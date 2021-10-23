@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irl_link/Controller/LoginViewController.dart';
 
@@ -9,31 +10,38 @@ class LoginView extends GetView<LoginViewController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Container(
+      body: Container(
+        width: double.infinity,
+        color: Color(0XFF480A52),
+        child: SafeArea(
           child: Column(
             children: [
               //TODO: dropdown pour la langue
               Container(
-                child: Text("IRL Link"),
+                width: 160,
+                child: Image(
+                  image: AssetImage("lib/assets/logo.png"),
+                ),
               ),
               Container(
+                padding: EdgeInsets.only(top: 40),
+                width: 300,
                 child: InkWell(
                   onTap: () {
                     controller.login();
                   },
-                  child: Text(
-                    'Connect with Twitch',
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  child: Image(image: AssetImage("lib/assets/ButtonLogin.png")),
                 ),
-                decoration: BoxDecoration(color: Color(0xFF6441A5)),
               ),
+              Spacer(),
               Container(
-                child: Row(
-                  children: [Text("C.G.U"), Text("Contact")],
+                height: 200,
+                width: 200,
+                child: SvgPicture.asset(
+                  './lib/assets/waves.svg',
+                  semanticsLabel: 'Waves',
                 ),
-              )
+              ),
             ],
           ),
         ),

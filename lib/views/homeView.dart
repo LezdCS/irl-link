@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irl_link/Controller/HomeViewController.dart';
 import 'package:irl_link/Widget/WebPageView.dart';
@@ -24,11 +27,14 @@ class HomeView extends GetView<HomeViewController> {
             },
             child: Container(
               constraints: BoxConstraints.expand(),
+              decoration: BoxDecoration(
+                color: Color(0xFF480A52),
+              ),
               child: SafeArea(
                 child: SplitView(
                   controller: controller.splitViewController,
-                  gripColor: Color(0xFF222f3e),
-                  gripColorActive: Color(0xFF222f3e),
+                  gripColor: Color(0xFF480A52),
+                  gripColorActive: Color(0xFF480A52),
                   gripSize: 20,
                   viewMode: SplitViewMode.Vertical,
                   indicator: SplitIndicator(
@@ -49,9 +55,6 @@ class HomeView extends GetView<HomeViewController> {
                   },
                 ),
               ),
-              decoration: BoxDecoration(
-                color: Color(0xFF222f3e),
-              ),
             ),
           ),
           Positioned(
@@ -69,33 +72,46 @@ class HomeView extends GetView<HomeViewController> {
     return Obx(
       () => Container(
         height: height * 0.07,
+        decoration: BoxDecoration(
+          color: Color(0xFF480A52),
+        ),
         child: Row(
           children: [
             Container(
-              width: width * 0.6,
+              alignment: Alignment.center,
+              padding: EdgeInsets.only(left: 10),
               height: double.maxFinite,
-              child: TextField(
-                maxLines: 2,
-                decoration: InputDecoration(
-                  fillColor: Color(0xFF8395a7),
-                  filled: true,
-                  hintText: 'Chat (stream offline)',
-                  isDense: true,
-                  contentPadding: EdgeInsets.only(bottom: 40 / 2, left: 5),
-                  border: new OutlineInputBorder(
-                    borderRadius: const BorderRadius.all(
-                      const Radius.circular(0.0),
+              width: width * 0.7,
+              child: Stack(
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    child: Image(
+                      image: AssetImage("lib/assets/chatinput.png"),
                     ),
-                    borderSide: new BorderSide(
-                      color: Colors.black,
-                      width: 1.0,
+                    // child: SvgPicture.asset(
+                    //   './lib/assets/chatinput.svg',
+                    //   semanticsLabel: 'Waves',
+                    // ),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    child: TextField(
+                      maxLines: 1,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(color: Colors.white),
+                        hintText: 'Chat (stream offline)',
+                        isDense: true,
+                        contentPadding: EdgeInsets.only(left: 8),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
             ),
             Container(
-              width: width * 0.2,
+              width: width * 0.15,
               height: double.maxFinite,
               child: InkWell(
                 onTap: () {
@@ -104,21 +120,13 @@ class HomeView extends GetView<HomeViewController> {
                 child: Icon(
                   controller.sound.value ? Icons.volume_up : Icons.volume_off,
                   color:
-                      controller.sound.value ? Colors.grey : Color(0xFFd63031),
+                      controller.sound.value ? Colors.white : Color(0xFFd63031),
                   size: 22,
-                ),
-              ),
-              decoration: BoxDecoration(
-                border: Border(
-                  left: BorderSide(
-                    color: Colors.black,
-                    width: 3.0,
-                  ),
                 ),
               ),
             ),
             Container(
-              width: width * 0.2,
+              width: width * 0.15,
               height: double.maxFinite,
               child: InkWell(
                 onTap: () {
@@ -126,23 +134,12 @@ class HomeView extends GetView<HomeViewController> {
                 },
                 child: Icon(
                   Icons.settings,
-                  color: Colors.grey,
+                  color: Colors.white,
                   size: 22,
-                ),
-              ),
-              decoration: BoxDecoration(
-                border: Border(
-                  left: BorderSide(
-                    color: Colors.black,
-                    width: 3.0,
-                  ),
                 ),
               ),
             ),
           ],
-        ),
-        decoration: BoxDecoration(
-          color: Color(0xFF222f3e),
         ),
       ),
     );
@@ -156,7 +153,7 @@ class HomeView extends GetView<HomeViewController> {
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(50.0),
           child: AppBar(
-            backgroundColor: Color(0xFF222f3e),
+            backgroundColor: Color(0xFF480A52),
             bottom: TabBar(
               controller: controller.tabController,
               isScrollable: true,
@@ -198,6 +195,9 @@ class HomeView extends GetView<HomeViewController> {
     return Container(
       width: width,
       padding: EdgeInsets.only(left: 8),
+      decoration: BoxDecoration(
+        color: Color(0xFF480A52),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -206,9 +206,6 @@ class HomeView extends GetView<HomeViewController> {
             style: TextStyle(color: Colors.white),
           ),
         ],
-      ),
-      decoration: BoxDecoration(
-        color: Color(0xFF222f3e),
       ),
     );
   }
