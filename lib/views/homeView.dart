@@ -2,12 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irl_link/Controller/HomeViewController.dart';
 import 'package:irl_link/Widget/WebPageView.dart';
+import 'package:irl_link/Widget/split_view_custom.dart';
 import 'package:irl_link/views/settingsView.dart';
-import 'package:split_view/split_view.dart';
 
 class HomeView extends GetView<HomeViewController> {
   final HomeViewController controller = Get.put(HomeViewController());
@@ -31,7 +30,7 @@ class HomeView extends GetView<HomeViewController> {
                 color: Color(0xFF480A52),
               ),
               child: SafeArea(
-                child: SplitView(
+                child: SplitViewCustom(
                   controller: controller.splitViewController,
                   gripColor: Color(0xFF480A52),
                   gripColorActive: Color(0xFF480A52),
