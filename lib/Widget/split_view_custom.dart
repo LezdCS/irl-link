@@ -6,6 +6,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/svg.dart';
 
 /// A SplitView class.
 class SplitViewCustom extends StatefulWidget {
@@ -387,10 +388,35 @@ class SplitIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.expand(
-      child: CustomPaint(
-        child: Image(
-          image: AssetImage('./lib/assets/slider.png'),
+    return SizedBox(
+      width: 50,
+      height: 3,
+      child: Container(
+        decoration: BoxDecoration(
+          color: this.color,
+          borderRadius: BorderRadius.circular(80),
+          boxShadow: [
+            BoxShadow(
+              color: Color(0xFF50E5FF),
+              spreadRadius: 3,
+              blurRadius: 2,
+            ),
+            BoxShadow(
+              color: Color(0xFF3E329A).withAlpha(150),
+              spreadRadius: 5,
+              blurRadius: 4,
+            ),
+            BoxShadow(
+              color: Color(0xFF4523CC).withAlpha(150),
+              spreadRadius: 7,
+              blurRadius: 4,
+            ),
+            BoxShadow(
+              color: Colors.white,
+              spreadRadius: -2,
+              blurRadius: 5,
+            )
+          ],
         ),
       ),
     );
@@ -432,6 +458,14 @@ class _SplitIndicatorPainter extends CustomPainter {
       paint.strokeCap = StrokeCap.round;
     }
     canvas.drawLine(Offset(x1, y1), Offset(x2, y2), paint);
+
+    var shadowPath = new Path();
+    shadowPath.addOval(Rect.fromPoints(
+      Offset(size.width / 2 - 100, size.height / 2 - 10),
+      Offset(size.width / 2 + 100, size.height / 2 - 5),
+    ));
+
+    canvas.drawShadow(shadowPath, Colors.red, 10, true);
   }
 
   @override

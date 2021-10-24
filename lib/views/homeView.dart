@@ -3,10 +3,10 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irl_link/Controller/HomeViewController.dart';
-import 'package:irl_link/Widget/WebPageView.dart';
-import 'package:irl_link/Widget/split_view_custom.dart';
-import 'package:irl_link/views/settingsView.dart';
+import 'package:irllink/Controller/HomeViewController.dart';
+import 'package:irllink/Widget/WebPageView.dart';
+import 'package:irllink/Widget/split_view_custom.dart';
+import 'package:irllink/views/settingsView.dart';
 
 class HomeView extends GetView<HomeViewController> {
   final HomeViewController controller = Get.put(HomeViewController());
@@ -34,14 +34,14 @@ class HomeView extends GetView<HomeViewController> {
                   controller: controller.splitViewController,
                   gripColor: Color(0xFF480A52),
                   gripColorActive: Color(0xFF480A52),
-                  gripSize: 20,
+                  gripSize: 22,
                   viewMode: SplitViewMode.Vertical,
                   indicator: SplitIndicator(
                     viewMode: SplitViewMode.Vertical,
-                    color: Color(0xFF8395a7),
+                    color: Color(0xFFFFFFFF),
                   ),
                   activeIndicator: SplitIndicator(
-                    color: Color(0xFF8395a7),
+                    color: Color(0xFFFFFFFF),
                     viewMode: SplitViewMode.Vertical,
                     isActive: true,
                   ),
@@ -99,10 +99,10 @@ class HomeView extends GetView<HomeViewController> {
                       maxLines: 1,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintStyle: TextStyle(color: Colors.white),
-                        hintText: 'Chat (stream offline)',
+                        hintStyle: TextStyle(color: Colors.white, fontSize: 14),
+                        hintText: 'Send a message',
                         isDense: true,
-                        contentPadding: EdgeInsets.only(left: 8),
+                        contentPadding: EdgeInsets.only(left: 10),
                       ),
                     ),
                   ),
@@ -193,7 +193,7 @@ class HomeView extends GetView<HomeViewController> {
   Widget _twitchChat(double width) {
     return Container(
       width: width,
-      padding: EdgeInsets.only(left: 8),
+      padding: EdgeInsets.only(left: 10),
       decoration: BoxDecoration(
         color: Color(0xFF480A52),
       ),
@@ -202,7 +202,12 @@ class HomeView extends GetView<HomeViewController> {
         children: [
           Text(
             "Welcome to the lezd_ chat room!",
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(
+              color: Color(0xFF878585),
+              fontFamily: 'Roboto',
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+            ),
           ),
         ],
       ),

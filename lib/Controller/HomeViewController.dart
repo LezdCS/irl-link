@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irl_link/Model/WebPage.dart';
-import 'package:irl_link/Widget/split_view_custom.dart';
+import 'package:irllink/Model/WebPage.dart';
+import 'package:irllink/Widget/split_view_custom.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class HomeViewController extends GetxController

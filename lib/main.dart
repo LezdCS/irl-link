@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:irl_link/views/homeView.dart';
-import 'package:irl_link/views/loginView.dart';
+import 'package:irllink/views/homeView.dart';
+import 'package:irllink/views/loginView.dart';
 
 void main() async {
   await GetStorage.init();
