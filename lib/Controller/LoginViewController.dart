@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_appauth/flutter_appauth.dart';
+import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:irllink/views/homeView.dart';
@@ -40,20 +40,23 @@ class LoginViewController extends GetxController {
 
   loginTwitch() async {
     var clientId = "shuf0nmdw2ao8o3rw1xe4raodb9ug3";
-    var redirectScheme = "dev.lezd.www.irllink://callback";
-    var discoveryUrl =
-        "https://id.twitch.tv/oauth2/.well-known/openid-configuration";
+    var redirectScheme = "dev.lezd.www.irllink";
 
-    FlutterAppAuth appAuth = FlutterAppAuth();
+    //todo : ajouter un state
+    final url = Uri.https('id.twitch.tv', '/oauth2/authorize', {
+      'response_type': 'token',
+      'client_id': clientId,
+      'redirect_uri': 'https://irllink.lezd.dev/twitchauth',
+      'scope': 'channel_editor',
+      'force_verify': 'true'
+    });
 
-    final AuthorizationTokenResponse? result =
-        await appAuth.authorizeAndExchangeCode(
-      AuthorizationTokenRequest(
-        clientId,
-        redirectScheme,
-        discoveryUrl: discoveryUrl,
-        scopes: ['openid'],
-      ),
+    debugPrint(url.toString());
+
+    final result = await FlutterWebAuth.authenticate(
+      url: url.toString(),
+      callbackUrlScheme: redirectScheme,
     );
+    final token = Uri.parse(result).queryParameters['token'];
   }
 }
