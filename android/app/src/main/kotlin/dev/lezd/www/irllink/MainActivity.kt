@@ -1,4 +1,4 @@
-package dev.lezd.www.irl_link
+package dev.lezd.www.irllink
 
 import io.flutter.embedding.android.FlutterActivity
 

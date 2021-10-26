@@ -1,10 +1,12 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irl_link/Controller/HomeViewController.dart';
-import 'package:irl_link/Widget/WebPageView.dart';
-import 'package:irl_link/views/settingsView.dart';
-import 'package:split_view/split_view.dart';
+import 'package:irllink/Controller/HomeViewController.dart';
+import 'package:irllink/Widget/WebPageView.dart';
+import 'package:irllink/Widget/split_view_custom.dart';
+import 'package:irllink/views/settingsView.dart';
 
 class HomeView extends GetView<HomeViewController> {
   final HomeViewController controller = Get.put(HomeViewController());
@@ -24,19 +26,22 @@ class HomeView extends GetView<HomeViewController> {
             },
             child: Container(
               constraints: BoxConstraints.expand(),
+              decoration: BoxDecoration(
+                color: Color(0xFF480A52),
+              ),
               child: SafeArea(
-                child: SplitView(
+                child: SplitViewCustom(
                   controller: controller.splitViewController,
-                  gripColor: Color(0xFF222f3e),
-                  gripColorActive: Color(0xFF222f3e),
-                  gripSize: 20,
+                  gripColor: Color(0xFF480A52),
+                  gripColorActive: Color(0xFF480A52),
+                  gripSize: 22,
                   viewMode: SplitViewMode.Vertical,
                   indicator: SplitIndicator(
                     viewMode: SplitViewMode.Vertical,
-                    color: Color(0xFF8395a7),
+                    color: Color(0xFFFFFFFF),
                   ),
                   activeIndicator: SplitIndicator(
-                    color: Color(0xFF8395a7),
+                    color: Color(0xFFFFFFFF),
                     viewMode: SplitViewMode.Vertical,
                     isActive: true,
                   ),
@@ -48,9 +53,6 @@ class HomeView extends GetView<HomeViewController> {
                     print("Horizon: $w");
                   },
                 ),
-              ),
-              decoration: BoxDecoration(
-                color: Color(0xFF222f3e),
               ),
             ),
           ),
@@ -69,33 +71,46 @@ class HomeView extends GetView<HomeViewController> {
     return Obx(
       () => Container(
         height: height * 0.07,
+        decoration: BoxDecoration(
+          color: Color(0xFF480A52),
+        ),
         child: Row(
           children: [
             Container(
-              width: width * 0.6,
+              alignment: Alignment.center,
+              padding: EdgeInsets.only(left: 10),
               height: double.maxFinite,
-              child: TextField(
-                maxLines: 2,
-                decoration: InputDecoration(
-                  fillColor: Color(0xFF8395a7),
-                  filled: true,
-                  hintText: 'Chat (stream offline)',
-                  isDense: true,
-                  contentPadding: EdgeInsets.only(bottom: 40 / 2, left: 5),
-                  border: new OutlineInputBorder(
-                    borderRadius: const BorderRadius.all(
-                      const Radius.circular(0.0),
+              width: width * 0.7,
+              child: Stack(
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    child: Image(
+                      image: AssetImage("lib/assets/chatinput.png"),
                     ),
-                    borderSide: new BorderSide(
-                      color: Colors.black,
-                      width: 1.0,
+                    // child: SvgPicture.asset(
+                    //   './lib/assets/chatinput.svg',
+                    //   semanticsLabel: 'Waves',
+                    // ),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    child: TextField(
+                      maxLines: 1,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(color: Colors.white, fontSize: 14),
+                        hintText: 'Send a message',
+                        isDense: true,
+                        contentPadding: EdgeInsets.only(left: 10),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
             ),
             Container(
-              width: width * 0.2,
+              width: width * 0.15,
               height: double.maxFinite,
               child: InkWell(
                 onTap: () {
@@ -104,21 +119,13 @@ class HomeView extends GetView<HomeViewController> {
                 child: Icon(
                   controller.sound.value ? Icons.volume_up : Icons.volume_off,
                   color:
-                      controller.sound.value ? Colors.grey : Color(0xFFd63031),
+                      controller.sound.value ? Colors.white : Color(0xFFd63031),
                   size: 22,
-                ),
-              ),
-              decoration: BoxDecoration(
-                border: Border(
-                  left: BorderSide(
-                    color: Colors.black,
-                    width: 3.0,
-                  ),
                 ),
               ),
             ),
             Container(
-              width: width * 0.2,
+              width: width * 0.15,
               height: double.maxFinite,
               child: InkWell(
                 onTap: () {
@@ -126,23 +133,12 @@ class HomeView extends GetView<HomeViewController> {
                 },
                 child: Icon(
                   Icons.settings,
-                  color: Colors.grey,
+                  color: Colors.white,
                   size: 22,
-                ),
-              ),
-              decoration: BoxDecoration(
-                border: Border(
-                  left: BorderSide(
-                    color: Colors.black,
-                    width: 3.0,
-                  ),
                 ),
               ),
             ),
           ],
-        ),
-        decoration: BoxDecoration(
-          color: Color(0xFF222f3e),
         ),
       ),
     );
@@ -156,7 +152,7 @@ class HomeView extends GetView<HomeViewController> {
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(50.0),
           child: AppBar(
-            backgroundColor: Color(0xFF222f3e),
+            backgroundColor: Color(0xFF480A52),
             bottom: TabBar(
               controller: controller.tabController,
               isScrollable: true,
@@ -197,18 +193,23 @@ class HomeView extends GetView<HomeViewController> {
   Widget _twitchChat(double width) {
     return Container(
       width: width,
-      padding: EdgeInsets.only(left: 8),
+      padding: EdgeInsets.only(left: 10),
+      decoration: BoxDecoration(
+        color: Color(0xFF480A52),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             "Welcome to the lezd_ chat room!",
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(
+              color: Color(0xFF878585),
+              fontFamily: 'Roboto',
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+            ),
           ),
         ],
-      ),
-      decoration: BoxDecoration(
-        color: Color(0xFF222f3e),
       ),
     );
   }
