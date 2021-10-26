@@ -57,6 +57,8 @@ class LoginViewController extends GetxController {
       url: url.toString(),
       callbackUrlScheme: redirectScheme,
     );
-    final token = Uri.parse(result).queryParameters['token'];
+    debugPrint(Uri.parse(result).queryParameters.toString());
+    final token = Uri.parse(result).queryParameters['access_token'];
+    debugPrint(token);
   }
 }
