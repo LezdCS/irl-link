@@ -32,10 +32,13 @@ class LoginViewController extends GetxController {
   }
 
   Future<void> login() async {
-    await loginTwitch();
+    var token = await loginTwitch();
+    debugPrint("token: " + token);
 
-    //box.write('twitchToken', token);
-    //Get.offAll(HomeView());
+    if (token != '') {
+      box.write('twitchToken', token);
+      Get.offAll(HomeView());
+    }
   }
 
   loginTwitch() async {
@@ -51,14 +54,13 @@ class LoginViewController extends GetxController {
       'force_verify': 'true'
     });
 
-    debugPrint(url.toString());
-
     final result = await FlutterWebAuth.authenticate(
       url: url.toString(),
       callbackUrlScheme: redirectScheme,
+      preferEphemeral: true,
     );
-    debugPrint(Uri.parse(result).queryParameters.toString());
+
     final token = Uri.parse(result).queryParameters['access_token'];
-    debugPrint(token);
+    return token;
   }
 }
