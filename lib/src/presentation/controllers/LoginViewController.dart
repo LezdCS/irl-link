@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:irllink/views/homeView.dart';
+import 'package:irllink/src/presentation/views/homeView.dart';
 import 'package:flutter/services.dart';
 
 import 'package:url_launcher/url_launcher.dart';
@@ -50,7 +50,7 @@ class LoginViewController extends GetxController {
       'response_type': 'token',
       'client_id': clientId,
       'redirect_uri': 'https://irllink.lezd.dev/twitchauth',
-      'scope': 'channel_editor',
+      'scope': 'channel_editor chat:read chat:edit',
       'force_verify': 'true'
     });
 

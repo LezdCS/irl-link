@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:irllink/views/loginView.dart';
+import 'package:irllink/src/presentation/views/loginView.dart';
 
 class SettingsViewController extends GetxController {
   final box = GetStorage();

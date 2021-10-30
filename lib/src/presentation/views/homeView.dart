@@ -3,10 +3,10 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/Controller/HomeViewController.dart';
-import 'package:irllink/Widget/WebPageView.dart';
-import 'package:irllink/Widget/split_view_custom.dart';
-import 'package:irllink/views/settingsView.dart';
+import 'package:irllink/src/presentation/controllers/HomeViewController.dart';
+import 'package:irllink/src/presentation/widgets/WebPageView.dart';
+import 'package:irllink/src/presentation/widgets/split_view_custom.dart';
+import 'package:irllink/src/presentation/views/settingsView.dart';
 
 class HomeView extends GetView<HomeViewController> {
   final HomeViewController controller = Get.put(HomeViewController());

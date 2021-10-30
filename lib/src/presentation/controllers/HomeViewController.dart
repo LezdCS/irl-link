@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/Model/WebPage.dart';
-import 'package:irllink/Widget/split_view_custom.dart';
+import 'package:irllink/src/presentation/widgets/split_view_custom.dart';
+import 'package:web_socket_channel/io.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class HomeViewController extends GetxController
     with SingleGetTickerProviderMixin {
   late TabController tabController;
   RxBool sound = true.obs;
-
   SplitViewController splitViewController =
       new SplitViewController(limits: [null, WeightLimit(min: 0.12)]);
 
   RxList<WebPage> internetPages = <WebPage>[].obs;
+
+  late var channel;
 
   @override
   void onInit() {
@@ -34,6 +37,10 @@ class HomeViewController extends GetxController
 
   @override
   void onReady() {
+    channel = IOWebSocketChannel.connect(
+      Uri.parse('wss://irc-ws.chat.twitch.tv:443'),
+    );
+
     super.onReady();
   }
 

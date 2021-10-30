@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/Controller/SettingsViewController.dart';
+import 'package:irllink/src/presentation/controllers/SettingsViewController.dart';
 
 class SettingsView extends GetView<SettingsViewController> {
   final SettingsViewController controller = Get.put(SettingsViewController());
