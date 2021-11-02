@@ -4,8 +4,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:irllink/src/presentation/views/homeView.dart';
 import 'package:flutter/services.dart';
-
-import 'package:url_launcher/url_launcher.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class LoginViewController extends GetxController {
   final box = GetStorage();
@@ -15,7 +14,7 @@ class LoginViewController extends GetxController {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
     ));
-    // Here you can fetch you product from server
+    // Here you can fetch you datas from server
     super.onInit();
   }
 
@@ -33,11 +32,9 @@ class LoginViewController extends GetxController {
 
   Future<void> login() async {
     var token = await loginTwitch();
-    debugPrint("token: " + token);
 
     if (token != '') {
-      box.write('twitchToken', token);
-      Get.offAll(HomeView());
+      Get.offAll(() => HomeView());
     }
   }
 
@@ -45,13 +42,14 @@ class LoginViewController extends GetxController {
     var clientId = "shuf0nmdw2ao8o3rw1xe4raodb9ug3";
     var redirectScheme = "dev.lezd.www.irllink";
 
-    //todo : ajouter un state
+    //todo : ajouter un nonce et un state
     final url = Uri.https('id.twitch.tv', '/oauth2/authorize', {
-      'response_type': 'token',
       'client_id': clientId,
-      'redirect_uri': 'https://irllink.lezd.dev/twitchauth',
-      'scope': 'channel_editor chat:read chat:edit',
-      'force_verify': 'true'
+      'redirect_uri': 'https://irllink.com/twitch/app/auth',
+      'response_type': 'code',
+      'scope': 'openid channel_editor chat:read chat:edit',
+      'force_verify': 'true',
+      'claims': '{"userinfo":{"picture":null, "preferred_username":null}}'
     });
 
     final result = await FlutterWebAuth.authenticate(
@@ -60,7 +58,17 @@ class LoginViewController extends GetxController {
       preferEphemeral: true,
     );
 
-    final token = Uri.parse(result).queryParameters['access_token'];
-    return token;
+    final access_token = Uri.parse(result).queryParameters['access_token'];
+    final id_token = Uri.parse(result).queryParameters['id_token'];
+    final refresh_token = Uri.parse(result).queryParameters['refresh_token'];
+    box.write('TwitchAccessToken', access_token);
+    box.write('TwitchIdToken', id_token);
+    box.write('TwitchRefreshToken', refresh_token);
+
+    //todo : faire une vérif de l'id token
+    Map<String, dynamic> decodedToken = JwtDecoder.decode(id_token!);
+    box.write('username', decodedToken['preferred_username']);
+
+    return access_token;
   }
 }

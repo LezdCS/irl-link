@@ -16,7 +16,6 @@ class LoginView extends GetView<LoginViewController> {
         child: SafeArea(
           child: Column(
             children: [
-              //TODO: dropdown pour la langue
               Container(
                 width: 160,
                 child: Image(

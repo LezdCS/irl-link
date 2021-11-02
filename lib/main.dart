@@ -15,7 +15,7 @@ class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      home: box.read('twitchToken') == null ? LoginView() : HomeView(),
+      home: box.read('TwitchAccessToken') == null ? LoginView() : HomeView(),
     );
   }
 }
