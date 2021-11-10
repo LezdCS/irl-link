@@ -50,8 +50,9 @@ class HomeViewController extends GetxController
       channel.sink.add('PASS oauth:' + token);
       channel.sink.add('NICK ' + nick);
 
-      //channel.sink.add('JOIN ');
-
+      channel.sink.add('JOIN #lezd_');
+      //channel.sink.add('PRIVMSG #lezd_ okay');
+      channel.sink.add('PART #lezd_');
       channel.stream.listen((message) {
         debugPrint(message);
       });

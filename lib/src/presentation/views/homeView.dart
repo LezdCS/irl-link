@@ -3,13 +3,13 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/presentation/controllers/HomeViewController.dart';
 import 'package:irllink/src/presentation/widgets/WebPageView.dart';
 import 'package:irllink/src/presentation/widgets/split_view_custom.dart';
-import 'package:irllink/src/presentation/views/settingsView.dart';
 
 class HomeView extends GetView<HomeViewController> {
-  final HomeViewController controller = Get.put(HomeViewController());
+  final HomeViewController controller = Get.find<HomeViewController>();
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +129,7 @@ class HomeView extends GetView<HomeViewController> {
               height: double.maxFinite,
               child: InkWell(
                 onTap: () {
-                  Get.to(SettingsView());
+                  Get.toNamed(Routes.SETTINGS);
                 },
                 child: Icon(
                   Icons.settings,

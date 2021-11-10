@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:irllink/src/presentation/views/homeView.dart';
+import 'package:irllink/routes/app_pages.dart';
+import 'package:irllink/src/bindings/login_bindings.dart';
 import 'package:irllink/src/presentation/views/loginView.dart';
 
 void main() async {
@@ -9,13 +10,13 @@ void main() async {
   runApp(Main());
 }
 
-final box = GetStorage();
-
 class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      home: box.read('TwitchAccessToken') == null ? LoginView() : HomeView(),
+      home: LoginView(),
+      initialRoute: AppPages.INITIAL,
+      getPages: AppPages.routes,
     );
   }
 }

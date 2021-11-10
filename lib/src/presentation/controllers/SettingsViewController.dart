@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/presentation/views/loginView.dart';
 
 class SettingsViewController extends GetxController {
@@ -24,7 +25,7 @@ class SettingsViewController extends GetxController {
   }
 
   void logout() {
-    box.remove('twitchToken');
-    Get.offAll(LoginView());
+    box.remove('TwitchAccessToken');
+    Get.offAllNamed(Routes.LOGIN);
   }
 }

@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:irllink/src/presentation/controllers/SettingsViewController.dart';
 
 class SettingsView extends GetView<SettingsViewController> {
-  final SettingsViewController controller = Get.put(SettingsViewController());
+  final SettingsViewController controller = Get.find<SettingsViewController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

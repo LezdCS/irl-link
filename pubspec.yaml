@@ -39,6 +39,8 @@ dependencies:
   web_socket_channel: ^2.1.0
   http: ^0.13.4
   jwt_decoder: ^2.0.1
+  equatable: ^2.0.3
+  dio: ^4.0.1
 
 dev_dependencies:
   flutter_test:
