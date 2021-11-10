@@ -8,4 +8,6 @@ abstract class TwitchRepository {
   );
 
   Future<DataState<Twitch>> getTwitchFromLocal();
+
+  Future<DataState<String>> logout();
 }

@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
-import 'package:irllink/src/presentation/controllers/HomeViewController.dart';
-import 'package:irllink/src/presentation/widgets/WebPageView.dart';
+import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
+import 'package:irllink/src/presentation/widgets/web_page_view.dart';
 import 'package:irllink/src/presentation/widgets/split_view_custom.dart';
 
 class HomeView extends GetView<HomeViewController> {

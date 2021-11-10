@@ -1,8 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:irllink/Model/WebPage.dart';
+import 'package:irllink/src/domain/entities/twitch.dart';
+import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:irllink/src/presentation/widgets/split_view_custom.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -10,7 +11,9 @@ import 'package:web_socket_channel/status.dart' as status;
 
 class HomeViewController extends GetxController
     with SingleGetTickerProviderMixin {
-  final box = GetStorage();
+  HomeViewController({required this.homeEvents});
+
+  final HomeEvents homeEvents;
 
   late TabController tabController;
   RxBool sound = true.obs;
@@ -19,7 +22,8 @@ class HomeViewController extends GetxController
 
   RxList<WebPage> internetPages = <WebPage>[].obs;
 
-  late var channel;
+  late IOWebSocketChannel channel;
+  late Twitch twitchData;
 
   @override
   void onInit() {
@@ -36,13 +40,19 @@ class HomeViewController extends GetxController
     internetPages.add(page2);
     internetPages.add(page3);
 
-    super.onInit();
+    homeEvents.getTwitchFromLocal().then((value) {
+      twitchData = value.data!;
+
+      //on met le super.onInit() dans le then pour
+      // qu'on passe au onReady seulement quand on a bien récup toutes les datas
+      super.onInit();
+    });
   }
 
   @override
   void onReady() {
-    var token = box.read('TwitchAccessToken');
-    var nick = box.read('username');
+    var token = twitchData.accessToken;
+    var nick = twitchData.preferredUsername;
     WebSocket.connect("wss://irc-ws.chat.twitch.tv:443").then((ws) {
       // create the stream channel
       channel = IOWebSocketChannel(ws);
@@ -64,8 +74,6 @@ class HomeViewController extends GetxController
   @override
   void onClose() {
     channel.sink.close(status.goingAway);
-    // Here, you can dispose your StreamControllers
-    // you can cancel timers
     super.onClose();
   }
 }

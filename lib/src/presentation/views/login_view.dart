@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/presentation/controllers/LoginViewController.dart';
+import 'package:irllink/src/presentation/controllers/login_view_controller.dart';
 
 class LoginView extends GetView<LoginViewController> {
   @override

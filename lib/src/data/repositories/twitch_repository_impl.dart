@@ -1,18 +1,29 @@
+import 'dart:convert';
+import 'dart:ffi';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:irllink/src/core/params/twitch_request_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/utils/constants.dart';
+import 'package:irllink/src/data/entities/twitch_dto.dart';
 import 'package:irllink/src/domain/entities/twitch.dart';
 import 'package:irllink/src/domain/repositories/twitch_repository.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 class TwitchRepositoryImpl extends TwitchRepository {
   @override
-  Future<DataState<Twitch>> getTwitchFromLocal() {
-    // TODO: implement getTwitchFromLocal
-    throw UnimplementedError();
+  Future<DataState<Twitch>> getTwitchFromLocal() async {
+    final box = GetStorage();
+    var twitchDataString = box.read('twitchData');
+    if (twitchDataString != null) {
+      Map<String, dynamic> twitchDataJson = jsonDecode(twitchDataString);
+      Twitch twitchData = TwitchDTO.fromJson(twitchDataJson);
+      return DataSuccess(twitchData);
+    } else {
+      return DataFailed(throw new Exception("No Twitch Data in local storage"));
+    }
   }
 
   @override
@@ -38,21 +49,29 @@ class TwitchRepositoryImpl extends TwitchRepository {
       final idToken = Uri.parse(result).queryParameters['id_token'];
       final refreshToken = Uri.parse(result).queryParameters['refresh_token'];
 
-      box.write('TwitchAccessToken', accessToken);
-      box.write('TwitchIdToken', idToken);
-      box.write('TwitchRefreshToken', refreshToken);
-
       Map<String, dynamic> decodedToken = JwtDecoder.decode(idToken!);
-      box.write('username', decodedToken['preferred_username']);
 
-      final twitchData = Twitch(
-          accessToken: accessToken!,
-          idToken: idToken,
-          refreshToken: refreshToken!);
+      final twitchData = TwitchDTO(
+        accessToken: accessToken!,
+        idToken: idToken,
+        refreshToken: refreshToken!,
+        preferredUsername: decodedToken['preferred_username'],
+      );
+
+      String jsonTwitchData = jsonEncode(twitchData);
+      box.write('twitchData', jsonTwitchData);
 
       return DataSuccess(twitchData);
-    } on DioError catch (e) {
-      return DataFailed(e);
+    } catch (e) {
+      return DataFailed(
+          throw new Exception("Unable to retrieve Twitch Data from Auth"));
     }
+  }
+
+  @override
+  Future<DataState<String>> logout() async {
+    final box = GetStorage();
+    box.remove('twitchData');
+    return DataSuccess('Correctly Deleted');
   }
 }

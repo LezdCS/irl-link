@@ -4,11 +4,13 @@ class Twitch extends Equatable {
   final String accessToken;
   final String idToken;
   final String refreshToken;
+  final String preferredUsername;
 
   const Twitch({
     required this.accessToken,
     required this.idToken,
     required this.refreshToken,
+    required this.preferredUsername,
   });
 
   @override
@@ -17,6 +19,7 @@ class Twitch extends Equatable {
       accessToken,
       idToken,
       refreshToken,
+      preferredUsername,
     ];
   }
 

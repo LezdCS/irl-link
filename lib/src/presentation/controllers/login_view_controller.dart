@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/core/params/twitch_request_params.dart';
-import 'package:irllink/src/domain/usecases/twitch_usecase.dart';
 import 'package:flutter/services.dart';
-import 'package:irllink/src/presentation/views/homeView.dart';
+import 'package:irllink/src/presentation/events/login_events.dart';
 
 class LoginViewController extends GetxController {
-  final box = GetStorage();
+  LoginViewController({required this.loginEvents});
 
-  LoginViewController({required this.twitchUseCase});
-
-  final TwitchUseCase twitchUseCase;
+  final LoginEvents loginEvents;
 
   @override
   void onInit() {
@@ -25,9 +21,11 @@ class LoginViewController extends GetxController {
 
   @override
   void onReady() {
-    if (box.read('TwitchAccessToken') != null) {
-      Get.offAllNamed(Routes.HOME);
-    }
+    loginEvents.getTwitchFromLocal().then((value) {
+      if (value.exception == null) {
+        Get.offAllNamed(Routes.HOME);
+      }
+    }).catchError((e) {});
 
     super.onReady();
   }
@@ -39,8 +37,8 @@ class LoginViewController extends GetxController {
 
   Future<void> login() async {
     TwitchRequestParams params = TwitchRequestParams();
-    await twitchUseCase.getTwitchOauth(params: params).then((value) {
-      if (value.error == null) {
+    await loginEvents.getTwitchOauth(params: params).then((value) {
+      if (value.exception == null) {
         Get.offAllNamed(Routes.HOME);
       }
     });
