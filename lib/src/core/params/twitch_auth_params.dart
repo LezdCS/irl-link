@@ -1,6 +1,6 @@
 import 'package:irllink/src/core/utils/constants.dart';
 
-class TwitchRequestParams {
+class TwitchAuthParams {
   final String clientId;
   final String redirectUri;
   final String responseType;
@@ -8,7 +8,7 @@ class TwitchRequestParams {
   final String forceVerify;
   final String claims;
 
-  const TwitchRequestParams({
+  const TwitchAuthParams({
     this.clientId = kTwitchAuthClientId,
     this.redirectUri = 'https://irllink.com/twitch/app/auth',
     this.responseType = 'code',

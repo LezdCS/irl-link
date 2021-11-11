@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
-import 'package:irllink/src/core/params/twitch_request_params.dart';
+import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:flutter/services.dart';
 import 'package:irllink/src/presentation/events/login_events.dart';
 
@@ -36,7 +36,7 @@ class LoginViewController extends GetxController {
   }
 
   Future<void> login() async {
-    TwitchRequestParams params = TwitchRequestParams();
+    TwitchAuthParams params = TwitchAuthParams();
     await loginEvents.getTwitchOauth(params: params).then((value) {
       if (value.exception == null) {
         Get.offAllNamed(Routes.HOME);

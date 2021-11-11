@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/Model/WebPage.dart';
-import 'package:irllink/src/domain/entities/twitch.dart';
+import 'package:irllink/src/domain/entities/twitch_credentials.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:irllink/src/presentation/widgets/split_view_custom.dart';
 import 'package:web_socket_channel/io.dart';
@@ -23,7 +23,7 @@ class HomeViewController extends GetxController
   RxList<WebPage> internetPages = <WebPage>[].obs;
 
   late IOWebSocketChannel channel;
-  late Twitch twitchData;
+  late TwitchCredentials twitchData;
 
   @override
   void onInit() {
@@ -52,18 +52,22 @@ class HomeViewController extends GetxController
   @override
   void onReady() {
     var token = twitchData.accessToken;
-    var nick = twitchData.preferredUsername;
+    var nick = twitchData.decodedIdToken.preferredUsername;
     WebSocket.connect("wss://irc-ws.chat.twitch.tv:443").then((ws) {
       // create the stream channel
       channel = IOWebSocketChannel(ws);
 
       channel.sink.add('PASS oauth:' + token);
       channel.sink.add('NICK ' + nick);
+      channel.sink.add('CAP REQ :twitch.tv/tags');
 
       channel.sink.add('JOIN #lezd_');
       //channel.sink.add('PRIVMSG #lezd_ okay');
-      channel.sink.add('PART #lezd_');
+
       channel.stream.listen((message) {
+        if (message == "PING :tmi.twitch.tv") {
+          channel.sink.add('PONG :tmi.twitch.tv');
+        }
         debugPrint(message);
       });
     });
@@ -73,6 +77,7 @@ class HomeViewController extends GetxController
 
   @override
   void onClose() {
+    channel.sink.add('PART #lezd_');
     channel.sink.close(status.goingAway);
     super.onClose();
   }

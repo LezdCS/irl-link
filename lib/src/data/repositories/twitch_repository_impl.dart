@@ -1,25 +1,28 @@
 import 'dart:convert';
-import 'dart:ffi';
 
-import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:irllink/src/core/params/twitch_request_params.dart';
+import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/utils/constants.dart';
-import 'package:irllink/src/data/entities/twitch_dto.dart';
-import 'package:irllink/src/domain/entities/twitch.dart';
+import 'package:irllink/src/data/entities/twitch_credentials_dto.dart';
+import 'package:irllink/src/data/entities/twitch_decoded_idtoken_dto.dart';
+import 'package:irllink/src/domain/entities/twitch_credentials.dart';
 import 'package:irllink/src/domain/repositories/twitch_repository.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 class TwitchRepositoryImpl extends TwitchRepository {
   @override
-  Future<DataState<Twitch>> getTwitchFromLocal() async {
+  Future<DataState<TwitchCredentials>> getTwitchFromLocal() async {
     final box = GetStorage();
     var twitchDataString = box.read('twitchData');
     if (twitchDataString != null) {
       Map<String, dynamic> twitchDataJson = jsonDecode(twitchDataString);
-      Twitch twitchData = TwitchDTO.fromJson(twitchDataJson);
+
+      TwitchCredentials twitchData =
+          TwitchCredentialsDTO.fromJson(twitchDataJson);
+
       return DataSuccess(twitchData);
     } else {
       return DataFailed(throw new Exception("No Twitch Data in local storage"));
@@ -27,7 +30,8 @@ class TwitchRepositoryImpl extends TwitchRepository {
   }
 
   @override
-  Future<DataState<Twitch>> getTwitchOauth(TwitchRequestParams params) async {
+  Future<DataState<TwitchCredentials>> getTwitchOauth(
+      TwitchAuthParams params) async {
     final box = GetStorage();
     try {
       final url = Uri.https(kTwitchAuthUrlBase, kTwitchAuthUrlPath, {
@@ -51,11 +55,16 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       Map<String, dynamic> decodedToken = JwtDecoder.decode(idToken!);
 
-      final twitchData = TwitchDTO(
+      TwitchDecodedIdTokenDTO decodedIdToken = TwitchDecodedIdTokenDTO(
+        preferredUsername: decodedToken['preferred_username'],
+        profilePicture: decodedToken['picture'],
+      );
+
+      final twitchData = TwitchCredentialsDTO(
         accessToken: accessToken!,
         idToken: idToken,
         refreshToken: refreshToken!,
-        preferredUsername: decodedToken['preferred_username'],
+        decodedIdToken: decodedIdToken,
       );
 
       String jsonTwitchData = jsonEncode(twitchData);
