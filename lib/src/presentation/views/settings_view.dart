@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/Controller/SettingsViewController.dart';
+import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 
 class SettingsView extends GetView<SettingsViewController> {
-  final SettingsViewController controller = Get.put(SettingsViewController());
+  final SettingsViewController controller = Get.find<SettingsViewController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,11 +18,16 @@ class SettingsView extends GetView<SettingsViewController> {
         centerTitle: true,
       ),
       body: Container(
-        child: InkWell(
-          onTap: () {
-            controller.logout();
-          },
-          child: Text("logout"),
+        child: Column(
+          children: [
+            InkWell(
+              onTap: () {
+                controller.logout();
+              },
+              child: Text("logout"),
+            ),
+            Text("fje"),
+          ],
         ),
       ),
     );
