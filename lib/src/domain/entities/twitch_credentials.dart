@@ -5,12 +5,14 @@ class TwitchCredentials extends Equatable {
   final String accessToken;
   final String idToken;
   final String refreshToken;
+  final String expiresIn;
   final TwitchDecodedIdToken decodedIdToken;
 
   const TwitchCredentials({
     required this.accessToken,
     required this.idToken,
     required this.refreshToken,
+    required this.expiresIn,
     required this.decodedIdToken,
   });
 
@@ -20,6 +22,7 @@ class TwitchCredentials extends Equatable {
       accessToken,
       idToken,
       refreshToken,
+      expiresIn,
       decodedIdToken,
     ];
   }

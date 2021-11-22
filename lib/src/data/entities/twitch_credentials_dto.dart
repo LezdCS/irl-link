@@ -8,11 +8,14 @@ class TwitchCredentialsDTO extends TwitchCredentials {
     required String accessToken,
     required String idToken,
     required String refreshToken,
+    //todo : passer le expiresIn en int à la place de String
+    required String expiresIn,
     required TwitchDecodedIdTokenDTO decodedIdToken,
   }) : super(
           accessToken: accessToken,
           idToken: idToken,
           refreshToken: refreshToken,
+          expiresIn: expiresIn,
           decodedIdToken: decodedIdToken,
         );
 
@@ -20,6 +23,7 @@ class TwitchCredentialsDTO extends TwitchCredentials {
         'accessToken': accessToken,
         'idToken': idToken,
         'refreshToken': refreshToken,
+        'expiresIn': expiresIn,
         'decodedIdToken': jsonEncode(decodedIdToken),
       };
 
@@ -28,6 +32,7 @@ class TwitchCredentialsDTO extends TwitchCredentials {
       accessToken: map['accessToken'] as String,
       idToken: map['idToken'] as String,
       refreshToken: map['refreshToken'] as String,
+      expiresIn: map['refreshToken'] as String,
       decodedIdToken:
           TwitchDecodedIdTokenDTO.fromJson(jsonDecode(map['decodedIdToken'])),
     );

@@ -52,6 +52,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       final accessToken = Uri.parse(result).queryParameters['access_token'];
       final idToken = Uri.parse(result).queryParameters['id_token'];
       final refreshToken = Uri.parse(result).queryParameters['refresh_token'];
+      final expiresIn = Uri.parse(result).queryParameters['expires_in'];
 
       Map<String, dynamic> decodedToken = JwtDecoder.decode(idToken!);
 
@@ -64,6 +65,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
         accessToken: accessToken!,
         idToken: idToken,
         refreshToken: refreshToken!,
+        expiresIn: expiresIn!,
         decodedIdToken: decodedIdToken,
       );
 
