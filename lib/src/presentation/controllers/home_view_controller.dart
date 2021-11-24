@@ -28,11 +28,13 @@ class HomeViewController extends GetxController
   late IOWebSocketChannel channel;
   late TwitchCredentials twitchData;
   late StreamController<dynamic> streamController;
-  late List<TwitchChatMessage> chatMessages = [];
+  late RxList<TwitchChatMessage> chatMessages = <TwitchChatMessage>[].obs;
+  late ScrollController scrollController;
 
   @override
   void onInit() {
     streamController = new StreamController.broadcast();
+    scrollController = new ScrollController();
 
     if (GetPlatform.isAndroid) WebView.platform = SurfaceAndroidWebView();
 
@@ -50,14 +52,8 @@ class HomeViewController extends GetxController
 
     streamController.addStream(channel.stream);
 
-    homeEvents.getTwitchFromLocal().then((value) {
-      twitchData = value.data!;
-      //todo : refresh token every expiresIn seconds
-
-      //on met le super.onInit() dans le then pour
-      // qu'on passe au onReady seulement quand on a bien récup toutes les datas
-      super.onInit();
-    });
+    twitchData = Get.arguments[0];
+    super.onInit();
   }
 
   @override
@@ -76,8 +72,10 @@ class HomeViewController extends GetxController
     //channel.sink.add('PRIVMSG #lezd_ okay');
 
     streamController.stream.listen((message) {
+      debugPrint(message);
       if (message == "PING :tmi.twitch.tv") {
-        channel.sink.add('PONG :tmi.twitch.tv');
+        channel.sink.add("PONG :tmi.twitch.tv\r\n");
+        debugPrint("Pong sent");
       }
       if (message.toString().startsWith('@')) {
         var messageSplited = message.toString().split(';');
@@ -104,8 +102,14 @@ class HomeViewController extends GetxController
           message: messageString,
         );
         chatMessages.add(chatMessage);
+
+        Timer(Duration(milliseconds: 100), () {
+          //we need a timer or it wont scroll to the real bottom of the ListView
+          scrollController.jumpTo(
+            scrollController.position.maxScrollExtent,
+          );
+        });
       }
-      debugPrint(message);
     });
     // });
 

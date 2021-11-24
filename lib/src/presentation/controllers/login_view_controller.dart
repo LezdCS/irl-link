@@ -23,7 +23,7 @@ class LoginViewController extends GetxController {
   void onReady() {
     loginEvents.getTwitchFromLocal().then((value) {
       if (value.exception == null) {
-        Get.offAllNamed(Routes.HOME);
+        Get.offAllNamed(Routes.HOME, arguments: [value.data]);
       }
     }).catchError((e) {});
 
@@ -39,7 +39,7 @@ class LoginViewController extends GetxController {
     TwitchAuthParams params = TwitchAuthParams();
     await loginEvents.getTwitchOauth(params: params).then((value) {
       if (value.exception == null) {
-        Get.offAllNamed(Routes.HOME);
+        Get.offAllNamed(Routes.HOME, arguments: [value.data]);
       }
     });
   }

@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:irllink/src/domain/entities/twitch_decoded_idtoken.dart';
+import 'package:irllink/src/domain/entities/twitch_user.dart';
 
 class TwitchCredentials extends Equatable {
   final String accessToken;
@@ -7,6 +8,7 @@ class TwitchCredentials extends Equatable {
   final String refreshToken;
   final String expiresIn;
   final TwitchDecodedIdToken decodedIdToken;
+  final TwitchUser twitchUser;
 
   const TwitchCredentials({
     required this.accessToken,
@@ -14,6 +16,7 @@ class TwitchCredentials extends Equatable {
     required this.refreshToken,
     required this.expiresIn,
     required this.decodedIdToken,
+    required this.twitchUser,
   });
 
   @override
@@ -24,6 +27,7 @@ class TwitchCredentials extends Equatable {
       refreshToken,
       expiresIn,
       decodedIdToken,
+      twitchUser,
     ];
   }
 
