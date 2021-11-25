@@ -33,11 +33,11 @@ class TwitchUserDTO extends TwitchUser {
     return TwitchUserDTO(
       id: map['id'] as String,
       login: map['login'] as String,
-      displayName: map['displayName'] as String,
-      broadcasterType: map['broadcasterType'] as String,
+      displayName: map['display_name'] as String,
+      broadcasterType: map['broadcaster_type'] as String,
       description: map['description'] as String,
-      profileImageUrl: map['profileImageUrl'] as String,
-      viewCount: map['viewCount'] as String,
+      profileImageUrl: map['profile_image_url'] as String,
+      viewCount: map['view_count'].toString() as String,
     );
   }
 }

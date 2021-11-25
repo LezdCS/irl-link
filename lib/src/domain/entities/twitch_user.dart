@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:irllink/src/domain/entities/twitch_decoded_idtoken.dart';
 
 class TwitchUser extends Equatable {
   final String id;

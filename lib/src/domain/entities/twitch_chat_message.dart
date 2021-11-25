@@ -1,8 +1,9 @@
 import 'package:equatable/equatable.dart';
+import 'package:irllink/src/domain/entities/twitch_badge.dart';
 
 class TwitchChatMessage extends Equatable {
   final String messageId;
-  final String badges;
+  final List<TwitchBadge> badges;
   final String color;
   final String authorName;
   final String authorId;

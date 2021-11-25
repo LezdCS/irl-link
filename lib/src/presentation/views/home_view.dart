@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/domain/entities/tabbar/web_page.dart';
+import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/obs_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/twitch_tab_view.dart';
@@ -223,6 +224,15 @@ class HomeView extends GetView<HomeViewController> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          for (TwitchBadge badge in message.badges)
+            Container(
+              padding: EdgeInsets.only(right: 4, top: 3),
+              child: Image(
+                image: NetworkImage(badge.imageUrl1x),
+                filterQuality: FilterQuality.high,
+                alignment: Alignment.bottomLeft,
+              ),
+            ),
           Text(
             message.authorName + ": ",
             style: TextStyle(

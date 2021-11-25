@@ -1,5 +1,6 @@
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
 import 'package:irllink/src/domain/entities/twitch_user.dart';
 
@@ -24,4 +25,6 @@ abstract class TwitchRepository {
     String username,
     String accessToken,
   );
+
+  Future<DataState<List<TwitchBadge>>> getTwitchBadges(String accessToken);
 }

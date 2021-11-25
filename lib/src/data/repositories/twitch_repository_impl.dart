@@ -7,9 +7,11 @@ import 'package:get_storage/get_storage.dart';
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/utils/constants.dart';
+import 'package:irllink/src/data/entities/twitch_badge_dto.dart';
 import 'package:irllink/src/data/entities/twitch_credentials_dto.dart';
 import 'package:irllink/src/data/entities/twitch_decoded_idtoken_dto.dart';
 import 'package:irllink/src/data/entities/twitch_user_dto.dart';
+import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
 import 'package:irllink/src/domain/entities/twitch_user.dart';
 import 'package:irllink/src/domain/repositories/twitch_repository.dart';
@@ -119,6 +121,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
         twitchUser: twitchUser,
       );
       this.setTwitchOnLocal(newTwitchData);
+      debugPrint('token refreshed');
       return DataSuccess(newTwitchData);
     } on DioError catch (e) {
       return DataFailed(throw new Exception("Refresh encountered issues"));
@@ -148,6 +151,8 @@ class TwitchRepositoryImpl extends TwitchRepository {
           .refreshAccessToken(twitchData)
           .then((value) => twitchData = value.data!);
 
+      this.getTwitchBadges(twitchData.accessToken);
+
       return DataSuccess(twitchData);
     } else {
       return DataFailed(throw new Exception("No Twitch Data in local storage"));
@@ -173,19 +178,36 @@ class TwitchRepositoryImpl extends TwitchRepository {
         'https://api.twitch.tv/helix/users',
         queryParameters: {'login': username},
       );
-      TwitchUserDTO twitchUser = TwitchUserDTO(
-        id: response.data['data'][0]['id'],
-        login: response.data['data'][0]['login'],
-        displayName: response.data['data'][0]['display_name'],
-        broadcasterType: response.data['data'][0]['broadcaster_type'],
-        description: response.data['data'][0]['description'],
-        profileImageUrl: response.data['data'][0]['profile_image_url'],
-        viewCount: response.data['data'][0]['view_count'],
-      );
+
+      TwitchUserDTO twitchUser =
+          TwitchUserDTO.fromJson(response.data['data'][0]);
 
       return DataSuccess(twitchUser);
     } on DioError catch (e) {
       return DataFailed(throw new Exception("Error retrieving user infos"));
+    }
+  }
+
+  @override
+  Future<DataState<List<TwitchBadge>>> getTwitchBadges(
+      String accessToken) async {
+    Response response;
+    var dio = Dio();
+    List<TwitchBadge> badges = <TwitchBadge>[];
+    try {
+      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dio.options.headers["authorization"] = "Bearer $accessToken";
+      response =
+          await dio.get('https://api.twitch.tv/helix/chat/badges/global');
+
+      response.data['data'].forEach((set) => set['versions'].forEach(
+          (version) =>
+              badges.add(TwitchBadgeDTO.fromJson(set['set_id'], version))));
+
+      debugPrint(badges.length.toString());
+      return DataSuccess(badges);
+    } on DioError catch (e) {
+      return DataFailed(throw new Exception("Error retrieving Twitch badges"));
     }
   }
 }

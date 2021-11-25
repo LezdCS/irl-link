@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/tabbar/tab_element.dart';
 import 'package:irllink/src/domain/entities/tabbar/web_page.dart';
+import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:irllink/src/domain/entities/twitch_chat_message.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
@@ -31,6 +32,8 @@ class HomeViewController extends GetxController
   late RxList<TwitchChatMessage> chatMessages = <TwitchChatMessage>[].obs;
   late ScrollController scrollController;
 
+  List<TwitchBadge> twitchBadges = [];
+
   @override
   void onInit() {
     streamController = new StreamController.broadcast();
@@ -53,6 +56,9 @@ class HomeViewController extends GetxController
     streamController.addStream(channel.stream);
 
     twitchData = Get.arguments[0];
+    homeEvents
+        .getTwitchBadges(twitchData.accessToken)
+        .then((value) => twitchBadges = value.data!);
     super.onInit();
   }
 
@@ -73,13 +79,19 @@ class HomeViewController extends GetxController
 
     streamController.stream.listen((message) {
       debugPrint(message);
-      if (message == "PING :tmi.twitch.tv") {
+      if (message.startsWith('PING ')) {
         channel.sink.add("PONG :tmi.twitch.tv\r\n");
         debugPrint("Pong sent");
       }
       if (message.toString().startsWith('@')) {
         var messageSplited = message.toString().split(';');
-        var badges = messageSplited[1].split('=')[1];
+        var badges = <TwitchBadge>[];
+        var badgesSplited = messageSplited[1].split('=')[1].split(',');
+        badgesSplited.forEach((i) {
+          badges.add(twitchBadges.firstWhere((badge) =>
+              badge.setId == i.split('/')[0] &&
+              badge.versionId == i.split('/')[1]));
+        });
         var color = messageSplited[3].split('=')[1];
         var displayName = messageSplited[4].split('=')[1];
         var emotes = messageSplited[5].split('=')[1];
