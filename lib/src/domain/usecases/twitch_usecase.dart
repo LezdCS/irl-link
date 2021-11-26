@@ -22,7 +22,7 @@ class TwitchUseCase {
   }
 
   Future<DataState<List<TwitchBadge>>> getTwitchBadges(
-      {required String accessToken}) {
-    return twitchRepository.getTwitchBadges(accessToken);
+      {required String accessToken, required String userId}) {
+    return twitchRepository.getTwitchBadges(accessToken, userId);
   }
 }

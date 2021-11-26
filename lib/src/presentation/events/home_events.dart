@@ -17,7 +17,9 @@ class HomeEvents {
     return twitchUseCase.getTwitchOauth(params: params!);
   }
 
-  Future<DataState<List<TwitchBadge>>> getTwitchBadges(String accessToken) {
-    return twitchUseCase.getTwitchBadges(accessToken: accessToken);
+  Future<DataState<List<TwitchBadge>>> getTwitchBadges(
+      String accessToken, String userId) {
+    return twitchUseCase.getTwitchBadges(
+        accessToken: accessToken, userId: userId);
   }
 }

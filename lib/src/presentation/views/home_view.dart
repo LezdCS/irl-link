@@ -102,6 +102,11 @@ class HomeView extends GetView<HomeViewController> {
                   Container(
                     alignment: Alignment.center,
                     child: TextField(
+                      controller: controller.chatInputController,
+                      onSubmitted: (String value) {
+                        controller.sendChatMessage(value);
+                        controller.chatInputController.text = '';
+                      },
                       maxLines: 1,
                       decoration: InputDecoration(
                         border: InputBorder.none,

@@ -61,7 +61,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
         displayName: '',
       );
 
-      this
+      await this
           .getTwitchUser(decodedIdToken.preferredUsername, accessToken!)
           .then((value) => twitchUser = value.data!);
 
@@ -121,6 +121,9 @@ class TwitchRepositoryImpl extends TwitchRepository {
         twitchUser: twitchUser,
       );
       this.setTwitchOnLocal(newTwitchData);
+
+      await this.validateToken(newTwitchData.accessToken);
+
       debugPrint('token refreshed');
       return DataSuccess(newTwitchData);
     } on DioError catch (e) {
@@ -128,11 +131,23 @@ class TwitchRepositoryImpl extends TwitchRepository {
     }
   }
 
+  Future<void> validateToken(String accessToken) async {
+    try {
+      Response response;
+      var dio = Dio();
+      dio.options.headers["authorization"] = "Bearer $accessToken";
+      response = await dio.get('https://id.twitch.tv/oauth2/validate');
+      debugPrint('Token is valid');
+    } on DioError catch (e) {
+      print(e.response);
+    }
+  }
+
   @override
   Future<DataState<String>> logout() async {
     final box = GetStorage();
     box.remove('twitchData');
-    //todo : revoke access token on twitch
+    //todo : call twitch api revoke access token
     return DataSuccess('Logged out successfuly');
   }
 
@@ -147,11 +162,9 @@ class TwitchRepositoryImpl extends TwitchRepository {
           TwitchCredentialsDTO.fromJson(twitchDataJson);
 
       //refresh the access token to be sure the token is going to be valid after starting the app
-      this
+      await this
           .refreshAccessToken(twitchData)
           .then((value) => twitchData = value.data!);
-
-      this.getTwitchBadges(twitchData.accessToken);
 
       return DataSuccess(twitchData);
     } else {
@@ -173,11 +186,8 @@ class TwitchRepositoryImpl extends TwitchRepository {
     var dio = Dio();
     try {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dio.options.headers["authorization"] = "Bearer ${accessToken}";
-      response = await dio.get(
-        'https://api.twitch.tv/helix/users',
-        queryParameters: {'login': username},
-      );
+      dio.options.headers["authorization"] = "Bearer $accessToken";
+      response = await dio.get('https://api.twitch.tv/helix/users');
 
       TwitchUserDTO twitchUser =
           TwitchUserDTO.fromJson(response.data['data'][0]);
@@ -190,23 +200,34 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
   @override
   Future<DataState<List<TwitchBadge>>> getTwitchBadges(
-      String accessToken) async {
-    Response response;
+      String accessToken, String userId) async {
+    Response response1;
+    Response response2;
     var dio = Dio();
     List<TwitchBadge> badges = <TwitchBadge>[];
     try {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
       dio.options.headers["authorization"] = "Bearer $accessToken";
-      response =
+      //global badges
+      response1 =
           await dio.get('https://api.twitch.tv/helix/chat/badges/global');
 
-      response.data['data'].forEach((set) => set['versions'].forEach(
+      response1.data['data'].forEach((set) => set['versions'].forEach(
           (version) =>
               badges.add(TwitchBadgeDTO.fromJson(set['set_id'], version))));
 
-      debugPrint(badges.length.toString());
+      //channel specific badges
+      response2 = await dio.get(
+          'https://api.twitch.tv/helix/chat/badges?broadcaster_id=$userId');
+
+      response2.data['data'].forEach((set) => set['versions'].forEach(
+          (version) =>
+              badges.add(TwitchBadgeDTO.fromJson(set['set_id'], version))));
+      //
+      // debugPrint(badges.length.toString());
       return DataSuccess(badges);
     } on DioError catch (e) {
+      print(e.response);
       return DataFailed(throw new Exception("Error retrieving Twitch badges"));
     }
   }

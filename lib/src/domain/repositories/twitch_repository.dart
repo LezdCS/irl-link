@@ -26,5 +26,8 @@ abstract class TwitchRepository {
     String accessToken,
   );
 
-  Future<DataState<List<TwitchBadge>>> getTwitchBadges(String accessToken);
+  Future<DataState<List<TwitchBadge>>> getTwitchBadges(
+    String accessToken,
+    String userId,
+  );
 }

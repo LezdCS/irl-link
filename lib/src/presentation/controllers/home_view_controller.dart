@@ -19,25 +19,28 @@ class HomeViewController extends GetxController
 
   final HomeEvents homeEvents;
 
-  late TabController tabController;
   RxBool sound = true.obs;
   SplitViewController splitViewController =
       new SplitViewController(limits: [null, WeightLimit(min: 0.12)]);
 
+  //TABS
+  late TabController tabController;
   RxList<TabElement> tabElements = <TabElement>[].obs;
 
+  //CHAT
   late IOWebSocketChannel channel;
   late TwitchCredentials twitchData;
   late StreamController<dynamic> streamController;
   late RxList<TwitchChatMessage> chatMessages = <TwitchChatMessage>[].obs;
   late ScrollController scrollController;
-
+  late TextEditingController chatInputController;
   List<TwitchBadge> twitchBadges = [];
 
   @override
   void onInit() {
     streamController = new StreamController.broadcast();
     scrollController = new ScrollController();
+    chatInputController = new TextEditingController();
 
     if (GetPlatform.isAndroid) WebView.platform = SurfaceAndroidWebView();
 
@@ -57,73 +60,47 @@ class HomeViewController extends GetxController
 
     twitchData = Get.arguments[0];
     homeEvents
-        .getTwitchBadges(twitchData.accessToken)
+        .getTwitchBadges(twitchData.accessToken, twitchData.twitchUser.id)
         .then((value) => twitchBadges = value.data!);
     super.onInit();
   }
 
   @override
   void onReady() {
-    var token = twitchData.accessToken;
-    var nick = twitchData.decodedIdToken.preferredUsername;
-    // WebSocket.connect("wss://irc-ws.chat.twitch.tv:443").then((ws) {
-    //channel = IOWebSocketChannel.connect(ws);
-    // create the stream channel
+    String token = twitchData.accessToken;
+    String nick = twitchData.twitchUser.login;
 
     channel.sink.add('PASS oauth:' + token);
     channel.sink.add('NICK ' + nick);
     channel.sink.add('CAP REQ :twitch.tv/tags');
 
-    channel.sink.add('JOIN #lezd_');
-    //channel.sink.add('PRIVMSG #lezd_ okay');
+    channel.sink.add('JOIN #$nick');
 
     streamController.stream.listen((message) {
       debugPrint(message);
       if (message.startsWith('PING ')) {
         channel.sink.add("PONG :tmi.twitch.tv\r\n");
-        debugPrint("Pong sent");
       }
-      if (message.toString().startsWith('@')) {
-        var messageSplited = message.toString().split(';');
-        var badges = <TwitchBadge>[];
-        var badgesSplited = messageSplited[1].split('=')[1].split(',');
-        badgesSplited.forEach((i) {
-          badges.add(twitchBadges.firstWhere((badge) =>
-              badge.setId == i.split('/')[0] &&
-              badge.versionId == i.split('/')[1]));
-        });
-        var color = messageSplited[3].split('=')[1];
-        var displayName = messageSplited[4].split('=')[1];
-        var emotes = messageSplited[5].split('=')[1];
-        var messageId = messageSplited[8].split('=')[1];
-        var timestamp = int.parse(messageSplited[12].split('=')[1]);
-        var userId = messageSplited[14].split('=')[1];
-        var messageList = messageSplited[15].split(':').sublist(2);
-        var messageString = messageList.join(':');
 
-        TwitchChatMessage chatMessage = new TwitchChatMessage(
-          badges: badges,
-          color: color,
-          authorName: displayName,
-          authorId: userId,
-          emotes: emotes,
-          messageId: messageId,
-          timestamp: timestamp,
-          deleted: false,
-          thirdPartiesEmotes: '',
-          message: messageString,
-        );
-        chatMessages.add(chatMessage);
+      if (message.startsWith('@')) {
+        List messageSplited = message.split(';');
+        if (messageSplited.last.contains('PRIVMSG')) {
+          TwitchChatMessage chatMessage =
+              TwitchChatMessage.fromString(twitchBadges, message);
+          chatMessages.add(chatMessage);
+          if (chatMessages.length > 100) {
+            chatMessages.removeLast();
+          }
 
-        Timer(Duration(milliseconds: 100), () {
-          //we need a timer or it wont scroll to the real bottom of the ListView
-          scrollController.jumpTo(
-            scrollController.position.maxScrollExtent,
-          );
-        });
+          Timer(Duration(milliseconds: 100), () {
+            //we need a timer or it wont scroll to the real bottom of the ListView
+            scrollController.jumpTo(
+              scrollController.position.maxScrollExtent,
+            );
+          });
+        }
       }
     });
-    // });
 
     super.onReady();
   }
@@ -133,5 +110,19 @@ class HomeViewController extends GetxController
     channel.sink.add('PART #lezd_');
     channel.sink.close(status.goingAway);
     super.onClose();
+  }
+
+  void sendChatMessage(String message) {
+    String token = twitchData.accessToken;
+    String nick = twitchData.twitchUser.login;
+    WebSocket.connect("wss://irc-ws.chat.twitch.tv:443").then((ws) {
+      IOWebSocketChannel channel = IOWebSocketChannel(ws);
+
+      channel.sink.add('PASS oauth:' + token);
+      channel.sink.add('NICK ' + nick);
+      channel.sink.add('JOIN #$nick');
+      channel.sink.add('PRIVMSG #$nick :$message\r\n');
+      channel.sink.close(status.goingAway);
+    });
   }
 }
