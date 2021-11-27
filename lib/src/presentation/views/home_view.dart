@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:collection/src/iterable_extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -187,6 +188,7 @@ class HomeView extends GetView<HomeViewController> {
         body: SizedBox(
           height: double.infinity,
           child: TabBarView(
+            physics: NeverScrollableScrollPhysics(),
             controller: controller.tabController,
             children: List<Widget>.generate(
               controller.tabElements.length,
@@ -226,8 +228,8 @@ class HomeView extends GetView<HomeViewController> {
   Widget chatMessage(TwitchChatMessage message) {
     return Container(
       padding: EdgeInsets.only(top: 4),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Wrap(
+        crossAxisAlignment: WrapCrossAlignment.start,
         children: [
           for (TwitchBadge badge in message.badges)
             Container(
@@ -241,20 +243,33 @@ class HomeView extends GetView<HomeViewController> {
           Text(
             message.authorName + ": ",
             style: TextStyle(
-              color: Color(int.parse(message.color.replaceAll('#', '0xff'))),
+              color: message.color != ''
+                  ? Color(int.parse(message.color.replaceAll('#', '0xff')))
+                  : Colors.white,
               fontSize: 19,
               fontWeight: FontWeight.bold,
             ),
           ),
-          Expanded(
-            child: Text(
-              message.message.trim(),
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 19,
+          for (String word in message.message.trim().split(' '))
+            if (controller.twitchEmotes
+                    .firstWhereOrNull((element) => element.name == word) !=
+                null)
+              Wrap(children: [
+                Image(
+                  image: NetworkImage(controller.twitchEmotes
+                      .firstWhere((element) => element.name == word)
+                      .url1x),
+                ),
+                Text(' '),
+              ])
+            else
+              Text(
+                word + " ",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 19,
+                ),
               ),
-            ),
-          ),
         ],
       ),
     );

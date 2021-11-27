@@ -25,4 +25,7 @@ class TwitchBadge extends Equatable {
       imageUrl4x,
     ];
   }
+
+  @override
+  bool get stringify => true;
 }

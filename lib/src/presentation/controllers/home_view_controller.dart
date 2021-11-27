@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/domain/entities/emote.dart';
 import 'package:irllink/src/domain/entities/tabbar/tab_element.dart';
 import 'package:irllink/src/domain/entities/tabbar/web_page.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
@@ -31,10 +32,11 @@ class HomeViewController extends GetxController
   late IOWebSocketChannel channel;
   late TwitchCredentials twitchData;
   late StreamController<dynamic> streamController;
-  late RxList<TwitchChatMessage> chatMessages = <TwitchChatMessage>[].obs;
+  RxList<TwitchChatMessage> chatMessages = <TwitchChatMessage>[].obs;
   late ScrollController scrollController;
   late TextEditingController chatInputController;
-  List<TwitchBadge> twitchBadges = [];
+  List<TwitchBadge> twitchBadges = <TwitchBadge>[];
+  List<Emote> twitchEmotes = <Emote>[];
 
   @override
   void onInit() {
@@ -62,6 +64,11 @@ class HomeViewController extends GetxController
     homeEvents
         .getTwitchBadges(twitchData.accessToken, twitchData.twitchUser.id)
         .then((value) => twitchBadges = value.data!);
+
+    homeEvents
+        .getTwitchEmotes(twitchData.accessToken)
+        .then((value) => twitchEmotes = value.data!);
+
     super.onInit();
   }
 
@@ -75,6 +82,8 @@ class HomeViewController extends GetxController
     channel.sink.add('CAP REQ :twitch.tv/tags');
 
     channel.sink.add('JOIN #$nick');
+    //use the one under for testing, lot of messages so you will see if something break the code
+    // channel.sink.add('JOIN #xqcow');
 
     streamController.stream.listen((message) {
       debugPrint(message);
@@ -89,7 +98,7 @@ class HomeViewController extends GetxController
               TwitchChatMessage.fromString(twitchBadges, message);
           chatMessages.add(chatMessage);
           if (chatMessages.length > 100) {
-            chatMessages.removeLast();
+            chatMessages.removeAt(0);
           }
 
           Timer(Duration(milliseconds: 100), () {

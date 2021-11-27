@@ -7,10 +7,12 @@ import 'package:get_storage/get_storage.dart';
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/utils/constants.dart';
+import 'package:irllink/src/data/entities/emote_dto.dart';
 import 'package:irllink/src/data/entities/twitch_badge_dto.dart';
 import 'package:irllink/src/data/entities/twitch_credentials_dto.dart';
 import 'package:irllink/src/data/entities/twitch_decoded_idtoken_dto.dart';
 import 'package:irllink/src/data/entities/twitch_user_dto.dart';
+import 'package:irllink/src/domain/entities/emote.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
 import 'package:irllink/src/domain/entities/twitch_user.dart';
@@ -229,6 +231,28 @@ class TwitchRepositoryImpl extends TwitchRepository {
     } on DioError catch (e) {
       print(e.response);
       return DataFailed(throw new Exception("Error retrieving Twitch badges"));
+    }
+  }
+
+  @override
+  Future<DataState<List<Emote>>> getTwitchEmotes(String accessToken) async {
+    Response response;
+    var dio = Dio();
+    List<Emote> emotes = <Emote>[];
+    try {
+      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dio.options.headers["authorization"] = "Bearer $accessToken";
+      response =
+          await dio.get('https://api.twitch.tv/helix/chat/emotes/global');
+
+      response.data['data'].forEach(
+          (emote) => emotes.add(EmoteDTO.fromJson(emote, EmoteType.global)));
+
+      debugPrint(emotes.length.toString());
+      debugPrint(emotes[0].toString());
+      return DataSuccess(emotes);
+    } on DioError catch (e) {
+      return DataFailed(throw new Exception("Error retrieving global emotes"));
     }
   }
 }
