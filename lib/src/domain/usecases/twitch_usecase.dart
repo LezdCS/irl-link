@@ -1,5 +1,7 @@
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:irllink/src/domain/entities/emote.dart';
+import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
 import 'package:irllink/src/domain/repositories/twitch_repository.dart';
 
@@ -12,11 +14,21 @@ class TwitchUseCase {
   }
 
   Future<DataState<TwitchCredentials>> getTwitchOauth(
-      {TwitchAuthParams? params}) {
-    return twitchRepository.getTwitchOauth(params!);
+      {required TwitchAuthParams params}) {
+    return twitchRepository.getTwitchOauth(params);
   }
 
   Future<DataState<String>> logout() {
     return twitchRepository.logout();
+  }
+
+  Future<DataState<List<TwitchBadge>>> getTwitchBadges(
+      {required String accessToken, required String userId}) {
+    return twitchRepository.getTwitchBadges(accessToken, userId);
+  }
+
+  Future<DataState<List<Emote>>> getTwitchEmotes(
+      {required String accessToken}) {
+    return twitchRepository.getTwitchEmotes(accessToken);
   }
 }

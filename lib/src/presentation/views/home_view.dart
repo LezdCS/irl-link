@@ -1,12 +1,19 @@
 import 'dart:ui';
 
+import 'package:collection/src/iterable_extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
+import 'package:irllink/src/domain/entities/tabbar/web_page.dart';
+import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
+import 'package:irllink/src/presentation/widgets/obs_tab_view.dart';
+import 'package:irllink/src/presentation/widgets/twitch_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/web_page_view.dart';
 import 'package:irllink/src/presentation/widgets/split_view_custom.dart';
+import 'package:irllink/src/domain/entities/twitch_chat_message.dart';
 
 class HomeView extends GetView<HomeViewController> {
   final HomeViewController controller = Get.find<HomeViewController>();
@@ -27,14 +34,14 @@ class HomeView extends GetView<HomeViewController> {
             child: Container(
               constraints: BoxConstraints.expand(),
               decoration: BoxDecoration(
-                color: Color(0xFF480A52),
+                color: Color(0xFF121212),
               ),
               child: SafeArea(
                 child: SplitViewCustom(
                   controller: controller.splitViewController,
-                  gripColor: Color(0xFF480A52),
-                  gripColorActive: Color(0xFF480A52),
-                  gripSize: 22,
+                  gripColor: Color(0xFF121212),
+                  gripColorActive: Color(0xFF121212),
+                  gripSize: 18,
                   viewMode: SplitViewMode.Vertical,
                   indicator: SplitIndicator(
                     viewMode: SplitViewMode.Vertical,
@@ -47,7 +54,7 @@ class HomeView extends GetView<HomeViewController> {
                   ),
                   children: [
                     _tabBarCustomWindows(height, width),
-                    _twitchChat(width),
+                    _twitchChat(height, width),
                   ],
                   onWeightChanged: (w) {
                     print("Horizon: $w");
@@ -72,7 +79,7 @@ class HomeView extends GetView<HomeViewController> {
       () => Container(
         height: height * 0.07,
         decoration: BoxDecoration(
-          color: Color(0xFF480A52),
+          color: Color(0xFF282828),
         ),
         child: Row(
           children: [
@@ -85,17 +92,22 @@ class HomeView extends GetView<HomeViewController> {
                 children: [
                   Container(
                     alignment: Alignment.center,
-                    child: Image(
-                      image: AssetImage("lib/assets/chatinput.png"),
-                    ),
-                    // child: SvgPicture.asset(
-                    //   './lib/assets/chatinput.svg',
-                    //   semanticsLabel: 'Waves',
+                    // child: Image(
+                    //   image: AssetImage("lib/assets/chatinput.png"),
                     // ),
+                    child: SvgPicture.asset(
+                      './lib/assets/chatinput.svg',
+                      semanticsLabel: 'chat input',
+                    ),
                   ),
                   Container(
                     alignment: Alignment.center,
                     child: TextField(
+                      controller: controller.chatInputController,
+                      onSubmitted: (String value) {
+                        controller.sendChatMessage(value);
+                        controller.chatInputController.text = '';
+                      },
                       maxLines: 1,
                       decoration: InputDecoration(
                         border: InputBorder.none,
@@ -152,23 +164,21 @@ class HomeView extends GetView<HomeViewController> {
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(50.0),
           child: AppBar(
-            backgroundColor: Color(0xFF480A52),
+            backgroundColor: Color(0xFF282828),
             bottom: TabBar(
               controller: controller.tabController,
               isScrollable: true,
+              labelColor: Colors.purple,
+              unselectedLabelColor: Colors.white,
               indicatorColor: Colors.purple,
               labelPadding: EdgeInsets.symmetric(
                   horizontal:
-                      width / (controller.internetPages.length > 2 ? 9 : 5)),
+                      width / (controller.tabElements.length > 2 ? 9 : 5)),
               tabs: List<Tab>.generate(
-                controller.internetPages.length,
+                controller.tabElements.length,
                 (int index) => Tab(
                   child: Text(
-                    controller.internetPages[index].title,
-                    style: TextStyle(
-                        color: controller.tabController.index == index
-                            ? Colors.purple
-                            : Colors.white),
+                    controller.tabElements[index].title,
                   ),
                 ),
               ),
@@ -178,11 +188,17 @@ class HomeView extends GetView<HomeViewController> {
         body: SizedBox(
           height: double.infinity,
           child: TabBarView(
+            physics: NeverScrollableScrollPhysics(),
             controller: controller.tabController,
-            children: List<TabBarPageWidget>.generate(
-              controller.internetPages.length,
-              (int index) =>
-                  TabBarPageWidget(controller.internetPages[index].url),
+            children: List<Widget>.generate(
+              controller.tabElements.length,
+              (int index) => controller.tabElements[index] is WebPage
+                  ? WebPageView(controller.tabElements[index].toWebPage().url)
+                  : controller.tabElements[index].title == "Twitch"
+                      ? TwitchTabView()
+                      : controller.tabElements[index].title == "OBS"
+                          ? ObsTabView()
+                          : Container(),
             ),
           ),
         ),
@@ -190,25 +206,70 @@ class HomeView extends GetView<HomeViewController> {
     );
   }
 
-  Widget _twitchChat(double width) {
-    return Container(
-      width: width,
-      padding: EdgeInsets.only(left: 10),
-      decoration: BoxDecoration(
-        color: Color(0xFF480A52),
+  Widget _twitchChat(double height, double width) {
+    return Obx(
+      () => Container(
+        width: width,
+        padding: EdgeInsets.only(top: 10, left: 10, bottom: height * 0.07),
+        decoration: BoxDecoration(
+          color: Color(0xFF282828),
+        ),
+        child: ListView(
+          controller: controller.scrollController,
+          children: [
+            for (TwitchChatMessage message in controller.chatMessages)
+              chatMessage(message)
+          ],
+        ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    );
+  }
+
+  Widget chatMessage(TwitchChatMessage message) {
+    return Container(
+      padding: EdgeInsets.only(top: 4),
+      child: Wrap(
+        crossAxisAlignment: WrapCrossAlignment.start,
         children: [
+          for (TwitchBadge badge in message.badges)
+            Container(
+              padding: EdgeInsets.only(right: 4, top: 3),
+              child: Image(
+                image: NetworkImage(badge.imageUrl1x),
+                filterQuality: FilterQuality.high,
+                alignment: Alignment.bottomLeft,
+              ),
+            ),
           Text(
-            "Welcome to the lezd_ chat room!",
+            message.authorName + ": ",
             style: TextStyle(
-              color: Color(0xFF878585),
-              fontFamily: 'Roboto',
+              color: message.color != ''
+                  ? Color(int.parse(message.color.replaceAll('#', '0xff')))
+                  : Colors.white,
+              fontSize: 19,
               fontWeight: FontWeight.bold,
-              fontSize: 12,
             ),
           ),
+          for (String word in message.message.trim().split(' '))
+            if (controller.twitchEmotes
+                    .firstWhereOrNull((element) => element.name == word) !=
+                null)
+              Wrap(children: [
+                Image(
+                  image: NetworkImage(controller.twitchEmotes
+                      .firstWhere((element) => element.name == word)
+                      .url1x),
+                ),
+                Text(' '),
+              ])
+            else
+              Text(
+                word + " ",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 19,
+                ),
+              ),
         ],
       ),
     );

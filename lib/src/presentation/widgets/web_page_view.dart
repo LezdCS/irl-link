@@ -2,16 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class TabBarPageWidget extends StatefulWidget {
-  TabBarPageWidget(this.url);
+class WebPageView extends StatefulWidget {
+  WebPageView(this.url);
 
   final String url;
 
   @override
-  _TabBarPageWidgetState createState() => _TabBarPageWidgetState();
+  _WebPageViewState createState() => _WebPageViewState();
 }
 
-class _TabBarPageWidgetState extends State<TabBarPageWidget>
+class _WebPageViewState extends State<WebPageView>
     with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   @override
   void initState() {
