@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
@@ -9,23 +11,26 @@ class LoginViewController extends GetxController {
   LoginViewController({required this.loginEvents});
 
   final LoginEvents loginEvents;
+  RxBool isOnline = true.obs;
 
   @override
-  void onInit() {
+  Future<void> onInit() async {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
     ));
-
+    isOnline.value = await hasNetwork();
     super.onInit();
   }
 
   @override
   void onReady() {
-    loginEvents.getTwitchFromLocal().then((value) {
-      if (value.exception == null) {
-        Get.offAllNamed(Routes.HOME, arguments: [value.data]);
-      }
-    }).catchError((e) {});
+    if (isOnline.value) {
+      loginEvents.getTwitchFromLocal().then((value) {
+        if (value.exception == null) {
+          Get.offAllNamed(Routes.HOME, arguments: [value.data]);
+        }
+      }).catchError((e) {});
+    }
 
     super.onReady();
   }
@@ -42,5 +47,14 @@ class LoginViewController extends GetxController {
         Get.offAllNamed(Routes.HOME, arguments: [value.data]);
       }
     });
+  }
+
+  Future<bool> hasNetwork() async {
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
+    } on SocketException catch (_) {
+      return false;
+    }
   }
 }

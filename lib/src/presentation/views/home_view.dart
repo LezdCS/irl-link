@@ -92,9 +92,6 @@ class HomeView extends GetView<HomeViewController> {
                 children: [
                   Container(
                     alignment: Alignment.center,
-                    // child: Image(
-                    //   image: AssetImage("lib/assets/chatinput.png"),
-                    // ),
                     child: SvgPicture.asset(
                       './lib/assets/chatinput.svg',
                       semanticsLabel: 'chat input',
@@ -102,20 +99,45 @@ class HomeView extends GetView<HomeViewController> {
                   ),
                   Container(
                     alignment: Alignment.center,
-                    child: TextField(
-                      controller: controller.chatInputController,
-                      onSubmitted: (String value) {
-                        controller.sendChatMessage(value);
-                        controller.chatInputController.text = '';
-                      },
-                      maxLines: 1,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(color: Colors.white, fontSize: 14),
-                        hintText: 'Send a message',
-                        isDense: true,
-                        contentPadding: EdgeInsets.only(left: 10),
-                      ),
+                    padding: EdgeInsets.only(left: 5, right: 5),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.emoji_emotions_rounded,
+                          color: Colors.white,
+                          size: 22,
+                        ),
+                        Expanded(
+                          child: TextField(
+                            controller: controller.chatInputController,
+                            onSubmitted: (String value) {
+                              controller.sendChatMessage(value);
+                              controller.chatInputController.text = '';
+                            },
+                            maxLines: 1,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintStyle:
+                                  TextStyle(color: Colors.white, fontSize: 14),
+                              hintText: 'Send a message',
+                              isDense: true,
+                              contentPadding: EdgeInsets.only(left: 10),
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            controller.sendChatMessage(
+                                controller.chatInputController.text);
+                            controller.chatInputController.text = '';
+                          },
+                          child: Icon(
+                            Icons.send,
+                            color: Colors.white,
+                            size: 22,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
