@@ -1,16 +1,26 @@
-# irl_link
+# IRL Link
 
-A new Flutter project.
+IRL Link is a mobile application to controll your IRL Stream at perfection.
 
-## Getting Started
+## Download
+Android APKs are available on the [Play Store]() (to come) or in the [Releases](https://github.com/LezdCS/irl_link/releases) section.
 
-This project is a starting point for a Flutter application.
+## Roadmap
+To come
 
-A few resources to get you started if this is your first Flutter project:
+## Contributing
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+This is a Flutter project, using the Dart language.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The project is buillt following the Clean Architecture :
+
+<img src="https://user-images.githubusercontent.com/63884731/143772996-6a4788e5-54d9-47ec-a9a9-3549977d72d8.png" alt="drawing" height="350"/>
+
+Using this architecture, you can implement new features quite easily, even if it takes some time to understand each part.
+
+The main Dart library used is [GetX](https://pub.dev/packages/get), we use it for State managment, local storage, navigation, themes, snackbar, dialogs and internationalization.
+
+## Quick links
+- Website : https://irllink.com
+- Wiki : https://github.com/LezdCS/irl_link/wiki
+- Bug Tracker : https://github.com/LezdCS/irl_link/issues

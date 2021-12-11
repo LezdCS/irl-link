@@ -13,21 +13,30 @@ class SettingsView extends GetView<SettingsViewController> {
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Get.back(),
         ),
+        actions: [
+          InkWell(
+            onTap: () {
+              controller.logout();
+            },
+            child: Container(
+              margin: EdgeInsets.only(right: 10, top: 10, bottom: 10),
+              padding: EdgeInsets.only(left: 8, right: 8),
+              alignment: Alignment.center,
+              decoration: new BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Text("Logout"),
+            ),
+          ),
+        ],
         backgroundColor: Colors.black,
         title: Text("Settings"),
-        centerTitle: true,
+        centerTitle: false,
       ),
       body: Container(
-        child: Column(
-          children: [
-            InkWell(
-              onTap: () {
-                controller.logout();
-              },
-              child: Text("logout"),
-            ),
-            Text("fje"),
-          ],
+        decoration: BoxDecoration(
+          color: Color(0xFF282828),
         ),
       ),
     );

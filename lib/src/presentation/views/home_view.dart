@@ -67,14 +67,14 @@ class HomeView extends GetView<HomeViewController> {
             bottom: 0.0,
             left: 0.0,
             right: 0.0,
-            child: _bottomNavBar(height, width),
+            child: _bottomNavBar(height, width, context),
           ),
         ],
       ),
     );
   }
 
-  Widget _bottomNavBar(double height, double width) {
+  Widget _bottomNavBar(double height, double width, BuildContext context) {
     return Obx(
       () => Container(
         height: height * 0.07,
@@ -92,9 +92,6 @@ class HomeView extends GetView<HomeViewController> {
                 children: [
                   Container(
                     alignment: Alignment.center,
-                    // child: Image(
-                    //   image: AssetImage("lib/assets/chatinput.png"),
-                    // ),
                     child: SvgPicture.asset(
                       './lib/assets/chatinput.svg',
                       semanticsLabel: 'chat input',
@@ -102,20 +99,46 @@ class HomeView extends GetView<HomeViewController> {
                   ),
                   Container(
                     alignment: Alignment.center,
-                    child: TextField(
-                      controller: controller.chatInputController,
-                      onSubmitted: (String value) {
-                        controller.sendChatMessage(value);
-                        controller.chatInputController.text = '';
-                      },
-                      maxLines: 1,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(color: Colors.white, fontSize: 14),
-                        hintText: 'Send a message',
-                        isDense: true,
-                        contentPadding: EdgeInsets.only(left: 10),
-                      ),
+                    padding: EdgeInsets.only(left: 5, right: 5),
+                    child: Row(
+                      children: [
+                        Image(
+                          image: AssetImage("lib/assets/twitchSmileEmoji.png"),
+                          width: 30,
+                        ),
+                        Expanded(
+                          child: TextField(
+                            controller: controller.chatInputController,
+                            onSubmitted: (String value) {
+                              controller.sendChatMessage(value);
+                              controller.chatInputController.text = '';
+                              FocusScope.of(context).unfocus();
+                            },
+                            maxLines: 1,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintStyle:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                              hintText: 'Send a message',
+                              isDense: true,
+                              contentPadding: EdgeInsets.only(left: 10),
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            controller.sendChatMessage(
+                                controller.chatInputController.text);
+                            controller.chatInputController.text = '';
+                            FocusScope.of(context).unfocus();
+                          },
+                          child: SvgPicture.asset(
+                            './lib/assets/sendArrow.svg',
+                            semanticsLabel: 'send message',
+                            width: 21,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -208,20 +231,42 @@ class HomeView extends GetView<HomeViewController> {
 
   Widget _twitchChat(double height, double width) {
     return Obx(
-      () => Container(
-        width: width,
-        padding: EdgeInsets.only(top: 10, left: 10, bottom: height * 0.07),
-        decoration: BoxDecoration(
-          color: Color(0xFF282828),
+      () => Stack(children: [
+        Container(
+          width: width,
+          padding: EdgeInsets.only(top: 10, left: 10, bottom: height * 0.07),
+          decoration: BoxDecoration(
+            color: Color(0xFF282828),
+          ),
+          child: ListView(
+            controller: controller.scrollController,
+            children: [
+              Visibility(
+                visible: controller.chatMessages.length < 100,
+                child: Text(
+                  "Welcome on ${controller.twitchData.twitchUser.displayName} chat room !",
+                  style: TextStyle(
+                    color: Color(0xFF878585),
+                  ),
+                ),
+              ),
+              for (TwitchChatMessage message in controller.chatMessages)
+                chatMessage(message)
+            ],
+          ),
         ),
-        child: ListView(
-          controller: controller.scrollController,
-          children: [
-            for (TwitchChatMessage message in controller.chatMessages)
-              chatMessage(message)
-          ],
+        AnimatedOpacity(
+          opacity: controller.isChatConnected.value ? 0.0 : 1.0,
+          duration: Duration(milliseconds: 1000),
+          child: alertMessage(
+            controller.isChatConnected.value
+                ? Color(0xFF33A031)
+                : Color(0xFFEC7508),
+            controller.isChatConnected.value ? "Connected" : "Connecting...",
+            !controller.isChatConnected.value,
+          ),
         ),
-      ),
+      ]),
     );
   }
 
@@ -270,6 +315,36 @@ class HomeView extends GetView<HomeViewController> {
                   fontSize: 19,
                 ),
               ),
+        ],
+      ),
+    );
+  }
+
+  Widget alertMessage(Color color, String message, bool isProgress) {
+    return AnimatedContainer(
+      padding: EdgeInsets.only(bottom: 5, top: 5),
+      color: color,
+      duration: Duration(milliseconds: 400),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            message,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Visibility(
+            visible: isProgress,
+            child: Container(
+              margin: EdgeInsets.only(left: 8),
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(color: Colors.white),
+            ),
+          ),
         ],
       ),
     );

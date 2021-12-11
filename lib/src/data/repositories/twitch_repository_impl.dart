@@ -114,7 +114,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
         displayName: twitchData.twitchUser.displayName,
       );
 
-      TwitchCredentials newTwitchData = TwitchCredentialsDTO(
+      TwitchCredentialsDTO newTwitchData = TwitchCredentialsDTO(
         accessToken: response.data['access_token'],
         refreshToken: response.data['refresh_token'],
         idToken: twitchData.idToken,
@@ -225,8 +225,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       response2.data['data'].forEach((set) => set['versions'].forEach(
           (version) =>
               badges.add(TwitchBadgeDTO.fromJson(set['set_id'], version))));
-      //
-      // debugPrint(badges.length.toString());
+
       return DataSuccess(badges);
     } on DioError catch (e) {
       print(e.response);
@@ -248,8 +247,6 @@ class TwitchRepositoryImpl extends TwitchRepository {
       response.data['data'].forEach(
           (emote) => emotes.add(EmoteDTO.fromJson(emote, EmoteType.global)));
 
-      debugPrint(emotes.length.toString());
-      debugPrint(emotes[0].toString());
       return DataSuccess(emotes);
     } on DioError catch (e) {
       return DataFailed(throw new Exception("Error retrieving global emotes"));

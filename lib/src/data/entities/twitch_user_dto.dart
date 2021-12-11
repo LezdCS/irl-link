@@ -22,11 +22,11 @@ class TwitchUserDTO extends TwitchUser {
   Map toJson() => {
         'id': id,
         'login': login,
-        'displayName': displayName,
-        'broadcasterType': broadcasterType,
+        'display_name': displayName,
+        'broadcaster_type': broadcasterType,
         'description': description,
-        'profileImageUrl': profileImageUrl,
-        'viewCount': viewCount,
+        'profile_image_url': profileImageUrl,
+        'view_count': viewCount,
       };
 
   factory TwitchUserDTO.fromJson(Map<String, dynamic> map) {
