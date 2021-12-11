@@ -29,6 +29,7 @@ class HomeViewController extends GetxController
   RxList<TabElement> tabElements = <TabElement>[].obs;
 
   //CHAT
+  RxBool isChatConnected = false.obs;
   late IOWebSocketChannel channel;
   late TwitchCredentials twitchData;
   late StreamController<dynamic> streamController;
@@ -77,13 +78,15 @@ class HomeViewController extends GetxController
     String token = twitchData.accessToken;
     String nick = twitchData.twitchUser.login;
 
+    isChatConnected.value = false;
     channel.sink.add('PASS oauth:' + token);
     channel.sink.add('NICK ' + nick);
     channel.sink.add('CAP REQ :twitch.tv/tags');
 
     channel.sink.add('JOIN #$nick');
     //use the one under for testing, lot of messages so you will see if something break the code
-    // channel.sink.add('JOIN #xqcow');
+    // channel.sink.add('JOIN #robcdee');
+    isChatConnected.value = true;
 
     streamController.stream.listen((message) {
       debugPrint(message);
@@ -126,12 +129,13 @@ class HomeViewController extends GetxController
     String nick = twitchData.twitchUser.login;
     WebSocket.connect("wss://irc-ws.chat.twitch.tv:443").then((ws) {
       IOWebSocketChannel channel = IOWebSocketChannel(ws);
-
       channel.sink.add('PASS oauth:' + token);
       channel.sink.add('NICK ' + nick);
       channel.sink.add('JOIN #$nick');
       channel.sink.add('PRIVMSG #$nick :$message\r\n');
+      channel.sink.add('PART #lezd_');
       channel.sink.close(status.goingAway);
+      ws.close();
     });
   }
 }

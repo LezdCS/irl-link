@@ -7,11 +7,12 @@ import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:flutter/services.dart';
 import 'package:irllink/src/presentation/events/login_events.dart';
 
-class LoginViewController extends GetxController {
+class LoginViewController extends GetxController with StateMixin<void> {
   LoginViewController({required this.loginEvents});
 
   final LoginEvents loginEvents;
   RxBool isOnline = true.obs;
+  RxStatus status = RxStatus.loading();
 
   @override
   Future<void> onInit() async {
@@ -23,15 +24,16 @@ class LoginViewController extends GetxController {
   }
 
   @override
-  void onReady() {
+  Future<void> onReady() async {
     if (isOnline.value) {
-      loginEvents.getTwitchFromLocal().then((value) {
+      await loginEvents.getTwitchFromLocal().then((value) {
         if (value.exception == null) {
           Get.offAllNamed(Routes.HOME, arguments: [value.data]);
         }
       }).catchError((e) {});
     }
 
+    status = RxStatus.success();
     super.onReady();
   }
 
