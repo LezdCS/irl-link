@@ -51,9 +51,9 @@ class HomeViewController extends GetxController
     TabElement twitchPage = new TabElement("Twitch");
     TabElement obsPage = new TabElement("OBS");
 
-    tabElements.add(page1);
     tabElements.add(twitchPage);
     tabElements.add(obsPage);
+    tabElements.add(page1);
 
     tabController = new TabController(length: tabElements.length, vsync: this);
 
