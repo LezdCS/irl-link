@@ -8,16 +8,15 @@ class LoginView extends GetView<LoginViewController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: controller.obx(
-        (state) => loginScreen(),
-        onLoading: loadingScreen(),
-        onEmpty: Text('No data found'),
-        onError: (error) => Text("error"),
+      body: Obx(
+        () => controller.isLoading.value
+            ? loadingScreen(context)
+            : loginScreen(context),
       ),
     );
   }
 
-  Widget loginScreen() {
+  Widget loginScreen(BuildContext context) {
     return Container(
       width: double.infinity,
       color: Color(0XFF282828),
@@ -30,6 +29,7 @@ class LoginView extends GetView<LoginViewController> {
                 image: AssetImage("lib/assets/logo.png"),
               ),
             ),
+            Spacer(),
             Container(
               padding: EdgeInsets.only(top: 40),
               width: 300,
@@ -42,8 +42,8 @@ class LoginView extends GetView<LoginViewController> {
             ),
             Spacer(),
             Container(
-              height: 200,
-              width: 200,
+              width: context.width,
+              height: context.height * 0.4,
               child: SvgPicture.asset(
                 './lib/assets/waves.svg',
                 semanticsLabel: 'Waves',
@@ -55,7 +55,7 @@ class LoginView extends GetView<LoginViewController> {
     );
   }
 
-  Widget loadingScreen() {
+  Widget loadingScreen(BuildContext context) {
     return Container(
       width: double.infinity,
       color: Color(0XFF282828),
@@ -85,8 +85,8 @@ class LoginView extends GetView<LoginViewController> {
             ),
             Spacer(),
             Container(
-              height: 200,
-              width: 200,
+              width: context.width,
+              height: context.height * 0.4,
               child: SvgPicture.asset(
                 './lib/assets/waves.svg',
                 semanticsLabel: 'Waves',

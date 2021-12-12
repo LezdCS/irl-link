@@ -12,7 +12,7 @@ class LoginViewController extends GetxController with StateMixin<void> {
 
   final LoginEvents loginEvents;
   RxBool isOnline = true.obs;
-  RxStatus status = RxStatus.loading();
+  RxBool isLoading = true.obs;
 
   @override
   Future<void> onInit() async {
@@ -33,7 +33,7 @@ class LoginViewController extends GetxController with StateMixin<void> {
       }).catchError((e) {});
     }
 
-    status = RxStatus.success();
+    isLoading.value = false;
     super.onReady();
   }
 

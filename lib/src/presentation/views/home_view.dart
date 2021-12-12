@@ -77,28 +77,22 @@ class HomeView extends GetView<HomeViewController> {
   Widget _bottomNavBar(double height, double width, BuildContext context) {
     return Obx(
       () => Container(
-        height: height * 0.07,
-        decoration: BoxDecoration(
-          color: Color(0xFF282828),
-        ),
+        height: height * 0.06,
         child: Row(
           children: [
             Container(
-              alignment: Alignment.center,
               padding: EdgeInsets.only(left: 10),
-              height: double.maxFinite,
               width: width * 0.7,
               child: Stack(
+                alignment: AlignmentDirectional.center,
                 children: [
                   Container(
-                    alignment: Alignment.center,
                     child: SvgPicture.asset(
                       './lib/assets/chatinput.svg',
                       semanticsLabel: 'chat input',
                     ),
                   ),
                   Container(
-                    alignment: Alignment.center,
                     padding: EdgeInsets.only(left: 5, right: 5),
                     child: Row(
                       children: [
@@ -114,6 +108,7 @@ class HomeView extends GetView<HomeViewController> {
                               controller.chatInputController.text = '';
                               FocusScope.of(context).unfocus();
                             },
+                            style: TextStyle(color: Colors.white),
                             maxLines: 1,
                             decoration: InputDecoration(
                               border: InputBorder.none,
@@ -121,7 +116,7 @@ class HomeView extends GetView<HomeViewController> {
                                   TextStyle(color: Colors.white, fontSize: 16),
                               hintText: 'Send a message',
                               isDense: true,
-                              contentPadding: EdgeInsets.only(left: 10),
+                              contentPadding: EdgeInsets.only(left: 5),
                             ),
                           ),
                         ),
@@ -146,7 +141,6 @@ class HomeView extends GetView<HomeViewController> {
             ),
             Container(
               width: width * 0.15,
-              height: double.maxFinite,
               child: InkWell(
                 onTap: () {
                   controller.sound.value = !controller.sound.value;
@@ -161,7 +155,6 @@ class HomeView extends GetView<HomeViewController> {
             ),
             Container(
               width: width * 0.15,
-              height: double.maxFinite,
               child: InkWell(
                 onTap: () {
                   Get.toNamed(Routes.SETTINGS);
@@ -187,7 +180,7 @@ class HomeView extends GetView<HomeViewController> {
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(50.0),
           child: AppBar(
-            backgroundColor: Color(0xFF282828),
+            backgroundColor: Color(0xFF121212),
             bottom: TabBar(
               controller: controller.tabController,
               isScrollable: true,
@@ -244,7 +237,7 @@ class HomeView extends GetView<HomeViewController> {
               Visibility(
                 visible: controller.chatMessages.length < 100,
                 child: Text(
-                  "Welcome on ${controller.twitchData.twitchUser.displayName} chat room !",
+                  "Welcome on ${controller.twitchData.twitchUser.displayName} 's chat room !",
                   style: TextStyle(
                     color: Color(0xFF878585),
                   ),
