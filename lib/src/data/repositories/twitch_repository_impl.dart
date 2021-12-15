@@ -50,7 +50,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       TwitchDecodedIdTokenDTO decodedIdToken = TwitchDecodedIdTokenDTO(
         preferredUsername: decodedToken['preferred_username'],
-        profilePicture: decodedToken['picture'],
+        profilePicture: decodedToken['picture'] ?? "",
       );
 
       TwitchUserDTO twitchUser = TwitchUserDTO(
