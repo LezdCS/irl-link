@@ -27,4 +27,18 @@ class HomeEvents {
   Future<DataState<List<Emote>>> getTwitchEmotes(String accessToken) {
     return twitchUseCase.getTwitchEmotes(accessToken: accessToken);
   }
+
+  Future<DataState<List<Emote>>> getTwitchChannelEmotes(
+      String accessToken, String broadcasterId) {
+    return twitchUseCase.getTwitchChannelEmotes(
+        accessToken: accessToken, broadcasterId: broadcasterId);
+  }
+
+  Future<DataState<List<Emote>>> getTwitchSetsEmotes(
+      String accessToken, List<String> setId) {
+    return twitchUseCase.getTwitchSetsEmotes(
+      accessToken: accessToken,
+      setId: setId,
+    );
+  }
 }

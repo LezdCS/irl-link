@@ -9,8 +9,7 @@ class TwitchChatMessage extends Equatable {
   final String color;
   final String authorName;
   final String authorId;
-  final String emotes;
-  final String thirdPartiesEmotes;
+  final Map<String, List> emotes;
   final String message;
   final int timestamp;
   final bool deleted;
@@ -22,7 +21,6 @@ class TwitchChatMessage extends Equatable {
     required this.authorName,
     required this.authorId,
     required this.emotes,
-    required this.thirdPartiesEmotes,
     required this.message,
     required this.timestamp,
     required this.deleted,
@@ -37,7 +35,6 @@ class TwitchChatMessage extends Equatable {
       authorName,
       authorId,
       emotes,
-      thirdPartiesEmotes,
       message,
       timestamp,
       deleted,
@@ -72,6 +69,31 @@ class TwitchChatMessage extends Equatable {
       });
     }
 
+    Map<String, List<List<String>>> emotesIdsPositions = {};
+    List<String> tempEmoteList = [];
+    if (messageMapped['emotes'] != "") {
+      bool multipleEmotes = messageMapped['emotes']!.contains('/');
+      if (multipleEmotes) {
+        tempEmoteList = messageMapped['emotes']!.split('/');
+      } else {
+        tempEmoteList = [messageMapped['emotes']!];
+      }
+
+      tempEmoteList.forEach((element) {
+        List<List<String>> positions = [];
+        bool sameEmote = element.split(':')[1].toString().contains(',');
+        if (sameEmote) {
+          for (String position in element.split(':')[1].split(',')) {
+            positions.add(position.split('-'));
+          }
+        } else {
+          positions = [element.split(':')[1].split('-')];
+        }
+
+        emotesIdsPositions[element.split(':')[0]] = positions;
+      });
+    }
+
     List messageList = messageSplited.last.split(':').sublist(2);
     String messageString = messageList.join(':');
 
@@ -81,8 +103,7 @@ class TwitchChatMessage extends Equatable {
       color: messageMapped['color'] as String,
       authorName: messageMapped['display-name'] as String,
       authorId: messageMapped['user-id'] as String,
-      emotes: messageMapped['emotes'] as String,
-      thirdPartiesEmotes: '',
+      emotes: emotesIdsPositions,
       message: messageString,
       timestamp: int.parse(messageMapped['tmi-sent-ts'] as String),
       deleted: false,

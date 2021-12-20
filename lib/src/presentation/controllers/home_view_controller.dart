@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:collection/src/iterable_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/emote.dart';
@@ -70,6 +71,13 @@ class HomeViewController extends GetxController
         .getTwitchEmotes(twitchData.accessToken)
         .then((value) => twitchEmotes = value.data!);
 
+    homeEvents
+        .getTwitchChannelEmotes(
+          twitchData.accessToken,
+          twitchData.twitchUser.id,
+        )
+        .then((value) => twitchEmotes.addAll(value.data!));
+
     super.onInit();
   }
 
@@ -79,9 +87,12 @@ class HomeViewController extends GetxController
     String nick = twitchData.twitchUser.login;
 
     isChatConnected.value = false;
+
+    channel.sink.add('CAP REQ :twitch.tv/membership');
+    channel.sink.add('CAP REQ :twitch.tv/tags');
+    channel.sink.add('CAP REQ :twitch.tv/commands');
     channel.sink.add('PASS oauth:' + token);
     channel.sink.add('NICK ' + nick);
-    channel.sink.add('CAP REQ :twitch.tv/tags');
 
     channel.sink.add('JOIN #$nick');
     //use the one under for testing, lot of messages so you will see if something break the code
@@ -111,6 +122,30 @@ class HomeViewController extends GetxController
             );
           });
         }
+      }
+
+      if (message.toString().contains("GLOBALUSERSTATE")) {
+        final Map<String, String> messageMapped = {};
+        List messageSplited = message.split(';');
+        messageSplited.forEach((element) {
+          List elementSplited = element.split('=');
+          messageMapped[elementSplited[0]] = elementSplited[1];
+        });
+        List<String> emoteSetsIds = messageMapped["emote-sets"]!.split(',');
+        homeEvents
+            .getTwitchSetsEmotes(twitchData.accessToken, emoteSetsIds)
+            .then((value) {
+          for (var emote in value.data!) {
+            if (twitchEmotes
+                    .firstWhereOrNull((element) => element.id == emote.id) ==
+                null) {
+              twitchEmotes.add(emote);
+              if (emote.name.contains("rcd")) {
+                debugPrint(emote.toString());
+              }
+            }
+          }
+        });
       }
     });
 

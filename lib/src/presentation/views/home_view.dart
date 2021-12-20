@@ -289,14 +289,30 @@ class HomeView extends GetView<HomeViewController> {
             ),
           ),
           for (String word in message.message.trim().split(' '))
-            if (controller.twitchEmotes
-                    .firstWhereOrNull((element) => element.name == word) !=
+            if (message.emotes.entries.firstWhereOrNull((element) => element
+                    .value
+                    .where((position) =>
+                        message.message.substring(int.parse(position[0]),
+                            int.parse(position[1]) + 1) ==
+                        word)
+                    .isNotEmpty) !=
                 null)
               Wrap(children: [
                 Image(
-                  image: NetworkImage(controller.twitchEmotes
-                      .firstWhere((element) => element.name == word)
-                      .url1x),
+                  image: NetworkImage(
+                      "https://static-cdn.jtvnw.net/emoticons/v2/" +
+                          message
+                              .emotes.entries
+                              .firstWhere((element) => element
+                                  .value
+                                  .where((position) =>
+                                      message.message.substring(
+                                          int.parse(position[0]),
+                                          int.parse(position[1]) + 1) ==
+                                      word)
+                                  .isNotEmpty)
+                              .key +
+                          "/default/dark/1.0"),
                 ),
                 Text(' '),
               ])

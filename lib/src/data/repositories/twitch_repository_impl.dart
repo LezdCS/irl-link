@@ -245,11 +245,75 @@ class TwitchRepositoryImpl extends TwitchRepository {
           await dio.get('https://api.twitch.tv/helix/chat/emotes/global');
 
       response.data['data'].forEach(
-          (emote) => emotes.add(EmoteDTO.fromJson(emote, EmoteType.global)));
+        (emote) => emotes.add(
+          EmoteDTO.fromJson(emote),
+        ),
+      );
 
       return DataSuccess(emotes);
     } on DioError catch (e) {
       return DataFailed(throw new Exception("Error retrieving global emotes"));
+    }
+  }
+
+  @override
+  Future<DataState<List<Emote>>> getTwitchChannelEmotes(
+    String accessToken,
+    String broadcasterId,
+  ) async {
+    Response response;
+    var dio = Dio();
+    List<Emote> emotes = <Emote>[];
+    try {
+      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dio.options.headers["authorization"] = "Bearer $accessToken";
+      response = await dio.get(
+        'https://api.twitch.tv/helix/chat/emotes',
+        queryParameters: {'broadcaster_id': broadcasterId},
+      );
+
+      response.data['data'].forEach(
+        (emote) => emotes.add(
+          EmoteDTO.fromJson(emote),
+        ),
+      );
+
+      return DataSuccess(emotes);
+    } on DioError catch (e) {
+      return DataFailed(throw new Exception("Error retrieving channel emotes"));
+    }
+  }
+
+  @override
+  Future<DataState<List<Emote>>> getTwitchSetsEmotes(
+    String accessToken,
+    List<String> setId,
+  ) async {
+    // TODO : max 25 setId per call https://api.twitch.tv/helix/chat/emotes/set?emote_set_id=301590448&emote_set_id=5678
+    Response response;
+    var dio = Dio();
+    List<Emote> emotes = <Emote>[];
+
+    try {
+      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dio.options.headers["authorization"] = "Bearer $accessToken";
+
+      final queryParameters = {'emote_set_id': setId};
+      Uri uri = Uri.https(
+        "api.twitch.tv",
+        "/helix/chat/emotes/set",
+        queryParameters,
+      );
+      response = await dio.getUri(uri);
+      response.data['data'].forEach(
+        (emote) => emotes.add(
+          EmoteDTO.fromJson(emote),
+        ),
+      );
+
+      return DataSuccess(emotes);
+    } on DioError catch (e) {
+      return DataFailed(throw new Exception("Error retrieving sets emotes"));
     }
   }
 }

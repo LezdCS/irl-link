@@ -9,8 +9,6 @@ import 'package:wakelock/wakelock.dart';
 void main() async {
   await GetStorage.init();
   Wakelock.enable();
-  //todo : faire la vérif d'utilisateur déjà existant ici plutôt que dans loginviewcontroller
-  //comme ça on a pas besoin de charger login view controller pour rien ?
   runApp(Main());
 }
 

@@ -33,4 +33,12 @@ abstract class TwitchRepository {
   );
 
   Future<DataState<List<Emote>>> getTwitchEmotes(String accessToken);
+  Future<DataState<List<Emote>>> getTwitchChannelEmotes(
+    String accessToken,
+    String broadcasterId,
+  );
+  Future<DataState<List<Emote>>> getTwitchSetsEmotes(
+    String accessToken,
+    List<String> setId,
+  );
 }
