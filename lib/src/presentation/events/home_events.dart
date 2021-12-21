@@ -30,12 +30,12 @@ class HomeEvents {
   }
 
   Future<DataState<List<TwitchBadge>>> getTwitchGlobalBadges(
-      String accessToken) {
+      {required String accessToken}) {
     return twitchUseCase.getTwitchGlobalBadges(accessToken: accessToken);
   }
 
   Future<DataState<List<TwitchBadge>>> getTwitchChannelBadges(
-      String accessToken, String broadcasterId) {
+      {required String accessToken, required String broadcasterId}) {
     return twitchUseCase.getTwitchChannelBadges(
       accessToken: accessToken,
       broadcasterId: broadcasterId,
