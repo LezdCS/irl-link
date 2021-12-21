@@ -12,7 +12,7 @@ To come
 
 This is a Flutter project, using the Dart language.
 
-The project is buillt following the Clean Architecture :
+The project is built following the Clean Architecture :
 
 <img src="https://user-images.githubusercontent.com/63884731/143772996-6a4788e5-54d9-47ec-a9a9-3549977d72d8.png" alt="drawing" height="350"/>
 
