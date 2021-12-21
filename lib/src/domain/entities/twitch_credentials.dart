@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 import 'package:irllink/src/domain/entities/twitch_decoded_idtoken.dart';
 import 'package:irllink/src/domain/entities/twitch_user.dart';
@@ -18,6 +20,15 @@ class TwitchCredentials extends Equatable {
     required this.decodedIdToken,
     required this.twitchUser,
   });
+
+  Map toJson() => {
+        'accessToken': accessToken,
+        'idToken': idToken,
+        'refreshToken': refreshToken,
+        'expiresIn': expiresIn,
+        'decodedIdToken': jsonEncode(decodedIdToken),
+        'twitchUser': jsonEncode(twitchUser),
+      };
 
   @override
   List<Object?> get props {

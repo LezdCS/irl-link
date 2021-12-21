@@ -19,6 +19,16 @@ class TwitchUser extends Equatable {
     required this.viewCount,
   });
 
+  Map toJson() => {
+        'id': id,
+        'login': login,
+        'display_name': displayName,
+        'broadcaster_type': broadcasterType,
+        'description': description,
+        'profile_image_url': profileImageUrl,
+        'view_count': viewCount,
+      };
+
   @override
   List<Object?> get props {
     return [

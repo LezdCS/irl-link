@@ -23,20 +23,26 @@ abstract class TwitchRepository {
   Future<DataState<String>> logout();
 
   Future<DataState<TwitchUser>> getTwitchUser(
-    String username,
+    String? username,
     String accessToken,
   );
 
-  Future<DataState<List<TwitchBadge>>> getTwitchBadges(
+  Future<DataState<List<TwitchBadge>>> getTwitchGlobalBadges(
     String accessToken,
-    String userId,
+  );
+
+  Future<DataState<List<TwitchBadge>>> getTwitchChannelBadges(
+    String accessToken,
+    String broadcasterId,
   );
 
   Future<DataState<List<Emote>>> getTwitchEmotes(String accessToken);
+
   Future<DataState<List<Emote>>> getTwitchChannelEmotes(
     String accessToken,
     String broadcasterId,
   );
+
   Future<DataState<List<Emote>>> getTwitchSetsEmotes(
     String accessToken,
     List<String> setId,

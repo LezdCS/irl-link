@@ -97,6 +97,8 @@ class TwitchChatMessage extends Equatable {
     List messageList = messageSplited.last.split(':').sublist(2);
     String messageString = messageList.join(':');
 
+    //TODO : if message startwith ACTION & end with  then it's a /me, so we have to cut this from message & add a boolean isMeAction so in view we display it in italic
+
     return TwitchChatMessage(
       messageId: messageMapped['id'] as String,
       badges: badges,
