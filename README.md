@@ -1,4 +1,4 @@
-# IRL Link
+# IRL Link [UNDER HEAVY DEVELOPMENT]
 
 IRL Link is a mobile application to controll your IRL Stream at perfection.
 
