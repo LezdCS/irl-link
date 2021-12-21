@@ -3,6 +3,7 @@ import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/domain/entities/emote.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
+import 'package:irllink/src/domain/entities/twitch_user.dart';
 import 'package:irllink/src/domain/usecases/twitch_usecase.dart';
 
 class HomeEvents {
@@ -18,13 +19,46 @@ class HomeEvents {
     return twitchUseCase.getTwitchOauth(params: params!);
   }
 
-  Future<DataState<List<TwitchBadge>>> getTwitchBadges(
-      String accessToken, String userId) {
-    return twitchUseCase.getTwitchBadges(
-        accessToken: accessToken, userId: userId);
+  Future<DataState<TwitchUser>> getTwitchUser({
+    String? username,
+    required String accessToken,
+  }) {
+    return twitchUseCase.getTwitchUser(
+      username: username,
+      accessToken: accessToken,
+    );
+  }
+
+  Future<DataState<List<TwitchBadge>>> getTwitchGlobalBadges(
+      String accessToken) {
+    return twitchUseCase.getTwitchGlobalBadges(accessToken: accessToken);
+  }
+
+  Future<DataState<List<TwitchBadge>>> getTwitchChannelBadges(
+      String accessToken, String broadcasterId) {
+    return twitchUseCase.getTwitchChannelBadges(
+      accessToken: accessToken,
+      broadcasterId: broadcasterId,
+    );
   }
 
   Future<DataState<List<Emote>>> getTwitchEmotes(String accessToken) {
     return twitchUseCase.getTwitchEmotes(accessToken: accessToken);
+  }
+
+  Future<DataState<List<Emote>>> getTwitchChannelEmotes(
+      String accessToken, String broadcasterId) {
+    return twitchUseCase.getTwitchChannelEmotes(
+      accessToken: accessToken,
+      broadcasterId: broadcasterId,
+    );
+  }
+
+  Future<DataState<List<Emote>>> getTwitchSetsEmotes(
+      String accessToken, List<String> setId) {
+    return twitchUseCase.getTwitchSetsEmotes(
+      accessToken: accessToken,
+      setId: setId,
+    );
   }
 }

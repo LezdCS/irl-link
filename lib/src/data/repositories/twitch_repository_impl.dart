@@ -50,7 +50,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       TwitchDecodedIdTokenDTO decodedIdToken = TwitchDecodedIdTokenDTO(
         preferredUsername: decodedToken['preferred_username'],
-        profilePicture: decodedToken['picture'],
+        profilePicture: decodedToken['picture'] ?? "",
       );
 
       TwitchUserDTO twitchUser = TwitchUserDTO(
@@ -64,7 +64,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       );
 
       await this
-          .getTwitchUser(decodedIdToken.preferredUsername, accessToken!)
+          .getTwitchUser(null, accessToken!)
           .then((value) => twitchUser = value.data!);
 
       final twitchData = TwitchCredentialsDTO(
@@ -98,29 +98,13 @@ class TwitchRepositoryImpl extends TwitchRepository {
         queryParameters: {'refresh_token': twitchData.refreshToken},
       );
 
-      //todo : faire un copywith une fois freezed mis en place pour le twitchData, ça évite de recréer decoed et user
-      TwitchDecodedIdTokenDTO decodedIdToken = TwitchDecodedIdTokenDTO(
-        preferredUsername: twitchData.decodedIdToken.preferredUsername,
-        profilePicture: twitchData.decodedIdToken.profilePicture,
-      );
-
-      TwitchUserDTO twitchUser = TwitchUserDTO(
-        profileImageUrl: twitchData.twitchUser.profileImageUrl,
-        id: twitchData.twitchUser.id,
-        broadcasterType: twitchData.twitchUser.broadcasterType,
-        login: twitchData.twitchUser.login,
-        description: twitchData.twitchUser.description,
-        viewCount: twitchData.twitchUser.viewCount,
-        displayName: twitchData.twitchUser.displayName,
-      );
-
-      TwitchCredentialsDTO newTwitchData = TwitchCredentialsDTO(
+      TwitchCredentials newTwitchData = TwitchCredentials(
         accessToken: response.data['access_token'],
         refreshToken: response.data['refresh_token'],
         idToken: twitchData.idToken,
-        decodedIdToken: decodedIdToken,
+        decodedIdToken: twitchData.decodedIdToken,
         expiresIn: twitchData.expiresIn,
-        twitchUser: twitchUser,
+        twitchUser: twitchData.twitchUser,
       );
       this.setTwitchOnLocal(newTwitchData);
 
@@ -183,13 +167,24 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
   @override
   Future<DataState<TwitchUserDTO>> getTwitchUser(
-      String username, String accessToken) async {
+      String? username, String accessToken) async {
     Response response;
     var dio = Dio();
     try {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
       dio.options.headers["authorization"] = "Bearer $accessToken";
-      response = await dio.get('https://api.twitch.tv/helix/users');
+
+      if (username != null) {
+        response = await dio.get(
+          'https://api.twitch.tv/helix/users',
+          queryParameters: {'login': username},
+        );
+      } else {
+        //if no username then it get the user linked to the accessToken
+        response = await dio.get(
+          'https://api.twitch.tv/helix/users',
+        );
+      }
 
       TwitchUserDTO twitchUser =
           TwitchUserDTO.fromJson(response.data['data'][0]);
@@ -201,35 +196,52 @@ class TwitchRepositoryImpl extends TwitchRepository {
   }
 
   @override
-  Future<DataState<List<TwitchBadge>>> getTwitchBadges(
-      String accessToken, String userId) async {
-    Response response1;
-    Response response2;
+  Future<DataState<List<TwitchBadge>>> getTwitchGlobalBadges(
+      String accessToken) async {
+    Response response;
     var dio = Dio();
     List<TwitchBadge> badges = <TwitchBadge>[];
     try {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
       dio.options.headers["authorization"] = "Bearer $accessToken";
-      //global badges
-      response1 =
+      response =
           await dio.get('https://api.twitch.tv/helix/chat/badges/global');
 
-      response1.data['data'].forEach((set) => set['versions'].forEach(
-          (version) =>
-              badges.add(TwitchBadgeDTO.fromJson(set['set_id'], version))));
-
-      //channel specific badges
-      response2 = await dio.get(
-          'https://api.twitch.tv/helix/chat/badges?broadcaster_id=$userId');
-
-      response2.data['data'].forEach((set) => set['versions'].forEach(
-          (version) =>
-              badges.add(TwitchBadgeDTO.fromJson(set['set_id'], version))));
+      response.data['data'].forEach(
+        (set) => set['versions'].forEach((version) =>
+            badges.add(TwitchBadgeDTO.fromJson(set['set_id'], version))),
+      );
 
       return DataSuccess(badges);
     } on DioError catch (e) {
       print(e.response);
-      return DataFailed(throw new Exception("Error retrieving Twitch badges"));
+      return DataFailed(
+          throw new Exception("Error retrieving Twitch global badges"));
+    }
+  }
+
+  @override
+  Future<DataState<List<TwitchBadge>>> getTwitchChannelBadges(
+      String accessToken, String broadcasterId) async {
+    Response response;
+    var dio = Dio();
+    List<TwitchBadge> badges = <TwitchBadge>[];
+    try {
+      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dio.options.headers["authorization"] = "Bearer $accessToken";
+      response = await dio.get(
+          'https://api.twitch.tv/helix/chat/badges?broadcaster_id=$broadcasterId');
+
+      response.data['data'].forEach(
+        (set) => set['versions'].forEach((version) =>
+            badges.add(TwitchBadgeDTO.fromJson(set['set_id'], version))),
+      );
+
+      return DataSuccess(badges);
+    } on DioError catch (e) {
+      print(e.response);
+      return DataFailed(throw new Exception(
+          "Error retrieving Twitch broadcaster channel badges"));
     }
   }
 
@@ -245,11 +257,75 @@ class TwitchRepositoryImpl extends TwitchRepository {
           await dio.get('https://api.twitch.tv/helix/chat/emotes/global');
 
       response.data['data'].forEach(
-          (emote) => emotes.add(EmoteDTO.fromJson(emote, EmoteType.global)));
+        (emote) => emotes.add(
+          EmoteDTO.fromJson(emote),
+        ),
+      );
 
       return DataSuccess(emotes);
     } on DioError catch (e) {
       return DataFailed(throw new Exception("Error retrieving global emotes"));
+    }
+  }
+
+  @override
+  Future<DataState<List<Emote>>> getTwitchChannelEmotes(
+    String accessToken,
+    String broadcasterId,
+  ) async {
+    Response response;
+    var dio = Dio();
+    List<Emote> emotes = <Emote>[];
+    try {
+      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dio.options.headers["authorization"] = "Bearer $accessToken";
+      response = await dio.get(
+        'https://api.twitch.tv/helix/chat/emotes',
+        queryParameters: {'broadcaster_id': broadcasterId},
+      );
+
+      response.data['data'].forEach(
+        (emote) => emotes.add(
+          EmoteDTO.fromJson(emote),
+        ),
+      );
+
+      return DataSuccess(emotes);
+    } on DioError catch (e) {
+      return DataFailed(throw new Exception("Error retrieving channel emotes"));
+    }
+  }
+
+  @override
+  Future<DataState<List<Emote>>> getTwitchSetsEmotes(
+    String accessToken,
+    List<String> setId,
+  ) async {
+    // TODO : max 25 setId per call https://api.twitch.tv/helix/chat/emotes/set?emote_set_id=301590448&emote_set_id=5678
+    Response response;
+    var dio = Dio();
+    List<Emote> emotes = <Emote>[];
+
+    try {
+      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dio.options.headers["authorization"] = "Bearer $accessToken";
+
+      final queryParameters = {'emote_set_id': setId};
+      Uri uri = Uri.https(
+        "api.twitch.tv",
+        "/helix/chat/emotes/set",
+        queryParameters,
+      );
+      response = await dio.getUri(uri);
+      response.data['data'].forEach(
+        (emote) => emotes.add(
+          EmoteDTO.fromJson(emote),
+        ),
+      );
+
+      return DataSuccess(emotes);
+    } on DioError catch (e) {
+      return DataFailed(throw new Exception("Error retrieving sets emotes"));
     }
   }
 }

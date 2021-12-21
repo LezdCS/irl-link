@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:collection/src/iterable_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/emote.dart';
@@ -8,6 +9,7 @@ import 'package:irllink/src/domain/entities/tabbar/web_page.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:irllink/src/domain/entities/twitch_chat_message.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
+import 'package:irllink/src/domain/entities/twitch_user.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:irllink/src/presentation/widgets/split_view_custom.dart';
 import 'package:web_socket_channel/io.dart';
@@ -39,6 +41,9 @@ class HomeViewController extends GetxController
   List<TwitchBadge> twitchBadges = <TwitchBadge>[];
   List<Emote> twitchEmotes = <Emote>[];
 
+  late TwitchUser otherUserInfosChatConnected;
+  String? otherUserNicknameChatConnected;
+
   @override
   void onInit() {
     streamController = new StreamController.broadcast();
@@ -62,13 +67,43 @@ class HomeViewController extends GetxController
     streamController.addStream(channel.stream);
 
     twitchData = Get.arguments[0];
+
     homeEvents
-        .getTwitchBadges(twitchData.accessToken, twitchData.twitchUser.id)
-        .then((value) => twitchBadges = value.data!);
+        .getTwitchGlobalBadges(twitchData.accessToken)
+        .then((value) => twitchBadges.addAll(value.data!));
+
+    //TODO : pour le moment c'est un système nul de fou pour verif si on est sur un autre chat que le notre => faire une fonction qui est appelée en fonction d'un boolean qu'on aura dans les settings
+    //TODO : il y a surement besoin de remplacer les badges de sub car parfois(le premier badge) ça utilise le badge twitch par défaut
+    if (otherUserNicknameChatConnected != null) {
+      homeEvents
+          .getTwitchUser(
+            username: otherUserNicknameChatConnected,
+            accessToken: twitchData.accessToken,
+          )
+          .then(
+            (value) => homeEvents
+                .getTwitchChannelBadges(twitchData.accessToken, value.data!.id)
+                .then((value) => addChannelBadges(value)),
+          );
+    } else {
+      homeEvents
+          .getTwitchChannelBadges(
+            twitchData.accessToken,
+            twitchData.twitchUser.id,
+          )
+          .then((value) => addChannelBadges(value));
+    }
 
     homeEvents
         .getTwitchEmotes(twitchData.accessToken)
-        .then((value) => twitchEmotes = value.data!);
+        .then((value) => twitchEmotes.addAll(value.data!));
+
+    homeEvents
+        .getTwitchChannelEmotes(
+          twitchData.accessToken,
+          twitchData.twitchUser.id,
+        )
+        .then((value) => twitchEmotes.addAll(value.data!));
 
     super.onInit();
   }
@@ -79,13 +114,19 @@ class HomeViewController extends GetxController
     String nick = twitchData.twitchUser.login;
 
     isChatConnected.value = false;
+
+    channel.sink.add('CAP REQ :twitch.tv/membership');
+    channel.sink.add('CAP REQ :twitch.tv/tags');
+    channel.sink.add('CAP REQ :twitch.tv/commands');
     channel.sink.add('PASS oauth:' + token);
     channel.sink.add('NICK ' + nick);
-    channel.sink.add('CAP REQ :twitch.tv/tags');
 
-    channel.sink.add('JOIN #$nick');
-    //use the one under for testing, lot of messages so you will see if something break the code
-    // channel.sink.add('JOIN #robcdee');
+    if (otherUserNicknameChatConnected != null) {
+      channel.sink.add('JOIN #$otherUserNicknameChatConnected');
+    } else {
+      channel.sink.add('JOIN #$nick');
+    }
+
     isChatConnected.value = true;
 
     streamController.stream.listen((message) {
@@ -112,6 +153,27 @@ class HomeViewController extends GetxController
           });
         }
       }
+
+      if (message.toString().contains("GLOBALUSERSTATE")) {
+        final Map<String, String> messageMapped = {};
+        List messageSplited = message.split(';');
+        messageSplited.forEach((element) {
+          List elementSplited = element.split('=');
+          messageMapped[elementSplited[0]] = elementSplited[1];
+        });
+        List<String> emoteSetsIds = messageMapped["emote-sets"]!.split(',');
+        homeEvents
+            .getTwitchSetsEmotes(twitchData.accessToken, emoteSetsIds)
+            .then((value) {
+          for (var emote in value.data!) {
+            if (twitchEmotes
+                    .firstWhereOrNull((element) => element.id == emote.id) ==
+                null) {
+              twitchEmotes.add(emote);
+            }
+          }
+        });
+      }
     });
 
     super.onReady();
@@ -136,6 +198,20 @@ class HomeViewController extends GetxController
       channel.sink.add('PART #lezd_');
       channel.sink.close(status.goingAway);
       ws.close();
+    });
+  }
+
+  void addChannelBadges(value) {
+    value.data!.forEach((badge) {
+      if (twitchBadges.firstWhereOrNull((badgeFromList) =>
+              badge.setId == badgeFromList.setId &&
+              badge.versionId == badgeFromList.versionId) !=
+          null) {
+        twitchBadges.remove(twitchBadges.firstWhere((badgeFromList) =>
+            badge.setId == badgeFromList.setId &&
+            badge.versionId == badgeFromList.versionId));
+      }
+      twitchBadges.addAll(value.data!);
     });
   }
 }

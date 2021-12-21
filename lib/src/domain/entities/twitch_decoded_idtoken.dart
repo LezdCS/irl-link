@@ -9,6 +9,11 @@ class TwitchDecodedIdToken extends Equatable {
     required this.profilePicture,
   });
 
+  Map toJson() => {
+        'preferredUsername': preferredUsername,
+        'profilePicture': profilePicture,
+      };
+
   @override
   List<Object?> get props {
     return [

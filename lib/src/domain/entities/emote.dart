@@ -8,6 +8,7 @@ enum EmoteType {
   thirdPart,
 }
 
+//todo : add owner_id & emote_set_id
 class Emote extends Equatable {
   final String id;
   final String name;

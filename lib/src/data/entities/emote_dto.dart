@@ -1,5 +1,6 @@
 import 'package:irllink/src/domain/entities/emote.dart';
 
+//todo : add owner_id & emote_set_id
 class EmoteDTO extends Emote {
   const EmoteDTO({
     required String id,
@@ -17,7 +18,22 @@ class EmoteDTO extends Emote {
           emoteType: emoteType,
         );
 
-  factory EmoteDTO.fromJson(Map<String, dynamic> map, EmoteType emoteType) {
+  factory EmoteDTO.fromJson(Map<String, dynamic> map) {
+    EmoteType emoteType = EmoteType.global;
+    if (map['emote_type'] != null) {
+      switch (map['emote_type']) {
+        case "subscriptions":
+          emoteType = EmoteType.subscriptions;
+          break;
+        case "follower":
+          emoteType = EmoteType.follower;
+          break;
+        case "bitstier":
+          emoteType = EmoteType.bitsTier;
+          break;
+      }
+    }
+
     return EmoteDTO(
       id: map['id'] as String,
       name: map['name'] as String,
