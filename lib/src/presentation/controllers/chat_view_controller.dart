@@ -34,6 +34,8 @@ class ChatViewController extends GetxController
   late TwitchUser otherUserInfosChatConnected;
   String? otherUserNicknameChatConnected = "xqcow";
 
+  Rxn<TwitchChatMessage> selectedMessage = Rxn<TwitchChatMessage>();
+
   @override
   void onInit() {
     streamController = new StreamController.broadcast();
@@ -47,22 +49,22 @@ class ChatViewController extends GetxController
     getTwitchBadges();
     getTwitchEmotes();
 
-    _scrollListener() {
-      if (scrollController.offset <=
-              scrollController.position.maxScrollExtent &&
-          !scrollController.position.outOfRange &&
-          isAutoScrolldown) {
-        isAutoScrolldown = false;
-      }
-      if (scrollController.offset >=
-              scrollController.position.maxScrollExtent &&
-          !scrollController.position.outOfRange &&
-          !isAutoScrolldown) {
-        isAutoScrolldown = true;
-      }
-    }
-
-    scrollController.addListener(_scrollListener);
+    // _scrollListener() {
+    //   if (scrollController.offset <=
+    //           scrollController.position.maxScrollExtent &&
+    //       !scrollController.position.outOfRange &&
+    //       isAutoScrolldown) {
+    //     isAutoScrolldown = false;
+    //   }
+    //   if (scrollController.offset >=
+    //           scrollController.position.maxScrollExtent &&
+    //       !scrollController.position.outOfRange &&
+    //       !isAutoScrolldown) {
+    //     isAutoScrolldown = true;
+    //   }
+    // }
+    //
+    // scrollController.addListener(_scrollListener);
 
     super.onInit();
   }

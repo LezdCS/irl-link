@@ -89,9 +89,13 @@ class HomeView extends GetView<HomeViewController> {
                     padding: EdgeInsets.only(left: 5, right: 5),
                     child: Row(
                       children: [
-                        Image(
-                          image: AssetImage("lib/assets/twitchSmileEmoji.png"),
-                          width: 30,
+                        InkWell(
+                          onTap: () => controller.getEmotes(),
+                          child: Image(
+                            image:
+                                AssetImage("lib/assets/twitchSmileEmoji.png"),
+                            width: 30,
+                          ),
                         ),
                         Expanded(
                           child: TextField(

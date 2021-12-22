@@ -17,27 +17,158 @@ class ChatView extends GetView<ChatViewController> {
     final double width = MediaQuery.of(context).size.width;
     return Obx(
       () => Stack(children: [
-        Container(
-          width: width,
-          padding: EdgeInsets.only(top: 10, left: 10, bottom: height * 0.07),
-          decoration: BoxDecoration(
-            color: Color(0xFF282828),
-          ),
-          child: ListView(
-            controller: controller.scrollController,
-            children: [
-              Visibility(
-                visible: controller.chatMessages.length < 100,
-                child: Text(
-                  "Welcome on ${controller.twitchData.twitchUser.displayName} 's chat room !",
-                  style: TextStyle(
-                    color: Color(0xFF878585),
+        GestureDetector(
+          onTap: () {
+            if (controller.selectedMessage.value != null) {
+              controller.selectedMessage.value = null;
+            }
+          },
+          child: Container(
+            width: width,
+            padding: EdgeInsets.only(top: 10, left: 10, bottom: height * 0.07),
+            decoration: BoxDecoration(
+              color: Color(0xFF282828),
+            ),
+            child: ListView(
+              controller: controller.scrollController,
+              children: [
+                Visibility(
+                  visible: controller.chatMessages.length < 100,
+                  child: Text(
+                    "Welcome on ${controller.twitchData.twitchUser.displayName} 's chat room !",
+                    style: TextStyle(
+                      color: Color(0xFF878585),
+                    ),
                   ),
                 ),
+                for (TwitchChatMessage message in controller.chatMessages)
+                  InkWell(
+                    onTap: () {
+                      if (controller.selectedMessage.value == null) {
+                        controller.selectedMessage.value = message;
+                      } else {
+                        controller.selectedMessage.value = null;
+                      }
+                    },
+                    child: chatMessage(message),
+                  )
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: height * 0.07,
+          child: Visibility(
+            visible: controller.selectedMessage.value != null,
+            child: Container(
+              padding: EdgeInsets.only(top: 10, left: 10),
+              width: width,
+              decoration: BoxDecoration(
+                color: Color(0xFF121212),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
+                ),
               ),
-              for (TwitchChatMessage message in controller.chatMessages)
-                chatMessage(message)
-            ],
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    controller.selectedMessage.value?.authorName ?? "",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
+
+                  Text(
+                    controller.selectedMessage.value?.message ?? "",
+                    style: TextStyle(
+                      color: Color(0xFF575757),
+                      fontStyle: FontStyle.italic,
+                      fontSize: 14,
+                    ),
+                  ),
+
+                  //TODO : créer un widget juste pour ce type de button (qu'on retrouve uniquement ici d'après les maquettes)
+                  Container(
+                    margin: EdgeInsets.only(left: 10),
+                    padding:
+                        EdgeInsets.only(top: 5, left: 5, right: 5, bottom: 5),
+                    decoration: BoxDecoration(
+                      color: Color(0xFF282828),
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                    ),
+                    child: Text(
+                      "Delete message",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 15),
+                  Row(children: [
+                    Container(
+                      margin: EdgeInsets.only(left: 10),
+                      padding:
+                          EdgeInsets.only(top: 5, left: 5, right: 5, bottom: 5),
+                      decoration: BoxDecoration(
+                        color: Color(0xFF282828),
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                      ),
+                      child: Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        clipBehavior: Clip.none,
+                        children: [
+                          Icon(
+                            Icons.stop,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                          Text(
+                            "Ban",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Container(
+                      margin: EdgeInsets.only(left: 10),
+                      padding:
+                          EdgeInsets.only(top: 5, left: 5, right: 5, bottom: 5),
+                      decoration: BoxDecoration(
+                        color: Color(0xFF282828),
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                      ),
+                      child: Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.timer,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                          Text(
+                            "Timeout",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ]),
+                  SizedBox(height: 10),
+                ],
+              ),
+            ),
           ),
         ),
         AnimatedOpacity(

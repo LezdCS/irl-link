@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/domain/entities/emote.dart';
 import 'package:irllink/src/domain/entities/tabbar/tab_element.dart';
 import 'package:irllink/src/domain/entities/tabbar/web_page.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
@@ -9,6 +10,8 @@ import 'package:irllink/src/presentation/widgets/split_view_custom.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:web_socket_channel/status.dart' as status;
+
+import 'chat_view_controller.dart';
 
 class HomeViewController extends GetxController
     with SingleGetTickerProviderMixin {
@@ -25,7 +28,10 @@ class HomeViewController extends GetxController
   RxList<TabElement> tabElements = <TabElement>[].obs;
 
   late TwitchCredentials twitchData;
+
+  //chat input
   late TextEditingController chatInputController;
+  List<Emote> twitchEmotes = <Emote>[];
 
   @override
   void onInit() {
@@ -72,5 +78,15 @@ class HomeViewController extends GetxController
       channel.sink.close(status.goingAway);
       ws.close();
     });
+  }
+
+  void getEmotes() {
+    ChatViewController chatViewController = Get.find<ChatViewController>();
+    List<Emote> emotes = chatViewController.twitchEmotes;
+    twitchEmotes
+      ..clear()
+      ..addAll(emotes);
+
+    debugPrint(twitchEmotes.length.toString());
   }
 }
