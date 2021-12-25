@@ -8,6 +8,7 @@ import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/domain/entities/tabbar/web_page.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/chat_view.dart';
+import 'package:irllink/src/presentation/widgets/emote_picker_view.dart';
 import 'package:irllink/src/presentation/widgets/obs_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/twitch_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/web_page_view.dart';
@@ -21,48 +22,89 @@ class HomeView extends GetView<HomeViewController> {
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      body: Stack(
-        children: [
-          GestureDetector(
-            onTap: () => {
-              FocusScope.of(context).unfocus(),
-            },
-            child: Container(
-              constraints: BoxConstraints.expand(),
-              decoration: BoxDecoration(
-                color: Color(0xFF121212),
-              ),
-              child: SafeArea(
-                child: SplitViewCustom(
-                  controller: controller.splitViewController,
-                  gripColor: Color(0xFF121212),
-                  gripColorActive: Color(0xFF121212),
-                  gripSize: 18,
-                  viewMode: SplitViewMode.Vertical,
-                  indicator: SplitIndicator(
+      appBar: AppBar(
+        backgroundColor: Color(0xFF121212),
+        flexibleSpace: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            _tabBar(height, width),
+          ],
+        ),
+      ),
+      body: Obx(
+        () => Stack(
+          children: [
+            GestureDetector(
+              onTap: () => {
+                debugPrint("trigereddddd"),
+                FocusScope.of(context).unfocus(),
+                controller.isPickingEmote.value = false,
+              },
+              child: Container(
+                constraints: BoxConstraints.expand(),
+                decoration: BoxDecoration(
+                  color: Color(0xFF121212),
+                ),
+                child: SafeArea(
+                  child: SplitViewCustom(
+                    controller: controller.splitViewController,
+                    gripColor: Color(0xFF121212),
+                    gripColorActive: Color(0xFF121212),
+                    gripSize: 18,
                     viewMode: SplitViewMode.Vertical,
-                    color: Color(0xFFFFFFFF),
+                    indicator: SplitIndicator(
+                      viewMode: SplitViewMode.Vertical,
+                      color: Color(0xFFFFFFFF),
+                    ),
+                    activeIndicator: SplitIndicator(
+                      color: Color(0xFFFFFFFF),
+                      viewMode: SplitViewMode.Vertical,
+                      isActive: true,
+                    ),
+                    children: [
+                      _tabsViews(height, width),
+                      ChatView(),
+                    ],
                   ),
-                  activeIndicator: SplitIndicator(
-                    color: Color(0xFFFFFFFF),
-                    viewMode: SplitViewMode.Vertical,
-                    isActive: true,
-                  ),
-                  children: [
-                    _tabBarCustomWindows(height, width),
-                    ChatView(),
-                  ],
                 ),
               ),
             ),
+            Positioned(
+              bottom: 0.0,
+              left: 0.0,
+              right: 0.0,
+              child: _bottomNavBar(height, width, context),
+            ),
+            Visibility(
+              visible: controller.isPickingEmote.value,
+              child: Positioned(
+                bottom: height * 0.07,
+                left: 10,
+                child: EmotePickerView(homeViewController: controller),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _tabBar(double height, double width) {
+    return TabBar(
+      controller: controller.tabController,
+      isScrollable: true,
+      labelColor: Colors.purple,
+      unselectedLabelColor: Colors.white,
+      indicatorColor: Colors.purple,
+      labelPadding: EdgeInsets.symmetric(
+          horizontal: width / (controller.tabElements.length > 2 ? 9 : 5)),
+      tabs: List<Tab>.generate(
+        controller.tabElements.length,
+        (int index) => Tab(
+          child: Text(
+            controller.tabElements[index].title,
           ),
-          Positioned(
-            bottom: 0.0,
-            left: 0.0,
-            right: 0.0,
-            child: _bottomNavBar(height, width, context),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -169,50 +211,24 @@ class HomeView extends GetView<HomeViewController> {
     );
   }
 
-  Widget _tabBarCustomWindows(double height, double width) {
+  Widget _tabsViews(double height, double width) {
     return SizedBox(
       height: height / 2,
       width: width,
-      child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(50.0),
-          child: AppBar(
-            backgroundColor: Color(0xFF121212),
-            bottom: TabBar(
-              controller: controller.tabController,
-              isScrollable: true,
-              labelColor: Colors.purple,
-              unselectedLabelColor: Colors.white,
-              indicatorColor: Colors.purple,
-              labelPadding: EdgeInsets.symmetric(
-                  horizontal:
-                      width / (controller.tabElements.length > 2 ? 9 : 5)),
-              tabs: List<Tab>.generate(
-                controller.tabElements.length,
-                (int index) => Tab(
-                  child: Text(
-                    controller.tabElements[index].title,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-        body: SizedBox(
-          height: double.infinity,
-          child: TabBarView(
-            physics: NeverScrollableScrollPhysics(),
-            controller: controller.tabController,
-            children: List<Widget>.generate(
-              controller.tabElements.length,
-              (int index) => controller.tabElements[index] is WebPage
-                  ? WebPageView(controller.tabElements[index].toWebPage().url)
-                  : controller.tabElements[index].title == "Twitch"
-                      ? TwitchTabView()
-                      : controller.tabElements[index].title == "OBS"
-                          ? ObsTabView()
-                          : Container(),
-            ),
+      child: SizedBox(
+        height: double.infinity,
+        child: TabBarView(
+          physics: NeverScrollableScrollPhysics(),
+          controller: controller.tabController,
+          children: List<Widget>.generate(
+            controller.tabElements.length,
+            (int index) => controller.tabElements[index] is WebPage
+                ? WebPageView(controller.tabElements[index].toWebPage().url)
+                : controller.tabElements[index].title == "Twitch"
+                    ? TwitchTabView()
+                    : controller.tabElements[index].title == "OBS"
+                        ? ObsTabView()
+                        : Container(),
           ),
         ),
       ),

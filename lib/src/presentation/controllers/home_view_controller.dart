@@ -31,7 +31,13 @@ class HomeViewController extends GetxController
 
   //chat input
   late TextEditingController chatInputController;
-  List<Emote> twitchEmotes = <Emote>[];
+  RxList<Emote> twitchEmotes = <Emote>[].obs;
+
+  //emote picker
+  RxBool isPickingEmote = false.obs;
+  //todo : when click outside emote picker => set to false
+  //todo :  maybe add a a cross button to close emote picker, on the right of the TextField
+  late ChatViewController chatViewController;
 
   @override
   void onInit() {
@@ -56,6 +62,8 @@ class HomeViewController extends GetxController
 
   @override
   void onReady() {
+    chatViewController = Get.find<ChatViewController>();
+
     super.onReady();
   }
 
@@ -65,28 +73,35 @@ class HomeViewController extends GetxController
   }
 
   void sendChatMessage(String message) {
-    //TODO : change the JOIN if we are in another chat, same for PART
     String token = twitchData.accessToken;
     String nick = twitchData.twitchUser.login;
     WebSocket.connect("wss://irc-ws.chat.twitch.tv:443").then((ws) {
       IOWebSocketChannel channel = IOWebSocketChannel(ws);
       channel.sink.add('PASS oauth:' + token);
       channel.sink.add('NICK ' + nick);
-      channel.sink.add('JOIN #$nick');
-      channel.sink.add('PRIVMSG #$nick :$message\r\n');
-      channel.sink.add('PART #$nick');
+      channel.sink.add('JOIN #${chatViewController.ircChannelJoined}');
+      channel.sink
+          .add('PRIVMSG #${chatViewController.ircChannelJoined} :$message\r\n');
+      channel.sink.add('PART #${chatViewController.ircChannelJoined}');
       channel.sink.close(status.goingAway);
       ws.close();
     });
   }
 
   void getEmotes() {
-    ChatViewController chatViewController = Get.find<ChatViewController>();
     List<Emote> emotes = chatViewController.twitchEmotes;
     twitchEmotes
       ..clear()
       ..addAll(emotes);
+    isPickingEmote.toggle();
+  }
 
-    debugPrint(twitchEmotes.length.toString());
+  void searchEmote(String input) {
+    List<Emote> emotes = chatViewController.twitchEmotes;
+    twitchEmotes
+      ..clear()
+      ..addAll(emotes
+          .where((emote) => emote.name.toLowerCase().contains(input))
+          .toList());
   }
 }

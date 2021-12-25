@@ -19,6 +19,7 @@ class LoginViewController extends GetxController with StateMixin<void> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
     ));
+    //todo : loop hasNetwork until isOnline = true
     isOnline.value = await hasNetwork();
     super.onInit();
   }

@@ -7,6 +7,7 @@ import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:irllink/src/domain/entities/twitch_chat_message.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'alert_message_view.dart';
 
@@ -22,6 +23,7 @@ class ChatView extends GetView<ChatViewController> {
             if (controller.selectedMessage.value != null) {
               controller.selectedMessage.value = null;
             }
+            FocusScope.of(context).unfocus();
           },
           child: Container(
             width: width,
@@ -35,7 +37,7 @@ class ChatView extends GetView<ChatViewController> {
                 Visibility(
                   visible: controller.chatMessages.length < 100,
                   child: Text(
-                    "Welcome on ${controller.twitchData.twitchUser.displayName} 's chat room !",
+                    "Welcome on ${controller.ircChannelJoined} 's chat room !",
                     style: TextStyle(
                       color: Color(0xFF878585),
                     ),
@@ -44,10 +46,14 @@ class ChatView extends GetView<ChatViewController> {
                 for (TwitchChatMessage message in controller.chatMessages)
                   InkWell(
                     onTap: () {
-                      if (controller.selectedMessage.value == null) {
-                        controller.selectedMessage.value = message;
+                      if (FocusScope.of(context).isFirstFocus) {
+                        FocusScope.of(context).unfocus();
                       } else {
-                        controller.selectedMessage.value = null;
+                        if (controller.selectedMessage.value == null) {
+                          controller.selectedMessage.value = message;
+                        } else {
+                          controller.selectedMessage.value = null;
+                        }
                       }
                     },
                     child: chatMessage(message),
@@ -61,7 +67,8 @@ class ChatView extends GetView<ChatViewController> {
           child: Visibility(
             visible: controller.selectedMessage.value != null,
             child: Container(
-              padding: EdgeInsets.only(top: 10, left: 10),
+              padding:
+                  EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
               width: width,
               decoration: BoxDecoration(
                 color: Color(0xFF121212),
@@ -73,15 +80,27 @@ class ChatView extends GetView<ChatViewController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    controller.selectedMessage.value?.authorName ?? "",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        controller.selectedMessage.value?.authorName ?? "",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      InkWell(
+                        onTap: () => launch("https://twitch.tv/" +
+                            controller.selectedMessage.value!.authorName),
+                        child: Icon(
+                          Icons.open_in_browser,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(height: 10),
-
                   Text(
                     controller.selectedMessage.value?.message ?? "",
                     style: TextStyle(
@@ -90,82 +109,25 @@ class ChatView extends GetView<ChatViewController> {
                       fontSize: 14,
                     ),
                   ),
-
-                  //TODO : créer un widget juste pour ce type de button (qu'on retrouve uniquement ici d'après les maquettes)
-                  Container(
-                    margin: EdgeInsets.only(left: 10),
-                    padding:
-                        EdgeInsets.only(top: 5, left: 5, right: 5, bottom: 5),
-                    decoration: BoxDecoration(
-                      color: Color(0xFF282828),
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                    ),
-                    child: Text(
-                      "Delete message",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                      ),
-                    ),
+                  InkWell(
+                    onTap: () => controller.deleteMessageInstruction(
+                        controller.selectedMessage.value!),
+                    child: moderationViewButton(null, "Delete message"),
                   ),
                   SizedBox(height: 15),
                   Row(children: [
-                    Container(
-                      margin: EdgeInsets.only(left: 10),
-                      padding:
-                          EdgeInsets.only(top: 5, left: 5, right: 5, bottom: 5),
-                      decoration: BoxDecoration(
-                        color: Color(0xFF282828),
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                      ),
-                      child: Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        clipBehavior: Clip.none,
-                        children: [
-                          Icon(
-                            Icons.stop,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                          Text(
-                            "Ban",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
-                      ),
+                    InkWell(
+                      onTap: () => controller.banMessageInstruction(
+                          controller.selectedMessage.value!),
+                      child: moderationViewButton(Icons.stop, "Ban"),
                     ),
                     SizedBox(width: 10),
-                    Container(
-                      margin: EdgeInsets.only(left: 10),
-                      padding:
-                          EdgeInsets.only(top: 5, left: 5, right: 5, bottom: 5),
-                      decoration: BoxDecoration(
-                        color: Color(0xFF282828),
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                      ),
-                      child: Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.timer,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                          Text(
-                            "Timeout",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
-                      ),
+                    InkWell(
+                      onTap: () => controller.timeoutMessageInstruction(
+                          controller.selectedMessage.value!),
+                      child: moderationViewButton(Icons.timer, "Timeout"),
                     ),
                   ]),
-                  SizedBox(height: 10),
                 ],
               ),
             ),
@@ -249,6 +211,36 @@ class ChatView extends GetView<ChatViewController> {
                   fontSize: 19,
                 ),
               ),
+        ],
+      ),
+    );
+  }
+
+  Widget moderationViewButton(IconData? icon, String message) {
+    return Container(
+      margin: EdgeInsets.only(left: 10),
+      padding: EdgeInsets.only(top: 5, left: 5, right: 5, bottom: 5),
+      decoration: BoxDecoration(
+        color: Color(0xFF282828),
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+      ),
+      child: Wrap(
+        crossAxisAlignment: WrapCrossAlignment.center,
+        clipBehavior: Clip.none,
+        children: [
+          if (icon != null)
+            Icon(
+              icon,
+              color: Colors.white,
+              size: 20,
+            ),
+          Text(
+            message,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+            ),
+          ),
         ],
       ),
     );

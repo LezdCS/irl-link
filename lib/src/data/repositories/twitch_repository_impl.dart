@@ -239,7 +239,6 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(badges);
     } on DioError catch (e) {
-      print(e.response);
       return DataFailed(throw new Exception(
           "Error retrieving Twitch broadcaster channel badges"));
     }

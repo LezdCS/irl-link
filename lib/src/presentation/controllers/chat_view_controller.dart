@@ -32,7 +32,7 @@ class ChatViewController extends GetxController
   List<Emote> twitchEmotes = <Emote>[];
 
   late TwitchUser otherUserInfosChatConnected;
-  String? otherUserNicknameChatConnected = "xqcow";
+  late String ircChannelJoined;
 
   Rxn<TwitchChatMessage> selectedMessage = Rxn<TwitchChatMessage>();
 
@@ -45,26 +45,13 @@ class ChatViewController extends GetxController
     streamController.addStream(channel.stream);
 
     twitchData = Get.arguments[0];
+    ircChannelJoined = twitchData.twitchUser.login;
+
+    //ircChannelJoined =
+    //    "kamet0"; //if you want to join another twitch chat than yours
 
     getTwitchBadges();
     getTwitchEmotes();
-
-    // _scrollListener() {
-    //   if (scrollController.offset <=
-    //           scrollController.position.maxScrollExtent &&
-    //       !scrollController.position.outOfRange &&
-    //       isAutoScrolldown) {
-    //     isAutoScrolldown = false;
-    //   }
-    //   if (scrollController.offset >=
-    //           scrollController.position.maxScrollExtent &&
-    //       !scrollController.position.outOfRange &&
-    //       !isAutoScrolldown) {
-    //     isAutoScrolldown = true;
-    //   }
-    // }
-    //
-    // scrollController.addListener(_scrollListener);
 
     super.onInit();
   }
@@ -82,11 +69,7 @@ class ChatViewController extends GetxController
     channel.sink.add('PASS oauth:' + token);
     channel.sink.add('NICK ' + nick);
 
-    if (otherUserNicknameChatConnected != null) {
-      channel.sink.add('JOIN #$otherUserNicknameChatConnected');
-    } else {
-      channel.sink.add('JOIN #$nick');
-    }
+    channel.sink.add('JOIN #$ircChannelJoined');
 
     isChatConnected.value = true;
 
@@ -97,29 +80,9 @@ class ChatViewController extends GetxController
 
   @override
   void onClose() {
-    String nick = twitchData.twitchUser.login;
-    if (otherUserNicknameChatConnected != null) {
-      channel.sink.add('PART #$otherUserNicknameChatConnected');
-    } else {
-      channel.sink.add('PART #$nick');
-    }
+    channel.sink.add('PART #$ircChannelJoined');
     channel.sink.close(status.goingAway);
     super.onClose();
-  }
-
-  void sendChatMessage(String message) {
-    String token = twitchData.accessToken;
-    String nick = twitchData.twitchUser.login;
-    WebSocket.connect("wss://irc-ws.chat.twitch.tv:443").then((ws) {
-      IOWebSocketChannel channel = IOWebSocketChannel(ws);
-      channel.sink.add('PASS oauth:' + token);
-      channel.sink.add('NICK ' + nick);
-      channel.sink.add('JOIN #$nick');
-      channel.sink.add('PRIVMSG #$nick :$message\r\n');
-      channel.sink.add('PART #lezd_');
-      channel.sink.close(status.goingAway);
-      ws.close();
-    });
   }
 
   void chatListener(message) {
@@ -133,20 +96,55 @@ class ChatViewController extends GetxController
 
     if (message.startsWith('@')) {
       List messageSplited = message.split(';');
-      if (messageSplited.last.contains('PRIVMSG')) {
-        TwitchChatMessage chatMessage =
-            TwitchChatMessage.fromString(twitchBadges, message);
-        chatMessages.add(chatMessage);
-        if (chatMessages.length > 100) {
-          chatMessages.removeAt(0);
-        }
-        if (scrollController.hasClients && isAutoScrolldown) {
-          Timer(Duration(milliseconds: 100), () {
-            //we need a timer or it wont scroll to the real bottom of the ListView
-            scrollController.jumpTo(
-              scrollController.position.maxScrollExtent,
-            );
-          });
+      List<String> keys = [
+        "PRIVMSG",
+        "CLEARCHAT",
+        "CLEARCHAT",
+        "CLEARMSG",
+        "NOTICE"
+      ];
+      String? keyResult =
+          keys.firstWhereOrNull((key) => messageSplited.last.contains(key));
+      if (keyResult != null) {
+        switch (keyResult) {
+          case "PRIVMSG":
+            {
+              TwitchChatMessage chatMessage =
+                  TwitchChatMessage.fromString(twitchBadges, message);
+              chatMessages.add(chatMessage);
+              if (chatMessages.length > 100) {
+                chatMessages.removeAt(0);
+              }
+              if (scrollController.hasClients && isAutoScrolldown) {
+                Timer(Duration(milliseconds: 100), () {
+                  //we need a timer or it wont scroll to the real bottom of the ListView
+                  scrollController.jumpTo(
+                    scrollController.position.maxScrollExtent,
+                  );
+                });
+              }
+            }
+            break;
+          case "CLEARCHAT":
+            {
+              //check if they is a nickname at the end, if yes -> delete messages from this user
+              //else -> clear all chat
+            }
+            break;
+          case "CLEARMSG":
+            {
+              //clear a specific msg by the id
+            }
+            break;
+          case "NOTICE":
+            {
+              //some error and success messages are send by notice like when you don't have perm for an action or when a ban is successfull
+              //https://dev.twitch.tv/docs/irc/msg-id
+            }
+            break;
+          default:
+            {}
+            break;
         }
       }
     } else if (message.toString().contains("GLOBALUSERSTATE")) {
@@ -187,16 +185,18 @@ class ChatViewController extends GetxController
   }
 
   void getTwitchBadges() {
+    String nick = twitchData.twitchUser.login;
+
     twitchBadges.clear();
 
     homeEvents
         .getTwitchGlobalBadges(accessToken: twitchData.accessToken)
         .then((value) => twitchBadges.addAll(value.data!));
 
-    if (otherUserNicknameChatConnected != null) {
+    if (ircChannelJoined != nick) {
       homeEvents
           .getTwitchUser(
-            username: otherUserNicknameChatConnected,
+            username: ircChannelJoined,
             accessToken: twitchData.accessToken,
           )
           .then(
@@ -229,5 +229,22 @@ class ChatViewController extends GetxController
       }
       twitchBadges.addAll(value.data!);
     });
+  }
+
+  void deleteMessageInstruction(TwitchChatMessage message) {
+    channel.sink
+        .add('PRIVMSG #$ircChannelJoined :/delete ${message.messageId}\r\n');
+  }
+
+  void timeoutMessageInstruction(TwitchChatMessage message) {
+    // /timeout [username] [duration] [reason]
+    channel.sink.add(
+        'PRIVMSG #$ircChannelJoined :/timeout ${message.authorName} 10 reason\r\n');
+  }
+
+  void banMessageInstruction(TwitchChatMessage message) {
+    // /ban [username] [reason]
+    channel.sink.add(
+        'PRIVMSG #$ircChannelJoined :/ban ${message.authorName} reason\r\n');
   }
 }
