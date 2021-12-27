@@ -10,7 +10,15 @@ class SettingsViewController extends GetxController {
 
   final box = GetStorage();
 
-  RxBool isSwitched = false.obs;
+  RxDouble slideValueForTextSize = 20.0.obs;
+
+  RxDouble slideValueForBadgesAndEmotesSize = 20.0.obs;
+
+  RxBool isSwitchedForFFZAndBTTVEmotes = false.obs;
+
+  RxBool isSwitchedForTimestamp = false.obs;
+
+  RxBool isSwitchedForAlternateChannel = false.obs;
 
   @override
   void onInit() {
