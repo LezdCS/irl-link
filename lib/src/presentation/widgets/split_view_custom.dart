@@ -397,18 +397,18 @@ class SplitIndicator extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: Color(0xFF50E5FF),
-              spreadRadius: 3,
-              blurRadius: 2,
+              spreadRadius: 2,
+              blurRadius: 1,
             ),
             BoxShadow(
               color: Color(0xFF3E329A).withAlpha(150),
-              spreadRadius: 5,
-              blurRadius: 4,
+              spreadRadius: 3,
+              blurRadius: 3,
             ),
             BoxShadow(
               color: Color(0xFF4523CC).withAlpha(150),
-              spreadRadius: 7,
-              blurRadius: 4,
+              spreadRadius: 5,
+              blurRadius: 3,
             ),
             BoxShadow(
               color: Colors.white,

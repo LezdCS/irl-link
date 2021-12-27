@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:collection/collection.dart';
 
+//todo : add bool isBitDonation
 class TwitchChatMessage extends Equatable {
   final String messageId;
   final List<TwitchBadge> badges;

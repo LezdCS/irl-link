@@ -20,8 +20,7 @@ class ChatViewController extends GetxController
 
   //CHAT
   late ScrollController scrollController;
-  late TextEditingController chatInputController;
-  bool isAutoScrolldown = true;
+  RxBool isAutoScrolldown = true.obs;
   RxBool isChatConnected = false.obs;
   late IOWebSocketChannel channel;
   late TwitchCredentials twitchData;
@@ -75,6 +74,8 @@ class ChatViewController extends GetxController
 
     streamController.stream.listen((message) => chatListener(message));
 
+    scrollController.addListener(scrollListener);
+
     super.onReady();
   }
 
@@ -83,6 +84,15 @@ class ChatViewController extends GetxController
     channel.sink.add('PART #$ircChannelJoined');
     channel.sink.close(status.goingAway);
     super.onClose();
+  }
+
+  void scrollListener() {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
+        !scrollController.position.outOfRange) {
+      isAutoScrolldown.value = true;
+    } else {
+      isAutoScrolldown.value = false;
+    }
   }
 
   void chatListener(message) {
@@ -115,7 +125,7 @@ class ChatViewController extends GetxController
               if (chatMessages.length > 100) {
                 chatMessages.removeAt(0);
               }
-              if (scrollController.hasClients && isAutoScrolldown) {
+              if (scrollController.hasClients && isAutoScrolldown.value) {
                 Timer(Duration(milliseconds: 100), () {
                   //we need a timer or it wont scroll to the real bottom of the ListView
                   scrollController.jumpTo(
@@ -246,5 +256,12 @@ class ChatViewController extends GetxController
     // /ban [username] [reason]
     channel.sink.add(
         'PRIVMSG #$ircChannelJoined :/ban ${message.authorName} reason\r\n');
+  }
+
+  void scrollToBottom() {
+    isAutoScrolldown.value = true;
+    scrollController.jumpTo(
+      scrollController.position.maxScrollExtent,
+    );
   }
 }

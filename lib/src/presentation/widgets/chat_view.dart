@@ -27,7 +27,7 @@ class ChatView extends GetView<ChatViewController> {
           },
           child: Container(
             width: width,
-            padding: EdgeInsets.only(top: 10, left: 10, bottom: height * 0.07),
+            padding: EdgeInsets.only(top: 10, bottom: height * 0.07),
             decoration: BoxDecoration(
               color: Color(0xFF282828),
             ),
@@ -36,10 +36,13 @@ class ChatView extends GetView<ChatViewController> {
               children: [
                 Visibility(
                   visible: controller.chatMessages.length < 100,
-                  child: Text(
-                    "Welcome on ${controller.ircChannelJoined} 's chat room !",
-                    style: TextStyle(
-                      color: Color(0xFF878585),
+                  child: Container(
+                    padding: EdgeInsets.only(left: 5),
+                    child: Text(
+                      "Welcome on ${controller.ircChannelJoined} 's chat room !",
+                      style: TextStyle(
+                        color: Color(0xFF878585),
+                      ),
                     ),
                   ),
                 ),
@@ -48,16 +51,41 @@ class ChatView extends GetView<ChatViewController> {
                     onTap: () {
                       if (FocusScope.of(context).isFirstFocus) {
                         FocusScope.of(context).unfocus();
-                      } else {
-                        if (controller.selectedMessage.value == null) {
-                          controller.selectedMessage.value = message;
-                        } else {
-                          controller.selectedMessage.value = null;
-                        }
+                      }
+                      controller.selectedMessage.value = null;
+                    },
+                    onLongPress: () {
+                      if (controller.selectedMessage.value == null) {
+                        controller.selectedMessage.value = message;
                       }
                     },
                     child: chatMessage(message),
                   )
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: height * 0.07,
+          width: width,
+          child: Visibility(
+            visible: !controller.isAutoScrolldown.value,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                InkWell(
+                  onTap: () {
+                    controller.scrollToBottom();
+                  },
+                  child: Container(
+                    padding: EdgeInsets.only(left: 20, right: 20),
+                    color: Colors.black.withOpacity(0.4),
+                    child: Icon(
+                      Icons.keyboard_arrow_down,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -90,13 +118,26 @@ class ChatView extends GetView<ChatViewController> {
                             fontSize: 20,
                             fontWeight: FontWeight.bold),
                       ),
-                      InkWell(
-                        onTap: () => launch("https://twitch.tv/" +
-                            controller.selectedMessage.value!.authorName),
-                        child: Icon(
-                          Icons.open_in_browser,
-                          color: Colors.white,
-                        ),
+                      Wrap(
+                        children: [
+                          InkWell(
+                            onTap: () => launch("https://twitch.tv/" +
+                                controller.selectedMessage.value!.authorName),
+                            child: Icon(
+                              Icons.open_in_browser,
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(width: 5),
+                          InkWell(
+                            onTap: () =>
+                                controller.selectedMessage.value = null,
+                            child: Icon(
+                              Icons.close,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -152,7 +193,10 @@ class ChatView extends GetView<ChatViewController> {
 
   Widget chatMessage(TwitchChatMessage message) {
     return Container(
-      padding: EdgeInsets.only(top: 4),
+      padding: EdgeInsets.only(top: 2, bottom: 2, left: 5),
+      color: controller.selectedMessage.value == message
+          ? Colors.grey
+          : Color(0xFF282828),
       child: Wrap(
         crossAxisAlignment: WrapCrossAlignment.start,
         children: [

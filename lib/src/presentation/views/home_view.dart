@@ -50,7 +50,7 @@ class HomeView extends GetView<HomeViewController> {
                     controller: controller.splitViewController,
                     gripColor: Color(0xFF121212),
                     gripColorActive: Color(0xFF121212),
-                    gripSize: 18,
+                    gripSize: 14,
                     viewMode: SplitViewMode.Vertical,
                     indicator: SplitIndicator(
                       viewMode: SplitViewMode.Vertical,
@@ -147,6 +147,11 @@ class HomeView extends GetView<HomeViewController> {
                               controller.chatInputController.text = '';
                               FocusScope.of(context).unfocus();
                             },
+                            onTap: () {
+                              controller.chatViewController.selectedMessage
+                                  .value = null;
+                            },
+                            textInputAction: TextInputAction.send,
                             style: TextStyle(color: Colors.white),
                             maxLines: 1,
                             decoration: InputDecoration(
@@ -218,7 +223,8 @@ class HomeView extends GetView<HomeViewController> {
       child: SizedBox(
         height: double.infinity,
         child: TabBarView(
-          physics: NeverScrollableScrollPhysics(),
+          physics:
+              NeverScrollableScrollPhysics(), //used so if the user scroll horizontally it wont change of tabView, might delete it later, to discuss
           controller: controller.tabController,
           children: List<Widget>.generate(
             controller.tabElements.length,
