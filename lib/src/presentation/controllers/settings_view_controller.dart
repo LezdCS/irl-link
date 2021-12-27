@@ -10,6 +10,8 @@ class SettingsViewController extends GetxController {
 
   final box = GetStorage();
 
+  RxBool isSwitched = false.obs;
+
   @override
   void onInit() {
     // Here you can fetch you product from server
