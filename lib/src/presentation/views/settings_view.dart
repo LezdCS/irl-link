@@ -185,7 +185,7 @@ class SettingsView extends GetView<SettingsViewController> {
                       divisions: 10,
                       activeColor: Colors.purpleAccent,
                       inactiveColor: Colors.purple,
-                      label: 'Set text size value',
+                      label: 'Set Emotes and Badges size',
                     ),
                   )
                 ])),
