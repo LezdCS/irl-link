@@ -144,6 +144,22 @@ class ChatViewController extends GetxController
           case "CLEARMSG":
             {
               //clear a specific msg by the id
+              // @login=lezd_;room-id=;target-msg-id=5ecb6458-198c-498c-b91b-16f1e12f58b4;tmi-sent-ts=1640717427981
+              // :tmi.twitch.tv CLEARMSG #lezd_ :okokok
+              final Map<String, String> messageMapped = {};
+
+              List messageSplited = message.split(';');
+              messageSplited.forEach((element) {
+                List elementSplited = element.split('=');
+                messageMapped[elementSplited[0]] = elementSplited[1];
+              });
+
+              chatMessages
+                  .firstWhereOrNull((message) =>
+                      message.messageId == messageMapped['target-msg-id'])!
+                  .deleted = true;
+
+              chatMessages.refresh();
             }
             break;
           case "NOTICE":
@@ -244,18 +260,24 @@ class ChatViewController extends GetxController
   void deleteMessageInstruction(TwitchChatMessage message) {
     channel.sink
         .add('PRIVMSG #$ircChannelJoined :/delete ${message.messageId}\r\n');
+
+    selectedMessage.value = null;
   }
 
   void timeoutMessageInstruction(TwitchChatMessage message) {
     // /timeout [username] [duration] [reason]
     channel.sink.add(
         'PRIVMSG #$ircChannelJoined :/timeout ${message.authorName} 10 reason\r\n');
+
+    selectedMessage.value = null;
   }
 
   void banMessageInstruction(TwitchChatMessage message) {
     // /ban [username] [reason]
     channel.sink.add(
         'PRIVMSG #$ircChannelJoined :/ban ${message.authorName} reason\r\n');
+
+    selectedMessage.value = null;
   }
 
   void scrollToBottom() {

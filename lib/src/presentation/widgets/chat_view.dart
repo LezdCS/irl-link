@@ -94,84 +94,7 @@ class ChatView extends GetView<ChatViewController> {
           bottom: height * 0.07,
           child: Visibility(
             visible: controller.selectedMessage.value != null,
-            child: Container(
-              padding:
-                  EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
-              width: width,
-              decoration: BoxDecoration(
-                color: Color(0xFF121212),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(8),
-                  topRight: Radius.circular(8),
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        controller.selectedMessage.value?.authorName ?? "",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Wrap(
-                        children: [
-                          InkWell(
-                            onTap: () => launch("https://twitch.tv/" +
-                                controller.selectedMessage.value!.authorName),
-                            child: Icon(
-                              Icons.open_in_browser,
-                              color: Colors.white,
-                            ),
-                          ),
-                          SizedBox(width: 5),
-                          InkWell(
-                            onTap: () =>
-                                controller.selectedMessage.value = null,
-                            child: Icon(
-                              Icons.close,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    controller.selectedMessage.value?.message ?? "",
-                    style: TextStyle(
-                      color: Color(0xFF575757),
-                      fontStyle: FontStyle.italic,
-                      fontSize: 14,
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () => controller.deleteMessageInstruction(
-                        controller.selectedMessage.value!),
-                    child: moderationViewButton(null, "Delete message"),
-                  ),
-                  SizedBox(height: 15),
-                  Row(children: [
-                    InkWell(
-                      onTap: () => controller.banMessageInstruction(
-                          controller.selectedMessage.value!),
-                      child: moderationViewButton(Icons.stop, "Ban"),
-                    ),
-                    SizedBox(width: 10),
-                    InkWell(
-                      onTap: () => controller.timeoutMessageInstruction(
-                          controller.selectedMessage.value!),
-                      child: moderationViewButton(Icons.timer, "Timeout"),
-                    ),
-                  ]),
-                ],
-              ),
-            ),
+            child: moderationView(width),
           ),
         ),
         AnimatedOpacity(
@@ -219,42 +142,139 @@ class ChatView extends GetView<ChatViewController> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          for (String word in message.message.trim().split(' '))
-            if (message.emotes.entries.firstWhereOrNull((element) => element
-                    .value
-                    .where((position) =>
-                        message.message.substring(int.parse(position[0]),
-                            int.parse(position[1]) + 1) ==
-                        word)
-                    .isNotEmpty) !=
-                null)
-              Wrap(children: [
-                Image(
-                  image: NetworkImage(
-                      "https://static-cdn.jtvnw.net/emoticons/v2/" +
-                          message
-                              .emotes.entries
-                              .firstWhere((element) => element
-                                  .value
+          message.deleted
+              ? Text(
+                  "<message deleted>",
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 19,
+                  ),
+                )
+              : Wrap(
+                  children: [
+                    for (String word in message.message.trim().split(' '))
+                      if (message.emotes.entries.firstWhereOrNull((element) =>
+                              element.value
                                   .where((position) =>
                                       message.message.substring(
                                           int.parse(position[0]),
                                           int.parse(position[1]) + 1) ==
                                       word)
-                                  .isNotEmpty)
-                              .key +
-                          "/default/dark/1.0"),
+                                  .isNotEmpty) !=
+                          null)
+                        Wrap(children: [
+                          Image(
+                            image: NetworkImage(
+                                "https://static-cdn.jtvnw.net/emoticons/v2/" +
+                                    message.emotes.entries
+                                        .firstWhere((element) => element.value
+                                            .where((position) =>
+                                                message.message.substring(
+                                                    int.parse(position[0]),
+                                                    int.parse(position[1]) +
+                                                        1) ==
+                                                word)
+                                            .isNotEmpty)
+                                        .key +
+                                    "/default/dark/1.0"),
+                          ),
+                          Text(' '),
+                        ])
+                      else
+                        Text(
+                          word + " ",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 19,
+                          ),
+                        ),
+                  ],
                 ),
-                Text(' '),
-              ])
-            else
+        ],
+      ),
+    );
+  }
+
+  Widget messageDeleted() {
+    return Container(
+      child: Text("<message deleted>"),
+    );
+  }
+
+  Widget moderationView(double width) {
+    return Container(
+      padding: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
+      width: width,
+      decoration: BoxDecoration(
+        color: Color(0xFF121212),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(8),
+          topRight: Radius.circular(8),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
               Text(
-                word + " ",
+                controller.selectedMessage.value?.authorName ?? "",
                 style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 19,
-                ),
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
               ),
+              Wrap(
+                children: [
+                  InkWell(
+                    onTap: () => launch("https://twitch.tv/" +
+                        controller.selectedMessage.value!.authorName),
+                    child: Icon(
+                      Icons.open_in_browser,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  InkWell(
+                    onTap: () => controller.selectedMessage.value = null,
+                    child: Icon(
+                      Icons.close,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          SizedBox(height: 10),
+          Text(
+            controller.selectedMessage.value?.message ?? "",
+            style: TextStyle(
+              color: Color(0xFF575757),
+              fontStyle: FontStyle.italic,
+              fontSize: 14,
+            ),
+          ),
+          InkWell(
+            onTap: () => controller
+                .deleteMessageInstruction(controller.selectedMessage.value!),
+            child: moderationViewButton(null, "Delete message"),
+          ),
+          SizedBox(height: 15),
+          Row(children: [
+            InkWell(
+              onTap: () => controller
+                  .banMessageInstruction(controller.selectedMessage.value!),
+              child: moderationViewButton(Icons.stop, "Ban"),
+            ),
+            SizedBox(width: 10),
+            InkWell(
+              onTap: () => controller
+                  .timeoutMessageInstruction(controller.selectedMessage.value!),
+              child: moderationViewButton(Icons.timer, "Timeout"),
+            ),
+          ]),
         ],
       ),
     );

@@ -2,8 +2,9 @@ import 'package:equatable/equatable.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:collection/collection.dart';
 
-//todo : add bool isBitDonation
+//ignore: must_be_immutable
 class TwitchChatMessage extends Equatable {
+  //todo : add bool isBitDonation
   final String messageId;
   final List<TwitchBadge> badges;
   final String color;
@@ -12,9 +13,9 @@ class TwitchChatMessage extends Equatable {
   final Map<String, List> emotes;
   final String message;
   final int timestamp;
-  final bool deleted;
+  bool deleted;
 
-  const TwitchChatMessage({
+  TwitchChatMessage({
     required this.messageId,
     required this.badges,
     required this.color,
