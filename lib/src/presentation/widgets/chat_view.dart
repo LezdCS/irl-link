@@ -2,6 +2,8 @@ import 'package:collection/src/iterable_extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
@@ -201,6 +203,149 @@ class ChatView extends GetView<ChatViewController> {
     );
   }
 
+  void timeoutDialog(double width) {
+    Get.defaultDialog(
+      title: "Timeout",
+      titleStyle: TextStyle(color: Colors.white),
+      backgroundColor: Color(0xFF282828),
+      content: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              InkWell(
+                onTap: () => controller.timeoutMessageInstruction(
+                    controller.selectedMessage.value!, 10000),
+                child: Container(
+                  margin: EdgeInsets.only(right: 10),
+                  padding:
+                      EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
+                  decoration: BoxDecoration(
+                    color: Color(0xFF121212),
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                  ),
+                  child: Text(
+                    '10s',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () => controller.timeoutMessageInstruction(
+                    controller.selectedMessage.value!, 60000),
+                child: Container(
+                  margin: EdgeInsets.only(right: 10),
+                  padding:
+                      EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
+                  decoration: BoxDecoration(
+                    color: Color(0xFF121212),
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                  ),
+                  child: Text(
+                    '1m',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () => controller.timeoutMessageInstruction(
+                    controller.selectedMessage.value!, 600000),
+                child: Container(
+                  margin: EdgeInsets.only(right: 10),
+                  padding:
+                      EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
+                  decoration: BoxDecoration(
+                    color: Color(0xFF121212),
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                  ),
+                  child: Text(
+                    '10m',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () => controller.timeoutMessageInstruction(
+                    controller.selectedMessage.value!, 1800000),
+                child: Container(
+                  margin: EdgeInsets.only(right: 10),
+                  padding:
+                      EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
+                  decoration: BoxDecoration(
+                    color: Color(0xFF121212),
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                  ),
+                  child: Text(
+                    '30m',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 10),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: Color(0xFF121212),
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                ),
+                width: width * 0.50,
+                child: TextField(
+                  controller: controller.banDurationInputController,
+                  keyboardType: TextInputType.number,
+                  textInputAction: TextInputAction.send,
+                  onSubmitted: (String value) {
+                    if (int.tryParse(value) != null) {
+                      controller.timeoutMessageInstruction(
+                          controller.selectedMessage.value!, int.parse(value));
+                    }
+                  },
+                  style: TextStyle(color: Colors.white),
+                  maxLines: 1,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintStyle: TextStyle(color: Colors.grey, fontSize: 16),
+                    hintText: 'Custom duration',
+                    isDense: true,
+                    contentPadding: EdgeInsets.only(left: 5),
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  if (int.tryParse(
+                          controller.banDurationInputController.text) !=
+                      null) {
+                    controller.timeoutMessageInstruction(
+                        controller.selectedMessage.value!,
+                        int.parse(controller.banDurationInputController.text));
+                  }
+                },
+                child: Container(
+                  child: Icon(Icons.send, color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+      textCancel: "Cancel",
+    );
+  }
+
   Widget moderationView(double width) {
     return Container(
       padding: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
@@ -270,8 +415,7 @@ class ChatView extends GetView<ChatViewController> {
             ),
             SizedBox(width: 10),
             InkWell(
-              onTap: () => controller
-                  .timeoutMessageInstruction(controller.selectedMessage.value!),
+              onTap: () => timeoutDialog(width),
               child: moderationViewButton(Icons.timer, "Timeout"),
             ),
           ]),

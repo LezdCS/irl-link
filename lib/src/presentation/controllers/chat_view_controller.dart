@@ -34,11 +34,13 @@ class ChatViewController extends GetxController
   late String ircChannelJoined;
 
   Rxn<TwitchChatMessage> selectedMessage = Rxn<TwitchChatMessage>();
+  late TextEditingController banDurationInputController;
 
   @override
   void onInit() {
     streamController = new StreamController.broadcast();
     scrollController = new ScrollController();
+    banDurationInputController = new TextEditingController();
 
     channel = IOWebSocketChannel.connect("wss://irc-ws.chat.twitch.tv:443");
     streamController.addStream(channel.stream);
@@ -47,7 +49,7 @@ class ChatViewController extends GetxController
     ircChannelJoined = twitchData.twitchUser.login;
 
     //ircChannelJoined =
-    //    "kamet0"; //if you want to join another twitch chat than yours
+    //    "kamet0".toLowerCase(); //if you want to join another twitch chat than yours
 
     getTwitchBadges();
     getTwitchEmotes();
@@ -264,10 +266,12 @@ class ChatViewController extends GetxController
     selectedMessage.value = null;
   }
 
-  void timeoutMessageInstruction(TwitchChatMessage message) {
+  void timeoutMessageInstruction(TwitchChatMessage message, int duration) {
     // /timeout [username] [duration] [reason]
     channel.sink.add(
-        'PRIVMSG #$ircChannelJoined :/timeout ${message.authorName} 10 reason\r\n');
+        'PRIVMSG #$ircChannelJoined :/timeout ${message.authorName} $duration reason\r\n');
+
+    Get.back();
 
     selectedMessage.value = null;
   }
