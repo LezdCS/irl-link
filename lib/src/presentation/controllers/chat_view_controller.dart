@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-import 'package:collection/src/iterable_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/emote.dart';
@@ -12,8 +10,8 @@ import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;
 
-class ChatViewController extends GetxController
-    with SingleGetTickerProviderMixin {
+class ChatViewController extends FullLifeCycleController
+    with GetSingleTickerProviderStateMixin, FullLifeCycleMixin {
   ChatViewController({required this.homeEvents});
 
   final HomeEvents homeEvents;
@@ -35,6 +33,30 @@ class ChatViewController extends GetxController
 
   Rxn<TwitchChatMessage> selectedMessage = Rxn<TwitchChatMessage>();
   late TextEditingController banDurationInputController;
+
+  // Mandatory
+  @override
+  void onDetached() {
+    print('HomeController - onDetached called');
+  }
+
+  // Mandatory
+  @override
+  void onInactive() {
+    print('HomeController - onInative called');
+  }
+
+  // Mandatory
+  @override
+  void onPaused() {
+    print('HomeController - onPaused called');
+  }
+
+  // Mandatory
+  @override
+  void onResumed() {
+    print('HomeController - onResumed called');
+  }
 
   @override
   void onInit() {

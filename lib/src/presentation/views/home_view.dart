@@ -62,8 +62,13 @@ class HomeView extends GetView<HomeViewController> {
                       isActive: true,
                     ),
                     children: [
-                      _tabsViews(height, width),
-                      ChatView(),
+                      _tabsViews(),
+                      Listener(
+                        onPointerUp: (_) => {
+                          controller.isPickingEmote.value = false,
+                        },
+                        child: ChatView(),
+                      ),
                     ],
                   ),
                 ),
@@ -144,12 +149,12 @@ class HomeView extends GetView<HomeViewController> {
                             controller: controller.chatInputController,
                             onSubmitted: (String value) {
                               controller.sendChatMessage(value);
-                              controller.chatInputController.text = '';
                               FocusScope.of(context).unfocus();
                             },
                             onTap: () {
                               controller.chatViewController.selectedMessage
                                   .value = null;
+                              controller.isPickingEmote.value = false;
                             },
                             textInputAction: TextInputAction.send,
                             style: TextStyle(color: Colors.white),
@@ -216,26 +221,22 @@ class HomeView extends GetView<HomeViewController> {
     );
   }
 
-  Widget _tabsViews(double height, double width) {
-    return SizedBox(
-      height: height / 2,
-      width: width,
-      child: SizedBox(
-        height: double.infinity,
-        child: TabBarView(
-          physics:
-              NeverScrollableScrollPhysics(), //used so if the user scroll horizontally it wont change of tabView, might delete it later, to discuss
-          controller: controller.tabController,
-          children: List<Widget>.generate(
-            controller.tabElements.length,
-            (int index) => controller.tabElements[index] is WebPage
-                ? WebPageView(controller.tabElements[index].toWebPage().url)
-                : controller.tabElements[index].title == "Twitch"
-                    ? TwitchTabView()
-                    : controller.tabElements[index].title == "OBS"
-                        ? ObsTabView()
-                        : Container(),
-          ),
+  Widget _tabsViews() {
+    return Container(
+      color: Color(0xFF282828),
+      child: TabBarView(
+        physics:
+            NeverScrollableScrollPhysics(), //used so if the user scroll horizontally it wont change of tabView, might delete it later, to discuss
+        controller: controller.tabController,
+        children: List<Widget>.generate(
+          controller.tabElements.length,
+          (int index) => controller.tabElements[index] is WebPage
+              ? WebPageView(controller.tabElements[index].toWebPage().url)
+              : controller.tabElements[index].title == "Twitch"
+                  ? TwitchTabView()
+                  : controller.tabElements[index].title == "OBS"
+                      ? ObsTabView()
+                      : Container(),
         ),
       ),
     );

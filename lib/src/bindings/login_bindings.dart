@@ -17,6 +17,7 @@ class LoginBindings extends Bindings {
           ),
         ),
       ),
+      fenix: true,
     );
     Get.find<LoginViewController>();
   }

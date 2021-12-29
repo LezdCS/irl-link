@@ -1,6 +1,5 @@
 import 'package:irllink/src/domain/entities/emote.dart';
 
-//todo : add owner_id & emote_set_id
 class EmoteDTO extends Emote {
   const EmoteDTO({
     required String id,

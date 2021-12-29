@@ -75,9 +75,11 @@ class LoginView extends GetView<LoginViewController> {
                   CircularProgressIndicator(),
                   Container(
                     margin: EdgeInsets.only(top: 10),
-                    child: Text(
-                      "Loading...",
-                      style: TextStyle(color: Colors.white),
+                    child: Obx(
+                      () => Text(
+                        controller.loadingMessage.value,
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
                 ]),

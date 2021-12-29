@@ -12,6 +12,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:web_socket_channel/status.dart' as status;
 
 import 'chat_view_controller.dart';
+import 'login_view_controller.dart';
 
 class HomeViewController extends GetxController
     with SingleGetTickerProviderMixin {
@@ -35,8 +36,6 @@ class HomeViewController extends GetxController
 
   //emote picker
   RxBool isPickingEmote = false.obs;
-  //todo : when click outside emote picker => set to false
-  //todo :  maybe add a a cross button to close emote picker, on the right of the TextField
   late ChatViewController chatViewController;
 
   @override
@@ -86,6 +85,9 @@ class HomeViewController extends GetxController
       channel.sink.close(status.goingAway);
       ws.close();
     });
+    chatInputController.text = '';
+    chatViewController.selectedMessage.value = null;
+    isPickingEmote.value = false;
   }
 
   void getEmotes() {

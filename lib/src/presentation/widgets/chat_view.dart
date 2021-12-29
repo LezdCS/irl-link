@@ -81,10 +81,11 @@ class ChatView extends GetView<ChatViewController> {
                   },
                   child: Container(
                     padding: EdgeInsets.only(left: 20, right: 20),
-                    color: Colors.black.withOpacity(0.4),
+                    color: Colors.black.withOpacity(0.8),
                     child: Icon(
                       Icons.keyboard_arrow_down,
                       color: Colors.white,
+                      size: 30,
                     ),
                   ),
                 ),
@@ -318,7 +319,7 @@ class ChatView extends GetView<ChatViewController> {
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintStyle: TextStyle(color: Colors.grey, fontSize: 16),
-                    hintText: 'Custom duration',
+                    hintText: 'Custom duration (ms)',
                     isDense: true,
                     contentPadding: EdgeInsets.only(left: 5),
                   ),

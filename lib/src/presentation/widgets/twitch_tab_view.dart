@@ -7,6 +7,11 @@ class TwitchTabView extends GetView {
   Widget build(BuildContext context) {
     return Container(
       color: Color(0xFF282828),
+      child: Column(
+        children: [
+          Text("okoko"),
+        ],
+      ),
     );
   }
 }
