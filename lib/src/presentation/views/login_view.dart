@@ -7,6 +7,7 @@ import 'package:irllink/src/presentation/controllers/login_view_controller.dart'
 class LoginView extends GetView<LoginViewController> {
   @override
   Widget build(BuildContext context) {
+    Get.find<LoginViewController>();
     return Scaffold(
       body: Obx(
         () => controller.isLoading.value
