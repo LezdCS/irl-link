@@ -13,6 +13,7 @@ import 'package:irllink/src/presentation/widgets/obs_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/twitch_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/web_page_view.dart';
 import 'package:irllink/src/presentation/widgets/split_view_custom.dart';
+import 'package:move_to_background/move_to_background.dart';
 
 class HomeView extends GetView<HomeViewController> {
   @override
@@ -20,75 +21,81 @@ class HomeView extends GetView<HomeViewController> {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        backgroundColor: Color(0xFF121212),
-        flexibleSpace: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            _tabBar(height, width),
-          ],
+    return WillPopScope(
+      onWillPop: () async {
+        MoveToBackground.moveTaskToBack();
+        return false;
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: AppBar(
+          backgroundColor: Color(0xFF121212),
+          flexibleSpace: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              _tabBar(height, width),
+            ],
+          ),
         ),
-      ),
-      body: Obx(
-        () => Stack(
-          children: [
-            GestureDetector(
-              onTap: () => {
-                debugPrint("trigereddddd"),
-                FocusScope.of(context).unfocus(),
-                controller.isPickingEmote.value = false,
-              },
-              child: Container(
-                constraints: BoxConstraints.expand(),
-                decoration: BoxDecoration(
-                  color: Color(0xFF121212),
-                ),
-                child: SafeArea(
-                  child: SplitViewCustom(
-                    controller: controller.splitViewController,
-                    gripColor: Color(0xFF121212),
-                    gripColorActive: Color(0xFF121212),
-                    gripSize: 14,
-                    viewMode: SplitViewMode.Vertical,
-                    indicator: SplitIndicator(
+        body: Obx(
+          () => Stack(
+            children: [
+              GestureDetector(
+                onTap: () => {
+                  debugPrint("trigereddddd"),
+                  FocusScope.of(context).unfocus(),
+                  controller.isPickingEmote.value = false,
+                },
+                child: Container(
+                  constraints: BoxConstraints.expand(),
+                  decoration: BoxDecoration(
+                    color: Color(0xFF121212),
+                  ),
+                  child: SafeArea(
+                    child: SplitViewCustom(
+                      controller: controller.splitViewController,
+                      gripColor: Color(0xFF121212),
+                      gripColorActive: Color(0xFF121212),
+                      gripSize: 14,
                       viewMode: SplitViewMode.Vertical,
-                      color: Color(0xFFFFFFFF),
-                    ),
-                    activeIndicator: SplitIndicator(
-                      color: Color(0xFFFFFFFF),
-                      viewMode: SplitViewMode.Vertical,
-                      isActive: true,
-                    ),
-                    children: [
-                      _tabsViews(),
-                      Listener(
-                        onPointerUp: (_) => {
-                          controller.isPickingEmote.value = false,
-                        },
-                        child: ChatView(),
+                      indicator: SplitIndicator(
+                        viewMode: SplitViewMode.Vertical,
+                        color: Color(0xFFFFFFFF),
                       ),
-                    ],
+                      activeIndicator: SplitIndicator(
+                        color: Color(0xFFFFFFFF),
+                        viewMode: SplitViewMode.Vertical,
+                        isActive: true,
+                      ),
+                      children: [
+                        _tabsViews(),
+                        Listener(
+                          onPointerUp: (_) => {
+                            controller.isPickingEmote.value = false,
+                          },
+                          child: ChatView(),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            Positioned(
-              bottom: 0.0,
-              left: 0.0,
-              right: 0.0,
-              child: _bottomNavBar(height, width, context),
-            ),
-            Visibility(
-              visible: controller.isPickingEmote.value,
-              child: Positioned(
-                bottom: height * 0.07,
-                left: 10,
-                child: EmotePickerView(homeViewController: controller),
+              Positioned(
+                bottom: 0.0,
+                left: 0.0,
+                right: 0.0,
+                child: _bottomNavBar(height, width, context),
               ),
-            ),
-          ],
+              Visibility(
+                visible: controller.isPickingEmote.value,
+                child: Positioned(
+                  bottom: height * 0.07,
+                  left: 10,
+                  child: EmotePickerView(homeViewController: controller),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

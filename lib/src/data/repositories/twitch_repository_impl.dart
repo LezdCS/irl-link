@@ -81,8 +81,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(twitchData);
     } catch (e) {
-      return DataFailed(
-          throw new Exception("Unable to retrieve Twitch Data from Auth"));
+      return DataFailed("Unable to retrieve Twitch Data from Auth");
     }
   }
 
@@ -113,7 +112,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       debugPrint('token refreshed');
       return DataSuccess(newTwitchData);
     } on DioError catch (e) {
-      return DataFailed(throw new Exception("Refresh encountered issues"));
+      return DataFailed("Refresh encountered issues");
     }
   }
 
@@ -154,7 +153,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(twitchData);
     } else {
-      return DataFailed(throw new Exception("No Twitch Data in local storage"));
+      return DataFailed("No Twitch Data in local storage");
     }
   }
 
@@ -191,7 +190,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(twitchUser);
     } on DioError catch (e) {
-      return DataFailed(throw new Exception("Error retrieving user infos"));
+      return DataFailed("Error retrieving user infos");
     }
   }
 
@@ -215,8 +214,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       return DataSuccess(badges);
     } on DioError catch (e) {
       print(e.response);
-      return DataFailed(
-          throw new Exception("Error retrieving Twitch global badges"));
+      return DataFailed("Error retrieving Twitch global badges");
     }
   }
 
@@ -239,8 +237,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(badges);
     } on DioError catch (e) {
-      return DataFailed(throw new Exception(
-          "Error retrieving Twitch broadcaster channel badges"));
+      return DataFailed("Error retrieving Twitch broadcaster channel badges");
     }
   }
 
@@ -263,7 +260,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(emotes);
     } on DioError catch (e) {
-      return DataFailed(throw new Exception("Error retrieving global emotes"));
+      return DataFailed("Error retrieving global emotes");
     }
   }
 
@@ -291,7 +288,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(emotes);
     } on DioError catch (e) {
-      return DataFailed(throw new Exception("Error retrieving channel emotes"));
+      return DataFailed("Error retrieving channel emotes");
     }
   }
 
@@ -324,7 +321,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(emotes);
     } on DioError catch (e) {
-      return DataFailed(throw new Exception("Error retrieving sets emotes"));
+      return DataFailed("Error retrieving sets emotes");
     }
   }
 }

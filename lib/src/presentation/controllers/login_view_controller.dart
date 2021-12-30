@@ -20,19 +20,16 @@ class LoginViewController extends GetxController {
       statusBarColor: Colors.transparent,
     ));
 
-    debugPrint("vvvvvvvvvvvv");
-
     super.onInit();
   }
 
   @override
   Future<void> onReady() async {
-    await Future.doWhile(() => hasNoNetwork());
-
-    debugPrint("eeeeeeeeeeeee");
+    await Future.doWhile(
+        () => Future.delayed(Duration(seconds: 2)).then((_) => hasNoNetwork()));
 
     await loginEvents.getTwitchFromLocal().then((value) {
-      if (value.exception == null) {
+      if (value.error == null) {
         Get.offAllNamed(Routes.HOME, arguments: [value.data]);
       }
     }).catchError((e) {});
@@ -48,12 +45,14 @@ class LoginViewController extends GetxController {
   }
 
   Future<void> login() async {
+    isLoading.value = true;
     TwitchAuthParams params = TwitchAuthParams();
     await loginEvents.getTwitchOauth(params: params).then((value) {
-      if (value.exception == null) {
+      if (value.error == null) {
         Get.offAllNamed(Routes.HOME, arguments: [value.data]);
       }
     });
+    isLoading.value = false;
   }
 
   Future<bool> hasNoNetwork() async {
@@ -61,7 +60,7 @@ class LoginViewController extends GetxController {
       final result = await InternetAddress.lookup('example.com');
       return !(result.isNotEmpty && result[0].rawAddress.isNotEmpty);
     } on SocketException catch (_) {
-      loadingMessage.value = "No internet connection...";
+      loadingMessage.value = "No internet connection";
       return true;
     }
   }

@@ -43,6 +43,7 @@ dependencies:
   dio: ^4.0.4
   wakelock: ^0.5.6
   connectivity_plus: ^2.1.0
+  move_to_background: ^1.0.2
 
 dev_dependencies:
   flutter_test:

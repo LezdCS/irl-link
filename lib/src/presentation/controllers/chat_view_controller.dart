@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:irllink/src/domain/entities/emote.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:irllink/src/domain/entities/twitch_chat_message.dart';
@@ -20,9 +22,10 @@ class ChatViewController extends FullLifeCycleController
   late ScrollController scrollController;
   RxBool isAutoScrolldown = true.obs;
   RxBool isChatConnected = false.obs;
+  RxString alertMessage = "Connecting...".obs;
   late IOWebSocketChannel channel;
   late TwitchCredentials twitchData;
-  late StreamController<dynamic> streamController;
+  StreamSubscription? streamSubscription;
   RxList<TwitchChatMessage> chatMessages = <TwitchChatMessage>[].obs;
 
   List<TwitchBadge> twitchBadges = <TwitchBadge>[];
@@ -60,12 +63,8 @@ class ChatViewController extends FullLifeCycleController
 
   @override
   void onInit() {
-    streamController = new StreamController.broadcast();
     scrollController = new ScrollController();
     banDurationInputController = new TextEditingController();
-
-    channel = IOWebSocketChannel.connect("wss://irc-ws.chat.twitch.tv:443");
-    streamController.addStream(channel.stream);
 
     twitchData = Get.arguments[0];
     ircChannelJoined = twitchData.twitchUser.login;
@@ -81,24 +80,32 @@ class ChatViewController extends FullLifeCycleController
 
   @override
   void onReady() {
-    String token = twitchData.accessToken;
-    String nick = twitchData.twitchUser.login;
-
-    isChatConnected.value = false;
-
-    channel.sink.add('CAP REQ :twitch.tv/membership');
-    channel.sink.add('CAP REQ :twitch.tv/tags');
-    channel.sink.add('CAP REQ :twitch.tv/commands');
-    channel.sink.add('PASS oauth:' + token);
-    channel.sink.add('NICK ' + nick);
-
-    channel.sink.add('JOIN #$ircChannelJoined');
-
-    isChatConnected.value = true;
-
-    streamController.stream.listen((message) => chatListener(message));
-
     scrollController.addListener(scrollListener);
+
+    joinIrc();
+
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      if (streamSubscription != null) {
+        streamSubscription!.cancel();
+        channel.sink.add('PART #$ircChannelJoined');
+      }
+      switch (result) {
+        case ConnectivityResult.wifi:
+          joinIrc();
+          break;
+        case ConnectivityResult.ethernet:
+          //
+          break;
+        case ConnectivityResult.mobile:
+          joinIrc();
+          break;
+        case ConnectivityResult.none:
+          alertMessage.value = "Network connectivity lost";
+          isChatConnected.value = false;
+          debugPrint("none");
+          break;
+      }
+    });
 
     super.onReady();
   }
@@ -108,6 +115,29 @@ class ChatViewController extends FullLifeCycleController
     channel.sink.add('PART #$ircChannelJoined');
     channel.sink.close(status.goingAway);
     super.onClose();
+  }
+
+  Future<void> joinIrc() async {
+    alertMessage.value = "Connecting...";
+    isChatConnected.value = false;
+    String token = twitchData.accessToken;
+    String nick = twitchData.twitchUser.login;
+
+    channel = IOWebSocketChannel.connect("wss://irc-ws.chat.twitch.tv:443");
+
+    streamSubscription =
+        channel.stream.listen((message) => chatListener(message));
+
+    channel.sink.add('CAP REQ :twitch.tv/membership');
+    channel.sink.add('CAP REQ :twitch.tv/tags');
+    channel.sink.add('CAP REQ :twitch.tv/commands');
+    channel.sink.add('PASS oauth:' + token);
+    channel.sink.add('NICK ' + nick);
+
+    channel.sink.add('JOIN #$ircChannelJoined');
+
+    alertMessage.value = "Connected";
+    isChatConnected.value = true;
   }
 
   void scrollListener() {
@@ -120,9 +150,6 @@ class ChatViewController extends FullLifeCycleController
   }
 
   void chatListener(message) {
-    if (streamController.isClosed) {
-      return;
-    }
     debugPrint(message);
     if (message.startsWith('PING ')) {
       channel.sink.add("PONG :tmi.twitch.tv\r\n");

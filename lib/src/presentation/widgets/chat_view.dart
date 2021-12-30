@@ -107,9 +107,7 @@ class ChatView extends GetView<ChatViewController> {
             color: controller.isChatConnected.value
                 ? Color(0xFF33A031)
                 : Color(0xFFEC7508),
-            message: controller.isChatConnected.value
-                ? "Connected"
-                : "Connecting...",
+            message: controller.alertMessage.value,
             isProgress: !controller.isChatConnected.value,
           ),
         ),
