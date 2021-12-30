@@ -2,20 +2,20 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/emote.dart';
-import 'package:irllink/src/domain/entities/tabbar/tab_element.dart';
-import 'package:irllink/src/domain/entities/tabbar/web_page.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
+import 'package:irllink/src/presentation/widgets/obs_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/split_view_custom.dart';
+import 'package:irllink/src/presentation/widgets/twitch_tab_view.dart';
+import 'package:irllink/src/presentation/widgets/web_page_view.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:web_socket_channel/status.dart' as status;
 
 import 'chat_view_controller.dart';
-import 'login_view_controller.dart';
 
 class HomeViewController extends GetxController
-    with SingleGetTickerProviderMixin {
+    with GetSingleTickerProviderStateMixin {
   HomeViewController({required this.homeEvents});
 
   final HomeEvents homeEvents;
@@ -26,7 +26,7 @@ class HomeViewController extends GetxController
 
   //TABS
   late TabController tabController;
-  RxList<TabElement> tabElements = <TabElement>[].obs;
+  RxList<Widget> tabElements = <Widget>[].obs;
 
   late TwitchCredentials twitchData;
 
@@ -46,13 +46,13 @@ class HomeViewController extends GetxController
 
     if (GetPlatform.isAndroid) WebView.platform = SurfaceAndroidWebView();
 
-    WebPage page1 = new WebPage("Youtube", "https://www.youtube.com", true);
-    TabElement twitchPage = new TabElement("Twitch");
-    TabElement obsPage = new TabElement("OBS");
+    TwitchTabView twitchPage = TwitchTabView();
+    ObsTabView obsPage = ObsTabView();
+    WebPageView page1View = WebPageView("Youtube", "https://www.youtube.com");
 
     tabElements.add(twitchPage);
     tabElements.add(obsPage);
-    tabElements.add(page1);
+    tabElements.add(page1View);
 
     tabController = new TabController(length: tabElements.length, vsync: this);
 

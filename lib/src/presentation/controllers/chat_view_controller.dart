@@ -208,7 +208,7 @@ class ChatViewController extends FullLifeCycleController
               chatMessages
                   .firstWhereOrNull((message) =>
                       message.messageId == messageMapped['target-msg-id'])!
-                  .deleted = true;
+                  .isDeleted = true;
 
               chatMessages.refresh();
             }

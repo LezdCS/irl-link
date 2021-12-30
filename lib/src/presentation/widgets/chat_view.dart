@@ -134,7 +134,9 @@ class ChatView extends GetView<ChatViewController> {
               ),
             ),
           Text(
-            message.authorName + ": ",
+            message.isAction
+                ? message.authorName + " "
+                : message.authorName + ": ",
             style: TextStyle(
               color: message.color != ''
                   ? Color(int.parse(message.color.replaceAll('#', '0xff')))
@@ -143,7 +145,7 @@ class ChatView extends GetView<ChatViewController> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          message.deleted
+          message.isDeleted
               ? Text(
                   "<message deleted>",
                   style: TextStyle(
@@ -187,6 +189,9 @@ class ChatView extends GetView<ChatViewController> {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 19,
+                            fontStyle: message.isAction
+                                ? FontStyle.italic
+                                : FontStyle.normal,
                           ),
                         ),
                   ],

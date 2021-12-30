@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebPageView extends StatefulWidget {
-  WebPageView(this.url);
+  WebPageView(this.title, this.url);
 
+  final String title;
   final String url;
 
   @override

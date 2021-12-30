@@ -5,14 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
-import 'package:irllink/src/domain/entities/tabbar/web_page.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/chat_view.dart';
 import 'package:irllink/src/presentation/widgets/emote_picker_view.dart';
 import 'package:irllink/src/presentation/widgets/obs_tab_view.dart';
+import 'package:irllink/src/presentation/widgets/split_view_custom.dart';
 import 'package:irllink/src/presentation/widgets/twitch_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/web_page_view.dart';
-import 'package:irllink/src/presentation/widgets/split_view_custom.dart';
 import 'package:move_to_background/move_to_background.dart';
 
 class HomeView extends GetView<HomeViewController> {
@@ -114,7 +113,13 @@ class HomeView extends GetView<HomeViewController> {
         controller.tabElements.length,
         (int index) => Tab(
           child: Text(
-            controller.tabElements[index].title,
+            controller.tabElements[index] is ObsTabView
+                ? "OBS"
+                : controller.tabElements[index] is TwitchTabView
+                    ? "Twitch"
+                    : controller.tabElements[index] is WebPageView
+                        ? (controller.tabElements[index] as WebPageView).title
+                        : "",
           ),
         ),
       ),
@@ -237,13 +242,7 @@ class HomeView extends GetView<HomeViewController> {
         controller: controller.tabController,
         children: List<Widget>.generate(
           controller.tabElements.length,
-          (int index) => controller.tabElements[index] is WebPage
-              ? WebPageView(controller.tabElements[index].toWebPage().url)
-              : controller.tabElements[index].title == "Twitch"
-                  ? TwitchTabView()
-                  : controller.tabElements[index].title == "OBS"
-                      ? ObsTabView()
-                      : Container(),
+          (int index) => controller.tabElements[index],
         ),
       ),
     );

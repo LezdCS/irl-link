@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:collection/collection.dart';
 
@@ -13,7 +14,9 @@ class TwitchChatMessage extends Equatable {
   final Map<String, List> emotes;
   final String message;
   final int timestamp;
-  bool deleted;
+  final bool isBitDonation;
+  final bool isAction;
+  bool isDeleted;
 
   TwitchChatMessage({
     required this.messageId,
@@ -24,7 +27,9 @@ class TwitchChatMessage extends Equatable {
     required this.emotes,
     required this.message,
     required this.timestamp,
-    required this.deleted,
+    required this.isBitDonation,
+    required this.isAction,
+    required this.isDeleted,
   });
 
   @override
@@ -38,7 +43,9 @@ class TwitchChatMessage extends Equatable {
       emotes,
       message,
       timestamp,
-      deleted,
+      isBitDonation,
+      isAction,
+      isDeleted,
     ];
   }
 
@@ -98,7 +105,15 @@ class TwitchChatMessage extends Equatable {
     List messageList = messageSplited.last.split(':').sublist(2);
     String messageString = messageList.join(':');
 
-    //TODO : if message startwith ACTION & end with  then it's a /me, so we have to cut this from message & add a boolean isMeAction so in view we display it in italic
+    bool isAction = messageString.startsWith("ACTION");
+    if (isAction) {
+      messageString = messageString
+          .replaceFirst("ACTION", '')
+          .replaceFirst("", '')
+          .trim();
+    }
+    debugPrint(messageString);
+    debugPrint(messageString.length.toString());
 
     return TwitchChatMessage(
       messageId: messageMapped['id'] as String,
@@ -109,7 +124,9 @@ class TwitchChatMessage extends Equatable {
       emotes: emotesIdsPositions,
       message: messageString,
       timestamp: int.parse(messageMapped['tmi-sent-ts'] as String),
-      deleted: false,
+      isBitDonation: messageMapped['bits'] != null ? true : false,
+      isAction: isAction,
+      isDeleted: false,
     );
   }
 }
