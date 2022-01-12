@@ -9,7 +9,6 @@ class ObsTabViewController extends GetxController {
 
   RxDouble slideValueForVolume = 50.0.obs;
 
-
   @override
   Future<void> onInit() async {
     super.onInit();
@@ -20,9 +19,7 @@ class ObsTabViewController extends GetxController {
     // connect to obs ws
     // todo get ws URL from obs tab creation
     obsWebSocket = await ObsWebSocket.connect(
-        connectUrl: 'ws://localhost:4444',
-        timeout: const Duration(seconds: 5)
-    );
+        connectUrl: 'ws://localhost:4444', timeout: const Duration(seconds: 5));
 
     super.onReady();
   }
@@ -30,7 +27,7 @@ class ObsTabViewController extends GetxController {
   @override
   void onClose() {
     // close obs websocket
-    obsWebSocket.close();
+    // obsWebSocket.close();
 
     super.onClose();
   }
@@ -51,7 +48,6 @@ class ObsTabViewController extends GetxController {
     }
   }
 
-
   /*
   returns
   * current-scene 	String
@@ -69,11 +65,7 @@ class ObsTabViewController extends GetxController {
   * name 	String
   * sources 	Array<SceneItem>
   */
-  getCurrentScene() {
+  getCurrentScene() {}
 
-  }
-
-  setCurrentScene(String sceneName) {
-
-  }
+  setCurrentScene(String sceneName) {}
 }

@@ -70,8 +70,8 @@ class ChatViewController extends FullLifeCycleController
     twitchData = Get.arguments[0];
     ircChannelJoined = twitchData.twitchUser.login;
 
-    ircChannelJoined = "xqcow"
-        .toLowerCase(); //if you want to join another twitch chat than yours
+    // ircChannelJoined = "xqcow"
+    //     .toLowerCase(); //if you want to join another twitch chat than yours
 
     getTwitchBadges();
     getTwitchEmotes();

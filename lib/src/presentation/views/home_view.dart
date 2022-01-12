@@ -48,7 +48,7 @@ class HomeView extends GetView<HomeViewController> {
                 child: Container(
                   constraints: BoxConstraints.expand(),
                   decoration: BoxDecoration(
-                    color: Color(0xFF121212),
+                    color: Color(0xFF0e0e10),
                   ),
                   child: SafeArea(
                     child: SplitViewCustom(

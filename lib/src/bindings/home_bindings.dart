@@ -22,7 +22,7 @@ class HomeBindings extends Bindings {
     );
     Get.find<HomeViewController>();
 
-    Get.lazyPut(() => ObsTabViewController());
+    Get.lazyPut<ObsTabViewController>(() => ObsTabViewController());
     Get.find<ObsTabViewController>();
 
     Get.lazyPut<ChatViewController>(
