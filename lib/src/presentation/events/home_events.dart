@@ -61,4 +61,12 @@ class HomeEvents {
       setId: setId,
     );
   }
+
+  Future<DataState<List<Emote>>> getTwitchCheerEmotes(
+      String accessToken, String broadcasterId) {
+    return twitchUseCase.getTwitchCheerEmotes(
+      accessToken: accessToken,
+      broadcasterId: broadcasterId,
+    );
+  }
 }

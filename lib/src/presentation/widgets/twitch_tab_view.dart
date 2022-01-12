@@ -6,7 +6,7 @@ class TwitchTabView extends GetView {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Color(0xFF282828),
+      color: Color(0xFF0e0e10),
       child: Column(
         children: [
           Text("okoko"),

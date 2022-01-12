@@ -15,7 +15,6 @@ import 'package:irllink/src/data/entities/twitch_user_dto.dart';
 import 'package:irllink/src/domain/entities/emote.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
-import 'package:irllink/src/domain/entities/twitch_user.dart';
 import 'package:irllink/src/domain/repositories/twitch_repository.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
@@ -322,6 +321,34 @@ class TwitchRepositoryImpl extends TwitchRepository {
       return DataSuccess(emotes);
     } on DioError catch (e) {
       return DataFailed("Error retrieving sets emotes");
+    }
+  }
+
+  @override
+  Future<DataState<List<Emote>>> getTwitchCheerEmotes(
+      String accessToken, String broadcasterId) async {
+    Response response;
+    var dio = Dio();
+    List<Emote> emotes = <Emote>[];
+    try {
+      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dio.options.headers["authorization"] = "Bearer $accessToken";
+      response = await dio.get(
+        'https://api.twitch.tv/helix/bits/cheermotes',
+        queryParameters: {'broadcaster_id': broadcasterId},
+      );
+
+      response.data['data'].forEach(
+        (prefix) => prefix['tiers'].forEach(
+          (emote) => emotes.add(
+            EmoteDTO.fromJsonCheerEmotes(emote, prefix['prefix']),
+          ),
+        ),
+      );
+
+      return DataSuccess(emotes);
+    } on DioError catch (e) {
+      return DataFailed("Error retrieving channel emotes");
     }
   }
 }

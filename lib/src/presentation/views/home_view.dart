@@ -53,8 +53,8 @@ class HomeView extends GetView<HomeViewController> {
                   child: SafeArea(
                     child: SplitViewCustom(
                       controller: controller.splitViewController,
-                      gripColor: Color(0xFF121212),
-                      gripColorActive: Color(0xFF121212),
+                      gripColor: Color(0xFF18181b),
+                      gripColorActive: Color(0xFF18181b),
                       gripSize: 14,
                       viewMode: SplitViewMode.Vertical,
                       indicator: SplitIndicator(
@@ -235,7 +235,7 @@ class HomeView extends GetView<HomeViewController> {
 
   Widget _tabsViews() {
     return Container(
-      color: Color(0xFF282828),
+      color: Color(0xFF0e0e10),
       child: TabBarView(
         physics:
             NeverScrollableScrollPhysics(), //used so if the user scroll horizontally it wont change of tabView, might delete it later, to discuss

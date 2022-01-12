@@ -30,6 +30,7 @@ class ChatViewController extends FullLifeCycleController
 
   List<TwitchBadge> twitchBadges = <TwitchBadge>[];
   List<Emote> twitchEmotes = <Emote>[];
+  List<Emote> cheerEmotes = <Emote>[];
 
   late TwitchUser otherUserInfosChatConnected;
   late String ircChannelJoined;
@@ -69,8 +70,8 @@ class ChatViewController extends FullLifeCycleController
     twitchData = Get.arguments[0];
     ircChannelJoined = twitchData.twitchUser.login;
 
-    //ircChannelJoined =
-    //    "kamet0".toLowerCase(); //if you want to join another twitch chat than yours
+    // ircChannelJoined = "robcdee"
+    //     .toLowerCase(); //if you want to join another twitch chat than yours
 
     getTwitchBadges();
     getTwitchEmotes();
@@ -170,8 +171,8 @@ class ChatViewController extends FullLifeCycleController
         switch (keyResult) {
           case "PRIVMSG":
             {
-              TwitchChatMessage chatMessage =
-                  TwitchChatMessage.fromString(twitchBadges, message);
+              TwitchChatMessage chatMessage = TwitchChatMessage.fromString(
+                  twitchBadges, cheerEmotes, message);
               chatMessages.add(chatMessage);
               if (chatMessages.length > 100) {
                 chatMessages.removeAt(0);
@@ -247,6 +248,8 @@ class ChatViewController extends FullLifeCycleController
   }
 
   void getTwitchEmotes() {
+    String nick = twitchData.twitchUser.login;
+
     twitchEmotes.clear();
 
     homeEvents
@@ -259,6 +262,29 @@ class ChatViewController extends FullLifeCycleController
           twitchData.twitchUser.id,
         )
         .then((value) => twitchEmotes.addAll(value.data!));
+
+    if (ircChannelJoined != nick) {
+      homeEvents
+          .getTwitchUser(
+            username: ircChannelJoined,
+            accessToken: twitchData.accessToken,
+          )
+          .then(
+            (value) => homeEvents
+                .getTwitchCheerEmotes(
+                  twitchData.accessToken,
+                  value.data!.id,
+                )
+                .then((value) => cheerEmotes.addAll(value.data!)),
+          );
+    } else {
+      homeEvents
+          .getTwitchCheerEmotes(
+            twitchData.accessToken,
+            twitchData.twitchUser.id,
+          )
+          .then((value) => cheerEmotes.addAll(value.data!));
+    }
   }
 
   void getTwitchBadges() {

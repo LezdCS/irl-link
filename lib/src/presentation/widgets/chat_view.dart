@@ -31,7 +31,7 @@ class ChatView extends GetView<ChatViewController> {
             width: width,
             padding: EdgeInsets.only(top: 10, bottom: height * 0.07),
             decoration: BoxDecoration(
-              color: Color(0xFF282828),
+              color: Color(0xFF0e0e10),
             ),
             child: ListView(
               controller: controller.scrollController,
@@ -81,10 +81,10 @@ class ChatView extends GetView<ChatViewController> {
                   },
                   child: Container(
                     padding: EdgeInsets.only(left: 20, right: 20),
-                    color: Colors.black.withOpacity(0.8),
+                    color: Colors.white.withOpacity(0.8),
                     child: Icon(
                       Icons.keyboard_arrow_down,
-                      color: Colors.white,
+                      color: Colors.black,
                       size: 30,
                     ),
                   ),
@@ -118,9 +118,16 @@ class ChatView extends GetView<ChatViewController> {
   Widget chatMessage(TwitchChatMessage message) {
     return Container(
       padding: EdgeInsets.only(top: 2, bottom: 2, left: 5),
-      color: controller.selectedMessage.value == message
-          ? Colors.grey
-          : Color(0xFF282828),
+      decoration: BoxDecoration(
+        color: controller.selectedMessage.value == message
+            ? Color(0xFF18181b)
+            : Color(0xFF0e0e10),
+        border: message.isBitDonation
+            ? Border(
+                left: BorderSide(width: 5.0, color: Color(0xFF9147ff)),
+              )
+            : null,
+      ),
       child: Wrap(
         crossAxisAlignment: WrapCrossAlignment.start,
         children: [
@@ -145,57 +152,16 @@ class ChatView extends GetView<ChatViewController> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          message.isDeleted
-              ? Text(
-                  "<message deleted>",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 19,
-                  ),
-                )
-              : Wrap(
-                  children: [
-                    for (String word in message.message.trim().split(' '))
-                      if (message.emotes.entries.firstWhereOrNull((element) =>
-                              element.value
-                                  .where((position) =>
-                                      message.message.substring(
-                                          int.parse(position[0]),
-                                          int.parse(position[1]) + 1) ==
-                                      word)
-                                  .isNotEmpty) !=
-                          null)
-                        Wrap(children: [
-                          Image(
-                            image: NetworkImage(
-                                "https://static-cdn.jtvnw.net/emoticons/v2/" +
-                                    message.emotes.entries
-                                        .firstWhere((element) => element.value
-                                            .where((position) =>
-                                                message.message.substring(
-                                                    int.parse(position[0]),
-                                                    int.parse(position[1]) +
-                                                        1) ==
-                                                word)
-                                            .isNotEmpty)
-                                        .key +
-                                    "/default/dark/1.0"),
-                          ),
-                          Text(' '),
-                        ])
-                      else
-                        Text(
-                          word + " ",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 19,
-                            fontStyle: message.isAction
-                                ? FontStyle.italic
-                                : FontStyle.normal,
-                          ),
-                        ),
-                  ],
-                ),
+          if (message.isDeleted)
+            Text(
+              "<message deleted>",
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 19,
+              ),
+            )
+          else
+            for (Widget i in message.messageWidgetsBuild) i,
         ],
       ),
     );
@@ -355,7 +321,8 @@ class ChatView extends GetView<ChatViewController> {
       padding: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
       width: width,
       decoration: BoxDecoration(
-        color: Color(0xFF121212),
+        border: Border.all(color: Color(0xFFa970ff)),
+        color: Color(0xFF18181b),
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(8),
           topRight: Radius.circular(8),
@@ -422,6 +389,12 @@ class ChatView extends GetView<ChatViewController> {
               onTap: () => timeoutDialog(width),
               child: moderationViewButton(Icons.timer, "Timeout"),
             ),
+            SizedBox(width: 10),
+            InkWell(
+              //todo : create a list of users i want to hide
+              onTap: () => null,
+              child: moderationViewButton(Icons.visibility_off, "Hide user"),
+            ),
           ]),
         ],
       ),
@@ -433,7 +406,7 @@ class ChatView extends GetView<ChatViewController> {
       margin: EdgeInsets.only(left: 10),
       padding: EdgeInsets.only(top: 5, left: 5, right: 5, bottom: 5),
       decoration: BoxDecoration(
-        color: Color(0xFF282828),
+        color: Color(0xFF0e0e10),
         borderRadius: BorderRadius.all(Radius.circular(5)),
       ),
       child: Wrap(

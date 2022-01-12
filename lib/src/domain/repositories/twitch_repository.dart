@@ -47,4 +47,9 @@ abstract class TwitchRepository {
     String accessToken,
     List<String> setId,
   );
+
+  Future<DataState<List<Emote>>> getTwitchCheerEmotes(
+    String accessToken,
+    String broadcasterId,
+  );
 }

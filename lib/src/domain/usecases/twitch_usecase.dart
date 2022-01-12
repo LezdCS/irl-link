@@ -56,4 +56,11 @@ class TwitchUseCase {
   }) {
     return twitchRepository.getTwitchSetsEmotes(accessToken, setId);
   }
+
+  Future<DataState<List<Emote>>> getTwitchCheerEmotes({
+    required String accessToken,
+    required String broadcasterId,
+  }) {
+    return twitchRepository.getTwitchCheerEmotes(accessToken, broadcasterId);
+  }
 }

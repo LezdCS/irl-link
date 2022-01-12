@@ -1,11 +1,13 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:collection/collection.dart';
 
+import 'emote.dart';
+
 //ignore: must_be_immutable
 class TwitchChatMessage extends Equatable {
-  //todo : add bool isBitDonation
   final String messageId;
   final List<TwitchBadge> badges;
   final String color;
@@ -13,8 +15,10 @@ class TwitchChatMessage extends Equatable {
   final String authorId;
   final Map<String, List> emotes;
   final String message;
+  final List<Widget> messageWidgetsBuild;
   final int timestamp;
   final bool isBitDonation;
+  final int bitAmount;
   final bool isAction;
   bool isDeleted;
 
@@ -26,8 +30,10 @@ class TwitchChatMessage extends Equatable {
     required this.authorId,
     required this.emotes,
     required this.message,
+    required this.messageWidgetsBuild,
     required this.timestamp,
     required this.isBitDonation,
+    required this.bitAmount,
     required this.isAction,
     required this.isDeleted,
   });
@@ -42,8 +48,10 @@ class TwitchChatMessage extends Equatable {
       authorId,
       emotes,
       message,
+      messageWidgetsBuild,
       timestamp,
       isBitDonation,
+      bitAmount,
       isAction,
       isDeleted,
     ];
@@ -54,6 +62,7 @@ class TwitchChatMessage extends Equatable {
 
   factory TwitchChatMessage.fromString(
     List<TwitchBadge> twitchBadges,
+    List<Emote> cheerEmotes,
     String message,
   ) {
     final Map<String, String> messageMapped = {};
@@ -75,6 +84,31 @@ class TwitchChatMessage extends Equatable {
           badges.add(badgeFound);
         }
       });
+    }
+
+    String color = messageMapped['color']!;
+    List<List<String>> default_colors = [
+      ["Red", "#FF0000"],
+      ["Blue", "#0000FF"],
+      ["Green", "#00FF00"],
+      ["FireBrick", "#B22222"],
+      ["Coral", "#FF7F50"],
+      ["YellowGreen", "#9ACD32"],
+      ["OrangeRed", "#FF4500"],
+      ["SeaGreen", "#2E8B57"],
+      ["GoldenRod", "#DAA520"],
+      ["Chocolate", "#D2691E"],
+      ["CadetBlue", "#5F9EA0"],
+      ["DodgerBlue", "#1E90FF"],
+      ["HotPink", "#FF69B4"],
+      ["BlueViolet", "#8A2BE2"],
+      ["SpringGreen", "#00FF7F"]
+    ];
+    if (color == "") {
+      var n = messageMapped['display-name']!.codeUnitAt(0) +
+          messageMapped['display-name']!
+              .codeUnitAt(messageMapped['display-name']!.length - 1);
+      color = default_colors[n % default_colors.length][1];
     }
 
     Map<String, List<List<String>>> emotesIdsPositions = {};
@@ -102,6 +136,8 @@ class TwitchChatMessage extends Equatable {
       });
     }
 
+    bool isBitDonation = messageMapped['bits'] != null;
+
     List messageList = messageSplited.last.split(':').sublist(2);
     String messageString = messageList.join(':');
 
@@ -112,19 +148,80 @@ class TwitchChatMessage extends Equatable {
           .replaceFirst("", '')
           .trim();
     }
-    debugPrint(messageString);
-    debugPrint(messageString.length.toString());
+
+    List<Widget> messageWidgetsBuild = [];
+
+    for (String word in messageString.trim().split(' ')) {
+      if (emotesIdsPositions.entries.firstWhereOrNull((element) => element.value
+              .where((position) =>
+                  messageString.substring(
+                      int.parse(position[0]), int.parse(position[1]) + 1) ==
+                  word)
+              .isNotEmpty) !=
+          null) {
+        messageWidgetsBuild.add(
+          Wrap(children: [
+            Image(
+              image: NetworkImage("https://static-cdn.jtvnw.net/emoticons/v2/" +
+                  emotesIdsPositions.entries
+                      .firstWhere((element) => element.value
+                          .where((position) =>
+                              messageString.substring(int.parse(position[0]),
+                                  int.parse(position[1]) + 1) ==
+                              word)
+                          .isNotEmpty)
+                      .key +
+                  "/default/dark/1.0"),
+            ),
+            Text(' '),
+          ]),
+        );
+      } else if (isBitDonation &&
+          cheerEmotes.firstWhereOrNull((emote) => emote.name == word) != null) {
+        Emote? cheerEmote =
+            cheerEmotes.firstWhereOrNull((emote) => emote.name == word);
+        messageWidgetsBuild.add(
+          Wrap(children: [
+            Image(
+              image: NetworkImage(cheerEmote!.url1x),
+            ),
+            Text(
+              cheerEmote.id + ' ',
+              style: TextStyle(
+                color:
+                    Color(int.parse(cheerEmote.color!.replaceAll('#', '0xff'))),
+                fontSize: 19,
+              ),
+            ),
+          ]),
+        );
+      } else {
+        messageWidgetsBuild.add(
+          Text(
+            word + " ",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 19,
+              fontStyle: isAction ? FontStyle.italic : FontStyle.normal,
+            ),
+          ),
+        );
+      }
+    }
 
     return TwitchChatMessage(
       messageId: messageMapped['id'] as String,
       badges: badges,
-      color: messageMapped['color'] as String,
+      color: color,
       authorName: messageMapped['display-name'] as String,
       authorId: messageMapped['user-id'] as String,
       emotes: emotesIdsPositions,
       message: messageString,
+      messageWidgetsBuild: messageWidgetsBuild,
       timestamp: int.parse(messageMapped['tmi-sent-ts'] as String),
-      isBitDonation: messageMapped['bits'] != null ? true : false,
+      isBitDonation: isBitDonation,
+      bitAmount:
+          messageMapped['bits'] == null ? 0 : int.parse(messageMapped['bits']!),
       isAction: isAction,
       isDeleted: false,
     );
