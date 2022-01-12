@@ -44,6 +44,7 @@ dependencies:
   wakelock: ^0.5.6
   connectivity_plus: ^2.1.0
   move_to_background: ^1.0.2
+  obs_websocket: ^2.2.12
 
 dev_dependencies:
   flutter_test:

@@ -5,6 +5,7 @@ import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/usecases/twitch_usecase.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 
 class HomeBindings extends Bindings {
@@ -20,6 +21,9 @@ class HomeBindings extends Bindings {
       ),
     );
     Get.find<HomeViewController>();
+
+    Get.lazyPut(() => ObsTabViewController());
+    Get.find<ObsTabViewController>();
 
     Get.lazyPut<ChatViewController>(
       () => ChatViewController(

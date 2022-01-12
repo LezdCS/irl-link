@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
+import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
 
-class ObsTabView extends GetView {
-  // stream viewer count
-  double _volume = 50;
+class ObsTabView extends GetView<ObsTabViewController> {
+  final ObsTabViewController controller = Get.find<ObsTabViewController>();
 
   // selected scene id
   int selectedSceneId = -1;
@@ -26,7 +27,8 @@ class ObsTabView extends GetView {
               children: [
                 InkWell(
                   onTap: () {
-                    // todo obs start stream
+                    // obs start stream
+                    controller.startStream();
                   },
                   child: Container(
                     margin: EdgeInsets.only(right: 10, top: 10, bottom: 10),
@@ -42,7 +44,8 @@ class ObsTabView extends GetView {
                 ),
                 InkWell(
                   onTap: () {
-                    // todo obs stop stream
+                    // obs stop stream
+                    controller.stopStream();
                   },
                   child: Container(
                     margin: EdgeInsets.only(right: 10, top: 10, bottom: 10),
@@ -65,14 +68,14 @@ class ObsTabView extends GetView {
                 child: Slider(
                   min: 0.0,
                   max: 100.0,
-                  value: _volume,
+                  value: controller.slideValueForVolume.value,
                   divisions: 100,
-                  label: '${_volume.round()}',
+                  label: '${controller.slideValueForVolume.value.round()}',
                   activeColor: Color(0xFFA47CED),
                   inactiveColor: Color(0xFF443B55),
                   thumbColor: Colors.purpleAccent,
                   onChanged: (value) {
-                    _volume = value;
+                    controller.slideValueForVolume.value = value;
                   },
                 ),
               ),
@@ -117,6 +120,7 @@ class ObsTabView extends GetView {
   }
 
   getScenes() {
+    controller.getSceneList();
     // todo get from obs
     final scenesList = [
       "scene1",
