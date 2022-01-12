@@ -33,12 +33,8 @@ class ChatView extends GetView<ChatViewController> {
             decoration: BoxDecoration(
               color: Color(0xFF0e0e10),
             ),
-            child: ListView(
-              controller: controller.scrollController,
-              children: [
-                Visibility(
-                  visible: controller.chatMessages.length < 100,
-                  child: Container(
+            child: controller.chatMessages.length == 0
+                ? Container(
                     padding: EdgeInsets.only(left: 5),
                     child: Text(
                       "Welcome on ${controller.ircChannelJoined} 's chat room !",
@@ -46,25 +42,28 @@ class ChatView extends GetView<ChatViewController> {
                         color: Color(0xFF878585),
                       ),
                     ),
-                  ),
-                ),
-                for (TwitchChatMessage message in controller.chatMessages)
-                  InkWell(
-                    onTap: () {
-                      if (FocusScope.of(context).isFirstFocus) {
-                        FocusScope.of(context).unfocus();
-                      }
-                      controller.selectedMessage.value = null;
-                    },
-                    onLongPress: () {
-                      if (controller.selectedMessage.value == null) {
-                        controller.selectedMessage.value = message;
-                      }
-                    },
-                    child: chatMessage(message),
                   )
-              ],
-            ),
+                : ListView.builder(
+                    controller: controller.scrollController,
+                    itemCount: controller.chatMessages.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return InkWell(
+                        onTap: () {
+                          if (FocusScope.of(context).isFirstFocus) {
+                            FocusScope.of(context).unfocus();
+                          }
+                          controller.selectedMessage.value = null;
+                        },
+                        onLongPress: () {
+                          if (controller.selectedMessage.value == null) {
+                            controller.selectedMessage.value =
+                                controller.chatMessages[index];
+                          }
+                        },
+                        child: chatMessage(controller.chatMessages[index]),
+                      );
+                    },
+                  ),
           ),
         ),
         Positioned(
@@ -145,9 +144,7 @@ class ChatView extends GetView<ChatViewController> {
                 ? message.authorName + " "
                 : message.authorName + ": ",
             style: TextStyle(
-              color: message.color != ''
-                  ? Color(int.parse(message.color.replaceAll('#', '0xff')))
-                  : Colors.white,
+              color: Color(int.parse(message.color.replaceAll('#', '0xff'))),
               fontSize: 19,
               fontWeight: FontWeight.bold,
             ),

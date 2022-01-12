@@ -7,6 +7,8 @@ class SettingsView extends GetView<SettingsViewController> {
   final SettingsViewController controller = Get.find<SettingsViewController>();
   @override
   Widget build(BuildContext context) {
+    final double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -43,7 +45,7 @@ class SettingsView extends GetView<SettingsViewController> {
             children: <Widget>[
               InkWell(
                 onTap: () {
-                  Get.to(() => chatSettings());
+                  Get.to(() => chatSettings(width));
                 },
                 child: Text(
                   "Chat",
@@ -91,153 +93,195 @@ class SettingsView extends GetView<SettingsViewController> {
     );
   }
 
-  Widget chatSettings() {
+  Widget chatSettings(double width) {
     return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => Get.back(),
-          ),
-          backgroundColor: Colors.black,
-          title: Text("Chat Settings"),
-          centerTitle: false,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Get.back(),
         ),
-        body: Obx(() => Container(
-            width: double.infinity,
-            color: Color(0xFF282828),
-            child: Column(
-              children: [
-                //FFZ et BTTV
-                Container(
-                    child: Row(children: [
-                  Container(
-                    padding: const EdgeInsets.all(5),
-                    child: Text(
-                      "FFZ & BTTV emotes :",
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                      textAlign: TextAlign.left,
-                    ),
+        backgroundColor: Colors.black,
+        title: Text("Chat Settings"),
+        centerTitle: false,
+      ),
+      body: Obx(
+        () => Container(
+          padding: EdgeInsets.only(top: 20),
+          width: width,
+          color: Color(0xFF282828),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: EdgeInsets.only(left: 10),
+                child: Text(
+                  "Chat",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 28,
                   ),
-                  Container(
-                      padding: const EdgeInsets.fromLTRB(165, 0, 0, 0),
-                      child: Switch(
-                        onChanged: (value) {
-                          controller.isSwitchedForFFZAndBTTVEmotes.value =
-                              value;
-                        },
-                        value: controller.isSwitchedForFFZAndBTTVEmotes.value,
-                        activeTrackColor: Colors.purpleAccent,
-                        activeColor: Colors.white,
-                      ))
-                ])),
-
-                //TextSize
-                Container(
-                    child: Row(children: [
-                  //"text"
-                  Container(
-                      padding: const EdgeInsets.all(5),
-                      child: Text(
-                        "Text size :",
-                        style: TextStyle(color: Colors.white, fontSize: 18),
-                        textAlign: TextAlign.left,
-                      )),
-                  //slider
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(126, 0, 0, 0),
-                    child: Slider(
-                      onChanged: (value) {
-                        controller.slideValueForTextSize.value = value;
-                      },
-                      value: controller.slideValueForTextSize.value,
-                      min: 1.0,
-                      max: 20.0,
-                      divisions: 10,
-                      activeColor: Colors.purpleAccent,
-                      inactiveColor: Colors.purple,
-                      label: 'Set text size value',
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //FFZ et BTTV
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            child: Text(
+                              "FFZ & BTTV emotes",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                          ),
+                          Container(
+                            child: Switch(
+                              onChanged: (value) {
+                                controller.isSwitchedForFFZAndBTTVEmotes.value =
+                                    value;
+                              },
+                              value: controller
+                                  .isSwitchedForFFZAndBTTVEmotes.value,
+                              activeTrackColor: Color(0xFF6441A5),
+                              activeColor: Colors.white,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  )
-                ])),
 
-                //Emotes and badges Size
-                Container(
-                    child: Row(children: [
-                  //"text"
-                  Container(
-                      padding: const EdgeInsets.all(5),
-                      child: Text(
-                        "Badges and emotes size :",
-                        style: TextStyle(color: Colors.white, fontSize: 18),
-                        textAlign: TextAlign.left,
-                      )),
-                  //slider
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: Slider(
-                      onChanged: (value) {
-                        controller.slideValueForBadgesAndEmotesSize.value =
-                            value;
-                      },
-                      value: controller.slideValueForBadgesAndEmotesSize.value,
-                      min: 1.0,
-                      max: 20.0,
-                      divisions: 10,
-                      activeColor: Colors.purpleAccent,
-                      inactiveColor: Colors.purple,
-                      label: 'Set Emotes and Badges size',
+                    //TextSize
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          //"text"
+                          Container(
+                            child: Text(
+                              "Text size",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                          ),
+                          //slider
+                          Container(
+                            child: Slider(
+                              onChanged: (value) {
+                                controller.slideValueForTextSize.value = value;
+                              },
+                              value: controller.slideValueForTextSize.value,
+                              min: 1.0,
+                              max: 20.0,
+                              divisions: null,
+                              activeColor: Color(0xFF6441A5),
+                              inactiveColor: Colors.grey,
+                              label: 'Set text size value',
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  )
-                ])),
 
-                //Show message timestamp
-                Container(
-                    child: Row(children: [
-                  Container(
-                    padding: const EdgeInsets.all(5),
-                    child: Text(
-                      "Show message timestamp :",
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                      textAlign: TextAlign.left,
+                    //Emotes and badges Size
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          //"text"
+                          Container(
+                            child: Text(
+                              "Badges & emotes size",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                          ),
+                          //slider
+                          Container(
+                            child: Slider(
+                              onChanged: (value) {
+                                controller.slideValueForBadgesAndEmotesSize
+                                    .value = value;
+                              },
+                              value: controller
+                                  .slideValueForBadgesAndEmotesSize.value,
+                              min: 1.0,
+                              max: 20.0,
+                              divisions: null,
+                              activeColor: Color(0xFF6441A5),
+                              inactiveColor: Colors.grey,
+                              label: 'Set Emotes and Badges size',
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                      padding: const EdgeInsets.fromLTRB(115, 0, 0, 0),
-                      child: Switch(
-                        onChanged: (value) {
-                          controller.isSwitchedForTimestamp.value = value;
-                        },
-                        value: controller.isSwitchedForTimestamp.value,
-                        activeTrackColor: Colors.purpleAccent,
-                        activeColor: Colors.white,
-                      ))
-                ])),
 
-                //Join alternate channel chat
-                Container(
-                    child: Row(children: [
-                  Container(
-                    padding: const EdgeInsets.all(5),
-                    child: Text(
-                      "Join alternante channel chat :",
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                      textAlign: TextAlign.left,
+                    //Show message timestamp
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            child: Text(
+                              "Show message timestamp",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                          ),
+                          Container(
+                            child: Switch(
+                              onChanged: (value) {
+                                controller.isSwitchedForTimestamp.value = value;
+                              },
+                              value: controller.isSwitchedForTimestamp.value,
+                              activeTrackColor: Color(0xFF6441A5),
+                              activeColor: Colors.white,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                      padding: const EdgeInsets.fromLTRB(101, 0, 0, 0),
-                      child: Switch(
-                        onChanged: (value) {
-                          controller.isSwitchedForAlternateChannel.value =
-                              value;
-                        },
-                        value: controller.isSwitchedForAlternateChannel.value,
-                        activeTrackColor: Colors.purpleAccent,
-                        activeColor: Colors.white,
-                      ))
-                ])),
-              ],
-            ))));
+
+                    //Join alternate channel chat
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            child: Text(
+                              "Join alternate channel chat",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                          ),
+                          Container(
+                            child: Switch(
+                              onChanged: (value) {
+                                controller.isSwitchedForAlternateChannel.value =
+                                    value;
+                              },
+                              value: controller
+                                  .isSwitchedForAlternateChannel.value,
+                              activeTrackColor: Color(0xFF6441A5),
+                              activeColor: Colors.white,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget appearanceSettings() {

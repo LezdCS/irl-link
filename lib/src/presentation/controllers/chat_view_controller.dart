@@ -70,8 +70,8 @@ class ChatViewController extends FullLifeCycleController
     twitchData = Get.arguments[0];
     ircChannelJoined = twitchData.twitchUser.login;
 
-    // ircChannelJoined = "robcdee"
-    //     .toLowerCase(); //if you want to join another twitch chat than yours
+    ircChannelJoined = "xqcow"
+        .toLowerCase(); //if you want to join another twitch chat than yours
 
     getTwitchBadges();
     getTwitchEmotes();
@@ -174,9 +174,6 @@ class ChatViewController extends FullLifeCycleController
               TwitchChatMessage chatMessage = TwitchChatMessage.fromString(
                   twitchBadges, cheerEmotes, message);
               chatMessages.add(chatMessage);
-              if (chatMessages.length > 100) {
-                chatMessages.removeAt(0);
-              }
               if (scrollController.hasClients && isAutoScrolldown.value) {
                 Timer(Duration(milliseconds: 100), () {
                   //we need a timer or it wont scroll to the real bottom of the ListView
