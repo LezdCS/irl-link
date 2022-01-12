@@ -58,4 +58,28 @@ class EmoteDTO extends Emote {
       emoteType: EmoteType.cheer,
     );
   }
+
+  factory EmoteDTO.fromJsonFrankerfacez(Map<String, dynamic> map) {
+    return EmoteDTO(
+      id: map["id"].toString(),
+      name: map["name"],
+      url1x: map['urls']['1'] as String,
+      url2x: map['urls']['2'] as String,
+      url4x: map['urls']['4'] as String,
+      color: null,
+      emoteType: EmoteType.thirdPart,
+    );
+  }
+
+  factory EmoteDTO.fromJsonBttv(Map<String, dynamic> map) {
+    return EmoteDTO(
+      id: map["id"],
+      name: map["code"],
+      url1x: "//cdn.betterttv.net/emote/" + map['id'] + "/1x",
+      url2x: "//cdn.betterttv.net/emote/" + map['id'] + "/2x",
+      url4x: "//cdn.betterttv.net/emote/" + map['id'] + "/3x",
+      color: null,
+      emoteType: EmoteType.thirdPart,
+    );
+  }
 }

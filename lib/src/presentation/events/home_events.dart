@@ -69,4 +69,20 @@ class HomeEvents {
       broadcasterId: broadcasterId,
     );
   }
+
+  Future<DataState<List<Emote>>> getFrankerfacezEmotes({
+    required String broadcasterId,
+  }) {
+    return twitchUseCase.getFrankerfacezEmotes(broadcasterId: broadcasterId);
+  }
+
+  Future<DataState<List<Emote>>> getBttvChannelEmotes({
+    required String broadcasterId,
+  }) {
+    return twitchUseCase.getBttvChannelEmotes(broadcasterId: broadcasterId);
+  }
+
+  Future<DataState<List<Emote>>> getBttvGlobalEmotes() {
+    return twitchUseCase.getBttvGlobalEmotes();
+  }
 }

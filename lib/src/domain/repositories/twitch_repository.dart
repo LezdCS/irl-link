@@ -52,4 +52,14 @@ abstract class TwitchRepository {
     String accessToken,
     String broadcasterId,
   );
+
+  Future<DataState<List<Emote>>> getFrankerfacezEmotes(
+    String broadcasterId,
+  );
+
+  Future<DataState<List<Emote>>> getBttvChannelEmotes(
+    String broadcasterId,
+  );
+
+  Future<DataState<List<Emote>>> getBttvGlobalEmotes();
 }

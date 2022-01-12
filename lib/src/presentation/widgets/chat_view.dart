@@ -116,52 +116,66 @@ class ChatView extends GetView<ChatViewController> {
 
   Widget chatMessage(TwitchChatMessage message) {
     return Container(
-      padding: EdgeInsets.only(top: 2, bottom: 2, left: 5),
-      decoration: BoxDecoration(
-        color: controller.selectedMessage.value == message
-            ? Color(0xFF18181b)
-            : Color(0xFF0e0e10),
-        border: message.isBitDonation
-            ? Border(
-                left: BorderSide(width: 5.0, color: Color(0xFF9147ff)),
-              )
-            : null,
-      ),
-      child: Wrap(
-        crossAxisAlignment: WrapCrossAlignment.start,
-        children: [
-          for (TwitchBadge badge in message.badges)
-            Container(
-              padding: EdgeInsets.only(right: 4, top: 3),
-              child: Image(
-                image: NetworkImage(badge.imageUrl1x),
-                filterQuality: FilterQuality.high,
-                alignment: Alignment.bottomLeft,
+        padding: EdgeInsets.only(top: 2, bottom: 2, left: 5),
+        decoration: BoxDecoration(
+          color: controller.selectedMessage.value == message
+              ? Color(0xFF18181b)
+              : Color(0xFF0e0e10),
+          border: message.isBitDonation
+              ? Border(
+                  left: BorderSide(width: 5.0, color: Color(0xFF9147ff)),
+                )
+              : null,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Visibility(
+              visible: message.isBitDonation,
+              child: Container(
+                child: Text(
+                  '${message.authorName} gave ${message.bitAmount.toString()} bits!',
+                  style: TextStyle(color: Colors.grey, fontSize: 15),
+                ),
               ),
             ),
-          Text(
-            message.isAction
-                ? message.authorName + " "
-                : message.authorName + ": ",
-            style: TextStyle(
-              color: Color(int.parse(message.color.replaceAll('#', '0xff'))),
-              fontSize: 19,
-              fontWeight: FontWeight.bold,
+            Wrap(
+              crossAxisAlignment: WrapCrossAlignment.start,
+              children: [
+                for (TwitchBadge badge in message.badges)
+                  Container(
+                    padding: EdgeInsets.only(right: 4, top: 3),
+                    child: Image(
+                      image: NetworkImage(badge.imageUrl1x),
+                      filterQuality: FilterQuality.high,
+                      alignment: Alignment.bottomLeft,
+                    ),
+                  ),
+                Text(
+                  message.isAction
+                      ? message.authorName + " "
+                      : message.authorName + ": ",
+                  style: TextStyle(
+                    color:
+                        Color(int.parse(message.color.replaceAll('#', '0xff'))),
+                    fontSize: 19,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                if (message.isDeleted)
+                  Text(
+                    "<message deleted>",
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 19,
+                    ),
+                  )
+                else
+                  for (Widget i in message.messageWidgetsBuild) i,
+              ],
             ),
-          ),
-          if (message.isDeleted)
-            Text(
-              "<message deleted>",
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 19,
-              ),
-            )
-          else
-            for (Widget i in message.messageWidgetsBuild) i,
-        ],
-      ),
-    );
+          ],
+        ));
   }
 
   Widget messageDeleted() {

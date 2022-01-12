@@ -60,11 +60,12 @@ class TwitchChatMessage extends Equatable {
   @override
   bool get stringify => true;
 
-  factory TwitchChatMessage.fromString(
-    List<TwitchBadge> twitchBadges,
-    List<Emote> cheerEmotes,
-    String message,
-  ) {
+  factory TwitchChatMessage.fromString({
+    required List<TwitchBadge> twitchBadges,
+    required List<Emote> cheerEmotes,
+    required List<Emote> thirdPartEmotes,
+    required String message,
+  }) {
     final Map<String, String> messageMapped = {};
 
     List messageSplited = message.split(';');
@@ -172,6 +173,20 @@ class TwitchChatMessage extends Equatable {
                           .isNotEmpty)
                       .key +
                   "/default/dark/1.0"),
+            ),
+            Text(' '),
+          ]),
+        );
+      } else if (thirdPartEmotes
+              .firstWhereOrNull((element) => element.name == word) !=
+          null) {
+        messageWidgetsBuild.add(
+          Wrap(children: [
+            Image(
+              image: NetworkImage("https:" +
+                  thirdPartEmotes
+                      .firstWhere((element) => element.name == word)
+                      .url1x),
             ),
             Text(' '),
           ]),

@@ -30,6 +30,7 @@ class ChatViewController extends FullLifeCycleController
 
   List<TwitchBadge> twitchBadges = <TwitchBadge>[];
   List<Emote> twitchEmotes = <Emote>[];
+  List<Emote> thirdPartEmotes = <Emote>[];
   List<Emote> cheerEmotes = <Emote>[];
 
   late TwitchUser otherUserInfosChatConnected;
@@ -172,7 +173,11 @@ class ChatViewController extends FullLifeCycleController
           case "PRIVMSG":
             {
               TwitchChatMessage chatMessage = TwitchChatMessage.fromString(
-                  twitchBadges, cheerEmotes, message);
+                twitchBadges: twitchBadges,
+                thirdPartEmotes: thirdPartEmotes,
+                cheerEmotes: cheerEmotes,
+                message: message,
+              );
               chatMessages.add(chatMessage);
               if (scrollController.hasClients && isAutoScrolldown.value) {
                 Timer(Duration(milliseconds: 100), () {
@@ -244,10 +249,11 @@ class ChatViewController extends FullLifeCycleController
     }
   }
 
-  void getTwitchEmotes() {
+  Future<void> getTwitchEmotes() async {
     String nick = twitchData.twitchUser.login;
 
     twitchEmotes.clear();
+    thirdPartEmotes.clear();
 
     homeEvents
         .getTwitchEmotes(twitchData.accessToken)
@@ -260,20 +266,33 @@ class ChatViewController extends FullLifeCycleController
         )
         .then((value) => twitchEmotes.addAll(value.data!));
 
+    homeEvents
+        .getBttvGlobalEmotes()
+        .then((value) => thirdPartEmotes.addAll(value.data!));
+
     if (ircChannelJoined != nick) {
-      homeEvents
+      String userId = '';
+      await homeEvents
           .getTwitchUser(
             username: ircChannelJoined,
             accessToken: twitchData.accessToken,
           )
-          .then(
-            (value) => homeEvents
-                .getTwitchCheerEmotes(
-                  twitchData.accessToken,
-                  value.data!.id,
-                )
-                .then((value) => cheerEmotes.addAll(value.data!)),
-          );
+          .then((value) => userId = value.data!.id);
+
+      homeEvents
+          .getTwitchCheerEmotes(
+            twitchData.accessToken,
+            userId,
+          )
+          .then((value) => cheerEmotes.addAll(value.data!));
+
+      homeEvents
+          .getFrankerfacezEmotes(broadcasterId: userId)
+          .then((value) => thirdPartEmotes.addAll(value.data!));
+
+      homeEvents
+          .getBttvChannelEmotes(broadcasterId: userId)
+          .then((value) => thirdPartEmotes.addAll(value.data!));
     } else {
       homeEvents
           .getTwitchCheerEmotes(
@@ -281,6 +300,15 @@ class ChatViewController extends FullLifeCycleController
             twitchData.twitchUser.id,
           )
           .then((value) => cheerEmotes.addAll(value.data!));
+
+      homeEvents
+          .getFrankerfacezEmotes(broadcasterId: twitchData.twitchUser.id)
+          .then((value) =>
+              value.data != null ? thirdPartEmotes.addAll(value.data!) : null);
+
+      homeEvents
+          .getBttvChannelEmotes(broadcasterId: twitchData.twitchUser.id)
+          .then((value) => thirdPartEmotes.addAll(value.data!));
     }
   }
 

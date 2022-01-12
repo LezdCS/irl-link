@@ -351,4 +351,79 @@ class TwitchRepositoryImpl extends TwitchRepository {
       return DataFailed("Error retrieving channel emotes");
     }
   }
+
+  @override
+  Future<DataState<List<Emote>>> getFrankerfacezEmotes(
+      String broadcasterId) async {
+    Response response;
+    var dio = Dio();
+    List<Emote> emotes = <Emote>[];
+    try {
+      response = await dio.get(
+        'https://api.frankerfacez.com/v1/room/id/$broadcasterId',
+      );
+
+      response.data['sets'][response.data['sets'].keys.toList()[0]]['emoticons']
+          .forEach(
+        (emote) => emotes.add(
+          EmoteDTO.fromJsonFrankerfacez(emote),
+        ),
+      );
+
+      return DataSuccess(emotes);
+    } on DioError catch (e) {
+      return DataFailed("Error retrieving FFZ emotes");
+    }
+  }
+
+  @override
+  Future<DataState<List<Emote>>> getBttvChannelEmotes(
+      String broadcasterId) async {
+    Response response;
+    var dio = Dio();
+    List<Emote> emotes = <Emote>[];
+    try {
+      response = await dio.get(
+        'https://api.betterttv.net/3/cached/users/twitch/$broadcasterId',
+      );
+
+      response.data['channelEmotes'].forEach(
+        (emote) => emotes.add(
+          EmoteDTO.fromJsonBttv(emote),
+        ),
+      );
+
+      response.data['sharedEmotes'].forEach(
+        (emote) => emotes.add(
+          EmoteDTO.fromJsonBttv(emote),
+        ),
+      );
+
+      return DataSuccess(emotes);
+    } on DioError catch (e) {
+      return DataFailed("Error retrieving FFZ emotes");
+    }
+  }
+
+  @override
+  Future<DataState<List<Emote>>> getBttvGlobalEmotes() async {
+    Response response;
+    var dio = Dio();
+    List<Emote> emotes = <Emote>[];
+    try {
+      response = await dio.get(
+        'https://api.betterttv.net/3/cached/emotes/global',
+      );
+
+      response.data.forEach(
+        (emote) => emotes.add(
+          EmoteDTO.fromJsonBttv(emote),
+        ),
+      );
+
+      return DataSuccess(emotes);
+    } on DioError catch (e) {
+      return DataFailed("Error retrieving FFZ emotes");
+    }
+  }
 }
