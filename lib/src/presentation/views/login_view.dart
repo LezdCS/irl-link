@@ -20,7 +20,7 @@ class LoginView extends GetView<LoginViewController> {
   Widget loginScreen(BuildContext context) {
     return Container(
       width: double.infinity,
-      color: Color(0XFF282828),
+      color: Theme.of(context).primaryColor,
       child: SafeArea(
         child: Column(
           children: [
@@ -59,7 +59,7 @@ class LoginView extends GetView<LoginViewController> {
   Widget loadingScreen(BuildContext context) {
     return Container(
       width: double.infinity,
-      color: Color(0XFF282828),
+      color: Theme.of(context).primaryColor,
       child: SafeArea(
         child: Column(
           children: [
@@ -79,7 +79,7 @@ class LoginView extends GetView<LoginViewController> {
                     child: Obx(
                       () => Text(
                         controller.loadingMessage.value,
-                        style: TextStyle(color: Colors.white),
+                        style: Theme.of(context).textTheme.bodyText1,
                       ),
                     ),
                   ),

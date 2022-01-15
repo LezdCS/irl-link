@@ -12,8 +12,8 @@ import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;
 
-class ChatViewController extends FullLifeCycleController
-    with GetSingleTickerProviderStateMixin, FullLifeCycleMixin {
+class ChatViewController extends GetxController
+    with GetSingleTickerProviderStateMixin {
   ChatViewController({required this.homeEvents});
 
   final HomeEvents homeEvents;
@@ -35,33 +35,10 @@ class ChatViewController extends FullLifeCycleController
 
   late TwitchUser otherUserInfosChatConnected;
   late String ircChannelJoined;
+  List<String> usersIdsHided = [];
 
   Rxn<TwitchChatMessage> selectedMessage = Rxn<TwitchChatMessage>();
   late TextEditingController banDurationInputController;
-
-  // Mandatory
-  @override
-  void onDetached() {
-    print('HomeController - onDetached called');
-  }
-
-  // Mandatory
-  @override
-  void onInactive() {
-    print('HomeController - onInative called');
-  }
-
-  // Mandatory
-  @override
-  void onPaused() {
-    print('HomeController - onPaused called');
-  }
-
-  // Mandatory
-  @override
-  void onResumed() {
-    print('HomeController - onResumed called');
-  }
 
   @override
   void onInit() {
@@ -71,7 +48,7 @@ class ChatViewController extends FullLifeCycleController
     twitchData = Get.arguments[0];
     ircChannelJoined = twitchData.twitchUser.login;
 
-    // ircChannelJoined = "xqcow"
+    // ircChannelJoined = "robcdee"
     //     .toLowerCase(); //if you want to join another twitch chat than yours
 
     getTwitchBadges();
@@ -96,7 +73,6 @@ class ChatViewController extends FullLifeCycleController
           joinIrc();
           break;
         case ConnectivityResult.ethernet:
-          //
           break;
         case ConnectivityResult.mobile:
           joinIrc();
@@ -104,7 +80,6 @@ class ChatViewController extends FullLifeCycleController
         case ConnectivityResult.none:
           alertMessage.value = "Network connectivity lost";
           isChatConnected.value = false;
-          debugPrint("none");
           break;
       }
     });
@@ -127,8 +102,10 @@ class ChatViewController extends FullLifeCycleController
 
     channel = IOWebSocketChannel.connect("wss://irc-ws.chat.twitch.tv:443");
 
-    streamSubscription =
-        channel.stream.listen((message) => chatListener(message));
+    streamSubscription = channel.stream.listen(
+        (message) => chatListener(message),
+        onDone: ircChatClosed,
+        onError: ircChatError);
 
     channel.sink.add('CAP REQ :twitch.tv/membership');
     channel.sink.add('CAP REQ :twitch.tv/tags');
@@ -137,9 +114,14 @@ class ChatViewController extends FullLifeCycleController
     channel.sink.add('NICK ' + nick);
 
     channel.sink.add('JOIN #$ircChannelJoined');
+  }
 
-    alertMessage.value = "Connected";
-    isChatConnected.value = true;
+  void ircChatClosed() {
+    debugPrint("IRC Chat CLOSED");
+  }
+
+  void ircChatError(Object o, StackTrace s) {
+    debugPrint("IRC Chat ERROR");
   }
 
   void scrollListener() {
@@ -178,21 +160,31 @@ class ChatViewController extends FullLifeCycleController
                 cheerEmotes: cheerEmotes,
                 message: message,
               );
-              chatMessages.add(chatMessage);
-              if (scrollController.hasClients && isAutoScrolldown.value) {
-                Timer(Duration(milliseconds: 100), () {
-                  //we need a timer or it wont scroll to the real bottom of the ListView
-                  scrollController.jumpTo(
-                    scrollController.position.maxScrollExtent,
-                  );
-                });
+              if (!usersIdsHided.contains(chatMessage.authorId)) {
+                chatMessages.add(chatMessage);
+
+                if (scrollController.hasClients && isAutoScrolldown.value) {
+                  Timer(Duration(milliseconds: 100), () {
+                    scrollController.jumpTo(
+                      scrollController.position.maxScrollExtent,
+                    );
+                  });
+                }
               }
             }
             break;
           case "CLEARCHAT":
             {
-              //check if they is a nickname at the end, if yes -> delete messages from this user
-              //else -> clear all chat
+              if (message.split(':').last.contains('CLEARCHAT')) {
+                //@room-id=107285371;tmi-sent-ts=1642256684032 :tmi.twitch.tv CLEARCHAT #lezd_
+                chatMessages.clear();
+              } else {
+                String nickname = message.split(':').last;
+                chatMessages
+                    .where((message) => message.authorName == nickname)
+                    .map((e) => e.isDeleted = true);
+                chatMessages.refresh();
+              }
             }
             break;
           case "CLEARMSG":
@@ -218,7 +210,7 @@ class ChatViewController extends FullLifeCycleController
             break;
           case "NOTICE":
             {
-              //some error and success messages are send by notice like when you don't have perm for an action or when a ban is successfull
+              //error and success messages are send by notice
               //https://dev.twitch.tv/docs/irc/msg-id
             }
             break;
@@ -228,6 +220,9 @@ class ChatViewController extends FullLifeCycleController
         }
       }
     } else if (message.toString().contains("GLOBALUSERSTATE")) {
+      alertMessage.value = "Connected";
+      isChatConnected.value = true;
+
       final Map<String, String> messageMapped = {};
       List messageSplited = message.split(';');
       messageSplited.forEach((element) {
@@ -319,7 +314,9 @@ class ChatViewController extends FullLifeCycleController
 
     homeEvents
         .getTwitchGlobalBadges(accessToken: twitchData.accessToken)
-        .then((value) => twitchBadges.addAll(value.data!));
+        .then((value) => {
+              if (value.error != null) {twitchBadges.addAll(value.data!)}
+            });
 
     if (ircChannelJoined != nick) {
       homeEvents
@@ -362,7 +359,6 @@ class ChatViewController extends FullLifeCycleController
   void deleteMessageInstruction(TwitchChatMessage message) {
     channel.sink
         .add('PRIVMSG #$ircChannelJoined :/delete ${message.messageId}\r\n');
-
     selectedMessage.value = null;
   }
 
@@ -372,7 +368,6 @@ class ChatViewController extends FullLifeCycleController
         'PRIVMSG #$ircChannelJoined :/timeout ${message.authorName} $duration reason\r\n');
 
     Get.back();
-
     selectedMessage.value = null;
   }
 
@@ -380,7 +375,11 @@ class ChatViewController extends FullLifeCycleController
     // /ban [username] [reason]
     channel.sink.add(
         'PRIVMSG #$ircChannelJoined :/ban ${message.authorName} reason\r\n');
+    selectedMessage.value = null;
+  }
 
+  void hideUser(TwitchChatMessage message) {
+    usersIdsHided.add(message.authorId);
     selectedMessage.value = null;
   }
 

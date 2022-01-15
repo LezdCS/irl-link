@@ -31,7 +31,7 @@ class ChatView extends GetView<ChatViewController> {
             width: width,
             padding: EdgeInsets.only(top: 10, bottom: height * 0.07),
             decoration: BoxDecoration(
-              color: Color(0xFF0e0e10),
+              color: Theme.of(context).primaryColor,
             ),
             child: controller.chatMessages.length == 0
                 ? Container(
@@ -119,8 +119,8 @@ class ChatView extends GetView<ChatViewController> {
         padding: EdgeInsets.only(top: 2, bottom: 2, left: 5),
         decoration: BoxDecoration(
           color: controller.selectedMessage.value == message
-              ? Color(0xFF18181b)
-              : Color(0xFF0e0e10),
+              ? Theme.of(Get.context!).colorScheme.secondary
+              : Theme.of(Get.context!).primaryColor,
           border: message.isBitDonation
               ? Border(
                   left: BorderSide(width: 5.0, color: Color(0xFF9147ff)),
@@ -134,7 +134,7 @@ class ChatView extends GetView<ChatViewController> {
               visible: message.isBitDonation,
               child: Container(
                 child: Text(
-                  '${message.authorName} gave ${message.bitAmount.toString()} bits!',
+                  'Cheered ${message.bitAmount.toString()} Bits',
                   style: TextStyle(color: Colors.grey, fontSize: 15),
                 ),
               ),
@@ -403,7 +403,8 @@ class ChatView extends GetView<ChatViewController> {
             SizedBox(width: 10),
             InkWell(
               //todo : create a list of users i want to hide
-              onTap: () => null,
+              onTap: () =>
+                  controller.hideUser(controller.selectedMessage.value!),
               child: moderationViewButton(Icons.visibility_off, "Hide user"),
             ),
           ]),

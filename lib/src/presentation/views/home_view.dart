@@ -28,7 +28,7 @@ class HomeView extends GetView<HomeViewController> {
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
-          backgroundColor: Color(0xFF121212),
+          backgroundColor: Theme.of(context).colorScheme.secondary,
           flexibleSpace: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -41,20 +41,19 @@ class HomeView extends GetView<HomeViewController> {
             children: [
               GestureDetector(
                 onTap: () => {
-                  debugPrint("trigereddddd"),
                   FocusScope.of(context).unfocus(),
                   controller.isPickingEmote.value = false,
                 },
                 child: Container(
                   constraints: BoxConstraints.expand(),
                   decoration: BoxDecoration(
-                    color: Color(0xFF0e0e10),
+                    color: context.theme.primaryColor,
                   ),
                   child: SafeArea(
                     child: SplitViewCustom(
                       controller: controller.splitViewController,
-                      gripColor: Color(0xFF18181b),
-                      gripColorActive: Color(0xFF18181b),
+                      gripColor: context.theme.colorScheme.secondary,
+                      gripColorActive: context.theme.colorScheme.secondary,
                       gripSize: 14,
                       viewMode: SplitViewMode.Vertical,
                       indicator: SplitIndicator(
@@ -105,7 +104,7 @@ class HomeView extends GetView<HomeViewController> {
       controller: controller.tabController,
       isScrollable: true,
       labelColor: Colors.purple,
-      unselectedLabelColor: Colors.white,
+      unselectedLabelColor: Theme.of(Get.context!).textTheme.bodyText1!.color,
       indicatorColor: Colors.purple,
       labelPadding: EdgeInsets.symmetric(
           horizontal: width / (controller.tabElements.length > 2 ? 9 : 5)),
@@ -169,12 +168,16 @@ class HomeView extends GetView<HomeViewController> {
                               controller.isPickingEmote.value = false;
                             },
                             textInputAction: TextInputAction.send,
-                            style: TextStyle(color: Colors.white),
+                            style: Theme.of(Get.context!).textTheme.bodyText1,
                             maxLines: 1,
                             decoration: InputDecoration(
                               border: InputBorder.none,
-                              hintStyle:
-                                  TextStyle(color: Colors.white, fontSize: 16),
+                              hintStyle: TextStyle(
+                                  color: Theme.of(Get.context!)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontSize: 16),
                               hintText: 'Send a message',
                               isDense: true,
                               contentPadding: EdgeInsets.only(left: 5),
@@ -208,8 +211,9 @@ class HomeView extends GetView<HomeViewController> {
                 },
                 child: Icon(
                   controller.sound.value ? Icons.volume_up : Icons.volume_off,
-                  color:
-                      controller.sound.value ? Colors.white : Color(0xFFd63031),
+                  color: controller.sound.value
+                      ? Theme.of(Get.context!).primaryIconTheme.color
+                      : Color(0xFFd63031),
                   size: 22,
                 ),
               ),
@@ -222,7 +226,7 @@ class HomeView extends GetView<HomeViewController> {
                 },
                 child: Icon(
                   Icons.settings,
-                  color: Colors.white,
+                  color: Theme.of(Get.context!).primaryIconTheme.color,
                   size: 22,
                 ),
               ),

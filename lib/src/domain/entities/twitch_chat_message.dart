@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:collection/collection.dart';
 
@@ -215,7 +216,7 @@ class TwitchChatMessage extends Equatable {
           Text(
             word + " ",
             style: TextStyle(
-              color: Colors.white,
+              color: Theme.of(Get.context!).textTheme.bodyText1!.color,
               fontSize: 19,
               fontStyle: isAction ? FontStyle.italic : FontStyle.normal,
             ),

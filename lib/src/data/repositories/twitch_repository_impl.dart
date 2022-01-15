@@ -92,7 +92,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
     var dio = Dio();
     try {
       response = await dio.get(
-        'http://www.irllink.com/twitch/app/refresh-token',
+        'https://www.irllink.com/twitch/app/refresh-token',
         queryParameters: {'refresh_token': twitchData.refreshToken},
       );
 
@@ -348,7 +348,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(emotes);
     } on DioError catch (e) {
-      return DataFailed("Error retrieving channel emotes");
+      return DataFailed("Error retrieving channel cheer emotes");
     }
   }
 
@@ -372,7 +372,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(emotes);
     } on DioError catch (e) {
-      return DataFailed("Error retrieving FFZ emotes");
+      return DataFailed("Error retrieving FFZ global emotes");
     }
   }
 
@@ -401,7 +401,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(emotes);
     } on DioError catch (e) {
-      return DataFailed("Error retrieving FFZ emotes");
+      return DataFailed("Error retrieving FFZ channel emotes");
     }
   }
 
@@ -423,7 +423,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(emotes);
     } on DioError catch (e) {
-      return DataFailed("Error retrieving FFZ emotes");
+      return DataFailed("Error retrieving BTTV Global emotes");
     }
   }
 }
