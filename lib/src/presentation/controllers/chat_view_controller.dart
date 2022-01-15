@@ -36,6 +36,7 @@ class ChatViewController extends GetxController
   late TwitchUser otherUserInfosChatConnected;
   late String ircChannelJoined;
   List<String> usersIdsHided = [];
+  RxBool isDisplayingMessageTime = false.obs;
 
   Rxn<TwitchChatMessage> selectedMessage = Rxn<TwitchChatMessage>();
   late TextEditingController banDurationInputController;
@@ -48,7 +49,7 @@ class ChatViewController extends GetxController
     twitchData = Get.arguments[0];
     ircChannelJoined = twitchData.twitchUser.login;
 
-    // ircChannelJoined = "robcdee"
+    // ircChannelJoined = "xqcow"
     //     .toLowerCase(); //if you want to join another twitch chat than yours
 
     getTwitchBadges();

@@ -1,4 +1,4 @@
-import 'package:collection/src/iterable_extensions.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -140,15 +140,29 @@ class ChatView extends GetView<ChatViewController> {
               ),
             ),
             Wrap(
-              crossAxisAlignment: WrapCrossAlignment.start,
+              crossAxisAlignment: WrapCrossAlignment.center,
               children: [
+                Visibility(
+                  visible: controller.isDisplayingMessageTime.value,
+                  child: Container(
+                    padding: EdgeInsets.only(right: 5),
+                    // color: Colors.red,
+                    child: Text(
+                      '${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(message.timestamp))}',
+                      textAlign: TextAlign.end,
+                      style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                ),
                 for (TwitchBadge badge in message.badges)
                   Container(
                     padding: EdgeInsets.only(right: 4, top: 3),
                     child: Image(
                       image: NetworkImage(badge.imageUrl1x),
                       filterQuality: FilterQuality.high,
-                      alignment: Alignment.bottomLeft,
                     ),
                   ),
                 Text(
