@@ -5,23 +5,30 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
 
+import 'alert_message_view.dart';
+
 class ObsTabView extends GetView<ObsTabViewController> {
-  // selected scene id
-  int selectedSceneId = -1;
-
-  // selected scene id
-  Set<int> selectedSourcesIds = new Set<int>();
-
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     return SingleChildScrollView(
       child: Obx(
-        () => Container(
+            () => Container(
           padding: EdgeInsets.only(left: 8, top: 5, right: 8),
           color: Color(0xFF282828),
           child: Column(
             children: [
+              AnimatedOpacity(
+                opacity: controller.isConnected.value ? 0.0 : 1.0,
+                duration: Duration(milliseconds: 1000),
+                child: AlertMessageView(
+                  color: controller.isConnected.value
+                      ? Color(0xFF33A031)
+                      : Color(0xFFEC7508),
+                  message: controller.alertMessage.value,
+                  isProgress: !controller.isConnected.value,
+                ),
+              ),
               Row(
                 children: [
                   InkWell(
@@ -120,37 +127,26 @@ class ObsTabView extends GetView<ObsTabViewController> {
   }
 
   getScenes() {
-    controller.getSceneList();
-    // todo get from obs
-    final scenesList = [
-      "scene1",
-      "scene2",
-      "scene4",
-      "scene5",
-      "scene6",
-      "scene7",
-      "scene8",
-      "scene9"
-    ];
-
     return ListView.builder(
-      itemCount: scenesList.length,
+      itemCount: controller.scenesList.length,
       scrollDirection: Axis.horizontal,
       itemBuilder: (BuildContext context, int i) {
+        var elementAt = controller.scenesList.elementAt(i);
         return InkWell(
           onTap: () {
-            selectedSceneId = i;
+            controller.setCurrentScene(elementAt);
           },
           child: Container(
             margin: EdgeInsets.only(right: 10, top: 10, bottom: 10),
             padding: EdgeInsets.only(left: 8, right: 8),
             alignment: Alignment.center,
             decoration: new BoxDecoration(
-              color:
-                  selectedSceneId == i ? Color(0xFFA47CED) : Color(0xFF443B55),
+              color: controller.currentScene == elementAt.name
+                  ? Color(0xFFA47CED)
+                  : Color(0xFF443B55),
               borderRadius: BorderRadius.circular(6),
             ),
-            child: Text('${scenesList.elementAt(i)}'),
+            child: Text(elementAt.name),
           ),
         );
       },
@@ -158,39 +154,28 @@ class ObsTabView extends GetView<ObsTabViewController> {
   }
 
   getSources() {
-    // todo get from obs
-    final srcList = [
-      "src1",
-      "src2",
-      "src3",
-      "src3",
-      "src3",
-      "src3",
-      "src3",
-      "src3",
-      "src3",
-      "src3",
-      "src3",
-      "src3"
-    ];
+    controller.getCurrentScene();
+    controller.getVisibleSources();
 
-    return List.generate(srcList.length, (i) {
+    return List.generate(controller.sourcesList.length, (i) {
+      var elementAt = controller.sourcesList.elementAt(i);
       return InkWell(
         onTap: () {
-          selectedSourcesIds.contains(i)
-              ? selectedSourcesIds.remove(i)
-              : selectedSourcesIds.add(i);
+          controller.selectedSourcesList.contains(elementAt)
+              ? controller.selectedSourcesList.remove(elementAt)
+              : controller.selectedSourcesList.add(elementAt);
+          // todo set visible
         },
         child: Container(
           margin: EdgeInsets.only(right: 10, bottom: 10),
           alignment: Alignment.center,
           decoration: new BoxDecoration(
-            color: selectedSourcesIds.contains(i)
+            color: controller.selectedSourcesList.contains(elementAt)
                 ? Color(0xFFA47CED)
                 : Color(0xFF443B55),
             borderRadius: BorderRadius.circular(6),
           ),
-          child: Text('${srcList.elementAt(i)}'),
+          child: Text(elementAt),
         ),
       );
     });
