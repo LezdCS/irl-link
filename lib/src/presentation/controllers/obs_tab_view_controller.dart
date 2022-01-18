@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:obs_websocket/obs_websocket.dart';
@@ -88,6 +87,9 @@ class ObsTabViewController extends GetxController {
     }
   }
 
+  /*
+  fetch scene list
+   */
   Future<void> getSceneList() async {
     /*
     returns
@@ -101,14 +103,12 @@ class ObsTabViewController extends GetxController {
 
       for (var i=0; i<respScenes.length; i++)
         scenesList.add(respScenes[i]["name"]);
-
-      debugPrint("FinalSceneList: "+scenesList.toString());
     }
   }
 
   /*
   fetch current scene and its sources
-  builds a list with all visible sources
+  build a list with all visible sources
    */
   Future<void> getCurrentScene() async {
     /*
@@ -120,16 +120,13 @@ class ObsTabViewController extends GetxController {
 
     // loads current scene name
     currentScene.value = response.name;
-    debugPrint("CurrentScene: "+currentScene.value);
     // loads current scene sources in list
     sourcesList.value = response.scenes;
-    debugPrint("CurrentSceneSources: "+sourcesList.toString());
     
     // builds visible sources list
     sourcesList.forEach((source) => {
       if (source.render) visibleSourcesList.add(source.name)
     });
-    debugPrint("VisibleSources: "+visibleSourcesList.toString());
   }
 
   Future<void> setCurrentScene(String sceneName) async {
