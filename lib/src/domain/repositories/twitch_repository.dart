@@ -62,4 +62,6 @@ abstract class TwitchRepository {
   );
 
   Future<DataState<List<Emote>>> getBttvGlobalEmotes();
+
+  Future<DataState<String>> getStreamInfo(String accessToken, String broadcasterId);
 }

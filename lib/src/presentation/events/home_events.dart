@@ -85,4 +85,8 @@ class HomeEvents {
   Future<DataState<List<Emote>>> getBttvGlobalEmotes() {
     return twitchUseCase.getBttvGlobalEmotes();
   }
+
+  Future<DataState<String>> getStreamInfo(String accessToken, String broadcasterId){
+    return twitchUseCase.getStreamInfo(accessToken, broadcasterId);
+  }
 }

@@ -426,4 +426,24 @@ class TwitchRepositoryImpl extends TwitchRepository {
       return DataFailed("Error retrieving BTTV Global emotes");
     }
   }
+
+  @override
+  Future<DataState<String>> getStreamInfo(String accessToken, String broadcasterId) async {
+    Response response;
+    var dio = Dio();
+    try {
+      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dio.options.headers["authorization"] = "Bearer $accessToken";
+      response = await dio.get(
+        'https://api.twitch.tv/helix/streams',
+        queryParameters: {'user_id': broadcasterId},
+      );
+
+      //debugPrint(response.data.toString());
+
+      return DataSuccess("");
+    } on DioError catch (e) {
+      return DataFailed("Error Getting Stream Infos");
+    }
+  }
 }
