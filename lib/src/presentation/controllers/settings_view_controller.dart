@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:irllink/routes/app_routes.dart';
+import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/events/settings_events.dart';
 
 class SettingsViewController extends GetxController {
@@ -20,6 +21,8 @@ class SettingsViewController extends GetxController {
 
   RxBool isSwitchedForAlternateChannel = false.obs;
 
+  late Settings settings;
+
   @override
   void onInit() {
     // Here you can fetch you product from server
@@ -28,6 +31,12 @@ class SettingsViewController extends GetxController {
 
   @override
   void onReady() {
+    settingsEvents.getSettings().then((value) => {
+          if (value.error == null)
+            {settings = value.data!}
+          else
+            {settings = Settings.defaultSettings()}
+        });
     super.onReady();
   }
 
@@ -42,5 +51,9 @@ class SettingsViewController extends GetxController {
     settingsEvents.logout().then(
           (value) => Get.offAllNamed(Routes.LOGIN),
         );
+  }
+
+  void saveSettings() {
+    settingsEvents.setSettings(settings: settings);
   }
 }

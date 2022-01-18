@@ -144,6 +144,7 @@ class SettingsView extends GetView<SettingsViewController> {
                               onChanged: (value) {
                                 controller.isSwitchedForFFZAndBTTVEmotes.value =
                                     value;
+                                // controller.settings.isEmotes = value;
                               },
                               value: controller
                                   .isSwitchedForFFZAndBTTVEmotes.value,

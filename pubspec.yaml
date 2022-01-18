@@ -46,6 +46,7 @@ dependencies:
   move_to_background: ^1.0.2
   obs_websocket: ^2.2.12
   intl: ^0.17.0
+  freezed: ^1.1.1
 
 dev_dependencies:
   flutter_test:
