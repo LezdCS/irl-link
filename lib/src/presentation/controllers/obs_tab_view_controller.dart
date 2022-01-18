@@ -16,12 +16,12 @@ class ObsTabViewController extends GetxController {
 
   // obs scenes list
   RxList scenesList = RxList();
-  // active scene
+  // active scene name
   RxString currentScene = RxString("");
   // sources of active scene
   RxList sourcesList = RxList();
-  // visible sources
-  RxSet selectedSourcesList = RxSet();
+  // visible sources names
+  RxSet visibleSourcesList = RxSet();
 
   @override
   Future<void> onInit() async {
@@ -31,15 +31,8 @@ class ObsTabViewController extends GetxController {
   @override
   void onReady() {
     // connect to obs ws
-    try {
-      // todo get ws URL from obs tab creation
-      connectWs("192.168.1.51", 4444);
-      alertMessage = "Connected.".obs;
-      isConnected = true.obs;
-    } catch(e) {
-      alertMessage = e.toString().obs;
-      isConnected = false.obs;
-    }
+    // todo get ws URL from obs tab creation
+    connectWs("172.21.202.107", 4444);
 
     super.onReady();
   }
@@ -56,11 +49,30 @@ class ObsTabViewController extends GetxController {
     obsWebSocket = await ObsWebSocket.connect(
         connectUrl: 'ws://$addr:$port',
         timeout: const Duration(seconds: 30),
-        onError: (e) => (throw e)
+        onError: (e) => connectFail(e)
     );
+
+    // success
+    alertMessage.value = "Connected.";
+    isConnected.value = true;
+    initController();
   }
 
-  void startStream() async {
+  void connectFail(e) {
+    isConnected.value = false;
+    alertMessage.value = "Can't connect to OBS...";
+  }
+
+  void initController() {
+    // loads all scenes
+    getSceneList();
+
+    // loads current scene and its sources
+    // checks which sources are visible
+    getCurrentScene();
+  }
+
+  Future<void> startStream()  async {
     final StreamStatusResponse status = await obsWebSocket.getStreamStatus();
 
     if (!status.streaming) {
@@ -68,7 +80,7 @@ class ObsTabViewController extends GetxController {
     }
   }
 
-  void stopStream() async {
+  Future<void> stopStream()  async {
     final StreamStatusResponse status = await obsWebSocket.getStreamStatus();
 
     if (status.streaming) {
@@ -76,7 +88,7 @@ class ObsTabViewController extends GetxController {
     }
   }
 
-  void getSceneList() async {
+  Future<void> getSceneList() async {
     /*
     returns
     * current-scene 	String
@@ -84,32 +96,61 @@ class ObsTabViewController extends GetxController {
     */
     BaseResponse? response = await obsWebSocket.command('GetSceneList');
 
-    print("GetScenes: "+response!.status.toString());
-    if (response.status) {
-      scenesList = response.rawResponse.entries as RxList;
-      debugPrint("Scenes: "+ scenesList.toString());
+    if (response!.status) {
+      List respScenes = response.rawResponse["scenes"];
+
+      for (var i=0; i<respScenes.length; i++)
+        scenesList.add(respScenes[i]["name"]);
+
+      debugPrint("FinalSceneList: "+scenesList.toString());
     }
   }
 
-  void getCurrentScene() async {
+  /*
+  fetch current scene and its sources
+  builds a list with all visible sources
+   */
+  Future<void> getCurrentScene() async {
     /*
     returns
     * name 	String
-    * sources 	Array<SceneItem>
+    * scenes 	Array<SceneItem> (sources of the current scene)
     */
     Scene response = await obsWebSocket.getCurrentScene();
-    currentScene = response.name.obs;
-    sourcesList = response.scenes.obs;
-  }
 
-  void getVisibleSources() {
+    // loads current scene name
+    currentScene.value = response.name;
+    debugPrint("CurrentScene: "+currentScene.value);
+    // loads current scene sources in list
+    sourcesList.value = response.scenes;
+    debugPrint("CurrentSceneSources: "+sourcesList.toString());
+    
+    // builds visible sources list
     sourcesList.forEach((source) => {
-      if (source.render)
-        selectedSourcesList.add(source)
+      if (source.render) visibleSourcesList.add(source.name)
     });
+    debugPrint("VisibleSources: "+visibleSourcesList.toString());
   }
 
-  void setCurrentScene(String sceneName) {
-    obsWebSocket.setCurrentScene(sceneName);
+  Future<void> setCurrentScene(String sceneName) async {
+    // update on OBS
+    await obsWebSocket.setCurrentScene(sceneName);
+
+    // update controller
+    getCurrentScene();
+  }
+
+  void setSourceVisibleState(String sourceName, bool value) {
+    // update on OBS
+    obsWebSocket.setSceneItemRender({
+      "source": sourceName,
+      "render": value
+    });
+
+    // update controller
+    value
+        ? visibleSourcesList.add(sourceName)
+        : visibleSourcesList.remove(sourceName)
+    ;
   }
 }

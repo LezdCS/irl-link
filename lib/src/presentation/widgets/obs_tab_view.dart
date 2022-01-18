@@ -141,12 +141,12 @@ class ObsTabView extends GetView<ObsTabViewController> {
             padding: EdgeInsets.only(left: 8, right: 8),
             alignment: Alignment.center,
             decoration: new BoxDecoration(
-              color: controller.currentScene == elementAt.name
+              color: controller.currentScene == elementAt
                   ? Color(0xFFA47CED)
                   : Color(0xFF443B55),
               borderRadius: BorderRadius.circular(6),
             ),
-            child: Text(elementAt.name),
+            child: Text(elementAt),
           ),
         );
       },
@@ -154,28 +154,24 @@ class ObsTabView extends GetView<ObsTabViewController> {
   }
 
   getSources() {
-    controller.getCurrentScene();
-    controller.getVisibleSources();
-
     return List.generate(controller.sourcesList.length, (i) {
       var elementAt = controller.sourcesList.elementAt(i);
       return InkWell(
         onTap: () {
-          controller.selectedSourcesList.contains(elementAt)
-              ? controller.selectedSourcesList.remove(elementAt)
-              : controller.selectedSourcesList.add(elementAt);
-          // todo set visible
+          controller.setSourceVisibleState(elementAt.name,
+              controller.visibleSourcesList.contains(elementAt.name) ? false : true
+          );
         },
         child: Container(
           margin: EdgeInsets.only(right: 10, bottom: 10),
           alignment: Alignment.center,
           decoration: new BoxDecoration(
-            color: controller.selectedSourcesList.contains(elementAt)
+            color: controller.visibleSourcesList.contains(elementAt.name)
                 ? Color(0xFFA47CED)
                 : Color(0xFF443B55),
             borderRadius: BorderRadius.circular(6),
           ),
-          child: Text(elementAt),
+          child: Text(elementAt.name),
         ),
       );
     });
