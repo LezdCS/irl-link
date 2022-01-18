@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 
 class Settings extends Equatable {
-  final bool isEmotes;
-  final double textSize;
-  final double emotesSize;
-  final bool displayTimestamp;
-  final bool alternateChannel;
-  final String alternateChannelName;
+  final bool? isEmotes;
+  final double? textSize;
+  final double? emotesSize;
+  final bool? displayTimestamp;
+  final bool? alternateChannel;
+  final String? alternateChannelName;
 
   const Settings({
     required this.isEmotes,
@@ -49,4 +49,21 @@ class Settings extends Equatable {
 
   @override
   bool get stringify => true;
+
+  Settings copyWith({
+    bool? isEmotes,
+    double? textSize,
+    double? emotesSize,
+    bool? displayTimestamp,
+    bool? alternateChannel,
+    String? alternateChannelName,
+  }) =>
+      Settings(
+        isEmotes: isEmotes,
+        textSize: textSize,
+        emotesSize: emotesSize,
+        displayTimestamp: displayTimestamp,
+        alternateChannel: alternateChannel,
+        alternateChannelName: alternateChannelName,
+      );
 }

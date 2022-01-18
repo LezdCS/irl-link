@@ -57,10 +57,10 @@ class SettingsView extends GetView<SettingsViewController> {
               ),
               InkWell(
                 onTap: () {
-                  Get.to(() => appearanceSettings());
+                  Get.to(() => generalSettings(width));
                 },
                 child: Text(
-                  "Appearance",
+                  "General",
                   style: TextStyle(color: Colors.white, fontSize: 25),
                 ),
               ),
@@ -69,7 +69,7 @@ class SettingsView extends GetView<SettingsViewController> {
               ),
               InkWell(
                 onTap: () {
-                  Get.to(() => connectionsSettings());
+                  Get.to(() => connectionsSettings(width));
                 },
                 child: Text(
                   "Connections",
@@ -81,7 +81,7 @@ class SettingsView extends GetView<SettingsViewController> {
               ),
               InkWell(
                 onTap: () {
-                  Get.to(() => contact());
+                  Get.to(() => contactSettings());
                 },
                 child: Text(
                   "Contact",
@@ -144,7 +144,9 @@ class SettingsView extends GetView<SettingsViewController> {
                               onChanged: (value) {
                                 controller.isSwitchedForFFZAndBTTVEmotes.value =
                                     value;
-                                // controller.settings.isEmotes = value;
+                                controller.settings = controller.settings
+                                    .copyWith(isEmotes: value);
+                                controller.saveSettings();
                               },
                               value: controller
                                   .isSwitchedForFFZAndBTTVEmotes.value,
@@ -285,7 +287,7 @@ class SettingsView extends GetView<SettingsViewController> {
     );
   }
 
-  Widget appearanceSettings() {
+  Widget generalSettings(double width) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -293,15 +295,137 @@ class SettingsView extends GetView<SettingsViewController> {
           onPressed: () => Get.back(),
         ),
         backgroundColor: Colors.black,
-        title: Text("Appearance Settings"),
+        title: Text("General Settings"),
         centerTitle: false,
       ),
-      body: Container(),
-      backgroundColor: Color(0xFF282828),
+      body: Obx(
+        () => Container(
+          padding: EdgeInsets.only(top: 20),
+          width: width,
+          color: Color(0xFF282828),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: EdgeInsets.only(left: 10),
+                child: Text(
+                  "General",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 28,
+                  ),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //Themes
+                    Container(
+                        child: Text(
+                      "Themes",
+                      style: TextStyle(color: Colors.white, fontSize: 25),
+                    )),
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            child: Text(
+                              "Mode dark/light",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                          ),
+                          Container(
+                            child: Switch(
+                              onChanged: (value) {
+                                controller.isSwitchedForFFZAndBTTVEmotes.value =
+                                    value;
+                                controller.settings = controller.settings
+                                    .copyWith(isEmotes: value);
+                                controller.saveSettings();
+                              },
+                              value: controller
+                                  .isSwitchedForFFZAndBTTVEmotes.value,
+                              activeTrackColor: Color(0xFF6441A5),
+                              activeColor: Colors.white,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+
+                    Container(
+                        child: Text(
+                      "Waking",
+                      style: TextStyle(color: Colors.white, fontSize: 25),
+                    )),
+                    //keep audio speaker awake
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            child: Text(
+                              "keep audio speaker awake",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                          ),
+                          Container(
+                            child: Switch(
+                              onChanged: (value) {
+                                controller.isSwitchedForTimestamp.value = value;
+                              },
+                              value: controller.isSwitchedForTimestamp.value,
+                              activeTrackColor: Color(0xFF6441A5),
+                              activeColor: Colors.white,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+
+                    //keep screen awake
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            child: Text(
+                              "keep screen awake",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                          ),
+                          Container(
+                            child: Switch(
+                              onChanged: (value) {
+                                controller.isSwitchedForAlternateChannel.value =
+                                    value;
+                              },
+                              value: controller
+                                  .isSwitchedForAlternateChannel.value,
+                              activeTrackColor: Color(0xFF6441A5),
+                              activeColor: Colors.white,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
-  Widget connectionsSettings() {
+  Widget connectionsSettings(double width) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -312,12 +436,151 @@ class SettingsView extends GetView<SettingsViewController> {
         title: Text("Connections Settings"),
         centerTitle: false,
       ),
-      body: Container(),
-      backgroundColor: Color(0xFF282828),
+      body: Container(
+        padding: EdgeInsets.only(top: 20),
+        width: width,
+        color: Color(0xFF282828),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: EdgeInsets.only(left: 10),
+              child: Text(
+                "Connections",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 28,
+                ),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //twitch
+                  Container(
+                      child: Text(
+                    "Twitch",
+                    style: TextStyle(color: Colors.white, fontSize: 25),
+                  )),
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          child: Text(
+                            "nickname",
+                            style: TextStyle(color: Colors.white, fontSize: 18),
+                          ),
+                        ),
+                        Container(
+                          child: InkWell(
+                            onTap: () {
+                              controller.logout();
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                  right: 10, top: 10, bottom: 10),
+                              padding: EdgeInsets.only(left: 8, right: 8),
+                              alignment: Alignment.center,
+                              decoration: new BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text("Logout"),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+
+                  //streamElements
+                  Container(
+                      child: Text(
+                    "Stream Elements",
+                    style: TextStyle(color: Colors.white, fontSize: 25),
+                  )),
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          child: Text(
+                            "nickname",
+                            style: TextStyle(color: Colors.white, fontSize: 18),
+                          ),
+                        ),
+                        Container(
+                          child: InkWell(
+                            onTap: () {
+                              controller.logout();
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                  right: 10, top: 10, bottom: 10),
+                              padding: EdgeInsets.only(left: 8, right: 8),
+                              alignment: Alignment.center,
+                              decoration: new BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text("Logout"),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+
+                  //OBS
+                  Container(
+                      child: Text(
+                    "OBS",
+                    style: TextStyle(color: Colors.white, fontSize: 25),
+                  )),
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          child: Text(
+                            "Websocket URL",
+                            style: TextStyle(color: Colors.white, fontSize: 18),
+                          ),
+                        ),
+                        Container(
+                          child: InkWell(
+                            onTap: () {
+                              controller.logout();
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                  right: 10, top: 10, bottom: 10),
+                              padding: EdgeInsets.only(left: 8, right: 8),
+                              alignment: Alignment.center,
+                              decoration: new BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text("Logout"),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
-  Widget contact() {
+  Widget contactSettings() {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
