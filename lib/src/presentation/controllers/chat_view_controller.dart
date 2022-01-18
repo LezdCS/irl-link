@@ -304,19 +304,20 @@ class ChatViewController extends GetxController
 
       homeEvents
           .getBttvChannelEmotes(broadcasterId: twitchData.twitchUser.id)
-          .then((value) => thirdPartEmotes.addAll(value.data!));
+          .then((value) => {
+                if (value.error == null) {thirdPartEmotes.addAll(value.data!)}
+              });
     }
   }
 
   void getTwitchBadges() {
     String nick = twitchData.twitchUser.login;
-
     twitchBadges.clear();
 
     homeEvents
         .getTwitchGlobalBadges(accessToken: twitchData.accessToken)
         .then((value) => {
-              if (value.error != null) {twitchBadges.addAll(value.data!)}
+              if (value.error == null) {twitchBadges.addAll(value.data!)}
             });
 
     if (ircChannelJoined != nick) {
