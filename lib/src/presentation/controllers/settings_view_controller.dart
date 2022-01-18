@@ -33,9 +33,13 @@ class SettingsViewController extends GetxController {
   void onReady() {
     settingsEvents.getSettings().then((value) => {
           if (value.error == null)
-            {settings = value.data!}
+            {
+              settings = value.data!,
+            }
           else
-            {settings = Settings.defaultSettings()}
+            {
+              settings = Settings.defaultSettings(),
+            }
         });
     super.onReady();
   }

@@ -64,8 +64,8 @@ class EmoteDTO extends Emote {
       id: map["id"].toString(),
       name: map["name"],
       url1x: map['urls']['1'] as String,
-      url2x: map['urls']['2'] as String,
-      url4x: map['urls']['4'] as String,
+      url2x: map['urls']['2'] ?? "",
+      url4x: map['urls']['4'] ?? "",
       color: null,
       emoteType: EmoteType.thirdPart,
     );

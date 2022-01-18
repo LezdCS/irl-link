@@ -365,9 +365,11 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       response.data['sets'][response.data['sets'].keys.toList()[0]]['emoticons']
           .forEach(
-        (emote) => emotes.add(
-          EmoteDTO.fromJsonFrankerfacez(emote),
-        ),
+        (emote) => {
+          emotes.add(
+            EmoteDTO.fromJsonFrankerfacez(emote),
+          ),
+        }
       );
 
       return DataSuccess(emotes);

@@ -38,7 +38,7 @@ class SettingsView extends GetView<SettingsViewController> {
       ),
       body: Container(
           decoration: BoxDecoration(
-            color: Color(0xFF282828),
+            color: Theme.of(context).colorScheme.secondary,
           ),
           child: ListView(
             padding: const EdgeInsets.all(8),
@@ -108,7 +108,7 @@ class SettingsView extends GetView<SettingsViewController> {
         () => Container(
           padding: EdgeInsets.only(top: 20),
           width: width,
-          color: Color(0xFF282828),
+          color: Theme.of(Get.context!).colorScheme.secondary,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -150,6 +150,7 @@ class SettingsView extends GetView<SettingsViewController> {
                               },
                               value: controller
                                   .isSwitchedForFFZAndBTTVEmotes.value,
+                              inactiveTrackColor: Colors.grey,
                               activeTrackColor: Color(0xFF6441A5),
                               activeColor: Colors.white,
                             ),
@@ -178,12 +179,12 @@ class SettingsView extends GetView<SettingsViewController> {
                                 controller.slideValueForTextSize.value = value;
                               },
                               value: controller.slideValueForTextSize.value,
-                              min: 1.0,
-                              max: 20.0,
-                              divisions: null,
+                              min: 0.0,
+                              max: 50.0,
+                              divisions: 100,
                               activeColor: Color(0xFF6441A5),
                               inactiveColor: Colors.grey,
-                              label: 'Set text size value',
+                              label: "${controller.slideValueForTextSize.value}",
                             ),
                           )
                         ],
@@ -212,12 +213,13 @@ class SettingsView extends GetView<SettingsViewController> {
                               },
                               value: controller
                                   .slideValueForBadgesAndEmotesSize.value,
-                              min: 1.0,
-                              max: 20.0,
-                              divisions: null,
+                              min: 0.0,
+                              max: 50.0,
+                              divisions: 100,
                               activeColor: Color(0xFF6441A5),
                               inactiveColor: Colors.grey,
-                              label: 'Set Emotes and Badges size',
+                              label: '${controller
+                                  .slideValueForBadgesAndEmotesSize.value}',
                             ),
                           )
                         ],
@@ -242,6 +244,7 @@ class SettingsView extends GetView<SettingsViewController> {
                                 controller.isSwitchedForTimestamp.value = value;
                               },
                               value: controller.isSwitchedForTimestamp.value,
+                              inactiveTrackColor: Colors.grey,
                               activeTrackColor: Color(0xFF6441A5),
                               activeColor: Colors.white,
                             ),
@@ -270,6 +273,7 @@ class SettingsView extends GetView<SettingsViewController> {
                               },
                               value: controller
                                   .isSwitchedForAlternateChannel.value,
+                              inactiveTrackColor: Colors.grey,
                               activeTrackColor: Color(0xFF6441A5),
                               activeColor: Colors.white,
                             ),
@@ -302,7 +306,7 @@ class SettingsView extends GetView<SettingsViewController> {
         () => Container(
           padding: EdgeInsets.only(top: 20),
           width: width,
-          color: Color(0xFF282828),
+          color: Theme.of(Get.context!).colorScheme.secondary,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -351,6 +355,7 @@ class SettingsView extends GetView<SettingsViewController> {
                                   .isSwitchedForFFZAndBTTVEmotes.value,
                               activeTrackColor: Color(0xFF6441A5),
                               activeColor: Colors.white,
+                              inactiveTrackColor: Colors.grey,
                             ),
                           )
                         ],
@@ -382,6 +387,7 @@ class SettingsView extends GetView<SettingsViewController> {
                               value: controller.isSwitchedForTimestamp.value,
                               activeTrackColor: Color(0xFF6441A5),
                               activeColor: Colors.white,
+                              inactiveTrackColor: Colors.grey,
                             ),
                           )
                         ],
@@ -410,6 +416,7 @@ class SettingsView extends GetView<SettingsViewController> {
                                   .isSwitchedForAlternateChannel.value,
                               activeTrackColor: Color(0xFF6441A5),
                               activeColor: Colors.white,
+                              inactiveTrackColor: Colors.grey,
                             ),
                           )
                         ],
@@ -439,7 +446,7 @@ class SettingsView extends GetView<SettingsViewController> {
       body: Container(
         padding: EdgeInsets.only(top: 20),
         width: width,
-        color: Color(0xFF282828),
+        color: Theme.of(Get.context!).colorScheme.secondary,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -592,7 +599,7 @@ class SettingsView extends GetView<SettingsViewController> {
         centerTitle: false,
       ),
       body: Container(),
-      backgroundColor: Color(0xFF282828),
+      backgroundColor: Theme.of(Get.context!).colorScheme.secondary,
     );
   }
 }

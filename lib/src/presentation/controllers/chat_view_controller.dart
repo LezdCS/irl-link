@@ -135,7 +135,7 @@ class ChatViewController extends GetxController
   }
 
   void chatListener(message) {
-    debugPrint(message);
+    //debugPrint(message);
     if (message.startsWith('PING ')) {
       channel.sink.add("PONG :tmi.twitch.tv\r\n");
     }
@@ -251,20 +251,22 @@ class ChatViewController extends GetxController
     twitchEmotes.clear();
     thirdPartEmotes.clear();
 
-    homeEvents
-        .getTwitchEmotes(twitchData.accessToken)
-        .then((value) => twitchEmotes.addAll(value.data!));
+    homeEvents.getTwitchEmotes(twitchData.accessToken).then((value) => {
+          if (value.error == null) {twitchEmotes.addAll(value.data!)}
+        });
 
     homeEvents
         .getTwitchChannelEmotes(
           twitchData.accessToken,
           twitchData.twitchUser.id,
         )
-        .then((value) => twitchEmotes.addAll(value.data!));
+        .then((value) => {
+              if (value.error == null) {twitchEmotes.addAll(value.data!)}
+            });
 
-    homeEvents
-        .getBttvGlobalEmotes()
-        .then((value) => thirdPartEmotes.addAll(value.data!));
+    homeEvents.getBttvGlobalEmotes().then((value) => {
+          if (value.error == null) {thirdPartEmotes.addAll(value.data!)}
+        });
 
     if (ircChannelJoined != nick) {
       String userId = '';
@@ -280,27 +282,34 @@ class ChatViewController extends GetxController
             twitchData.accessToken,
             userId,
           )
-          .then((value) => cheerEmotes.addAll(value.data!));
+          .then((value) => {
+                if (value.error == null) {cheerEmotes.addAll(value.data!)}
+              });
 
-      homeEvents
-          .getFrankerfacezEmotes(broadcasterId: userId)
-          .then((value) => thirdPartEmotes.addAll(value.data!));
+      homeEvents.getFrankerfacezEmotes(broadcasterId: userId).then((value) => {
+            if (value.error == null) {thirdPartEmotes.addAll(value.data!)}
+          });
 
-      homeEvents
-          .getBttvChannelEmotes(broadcasterId: userId)
-          .then((value) => thirdPartEmotes.addAll(value.data!));
+      homeEvents.getBttvChannelEmotes(broadcasterId: userId).then((value) => {
+            if (value.error == null) {thirdPartEmotes.addAll(value.data!)}
+          });
     } else {
       homeEvents
           .getTwitchCheerEmotes(
             twitchData.accessToken,
             twitchData.twitchUser.id,
           )
-          .then((value) => cheerEmotes.addAll(value.data!));
+          .then((value) => {
+                if (value.error == null) {cheerEmotes.addAll(value.data!)}
+              });
 
-      homeEvents
+      await homeEvents
           .getFrankerfacezEmotes(broadcasterId: twitchData.twitchUser.id)
-          .then((value) =>
-              value.data != null ? thirdPartEmotes.addAll(value.data!) : null);
+          .then((value) => {
+                if (value.error == null) {thirdPartEmotes.addAll(value.data!)}
+              });
+
+      debugPrint(thirdPartEmotes.toString());
 
       homeEvents
           .getBttvChannelEmotes(broadcasterId: twitchData.twitchUser.id)
