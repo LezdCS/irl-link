@@ -49,7 +49,7 @@ class ChatViewController extends GetxController
     twitchData = Get.arguments[0];
     ircChannelJoined = twitchData.twitchUser.login;
 
-    // ircChannelJoined = "xqcow"
+    // ircChannelJoined = "robcdee"
     //     .toLowerCase(); //if you want to join another twitch chat than yours
 
     getTwitchBadges();
@@ -119,6 +119,7 @@ class ChatViewController extends GetxController
 
   void ircChatClosed() {
     debugPrint("IRC Chat CLOSED");
+    joinIrc();
   }
 
   void ircChatError(Object o, StackTrace s) {
@@ -135,7 +136,7 @@ class ChatViewController extends GetxController
   }
 
   void chatListener(message) {
-    //debugPrint(message);
+    // debugPrint(message);
     if (message.startsWith('PING ')) {
       channel.sink.add("PONG :tmi.twitch.tv\r\n");
     }
@@ -176,15 +177,26 @@ class ChatViewController extends GetxController
             break;
           case "CLEARCHAT":
             {
-              if (message.split(':').last.contains('CLEARCHAT')) {
+              final Map<String, String> messageMapped = {};
+
+              List messageSplited = message.split(';');
+              messageSplited.forEach((element) {
+                List elementSplited = element.split('=');
+                messageMapped[elementSplited[0]] = elementSplited[1];
+              });
+              if (messageMapped['target-user-id'] != null) {
+                // @ban-duration=43;room-id=169185650;target-user-id=107285371;tmi-sent-ts=1642601142470 :tmi.twitch.tv CLEARCHAT #robcdee :lezd_
+                String userId = messageMapped['target-user-id']!;
+                chatMessages.forEach((message) {
+                  if (message.authorId == userId) {
+                    message.isDeleted = true;
+                  }
+                });
+
+                chatMessages.refresh();
+              } else {
                 //@room-id=107285371;tmi-sent-ts=1642256684032 :tmi.twitch.tv CLEARCHAT #lezd_
                 chatMessages.clear();
-              } else {
-                String nickname = message.split(':').last;
-                chatMessages
-                    .where((message) => message.authorName == nickname)
-                    .map((e) => e.isDeleted = true);
-                chatMessages.refresh();
               }
             }
             break;
@@ -374,7 +386,7 @@ class ChatViewController extends GetxController
   }
 
   void timeoutMessageInstruction(TwitchChatMessage message, int duration) {
-    // /timeout [username] [duration] [reason]
+    // /timeout [username] [duration in seconds] [reason]
     channel.sink.add(
         'PRIVMSG #$ircChannelJoined :/timeout ${message.authorName} $duration reason\r\n');
 

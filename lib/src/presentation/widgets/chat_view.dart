@@ -210,7 +210,7 @@ class ChatView extends GetView<ChatViewController> {
             children: [
               InkWell(
                 onTap: () => controller.timeoutMessageInstruction(
-                    controller.selectedMessage.value!, 10000),
+                    controller.selectedMessage.value!, 10),
                 child: Container(
                   margin: EdgeInsets.only(right: 10),
                   padding:
@@ -229,7 +229,7 @@ class ChatView extends GetView<ChatViewController> {
               ),
               InkWell(
                 onTap: () => controller.timeoutMessageInstruction(
-                    controller.selectedMessage.value!, 60000),
+                    controller.selectedMessage.value!, 60),
                 child: Container(
                   margin: EdgeInsets.only(right: 10),
                   padding:
@@ -248,7 +248,7 @@ class ChatView extends GetView<ChatViewController> {
               ),
               InkWell(
                 onTap: () => controller.timeoutMessageInstruction(
-                    controller.selectedMessage.value!, 600000),
+                    controller.selectedMessage.value!, 600),
                 child: Container(
                   margin: EdgeInsets.only(right: 10),
                   padding:
@@ -267,7 +267,7 @@ class ChatView extends GetView<ChatViewController> {
               ),
               InkWell(
                 onTap: () => controller.timeoutMessageInstruction(
-                    controller.selectedMessage.value!, 1800000),
+                    controller.selectedMessage.value!, 1800),
                 child: Container(
                   margin: EdgeInsets.only(right: 10),
                   padding:
@@ -313,7 +313,7 @@ class ChatView extends GetView<ChatViewController> {
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintStyle: TextStyle(color: Colors.grey, fontSize: 16),
-                    hintText: 'Custom duration (ms)',
+                    hintText: 'Custom duration (s)',
                     isDense: true,
                     contentPadding: EdgeInsets.only(left: 5),
                   ),

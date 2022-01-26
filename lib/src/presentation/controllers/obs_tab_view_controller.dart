@@ -31,7 +31,7 @@ class ObsTabViewController extends GetxController {
   void onReady() {
     // connect to obs ws
     // todo get ws URL from obs tab creation
-    connectWs("172.21.202.107", 4444);
+    connectWs("172.21.201.135", 4444);
 
     super.onReady();
   }
@@ -48,8 +48,7 @@ class ObsTabViewController extends GetxController {
     obsWebSocket = await ObsWebSocket.connect(
         connectUrl: 'ws://$addr:$port',
         timeout: const Duration(seconds: 30),
-        onError: (e) => connectFail(e)
-    );
+        onError: (e) => connectFail(e));
 
     // success
     alertMessage.value = "Connected.";
@@ -71,7 +70,7 @@ class ObsTabViewController extends GetxController {
     getCurrentScene();
   }
 
-  Future<void> startStream()  async {
+  Future<void> startStream() async {
     final StreamStatusResponse status = await obsWebSocket.getStreamStatus();
 
     if (!status.streaming) {
@@ -79,7 +78,7 @@ class ObsTabViewController extends GetxController {
     }
   }
 
-  Future<void> stopStream()  async {
+  Future<void> stopStream() async {
     final StreamStatusResponse status = await obsWebSocket.getStreamStatus();
 
     if (status.streaming) {
@@ -101,7 +100,7 @@ class ObsTabViewController extends GetxController {
     if (response!.status) {
       List respScenes = response.rawResponse["scenes"];
 
-      for (var i=0; i<respScenes.length; i++)
+      for (var i = 0; i < respScenes.length; i++)
         scenesList.add(respScenes[i]["name"]);
     }
   }
@@ -122,11 +121,10 @@ class ObsTabViewController extends GetxController {
     currentScene.value = response.name;
     // loads current scene sources in list
     sourcesList.value = response.scenes;
-    
+
     // builds visible sources list
-    sourcesList.forEach((source) => {
-      if (source.render) visibleSourcesList.add(source.name)
-    });
+    sourcesList.forEach(
+        (source) => {if (source.render) visibleSourcesList.add(source.name)});
   }
 
   Future<void> setCurrentScene(String sceneName) async {
@@ -139,15 +137,11 @@ class ObsTabViewController extends GetxController {
 
   void setSourceVisibleState(String sourceName, bool value) {
     // update on OBS
-    obsWebSocket.setSceneItemRender({
-      "source": sourceName,
-      "render": value
-    });
+    obsWebSocket.setSceneItemRender({"source": sourceName, "render": value});
 
     // update controller
     value
         ? visibleSourcesList.add(sourceName)
-        : visibleSourcesList.remove(sourceName)
-    ;
+        : visibleSourcesList.remove(sourceName);
   }
 }
