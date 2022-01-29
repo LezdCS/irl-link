@@ -321,8 +321,6 @@ class ChatViewController extends GetxController
                 if (value.error == null) {thirdPartEmotes.addAll(value.data!)}
               });
 
-      debugPrint(thirdPartEmotes.toString());
-
       homeEvents
           .getBttvChannelEmotes(broadcasterId: twitchData.twitchUser.id)
           .then((value) => {

@@ -6,6 +6,7 @@ import 'package:irllink/src/domain/entities/twitch_credentials.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:irllink/src/presentation/widgets/obs_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/split_view_custom.dart';
+import 'package:irllink/src/presentation/widgets/streamelements_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/twitch_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/web_page_view.dart';
 import 'package:web_socket_channel/io.dart';
@@ -48,11 +49,13 @@ class HomeViewController extends GetxController
 
     TwitchTabView twitchPage = TwitchTabView();
     ObsTabView obsPage = ObsTabView();
+    StreamelementsTabView streamelementsPage = StreamelementsTabView();
     WebPageView page1View = WebPageView("Youtube", "https://www.youtube.com");
 
     tabElements.add(twitchPage);
     tabElements.add(obsPage);
-    tabElements.add(page1View);
+    tabElements.add(streamelementsPage);
+    // tabElements.add(page1View);
 
     tabController = new TabController(length: tabElements.length, vsync: this);
 

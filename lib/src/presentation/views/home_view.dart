@@ -10,6 +10,7 @@ import 'package:irllink/src/presentation/widgets/chat_view.dart';
 import 'package:irllink/src/presentation/widgets/emote_picker_view.dart';
 import 'package:irllink/src/presentation/widgets/obs_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/split_view_custom.dart';
+import 'package:irllink/src/presentation/widgets/streamelements_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/twitch_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/web_page_view.dart';
 import 'package:move_to_background/move_to_background.dart';
@@ -114,11 +115,14 @@ class HomeView extends GetView<HomeViewController> {
           child: Text(
             controller.tabElements[index] is ObsTabView
                 ? "OBS"
-                : controller.tabElements[index] is TwitchTabView
-                    ? "Twitch"
-                    : controller.tabElements[index] is WebPageView
-                        ? (controller.tabElements[index] as WebPageView).title
-                        : "",
+                : controller.tabElements[index] is StreamelementsTabView
+                    ? "StreamElements"
+                    : controller.tabElements[index] is TwitchTabView
+                        ? "Twitch"
+                        : controller.tabElements[index] is WebPageView
+                            ? (controller.tabElements[index] as WebPageView)
+                                .title
+                            : "",
           ),
         ),
       ),
