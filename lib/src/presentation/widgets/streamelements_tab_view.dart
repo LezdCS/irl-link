@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
+import 'package:irllink/src/domain/entities/se_activity.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 
 class StreamelementsTabView extends GetView<StreamelementsViewController> {
@@ -74,11 +75,12 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
               controller: controller.activitiesScrollController,
               itemCount: controller.activities.length,
               itemBuilder: (BuildContext context, int index) {
+                SeActivity activity = controller.activities[index];
                 return Container(
                   padding:
                       EdgeInsets.only(left: 3, right: 3, top: 5, bottom: 5),
                   decoration: BoxDecoration(
-                    color: Color(0xFFA47CED),
+                    color: activity.colorsForEnum()[0],
                     borderRadius: BorderRadius.all(
                       Radius.circular(5),
                     ),
@@ -95,19 +97,17 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
                             width: 10.0,
                             height: 10.0,
                             decoration: BoxDecoration(
-                              color: Color(0xFF6441A5),
+                              color: activity.colorsForEnum()[1],
                               shape: BoxShape.circle,
                             ),
                           ),
                           RichText(
                             text: TextSpan(children: [
                               TextSpan(
-                                text: "Lezd",
+                                text: activity.username,
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
-                              TextSpan(text: " has tipped"),
-                              TextSpan(text: " 5\$ !"),
-                              TextSpan(text: ' "This is a test"'),
+                              TextSpan(text: activity.textFromEnum()),
                             ]),
                           ),
                         ],
