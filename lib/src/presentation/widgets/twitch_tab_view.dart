@@ -21,9 +21,14 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         EdgeInsets.only(left: 20.0, top: 12.0, bottom: 12.0),
                     child: Row(
                       children: <Widget>[
-                        Icon(Icons.circle, color: Colors.red),
+                        Icon(Icons.circle,
+                            color: controller.streamState.value
+                                ? Colors.green
+                                : Colors.red),
                         Padding(padding: EdgeInsets.only(right: 10.0)),
-                        Text("Online"),
+                        Text(controller.streamState.value
+                            ? "Online"
+                            : "Offline"),
                       ],
                     ),
                   ),
@@ -56,6 +61,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         children: <Widget>[
                           Container(
                             child: TextFormField(
+                              controller: controller.titleFormController,
                               decoration: InputDecoration(
                                 border: UnderlineInputBorder(),
                                 hintText: 'Your stream\'s title',

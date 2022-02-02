@@ -6,6 +6,7 @@ enum ActivityType {
   subscription,
   cheer,
   donation,
+  raid,
 }
 
 class SeActivity extends Equatable {
@@ -67,6 +68,9 @@ class SeActivity extends Equatable {
         //circle color
         colors.add(Color(0xFFFB4B8C5));
         break;
+      case ActivityType.raid:
+        // TODO: Handle this case.
+        break;
     }
     return colors;
   }
@@ -86,6 +90,9 @@ class SeActivity extends Equatable {
         break;
       case ActivityType.donation:
         s = ' donated ${this.donationAmount}\$! "${this.message}"';
+        break;
+      case ActivityType.raid:
+        // TODO: Handle this case.
         break;
     }
     return s;

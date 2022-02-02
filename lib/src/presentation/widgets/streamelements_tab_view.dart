@@ -75,7 +75,8 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
               controller: controller.activitiesScrollController,
               itemCount: controller.activities.length,
               itemBuilder: (BuildContext context, int index) {
-                SeActivity activity = controller.activities[index];
+                SeActivity activity = controller
+                    .activities[controller.activities.length - 1 - index];
                 return Container(
                   padding:
                       EdgeInsets.only(left: 3, right: 3, top: 5, bottom: 5),

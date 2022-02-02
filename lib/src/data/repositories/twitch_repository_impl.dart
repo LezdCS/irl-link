@@ -11,10 +11,12 @@ import 'package:irllink/src/data/entities/emote_dto.dart';
 import 'package:irllink/src/data/entities/twitch_badge_dto.dart';
 import 'package:irllink/src/data/entities/twitch_credentials_dto.dart';
 import 'package:irllink/src/data/entities/twitch_decoded_idtoken_dto.dart';
+import 'package:irllink/src/data/entities/twitch_stream_infos_dto.dart';
 import 'package:irllink/src/data/entities/twitch_user_dto.dart';
 import 'package:irllink/src/domain/entities/emote.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
+import 'package:irllink/src/domain/entities/twitch_stream_infos.dart';
 import 'package:irllink/src/domain/repositories/twitch_repository.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
@@ -364,13 +366,11 @@ class TwitchRepositoryImpl extends TwitchRepository {
       );
 
       response.data['sets'][response.data['sets'].keys.toList()[0]]['emoticons']
-          .forEach(
-        (emote) => {
-          emotes.add(
-            EmoteDTO.fromJsonFrankerfacez(emote),
-          ),
-        }
-      );
+          .forEach((emote) => {
+                emotes.add(
+                  EmoteDTO.fromJsonFrankerfacez(emote),
+                ),
+              });
 
       return DataSuccess(emotes);
     } on DioError catch (e) {
@@ -430,20 +430,28 @@ class TwitchRepositoryImpl extends TwitchRepository {
   }
 
   @override
-  Future<DataState<String>> getStreamInfo(String accessToken, String broadcasterId) async {
+  Future<DataState<TwitchStreamInfos>> getStreamInfo(
+      String accessToken, String broadcasterId) async {
     Response response;
+    Response response2;
     var dio = Dio();
     try {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
       dio.options.headers["authorization"] = "Bearer $accessToken";
       response = await dio.get(
+        'https://api.twitch.tv/helix/channels',
+        queryParameters: {'broadcaster_id': broadcasterId},
+      );
+
+      response2 = await dio.get(
         'https://api.twitch.tv/helix/streams',
         queryParameters: {'user_id': broadcasterId},
       );
 
-      //debugPrint(response.data.toString());
+      TwitchStreamInfosDto twitchStreamInfosDto = TwitchStreamInfosDto.fromJson(
+          response.data['data'][0], response2.data);
 
-      return DataSuccess("");
+      return DataSuccess(twitchStreamInfosDto);
     } on DioError catch (e) {
       return DataFailed("Error Getting Stream Infos");
     }

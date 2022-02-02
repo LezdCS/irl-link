@@ -3,6 +3,7 @@ import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/domain/entities/emote.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
+import 'package:irllink/src/domain/entities/twitch_stream_infos.dart';
 import 'package:irllink/src/domain/entities/twitch_user.dart';
 
 abstract class TwitchRepository {
@@ -63,5 +64,6 @@ abstract class TwitchRepository {
 
   Future<DataState<List<Emote>>> getBttvGlobalEmotes();
 
-  Future<DataState<String>> getStreamInfo(String accessToken, String broadcasterId);
+  Future<DataState<TwitchStreamInfos>> getStreamInfo(
+      String accessToken, String broadcasterId);
 }

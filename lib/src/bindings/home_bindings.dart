@@ -30,15 +30,6 @@ class HomeBindings extends Bindings {
     Get.lazyPut<ObsTabViewController>(() => ObsTabViewController());
     Get.find<ObsTabViewController>();
 
-    Get.lazyPut<TwitchTabViewController>(() => TwitchTabViewController(
-          homeEvents: HomeEvents(
-            twitchUseCase: TwitchUseCase(
-              twitchRepository: TwitchRepositoryImpl(),
-            ),
-          ),
-        ));
-    Get.find<TwitchTabViewController>();
-
     Get.lazyPut<StreamelementsViewController>(
       () => StreamelementsViewController(
         streamelementsEvents: StreamelementsEvents(
@@ -60,5 +51,14 @@ class HomeBindings extends Bindings {
       ),
     );
     Get.find<ChatViewController>();
+
+    Get.lazyPut<TwitchTabViewController>(() => TwitchTabViewController(
+          homeEvents: HomeEvents(
+            twitchUseCase: TwitchUseCase(
+              twitchRepository: TwitchRepositoryImpl(),
+            ),
+          ),
+        ));
+    Get.find<TwitchTabViewController>();
   }
 }
