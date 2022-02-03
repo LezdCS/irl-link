@@ -98,4 +98,9 @@ class HomeEvents {
     return twitchUseCase.setChatSettings(
         accessToken, broadcasterId, twitchStreamInfos);
   }
+
+  Future<DataState<void>> setStreamTitle(
+      String accessToken, String broadcasterId, String title) {
+    return twitchUseCase.setStreamTitle(accessToken, broadcasterId, title);
+  }
 }

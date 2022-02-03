@@ -92,4 +92,9 @@ class TwitchUseCase {
     return twitchRepository.setChatSettings(
         accessToken, broadcasterId, twitchStreamInfos);
   }
+
+  Future<DataState<void>> setStreamTitle(
+      String accessToken, String broadcasterId, String title) {
+    return twitchRepository.setStreamTitle(accessToken, broadcasterId, title);
+  }
 }

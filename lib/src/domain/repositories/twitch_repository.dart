@@ -70,4 +70,8 @@ abstract class TwitchRepository {
 
   Future<DataState<Response<dynamic>>> setChatSettings(String accessToken,
       String broadcasterId, TwitchStreamInfos? twitchStreamInfos);
+
+  Future<DataState<void>> setStreamTitle(
+      String accessToken, String broadcasterId, String title);
+
 }

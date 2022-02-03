@@ -80,7 +80,9 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         backgroundColor: Colors.deepPurpleAccent,
                         fixedSize: Size(50, 20),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        controller.setStreamTitle();
+                      },
                       child: Text(
                         'Change',
                         style: TextStyle(

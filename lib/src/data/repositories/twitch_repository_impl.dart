@@ -492,4 +492,27 @@ class TwitchRepositoryImpl extends TwitchRepository {
       return DataFailed("Error editing Stream chat settings");
     }
   }
+
+  @override
+  Future<DataState<void>> setStreamTitle(String accessToken, String broadcasterId, String title) async {
+    Response response;
+    var dio = Dio();
+    try {
+      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dio.options.headers["authorization"] = "Bearer $accessToken";
+      Map titleMap = {
+        "title": title
+      };
+      response = await dio.patch('https://api.twitch.tv/helix/channels',
+          queryParameters: {
+            'broadcaster_id': broadcasterId,
+            'moderator_id': broadcasterId
+          },
+          data: jsonEncode(titleMap));
+      return DataSuccess("");
+    } on DioError catch (e) {
+      return DataFailed("Error editing Stream chat settings");
+    }
+
+  }
 }
