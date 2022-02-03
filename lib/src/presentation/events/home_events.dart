@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/domain/entities/emote.dart';
@@ -90,5 +91,11 @@ class HomeEvents {
   Future<DataState<TwitchStreamInfos>> getStreamInfo(
       String accessToken, String broadcasterId) {
     return twitchUseCase.getStreamInfo(accessToken, broadcasterId);
+  }
+
+  Future<DataState<Response<dynamic>>> setChatSettings(String accessToken,
+      String broadcasterId, TwitchStreamInfos? twitchStreamInfos) {
+    return twitchUseCase.setChatSettings(
+        accessToken, broadcasterId, twitchStreamInfos);
   }
 }

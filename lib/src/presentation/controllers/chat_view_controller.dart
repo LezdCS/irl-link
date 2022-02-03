@@ -49,8 +49,8 @@ class ChatViewController extends GetxController
     twitchData = Get.arguments[0];
     ircChannelJoined = twitchData.twitchUser.login;
 
-    ircChannelJoined = "robcdee"
-        .toLowerCase(); //if you want to join another twitch chat than yours
+    // ircChannelJoined = "robcdee"
+    //     .toLowerCase(); //if you want to join another twitch chat than yours
 
     getTwitchBadges();
     getTwitchEmotes();

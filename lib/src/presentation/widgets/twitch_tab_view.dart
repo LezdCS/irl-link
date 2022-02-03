@@ -22,11 +22,11 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                     child: Row(
                       children: <Widget>[
                         Icon(Icons.circle,
-                            color: controller.streamState.value
+                            color: controller.twitchStreamInfos.value.isOnline!
                                 ? Colors.green
                                 : Colors.red),
                         Padding(padding: EdgeInsets.only(right: 10.0)),
-                        Text(controller.streamState.value
+                        Text(controller.twitchStreamInfos.value.isOnline!
                             ? "Online"
                             : "Offline"),
                       ],
@@ -40,7 +40,8 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                       children: <Widget>[
                         Icon(Icons.person_outline, color: Colors.red),
                         Text(
-                          controller.nbViewers.value.toString(),
+                          controller.twitchStreamInfos.value.viewerCount
+                              .toString(),
                           style: TextStyle(color: Colors.red),
                         ),
                         Padding(
@@ -154,9 +155,20 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                           child: TextButton(
                             style: TextButton.styleFrom(
                               textStyle: TextStyle(fontSize: 20),
-                              backgroundColor: Colors.deepPurpleAccent,
+                              backgroundColor: controller
+                                      .twitchStreamInfos.value.isFollowerMode!
+                                  ? Colors.purple
+                                  : Colors.deepPurpleAccent,
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              controller.twitchStreamInfos.value =
+                                  controller.twitchStreamInfos.value.copyWith(
+                                      isFollowerMode: !controller
+                                          .twitchStreamInfos
+                                          .value
+                                          .isFollowerMode!);
+                              controller.changeChatSettings();
+                            },
                             child: Text(
                               'Followers Only',
                               style: TextStyle(
@@ -170,9 +182,20 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                           child: TextButton(
                             style: TextButton.styleFrom(
                               textStyle: TextStyle(fontSize: 20),
-                              backgroundColor: Colors.deepPurpleAccent,
+                              backgroundColor: controller
+                                      .twitchStreamInfos.value.isSubscriberMode!
+                                  ? Colors.purple
+                                  : Colors.deepPurpleAccent,
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              controller.twitchStreamInfos.value =
+                                  controller.twitchStreamInfos.value.copyWith(
+                                      isSubscriberMode: !controller
+                                          .twitchStreamInfos
+                                          .value
+                                          .isSubscriberMode!);
+                              controller.changeChatSettings();
+                            },
                             child: Text(
                               'Subscribers Only',
                               style: TextStyle(
@@ -186,9 +209,18 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                           child: TextButton(
                             style: TextButton.styleFrom(
                               textStyle: TextStyle(fontSize: 20),
-                              backgroundColor: Colors.deepPurpleAccent,
+                              backgroundColor: controller
+                                      .twitchStreamInfos.value.isEmoteMode!
+                                  ? Colors.purple
+                                  : Colors.deepPurpleAccent,
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              controller.twitchStreamInfos.value =
+                                  controller.twitchStreamInfos.value.copyWith(
+                                      isEmoteMode: !controller.twitchStreamInfos
+                                          .value.isEmoteMode!);
+                              controller.changeChatSettings();
+                            },
                             child: Text(
                               'Emote Only',
                               style: TextStyle(
@@ -202,9 +234,18 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                           child: TextButton(
                             style: TextButton.styleFrom(
                               textStyle: TextStyle(fontSize: 20),
-                              backgroundColor: Colors.deepPurpleAccent,
+                              backgroundColor:
+                                  controller.twitchStreamInfos.value.isSlowMode!
+                                      ? Colors.purple
+                                      : Colors.deepPurpleAccent,
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              controller.twitchStreamInfos.value =
+                                  controller.twitchStreamInfos.value.copyWith(
+                                      isSlowMode: !controller
+                                          .twitchStreamInfos.value.isSlowMode!);
+                              controller.changeChatSettings();
+                            },
                             child: Text(
                               'Slow Mode',
                               style: TextStyle(

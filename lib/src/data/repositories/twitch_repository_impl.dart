@@ -448,12 +448,48 @@ class TwitchRepositoryImpl extends TwitchRepository {
         queryParameters: {'user_id': broadcasterId},
       );
 
+      dynamic reponse3;
+      await setChatSettings(accessToken, broadcasterId, null)
+          .then((value) => reponse3 = value.data!.data);
+
       TwitchStreamInfosDto twitchStreamInfosDto = TwitchStreamInfosDto.fromJson(
-          response.data['data'][0], response2.data);
+          response.data['data'][0], response2.data, reponse3['data'][0]);
 
       return DataSuccess(twitchStreamInfosDto);
     } on DioError catch (e) {
       return DataFailed("Error Getting Stream Infos");
+    }
+  }
+
+  @override
+  Future<DataState<Response<dynamic>>> setChatSettings(String accessToken,
+      String broadcasterId, TwitchStreamInfos? twitchStreamInfos) async {
+    Response response;
+    Map<String, bool> settings = {};
+    var dio = Dio();
+    try {
+      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dio.options.headers["authorization"] = "Bearer $accessToken";
+
+      if (twitchStreamInfos != null) {
+        settings = {
+          'emote_mode': twitchStreamInfos.isEmoteMode!,
+          'follower_mode': twitchStreamInfos.isFollowerMode!,
+          'slow_mode': twitchStreamInfos.isSlowMode!,
+          'subscriber_mode': twitchStreamInfos.isSubscriberMode!,
+        };
+      }
+
+      response = await dio.patch('https://api.twitch.tv/helix/chat/settings',
+          queryParameters: {
+            'broadcaster_id': broadcasterId,
+            'moderator_id': broadcasterId
+          },
+          data: jsonEncode(settings));
+
+      return DataSuccess(response);
+    } on DioError catch (e) {
+      return DataFailed("Error editing Stream chat settings");
     }
   }
 }
