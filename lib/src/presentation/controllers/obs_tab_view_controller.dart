@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:obs_websocket/obs_websocket.dart';
@@ -8,7 +9,7 @@ class ObsTabViewController extends GetxController {
 
   late ObsWebSocket obsWebSocket;
 
-  RxString alertMessage = "Connecting...".obs;
+  RxString alertMessage = "Failed to connect tp OBS...".obs;
   RxBool isConnected = false.obs;
 
   RxDouble slideValueForVolume = 50.0.obs;
@@ -30,8 +31,7 @@ class ObsTabViewController extends GetxController {
   @override
   void onReady() {
     // connect to obs ws
-    // todo get ws URL from obs tab creation
-    connectWs("172.21.201.135", 4444);
+    connectWs();
 
     super.onReady();
   }
@@ -44,11 +44,15 @@ class ObsTabViewController extends GetxController {
     super.onClose();
   }
 
-  void connectWs(String addr, int port) async {
+  void connectWs() async {
+    // todo get ws URL from settings
+    String addr = "172.21.203.77";
+    int port = 4444;
     obsWebSocket = await ObsWebSocket.connect(
         connectUrl: 'ws://$addr:$port',
-        timeout: const Duration(seconds: 30),
-        onError: (e) => connectFail(e));
+        fallbackEvent: (e) => connectionLost(e),
+        onError: (e) => connectFail(e),
+        timeout: const Duration(seconds: 30));
 
     // success
     alertMessage.value = "Connected.";
@@ -57,8 +61,17 @@ class ObsTabViewController extends GetxController {
   }
 
   void connectFail(e) {
+    debugPrint("connectFail : connect.onError");
+    debugPrint(e);
     isConnected.value = false;
     alertMessage.value = "Can't connect to OBS...";
+  }
+
+  void connectionLost(e) {
+    debugPrint("connectionLost : connect.fallBackEvent");
+    debugPrint(e);
+    isConnected.value = false;
+    alertMessage.value = "Connection with OBS lost ...";
   }
 
   void initController() {
@@ -124,7 +137,7 @@ class ObsTabViewController extends GetxController {
 
     // builds visible sources list
     sourcesList.forEach(
-        (source) => {if (source.render) visibleSourcesList.add(source.name)});
+            (source) => {if (source.render) visibleSourcesList.add(source.name)});
   }
 
   Future<void> setCurrentScene(String sceneName) async {

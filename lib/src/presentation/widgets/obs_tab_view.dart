@@ -111,16 +111,35 @@ class ObsTabView extends GetView<ObsTabViewController> {
           ],
         ),
       )
-          : AnimatedOpacity(
-        opacity: controller.isConnected.value ? 0.0 : 1.0,
-        duration: Duration(milliseconds: 1000),
-        child: AlertMessageView(
-          color: controller.isConnected.value
-              ? Color(0xFF33A031)
-              : Color(0xFFEC7508),
-          message: controller.alertMessage.value,
-          isProgress: !controller.isConnected.value,
-        ),
+          : Container(
+          padding: EdgeInsets.only(left: 8, top: 5, right: 8),
+          color: Color(0xFF282828),
+          child: Column(
+            children: [
+              AlertMessageView(
+                color: Color(0xFFEC0808),
+                message: controller.alertMessage.value,
+                isProgress: false,
+              ),
+              InkWell(
+                onTap: () {
+                  // try connect function
+                  controller.connectWs();
+                },
+                child: Container(
+                  margin: EdgeInsets.only(right: 10, top: 10, bottom: 10),
+                  padding: EdgeInsets.all(8),
+                  alignment: Alignment.center,
+                  decoration: new BoxDecoration(
+                    color: Color(0xFFA47CED),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text("Retry",
+                      style: TextStyle(color: Colors.white)),
+                ),
+              ),
+            ],
+          )
       )
       ),
     );
