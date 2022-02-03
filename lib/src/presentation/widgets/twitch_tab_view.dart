@@ -82,6 +82,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                       ),
                       onPressed: () {
                         controller.setStreamTitle();
+                        FocusScope.of(context).unfocus();
                       },
                       child: Text(
                         'Change',
@@ -124,6 +125,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                       ),
                       onPressed: () {
                         controller.raidSomeone();
+                        FocusScope.of(context).unfocus();
                       },
                       child: Text(
                         'Raid',

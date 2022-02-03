@@ -53,8 +53,8 @@ class TwitchTabViewController extends GetxController {
 
   void raidSomeone() {
     raid = raidFormController.text;
-    homeViewController.sendChatMessage("/raid "+raid);
-    raidFormController.text="";
+    homeViewController.sendChatMessage("/raid " + raid);
+    raidFormController.text = "";
   }
 
   void changeChatSettings() {
