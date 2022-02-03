@@ -23,8 +23,8 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                       children: <Widget>[
                         Icon(Icons.circle,
                             color: controller.twitchStreamInfos.value.isOnline!
-                                ? Colors.green
-                                : Colors.red),
+                                ? Colors.red
+                                : Colors.grey),
                         Padding(padding: EdgeInsets.only(right: 10.0)),
                         Text(controller.twitchStreamInfos.value.isOnline!
                             ? "Online"
@@ -63,6 +63,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                           Container(
                             child: TextFormField(
                               controller: controller.titleFormController,
+                              focusNode: controller.focus,
                               decoration: InputDecoration(
                                 border: UnderlineInputBorder(),
                                 hintText: 'Your stream\'s title',
@@ -99,6 +100,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         children: <Widget>[
                           Container(
                             child: TextFormField(
+                              controller: controller.raidFormController,
                               decoration: InputDecoration(
                                 border: UnderlineInputBorder(),
                                 hintText: 'Enter the nickname',
@@ -118,7 +120,9 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         backgroundColor: Colors.deepPurpleAccent,
                         fixedSize: Size(50, 20),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        controller.raidSomeone();
+                      },
                       child: Text(
                         'Raid',
                         style: TextStyle(

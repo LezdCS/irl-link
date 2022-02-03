@@ -17,10 +17,11 @@ class TwitchTabViewController extends GetxController {
   String raid = ""; // pseudo de la personne qui va se faire raid
 
   late TextEditingController titleFormController;
+  late TextEditingController raidFormController;
 
   //todo : utiliser un FocusNode pour vérifier si l'utilisateur edit le Titre
   // si il edit le titre alors on ne doit pas changer le titre lors d'un fetch des infos de stream
-  FocusNode _focus = FocusNode();
+  FocusNode focus = FocusNode();
 
   late HomeViewController homeViewController;
 
@@ -30,6 +31,7 @@ class TwitchTabViewController extends GetxController {
   @override
   void onInit() {
     titleFormController = new TextEditingController();
+    raidFormController = new TextEditingController();
     super.onInit();
   }
 
@@ -47,6 +49,12 @@ class TwitchTabViewController extends GetxController {
   @override
   void onClose() {
     super.onClose();
+  }
+
+  void raidSomeone() {
+    raid = raidFormController.text;
+    homeViewController.sendChatMessage("/raid "+raid);
+    raidFormController.text="";
   }
 
   void changeChatSettings() {

@@ -136,7 +136,7 @@ class ChatViewController extends GetxController
   }
 
   void chatListener(message) {
-    // debugPrint(message);
+     debugPrint(message);
     if (message.startsWith('PING ')) {
       channel.sink.add("PONG :tmi.twitch.tv\r\n");
     }
