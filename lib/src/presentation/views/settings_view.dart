@@ -278,9 +278,12 @@ class SettingsView extends GetView<SettingsViewController> {
                                 controller.settings.value = controller
                                     .settings.value
                                     .copyWith(alternateChannel: value);
-                                if(!value){
-                                  controller.settings.value = controller.settings.value.copyWith(alternateChannelName: '');
-                                  controller.alternateChannelChatController.text = '';
+                                if (!value) {
+                                  controller.settings.value = controller
+                                      .settings.value
+                                      .copyWith(alternateChannelName: '');
+                                  controller
+                                      .alternateChannelChatController.text = '';
                                 }
                                 controller.saveSettings();
                               },
@@ -303,7 +306,8 @@ class SettingsView extends GetView<SettingsViewController> {
                           Expanded(
                             flex: 7,
                             child: TextFormField(
-                              controller: controller.alternateChannelChatController,
+                              controller:
+                                  controller.alternateChannelChatController,
                               decoration: InputDecoration(
                                 border: UnderlineInputBorder(),
                                 hintText: 'Nickname',
@@ -320,9 +324,14 @@ class SettingsView extends GetView<SettingsViewController> {
                                 fixedSize: Size(50, 20),
                               ),
                               onPressed: () {
-                                controller.settings.value = controller.settings.value.copyWith(alternateChannelName: controller.alternateChannelChatController.text);
+                                controller.settings.value =
+                                    controller.settings.value.copyWith(
+                                        alternateChannelName: controller
+                                            .alternateChannelChatController
+                                            .text);
                                 controller.saveSettings();
-                                SystemChannels.textInput.invokeMethod('TextInput.hide');
+                                SystemChannels.textInput
+                                    .invokeMethod('TextInput.hide');
                               },
                               child: Text(
                                 'Save',
@@ -479,145 +488,151 @@ class SettingsView extends GetView<SettingsViewController> {
         title: Text("Connections Settings"),
         centerTitle: false,
       ),
-      body: Container(
-        padding: EdgeInsets.only(top: 20),
-        width: width,
-        color: Theme.of(Get.context!).colorScheme.secondary,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: EdgeInsets.only(left: 10),
-              child: Text(
-                "Connections",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 28,
+      body: Obx(
+        () => Container(
+          padding: EdgeInsets.only(top: 20),
+          width: width,
+          color: Theme.of(Get.context!).colorScheme.secondary,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: EdgeInsets.only(left: 10),
+                child: Text(
+                  "Connections",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 28,
+                  ),
                 ),
               ),
-            ),
-            Container(
-              padding: EdgeInsets.only(left: 20, right: 20, top: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //twitch
-                  Container(
-                      child: Text(
-                    "Twitch",
-                    style: TextStyle(color: Colors.white, fontSize: 25),
-                  )),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          child: Text(
-                            "nickname",
-                            style: TextStyle(color: Colors.white, fontSize: 18),
-                          ),
-                        ),
-                        Container(
-                          child: InkWell(
-                            onTap: () {
-                              controller.logout();
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                  right: 10, top: 10, bottom: 10),
-                              padding: EdgeInsets.only(left: 8, right: 8),
-                              alignment: Alignment.center,
-                              decoration: new BoxDecoration(
-                                color: Colors.red,
-                                borderRadius: BorderRadius.circular(6),
+              Container(
+                padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //streamElements
+                    Container(
+                        child: Text(
+                      "Stream Elements",
+                      style: TextStyle(color: Colors.white, fontSize: 25),
+                    )),
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                textStyle: TextStyle(fontSize: 12),
+                                backgroundColor: controller.settings.value.streamElementsAccessToken != "" ? Colors.redAccent : Colors.green,
+                                fixedSize: Size(50, 20),
                               ),
-                              child: Text("Logout"),
+                              onPressed: () {
+                                SystemChannels.textInput
+                                    .invokeMethod('TextInput.hide');
+                              },
+                              child: Text(
+                                controller.settings.value.streamElementsAccessToken != "" ? 'Logout' : 'Login',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
                           ),
-                        )
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
 
-                  //streamElements
-                  Container(
-                      child: Text(
-                    "Stream Elements",
-                    style: TextStyle(color: Colors.white, fontSize: 25),
-                  )),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //OBS
+                    Row(
                       children: [
-                        Container(
+                        Expanded(
+                          flex: 7,
                           child: Text(
-                            "nickname",
-                            style: TextStyle(color: Colors.white, fontSize: 18),
+                            "OBS",
+                            style: TextStyle(color: Colors.white, fontSize: 25),
                           ),
                         ),
-                        Container(
-                          child: InkWell(
-                            onTap: () {
-                              controller.logout();
+                        Expanded(
+                          flex: 3,
+                          child: Switch(
+                            onChanged: (value) {
+                              controller.settings.value = controller
+                                  .settings.value
+                                  .copyWith(isObsConnected: value);
+                              if(!value){
+                                controller
+                                    .obsWebsocketUrlFieldController
+                                    .text = '';
+                                controller.settings.value =
+                                    controller.settings.value.copyWith(
+                                        obsWebsocketUrl: '');
+                                controller.saveSettings();
+                              }
+                              controller.saveSettings();
                             },
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                  right: 10, top: 10, bottom: 10),
-                              padding: EdgeInsets.only(left: 8, right: 8),
-                              alignment: Alignment.center,
-                              decoration: new BoxDecoration(
-                                color: Colors.red,
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Text("Logout"),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-
-                  //OBS
-                  Container(
-                      child: Text(
-                    "OBS",
-                    style: TextStyle(color: Colors.white, fontSize: 25),
-                  )),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          child: Text(
-                            "Websocket URL",
-                            style: TextStyle(color: Colors.white, fontSize: 18),
+                            value: controller.settings.value.isObsConnected!,
+                            inactiveTrackColor: Colors.grey,
+                            activeTrackColor: Color(0xFF6441A5),
+                            activeColor: Colors.white,
                           ),
                         ),
-                        Container(
-                          child: InkWell(
-                            onTap: () {
-                              controller.logout();
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                  right: 10, top: 10, bottom: 10),
-                              padding: EdgeInsets.only(left: 8, right: 8),
-                              alignment: Alignment.center,
-                              decoration: new BoxDecoration(
-                                color: Colors.red,
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Text("Logout"),
-                            ),
-                          ),
-                        )
                       ],
                     ),
-                  ),
-                ],
+                    Visibility(
+                      visible: controller.settings.value.isObsConnected!,
+                      child: Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              flex: 7,
+                              child: TextFormField(
+                                controller:
+                                    controller.obsWebsocketUrlFieldController,
+                                decoration: InputDecoration(
+                                  border: UnderlineInputBorder(),
+                                  hintText: 'wss://url:port',
+                                  labelText: 'Weboscket Url',
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  textStyle: TextStyle(fontSize: 12),
+                                  backgroundColor: Colors.deepPurpleAccent,
+                                  fixedSize: Size(50, 20),
+                                ),
+                                onPressed: () {
+                                  controller.settings.value =
+                                      controller.settings.value.copyWith(
+                                          obsWebsocketUrl: controller
+                                              .obsWebsocketUrlFieldController
+                                              .text);
+                                  controller.saveSettings();
+                                  SystemChannels.textInput
+                                      .invokeMethod('TextInput.hide');
+                                },
+                                child: Text(
+                                  'Save',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

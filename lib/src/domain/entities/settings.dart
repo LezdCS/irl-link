@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class Settings extends Equatable {
+  //CHAT SETTINGS
   final bool? isEmotes;
   final double? textSize;
   final double? emotesSize;
@@ -8,22 +9,39 @@ class Settings extends Equatable {
   final bool? alternateChannel;
   final String? alternateChannelName;
 
+  //CONNECTIONS SETTINGS
+  final bool? isObsConnected;
+  final String? obsWebsocketUrl;
+  final String? streamElementsAccessToken;
+
   const Settings({
+    //CHAT SETTINGS
     required this.isEmotes,
     required this.textSize,
     required this.emotesSize,
     required this.displayTimestamp,
     required this.alternateChannel,
     required this.alternateChannelName,
+
+    //CONNECTIONS SETTINGS
+    required this.isObsConnected,
+    required this.obsWebsocketUrl,
+    required this.streamElementsAccessToken,
   });
 
   Settings.defaultSettings({
+    //CHAT SETTINGS
     this.isEmotes = true,
     this.textSize = 20,
     this.emotesSize = 20,
     this.displayTimestamp = false,
     this.alternateChannel = false,
     this.alternateChannelName = "",
+
+    //CONNECTIONS SETTINGS
+    this.isObsConnected = false,
+    this.obsWebsocketUrl = "",
+    this.streamElementsAccessToken = "",
   });
 
   Map toJson() => {
@@ -33,6 +51,9 @@ class Settings extends Equatable {
         'displayTimestamp': displayTimestamp,
         'alternateChannel': alternateChannel,
         'alternateChannelName': alternateChannelName,
+        'isObsConnected': isObsConnected,
+        'obsWebsocketUrl': obsWebsocketUrl,
+        'streamElementsAccessToken': streamElementsAccessToken,
       };
 
   @override
@@ -44,6 +65,9 @@ class Settings extends Equatable {
       displayTimestamp,
       alternateChannel,
       alternateChannelName,
+      isObsConnected,
+      obsWebsocketUrl,
+      streamElementsAccessToken,
     ];
   }
 
@@ -57,6 +81,9 @@ class Settings extends Equatable {
     bool? displayTimestamp,
     bool? alternateChannel,
     String? alternateChannelName,
+    bool? isObsConnected,
+    String? obsWebsocketUrl,
+    String? streamElementsAccessToken,
   }) =>
       Settings(
         isEmotes: isEmotes ?? this.isEmotes,
@@ -65,5 +92,9 @@ class Settings extends Equatable {
         displayTimestamp: displayTimestamp ?? this.displayTimestamp,
         alternateChannel: alternateChannel ?? this.alternateChannel,
         alternateChannelName: alternateChannelName ?? this.alternateChannelName,
+        isObsConnected: isObsConnected ?? this.isObsConnected,
+        obsWebsocketUrl: obsWebsocketUrl ?? this.obsWebsocketUrl,
+        streamElementsAccessToken:
+            streamElementsAccessToken ?? this.streamElementsAccessToken,
       );
 }

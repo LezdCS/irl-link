@@ -13,10 +13,12 @@ class SettingsViewController extends GetxController {
   late Rx<Settings> settings = Settings.defaultSettings().obs;
 
   late TextEditingController alternateChannelChatController;
+  late TextEditingController  obsWebsocketUrlFieldController;
 
   @override
   void onInit() {
     alternateChannelChatController = new TextEditingController();
+    obsWebsocketUrlFieldController = new TextEditingController();
     super.onInit();
   }
 
@@ -27,6 +29,7 @@ class SettingsViewController extends GetxController {
             {
               settings.value = value.data!,
               alternateChannelChatController.text = settings.value.alternateChannelName!,
+              obsWebsocketUrlFieldController.text = settings.value.obsWebsocketUrl!,
             }
         });
     super.onReady();
