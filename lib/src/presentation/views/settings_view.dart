@@ -365,113 +365,124 @@ class SettingsView extends GetView<SettingsViewController> {
         title: Text("General Settings"),
         centerTitle: false,
       ),
-      body: Container(
-        padding: EdgeInsets.only(top: 20),
-        width: width,
-        color: Theme.of(Get.context!).colorScheme.secondary,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: EdgeInsets.only(left: 10),
-              child: Text(
-                "General",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 28,
+      body: Obx(
+        () => Container(
+          padding: EdgeInsets.only(top: 20),
+          width: width,
+          color: Theme.of(Get.context!).colorScheme.secondary,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: EdgeInsets.only(left: 10),
+                child: Text(
+                  "General",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 28,
+                  ),
                 ),
               ),
-            ),
-            Container(
-              padding: EdgeInsets.only(left: 20, right: 20, top: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //Themes
-                  Container(
-                      child: Text(
-                    "Themes",
-                    style: TextStyle(color: Colors.white, fontSize: 25),
-                  )),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          child: Text(
-                            "Mode dark/light",
-                            style: TextStyle(color: Colors.white, fontSize: 18),
-                          ),
-                        ),
-                        Container(
-                          child: Switch(
-                            onChanged: (value) {},
-                            value: false,
-                            activeTrackColor: Color(0xFF6441A5),
-                            activeColor: Colors.white,
-                            inactiveTrackColor: Colors.grey,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
+              Container(
+                padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //Themes
 
-                  Container(
-                      child: Text(
-                    "Waking",
-                    style: TextStyle(color: Colors.white, fontSize: 25),
-                  )),
-                  //keep audio speaker awake
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          child: Text(
-                            "keep audio speaker awake",
-                            style: TextStyle(color: Colors.white, fontSize: 18),
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            child: Text(
+                              "Dark mode",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18),
+                            ),
                           ),
-                        ),
-                        Container(
-                          child: Switch(
-                            onChanged: (value) {},
-                            value: false,
-                            activeTrackColor: Color(0xFF6441A5),
-                            activeColor: Colors.white,
-                            inactiveTrackColor: Colors.grey,
-                          ),
-                        )
-                      ],
+                          Container(
+                            child: Switch(
+                              onChanged: (value) {
+                                controller.settings.value = controller
+                                    .settings.value
+                                    .copyWith(isDarkMode: value);
+                                controller.saveSettings();
+                              },
+                              value: controller.settings.value.isDarkMode!,
+                              activeTrackColor: Color(0xFF6441A5),
+                              activeColor: Colors.white,
+                              inactiveTrackColor: Colors.grey,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
 
-                  //keep screen awake
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          child: Text(
-                            "keep screen awake",
-                            style: TextStyle(color: Colors.white, fontSize: 18),
+                    //keep audio speaker awake
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            child: Text(
+                              "Keep audio speaker on",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18),
+                            ),
                           ),
-                        ),
-                        Container(
-                          child: Switch(
-                            onChanged: (value) {},
-                            value: false,
-                            activeTrackColor: Color(0xFF6441A5),
-                            activeColor: Colors.white,
-                            inactiveTrackColor: Colors.grey,
-                          ),
-                        )
-                      ],
+                          Container(
+                            child: Switch(
+                              onChanged: (value) {
+                                controller.settings.value = controller
+                                    .settings.value
+                                    .copyWith(keepSpeakerOn: value);
+                                controller.saveSettings();
+                              },
+                              value: controller.settings.value.keepSpeakerOn!,
+                              activeTrackColor: Color(0xFF6441A5),
+                              activeColor: Colors.white,
+                              inactiveTrackColor: Colors.grey,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+
+                    //keep screen awake
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            child: Text(
+                              "Keep screen on",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                          ),
+                          Container(
+                            child: Switch(
+                              onChanged: (value) {
+                                controller.settings.value = controller
+                                    .settings.value
+                                    .copyWith(keepScreenOn: value);
+                                controller.saveSettings();
+                              },
+                              value: controller.settings.value.keepScreenOn!,
+                              activeTrackColor: Color(0xFF6441A5),
+                              activeColor: Colors.white,
+                              inactiveTrackColor: Colors.grey,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -515,7 +526,7 @@ class SettingsView extends GetView<SettingsViewController> {
                     Container(
                         child: Text(
                       "Stream Elements",
-                      style: TextStyle(color: Colors.white, fontSize: 25),
+                      style: TextStyle(color: Colors.white, fontSize: 20),
                     )),
                     Container(
                       child: Row(
@@ -525,7 +536,11 @@ class SettingsView extends GetView<SettingsViewController> {
                             child: TextButton(
                               style: TextButton.styleFrom(
                                 textStyle: TextStyle(fontSize: 12),
-                                backgroundColor: controller.settings.value.streamElementsAccessToken != "" ? Colors.redAccent : Colors.green,
+                                backgroundColor: controller.settings.value
+                                            .streamElementsAccessToken !=
+                                        ""
+                                    ? Colors.redAccent
+                                    : Colors.green,
                                 fixedSize: Size(50, 20),
                               ),
                               onPressed: () {
@@ -533,7 +548,11 @@ class SettingsView extends GetView<SettingsViewController> {
                                     .invokeMethod('TextInput.hide');
                               },
                               child: Text(
-                                controller.settings.value.streamElementsAccessToken != "" ? 'Logout' : 'Login',
+                                controller.settings.value
+                                            .streamElementsAccessToken !=
+                                        ""
+                                    ? 'Logout'
+                                    : 'Login',
                                 style: TextStyle(
                                   color: Colors.white,
                                 ),
@@ -551,7 +570,7 @@ class SettingsView extends GetView<SettingsViewController> {
                           flex: 7,
                           child: Text(
                             "OBS",
-                            style: TextStyle(color: Colors.white, fontSize: 25),
+                            style: TextStyle(color: Colors.white, fontSize: 20),
                           ),
                         ),
                         Expanded(
@@ -561,13 +580,12 @@ class SettingsView extends GetView<SettingsViewController> {
                               controller.settings.value = controller
                                   .settings.value
                                   .copyWith(isObsConnected: value);
-                              if(!value){
-                                controller
-                                    .obsWebsocketUrlFieldController
-                                    .text = '';
-                                controller.settings.value =
-                                    controller.settings.value.copyWith(
-                                        obsWebsocketUrl: '');
+                              if (!value) {
+                                controller.obsWebsocketUrlFieldController.text =
+                                    '';
+                                controller.settings.value = controller
+                                    .settings.value
+                                    .copyWith(obsWebsocketUrl: '');
                                 controller.saveSettings();
                               }
                               controller.saveSettings();

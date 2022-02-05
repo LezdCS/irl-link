@@ -2,34 +2,52 @@ import 'package:irllink/src/domain/entities/settings.dart';
 
 class SettingsDTO extends Settings {
   const SettingsDTO({
+    //CHAT SETTINGS
     required bool isEmotes,
     required double textSize,
     required double emotesSize,
     required bool displayTimestamp,
     required bool alternateChannel,
     required String alternateChannelName,
+    //GENERAL SETTINGS
+    required bool isDarkMode,
+    required bool keepSpeakerOn,
+    required bool keepScreenOn,
+    //CONNECTIONS SETTINGS
     required bool isObsConnected,
     required String obsWebsocketUrl,
     required String streamElementsAccessToken,
   }) : super(
+          //CHAT SETTINGS
           isEmotes: isEmotes,
           textSize: textSize,
           emotesSize: emotesSize,
           displayTimestamp: displayTimestamp,
           alternateChannel: alternateChannel,
           alternateChannelName: alternateChannelName,
+          //GENERAL SETTINGS
+          isDarkMode: isDarkMode,
+          keepSpeakerOn: keepSpeakerOn,
+          keepScreenOn: keepScreenOn,
+          //CONNECTIONS SETTINGS
           obsWebsocketUrl: obsWebsocketUrl,
           isObsConnected: isObsConnected,
           streamElementsAccessToken: streamElementsAccessToken,
         );
 
   Map toJson() => {
+        //CHAT
         'isEmotes': isEmotes,
         'textSize': textSize,
         'emotesSize': emotesSize,
         'displayTimestamp': displayTimestamp,
         'alternateChannel': alternateChannel,
         'alternateChannelName': alternateChannelName,
+        //GENERAL
+        'isDarkMode': isDarkMode,
+        'keepSpeakerOn': keepSpeakerOn,
+        'keepScreenOn': keepScreenOn,
+        //CONNECTIONS
         'isObsConnected': isObsConnected,
         'obsWebsocketUrl': obsWebsocketUrl,
         'streamElementsAccessToken': streamElementsAccessToken,
@@ -37,6 +55,7 @@ class SettingsDTO extends Settings {
 
   factory SettingsDTO.fromJson(Map<String, dynamic> map) {
     return SettingsDTO(
+        //CHAT SETTINGS
         isEmotes: map['isEmotes'] != null
             ? map['isEmotes'] as bool
             : Settings.defaultSettings().isEmotes!,
@@ -55,6 +74,17 @@ class SettingsDTO extends Settings {
         alternateChannelName: map['alternateChannelName'] != null
             ? map['alternateChannelName'] as String
             : Settings.defaultSettings().alternateChannelName!,
+        //GENERAL SETTINGS
+        isDarkMode: map['isDarkMode'] != null
+            ? map['isDarkMode'] as bool
+            : Settings.defaultSettings().isDarkMode!,
+        keepSpeakerOn: map['keepSpeakerOn'] != null
+            ? map['keepSpeakerOn'] as bool
+            : Settings.defaultSettings().keepSpeakerOn!,
+        keepScreenOn: map['keepScreenOn'] != null
+            ? map['keepScreenOn'] as bool
+            : Settings.defaultSettings().keepScreenOn!,
+        //CONNECTIONS SETTINGS
         isObsConnected: map['isObsConnected'] != null
             ? map['isObsConnected'] as bool
             : Settings.defaultSettings().isObsConnected!,
