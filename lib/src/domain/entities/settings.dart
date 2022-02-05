@@ -59,11 +59,11 @@ class Settings extends Equatable {
     String? alternateChannelName,
   }) =>
       Settings(
-        isEmotes: isEmotes,
-        textSize: textSize,
-        emotesSize: emotesSize,
-        displayTimestamp: displayTimestamp,
-        alternateChannel: alternateChannel,
-        alternateChannelName: alternateChannelName,
+        isEmotes: isEmotes ?? this.isEmotes,
+        textSize: textSize ?? this.textSize,
+        emotesSize: emotesSize ?? this.emotesSize,
+        displayTimestamp: displayTimestamp ?? this.displayTimestamp,
+        alternateChannel: alternateChannel ?? this.alternateChannel,
+        alternateChannelName: alternateChannelName ?? this.alternateChannelName,
       );
 }

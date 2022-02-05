@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
+import 'package:flutter/services.dart';
 
 class SettingsView extends GetView<SettingsViewController> {
   final SettingsViewController controller = Get.find<SettingsViewController>();
+
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
@@ -142,14 +144,12 @@ class SettingsView extends GetView<SettingsViewController> {
                           Container(
                             child: Switch(
                               onChanged: (value) {
-                                controller.isSwitchedForFFZAndBTTVEmotes.value =
-                                    value;
-                                controller.settings = controller.settings
+                                controller.settings.value = controller
+                                    .settings.value
                                     .copyWith(isEmotes: value);
                                 controller.saveSettings();
                               },
-                              value: controller
-                                  .isSwitchedForFFZAndBTTVEmotes.value,
+                              value: controller.settings.value.isEmotes!,
                               inactiveTrackColor: Colors.grey,
                               activeTrackColor: Color(0xFF6441A5),
                               activeColor: Colors.white,
@@ -176,15 +176,18 @@ class SettingsView extends GetView<SettingsViewController> {
                           Container(
                             child: Slider(
                               onChanged: (value) {
-                                controller.slideValueForTextSize.value = value;
+                                controller.settings.value = controller
+                                    .settings.value
+                                    .copyWith(textSize: value);
+                                controller.saveSettings();
                               },
-                              value: controller.slideValueForTextSize.value,
+                              value: controller.settings.value.textSize!,
                               min: 0.0,
                               max: 50.0,
                               divisions: 100,
                               activeColor: Color(0xFF6441A5),
                               inactiveColor: Colors.grey,
-                              label: "${controller.slideValueForTextSize.value}",
+                              label: "${controller.settings.value.textSize}",
                             ),
                           )
                         ],
@@ -208,18 +211,18 @@ class SettingsView extends GetView<SettingsViewController> {
                           Container(
                             child: Slider(
                               onChanged: (value) {
-                                controller.slideValueForBadgesAndEmotesSize
-                                    .value = value;
+                                controller.settings.value = controller
+                                    .settings.value
+                                    .copyWith(emotesSize: value);
+                                controller.saveSettings();
                               },
-                              value: controller
-                                  .slideValueForBadgesAndEmotesSize.value,
+                              value: controller.settings.value.emotesSize!,
                               min: 0.0,
                               max: 50.0,
                               divisions: 100,
                               activeColor: Color(0xFF6441A5),
                               inactiveColor: Colors.grey,
-                              label: '${controller
-                                  .slideValueForBadgesAndEmotesSize.value}',
+                              label: '${controller.settings.value.emotesSize}',
                             ),
                           )
                         ],
@@ -241,9 +244,13 @@ class SettingsView extends GetView<SettingsViewController> {
                           Container(
                             child: Switch(
                               onChanged: (value) {
-                                controller.isSwitchedForTimestamp.value = value;
+                                controller.settings.value = controller
+                                    .settings.value
+                                    .copyWith(displayTimestamp: value);
+                                controller.saveSettings();
                               },
-                              value: controller.isSwitchedForTimestamp.value,
+                              value:
+                                  controller.settings.value.displayTimestamp!,
                               inactiveTrackColor: Colors.grey,
                               activeTrackColor: Color(0xFF6441A5),
                               activeColor: Colors.white,
@@ -268,11 +275,17 @@ class SettingsView extends GetView<SettingsViewController> {
                           Container(
                             child: Switch(
                               onChanged: (value) {
-                                controller.isSwitchedForAlternateChannel.value =
-                                    value;
+                                controller.settings.value = controller
+                                    .settings.value
+                                    .copyWith(alternateChannel: value);
+                                if(!value){
+                                  controller.settings.value = controller.settings.value.copyWith(alternateChannelName: '');
+                                  controller.alternateChannelChatController.text = '';
+                                }
+                                controller.saveSettings();
                               },
-                              value: controller
-                                  .isSwitchedForAlternateChannel.value,
+                              value:
+                                  controller.settings.value.alternateChannel!,
                               inactiveTrackColor: Colors.grey,
                               activeTrackColor: Color(0xFF6441A5),
                               activeColor: Colors.white,
@@ -280,6 +293,47 @@ class SettingsView extends GetView<SettingsViewController> {
                           )
                         ],
                       ),
+                    ),
+
+                    Visibility(
+                      visible: controller.settings.value.alternateChannel!,
+                      child: Container(
+                          child: Row(
+                        children: [
+                          Expanded(
+                            flex: 7,
+                            child: TextFormField(
+                              controller: controller.alternateChannelChatController,
+                              decoration: InputDecoration(
+                                border: UnderlineInputBorder(),
+                                hintText: 'Nickname',
+                                labelText: 'Twitch nickname',
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                textStyle: TextStyle(fontSize: 12),
+                                backgroundColor: Colors.deepPurpleAccent,
+                                fixedSize: Size(50, 20),
+                              ),
+                              onPressed: () {
+                                controller.settings.value = controller.settings.value.copyWith(alternateChannelName: controller.alternateChannelChatController.text);
+                                controller.saveSettings();
+                                SystemChannels.textInput.invokeMethod('TextInput.hide');
+                              },
+                              child: Text(
+                                'Save',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )),
                     ),
                   ],
                 ),
@@ -302,131 +356,113 @@ class SettingsView extends GetView<SettingsViewController> {
         title: Text("General Settings"),
         centerTitle: false,
       ),
-      body: Obx(
-        () => Container(
-          padding: EdgeInsets.only(top: 20),
-          width: width,
-          color: Theme.of(Get.context!).colorScheme.secondary,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: EdgeInsets.only(left: 10),
-                child: Text(
-                  "General",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 28,
+      body: Container(
+        padding: EdgeInsets.only(top: 20),
+        width: width,
+        color: Theme.of(Get.context!).colorScheme.secondary,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: EdgeInsets.only(left: 10),
+              child: Text(
+                "General",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 28,
+                ),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //Themes
+                  Container(
+                      child: Text(
+                    "Themes",
+                    style: TextStyle(color: Colors.white, fontSize: 25),
+                  )),
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          child: Text(
+                            "Mode dark/light",
+                            style: TextStyle(color: Colors.white, fontSize: 18),
+                          ),
+                        ),
+                        Container(
+                          child: Switch(
+                            onChanged: (value) {},
+                            value: false,
+                            activeTrackColor: Color(0xFF6441A5),
+                            activeColor: Colors.white,
+                            inactiveTrackColor: Colors.grey,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(left: 20, right: 20, top: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    //Themes
-                    Container(
-                        child: Text(
-                      "Themes",
-                      style: TextStyle(color: Colors.white, fontSize: 25),
-                    )),
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            child: Text(
-                              "Mode dark/light",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 18),
-                            ),
-                          ),
-                          Container(
-                            child: Switch(
-                              onChanged: (value) {
-                                controller.isSwitchedForFFZAndBTTVEmotes.value =
-                                    value;
-                                controller.settings = controller.settings
-                                    .copyWith(isEmotes: value);
-                                controller.saveSettings();
-                              },
-                              value: controller
-                                  .isSwitchedForFFZAndBTTVEmotes.value,
-                              activeTrackColor: Color(0xFF6441A5),
-                              activeColor: Colors.white,
-                              inactiveTrackColor: Colors.grey,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
 
-                    Container(
-                        child: Text(
-                      "Waking",
-                      style: TextStyle(color: Colors.white, fontSize: 25),
-                    )),
-                    //keep audio speaker awake
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            child: Text(
-                              "keep audio speaker awake",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 18),
-                            ),
+                  Container(
+                      child: Text(
+                    "Waking",
+                    style: TextStyle(color: Colors.white, fontSize: 25),
+                  )),
+                  //keep audio speaker awake
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          child: Text(
+                            "keep audio speaker awake",
+                            style: TextStyle(color: Colors.white, fontSize: 18),
                           ),
-                          Container(
-                            child: Switch(
-                              onChanged: (value) {
-                                controller.isSwitchedForTimestamp.value = value;
-                              },
-                              value: controller.isSwitchedForTimestamp.value,
-                              activeTrackColor: Color(0xFF6441A5),
-                              activeColor: Colors.white,
-                              inactiveTrackColor: Colors.grey,
-                            ),
-                          )
-                        ],
-                      ),
+                        ),
+                        Container(
+                          child: Switch(
+                            onChanged: (value) {},
+                            value: false,
+                            activeTrackColor: Color(0xFF6441A5),
+                            activeColor: Colors.white,
+                            inactiveTrackColor: Colors.grey,
+                          ),
+                        )
+                      ],
                     ),
+                  ),
 
-                    //keep screen awake
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            child: Text(
-                              "keep screen awake",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 18),
-                            ),
+                  //keep screen awake
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          child: Text(
+                            "keep screen awake",
+                            style: TextStyle(color: Colors.white, fontSize: 18),
                           ),
-                          Container(
-                            child: Switch(
-                              onChanged: (value) {
-                                controller.isSwitchedForAlternateChannel.value =
-                                    value;
-                              },
-                              value: controller
-                                  .isSwitchedForAlternateChannel.value,
-                              activeTrackColor: Color(0xFF6441A5),
-                              activeColor: Colors.white,
-                              inactiveTrackColor: Colors.grey,
-                            ),
-                          )
-                        ],
-                      ),
+                        ),
+                        Container(
+                          child: Switch(
+                            onChanged: (value) {},
+                            value: false,
+                            activeTrackColor: Color(0xFF6441A5),
+                            activeColor: Colors.white,
+                            inactiveTrackColor: Colors.grey,
+                          ),
+                        )
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

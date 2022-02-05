@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:irllink/src/data/entities/settings_dto.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
@@ -15,7 +16,7 @@ class SettingsRepositoryImpl extends SettingsRepository {
       SettingsDTO settings = SettingsDTO.fromJson(settingsJson);
       return DataSuccess(settings);
     }
-    return DataFailed("no settings found");
+    return DataFailed("No settings found");
   }
 
   @override

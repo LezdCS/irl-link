@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:irllink/routes/app_routes.dart';
@@ -9,23 +10,13 @@ class SettingsViewController extends GetxController {
 
   final SettingsEvents settingsEvents;
 
-  final box = GetStorage();
+  late Rx<Settings> settings = Settings.defaultSettings().obs;
 
-  RxDouble slideValueForTextSize = 20.0.obs;
-
-  RxDouble slideValueForBadgesAndEmotesSize = 20.0.obs;
-
-  RxBool isSwitchedForFFZAndBTTVEmotes = false.obs;
-
-  RxBool isSwitchedForTimestamp = false.obs;
-
-  RxBool isSwitchedForAlternateChannel = false.obs;
-
-  late Settings settings;
+  late TextEditingController alternateChannelChatController;
 
   @override
   void onInit() {
-    // Here you can fetch you product from server
+    alternateChannelChatController = new TextEditingController();
     super.onInit();
   }
 
@@ -34,11 +25,8 @@ class SettingsViewController extends GetxController {
     settingsEvents.getSettings().then((value) => {
           if (value.error == null)
             {
-              settings = value.data!,
-            }
-          else
-            {
-              settings = Settings.defaultSettings(),
+              settings.value = value.data!,
+              alternateChannelChatController.text = settings.value.alternateChannelName!,
             }
         });
     super.onReady();
@@ -46,8 +34,6 @@ class SettingsViewController extends GetxController {
 
   @override
   void onClose() {
-    // Here, you can dispose your StreamControllers
-    // you can cancel timers
     super.onClose();
   }
 
@@ -58,6 +44,6 @@ class SettingsViewController extends GetxController {
   }
 
   void saveSettings() {
-    settingsEvents.setSettings(settings: settings);
+    settingsEvents.setSettings(settings: settings.value);
   }
 }
