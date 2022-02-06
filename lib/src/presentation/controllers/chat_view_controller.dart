@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:irllink/src/domain/entities/emote.dart';
+import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:irllink/src/domain/entities/twitch_chat_message.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
@@ -33,7 +34,7 @@ class ChatViewController extends GetxController
   List<Emote> thirdPartEmotes = <Emote>[];
   List<Emote> cheerEmotes = <Emote>[];
 
-  late TwitchUser otherUserInfosChatConnected;
+  late TwitchUser? otherUserInfosChatConnected;
   late String ircChannelJoined;
   List<String> usersIdsHided = [];
   RxBool isDisplayingMessageTime = false.obs;
@@ -41,19 +42,19 @@ class ChatViewController extends GetxController
   Rxn<TwitchChatMessage> selectedMessage = Rxn<TwitchChatMessage>();
   late TextEditingController banDurationInputController;
 
+  late Rx<Settings> settings = Settings
+      .defaultSettings()
+      .obs;
+
   @override
-  void onInit() {
+  void onInit() async {
     scrollController = new ScrollController();
     banDurationInputController = new TextEditingController();
 
     twitchData = Get.arguments[0];
     ircChannelJoined = twitchData.twitchUser.login;
 
-    // ircChannelJoined = "robcdee"
-    //     .toLowerCase(); //if you want to join another twitch chat than yours
-
-    getTwitchBadges();
-    getTwitchEmotes();
+    await getSettings();
 
     super.onInit();
   }
@@ -61,8 +62,6 @@ class ChatViewController extends GetxController
   @override
   void onReady() {
     scrollController.addListener(scrollListener);
-
-    joinIrc();
 
     Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       if (streamSubscription != null) {
@@ -104,7 +103,7 @@ class ChatViewController extends GetxController
     channel = IOWebSocketChannel.connect("wss://irc-ws.chat.twitch.tv:443");
 
     streamSubscription = channel.stream.listen(
-        (message) => chatListener(message),
+            (message) => chatListener(message),
         onDone: ircChatClosed,
         onError: ircChatError);
 
@@ -136,7 +135,7 @@ class ChatViewController extends GetxController
   }
 
   void chatListener(message) {
-     debugPrint(message);
+    debugPrint(message);
     if (message.startsWith('PING ')) {
       channel.sink.add("PONG :tmi.twitch.tv\r\n");
     }
@@ -151,7 +150,7 @@ class ChatViewController extends GetxController
         "NOTICE"
       ];
       String? keyResult =
-          keys.firstWhereOrNull((key) => messageSplited.last.contains(key));
+      keys.firstWhereOrNull((key) => messageSplited.last.contains(key));
       if (keyResult != null) {
         switch (keyResult) {
           case "PRIVMSG":
@@ -215,7 +214,7 @@ class ChatViewController extends GetxController
 
               chatMessages
                   .firstWhereOrNull((message) =>
-                      message.messageId == messageMapped['target-msg-id'])!
+              message.messageId == messageMapped['target-msg-id'])!
                   .isDeleted = true;
 
               chatMessages.refresh();
@@ -248,7 +247,7 @@ class ChatViewController extends GetxController
           .then((value) {
         for (var emote in value.data!) {
           if (twitchEmotes
-                  .firstWhereOrNull((element) => element.id == emote.id) ==
+              .firstWhereOrNull((element) => element.id == emote.id) ==
               null) {
             twitchEmotes.add(emote);
           }
@@ -258,107 +257,132 @@ class ChatViewController extends GetxController
   }
 
   Future<void> getTwitchEmotes() async {
-    String nick = twitchData.twitchUser.login;
 
     twitchEmotes.clear();
     thirdPartEmotes.clear();
 
-    homeEvents.getTwitchEmotes(twitchData.accessToken).then((value) => {
-          if (value.error == null) {twitchEmotes.addAll(value.data!)}
-        });
+    homeEvents.getTwitchEmotes(twitchData.accessToken).then((value) =>
+    {
+      if (value.error == null) {twitchEmotes.addAll(value.data!)}
+    });
 
     homeEvents
         .getTwitchChannelEmotes(
-          twitchData.accessToken,
-          twitchData.twitchUser.id,
-        )
-        .then((value) => {
-              if (value.error == null) {twitchEmotes.addAll(value.data!)}
-            });
+      twitchData.accessToken,
+      twitchData.twitchUser.id,
+    )
+        .then((value) =>
+    {
+      if (value.error == null) {twitchEmotes.addAll(value.data!)}
+    });
 
-    homeEvents.getBttvGlobalEmotes().then((value) => {
-          if (value.error == null) {thirdPartEmotes.addAll(value.data!)}
-        });
+    homeEvents.getBttvGlobalEmotes().then((value) =>
+    {
+      if (value.error == null) {thirdPartEmotes.addAll(value.data!)}
+    });
 
-    if (ircChannelJoined != nick) {
-      String userId = '';
-      await homeEvents
-          .getTwitchUser(
-            username: ircChannelJoined,
-            accessToken: twitchData.accessToken,
-          )
-          .then((value) => userId = value.data!.id);
+    if (otherUserInfosChatConnected != null) {
+      String userId = otherUserInfosChatConnected!.id;
 
       homeEvents
           .getTwitchCheerEmotes(
-            twitchData.accessToken,
-            userId,
-          )
-          .then((value) => {
-                if (value.error == null) {cheerEmotes.addAll(value.data!)}
-              });
+        twitchData.accessToken,
+        userId,
+      )
+          .then((value) =>
+      {
+        if (value.error == null) {cheerEmotes.addAll(value.data!)}
+      });
 
-      homeEvents.getFrankerfacezEmotes(broadcasterId: userId).then((value) => {
-            if (value.error == null) {thirdPartEmotes.addAll(value.data!)}
-          });
+      homeEvents.getFrankerfacezEmotes(broadcasterId: userId).then((value) =>
+      {
+        if (value.error == null) {thirdPartEmotes.addAll(value.data!)}
+      });
 
-      homeEvents.getBttvChannelEmotes(broadcasterId: userId).then((value) => {
-            if (value.error == null) {thirdPartEmotes.addAll(value.data!)}
-          });
+      homeEvents.getBttvChannelEmotes(broadcasterId: userId).then((value) =>
+      {
+        if (value.error == null) {thirdPartEmotes.addAll(value.data!)}
+      });
     } else {
       homeEvents
           .getTwitchCheerEmotes(
-            twitchData.accessToken,
-            twitchData.twitchUser.id,
-          )
-          .then((value) => {
-                if (value.error == null) {cheerEmotes.addAll(value.data!)}
-              });
+        twitchData.accessToken,
+        twitchData.twitchUser.id,
+      )
+          .then((value) =>
+      {
+        if (value.error == null) {cheerEmotes.addAll(value.data!)}
+      });
 
       await homeEvents
           .getFrankerfacezEmotes(broadcasterId: twitchData.twitchUser.id)
-          .then((value) => {
-                if (value.error == null) {thirdPartEmotes.addAll(value.data!)}
-              });
+          .then((value) =>
+      {
+        if (value.error == null) {thirdPartEmotes.addAll(value.data!)}
+      });
 
       homeEvents
           .getBttvChannelEmotes(broadcasterId: twitchData.twitchUser.id)
-          .then((value) => {
-                if (value.error == null) {thirdPartEmotes.addAll(value.data!)}
-              });
+          .then((value) =>
+      {
+        if (value.error == null) {thirdPartEmotes.addAll(value.data!)}
+      });
     }
   }
 
+  Future getSettings() async {
+    await homeEvents.getSettings().then((value) async =>
+    {
+      if (value.error == null)
+        {
+          settings.value = value.data!,
+          if(settings.value.alternateChannel!){
+            ircChannelJoined = settings.value.alternateChannelName!,
+            await homeEvents
+                .getTwitchUser(
+              username: ircChannelJoined,
+              accessToken: twitchData.accessToken,
+            ).then((value) => otherUserInfosChatConnected = value.data! )
+          } else
+            {
+              ircChannelJoined = twitchData.twitchUser.login,
+            }
+        },
+      if (streamSubscription != null) {
+        streamSubscription!.cancel(),
+        channel.sink.add('PART #$ircChannelJoined'),
+        chatMessages.clear(),
+      },
+      joinIrc(),
+      getTwitchBadges(),
+      getTwitchEmotes(),
+    });
+  }
+
   void getTwitchBadges() {
-    String nick = twitchData.twitchUser.login;
     twitchBadges.clear();
 
     homeEvents
         .getTwitchGlobalBadges(accessToken: twitchData.accessToken)
-        .then((value) => {
-              if (value.error == null) {twitchBadges.addAll(value.data!)}
-            });
+        .then((value) =>
+    {
+      if (value.error == null) {twitchBadges.addAll(value.data!)}
+    });
 
-    if (ircChannelJoined != nick) {
-      homeEvents
-          .getTwitchUser(
-            username: ircChannelJoined,
-            accessToken: twitchData.accessToken,
-          )
-          .then(
-            (value) => homeEvents
+    if (otherUserInfosChatConnected != null) {
+            homeEvents
                 .getTwitchChannelBadges(
-                  accessToken: twitchData.accessToken,
-                  broadcasterId: value.data!.id,
-                )
-                .then((value) => addChannelBadges(value)),
-          );
+              accessToken: twitchData.accessToken,
+              broadcasterId: otherUserInfosChatConnected!.id,
+            )
+                .then((value) => addChannelBadges(value));
+
     } else {
       homeEvents
           .getTwitchChannelBadges(
-            accessToken: twitchData.accessToken,
-            broadcasterId: twitchData.twitchUser.id,
-          )
+        accessToken: twitchData.accessToken,
+        broadcasterId: twitchData.twitchUser.id,
+      )
           .then((value) => addChannelBadges(value));
     }
   }
@@ -366,11 +390,11 @@ class ChatViewController extends GetxController
   void addChannelBadges(value) {
     value.data!.forEach((badge) {
       if (twitchBadges.firstWhereOrNull((badgeFromList) =>
-              badge.setId == badgeFromList.setId &&
-              badge.versionId == badgeFromList.versionId) !=
+      badge.setId == badgeFromList.setId &&
+          badge.versionId == badgeFromList.versionId) !=
           null) {
         twitchBadges.remove(twitchBadges.firstWhere((badgeFromList) =>
-            badge.setId == badgeFromList.setId &&
+        badge.setId == badgeFromList.setId &&
             badge.versionId == badgeFromList.versionId));
       }
       twitchBadges.addAll(value.data!);
@@ -386,7 +410,8 @@ class ChatViewController extends GetxController
   void timeoutMessageInstruction(TwitchChatMessage message, int duration) {
     // /timeout [username] [duration in seconds] [reason]
     channel.sink.add(
-        'PRIVMSG #$ircChannelJoined :/timeout ${message.authorName} $duration reason\r\n');
+        'PRIVMSG #$ircChannelJoined :/timeout ${message
+            .authorName} $duration reason\r\n');
 
     Get.back();
     selectedMessage.value = null;

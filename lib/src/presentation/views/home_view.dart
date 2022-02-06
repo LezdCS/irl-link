@@ -225,8 +225,9 @@ class HomeView extends GetView<HomeViewController> {
             Container(
               width: width * 0.15,
               child: InkWell(
-                onTap: () {
-                  Get.toNamed(Routes.SETTINGS);
+                onTap: () async {
+                  await Get.toNamed(Routes.SETTINGS);
+                  controller.chatViewController.getSettings();
                 },
                 child: Icon(
                   Icons.settings,

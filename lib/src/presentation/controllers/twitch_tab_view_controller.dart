@@ -19,7 +19,6 @@ class TwitchTabViewController extends GetxController {
   late TextEditingController titleFormController;
   late TextEditingController raidFormController;
 
-
   // si il edit le titre alors on ne doit pas changer le titre lors d'un fetch des infos de stream
   FocusNode focus = FocusNode();
 
@@ -62,55 +61,28 @@ class TwitchTabViewController extends GetxController {
         homeViewController.twitchData.twitchUser.id, twitchStreamInfos.value);
   }
 
-  void setStreamTitle(){
+  void setStreamTitle() {
     homeEvents.setStreamTitle(homeViewController.twitchData.accessToken,
         homeViewController.twitchData.twitchUser.id, titleFormController.text);
   }
 
   void getStreamInfos() {
-    //todo : enlever le getTwitchUser et n'utiliser que le twitch id de l'utilisateur connecté pour le getStreamInfo
-    // pour le moment on garde le getTwitchUser pour faire des tests sur d'autres streamers
-    if (homeViewController.chatViewController.ircChannelJoined !=
-        homeViewController.chatViewController.twitchData.twitchUser.login) {
-      homeEvents
-          .getTwitchUser(
-            username: homeViewController.chatViewController.ircChannelJoined,
-            accessToken: homeViewController.twitchData.accessToken,
-          )
-          .then(
-            (value) => homeEvents
-                .getStreamInfo(
-                  homeViewController.twitchData.accessToken,
-                  value.data!.id,
-                )
-                .then(
-                  (value) => {
-                    if (value.data != null)
-                      {
-                        twitchStreamInfos.value = value.data!,
-                        titleFormController.text =
-                            twitchStreamInfos.value.title!,
-                      },
-                  },
-                ),
-          );
-    } else {
-      homeEvents
-          .getStreamInfo(
-            homeViewController.twitchData.accessToken,
-            homeViewController.twitchData.twitchUser.id,
-          )
-          .then(
-            (value) => {
-              if (value.data != null)
-                {
-                  twitchStreamInfos.value = value.data!,
-                  if(!focus.hasFocus){
+    homeEvents
+        .getStreamInfo(
+          homeViewController.twitchData.accessToken,
+          homeViewController.twitchData.twitchUser.id,
+        )
+        .then(
+          (value) => {
+            if (value.data != null)
+              {
+                twitchStreamInfos.value = value.data!,
+                if (!focus.hasFocus)
+                  {
                     titleFormController.text = twitchStreamInfos.value.title!,
                   }
-                },
-            },
-          );
-    }
+              },
+          },
+        );
   }
 }

@@ -1,8 +1,10 @@
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/bindings_interface.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:irllink/src/data/repositories/settings_repository_impl.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
+import 'package:irllink/src/domain/usecases/settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch_usecase.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
@@ -21,6 +23,9 @@ class HomeBindings extends Bindings {
         homeEvents: HomeEvents(
           twitchUseCase: TwitchUseCase(
             twitchRepository: TwitchRepositoryImpl(),
+          ),
+          settingsUseCase: SettingsUseCase(
+            settingsRepository: SettingsRepositoryImpl(),
           ),
         ),
       ),
@@ -47,6 +52,9 @@ class HomeBindings extends Bindings {
           twitchUseCase: TwitchUseCase(
             twitchRepository: TwitchRepositoryImpl(),
           ),
+          settingsUseCase: SettingsUseCase(
+            settingsRepository: SettingsRepositoryImpl(),
+          ),
         ),
       ),
     );
@@ -56,6 +64,9 @@ class HomeBindings extends Bindings {
           homeEvents: HomeEvents(
             twitchUseCase: TwitchUseCase(
               twitchRepository: TwitchRepositoryImpl(),
+            ),
+            settingsUseCase: SettingsUseCase(
+              settingsRepository: SettingsRepositoryImpl(),
             ),
           ),
         ));
