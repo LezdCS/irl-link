@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
 import 'package:irllink/src/domain/entities/se_activity.dart';
+import 'package:irllink/src/domain/entities/se_song.dart';
 import 'package:irllink/src/presentation/events/streamelements_events.dart';
 import 'package:flutter/src/material/tab_controller.dart';
 
@@ -14,6 +15,7 @@ class StreamelementsViewController extends GetxController
   late TabController tabController;
   late ScrollController activitiesScrollController;
   late List<SeActivity> activities;
+  late List<SeSong> songRequestQueue;
 
   @override
   void onInit() {
@@ -48,6 +50,12 @@ class StreamelementsViewController extends GetxController
         soundUrl: null,
         activityType: ActivityType.cheer);
     activities = [a1, a2, a3, a4];
+    
+    SeSong s1 = SeSong( id: '',videoId: "dQw4w9WgXcQ", title: "xQc die from an insane and unstoppable laught", channel: "xQc", duration: "123",);
+    SeSong s2 = SeSong( id: '',videoId: "dQw4w9WgXcQ", title: "xQc die from an insane and unstoppable laught", channel: "xQc", duration: "123",);
+    SeSong s3 = SeSong( id: '',videoId: "dQw4w9WgXcQ", title: "xQc die from an insane and unstoppable laught", channel: "xQc", duration: "123",);
+    SeSong s4 = SeSong( id: '',videoId: "dQw4w9WgXcQ", title: "xQc die from an insane and unstoppable laught", channel: "xQc", duration: "123",);
+    songRequestQueue = [s1, s2, s3, s4];
     super.onInit();
   }
 
