@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:collection/collection.dart';
 
@@ -66,6 +67,7 @@ class TwitchChatMessage extends Equatable {
     required List<Emote> cheerEmotes,
     required List<Emote> thirdPartEmotes,
     required String message,
+    required Settings settings,
   }) {
     final Map<String, String> messageMapped = {};
 
@@ -89,7 +91,7 @@ class TwitchChatMessage extends Equatable {
     }
 
     String color = messageMapped['color']!;
-    List<List<String>> default_colors = [
+    List<List<String>> defaultColors = [
       ["Red", "#FF0000"],
       ["Blue", "#0000FF"],
       ["Green", "#00FF00"],
@@ -110,7 +112,7 @@ class TwitchChatMessage extends Equatable {
       var n = messageMapped['display-name']!.codeUnitAt(0) +
           messageMapped['display-name']!
               .codeUnitAt(messageMapped['display-name']!.length - 1);
-      color = default_colors[n % default_colors.length][1];
+      color = defaultColors[n % defaultColors.length][1];
     }
 
     Map<String, List<List<String>>> emotesIdsPositions = {};
@@ -180,7 +182,7 @@ class TwitchChatMessage extends Equatable {
         );
       } else if (thirdPartEmotes
               .firstWhereOrNull((element) => element.name == word) !=
-          null) {
+          null && settings.isEmotes!) {
         messageWidgetsBuild.add(
           Wrap(children: [
             Image(
@@ -206,7 +208,7 @@ class TwitchChatMessage extends Equatable {
               style: TextStyle(
                 color:
                     Color(int.parse(cheerEmote.color!.replaceAll('#', '0xff'))),
-                fontSize: 19,
+                fontSize:  settings.textSize,
               ),
             ),
           ]),
@@ -217,7 +219,7 @@ class TwitchChatMessage extends Equatable {
             word + " ",
             style: TextStyle(
               color: Theme.of(Get.context!).textTheme.bodyText1!.color,
-              fontSize: 19,
+              fontSize: settings.textSize,
               fontStyle: isAction ? FontStyle.italic : FontStyle.normal,
             ),
           ),

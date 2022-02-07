@@ -42,7 +42,7 @@ class Settings extends Equatable {
   Settings.defaultSettings({
     //CHAT SETTINGS
     this.isEmotes = true,
-    this.textSize = 20,
+    this.textSize = 19,
     this.emotesSize = 20,
     this.displayTimestamp = false,
     this.alternateChannel = false,

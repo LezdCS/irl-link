@@ -143,7 +143,7 @@ class ChatView extends GetView<ChatViewController> {
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 Visibility(
-                  visible: controller.isDisplayingMessageTime.value,
+                  visible: controller.settings.value.displayTimestamp!,
                   child: Container(
                     padding: EdgeInsets.only(right: 5),
                     // color: Colors.red,
@@ -172,7 +172,7 @@ class ChatView extends GetView<ChatViewController> {
                   style: TextStyle(
                     color:
                         Color(int.parse(message.color.replaceAll('#', '0xff'))),
-                    fontSize: 19,
+                    fontSize: controller.settings.value.textSize,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
