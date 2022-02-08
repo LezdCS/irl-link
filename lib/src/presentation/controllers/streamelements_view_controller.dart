@@ -13,9 +13,12 @@ class StreamelementsViewController extends GetxController
   final StreamelementsEvents streamelementsEvents;
 
   late TabController tabController;
-  late ScrollController activitiesScrollController;
+
   late List<SeActivity> activities;
+  late ScrollController activitiesScrollController;
+
   late List<SeSong> songRequestQueue;
+  late ScrollController songRequestScrollController;
 
   @override
   void onInit() {
@@ -50,11 +53,36 @@ class StreamelementsViewController extends GetxController
         soundUrl: null,
         activityType: ActivityType.cheer);
     activities = [a1, a2, a3, a4];
-    
-    SeSong s1 = SeSong( id: '',videoId: "dQw4w9WgXcQ", title: "xQc die from an insane and unstoppable laught", channel: "xQc", duration: "123",);
-    SeSong s2 = SeSong( id: '',videoId: "dQw4w9WgXcQ", title: "xQc die from an insane and unstoppable laught", channel: "xQc", duration: "123",);
-    SeSong s3 = SeSong( id: '',videoId: "dQw4w9WgXcQ", title: "xQc die from an insane and unstoppable laught", channel: "xQc", duration: "123",);
-    SeSong s4 = SeSong( id: '',videoId: "dQw4w9WgXcQ", title: "xQc die from an insane and unstoppable laught", channel: "xQc", duration: "123",);
+
+    songRequestScrollController = new ScrollController();
+    SeSong s1 = SeSong(
+      id: '',
+      videoId: "dQw4w9WgXcQ",
+      title: "xQc die from an insane and unstoppable laught",
+      channel: "xQc",
+      duration: "123",
+    );
+    SeSong s2 = SeSong(
+      id: '',
+      videoId: "dQw4w9WgXcQ",
+      title: "xQc die from an insane and unstoppable laught",
+      channel: "xQc",
+      duration: "123",
+    );
+    SeSong s3 = SeSong(
+      id: '',
+      videoId: "dQw4w9WgXcQ",
+      title: "xQc die from an insane and unstoppable laught",
+      channel: "xQc",
+      duration: "123",
+    );
+    SeSong s4 = SeSong(
+      id: '',
+      videoId: "dQw4w9WgXcQ",
+      title: "xQc die from an insane and unstoppable laught",
+      channel: "xQc",
+      duration: "123",
+    );
     songRequestQueue = [s1, s2, s3, s4];
     super.onInit();
   }
