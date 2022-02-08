@@ -11,7 +11,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
     return SingleChildScrollView(
       child: Obx(
         () => Container(
-          color: Color(0xFF0e0e10),
+          color: Theme.of(context).primaryColor,
           child: Column(
             children: <Widget>[
               Row(
@@ -26,9 +26,17 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                                 ? Colors.red
                                 : Colors.grey),
                         Padding(padding: EdgeInsets.only(right: 10.0)),
-                        Text(controller.twitchStreamInfos.value.isOnline!
-                            ? "Online"
-                            : "Offline"),
+                        Text(
+                          controller.twitchStreamInfos.value.isOnline!
+                              ? "Online"
+                              : "Offline",
+                          style: TextStyle(
+                            color: Theme.of(Get.context!)
+                                .textTheme
+                                .bodyText1!
+                                .color,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -47,7 +55,15 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         Padding(
                           padding: EdgeInsets.only(right: 10.0),
                         ),
-                        Text("viewers"),
+                        Text(
+                          "viewers",
+                          style: TextStyle(
+                            color: Theme.of(Get.context!)
+                                .textTheme
+                                .bodyText1!
+                                .color,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -64,6 +80,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                             child: TextFormField(
                               controller: controller.titleFormController,
                               focusNode: controller.focus,
+                              style: Theme.of(Get.context!).textTheme.bodyText1,
                               decoration: InputDecoration(
                                 border: UnderlineInputBorder(),
                                 hintText: 'Your stream\'s title',
@@ -104,6 +121,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                           Container(
                             child: TextFormField(
                               controller: controller.raidFormController,
+                              style: Theme.of(Get.context!).textTheme.bodyText1,
                               decoration: InputDecoration(
                                 border: UnderlineInputBorder(),
                                 hintText: 'Enter the nickname',

@@ -22,8 +22,7 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
               controller: controller.tabController,
               isScrollable: true,
               labelColor: Colors.purple,
-              unselectedLabelColor:
-                  Theme.of(Get.context!).textTheme.bodyText1!.color,
+              unselectedLabelColor: context.theme.textTheme.bodyText1!.color,
               indicatorColor: Colors.purple,
               indicatorWeight: 0.000001,
               tabs: [Text("Notifications"), Text("Song Requests")],
@@ -41,7 +40,7 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
             controller: controller.tabController,
             children: [
               _activities(),
-              _songRequests(),
+              _songRequests(context),
             ],
           ),
         ),
@@ -57,7 +56,7 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(Icons.settings),
+              _activitiesSettings(),
               Wrap(
                 children: [
                   Icon(Icons.pause),
@@ -124,7 +123,7 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
     );
   }
 
-  Widget _songRequests() {
+  Widget _songRequests(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(left: 20, right: 20, top: 20),
       child: Column(
@@ -145,25 +144,36 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
           Padding(
             padding: EdgeInsets.only(top: 10),
           ),
-          Text('Now Playing'),
-          Row(
-            children: [
-              RichText(
-                overflow: TextOverflow.ellipsis,
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: controller.songRequestQueue.first.channel,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    TextSpan(text: " - "),
-                    TextSpan(
-                      text: controller.songRequestQueue.first.title,
-                    )
-                  ],
+          Text(
+            'Now Playing',
+            style: TextStyle(
+              color: Theme.of(context).textTheme.bodyText1!.color,
+            ),
+          ),
+          RichText(
+            overflow: TextOverflow.ellipsis,
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: controller.songRequestQueue.first.channel,
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      fontWeight: FontWeight.bold),
                 ),
-              ),
-            ],
+                TextSpan(
+                  text: " - ",
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyText1!.color,
+                  ),
+                ),
+                TextSpan(
+                  text: controller.songRequestQueue.first.title,
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyText1!.color,
+                  ),
+                )
+              ],
+            ),
           ),
           Padding(
             padding: EdgeInsets.only(bottom: 15),
@@ -171,12 +181,19 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
           RichText(
             overflow: TextOverflow.ellipsis,
             text: TextSpan(children: [
-              TextSpan(text: "Queue "),
+              TextSpan(
+                text: "Queue ",
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyText1!.color,
+                ),
+              ),
               TextSpan(
                 text: "(" +
                     controller.songRequestQueue.length.toString() +
                     " videos)",
-                style: TextStyle(),
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyText1!.color,
+                ),
               ),
             ]),
           ),
@@ -245,6 +262,65 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _activitiesSettings() {
+    return PopupMenuButton(
+      offset: Offset(30, 30),
+      child: Icon(Icons.settings),
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          child: CheckboxListTile(
+            controlAffinity: ListTileControlAffinity.leading,
+            title: Text(
+              'Followers',
+            ),
+            value: true,
+            onChanged: (bool? value) {},
+          ),
+        ),
+        PopupMenuItem(
+          child: CheckboxListTile(
+            controlAffinity: ListTileControlAffinity.leading,
+            title: Text(
+              'Subscribers',
+            ),
+            value: true,
+            onChanged: (bool? value) {},
+          ),
+        ),
+        PopupMenuItem(
+          child: CheckboxListTile(
+            controlAffinity: ListTileControlAffinity.leading,
+            title: Text(
+              'Donations',
+            ),
+            value: true,
+            onChanged: (bool? value) {},
+          ),
+        ),
+        PopupMenuItem(
+          child: CheckboxListTile(
+            controlAffinity: ListTileControlAffinity.leading,
+            title: Text(
+              'Bits',
+            ),
+            value: true,
+            onChanged: (bool? value) {},
+          ),
+        ),
+        PopupMenuItem(
+          child: CheckboxListTile(
+            controlAffinity: ListTileControlAffinity.leading,
+            title: Text(
+              'Raids',
+            ),
+            value: true,
+            onChanged: (bool? value) {},
+          ),
+        ),
+      ],
     );
   }
 }

@@ -12,136 +12,137 @@ class ObsTabView extends GetView<ObsTabViewController> {
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     return SingleChildScrollView(
-      child: Obx(() =>
-      controller.isConnected.value ? Container(
-        padding: EdgeInsets.only(left: 8, top: 5, right: 8),
-        color: Color(0xFF282828),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                InkWell(
-                  onTap: () {
-                    // obs start stream
-                    controller.startStream();
-                  },
-                  child: Container(
-                    margin: EdgeInsets.only(right: 10, top: 10, bottom: 10),
-                    padding: EdgeInsets.all(8),
-                    alignment: Alignment.center,
-                    decoration: new BoxDecoration(
-                      color: Color(0xFFA47CED),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: Text("Start stream",
-                        style: TextStyle(color: Colors.white)),
+      child: Obx(() => controller.isConnected.value
+          ? Container(
+              padding: EdgeInsets.only(left: 8, top: 5, right: 8),
+              color: context.theme.primaryColor,
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          // obs start stream
+                          controller.startStream();
+                        },
+                        child: Container(
+                          margin:
+                              EdgeInsets.only(right: 10, top: 10, bottom: 10),
+                          padding: EdgeInsets.all(8),
+                          alignment: Alignment.center,
+                          decoration: new BoxDecoration(
+                            color: Color(0xFFA47CED),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text("Start stream",
+                              style: TextStyle(color: Colors.white)),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          // obs stop stream
+                          controller.stopStream();
+                        },
+                        child: Container(
+                          margin:
+                              EdgeInsets.only(right: 10, top: 10, bottom: 10),
+                          padding: EdgeInsets.all(8),
+                          alignment: Alignment.center,
+                          decoration: new BoxDecoration(
+                            color: Color(0xFFA47CED),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text("Stop stream",
+                              style: TextStyle(color: Colors.white)),
+                        ),
+                      )
+                    ],
                   ),
-                ),
-                InkWell(
-                  onTap: () {
-                    // obs stop stream
-                    controller.stopStream();
-                  },
-                  child: Container(
-                    margin: EdgeInsets.only(right: 10, top: 10, bottom: 10),
-                    padding: EdgeInsets.all(8),
-                    alignment: Alignment.center,
-                    decoration: new BoxDecoration(
-                      color: Color(0xFFA47CED),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: Text("Stop stream",
+                  SizedBox(height: 10),
+                  Wrap(children: [
+                    Text("Stream volume",
                         style: TextStyle(color: Colors.white)),
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: 10),
-            Wrap(children: [
-              Text("Stream volume", style: TextStyle(color: Colors.white)),
-              Container(
-                child: Slider(
-                  min: 0.0,
-                  max: 100.0,
-                  value: controller.slideValueForVolume.value,
-                  divisions: 100,
-                  label: '${controller.slideValueForVolume.value.round()}',
-                  activeColor: Color(0xFFA47CED),
-                  inactiveColor: Color(0xFF443B55),
-                  thumbColor: Colors.purpleAccent,
-                  onChanged: (value) {
-                    controller.slideValueForVolume.value = value;
-                  },
-                ),
+                    Container(
+                      child: Slider(
+                        min: 0.0,
+                        max: 100.0,
+                        value: controller.slideValueForVolume.value,
+                        divisions: 100,
+                        label:
+                            '${controller.slideValueForVolume.value.round()}',
+                        activeColor: Color(0xFFA47CED),
+                        inactiveColor: Color(0xFF443B55),
+                        thumbColor: Colors.purpleAccent,
+                        onChanged: (value) {
+                          controller.slideValueForVolume.value = value;
+                        },
+                      ),
+                    ),
+                  ]),
+                  SizedBox(height: 10),
+                  Wrap(children: [
+                    Text(
+                      "Scenes",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    Container(
+                      height: 60,
+                      width: width,
+                      child: getScenes(),
+                    ),
+                  ]),
+                  SizedBox(height: 10),
+                  Wrap(children: [
+                    Text(
+                      "Sources",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    Container(
+                      width: width,
+                      height: 120,
+                      child: GridView.count(
+                        scrollDirection: Axis.horizontal,
+                        physics: ScrollPhysics(),
+                        shrinkWrap: true,
+                        primary: true,
+                        padding: EdgeInsets.only(top: 5.0),
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.60,
+                        children: getSources(),
+                      ),
+                    )
+                  ])
+                ],
               ),
-            ]),
-            SizedBox(height: 10),
-            Wrap(children: [
-              Text(
-                "Scenes",
-                style: TextStyle(color: Colors.white),
-              ),
-              Container(
-                height: 60,
-                width: width,
-                child: getScenes(),
-              ),
-            ]),
-            SizedBox(height: 10),
-            Wrap(children: [
-              Text(
-                "Sources",
-                style: TextStyle(color: Colors.white),
-              ),
-              Container(
-                width: width,
-                height: 120,
-                child: GridView.count(
-                  scrollDirection: Axis.horizontal,
-                  physics: ScrollPhysics(),
-                  shrinkWrap: true,
-                  primary: true,
-                  padding: EdgeInsets.only(top: 5.0),
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.60,
-                  children: getSources(),
-                ),
-              )
-            ])
-          ],
-        ),
-      )
+            )
           : Container(
-          padding: EdgeInsets.only(left: 8, top: 5, right: 8),
-          color: Color(0xFF282828),
-          child: Column(
-            children: [
-              AlertMessageView(
-                color: Color(0xFFEC0808),
-                message: controller.alertMessage.value,
-                isProgress: false,
-              ),
-              InkWell(
-                onTap: () {
-                  // try connect function
-                  controller.connectWs();
-                },
-                child: Container(
-                  margin: EdgeInsets.only(right: 10, top: 10, bottom: 10),
-                  padding: EdgeInsets.all(8),
-                  alignment: Alignment.center,
-                  decoration: new BoxDecoration(
-                    color: Color(0xFFA47CED),
-                    borderRadius: BorderRadius.circular(6),
+              color: context.theme.primaryColor,
+              child: Column(
+                children: [
+                  AlertMessageView(
+                    color: Color(0xFFEC0808),
+                    message: controller.alertMessage.value,
+                    isProgress: false,
                   ),
-                  child: Text("Retry",
-                      style: TextStyle(color: Colors.white)),
-                ),
-              ),
-            ],
-          )
-      )
-      ),
+                  InkWell(
+                    onTap: () {
+                      // try connect function
+                      controller.connectWs();
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(right: 10, top: 10, bottom: 10),
+                      padding: EdgeInsets.all(8),
+                      alignment: Alignment.center,
+                      decoration: new BoxDecoration(
+                        color: Color(0xFFA47CED),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child:
+                          Text("Retry", style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                ],
+              ))),
     );
   }
 
@@ -177,9 +178,11 @@ class ObsTabView extends GetView<ObsTabViewController> {
       var elementAt = controller.sourcesList.elementAt(i);
       return InkWell(
         onTap: () {
-          controller.setSourceVisibleState(elementAt.name,
-              controller.visibleSourcesList.contains(elementAt.name) ? false : true
-          );
+          controller.setSourceVisibleState(
+              elementAt.name,
+              controller.visibleSourcesList.contains(elementAt.name)
+                  ? false
+                  : true);
         },
         child: Container(
           margin: EdgeInsets.only(right: 10, bottom: 10),

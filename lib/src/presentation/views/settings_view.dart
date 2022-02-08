@@ -14,7 +14,10 @@ class SettingsView extends GetView<SettingsViewController> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(
+            Icons.arrow_back,
+            color: Theme.of(context).textTheme.bodyText1!.color,
+          ),
           onPressed: () => Get.back(),
         ),
         actions: [
@@ -26,7 +29,7 @@ class SettingsView extends GetView<SettingsViewController> {
               margin: EdgeInsets.only(right: 10, top: 10, bottom: 10),
               padding: EdgeInsets.only(left: 8, right: 8),
               alignment: Alignment.center,
-              decoration: new BoxDecoration(
+              decoration: BoxDecoration(
                 color: Colors.red,
                 borderRadius: BorderRadius.circular(6),
               ),
@@ -34,24 +37,31 @@ class SettingsView extends GetView<SettingsViewController> {
             ),
           ),
         ],
-        backgroundColor: Colors.black,
-        title: Text("Settings"),
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        title: Text(
+          "Settings",
+          style: TextStyle(
+            color: Theme.of(context).textTheme.bodyText1!.color,
+          ),
+        ),
         centerTitle: false,
       ),
       body: Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.secondary,
+            color: Theme.of(context).primaryColor,
           ),
           child: ListView(
-            padding: const EdgeInsets.all(8),
+            padding: EdgeInsets.all(8),
             children: <Widget>[
               InkWell(
                 onTap: () {
-                  Get.to(() => chatSettings(width));
+                  Get.to(() => chatSettings(context, width));
                 },
                 child: Text(
                   "Chat",
-                  style: TextStyle(color: Colors.white, fontSize: 25),
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      fontSize: 25),
                 ),
               ),
               Divider(
@@ -59,11 +69,13 @@ class SettingsView extends GetView<SettingsViewController> {
               ),
               InkWell(
                 onTap: () {
-                  Get.to(() => generalSettings(width));
+                  Get.to(() => generalSettings(context, width));
                 },
                 child: Text(
                   "General",
-                  style: TextStyle(color: Colors.white, fontSize: 25),
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      fontSize: 25),
                 ),
               ),
               Divider(
@@ -71,11 +83,13 @@ class SettingsView extends GetView<SettingsViewController> {
               ),
               InkWell(
                 onTap: () {
-                  Get.to(() => connectionsSettings(width));
+                  Get.to(() => connectionsSettings(context, width));
                 },
                 child: Text(
                   "Connections",
-                  style: TextStyle(color: Colors.white, fontSize: 25),
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      fontSize: 25),
                 ),
               ),
               Divider(
@@ -83,11 +97,14 @@ class SettingsView extends GetView<SettingsViewController> {
               ),
               InkWell(
                 onTap: () {
-                  Get.to(() => contactSettings());
+                  Get.to(() => contactSettings(context));
                 },
                 child: Text(
                   "Contact",
-                  style: TextStyle(color: Colors.white, fontSize: 25),
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyText1!.color,
+                    fontSize: 25,
+                  ),
                 ),
               ),
             ],
@@ -95,22 +112,30 @@ class SettingsView extends GetView<SettingsViewController> {
     );
   }
 
-  Widget chatSettings(double width) {
+  Widget chatSettings(BuildContext context, double width) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(
+            Icons.arrow_back,
+            color: Theme.of(context).textTheme.bodyText1!.color,
+          ),
           onPressed: () => Get.back(),
         ),
-        backgroundColor: Colors.black,
-        title: Text("Chat Settings"),
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        title: Text(
+          "Chat Settings",
+          style: TextStyle(
+            color: Theme.of(context).textTheme.bodyText1!.color,
+          ),
+        ),
         centerTitle: false,
       ),
       body: Obx(
         () => Container(
           padding: EdgeInsets.only(top: 20),
           width: width,
-          color: Theme.of(Get.context!).colorScheme.secondary,
+          color: Theme.of(context).primaryColor,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -119,9 +144,8 @@ class SettingsView extends GetView<SettingsViewController> {
                 child: Text(
                   "Chat",
                   style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 28,
-                  ),
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      fontSize: 28),
                 ),
               ),
               Container(
@@ -137,8 +161,13 @@ class SettingsView extends GetView<SettingsViewController> {
                           Container(
                             child: Text(
                               "FFZ & BTTV emotes",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 18),
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
+                                fontSize: 18,
+                              ),
                             ),
                           ),
                           Container(
@@ -168,8 +197,12 @@ class SettingsView extends GetView<SettingsViewController> {
                           Container(
                             child: Text(
                               "Text size",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 18),
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontSize: 18),
                             ),
                           ),
                           //slider
@@ -203,8 +236,12 @@ class SettingsView extends GetView<SettingsViewController> {
                           Container(
                             child: Text(
                               "Badges & emotes size",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 18),
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontSize: 18),
                             ),
                           ),
                           //slider
@@ -237,8 +274,12 @@ class SettingsView extends GetView<SettingsViewController> {
                           Container(
                             child: Text(
                               "Show message timestamp",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 18),
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontSize: 18),
                             ),
                           ),
                           Container(
@@ -268,8 +309,12 @@ class SettingsView extends GetView<SettingsViewController> {
                           Container(
                             child: Text(
                               "Join alternate channel chat",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 18),
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontSize: 18),
                             ),
                           ),
                           Container(
@@ -354,22 +399,30 @@ class SettingsView extends GetView<SettingsViewController> {
     );
   }
 
-  Widget generalSettings(double width) {
+  Widget generalSettings(BuildContext context, double width) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(
+            Icons.arrow_back,
+            color: Theme.of(context).textTheme.bodyText1!.color,
+          ),
           onPressed: () => Get.back(),
         ),
-        backgroundColor: Colors.black,
-        title: Text("General Settings"),
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        title: Text(
+          "General Settings",
+          style: TextStyle(
+            color: Theme.of(context).textTheme.bodyText1!.color,
+          ),
+        ),
         centerTitle: false,
       ),
       body: Obx(
         () => Container(
           padding: EdgeInsets.only(top: 20),
           width: width,
-          color: Theme.of(Get.context!).colorScheme.secondary,
+          color: Theme.of(context).primaryColor,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -378,9 +431,8 @@ class SettingsView extends GetView<SettingsViewController> {
                 child: Text(
                   "General",
                   style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 28,
-                  ),
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      fontSize: 28),
                 ),
               ),
               Container(
@@ -397,13 +449,21 @@ class SettingsView extends GetView<SettingsViewController> {
                           Container(
                             child: Text(
                               "Dark mode",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 18),
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
+                                fontSize: 18,
+                              ),
                             ),
                           ),
                           Container(
                             child: Switch(
                               onChanged: (value) {
+                                value
+                                    ? Get.changeThemeMode(ThemeMode.dark)
+                                    : Get.changeThemeMode(ThemeMode.light);
                                 controller.settings.value = controller
                                     .settings.value
                                     .copyWith(isDarkMode: value);
@@ -427,8 +487,13 @@ class SettingsView extends GetView<SettingsViewController> {
                           Container(
                             child: Text(
                               "Keep audio speaker on",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 18),
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
+                                fontSize: 18,
+                              ),
                             ),
                           ),
                           Container(
@@ -457,8 +522,13 @@ class SettingsView extends GetView<SettingsViewController> {
                           Container(
                             child: Text(
                               "Keep screen on",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 18),
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
+                                fontSize: 18,
+                              ),
                             ),
                           ),
                           Container(
@@ -488,22 +558,30 @@ class SettingsView extends GetView<SettingsViewController> {
     );
   }
 
-  Widget connectionsSettings(double width) {
+  Widget connectionsSettings(BuildContext context, double width) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(
+            Icons.arrow_back,
+            color: Theme.of(context).textTheme.bodyText1!.color,
+          ),
           onPressed: () => Get.back(),
         ),
-        backgroundColor: Colors.black,
-        title: Text("Connections Settings"),
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        title: Text(
+          "Connections Settings",
+          style: TextStyle(
+            color: Theme.of(context).textTheme.bodyText1!.color,
+          ),
+        ),
         centerTitle: false,
       ),
       body: Obx(
         () => Container(
           padding: EdgeInsets.only(top: 20),
           width: width,
-          color: Theme.of(Get.context!).colorScheme.secondary,
+          color: Theme.of(context).primaryColor,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -512,7 +590,7 @@ class SettingsView extends GetView<SettingsViewController> {
                 child: Text(
                   "Connections",
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Theme.of(context).textTheme.bodyText1!.color,
                     fontSize: 28,
                   ),
                 ),
@@ -526,7 +604,10 @@ class SettingsView extends GetView<SettingsViewController> {
                     Container(
                         child: Text(
                       "Stream Elements",
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyText1!.color,
+                        fontSize: 20,
+                      ),
                     )),
                     Container(
                       child: Row(
@@ -570,7 +651,11 @@ class SettingsView extends GetView<SettingsViewController> {
                           flex: 7,
                           child: Text(
                             "OBS",
-                            style: TextStyle(color: Colors.white, fontSize: 20),
+                            style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color,
+                              fontSize: 20,
+                            ),
                           ),
                         ),
                         Expanded(
@@ -656,19 +741,27 @@ class SettingsView extends GetView<SettingsViewController> {
     );
   }
 
-  Widget contactSettings() {
+  Widget contactSettings(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(
+            Icons.arrow_back,
+            color: Theme.of(context).textTheme.bodyText1!.color,
+          ),
           onPressed: () => Get.back(),
         ),
-        backgroundColor: Colors.black,
-        title: Text("Contact"),
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        title: Text(
+          "Contact",
+          style: TextStyle(
+            color: Theme.of(context).textTheme.bodyText1!.color,
+          ),
+        ),
         centerTitle: false,
       ),
       body: Container(),
-      backgroundColor: Theme.of(Get.context!).colorScheme.secondary,
+      backgroundColor: Theme.of(context).primaryColor,
     );
   }
 }

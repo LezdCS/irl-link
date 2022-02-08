@@ -33,7 +33,7 @@ class HomeView extends GetView<HomeViewController> {
           flexibleSpace: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              _tabBar(height, width),
+              _tabBar(context, height, width),
             ],
           ),
         ),
@@ -67,7 +67,7 @@ class HomeView extends GetView<HomeViewController> {
                         isActive: true,
                       ),
                       children: [
-                        _tabsViews(),
+                        _tabsViews(context),
                         Listener(
                           onPointerUp: (_) => {
                             controller.isPickingEmote.value = false,
@@ -100,12 +100,12 @@ class HomeView extends GetView<HomeViewController> {
     );
   }
 
-  Widget _tabBar(double height, double width) {
+  Widget _tabBar(BuildContext context, double height, double width) {
     return TabBar(
       controller: controller.tabController,
       isScrollable: true,
       labelColor: Colors.purple,
-      unselectedLabelColor: Theme.of(Get.context!).textTheme.bodyText1!.color,
+      unselectedLabelColor: Theme.of(context).textTheme.bodyText1!.color,
       indicatorColor: Colors.purple,
       labelPadding: EdgeInsets.symmetric(
           horizontal: width / (controller.tabElements.length > 2 ? 9 : 5)),
@@ -172,12 +172,12 @@ class HomeView extends GetView<HomeViewController> {
                               controller.isPickingEmote.value = false;
                             },
                             textInputAction: TextInputAction.send,
-                            style: Theme.of(Get.context!).textTheme.bodyText1,
+                            style: Theme.of(context).textTheme.bodyText1,
                             maxLines: 1,
                             decoration: InputDecoration(
                               border: InputBorder.none,
                               hintStyle: TextStyle(
-                                  color: Theme.of(Get.context!)
+                                  color: Theme.of(context)
                                       .textTheme
                                       .bodyText1!
                                       .color,
@@ -216,7 +216,7 @@ class HomeView extends GetView<HomeViewController> {
                 child: Icon(
                   controller.sound.value ? Icons.volume_up : Icons.volume_off,
                   color: controller.sound.value
-                      ? Theme.of(Get.context!).primaryIconTheme.color
+                      ? Theme.of(context).primaryIconTheme.color
                       : Color(0xFFd63031),
                   size: 22,
                 ),
@@ -231,7 +231,7 @@ class HomeView extends GetView<HomeViewController> {
                 },
                 child: Icon(
                   Icons.settings,
-                  color: Theme.of(Get.context!).primaryIconTheme.color,
+                  color: Theme.of(context).primaryIconTheme.color,
                   size: 22,
                 ),
               ),
@@ -242,9 +242,9 @@ class HomeView extends GetView<HomeViewController> {
     );
   }
 
-  Widget _tabsViews() {
+  Widget _tabsViews(BuildContext context) {
     return Container(
-      color: Color(0xFF0e0e10),
+      color: Theme.of(context).primaryColor,
       child: TabBarView(
         physics:
             NeverScrollableScrollPhysics(), //used so if the user scroll horizontally it wont change of tabView, might delete it later, to discuss
