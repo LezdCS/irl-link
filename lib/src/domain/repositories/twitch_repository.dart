@@ -1,8 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/domain/entities/emote.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
+import 'package:irllink/src/domain/entities/twitch_stream_infos.dart';
 import 'package:irllink/src/domain/entities/twitch_user.dart';
 
 abstract class TwitchRepository {
@@ -47,4 +49,29 @@ abstract class TwitchRepository {
     String accessToken,
     List<String> setId,
   );
+
+  Future<DataState<List<Emote>>> getTwitchCheerEmotes(
+    String accessToken,
+    String broadcasterId,
+  );
+
+  Future<DataState<List<Emote>>> getFrankerfacezEmotes(
+    String broadcasterId,
+  );
+
+  Future<DataState<List<Emote>>> getBttvChannelEmotes(
+    String broadcasterId,
+  );
+
+  Future<DataState<List<Emote>>> getBttvGlobalEmotes();
+
+  Future<DataState<TwitchStreamInfos>> getStreamInfo(
+      String accessToken, String broadcasterId);
+
+  Future<DataState<Response<dynamic>>> setChatSettings(String accessToken,
+      String broadcasterId, TwitchStreamInfos? twitchStreamInfos);
+
+  Future<DataState<void>> setStreamTitle(
+      String accessToken, String broadcasterId, String title);
+
 }

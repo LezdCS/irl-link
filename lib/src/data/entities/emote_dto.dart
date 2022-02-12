@@ -1,6 +1,5 @@
 import 'package:irllink/src/domain/entities/emote.dart';
 
-//todo : add owner_id & emote_set_id
 class EmoteDTO extends Emote {
   const EmoteDTO({
     required String id,
@@ -8,6 +7,7 @@ class EmoteDTO extends Emote {
     required String url1x,
     required String url2x,
     required String url4x,
+    required String? color,
     required EmoteType emoteType,
   }) : super(
           id: id,
@@ -15,6 +15,7 @@ class EmoteDTO extends Emote {
           url1x: url1x,
           url2x: url2x,
           url4x: url4x,
+          color: color,
           emoteType: emoteType,
         );
 
@@ -40,7 +41,45 @@ class EmoteDTO extends Emote {
       url1x: map['images']['url_1x'] as String,
       url2x: map['images']['url_2x'] as String,
       url4x: map['images']['url_4x'] as String,
+      color: null,
       emoteType: emoteType,
+    );
+  }
+
+  factory EmoteDTO.fromJsonCheerEmotes(
+      Map<String, dynamic> map, String prefix) {
+    return EmoteDTO(
+      id: map["id"],
+      name: prefix + map["id"],
+      url1x: map['images']['dark']['animated']["1"] as String,
+      url2x: map['images']['dark']['animated']["2"] as String,
+      url4x: map['images']['dark']['animated']["4"] as String,
+      color: map["color"] as String,
+      emoteType: EmoteType.cheer,
+    );
+  }
+
+  factory EmoteDTO.fromJsonFrankerfacez(Map<String, dynamic> map) {
+    return EmoteDTO(
+      id: map["id"].toString(),
+      name: map["name"],
+      url1x: map['urls']['1'] as String,
+      url2x: map['urls']['2'] ?? "",
+      url4x: map['urls']['4'] ?? "",
+      color: null,
+      emoteType: EmoteType.thirdPart,
+    );
+  }
+
+  factory EmoteDTO.fromJsonBttv(Map<String, dynamic> map) {
+    return EmoteDTO(
+      id: map["id"],
+      name: map["code"],
+      url1x: "//cdn.betterttv.net/emote/" + map['id'] + "/1x",
+      url2x: "//cdn.betterttv.net/emote/" + map['id'] + "/2x",
+      url4x: "//cdn.betterttv.net/emote/" + map['id'] + "/3x",
+      color: null,
+      emoteType: EmoteType.thirdPart,
     );
   }
 }

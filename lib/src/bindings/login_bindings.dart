@@ -18,6 +18,5 @@ class LoginBindings extends Bindings {
         ),
       ),
     );
-    Get.find<LoginViewController>();
   }
 }

@@ -6,15 +6,16 @@ enum EmoteType {
   subscriptions,
   bitsTier,
   thirdPart,
+  cheer,
 }
 
-//todo : add owner_id & emote_set_id
 class Emote extends Equatable {
   final String id;
   final String name;
   final String url1x;
   final String url2x;
   final String url4x;
+  final String? color;
   final EmoteType emoteType;
 
   const Emote({
@@ -23,6 +24,7 @@ class Emote extends Equatable {
     required this.url1x,
     required this.url2x,
     required this.url4x,
+    required this.color,
     required this.emoteType,
   });
 
@@ -34,6 +36,7 @@ class Emote extends Equatable {
       url1x,
       url2x,
       url4x,
+      color,
       emoteType,
     ];
   }
