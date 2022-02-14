@@ -17,7 +17,7 @@ class StreamelementsViewController extends GetxController
   late List<SeActivity> activities;
   late ScrollController activitiesScrollController;
 
-  late List<SeSong> songRequestQueue;
+  RxList<SeSong> songRequestQueue = <SeSong>[].obs;
   late ScrollController songRequestScrollController;
 
   @override
@@ -57,33 +57,33 @@ class StreamelementsViewController extends GetxController
     songRequestScrollController = new ScrollController();
     SeSong s1 = SeSong(
       id: '',
-      videoId: "dQw4w9WgXcQ",
-      title: "xQc die from an insane and unstoppable laught",
-      channel: "xQc",
+      videoId: "6x4HDrL1KEU",
+      title: "Necrofantasia (Thousand Night Anamnesis)",
+      channel: "Delta 3859",
       duration: "123",
     );
     SeSong s2 = SeSong(
       id: '',
-      videoId: "dQw4w9WgXcQ",
-      title: "xQc die from an insane and unstoppable laught",
-      channel: "xQc",
+      videoId: "qjPJHiCS7Ak",
+      title: "xQc CAN'T STOP LAUGHING at UNUSUAL MEMES COMPILATION V175",
+      channel: "xQcOW",
       duration: "123",
     );
     SeSong s3 = SeSong(
       id: '',
-      videoId: "dQw4w9WgXcQ",
-      title: "xQc die from an insane and unstoppable laught",
-      channel: "xQc",
+      videoId: "J_nBbJaAe68",
+      title: "【東方】まるで戦闘中！東方好きに送る東方アレンジメドレー！",
+      channel: "MM495",
       duration: "123",
     );
     SeSong s4 = SeSong(
       id: '',
-      videoId: "dQw4w9WgXcQ",
-      title: "xQc die from an insane and unstoppable laught",
-      channel: "xQc",
+      videoId: "cyv7YwXkFnQ",
+      title: "don't worry brah (1 hour)",
+      channel: "Kopera",
       duration: "123",
     );
-    songRequestQueue = [s1, s2, s3, s4];
+    songRequestQueue.value = [s1, s2, s3, s4];
     super.onInit();
   }
 
@@ -100,5 +100,19 @@ class StreamelementsViewController extends GetxController
   Future<void> login() async {
     StreamelementsAuthParams params = StreamelementsAuthParams();
     await streamelementsEvents.login(params: params);
+  }
+
+  void nextSong() {
+    if (songRequestQueue.length > 0) {
+      songRequestQueue.removeAt(0);
+    }
+  }
+
+  void removeSong(SeSong song) {
+    songRequestQueue.remove(song);
+  }
+
+  void resetQueue() {
+    songRequestQueue.clear();
   }
 }
