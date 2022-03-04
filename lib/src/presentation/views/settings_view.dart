@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/resources/themes.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:flutter/services.dart';
 
@@ -55,20 +56,6 @@ class SettingsView extends GetView<SettingsViewController> {
             children: <Widget>[
               InkWell(
                 onTap: () {
-                  Get.to(() => chatSettings(context, width));
-                },
-                child: Text(
-                  "Chat",
-                  style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyText1!.color,
-                      fontSize: 25),
-                ),
-              ),
-              Divider(
-                color: Colors.black,
-              ),
-              InkWell(
-                onTap: () {
                   Get.to(() => generalSettings(context, width));
                 },
                 child: Text(
@@ -78,9 +65,19 @@ class SettingsView extends GetView<SettingsViewController> {
                       fontSize: 25),
                 ),
               ),
-              Divider(
-                color: Colors.black,
+              Divider(),
+              InkWell(
+                onTap: () {
+                  Get.to(() => chatSettings(context, width));
+                },
+                child: Text(
+                  "Chat",
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      fontSize: 25),
+                ),
               ),
+              Divider(),
               InkWell(
                 onTap: () {
                   Get.to(() => connectionsSettings(context, width));
@@ -92,9 +89,7 @@ class SettingsView extends GetView<SettingsViewController> {
                       fontSize: 25),
                 ),
               ),
-              Divider(
-                color: Colors.black,
-              ),
+              Divider(),
               InkWell(
                 onTap: () {
                   Get.to(() => contactSettings(context));

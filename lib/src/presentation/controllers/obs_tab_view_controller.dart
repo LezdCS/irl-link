@@ -9,7 +9,7 @@ class ObsTabViewController extends GetxController {
 
   late ObsWebSocket obsWebSocket;
 
-  RxString alertMessage = "Failed to connect to OBS...".obs;
+  RxString alertMessage = "Failed to connect to OBS".obs;
   RxBool isConnected = false.obs;
 
   RxDouble slideValueForVolume = 50.0.obs;
@@ -46,7 +46,7 @@ class ObsTabViewController extends GetxController {
 
   void connectWs() async {
     // todo get ws URL from settings
-    String addr = "172.21.205.220";
+    String addr = "172.21.204.230";
     int port = 4444;
     obsWebSocket = await ObsWebSocket.connect(
         connectUrl: 'ws://$addr:$port',
