@@ -660,14 +660,6 @@ class SettingsView extends GetView<SettingsViewController> {
                               controller.settings.value = controller
                                   .settings.value
                                   .copyWith(isObsConnected: value);
-                              if (!value) {
-                                controller.obsWebsocketUrlFieldController.text =
-                                    '';
-                                controller.settings.value = controller
-                                    .settings.value
-                                    .copyWith(obsWebsocketUrl: '');
-                                controller.saveSettings();
-                              }
                               controller.saveSettings();
                             },
                             value: controller.settings.value.isObsConnected!,

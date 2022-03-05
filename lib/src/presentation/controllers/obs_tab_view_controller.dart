@@ -60,7 +60,8 @@ class ObsTabViewController extends GetxController {
       getSceneList();
       getCurrentScene();
     }catch(e){
-
+      alertMessage.value = "Failed to connect to OBS";
+      isConnected.value = false;
     }
   }
 
