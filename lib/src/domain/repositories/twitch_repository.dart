@@ -63,6 +63,10 @@ abstract class TwitchRepository {
     String broadcasterId,
   );
 
+  Future<DataState<List<Emote>>> get7TvChannelEmotes(
+      String broadcasterId,
+      );
+
   Future<DataState<List<Emote>>> getBttvGlobalEmotes();
 
   Future<DataState<TwitchStreamInfos>> getStreamInfo(

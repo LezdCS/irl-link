@@ -408,6 +408,29 @@ class TwitchRepositoryImpl extends TwitchRepository {
   }
 
   @override
+  Future<DataState<List<Emote>>> get7TvChannelEmotes(
+      String broadcasterId) async {
+    Response response;
+    var dio = Dio();
+    List<Emote> emotes = <Emote>[];
+    try {
+      response = await dio.get(
+        'https://api.7tv.app/v2/users/$broadcasterId/emotes',
+      );
+
+      response.data.forEach(
+            (emote) => emotes.add(
+              EmoteDTO.fromJson7Tv(emote),
+            ),
+      );
+
+      return DataSuccess(emotes);
+    } on DioError catch (e) {
+      return DataFailed("Error retrieving FFZ channel emotes");
+    }
+  }
+
+  @override
   Future<DataState<List<Emote>>> getBttvGlobalEmotes() async {
     Response response;
     var dio = Dio();

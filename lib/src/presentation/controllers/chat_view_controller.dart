@@ -296,6 +296,12 @@ class ChatViewController extends GetxController
         .then((value) => {
               if (value.error == null) {thirdPartEmotes.addAll(value.data!)}
             });
+
+    homeEvents
+        .get7TvChannelEmotes(broadcasterId: ircChannelJoinedChannelId)
+        .then((value) => {
+      if (value.error == null) {thirdPartEmotes.addAll(value.data!)}
+    });
   }
 
   Future getSettings() async {

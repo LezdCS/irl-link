@@ -186,7 +186,7 @@ class TwitchChatMessage extends Equatable {
         messageWidgetsBuild.add(
           Wrap(children: [
             Image(
-              image: NetworkImage("https:" +
+              image: NetworkImage(
                   thirdPartEmotes
                       .firstWhere((element) => element.name == word)
                       .url1x),

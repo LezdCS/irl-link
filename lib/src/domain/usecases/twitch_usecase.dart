@@ -78,6 +78,12 @@ class TwitchUseCase {
     return twitchRepository.getBttvChannelEmotes(broadcasterId);
   }
 
+  Future<DataState<List<Emote>>> get7TvChannelEmotes({
+    required String broadcasterId,
+  }) {
+    return twitchRepository.get7TvChannelEmotes(broadcasterId);
+  }
+
   Future<DataState<List<Emote>>> getBttvGlobalEmotes() {
     return twitchRepository.getBttvGlobalEmotes();
   }
