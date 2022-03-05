@@ -1,13 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
+import 'package:irllink/src/domain/entities/settings.dart';
+import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 import 'package:obs_websocket/src/model/scene.dart';
 
 class ObsTabViewController extends GetxController {
-  final box = GetStorage();
+  ObsTabViewController({required this.homeEvents});
+  final HomeEvents homeEvents;
 
-  late ObsWebSocket obsWebSocket;
+
+  ObsWebSocket? obsWebSocket;
 
   RxString alertMessage = "Failed to connect to OBS".obs;
   RxBool isConnected = false.obs;
@@ -23,41 +26,42 @@ class ObsTabViewController extends GetxController {
   // visible sources names
   RxSet visibleSourcesList = RxSet();
 
+  late Rx<Settings> settings = Settings.defaultSettings().obs;
+
   @override
   Future<void> onInit() async {
     super.onInit();
   }
 
   @override
-  void onReady() {
-    // connect to obs ws
-    connectWs();
-
+  Future<void> onReady() async {
+    await getSettings();
     super.onReady();
   }
 
   @override
   void onClose() {
     // close obs websocket
-    obsWebSocket.close();
+    obsWebSocket!.close();
 
     super.onClose();
   }
 
-  void connectWs() async {
-    // todo get ws URL from settings
-    String addr = "172.21.204.230";
-    int port = 4444;
-    obsWebSocket = await ObsWebSocket.connect(
-        connectUrl: 'ws://$addr:$port',
-        fallbackEvent: (e) => connectionLost(e),
-        onError: (e) => connectFail(e),
-        timeout: const Duration(seconds: 30));
+  void connectWs(String url) async {
+    try{
+      obsWebSocket = await ObsWebSocket.connect(
+          connectUrl: 'ws://$url',
+          fallbackEvent: (e) => connectionLost(e),
+          onError: (e) => connectFail(e),
+          timeout: Duration(seconds: 30));
+      // success
+      alertMessage.value = "Connected.";
+      isConnected.value = true;
+      getSceneList();
+      getCurrentScene();
+    }catch(e){
 
-    // success
-    alertMessage.value = "Connected.";
-    isConnected.value = true;
-    initController();
+    }
   }
 
   void connectFail(e) {
@@ -74,28 +78,19 @@ class ObsTabViewController extends GetxController {
     alertMessage.value = "Connection with OBS lost ...";
   }
 
-  void initController() {
-    // loads all scenes
-    getSceneList();
-
-    // loads current scene and its sources
-    // checks which sources are visible
-    getCurrentScene();
-  }
-
   Future<void> startStream() async {
-    final StreamStatusResponse status = await obsWebSocket.getStreamStatus();
+    final StreamStatusResponse status = await obsWebSocket!.getStreamStatus();
 
     if (!status.streaming) {
-      await obsWebSocket.startStreaming();
+      await obsWebSocket!.startStreaming();
     }
   }
 
   Future<void> stopStream() async {
-    final StreamStatusResponse status = await obsWebSocket.getStreamStatus();
+    final StreamStatusResponse status = await obsWebSocket!.getStreamStatus();
 
     if (status.streaming) {
-      await obsWebSocket.stopStreaming();
+      await obsWebSocket!.stopStreaming();
     }
   }
 
@@ -108,7 +103,7 @@ class ObsTabViewController extends GetxController {
     * current-scene 	String
     * scenes 	Array<Scene>
     */
-    BaseResponse? response = await obsWebSocket.command('GetSceneList');
+    BaseResponse? response = await obsWebSocket!.command('GetSceneList');
 
     if (response!.status) {
       List respScenes = response.rawResponse["scenes"];
@@ -128,7 +123,7 @@ class ObsTabViewController extends GetxController {
     * name 	String
     * scenes 	Array<SceneItem> (sources of the current scene)
     */
-    Scene response = await obsWebSocket.getCurrentScene();
+    Scene response = await obsWebSocket!.getCurrentScene();
 
     // loads current scene name
     currentScene.value = response.name;
@@ -142,7 +137,7 @@ class ObsTabViewController extends GetxController {
 
   Future<void> setCurrentScene(String sceneName) async {
     // update on OBS
-    await obsWebSocket.setCurrentScene(sceneName);
+    await obsWebSocket!.setCurrentScene(sceneName);
 
     // update controller
     getCurrentScene();
@@ -150,11 +145,28 @@ class ObsTabViewController extends GetxController {
 
   void setSourceVisibleState(String sourceName, bool value) {
     // update on OBS
-    obsWebSocket.setSceneItemRender({"source": sourceName, "render": value});
+    obsWebSocket!.setSceneItemRender({"source": sourceName, "render": value});
 
     // update controller
     value
         ? visibleSourcesList.add(sourceName)
         : visibleSourcesList.remove(sourceName);
+  }
+
+  Future getSettings() async {
+    await homeEvents.getSettings().then((value) async => {
+      if (value.error == null)
+        {
+          settings.value = value.data!,
+          debugPrint("==========================================="),
+          debugPrint(settings.value.obsWebsocketUrl!.toString()),
+          if(obsWebSocket != null){
+            obsWebSocket!.close(),
+          },
+          if(settings.value.isObsConnected!){
+            this.connectWs(settings.value.obsWebsocketUrl!),
+          }
+        },
+    });
   }
 }

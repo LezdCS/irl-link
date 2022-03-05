@@ -32,7 +32,16 @@ class HomeBindings extends Bindings {
     );
     Get.find<HomeViewController>();
 
-    Get.lazyPut<ObsTabViewController>(() => ObsTabViewController());
+    Get.lazyPut<ObsTabViewController>(() => ObsTabViewController(
+      homeEvents: HomeEvents(
+        twitchUseCase: TwitchUseCase(
+          twitchRepository: TwitchRepositoryImpl(),
+        ),
+        settingsUseCase: SettingsUseCase(
+          settingsRepository: SettingsRepositoryImpl(),
+        ),
+      ),
+    ));
     Get.find<ObsTabViewController>();
 
     Get.lazyPut<StreamelementsViewController>(

@@ -101,7 +101,7 @@ class HomeView extends GetView<HomeViewController> {
   }
 
   Widget _tabBar(BuildContext context, double height, double width) {
-    return TabBar(
+    return Obx(()=>TabBar(
       controller: controller.tabController,
       isScrollable: true,
       labelColor: Colors.purple,
@@ -125,7 +125,7 @@ class HomeView extends GetView<HomeViewController> {
                             : "",
           ),
         ),
-      ),
+      ),),
     );
   }
 
@@ -227,7 +227,9 @@ class HomeView extends GetView<HomeViewController> {
               child: InkWell(
                 onTap: () async {
                   await Get.toNamed(Routes.SETTINGS);
+                  controller.getSettings();
                   controller.chatViewController.getSettings();
+                  controller.obsTabViewController.getSettings();
                 },
                 child: Icon(
                   Icons.settings,

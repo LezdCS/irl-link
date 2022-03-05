@@ -691,7 +691,7 @@ class SettingsView extends GetView<SettingsViewController> {
                                     controller.obsWebsocketUrlFieldController,
                                 decoration: InputDecoration(
                                   border: UnderlineInputBorder(),
-                                  hintText: 'wss://url:port',
+                                  hintText: 'url:port',
                                   labelText: 'Weboscket Url',
                                 ),
                               ),
