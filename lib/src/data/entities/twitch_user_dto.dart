@@ -37,7 +37,7 @@ class TwitchUserDTO extends TwitchUser {
       broadcasterType: map['broadcaster_type'] as String,
       description: map['description'] as String,
       profileImageUrl: map['profile_image_url'] as String,
-      viewCount: map['view_count'].toString() as String,
+      viewCount: map['view_count'].toString(),
     );
   }
 }

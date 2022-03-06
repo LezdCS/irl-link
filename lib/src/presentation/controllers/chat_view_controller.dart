@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:irllink/src/domain/entities/emote.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
@@ -70,14 +69,16 @@ class ChatViewController extends GetxController
         case ConnectivityResult.wifi:
           joinIrc();
           break;
-        case ConnectivityResult.ethernet:
-          break;
         case ConnectivityResult.mobile:
           joinIrc();
           break;
         case ConnectivityResult.none:
           alertMessage.value = "Network connectivity lost";
           isChatConnected.value = false;
+          break;
+        case ConnectivityResult.ethernet:
+          break;
+        case ConnectivityResult.bluetooth:
           break;
       }
     });

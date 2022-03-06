@@ -4,8 +4,6 @@ import 'dart:collection';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 
 /// A SplitView class.
 class SplitViewCustom extends StatefulWidget {

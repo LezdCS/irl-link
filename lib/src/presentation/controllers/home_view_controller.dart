@@ -118,6 +118,7 @@ class HomeViewController extends GetxController
 
   void getEmotes() {
     List<Emote> emotes = chatViewController.twitchEmotes;
+    emotes.addAll(chatViewController.thirdPartEmotes);
     twitchEmotes
       ..clear()
       ..addAll(emotes);
@@ -126,10 +127,11 @@ class HomeViewController extends GetxController
 
   void searchEmote(String input) {
     List<Emote> emotes = chatViewController.twitchEmotes;
+    emotes.addAll(chatViewController.thirdPartEmotes);
     twitchEmotes
       ..clear()
       ..addAll(emotes
-          .where((emote) => emote.name.toLowerCase().contains(input))
+          .where((emote) => emote.name.toLowerCase().contains(input.toLowerCase()))
           .toList());
   }
 
@@ -138,10 +140,8 @@ class HomeViewController extends GetxController
       if (value.error == null)
         {
           settings.value = value.data!,
-          debugPrint("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"),
           if(settings.value.isObsConnected!){
             this.createObsTab(),
-            debugPrint("ADDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"),
           }else{
             this.removeObsTab(),
           }
