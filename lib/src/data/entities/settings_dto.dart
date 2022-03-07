@@ -9,6 +9,7 @@ class SettingsDTO extends Settings {
     required bool displayTimestamp,
     required bool alternateChannel,
     required String alternateChannelName,
+    required List hiddenUsersIds,
     //GENERAL SETTINGS
     required bool isDarkMode,
     required bool keepSpeakerOn,
@@ -25,6 +26,7 @@ class SettingsDTO extends Settings {
           displayTimestamp: displayTimestamp,
           alternateChannel: alternateChannel,
           alternateChannelName: alternateChannelName,
+          hiddenUsersIds: hiddenUsersIds,
           //GENERAL SETTINGS
           isDarkMode: isDarkMode,
           keepSpeakerOn: keepSpeakerOn,
@@ -43,6 +45,7 @@ class SettingsDTO extends Settings {
         'displayTimestamp': displayTimestamp,
         'alternateChannel': alternateChannel,
         'alternateChannelName': alternateChannelName,
+        'hiddenUsersIds': hiddenUsersIds,
         //GENERAL
         'isDarkMode': isDarkMode,
         'keepSpeakerOn': keepSpeakerOn,
@@ -74,6 +77,9 @@ class SettingsDTO extends Settings {
         alternateChannelName: map['alternateChannelName'] != null
             ? map['alternateChannelName'] as String
             : Settings.defaultSettings().alternateChannelName!,
+        hiddenUsersIds: map['hiddenUsersIds'] != null
+            ? map['hiddenUsersIds'] as List
+            : Settings.defaultSettings().hiddenUsersIds!,
         //GENERAL SETTINGS
         isDarkMode: map['isDarkMode'] != null
             ? map['isDarkMode'] as bool

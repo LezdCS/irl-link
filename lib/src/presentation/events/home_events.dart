@@ -116,4 +116,8 @@ class HomeEvents {
   Future<DataState<Settings>> getSettings() {
     return settingsUseCase.getSettings();
   }
+
+  Future<void> setSettings({required Settings settings}) {
+    return settingsUseCase.setSettings(settings: settings);
+  }
 }

@@ -80,7 +80,7 @@ class HomeViewController extends GetxController
     super.onClose();
   }
 
-  void createObsTab(){
+  void createObsTab() {
     if (tabElements.firstWhereOrNull((tab) => tab is ObsTabView) == null) {
       ObsTabView obsPage = ObsTabView();
       int newSize = tabController.length + 1;
@@ -89,7 +89,7 @@ class HomeViewController extends GetxController
     }
   }
 
-  void removeObsTab(){
+  void removeObsTab() {
     if (tabElements.firstWhereOrNull((tab) => tab is ObsTabView) != null) {
       int newSize = tabController.length - 1;
       tabController = new TabController(length: newSize, vsync: this);
@@ -117,8 +117,8 @@ class HomeViewController extends GetxController
   }
 
   void getEmotes() {
-    List<Emote> emotes = chatViewController.twitchEmotes;
-    emotes.addAll(chatViewController.thirdPartEmotes);
+    List<Emote> emotes = List.from(chatViewController.twitchEmotes)
+      ..addAll(chatViewController.thirdPartEmotes);
     twitchEmotes
       ..clear()
       ..addAll(emotes);
@@ -126,26 +126,30 @@ class HomeViewController extends GetxController
   }
 
   void searchEmote(String input) {
-    List<Emote> emotes = chatViewController.twitchEmotes;
-    emotes.addAll(chatViewController.thirdPartEmotes);
+    List<Emote> emotes = List.from(chatViewController.twitchEmotes)
+      ..addAll(chatViewController.thirdPartEmotes);
+    emotes = emotes.where(
+            (emote) => emote.name.toLowerCase().contains(input.toLowerCase()),
+      ).toList();
     twitchEmotes
       ..clear()
-      ..addAll(emotes
-          .where((emote) => emote.name.toLowerCase().contains(input.toLowerCase()))
-          .toList());
+      ..addAll(emotes);
   }
 
   Future getSettings() async {
     await homeEvents.getSettings().then((value) async => {
-      if (value.error == null)
-        {
-          settings.value = value.data!,
-          if(settings.value.isObsConnected!){
-            this.createObsTab(),
-          }else{
-            this.removeObsTab(),
-          }
-        },
-    });
+          if (value.error == null)
+            {
+              settings.value = value.data!,
+              if (settings.value.isObsConnected!)
+                {
+                  this.createObsTab(),
+                }
+              else
+                {
+                  this.removeObsTab(),
+                }
+            },
+        });
   }
 }

@@ -35,8 +35,6 @@ class ChatViewController extends GetxController
   late String ircChannelJoined;
   late String ircChannelJoinedChannelId;
 
-  List<String> usersIdsHided = [];
-
   Rxn<TwitchChatMessage> selectedMessage = Rxn<TwitchChatMessage>();
   late TextEditingController banDurationInputController;
 
@@ -161,7 +159,8 @@ class ChatViewController extends GetxController
                 message: message,
                 settings: settings.value,
               );
-              if (!usersIdsHided.contains(chatMessage.authorId)) {
+              if (!settings.value.hiddenUsersIds!
+                  .contains(chatMessage.authorId)) {
                 chatMessages.add(chatMessage);
 
                 if (scrollController.hasClients && isAutoScrolldown.value) {
@@ -301,8 +300,8 @@ class ChatViewController extends GetxController
     homeEvents
         .get7TvChannelEmotes(broadcasterId: ircChannelJoinedChannelId)
         .then((value) => {
-      if (value.error == null) {thirdPartEmotes.addAll(value.data!)}
-    });
+              if (value.error == null) {thirdPartEmotes.addAll(value.data!)}
+            });
   }
 
   Future getSettings() async {
@@ -392,8 +391,21 @@ class ChatViewController extends GetxController
   }
 
   void hideUser(TwitchChatMessage message) {
-    usersIdsHided.add(message.authorId);
-    selectedMessage.value = null;
+    List hiddenUsersIds = settings.value.hiddenUsersIds! != const [] ? settings.value.hiddenUsersIds! : [];
+    if (hiddenUsersIds
+            .firstWhereOrNull((userId) => userId == message.authorId) ==
+        null) {
+      //add user to hidden users list
+      hiddenUsersIds.add(message.authorId);
+      settings.value = settings.value.copyWith(hiddenUsersIds: hiddenUsersIds);
+      saveSettings();
+    }else{
+      //remove user from hidden users list
+      hiddenUsersIds.remove(message.authorId);
+      settings.value = settings.value.copyWith(hiddenUsersIds: hiddenUsersIds);
+      saveSettings();
+    }
+    selectedMessage.refresh();
   }
 
   void scrollToBottom() {
@@ -401,5 +413,9 @@ class ChatViewController extends GetxController
     scrollController.jumpTo(
       scrollController.position.maxScrollExtent,
     );
+  }
+
+  void saveSettings() {
+    homeEvents.setSettings(settings: settings.value);
   }
 }

@@ -8,6 +8,7 @@ import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:irllink/src/domain/entities/twitch_chat_message.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:collection/collection.dart';
 
 import 'alert_message_view.dart';
 
@@ -414,10 +415,15 @@ class ChatView extends GetView<ChatViewController> {
             ),
             SizedBox(width: 10),
             InkWell(
-              //todo : create a list of users i want to hide
               onTap: () =>
                   controller.hideUser(controller.selectedMessage.value!),
-              child: moderationViewButton(Icons.visibility_off, "Hide user"),
+              child: (controller.selectedMessage.value != null && controller.settings.value.hiddenUsersIds!.firstWhereOrNull(
+                          (userId) =>
+                              controller.selectedMessage.value!.authorId ==
+                              userId) !=
+                      null)
+                  ? moderationViewButton(Icons.visibility, "Unhide user")
+                  : moderationViewButton(Icons.visibility_off, "Hide user"),
             ),
           ]),
         ],
