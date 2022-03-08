@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsView extends GetView<SettingsViewController> {
   final SettingsViewController controller = Get.find<SettingsViewController>();
@@ -51,7 +52,7 @@ class SettingsView extends GetView<SettingsViewController> {
             color: Theme.of(context).primaryColor,
           ),
           child: ListView(
-            padding: EdgeInsets.all(8),
+            padding: EdgeInsets.only(top: 8, left: 18, right: 18, bottom: 8),
             children: [
               chatSettings(context, width),
               Divider(),
@@ -69,22 +70,18 @@ class SettingsView extends GetView<SettingsViewController> {
 
   Widget chatSettings(BuildContext context, double width) {
     return Container(
-      width: width,
       color: Theme.of(context).primaryColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: EdgeInsets.only(left: 10),
             child: Text(
               "Chat",
-              style: TextStyle(
-                  color: Color(0xFF6441A5),
-                  fontSize: 22),
+              style: TextStyle(color: Color(0xFF6441A5), fontSize: 22),
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 20, right: 20),
+            padding: EdgeInsets.only(left: 10, right: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -297,6 +294,28 @@ class SettingsView extends GetView<SettingsViewController> {
                     ),
                   ),
                 ),
+                Container(
+                  padding: EdgeInsets.only(top: 5,bottom: 10),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.list,
+                        color: Theme.of(context).primaryIconTheme.color,
+                        size: 22,
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Text(
+                          "Manage hidden users",
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.bodyText1!.color,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -307,22 +326,18 @@ class SettingsView extends GetView<SettingsViewController> {
 
   Widget generalSettings(BuildContext context, double width) {
     return Container(
-      width: width,
       color: Theme.of(context).primaryColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: EdgeInsets.only(left: 10),
             child: Text(
               "General",
-              style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyText1!.color,
-                  fontSize: 22),
+              style: TextStyle(color: Color(0xFF6441A5), fontSize: 22),
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 20, right: 20),
+            padding: EdgeInsets.only(left: 10, right: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -360,15 +375,13 @@ class SettingsView extends GetView<SettingsViewController> {
                     ],
                   ),
                 ),
-
-                //keep audio speaker awake
                 Container(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
                         child: Text(
-                          "Keep audio speaker on",
+                          "Keep speaker on",
                           style: TextStyle(
                             color: Theme.of(context).textTheme.bodyText1!.color,
                             fontSize: 18,
@@ -392,8 +405,6 @@ class SettingsView extends GetView<SettingsViewController> {
                     ],
                   ),
                 ),
-
-                //keep screen awake
                 Container(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -434,70 +445,42 @@ class SettingsView extends GetView<SettingsViewController> {
 
   Widget connectionsSettings(BuildContext context, double width) {
     return Container(
-      width: width,
       color: Theme.of(context).primaryColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: EdgeInsets.only(left: 10),
             child: Text(
-              "Connections",
-              style: TextStyle(
-                color: Theme.of(context).textTheme.bodyText1!.color,
-                fontSize: 22,
-              ),
+              "Connections & Tabs",
+              style: TextStyle(color: Color(0xFF6441A5), fontSize: 22),
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+            padding: EdgeInsets.only(left: 10, right: 10, top: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                //streamElements
-                Container(
-                    child: Text(
-                  "Stream Elements",
-                  style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyText1!.color,
-                    fontSize: 20,
-                  ),
-                )),
                 Container(
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            textStyle: TextStyle(fontSize: 12),
-                            backgroundColor: controller.settings.value
-                                        .streamElementsAccessToken !=
-                                    ""
-                                ? Colors.redAccent
-                                : Colors.green,
-                            fixedSize: Size(50, 20),
-                          ),
-                          onPressed: () {
-                            SystemChannels.textInput
-                                .invokeMethod('TextInput.hide');
-                          },
-                          child: Text(
-                            controller.settings.value
-                                        .streamElementsAccessToken !=
-                                    ""
-                                ? 'Logout'
-                                : 'Login',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
+                      Icon(
+                        Icons.list,
+                        color: Theme.of(context).primaryIconTheme.color,
+                        size: 22,
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Text(
+                          "Manage browser tabs",
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.bodyText1!.color,
+                            fontSize: 18,
                           ),
                         ),
                       ),
                     ],
                   ),
                 ),
-                //OBS
                 Row(
                   children: [
                     Expanded(
@@ -506,7 +489,7 @@ class SettingsView extends GetView<SettingsViewController> {
                         "OBS",
                         style: TextStyle(
                           color: Theme.of(context).textTheme.bodyText1!.color,
-                          fontSize: 20,
+                          fontSize: 18,
                         ),
                       ),
                     ),
@@ -573,17 +556,50 @@ class SettingsView extends GetView<SettingsViewController> {
                     ),
                   ),
                 ),
+                Container(
+                  child: Text(
+                    "Stream Elements",
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            textStyle: TextStyle(fontSize: 12),
+                            backgroundColor: controller.settings.value
+                                        .streamElementsAccessToken !=
+                                    ""
+                                ? Colors.redAccent
+                                : Colors.green,
+                            fixedSize: Size(50, 20),
+                          ),
+                          onPressed: () {
+                            SystemChannels.textInput
+                                .invokeMethod('TextInput.hide');
+                          },
+                          child: Text(
+                            controller.settings.value
+                                        .streamElementsAccessToken !=
+                                    ""
+                                ? 'Logout'
+                                : 'Login',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.only(left: 10, top: 10),
-            child: Text(
-              "Tabs",
-              style: TextStyle(
-                color: Theme.of(context).textTheme.bodyText1!.color,
-                fontSize: 22,
-              ),
             ),
           ),
         ],
@@ -593,27 +609,51 @@ class SettingsView extends GetView<SettingsViewController> {
 
   Widget contactSettings(BuildContext context, double width) {
     return Container(
-      width: width,
       color: Theme.of(context).primaryColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: EdgeInsets.only(left: 10),
             child: Text(
               "Contact",
-              style: TextStyle(
-                color: Theme.of(context).textTheme.bodyText1!.color,
-                fontSize: 22,
-              ),
+              style: TextStyle(color: Color(0xFF6441A5), fontSize: 22),
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+            padding: EdgeInsets.only(left: 10, right: 10, top: 10),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Website:'),
-                Text('Twitter:'),
+                InkWell(
+                  onTap:(){
+                    //TODO : https://pub.dev/packages/url_launcher config for android package visibility configuration (API > 30 )
+                    launch("https://irllink.com");
+                  },
+                  child: Text(
+                    'irllink.com',
+                    style: TextStyle(
+                      color: Colors.blue[900],
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap:(){
+                    launch("mailto:support@irllink.com");
+                  },
+                  child: Text(
+                    'support@irllink.com',
+                    style: TextStyle(
+                      color: Colors.blue[900],
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                //todo : add Twitter icon
+                //todo : add GitHub icon
               ],
             ),
           ),

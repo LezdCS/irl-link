@@ -147,9 +147,8 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                 ),
               ),
               Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
                 child: GridView.count(
+                  shrinkWrap: true,
                   primary: false,
                   padding: EdgeInsets.all(20),
                   crossAxisSpacing: 10,
