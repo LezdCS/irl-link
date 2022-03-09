@@ -150,7 +150,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                 child: GridView.count(
                   shrinkWrap: true,
                   primary: false,
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.only(top:10),
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
                   crossAxisCount: 2,
@@ -165,6 +165,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         controller.changeChatSettings();
                       },
                       child: Container(
+                        alignment: Alignment.center,
                         decoration: BoxDecoration(
                             color: controller
                                     .twitchStreamInfos.value.isFollowerMode!
@@ -187,6 +188,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         controller.changeChatSettings();
                       },
                       child: Container(
+                        alignment: Alignment.center,
                         decoration: BoxDecoration(
                             color: controller
                                     .twitchStreamInfos.value.isSubscriberMode!
@@ -209,6 +211,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         controller.changeChatSettings();
                       },
                       child: Container(
+                        alignment: Alignment.center,
                         decoration: BoxDecoration(
                             color:
                                 controller.twitchStreamInfos.value.isEmoteMode!
@@ -231,6 +234,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         controller.changeChatSettings();
                       },
                       child: Container(
+                        alignment: Alignment.center,
                         decoration: BoxDecoration(
                             color:
                                 controller.twitchStreamInfos.value.isSlowMode!

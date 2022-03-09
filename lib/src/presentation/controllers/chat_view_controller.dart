@@ -144,10 +144,18 @@ class ChatViewController extends GetxController
         "CLEARCHAT",
         "CLEARCHAT",
         "CLEARMSG",
-        "NOTICE"
+        "NOTICE",
+        "ROOMSTATE"
       ];
       String? keyResult =
           keys.firstWhereOrNull((key) => messageSplited.last.contains(key));
+
+      final Map<String, String> messageMapped = {};
+      messageSplited.forEach((element) {
+        List elementSplited = element.split('=');
+        messageMapped[elementSplited[0]] = elementSplited[1];
+      });
+
       if (keyResult != null) {
         switch (keyResult) {
           case "PRIVMSG":
@@ -173,15 +181,38 @@ class ChatViewController extends GetxController
               }
             }
             break;
+          case 'ROOMSTATE':
+
+            List<String> keys = [
+              "@followers-only",
+              "@emote-only"
+            ];
+
+            String? keyResult =
+            keys.firstWhereOrNull((key) => messageMapped.containsKey(key));
+
+            if (keyResult != null) {
+              switch (keyResult) {
+                case '@followers-only':
+                  if (messageMapped['@followers-only'] == "0") {
+                    debugPrint("FOLLOWER ONLY ON");
+                  } else {
+                    debugPrint("FOLLOWER ONLY OFF");
+                  }
+                  break;
+                case '@emote-only':
+                  if (messageMapped['@emote-only'] == "1") {
+                    debugPrint("EMOTE ONLY ON");
+                  } else {
+                    debugPrint("EMOTE ONLY OFF");
+                  }
+                  break;
+              }
+            }
+            break;
           case "CLEARCHAT":
             {
-              final Map<String, String> messageMapped = {};
 
-              List messageSplited = message.split(';');
-              messageSplited.forEach((element) {
-                List elementSplited = element.split('=');
-                messageMapped[elementSplited[0]] = elementSplited[1];
-              });
               if (messageMapped['target-user-id'] != null) {
                 // @ban-duration=43;room-id=169185650;target-user-id=107285371;tmi-sent-ts=1642601142470 :tmi.twitch.tv CLEARCHAT #robcdee :lezd_
                 String userId = messageMapped['target-user-id']!;
@@ -203,13 +234,6 @@ class ChatViewController extends GetxController
               //clear a specific msg by the id
               // @login=lezd_;room-id=;target-msg-id=5ecb6458-198c-498c-b91b-16f1e12f58b4;tmi-sent-ts=1640717427981
               // :tmi.twitch.tv CLEARMSG #lezd_ :okokok
-              final Map<String, String> messageMapped = {};
-
-              List messageSplited = message.split(';');
-              messageSplited.forEach((element) {
-                List elementSplited = element.split('=');
-                messageMapped[elementSplited[0]] = elementSplited[1];
-              });
 
               chatMessages
                   .firstWhereOrNull((message) =>

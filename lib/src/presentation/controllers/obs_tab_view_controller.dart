@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:obs_websocket/obs_websocket.dart';
+
 import 'package:obs_websocket/src/model/scene.dart';
+
 
 class ObsTabViewController extends GetxController {
   ObsTabViewController({required this.homeEvents});
@@ -15,8 +17,6 @@ class ObsTabViewController extends GetxController {
   RxString alertMessage = "Failed to connect to OBS".obs;
   RxBool isConnected = false.obs;
 
-  RxDouble slideValueForVolume = 50.0.obs;
-
   // obs scenes list
   RxList scenesList = RxList();
   // active scene name
@@ -25,6 +25,8 @@ class ObsTabViewController extends GetxController {
   RxList sourcesList = RxList();
   // visible sources names
   RxSet visibleSourcesList = RxSet();
+
+  RxBool isRecording = false.obs;
 
   late Rx<Settings> settings = Settings.defaultSettings().obs;
 
@@ -95,6 +97,14 @@ class ObsTabViewController extends GetxController {
     }
   }
 
+  Future<void> startStopRecording() async {
+    //TODO : to finish
+    await obsWebSocket!.startStopRecording();
+    BaseResponse? status = await obsWebSocket!.command('GetRecordingStatus');
+    debugPrint(status!.rawResponse.toString());
+    debugPrint(status.rawResponse['isRecording'].toString());
+  }
+
   /*
   fetch scene list
    */
@@ -105,6 +115,7 @@ class ObsTabViewController extends GetxController {
     * scenes 	Array<Scene>
     */
     BaseResponse? response = await obsWebSocket!.command('GetSceneList');
+    scenesList.clear();
 
     if (response!.status) {
       List respScenes = response.rawResponse["scenes"];
@@ -159,8 +170,6 @@ class ObsTabViewController extends GetxController {
       if (value.error == null)
         {
           settings.value = value.data!,
-          debugPrint("==========================================="),
-          debugPrint(settings.value.obsWebsocketUrl!.toString()),
           if(obsWebSocket != null){
             obsWebSocket!.close(),
           },

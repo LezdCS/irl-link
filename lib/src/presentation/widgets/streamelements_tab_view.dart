@@ -28,18 +28,15 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
         ),
       ),
       body: Container(
-        constraints: BoxConstraints.expand(),
         decoration: BoxDecoration(
           color: context.theme.primaryColor,
         ),
-        child: SafeArea(
-          child: TabBarView(
-            controller: controller.tabController,
-            children: [
-              _activities(),
-              _songRequests(context),
-            ],
-          ),
+        child: TabBarView(
+          controller: controller.tabController,
+          children: [
+            _activities(),
+            _songRequests(context),
+          ],
         ),
       ),
     );

@@ -44,7 +44,7 @@ dependencies:
   wakelock: ^0.5.6
   connectivity_plus: ^2.2.1
   move_to_background: ^1.0.2
-  obs_websocket: ^2.2.12
+  obs_websocket: ^2.3.1
   intl: ^0.17.0
 
 dev_dependencies:
