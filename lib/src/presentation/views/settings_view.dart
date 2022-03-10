@@ -4,6 +4,8 @@ import 'package:irllink/src/presentation/controllers/settings_view_controller.da
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../widgets/manage_list.dart';
+
 class SettingsView extends GetView<SettingsViewController> {
   final SettingsViewController controller = Get.find<SettingsViewController>();
 
@@ -295,7 +297,7 @@ class SettingsView extends GetView<SettingsViewController> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.only(top: 5,bottom: 10),
+                  padding: EdgeInsets.only(top: 5, bottom: 10),
                   child: Row(
                     children: [
                       Icon(
@@ -305,11 +307,26 @@ class SettingsView extends GetView<SettingsViewController> {
                       ),
                       Container(
                         padding: EdgeInsets.only(left: 10),
-                        child: Text(
-                          "Manage hidden users",
-                          style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1!.color,
-                            fontSize: 18,
+                        child: InkWell(
+                          onTap: () {
+                            Get.to(
+                              () => ManageList(
+                                title: "Manage hidden users",
+                                controller: controller,
+                                isReorderable: false,
+                                list: controller.settings.value.hiddenUsersIds!,
+                                addFunction: () {},
+                                removeFunction: () {},
+                              ),
+                            );
+                          },
+                          child: Text(
+                            "Manage hidden users",
+                            style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color,
+                              fontSize: 18,
+                            ),
                           ),
                         ),
                       ),
@@ -625,7 +642,7 @@ class SettingsView extends GetView<SettingsViewController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 InkWell(
-                  onTap:(){
+                  onTap: () {
                     //TODO : https://pub.dev/packages/url_launcher config for android package visibility configuration (API > 30 )
                     launch("https://irllink.com");
                   },
@@ -638,7 +655,7 @@ class SettingsView extends GetView<SettingsViewController> {
                   ),
                 ),
                 InkWell(
-                  onTap:(){
+                  onTap: () {
                     launch("mailto:support@irllink.com");
                   },
                   child: Text(
