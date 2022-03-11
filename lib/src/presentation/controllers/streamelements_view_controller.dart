@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
 import 'package:irllink/src/domain/entities/se_activity.dart';
 import 'package:irllink/src/domain/entities/se_song.dart';
 import 'package:irllink/src/presentation/events/streamelements_events.dart';
-import 'package:flutter/src/material/tab_controller.dart';
 
 class StreamelementsViewController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -22,8 +21,8 @@ class StreamelementsViewController extends GetxController
 
   @override
   void onInit() {
-    tabController = new TabController(length: 2, vsync: this);
-    activitiesScrollController = new ScrollController();
+    tabController = TabController(length: 2, vsync: this);
+    activitiesScrollController = ScrollController();
     SeActivity a1 = SeActivity(
         id: "1",
         username: "Lezd",
@@ -54,7 +53,7 @@ class StreamelementsViewController extends GetxController
         activityType: ActivityType.cheer);
     activities = [a1, a2, a3, a4];
 
-    songRequestScrollController = new ScrollController();
+    songRequestScrollController = ScrollController();
     SeSong s1 = SeSong(
       id: '',
       videoId: "6x4HDrL1KEU",

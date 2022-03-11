@@ -1,8 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
 
 import 'alert_message_view.dart';
@@ -11,7 +8,6 @@ class ObsTabView extends GetView<ObsTabViewController> {
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
-    final double height = MediaQuery.of(context).size.height;
     return SingleChildScrollView(
       child: Obx(
         () => controller.isConnected.value

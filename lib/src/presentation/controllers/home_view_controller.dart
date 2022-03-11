@@ -10,7 +10,6 @@ import 'package:irllink/src/presentation/widgets/obs_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/split_view_custom.dart';
 import 'package:irllink/src/presentation/widgets/streamelements_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/twitch_tab_view.dart';
-import 'package:irllink/src/presentation/widgets/web_page_view.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:web_socket_channel/status.dart' as status;
@@ -25,7 +24,7 @@ class HomeViewController extends GetxController
 
   RxBool sound = true.obs;
   SplitViewController splitViewController =
-      new SplitViewController(limits: [null, WeightLimit(min: 0.12)]);
+      SplitViewController(limits: [null, WeightLimit(min: 0.12)]);
 
   //TABS
   late TabController tabController;
@@ -46,7 +45,7 @@ class HomeViewController extends GetxController
 
   @override
   void onInit() {
-    chatInputController = new TextEditingController();
+    chatInputController = TextEditingController();
 
     twitchData = Get.arguments[0];
 
@@ -84,7 +83,7 @@ class HomeViewController extends GetxController
     if (tabElements.firstWhereOrNull((tab) => tab is ObsTabView) == null) {
       ObsTabView obsPage = ObsTabView();
       int newSize = tabController.length + 1;
-      tabController = new TabController(length: newSize, vsync: this);
+      tabController = TabController(length: newSize, vsync: this);
       tabElements.add(obsPage);
     }
   }
@@ -92,7 +91,7 @@ class HomeViewController extends GetxController
   void removeObsTab() {
     if (tabElements.firstWhereOrNull((tab) => tab is ObsTabView) != null) {
       int newSize = tabController.length - 1;
-      tabController = new TabController(length: newSize, vsync: this);
+      tabController = TabController(length: newSize, vsync: this);
       tabElements.remove(tabElements.firstWhere((tab) => tab is ObsTabView));
     }
   }

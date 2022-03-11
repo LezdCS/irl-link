@@ -42,8 +42,8 @@ class ChatViewController extends GetxController
 
   @override
   void onInit() async {
-    scrollController = new ScrollController();
-    banDurationInputController = new TextEditingController();
+    scrollController = ScrollController();
+    banDurationInputController = TextEditingController();
 
     twitchData = Get.arguments[0];
     ircChannelJoined = twitchData.twitchUser.login;

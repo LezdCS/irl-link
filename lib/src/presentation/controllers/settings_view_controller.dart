@@ -17,8 +17,8 @@ class SettingsViewController extends GetxController {
 
   @override
   void onInit() {
-    alternateChannelChatController = new TextEditingController();
-    obsWebsocketUrlFieldController = new TextEditingController();
+    alternateChannelChatController = TextEditingController();
+    obsWebsocketUrlFieldController = TextEditingController();
     super.onInit();
   }
 
