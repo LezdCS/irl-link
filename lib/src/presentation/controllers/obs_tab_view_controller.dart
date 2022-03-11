@@ -6,24 +6,23 @@ import 'package:obs_websocket/obs_websocket.dart';
 
 import 'package:obs_websocket/src/model/scene.dart';
 
-
 class ObsTabViewController extends GetxController {
   ObsTabViewController({required this.homeEvents});
-  final HomeEvents homeEvents;
 
+  final HomeEvents homeEvents;
 
   ObsWebSocket? obsWebSocket;
 
   RxString alertMessage = "Failed to connect to OBS".obs;
+
   RxBool isConnected = false.obs;
 
-  // obs scenes list
   RxList scenesList = RxList();
-  // active scene name
+
   RxString currentScene = RxString("");
-  // sources of active scene
+
   RxList sourcesList = RxList();
-  // visible sources names
+
   RxSet visibleSourcesList = RxSet();
 
   RxBool isRecording = false.obs;
@@ -31,7 +30,7 @@ class ObsTabViewController extends GetxController {
   late Rx<Settings> settings = Settings.defaultSettings().obs;
 
   @override
-  Future<void> onInit() async {
+  void onInit() {
     super.onInit();
   }
 
@@ -43,14 +42,14 @@ class ObsTabViewController extends GetxController {
 
   @override
   void onClose() {
-    // close obs websocket
     obsWebSocket!.close();
 
     super.onClose();
   }
 
+  /// Connect to the OBS websocket at [url]
   void connectWs(String url) async {
-    try{
+    try {
       obsWebSocket = await ObsWebSocket.connect(
           connectUrl: 'ws://$url',
           fallbackEvent: (e) => connectionLost(e),
@@ -61,7 +60,7 @@ class ObsTabViewController extends GetxController {
       isConnected.value = true;
       getSceneList();
       getCurrentScene();
-    }catch(e){
+    } catch (e) {
       alertMessage.value = "Failed to connect to OBS";
       isConnected.value = false;
     }
@@ -81,6 +80,7 @@ class ObsTabViewController extends GetxController {
     alertMessage.value = "Connection with OBS lost ...";
   }
 
+  /// Start the stream
   Future<void> startStream() async {
     final StreamStatusResponse status = await obsWebSocket!.getStreamStatus();
 
@@ -89,6 +89,7 @@ class ObsTabViewController extends GetxController {
     }
   }
 
+  /// Stop the stream
   Future<void> stopStream() async {
     final StreamStatusResponse status = await obsWebSocket!.getStreamStatus();
 
@@ -97,6 +98,7 @@ class ObsTabViewController extends GetxController {
     }
   }
 
+  /// Toggle OBS recording
   Future<void> startStopRecording() async {
     //TODO : to finish
     await obsWebSocket!.startStopRecording();
@@ -105,15 +107,8 @@ class ObsTabViewController extends GetxController {
     debugPrint(status.rawResponse['isRecording'].toString());
   }
 
-  /*
-  fetch scene list
-   */
+  /// Fetch scene list
   Future<void> getSceneList() async {
-    /*
-    returns
-    * current-scene 	String
-    * scenes 	Array<Scene>
-    */
     BaseResponse? response = await obsWebSocket!.command('GetSceneList');
     scenesList.clear();
 
@@ -125,41 +120,27 @@ class ObsTabViewController extends GetxController {
     }
   }
 
-  /*
-  fetch current scene and its sources
-  build a list with all visible sources
-   */
+  /// Fetch current scene and its sources
+  /// Build a list with all visible sources
   Future<void> getCurrentScene() async {
-    /*
-    returns
-    * name 	String
-    * scenes 	Array<SceneItem> (sources of the current scene)
-    */
     Scene response = await obsWebSocket!.getCurrentScene();
 
-    // loads current scene name
     currentScene.value = response.name;
-    // loads current scene sources in list
     sourcesList.value = response.scenes;
 
-    // builds visible sources list
     sourcesList.forEach(
         (source) => {if (source.render) visibleSourcesList.add(source.name)});
   }
 
+  /// Switch to the scene named [sceneName]
   Future<void> setCurrentScene(String sceneName) async {
-    // update on OBS
     await obsWebSocket!.setCurrentScene(sceneName);
-
-    // update controller
     getCurrentScene();
   }
 
+  /// Show or hide the source named [sourceName] according to the [value]
   void setSourceVisibleState(String sourceName, bool value) {
-    // update on OBS
     obsWebSocket!.setSceneItemRender({"source": sourceName, "render": value});
-
-    // update controller
     value
         ? visibleSourcesList.add(sourceName)
         : visibleSourcesList.remove(sourceName);
@@ -167,16 +148,20 @@ class ObsTabViewController extends GetxController {
 
   Future getSettings() async {
     await homeEvents.getSettings().then((value) async => {
-      if (value.error == null)
-        {
-          settings.value = value.data!,
-          if(obsWebSocket != null){
-            obsWebSocket!.close(),
-          },
-          if(settings.value.isObsConnected!){
-            this.connectWs(settings.value.obsWebsocketUrl!),
-          }
-        },
-    });
+          if (value.error == null)
+            {
+              settings.value = value.data!,
+              this.applySettings(),
+            },
+        });
+  }
+
+  Future applySettings() async {
+    if (obsWebSocket != null) {
+      obsWebSocket!.close();
+    }
+    if (settings.value.isObsConnected!) {
+      this.connectWs(settings.value.obsWebsocketUrl!);
+    }
   }
 }

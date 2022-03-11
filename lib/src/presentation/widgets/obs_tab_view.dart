@@ -32,9 +32,10 @@ class ObsTabView extends GetView<ObsTabViewController> {
                             ),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                                color: Colors.grey[850],
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(8))),
+                              color: Colors.grey[850],
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8)),
+                            ),
                             padding: EdgeInsets.all(8),
                             child: Text(
                               "Start stream",
@@ -76,9 +77,11 @@ class ObsTabView extends GetView<ObsTabViewController> {
                             ),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                                color: Colors.grey[850],
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(8))),
+                              color: Colors.grey[850],
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(8),
+                              ),
+                            ),
                             padding: EdgeInsets.all(8),
                             child: Text(
                               "Start recording",
@@ -139,8 +142,10 @@ class ObsTabView extends GetView<ObsTabViewController> {
                           color: Color(0xFFA47CED),
                           borderRadius: BorderRadius.circular(6),
                         ),
-                        child: Text("Retry connection",
-                            style: TextStyle(color: Colors.white)),
+                        child: Text(
+                          "Retry connection",
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ),
                   ],
@@ -171,10 +176,11 @@ class ObsTabView extends GetView<ObsTabViewController> {
             ),
             alignment: Alignment.center,
             decoration: BoxDecoration(
-                color: controller.currentScene == elementAt
-                    ? Colors.deepPurpleAccent[200]
-                    : Colors.grey[850],
-                borderRadius: BorderRadius.all(Radius.circular(8))),
+              color: controller.currentScene == elementAt
+                  ? Colors.deepPurpleAccent[200]
+                  : Colors.grey[850],
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+            ),
             padding: EdgeInsets.all(8),
             child: Tooltip(
               message: elementAt,
@@ -218,10 +224,11 @@ class ObsTabView extends GetView<ObsTabViewController> {
           child: Container(
             alignment: Alignment.center,
             decoration: BoxDecoration(
-                color: controller.visibleSourcesList.contains(elementAt.name)
-                    ? Colors.deepPurpleAccent[200]
-                    : Colors.grey[850],
-                borderRadius: BorderRadius.all(Radius.circular(8))),
+              color: controller.visibleSourcesList.contains(elementAt.name)
+                  ? Colors.deepPurpleAccent[200]
+                  : Colors.grey[850],
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+            ),
             padding: EdgeInsets.all(8),
             child: Tooltip(
               message: elementAt.name,
