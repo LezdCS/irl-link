@@ -62,8 +62,7 @@ class Settings extends Equatable {
     this.streamElementsAccessToken = "",
   });
 
-  Map toJson() =>
-      {
+  Map toJson() => {
         //CHAT
         'isEmotes': isEmotes,
         'textSize': textSize,
@@ -71,6 +70,7 @@ class Settings extends Equatable {
         'displayTimestamp': displayTimestamp,
         'alternateChannel': alternateChannel,
         'alternateChannelName': alternateChannelName,
+        'hiddenUsersIds': hiddenUsersIds,
         //GENERAL
         'isDarkMode': isDarkMode,
         'keepSpeakerOn': keepSpeakerOn,
@@ -135,12 +135,12 @@ class Settings extends Equatable {
         hiddenUsersIds: hiddenUsersIds ?? this.hiddenUsersIds,
         //GENERAL
         isDarkMode: isDarkMode ?? this.isDarkMode,
-        keepSpeakerOn:keepSpeakerOn ?? this.keepSpeakerOn,
-        keepScreenOn:keepScreenOn ?? this.keepScreenOn,
+        keepSpeakerOn: keepSpeakerOn ?? this.keepSpeakerOn,
+        keepScreenOn: keepScreenOn ?? this.keepScreenOn,
         //CONNECTIONS
         isObsConnected: isObsConnected ?? this.isObsConnected,
         obsWebsocketUrl: obsWebsocketUrl ?? this.obsWebsocketUrl,
         streamElementsAccessToken:
-        streamElementsAccessToken ?? this.streamElementsAccessToken,
+            streamElementsAccessToken ?? this.streamElementsAccessToken,
       );
 }

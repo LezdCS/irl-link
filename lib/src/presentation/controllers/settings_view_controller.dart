@@ -48,6 +48,18 @@ class SettingsViewController extends GetxController {
         );
   }
 
+  void clearHiddenUsers() {
+    settings.value = settings.value.copyWith(hiddenUsersIds: []);
+    this.saveSettings();
+  }
+
+  void removeHiddenUser(userId) {
+    List hiddenUsersIds = settings.value.hiddenUsersIds!;
+    hiddenUsersIds.remove(userId);
+    settings.value = settings.value.copyWith(hiddenUsersIds: hiddenUsersIds);
+    saveSettings();
+  }
+
   void saveSettings() {
     settingsEvents.setSettings(settings: settings.value);
   }

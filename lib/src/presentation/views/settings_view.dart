@@ -309,16 +309,19 @@ class SettingsView extends GetView<SettingsViewController> {
                         padding: EdgeInsets.only(left: 10),
                         child: InkWell(
                           onTap: () {
-                            Get.to(
-                              () => ManageList(
-                                title: "Manage hidden users",
-                                controller: controller,
-                                isReorderable: false,
-                                list: controller.settings.value.hiddenUsersIds!,
-                                addFunction: () {},
-                                removeFunction: () {},
-                              ),
-                            );
+                            Get.to(() => Obx(
+                                  () => ManageList(
+                                    title: "Manage hidden users",
+                                    controller: controller,
+                                    isReorderable: false,
+                                    list: controller
+                                        .settings.value.hiddenUsersIds!.obs,
+                                    addFunction: () {},
+                                    removeFunction: controller.removeHiddenUser,
+                                    removeAllFunction:
+                                        controller.clearHiddenUsers,
+                                  ),
+                                ));
                           },
                           child: Text(
                             "Manage hidden users",

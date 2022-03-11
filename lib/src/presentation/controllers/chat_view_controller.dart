@@ -182,14 +182,10 @@ class ChatViewController extends GetxController
             }
             break;
           case 'ROOMSTATE':
-
-            List<String> keys = [
-              "@followers-only",
-              "@emote-only"
-            ];
+            List<String> keys = ["@followers-only", "@emote-only"];
 
             String? keyResult =
-            keys.firstWhereOrNull((key) => messageMapped.containsKey(key));
+                keys.firstWhereOrNull((key) => messageMapped.containsKey(key));
 
             if (keyResult != null) {
               switch (keyResult) {
@@ -212,7 +208,6 @@ class ChatViewController extends GetxController
             break;
           case "CLEARCHAT":
             {
-
               if (messageMapped['target-user-id'] != null) {
                 // @ban-duration=43;room-id=169185650;target-user-id=107285371;tmi-sent-ts=1642601142470 :tmi.twitch.tv CLEARCHAT #robcdee :lezd_
                 String userId = messageMapped['target-user-id']!;
@@ -415,7 +410,9 @@ class ChatViewController extends GetxController
   }
 
   void hideUser(TwitchChatMessage message) {
-    List hiddenUsersIds = settings.value.hiddenUsersIds! != const [] ? settings.value.hiddenUsersIds! : [];
+    List hiddenUsersIds = settings.value.hiddenUsersIds! != const []
+        ? settings.value.hiddenUsersIds!
+        : [];
     if (hiddenUsersIds
             .firstWhereOrNull((userId) => userId == message.authorId) ==
         null) {
@@ -423,7 +420,7 @@ class ChatViewController extends GetxController
       hiddenUsersIds.add(message.authorId);
       settings.value = settings.value.copyWith(hiddenUsersIds: hiddenUsersIds);
       saveSettings();
-    }else{
+    } else {
       //remove user from hidden users list
       hiddenUsersIds.remove(message.authorId);
       settings.value = settings.value.copyWith(hiddenUsersIds: hiddenUsersIds);
