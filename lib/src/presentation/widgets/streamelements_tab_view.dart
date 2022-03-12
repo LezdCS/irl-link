@@ -54,7 +54,7 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
               Wrap(
                 children: [
                   Icon(Icons.pause),
-                  Icon(Icons.play_arrow_outlined),
+                  Icon(Icons.skip_next),
                   Icon(Icons.notifications_on_outlined),
                   Icon(Icons.restart_alt),
                 ],
@@ -283,11 +283,13 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
 
   Widget _activitiesSettings() {
     return PopupMenuButton(
-      offset: Offset(30, 30),
+      offset: Offset(30, 10),
+      color: Theme.of(Get.context!).colorScheme.secondary,
       child: Icon(Icons.settings),
       itemBuilder: (context) => [
         PopupMenuItem(
           child: CheckboxListTile(
+            activeColor: Colors.deepPurple[600],
             controlAffinity: ListTileControlAffinity.leading,
             title: Text(
               'Followers',
@@ -298,6 +300,7 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
         ),
         PopupMenuItem(
           child: CheckboxListTile(
+            activeColor: Colors.deepPurple[600],
             controlAffinity: ListTileControlAffinity.leading,
             title: Text(
               'Subscribers',
@@ -308,6 +311,7 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
         ),
         PopupMenuItem(
           child: CheckboxListTile(
+            activeColor: Colors.deepPurple[600],
             controlAffinity: ListTileControlAffinity.leading,
             title: Text(
               'Donations',
@@ -318,6 +322,7 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
         ),
         PopupMenuItem(
           child: CheckboxListTile(
+            activeColor: Colors.deepPurple[600],
             controlAffinity: ListTileControlAffinity.leading,
             title: Text(
               'Bits',
@@ -328,6 +333,7 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
         ),
         PopupMenuItem(
           child: CheckboxListTile(
+            activeColor: Colors.deepPurple[600],
             controlAffinity: ListTileControlAffinity.leading,
             title: Text(
               'Raids',

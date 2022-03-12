@@ -184,29 +184,6 @@ class ChatViewController extends GetxController
             }
             break;
           case 'ROOMSTATE':
-            List<String> keys = ["@followers-only", "@emote-only"];
-
-            String? keyResult =
-                keys.firstWhereOrNull((key) => messageMapped.containsKey(key));
-
-            if (keyResult != null) {
-              switch (keyResult) {
-                case '@followers-only':
-                  if (messageMapped['@followers-only'] == "0") {
-                    debugPrint("FOLLOWER ONLY ON");
-                  } else {
-                    debugPrint("FOLLOWER ONLY OFF");
-                  }
-                  break;
-                case '@emote-only':
-                  if (messageMapped['@emote-only'] == "1") {
-                    debugPrint("EMOTE ONLY ON");
-                  } else {
-                    debugPrint("EMOTE ONLY OFF");
-                  }
-                  break;
-              }
-            }
             break;
           case "CLEARCHAT":
             {
@@ -278,10 +255,9 @@ class ChatViewController extends GetxController
 
   /// Returns a List of Twitch official emotes
   Future<List<Emote>> getTwitchEmotes() async {
-    twitchEmotes.clear();
     List<Emote> emotes = [];
 
-    homeEvents.getTwitchEmotes(twitchData.accessToken).then(
+    await homeEvents.getTwitchEmotes(twitchData.accessToken).then(
           (value) => {
             if (value.error == null)
               {
@@ -290,7 +266,7 @@ class ChatViewController extends GetxController
           },
         );
 
-    homeEvents
+    await homeEvents
         .getTwitchChannelEmotes(
           twitchData.accessToken,
           twitchData.twitchUser.id,
@@ -301,7 +277,7 @@ class ChatViewController extends GetxController
           },
         );
 
-    homeEvents
+    await homeEvents
         .getTwitchCheerEmotes(
           twitchData.accessToken,
           ircChannelJoinedChannelId,
@@ -317,26 +293,25 @@ class ChatViewController extends GetxController
 
   /// Returns a List of third parties emotes (FFZ, BTTV, 7TV)
   Future<List<Emote>> getThirdPartEmotes() async {
-    thirdPartEmotes.clear();
     List<Emote> emotes = [];
 
-    homeEvents.getBttvGlobalEmotes().then((value) => {
+    await homeEvents.getBttvGlobalEmotes().then((value) => {
           if (value.error == null) {emotes.addAll(value.data!)}
         });
 
-    homeEvents
+    await homeEvents
         .getBttvChannelEmotes(broadcasterId: ircChannelJoinedChannelId)
         .then((value) => {
               if (value.error == null) {emotes.addAll(value.data!)}
             });
 
-    homeEvents
+    await homeEvents
         .getFrankerfacezEmotes(broadcasterId: ircChannelJoinedChannelId)
         .then((value) => {
               if (value.error == null) {emotes.addAll(value.data!)}
             });
 
-    homeEvents
+    await homeEvents
         .get7TvChannelEmotes(broadcasterId: ircChannelJoinedChannelId)
         .then((value) => {
               if (value.error == null) {emotes.addAll(value.data!)}
@@ -347,26 +322,21 @@ class ChatViewController extends GetxController
 
   /// Returns a List of Twitch official badges
   Future<List<TwitchBadge>> getTwitchBadges() async {
-    twitchBadges.clear();
     List<TwitchBadge> badges = [];
 
-    homeEvents
+    await homeEvents
         .getTwitchGlobalBadges(accessToken: twitchData.accessToken)
         .then((value) => {
               if (value.error == null) {badges.addAll(value.data!)}
             });
 
-    homeEvents
+    await homeEvents
         .getTwitchChannelBadges(
           accessToken: twitchData.accessToken,
           broadcasterId: ircChannelJoinedChannelId,
         )
         .then(
-          (value) => {
-            addChannelBadges(badges, value).then(
-              (value) => badges.addAll(value),
-            ),
-          },
+          (channelBadges) => {addChannelBadges(badges, channelBadges)},
         );
 
     return badges;
@@ -374,8 +344,8 @@ class ChatViewController extends GetxController
 
   /// Replace Twitch default [badges] with Channel badges
   Future<List<TwitchBadge>> addChannelBadges(
-      List<TwitchBadge> badges, value) async {
-    value.data!.forEach((badge) {
+      List<TwitchBadge> badges, channelBadges) async {
+    channelBadges.data!.forEach((badge) {
       if (badges.firstWhereOrNull((badgeFromList) =>
               badge.setId == badgeFromList.setId &&
               badge.versionId == badgeFromList.versionId) !=
@@ -384,7 +354,7 @@ class ChatViewController extends GetxController
             badge.setId == badgeFromList.setId &&
             badge.versionId == badgeFromList.versionId));
       }
-      badges.addAll(value.data!);
+      badges.addAll(channelBadges.data!);
     });
 
     return badges;
@@ -424,13 +394,12 @@ class ChatViewController extends GetxController
       //add user
       hiddenUsersIds.add(message.authorId);
       settings.value = settings.value.copyWith(hiddenUsersIds: hiddenUsersIds);
-      saveSettings();
     } else {
       //remove user
       hiddenUsersIds.remove(message.authorId);
       settings.value = settings.value.copyWith(hiddenUsersIds: hiddenUsersIds);
-      saveSettings();
     }
+    saveSettings();
     selectedMessage.refresh();
   }
 
@@ -451,7 +420,7 @@ class ChatViewController extends GetxController
           if (value.error == null)
             {
               settings.value = value.data!,
-              this.applySettings(),
+              await this.applySettings(),
             },
         });
   }

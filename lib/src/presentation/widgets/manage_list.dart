@@ -48,6 +48,7 @@ class ManageList extends GetView {
             color: Theme.of(context).primaryColor,
           ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
                 child: ReorderableListView.builder(
@@ -84,11 +85,61 @@ class ManageList extends GetView {
                 ),
               ),
               Container(
-                  child: InkWell(
-                      onTap: () {
-                        removeAllFunction();
-                      },
-                      child: Text("Delete all"))),
+                padding: EdgeInsets.only(bottom: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      width: 120,
+                      padding: EdgeInsets.only(
+                        top: 10,
+                        bottom: 10,
+                        left: 5,
+                        right: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(2),
+                        ),
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          addFunction();
+                        },
+                        child: Text(
+                          "Add",
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: 120,
+                      padding: EdgeInsets.only(
+                        top: 10,
+                        bottom: 10,
+                        left: 5,
+                        right: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(2),
+                        ),
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          removeAllFunction();
+                        },
+                        child: Text(
+                          "Remove all",
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
