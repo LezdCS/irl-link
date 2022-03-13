@@ -53,7 +53,9 @@ class HomeView extends GetView<HomeViewController> {
                       gripColor: context.theme.colorScheme.secondary,
                       gripColorActive: context.theme.colorScheme.secondary,
                       gripSize: 14,
-                      viewMode: SplitViewMode.Vertical,
+                      viewMode: context.isPortrait
+                          ? SplitViewMode.Vertical
+                          : SplitViewMode.Horizontal,
                       indicator: SplitIndicator(
                         viewMode: SplitViewMode.Vertical,
                         color: Color(0xFFFFFFFF),
@@ -65,22 +67,25 @@ class HomeView extends GetView<HomeViewController> {
                       ),
                       children: [
                         _tabsViews(context),
-                        Listener(
-                          onPointerUp: (_) => {
-                            controller.isPickingEmote.value = false,
-                          },
-                          child: ChatView(),
+                        Stack(
+                          children: [
+                            Listener(
+                              onPointerUp: (_) => {
+                                controller.isPickingEmote.value = false,
+                              },
+                              child: ChatView(),
+                            ),
+                            Positioned(
+                                bottom: 0.0,
+                                left: 0.0,
+                                right: 0.0,
+                                child: _bottomNavBar(height, width, context)),
+                          ],
                         ),
                       ],
                     ),
                   ),
                 ),
-              ),
-              Positioned(
-                bottom: 0.0,
-                left: 0.0,
-                right: 0.0,
-                child: _bottomNavBar(height, width, context),
               ),
               Visibility(
                 visible: controller.isPickingEmote.value,
@@ -98,43 +103,45 @@ class HomeView extends GetView<HomeViewController> {
   }
 
   Widget _tabBar(BuildContext context, double height, double width) {
-    return Obx(()=>TabBar(
-      controller: controller.tabController,
-      isScrollable: true,
-      labelColor: Colors.purple,
-      unselectedLabelColor: Theme.of(context).textTheme.bodyText1!.color,
-      indicatorColor: Colors.purple,
-      labelPadding: EdgeInsets.symmetric(
-          horizontal: width / (controller.tabElements.length > 2 ? 9 : 5)),
-      tabs: List<Tab>.generate(
-        controller.tabElements.length,
-        (int index) => Tab(
-          child: Text(
-            controller.tabElements[index] is ObsTabView
-                ? "OBS"
-                : controller.tabElements[index] is StreamelementsTabView
-                    ? "StreamElements"
-                    : controller.tabElements[index] is TwitchTabView
-                        ? "Twitch"
-                        : controller.tabElements[index] is WebPageView
-                            ? (controller.tabElements[index] as WebPageView)
-                                .title
-                            : "",
+    return Obx(
+      () => TabBar(
+        controller: controller.tabController,
+        isScrollable: true,
+        labelColor: Colors.purple,
+        unselectedLabelColor: Theme.of(context).textTheme.bodyText1!.color,
+        indicatorColor: Colors.purple,
+        labelPadding: EdgeInsets.symmetric(
+            horizontal: width / (controller.tabElements.length > 2 ? 9 : 5)),
+        tabs: List<Tab>.generate(
+          controller.tabElements.length,
+          (int index) => Tab(
+            child: Text(
+              controller.tabElements[index] is ObsTabView
+                  ? "OBS"
+                  : controller.tabElements[index] is StreamelementsTabView
+                      ? "StreamElements"
+                      : controller.tabElements[index] is TwitchTabView
+                          ? "Twitch"
+                          : controller.tabElements[index] is WebPageView
+                              ? (controller.tabElements[index] as WebPageView)
+                                  .title
+                              : "",
+            ),
           ),
         ),
-      ),),
+      ),
     );
   }
 
   Widget _bottomNavBar(double height, double width, BuildContext context) {
     return Obx(
       () => Container(
+        padding: EdgeInsets.only(left: 10),
         height: height * 0.06,
         child: Row(
           children: [
-            Container(
-              padding: EdgeInsets.only(left: 10),
-              width: width * 0.7,
+            Expanded(
+              flex: 5,
               child: Stack(
                 alignment: AlignmentDirectional.center,
                 children: [
@@ -142,6 +149,7 @@ class HomeView extends GetView<HomeViewController> {
                     child: SvgPicture.asset(
                       './lib/assets/chatinput.svg',
                       semanticsLabel: 'chat input',
+                      fit: BoxFit.fitWidth,
                     ),
                   ),
                   Container(
@@ -204,8 +212,8 @@ class HomeView extends GetView<HomeViewController> {
                 ],
               ),
             ),
-            Container(
-              width: width * 0.15,
+            Expanded(
+              flex: 1,
               child: InkWell(
                 onTap: () {
                   controller.sound.value = !controller.sound.value;
@@ -219,8 +227,8 @@ class HomeView extends GetView<HomeViewController> {
                 ),
               ),
             ),
-            Container(
-              width: width * 0.15,
+            Expanded(
+              flex: 1,
               child: InkWell(
                 onTap: () async {
                   await Get.toNamed(Routes.SETTINGS);

@@ -93,6 +93,8 @@ class ChatView extends GetView<ChatViewController> {
         ),
         Positioned(
           bottom: height * 0.07,
+          left: 0,
+          right: 0,
           child: Visibility(
             visible: controller.selectedMessage.value != null,
             child: moderationView(width),
@@ -189,12 +191,6 @@ class ChatView extends GetView<ChatViewController> {
             ),
           ],
         ));
-  }
-
-  Widget messageDeleted() {
-    return Container(
-      child: Text("<message deleted>"),
-    );
   }
 
   void timeoutDialog(double width) {
@@ -343,7 +339,6 @@ class ChatView extends GetView<ChatViewController> {
   Widget moderationView(double width) {
     return Container(
       padding: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
-      width: width,
       decoration: BoxDecoration(
         border: Border.all(color: Color(0xFFa970ff)),
         color: Color(0xFF18181b),
@@ -417,11 +412,12 @@ class ChatView extends GetView<ChatViewController> {
             InkWell(
               onTap: () =>
                   controller.hideUser(controller.selectedMessage.value!),
-              child: (controller.selectedMessage.value != null && controller.settings.value.hiddenUsersIds!.firstWhereOrNull(
-                          (userId) =>
-                              controller.selectedMessage.value!.authorId ==
-                              userId) !=
-                      null)
+              child: (controller.selectedMessage.value != null &&
+                      controller.settings.value.hiddenUsersIds!
+                              .firstWhereOrNull((userId) =>
+                                  controller.selectedMessage.value!.authorId ==
+                                  userId) !=
+                          null)
                   ? moderationViewButton(Icons.visibility, "Unhide user")
                   : moderationViewButton(Icons.visibility_off, "Hide user"),
             ),
