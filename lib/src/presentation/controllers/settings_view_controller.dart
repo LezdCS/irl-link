@@ -60,6 +60,14 @@ class SettingsViewController extends GetxController {
     saveSettings();
   }
 
+  void addHiddenUser(String name) {}
+
+  void addBrowserTab(String name, String url) {}
+
+  void removeBrowserTab() {}
+
+  void clearBrowserTabs() {}
+
   void saveSettings() {
     settingsEvents.setSettings(settings: settings.value);
   }

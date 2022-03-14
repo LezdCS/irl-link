@@ -13,6 +13,15 @@ import 'package:collection/collection.dart';
 import 'alert_message_view.dart';
 
 class ChatView extends GetView<ChatViewController> {
+
+  //TODO : generate dialog timeout buttons from this List
+  List<Map<String, int>> timeoutValues = [
+    {"10s": 10},
+    {"1m": 60},
+    {"10m": 600},
+    {"30m": 1800},
+  ];
+
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
@@ -65,6 +74,8 @@ class ChatView extends GetView<ChatViewController> {
                   ),
           ),
         ),
+
+        // FIXME : fix landscape view
         Positioned(
           bottom: height * 0.07,
           width: width,
@@ -193,11 +204,15 @@ class ChatView extends GetView<ChatViewController> {
         ));
   }
 
-  void timeoutDialog(double width) {
+  void timeoutDialog() {
     Get.defaultDialog(
       title: "Timeout",
       titleStyle: TextStyle(color: Colors.white),
       backgroundColor: Color(0xFF282828),
+      buttonColor: Color(0xFF9147ff),
+      cancelTextColor: Color(0xFF9147ff),
+      textCancel: "Cancel",
+      radius: 10,
       content: Column(
         children: [
           Row(
@@ -286,53 +301,62 @@ class ChatView extends GetView<ChatViewController> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                padding: EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  color: Color(0xFF121212),
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                ),
-                width: width * 0.50,
-                child: TextField(
-                  controller: controller.banDurationInputController,
-                  keyboardType: TextInputType.number,
-                  textInputAction: TextInputAction.send,
-                  onSubmitted: (String value) {
-                    if (int.tryParse(value) != null) {
-                      controller.timeoutMessageInstruction(
-                          controller.selectedMessage.value!, int.parse(value));
-                    }
-                  },
-                  style: TextStyle(color: Colors.white),
-                  maxLines: 1,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintStyle: TextStyle(color: Colors.grey, fontSize: 16),
-                    hintText: 'Custom duration (s)',
-                    isDense: true,
-                    contentPadding: EdgeInsets.only(left: 5),
+              Expanded(
+                flex: 6,
+                child: Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: Color(0xFF121212),
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                  ),
+                  child: TextField(
+                    controller: controller.banDurationInputController,
+                    keyboardType: TextInputType.number,
+                    textInputAction: TextInputAction.send,
+                    onSubmitted: (String value) {
+                      if (int.tryParse(value) != null) {
+                        controller.timeoutMessageInstruction(
+                            controller.selectedMessage.value!,
+                            int.parse(value));
+                      }
+                    },
+                    style: TextStyle(color: Colors.white),
+                    maxLines: 1,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintStyle: TextStyle(color: Colors.grey, fontSize: 16),
+                      hintText: 'Custom duration (s)',
+                      isDense: true,
+                      contentPadding: EdgeInsets.only(left: 5),
+                    ),
                   ),
                 ),
               ),
-              InkWell(
-                onTap: () {
-                  if (int.tryParse(
-                          controller.banDurationInputController.text) !=
-                      null) {
-                    controller.timeoutMessageInstruction(
-                        controller.selectedMessage.value!,
-                        int.parse(controller.banDurationInputController.text));
-                  }
-                },
-                child: Container(
-                  child: Icon(Icons.send, color: Colors.white),
+              Expanded(
+                flex: 1,
+                child: InkWell(
+                  onTap: () {
+                    if (int.tryParse(
+                            controller.banDurationInputController.text) !=
+                        null) {
+                      controller.timeoutMessageInstruction(
+                          controller.selectedMessage.value!,
+                          int.parse(
+                              controller.banDurationInputController.text));
+                    }
+                  },
+                  child: Container(
+                    child: Icon(
+                      Icons.send,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
             ],
           ),
         ],
       ),
-      textCancel: "Cancel",
     );
   }
 
@@ -405,7 +429,7 @@ class ChatView extends GetView<ChatViewController> {
             ),
             SizedBox(width: 10),
             InkWell(
-              onTap: () => timeoutDialog(width),
+              onTap: () => timeoutDialog(),
               child: moderationViewButton(Icons.timer, "Timeout"),
             ),
             SizedBox(width: 10),

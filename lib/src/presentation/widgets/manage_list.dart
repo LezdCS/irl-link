@@ -11,6 +11,7 @@ class ManageList extends GetView {
     required this.addFunction,
     required this.removeFunction,
     required this.removeAllFunction,
+    required this.addDialogWidget,
   });
 
   final String title;
@@ -20,6 +21,7 @@ class ManageList extends GetView {
   final Function addFunction;
   final Function removeFunction;
   final Function removeAllFunction;
+  final Widget addDialogWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +107,10 @@ class ManageList extends GetView {
                       ),
                       child: InkWell(
                         onTap: () {
-                          addFunction();
+                          Get.defaultDialog(
+                            content: addDialogWidget,
+                            textCancel: "Cancel",
+                          );
                         },
                         child: Text(
                           "Add",

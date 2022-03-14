@@ -295,33 +295,34 @@ class SettingsView extends GetView<SettingsViewController> {
                     ),
                   ),
                 ),
-                Container(
-                  padding: EdgeInsets.only(top: 5, bottom: 10),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.list,
-                        color: Theme.of(context).primaryIconTheme.color,
-                        size: 22,
+                InkWell(
+                  onTap: () {
+                    Get.to(
+                      () => Obx(
+                        () => ManageList(
+                          title: "Manage hidden users",
+                          controller: controller,
+                          isReorderable: false,
+                          list: controller.settings.value.hiddenUsersIds!.obs,
+                          addFunction: controller.addHiddenUser,
+                          removeFunction: controller.removeHiddenUser,
+                          removeAllFunction: controller.clearHiddenUsers,
+                          addDialogWidget: Container(),
+                        ),
                       ),
-                      Container(
-                        padding: EdgeInsets.only(left: 10),
-                        child: InkWell(
-                          onTap: () {
-                            Get.to(() => Obx(
-                                  () => ManageList(
-                                    title: "Manage hidden users",
-                                    controller: controller,
-                                    isReorderable: false,
-                                    list: controller
-                                        .settings.value.hiddenUsersIds!.obs,
-                                    addFunction: () {},
-                                    removeFunction: controller.removeHiddenUser,
-                                    removeAllFunction:
-                                        controller.clearHiddenUsers,
-                                  ),
-                                ));
-                          },
+                    );
+                  },
+                  child: Container(
+                    padding: EdgeInsets.only(top: 5, bottom: 10),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.list,
+                          color: Theme.of(context).primaryIconTheme.color,
+                          size: 22,
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 10),
                           child: Text(
                             "Manage hidden users",
                             style: TextStyle(
@@ -331,8 +332,8 @@ class SettingsView extends GetView<SettingsViewController> {
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -479,26 +480,45 @@ class SettingsView extends GetView<SettingsViewController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: EdgeInsets.only(top: 10),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.list,
-                        color: Theme.of(context).primaryIconTheme.color,
-                        size: 22,
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(left: 10),
-                        child: Text(
-                          "Manage browser tabs",
-                          style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1!.color,
-                            fontSize: 18,
-                          ),
+                InkWell(
+                  onTap: () {
+                    Get.to(
+                      () => Obx(
+                        () => ManageList(
+                          title: "Manage browser tabs",
+                          controller: controller,
+                          isReorderable: false,
+                          list: controller.settings.value.browserTabs!.obs,
+                          addFunction: controller.addBrowserTab,
+                          removeFunction: controller.removeBrowserTab,
+                          removeAllFunction: controller.clearBrowserTabs,
+                          addDialogWidget: Container(),
                         ),
                       ),
-                    ],
+                    );
+                  },
+                  child: Container(
+                    padding: EdgeInsets.only(top: 10),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.list,
+                          color: Theme.of(context).primaryIconTheme.color,
+                          size: 22,
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text(
+                            "Manage browser tabs",
+                            style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Row(
