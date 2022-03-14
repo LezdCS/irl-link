@@ -25,15 +25,6 @@ class HomeView extends GetView<HomeViewController> {
       },
       child: Scaffold(
         resizeToAvoidBottomInset: true,
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.secondary,
-          flexibleSpace: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              _tabBar(context, height, width),
-            ],
-          ),
-        ),
         body: Obx(
           () => Stack(
             children: [
@@ -66,7 +57,12 @@ class HomeView extends GetView<HomeViewController> {
                         isActive: true,
                       ),
                       children: [
-                        _tabsViews(context),
+                        Column(
+                          children: [
+                            _tabBar(context, height, width),
+                            _tabsViews(context),
+                          ],
+                        ),
                         Stack(
                           children: [
                             Listener(
@@ -74,6 +70,17 @@ class HomeView extends GetView<HomeViewController> {
                                 controller.isPickingEmote.value = false,
                               },
                               child: ChatView(),
+                            ),
+                            Visibility(
+                              visible: controller.isPickingEmote.value,
+                              child: Positioned(
+                                bottom: 50,
+                                top: 50,
+                                left: 4,
+                                right: 150,
+                                child: EmotePickerView(
+                                    homeViewController: controller),
+                              ),
                             ),
                             Positioned(
                                 bottom: 0.0,
@@ -85,14 +92,6 @@ class HomeView extends GetView<HomeViewController> {
                       ],
                     ),
                   ),
-                ),
-              ),
-              Visibility(
-                visible: controller.isPickingEmote.value,
-                child: Positioned(
-                  bottom: height * 0.07,
-                  left: 10,
-                  child: EmotePickerView(homeViewController: controller),
                 ),
               ),
             ],
@@ -250,15 +249,17 @@ class HomeView extends GetView<HomeViewController> {
   }
 
   Widget _tabsViews(BuildContext context) {
-    return Container(
-      color: Theme.of(context).primaryColor,
-      child: TabBarView(
-        physics:
-            NeverScrollableScrollPhysics(), //used so if the user scroll horizontally it wont change of tabView, might delete it later, to discuss
-        controller: controller.tabController,
-        children: List<Widget>.generate(
-          controller.tabElements.length,
-          (int index) => controller.tabElements[index],
+    return Expanded(
+      child: Container(
+        color: Theme.of(context).primaryColor,
+        child: TabBarView(
+          physics:
+              NeverScrollableScrollPhysics(), //used so if the user scroll horizontally it wont change of tabView, might delete it later, to discuss
+          controller: controller.tabController,
+          children: List<Widget>.generate(
+            controller.tabElements.length,
+            (int index) => controller.tabElements[index],
+          ),
         ),
       ),
     );

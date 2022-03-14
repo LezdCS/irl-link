@@ -53,7 +53,7 @@ class SettingsView extends GetView<SettingsViewController> {
             color: Theme.of(context).primaryColor,
           ),
           child: ListView(
-            padding: EdgeInsets.only(top: 8, left: 18, right: 18, bottom: 8),
+            padding: EdgeInsets.only(top: 8, left: 10, right: 10, bottom: 8),
             children: [
               chatSettings(context, width),
               Divider(),
@@ -82,7 +82,7 @@ class SettingsView extends GetView<SettingsViewController> {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 10, right: 10),
+            padding: EdgeInsets.only(left: 4, right: 4),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -356,7 +356,7 @@ class SettingsView extends GetView<SettingsViewController> {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 10, right: 10),
+            padding: EdgeInsets.only(left: 4, right: 4),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -475,11 +475,12 @@ class SettingsView extends GetView<SettingsViewController> {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+            padding: EdgeInsets.only(left: 4, right: 4),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
+                  padding: EdgeInsets.only(top: 10),
                   child: Row(
                     children: [
                       Icon(
@@ -639,7 +640,7 @@ class SettingsView extends GetView<SettingsViewController> {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+            padding: EdgeInsets.only(left: 4, right: 4),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

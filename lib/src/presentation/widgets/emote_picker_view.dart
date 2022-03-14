@@ -11,10 +11,7 @@ class EmotePickerView extends GetView {
 
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width;
     return Container(
-      width: width * 0.45,
-      height: width * 0.50,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(
           Radius.circular(8),
@@ -31,7 +28,6 @@ class EmotePickerView extends GetView {
       child: Column(
         children: [
           Container(
-            height: width * 0.1,
             decoration: BoxDecoration(
               color: Color(0xFF282828),
               borderRadius: BorderRadius.only(
@@ -56,11 +52,11 @@ class EmotePickerView extends GetView {
               ),
             ),
           ),
-          Container(
-            height: width * 0.4,
-            padding: EdgeInsets.only(left: 5, right: 5),
-            color: Color(0xFF121212),
+          Expanded(
+            flex: 4,
             child: Container(
+              padding: EdgeInsets.only(left: 5, right: 5),
+              color: Color(0xFF121212),
               child: Obx(
                 () => GridView.builder(
                   padding: EdgeInsets.only(top: 5),
@@ -82,7 +78,8 @@ class EmotePickerView extends GetView {
                     );
                   },
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 5),
+                    crossAxisCount: 5,
+                  ),
                 ),
               ),
             ),
