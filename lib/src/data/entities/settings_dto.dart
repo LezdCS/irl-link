@@ -18,6 +18,7 @@ class SettingsDTO extends Settings {
     required bool isObsConnected,
     required String obsWebsocketUrl,
     required String streamElementsAccessToken,
+    required List browserTabs,
   }) : super(
           //CHAT SETTINGS
           isEmotes: isEmotes,
@@ -35,6 +36,7 @@ class SettingsDTO extends Settings {
           obsWebsocketUrl: obsWebsocketUrl,
           isObsConnected: isObsConnected,
           streamElementsAccessToken: streamElementsAccessToken,
+          browserTabs: browserTabs,
         );
 
   Map toJson() => {
@@ -54,51 +56,56 @@ class SettingsDTO extends Settings {
         'isObsConnected': isObsConnected,
         'obsWebsocketUrl': obsWebsocketUrl,
         'streamElementsAccessToken': streamElementsAccessToken,
+        'browserTabs': browserTabs,
       };
 
   factory SettingsDTO.fromJson(Map<String, dynamic> map) {
     return SettingsDTO(
-        //CHAT SETTINGS
-        isEmotes: map['isEmotes'] != null
-            ? map['isEmotes'] as bool
-            : Settings.defaultSettings().isEmotes!,
-        textSize: map['textSize'] != null
-            ? map['textSize'] as double
-            : Settings.defaultSettings().textSize!,
-        emotesSize: map['emotesSize'] != null
-            ? map['emotesSize'] as double
-            : Settings.defaultSettings().emotesSize!,
-        displayTimestamp: map['displayTimestamp'] != null
-            ? map['displayTimestamp'] as bool
-            : Settings.defaultSettings().displayTimestamp!,
-        alternateChannel: map['alternateChannel'] != null
-            ? map['alternateChannel'] as bool
-            : Settings.defaultSettings().alternateChannel!,
-        alternateChannelName: map['alternateChannelName'] != null
-            ? map['alternateChannelName'] as String
-            : Settings.defaultSettings().alternateChannelName!,
-        hiddenUsersIds: map['hiddenUsersIds'] != null
-            ? map['hiddenUsersIds'] as List
-            : Settings.defaultSettings().hiddenUsersIds!,
-        //GENERAL SETTINGS
-        isDarkMode: map['isDarkMode'] != null
-            ? map['isDarkMode'] as bool
-            : Settings.defaultSettings().isDarkMode!,
-        keepSpeakerOn: map['keepSpeakerOn'] != null
-            ? map['keepSpeakerOn'] as bool
-            : Settings.defaultSettings().keepSpeakerOn!,
-        keepScreenOn: map['keepScreenOn'] != null
-            ? map['keepScreenOn'] as bool
-            : Settings.defaultSettings().keepScreenOn!,
-        //CONNECTIONS SETTINGS
-        isObsConnected: map['isObsConnected'] != null
-            ? map['isObsConnected'] as bool
-            : Settings.defaultSettings().isObsConnected!,
-        obsWebsocketUrl: map['obsWebsocketUrl'] != null
-            ? map['obsWebsocketUrl'] as String
-            : Settings.defaultSettings().obsWebsocketUrl!,
-        streamElementsAccessToken: map['streamElementsAccessToken'] != null
-            ? map['streamElementsAccessToken'] as String
-            : Settings.defaultSettings().streamElementsAccessToken!);
+      //CHAT SETTINGS
+      isEmotes: map['isEmotes'] != null
+          ? map['isEmotes'] as bool
+          : Settings.defaultSettings().isEmotes!,
+      textSize: map['textSize'] != null
+          ? map['textSize'] as double
+          : Settings.defaultSettings().textSize!,
+      emotesSize: map['emotesSize'] != null
+          ? map['emotesSize'] as double
+          : Settings.defaultSettings().emotesSize!,
+      displayTimestamp: map['displayTimestamp'] != null
+          ? map['displayTimestamp'] as bool
+          : Settings.defaultSettings().displayTimestamp!,
+      alternateChannel: map['alternateChannel'] != null
+          ? map['alternateChannel'] as bool
+          : Settings.defaultSettings().alternateChannel!,
+      alternateChannelName: map['alternateChannelName'] != null
+          ? map['alternateChannelName'] as String
+          : Settings.defaultSettings().alternateChannelName!,
+      hiddenUsersIds: map['hiddenUsersIds'] != null
+          ? map['hiddenUsersIds'] as List
+          : Settings.defaultSettings().hiddenUsersIds!,
+      //GENERAL SETTINGS
+      isDarkMode: map['isDarkMode'] != null
+          ? map['isDarkMode'] as bool
+          : Settings.defaultSettings().isDarkMode!,
+      keepSpeakerOn: map['keepSpeakerOn'] != null
+          ? map['keepSpeakerOn'] as bool
+          : Settings.defaultSettings().keepSpeakerOn!,
+      keepScreenOn: map['keepScreenOn'] != null
+          ? map['keepScreenOn'] as bool
+          : Settings.defaultSettings().keepScreenOn!,
+      //CONNECTIONS SETTINGS
+      isObsConnected: map['isObsConnected'] != null
+          ? map['isObsConnected'] as bool
+          : Settings.defaultSettings().isObsConnected!,
+      obsWebsocketUrl: map['obsWebsocketUrl'] != null
+          ? map['obsWebsocketUrl'] as String
+          : Settings.defaultSettings().obsWebsocketUrl!,
+      streamElementsAccessToken: map['streamElementsAccessToken'] != null
+          ? map['streamElementsAccessToken'] as String
+          : Settings.defaultSettings().streamElementsAccessToken!,
+      browserTabs: map['browserTabs'] != null
+          ? map['browserTabs'] as List
+          : Settings.defaultSettings().browserTabs!,
+    );
   }
 }
