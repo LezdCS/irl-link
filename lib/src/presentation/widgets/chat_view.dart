@@ -13,7 +13,6 @@ import 'package:collection/collection.dart';
 import 'alert_message_view.dart';
 
 class ChatView extends GetView<ChatViewController> {
-  //TODO : generate dialog timeout buttons from this List
   List<Map<String, int>> timeoutValues = [
     {"10s": 10},
     {"1m": 60},
@@ -215,10 +214,10 @@ class ChatView extends GetView<ChatViewController> {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              InkWell(
+            children: List.generate(timeoutValues.length, (index) {
+              return InkWell(
                 onTap: () => controller.timeoutMessageInstruction(
-                    controller.selectedMessage.value!, 10),
+                    controller.selectedMessage.value!, timeoutValues[index].values.first),
                 child: Container(
                   margin: EdgeInsets.only(right: 10),
                   padding:
@@ -228,71 +227,14 @@ class ChatView extends GetView<ChatViewController> {
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                   ),
                   child: Text(
-                    '10s',
+                    timeoutValues[index].keys.first,
                     style: TextStyle(
                       color: Colors.white,
                     ),
                   ),
                 ),
-              ),
-              InkWell(
-                onTap: () => controller.timeoutMessageInstruction(
-                    controller.selectedMessage.value!, 60),
-                child: Container(
-                  margin: EdgeInsets.only(right: 10),
-                  padding:
-                      EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
-                  decoration: BoxDecoration(
-                    color: Color(0xFF121212),
-                    borderRadius: BorderRadius.all(Radius.circular(5)),
-                  ),
-                  child: Text(
-                    '1m',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () => controller.timeoutMessageInstruction(
-                    controller.selectedMessage.value!, 600),
-                child: Container(
-                  margin: EdgeInsets.only(right: 10),
-                  padding:
-                      EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
-                  decoration: BoxDecoration(
-                    color: Color(0xFF121212),
-                    borderRadius: BorderRadius.all(Radius.circular(5)),
-                  ),
-                  child: Text(
-                    '10m',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () => controller.timeoutMessageInstruction(
-                    controller.selectedMessage.value!, 1800),
-                child: Container(
-                  margin: EdgeInsets.only(right: 10),
-                  padding:
-                      EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
-                  decoration: BoxDecoration(
-                    color: Color(0xFF121212),
-                    borderRadius: BorderRadius.all(Radius.circular(5)),
-                  ),
-                  child: Text(
-                    '30m',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+              );
+            }),
           ),
           SizedBox(height: 10),
           Row(
