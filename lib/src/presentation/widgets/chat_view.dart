@@ -13,7 +13,6 @@ import 'package:collection/collection.dart';
 import 'alert_message_view.dart';
 
 class ChatView extends GetView<ChatViewController> {
-
   //TODO : generate dialog timeout buttons from this List
   List<Map<String, int>> timeoutValues = [
     {"10s": 10},
@@ -74,11 +73,10 @@ class ChatView extends GetView<ChatViewController> {
                   ),
           ),
         ),
-
-        // FIXME : fix landscape view
         Positioned(
           bottom: height * 0.07,
-          width: width,
+          left: 0,
+          right: 0,
           child: Visibility(
             visible: !controller.isAutoScrolldown.value,
             child: Row(
