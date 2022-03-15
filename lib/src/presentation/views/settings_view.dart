@@ -260,7 +260,10 @@ class SettingsView extends GetView<SettingsViewController> {
                             controller:
                                 controller.alternateChannelChatController,
                             decoration: InputDecoration(
-                              border: UnderlineInputBorder(),
+                              isDense: true,
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 0, vertical: 0),
+                              border: InputBorder.none,
                               hintText: 'Nickname',
                               labelText: 'Twitch nickname',
                             ),
@@ -522,9 +525,9 @@ class SettingsView extends GetView<SettingsViewController> {
                   ),
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(
-                      flex: 7,
+                    Container(
                       child: Text(
                         "OBS",
                         style: TextStyle(
@@ -533,8 +536,7 @@ class SettingsView extends GetView<SettingsViewController> {
                         ),
                       ),
                     ),
-                    Expanded(
-                      flex: 3,
+                    Container(
                       child: Switch(
                         onChanged: (value) {
                           controller.settings.value = controller.settings.value
@@ -561,7 +563,10 @@ class SettingsView extends GetView<SettingsViewController> {
                             controller:
                                 controller.obsWebsocketUrlFieldController,
                             decoration: InputDecoration(
-                              border: UnderlineInputBorder(),
+                              isDense: true,
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 0, vertical: 0),
+                              border: InputBorder.none,
                               hintText: 'url:port',
                               labelText: 'Weboscket Url',
                             ),
@@ -596,48 +601,48 @@ class SettingsView extends GetView<SettingsViewController> {
                     ),
                   ),
                 ),
-                Container(
-                  child: Text(
-                    "Stream Elements",
-                    style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyText1!.color,
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            textStyle: TextStyle(fontSize: 12),
-                            backgroundColor: controller.settings.value
-                                        .streamElementsAccessToken !=
-                                    ""
-                                ? Colors.redAccent
-                                : Colors.green,
-                            fixedSize: Size(50, 20),
-                          ),
-                          onPressed: () {
-                            SystemChannels.textInput
-                                .invokeMethod('TextInput.hide');
-                          },
-                          child: Text(
-                            controller.settings.value
-                                        .streamElementsAccessToken !=
-                                    ""
-                                ? 'Logout'
-                                : 'Login',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 7,
+                      child: Container(
+                        child: Text(
+                          "Stream Elements",
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.bodyText1!.color,
+                            fontSize: 18,
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          textStyle: TextStyle(fontSize: 12),
+                          backgroundColor: controller.settings.value
+                                      .streamElementsAccessToken !=
+                                  ""
+                              ? Colors.redAccent
+                              : Colors.green,
+                          fixedSize: Size(50, 20),
+                        ),
+                        onPressed: () {
+                          SystemChannels.textInput
+                              .invokeMethod('TextInput.hide');
+                        },
+                        child: Text(
+                          controller.settings.value.streamElementsAccessToken !=
+                                  ""
+                              ? 'Logout'
+                              : 'Login',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
