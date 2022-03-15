@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:flutter/services.dart';
@@ -665,7 +666,7 @@ class SettingsView extends GetView<SettingsViewController> {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 4, right: 4),
+            padding: EdgeInsets.only(left: 4, right: 4, top: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -697,8 +698,35 @@ class SettingsView extends GetView<SettingsViewController> {
                 SizedBox(
                   height: 10,
                 ),
-                //todo : add Twitter icon
-                //todo : add GitHub icon
+                Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        launch("https://github.com/LezdCS/irl_link");
+                      },
+                      child: SvgPicture.asset(
+                        './lib/assets/icon-github.svg',
+                        semanticsLabel: 'github icon',
+                        width: 25,
+                        height: 25,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        launch("https://twitter.com/LezdCS");
+                      },
+                      child: SvgPicture.asset(
+                        './lib/assets/icon-twitter.svg',
+                        semanticsLabel: 'twitter icon',
+                        width: 24,
+                        height: 24,
+                      ),
+                    ),
+                  ],
+                )
               ],
             ),
           ),
