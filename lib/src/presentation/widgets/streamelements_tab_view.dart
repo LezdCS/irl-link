@@ -7,38 +7,35 @@ import 'package:irllink/src/presentation/controllers/streamelements_view_control
 class StreamelementsTabView extends GetView<StreamelementsViewController> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: context.theme.primaryColor,
-        flexibleSpace: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            TabBar(
-              controller: controller.tabController,
-              isScrollable: true,
-              labelColor: Colors.purple,
-              unselectedLabelColor: context.theme.textTheme.bodyText1!.color,
-              indicatorColor: Colors.purple,
-              indicatorWeight: 0.000001,
-              tabs: [Text("Notifications"), Text("Song Requests")],
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.only(top: 20, bottom: 10),
+          child: TabBar(
+            controller: controller.tabController,
+            isScrollable: true,
+            labelColor: Colors.purple,
+            unselectedLabelColor: context.theme.textTheme.bodyText1!.color,
+            indicatorColor: Colors.purple,
+            indicatorWeight: 0.000001,
+            tabs: [Text("Notifications"), Text("Song Requests")],
+          ),
+        ),
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              color: context.theme.primaryColor,
             ),
-          ],
+            child: TabBarView(
+              controller: controller.tabController,
+              children: [
+                _activities(),
+                _songRequests(context),
+              ],
+            ),
+          ),
         ),
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          color: context.theme.primaryColor,
-        ),
-        child: TabBarView(
-          controller: controller.tabController,
-          children: [
-            _activities(),
-            _songRequests(context),
-          ],
-        ),
-      ),
+      ],
     );
   }
 
