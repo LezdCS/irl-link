@@ -311,7 +311,7 @@ class SettingsView extends GetView<SettingsViewController> {
                           addFunction: controller.addHiddenUser,
                           removeFunction: controller.removeHiddenUser,
                           removeAllFunction: controller.clearHiddenUsers,
-                          addDialogWidget: Container(),
+                          addDialogWidget: _addHiddenUserTabDialog(context),
                         ),
                       ),
                     );
@@ -496,7 +496,7 @@ class SettingsView extends GetView<SettingsViewController> {
                           addFunction: controller.addBrowserTab,
                           removeFunction: controller.removeBrowserTab,
                           removeAllFunction: controller.clearBrowserTabs,
-                          addDialogWidget: Container(),
+                          addDialogWidget: _addBrowserTabDialog(context),
                         ),
                       ),
                     );
@@ -734,4 +734,62 @@ class SettingsView extends GetView<SettingsViewController> {
       ),
     );
   }
+}
+
+Widget _addBrowserTabDialog(context) {
+  return Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      TextFormField(
+        textInputAction: TextInputAction.send,
+        style: Theme.of(context).textTheme.bodyText1,
+        maxLines: 1,
+        decoration: InputDecoration(
+          border: UnderlineInputBorder(),
+          hintStyle: TextStyle(
+              color: Theme.of(context).textTheme.bodyText1!.color,
+              fontSize: 16),
+          hintText: 'Tab title',
+          labelText: 'Title',
+          isDense: true,
+          contentPadding: EdgeInsets.only(left: 5),
+        ),
+      ),
+      SizedBox(
+        height: 10,
+      ),
+      TextFormField(
+        textInputAction: TextInputAction.send,
+        style: Theme.of(context).textTheme.bodyText1,
+        maxLines: 1,
+        decoration: InputDecoration(
+          border: UnderlineInputBorder(),
+          hintStyle: TextStyle(
+              color: Theme.of(context).textTheme.bodyText1!.color,
+              fontSize: 16),
+          hintText: 'Tab url',
+          labelText: 'URL',
+          isDense: true,
+          contentPadding: EdgeInsets.only(left: 5),
+        ),
+      )
+    ],
+  );
+}
+
+Widget _addHiddenUserTabDialog(BuildContext context) {
+  return TextFormField(
+    textInputAction: TextInputAction.send,
+    style: Theme.of(context).textTheme.bodyText1,
+    maxLines: 1,
+    decoration: InputDecoration(
+      border: UnderlineInputBorder(),
+      hintStyle: TextStyle(
+          color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 16),
+      hintText: 'Enter an username',
+      labelText: 'Username',
+      isDense: true,
+      contentPadding: EdgeInsets.only(left: 5),
+    ),
+  );
 }

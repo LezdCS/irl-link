@@ -58,7 +58,14 @@ class ManageList extends GetView {
                   padding:
                       EdgeInsets.only(top: 8, left: 18, right: 18, bottom: 8),
                   itemCount: list.length,
-                  onReorder: (int oldIndex, int newIndex) {},
+                  onReorder: (int oldIndex, int newIndex) {
+                    if (newIndex == list.length) {
+                      newIndex -= 1;
+                    }
+                    var element = list[oldIndex];
+                    list.removeAt(oldIndex);
+                    list.insert(newIndex, element);
+                  },
                   itemBuilder: (BuildContext context, int index) {
                     var elem = list[index];
                     return Row(
@@ -108,9 +115,19 @@ class ManageList extends GetView {
                       child: InkWell(
                         onTap: () {
                           Get.defaultDialog(
-                            content: addDialogWidget,
-                            textCancel: "Cancel",
-                          );
+                              content: addDialogWidget,
+                              title: "Add",
+                              textCancel: "Cancel",
+                              textConfirm: "Add",
+                              titleStyle: TextStyle(color: Colors.white),
+                              backgroundColor: Color(0xFF282828),
+                              buttonColor: Color(0xFF9147ff),
+                              cancelTextColor: Color(0xFF9147ff),
+                              confirmTextColor: Colors.white,
+                              radius: 10,
+                              onConfirm: () {
+                                addFunction();
+                              });
                         },
                         child: Text(
                           "Add",
