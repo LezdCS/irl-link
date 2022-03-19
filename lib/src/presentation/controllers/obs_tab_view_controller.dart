@@ -1,63 +1,65 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
+import 'package:irllink/src/domain/entities/settings.dart';
+import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:obs_websocket/obs_websocket.dart';
-import 'package:obs_websocket/src/model/scene.dart';
 
 class ObsTabViewController extends GetxController {
-  final box = GetStorage();
+  ObsTabViewController({required this.homeEvents});
 
-  late ObsWebSocket obsWebSocket;
+  final HomeEvents homeEvents;
 
-  RxString alertMessage = "Failed to connect to OBS...".obs;
+  ObsWebSocket? obsWebSocket;
+
+  RxString alertMessage = "Failed to connect to OBS".obs;
+
   RxBool isConnected = false.obs;
 
-  RxDouble slideValueForVolume = 50.0.obs;
-
-  // obs scenes list
   RxList scenesList = RxList();
-  // active scene name
+
   RxString currentScene = RxString("");
-  // sources of active scene
+
   RxList sourcesList = RxList();
-  // visible sources names
+
   RxSet visibleSourcesList = RxSet();
 
+  RxBool isRecording = false.obs;
+
+  late Rx<Settings> settings = Settings.defaultSettings().obs;
+
   @override
-  Future<void> onInit() async {
+  void onInit() {
     super.onInit();
   }
 
   @override
-  void onReady() {
-    // connect to obs ws
-    connectWs();
-
+  Future<void> onReady() async {
+    await getSettings();
     super.onReady();
   }
 
   @override
   void onClose() {
-    // close obs websocket
-    obsWebSocket.close();
-
     super.onClose();
   }
 
-  void connectWs() async {
-    // todo get ws URL from settings
-    String addr = "172.21.205.220";
-    int port = 4444;
-    obsWebSocket = await ObsWebSocket.connect(
-        connectUrl: 'ws://$addr:$port',
-        fallbackEvent: (e) => connectionLost(e),
-        onError: (e) => connectFail(e),
-        timeout: const Duration(seconds: 30));
-
-    // success
-    alertMessage.value = "Connected.";
-    isConnected.value = true;
-    initController();
+  /// Connect to the OBS websocket at [url]
+  void connectWs(String url) async {
+    try {
+      obsWebSocket = await ObsWebSocket.connect(
+          connectUrl: 'ws://$url',
+          fallbackEvent: (e) => connectionLost(e),
+          onError: (e) => connectFail(e),
+          timeout: Duration(seconds: 30));
+      // success
+      alertMessage.value = "Connected.";
+      isConnected.value = true;
+      getSceneList();
+      getCurrentScene();
+    } catch (e) {
+      alertMessage.value = "Failed to connect to OBS";
+      isConnected.value = false;
+    }
   }
 
   void connectFail(e) {
@@ -74,41 +76,37 @@ class ObsTabViewController extends GetxController {
     alertMessage.value = "Connection with OBS lost ...";
   }
 
-  void initController() {
-    // loads all scenes
-    getSceneList();
-
-    // loads current scene and its sources
-    // checks which sources are visible
-    getCurrentScene();
-  }
-
+  /// Start the stream
   Future<void> startStream() async {
-    final StreamStatusResponse status = await obsWebSocket.getStreamStatus();
+    final StreamStatusResponse status = await obsWebSocket!.getStreamStatus();
 
     if (!status.streaming) {
-      await obsWebSocket.startStreaming();
+      await obsWebSocket!.startStreaming();
     }
   }
 
+  /// Stop the stream
   Future<void> stopStream() async {
-    final StreamStatusResponse status = await obsWebSocket.getStreamStatus();
+    final StreamStatusResponse status = await obsWebSocket!.getStreamStatus();
 
     if (status.streaming) {
-      await obsWebSocket.stopStreaming();
+      await obsWebSocket!.stopStreaming();
     }
   }
 
-  /*
-  fetch scene list
-   */
+  /// Toggle OBS recording
+  Future<void> startStopRecording() async {
+    //TODO : to finish
+    await obsWebSocket!.startStopRecording();
+    BaseResponse? status = await obsWebSocket!.command('GetRecordingStatus');
+    debugPrint(status!.rawResponse.toString());
+    debugPrint(status.rawResponse['isRecording'].toString());
+  }
+
+  /// Fetch scene list
   Future<void> getSceneList() async {
-    /*
-    returns
-    * current-scene 	String
-    * scenes 	Array<Scene>
-    */
-    BaseResponse? response = await obsWebSocket.command('GetSceneList');
+    BaseResponse? response = await obsWebSocket!.command('GetSceneList');
+    scenesList.clear();
 
     if (response!.status) {
       List respScenes = response.rawResponse["scenes"];
@@ -118,43 +116,48 @@ class ObsTabViewController extends GetxController {
     }
   }
 
-  /*
-  fetch current scene and its sources
-  build a list with all visible sources
-   */
+  /// Fetch current scene and its sources
+  /// Build a list with all visible sources
   Future<void> getCurrentScene() async {
-    /*
-    returns
-    * name 	String
-    * scenes 	Array<SceneItem> (sources of the current scene)
-    */
-    Scene response = await obsWebSocket.getCurrentScene();
+    Scene response = await obsWebSocket!.getCurrentScene();
 
-    // loads current scene name
     currentScene.value = response.name;
-    // loads current scene sources in list
     sourcesList.value = response.scenes;
 
-    // builds visible sources list
     sourcesList.forEach(
         (source) => {if (source.render) visibleSourcesList.add(source.name)});
   }
 
+  /// Switch to the scene named [sceneName]
   Future<void> setCurrentScene(String sceneName) async {
-    // update on OBS
-    await obsWebSocket.setCurrentScene(sceneName);
-
-    // update controller
+    await obsWebSocket!.setCurrentScene(sceneName);
     getCurrentScene();
   }
 
+  /// Show or hide the source named [sourceName] according to the [value]
   void setSourceVisibleState(String sourceName, bool value) {
-    // update on OBS
-    obsWebSocket.setSceneItemRender({"source": sourceName, "render": value});
-
-    // update controller
+    obsWebSocket!.setSceneItemRender({"source": sourceName, "render": value});
     value
         ? visibleSourcesList.add(sourceName)
         : visibleSourcesList.remove(sourceName);
+  }
+
+  Future getSettings() async {
+    await homeEvents.getSettings().then((value) async => {
+          if (value.error == null)
+            {
+              settings.value = value.data!,
+              this.applySettings(),
+            },
+        });
+  }
+
+  Future applySettings() async {
+    if (obsWebSocket != null) {
+      obsWebSocket!.close();
+    }
+    if (settings.value.isObsConnected!) {
+      this.connectWs(settings.value.obsWebsocketUrl!);
+    }
   }
 }

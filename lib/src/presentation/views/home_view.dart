@@ -1,6 +1,3 @@
-import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -28,15 +25,6 @@ class HomeView extends GetView<HomeViewController> {
       },
       child: Scaffold(
         resizeToAvoidBottomInset: true,
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.secondary,
-          flexibleSpace: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              _tabBar(context, height, width),
-            ],
-          ),
-        ),
         body: Obx(
           () => Stack(
             children: [
@@ -56,41 +44,28 @@ class HomeView extends GetView<HomeViewController> {
                       gripColor: context.theme.colorScheme.secondary,
                       gripColorActive: context.theme.colorScheme.secondary,
                       gripSize: 14,
-                      viewMode: SplitViewMode.Vertical,
+                      viewMode: context.isPortrait
+                          ? SplitViewMode.Vertical
+                          : SplitViewMode.Horizontal,
                       indicator: SplitIndicator(
-                        viewMode: SplitViewMode.Vertical,
+                        viewMode: context.isPortrait
+                            ? SplitViewMode.Vertical
+                            : SplitViewMode.Horizontal,
                         color: Color(0xFFFFFFFF),
                       ),
                       activeIndicator: SplitIndicator(
                         color: Color(0xFFFFFFFF),
-                        viewMode: SplitViewMode.Vertical,
+                        viewMode: context.isPortrait
+                            ? SplitViewMode.Vertical
+                            : SplitViewMode.Horizontal,
                         isActive: true,
                       ),
                       children: [
-                        _tabsViews(context),
-                        Listener(
-                          onPointerUp: (_) => {
-                            controller.isPickingEmote.value = false,
-                          },
-                          child: ChatView(),
-                        ),
+                        _top(context, height, width),
+                        _bottom(context, height, width),
                       ],
                     ),
                   ),
-                ),
-              ),
-              Positioned(
-                bottom: 0.0,
-                left: 0.0,
-                right: 0.0,
-                child: _bottomNavBar(height, width, context),
-              ),
-              Visibility(
-                visible: controller.isPickingEmote.value,
-                child: Positioned(
-                  bottom: height * 0.07,
-                  left: 10,
-                  child: EmotePickerView(homeViewController: controller),
                 ),
               ),
             ],
@@ -100,29 +75,69 @@ class HomeView extends GetView<HomeViewController> {
     );
   }
 
+  Widget _top(BuildContext context, double height, double width) {
+    return Column(
+      children: [
+        _tabBar(context, height, width),
+        _tabs(context),
+      ],
+    );
+  }
+
+  Widget _bottom(BuildContext context, double height, double width) {
+    return Stack(
+      children: [
+        Listener(
+          onPointerUp: (_) => {
+            controller.isPickingEmote.value = false,
+          },
+          child: ChatView(),
+        ),
+        Visibility(
+          visible: controller.isPickingEmote.value,
+          child: Positioned(
+            bottom: 50,
+            top: 50,
+            left: 10,
+            right: 150,
+            child: EmotePickerView(homeViewController: controller),
+          ),
+        ),
+        Positioned(
+          bottom: 0.0,
+          left: 0.0,
+          right: 0.0,
+          child: _bottomNavBar(height, width, context),
+        ),
+      ],
+    );
+  }
+
   Widget _tabBar(BuildContext context, double height, double width) {
-    return TabBar(
-      controller: controller.tabController,
-      isScrollable: true,
-      labelColor: Colors.purple,
-      unselectedLabelColor: Theme.of(context).textTheme.bodyText1!.color,
-      indicatorColor: Colors.purple,
-      labelPadding: EdgeInsets.symmetric(
-          horizontal: width / (controller.tabElements.length > 2 ? 9 : 5)),
-      tabs: List<Tab>.generate(
-        controller.tabElements.length,
-        (int index) => Tab(
-          child: Text(
-            controller.tabElements[index] is ObsTabView
-                ? "OBS"
-                : controller.tabElements[index] is StreamelementsTabView
-                    ? "StreamElements"
-                    : controller.tabElements[index] is TwitchTabView
-                        ? "Twitch"
-                        : controller.tabElements[index] is WebPageView
-                            ? (controller.tabElements[index] as WebPageView)
-                                .title
-                            : "",
+    return Obx(
+      () => TabBar(
+        controller: controller.tabController,
+        isScrollable: true,
+        labelColor: Colors.purple,
+        unselectedLabelColor: Theme.of(context).textTheme.bodyText1!.color,
+        indicatorColor: Colors.purple,
+        labelPadding: EdgeInsets.symmetric(
+            horizontal: width / (controller.tabElements.length > 2 ? 9 : 5)),
+        tabs: List<Tab>.generate(
+          controller.tabElements.length,
+          (int index) => Tab(
+            child: Text(
+              controller.tabElements[index] is ObsTabView
+                  ? "OBS"
+                  : controller.tabElements[index] is StreamelementsTabView
+                      ? "StreamElements"
+                      : controller.tabElements[index] is TwitchTabView
+                          ? "Twitch"
+                          : controller.tabElements[index] is WebPageView
+                              ? (controller.tabElements[index] as WebPageView)
+                                  .title
+                              : "",
+            ),
           ),
         ),
       ),
@@ -132,12 +147,12 @@ class HomeView extends GetView<HomeViewController> {
   Widget _bottomNavBar(double height, double width, BuildContext context) {
     return Obx(
       () => Container(
+        padding: EdgeInsets.only(left: 10),
         height: height * 0.06,
         child: Row(
           children: [
-            Container(
-              padding: EdgeInsets.only(left: 10),
-              width: width * 0.7,
+            Expanded(
+              flex: 5,
               child: Stack(
                 alignment: AlignmentDirectional.center,
                 children: [
@@ -145,6 +160,7 @@ class HomeView extends GetView<HomeViewController> {
                     child: SvgPicture.asset(
                       './lib/assets/chatinput.svg',
                       semanticsLabel: 'chat input',
+                      fit: BoxFit.fitWidth,
                     ),
                   ),
                   Container(
@@ -207,8 +223,8 @@ class HomeView extends GetView<HomeViewController> {
                 ],
               ),
             ),
-            Container(
-              width: width * 0.15,
+            Expanded(
+              flex: 1,
               child: InkWell(
                 onTap: () {
                   controller.sound.value = !controller.sound.value;
@@ -222,12 +238,14 @@ class HomeView extends GetView<HomeViewController> {
                 ),
               ),
             ),
-            Container(
-              width: width * 0.15,
+            Expanded(
+              flex: 1,
               child: InkWell(
                 onTap: () async {
                   await Get.toNamed(Routes.SETTINGS);
+                  controller.getSettings();
                   controller.chatViewController.getSettings();
+                  controller.obsTabViewController.getSettings();
                 },
                 child: Icon(
                   Icons.settings,
@@ -242,16 +260,17 @@ class HomeView extends GetView<HomeViewController> {
     );
   }
 
-  Widget _tabsViews(BuildContext context) {
-    return Container(
-      color: Theme.of(context).primaryColor,
-      child: TabBarView(
-        physics:
-            NeverScrollableScrollPhysics(), //used so if the user scroll horizontally it wont change of tabView, might delete it later, to discuss
-        controller: controller.tabController,
-        children: List<Widget>.generate(
-          controller.tabElements.length,
-          (int index) => controller.tabElements[index],
+  Widget _tabs(BuildContext context) {
+    return Expanded(
+      child: Container(
+        color: Theme.of(context).primaryColor,
+        child: TabBarView(
+          physics: NeverScrollableScrollPhysics(),
+          controller: controller.tabController,
+          children: List<Widget>.generate(
+            controller.tabElements.length,
+            (int index) => controller.tabElements[index],
+          ),
         ),
       ),
     );

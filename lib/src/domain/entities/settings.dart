@@ -8,6 +8,7 @@ class Settings extends Equatable {
   final bool? displayTimestamp;
   final bool? alternateChannel;
   final String? alternateChannelName;
+  final List? hiddenUsersIds;
 
   //GENERAL SETTINGS
   final bool? isDarkMode;
@@ -18,6 +19,7 @@ class Settings extends Equatable {
   final bool? isObsConnected;
   final String? obsWebsocketUrl;
   final String? streamElementsAccessToken;
+  final List? browserTabs;
 
   const Settings({
     //CHAT SETTINGS
@@ -27,6 +29,7 @@ class Settings extends Equatable {
     required this.displayTimestamp,
     required this.alternateChannel,
     required this.alternateChannelName,
+    required this.hiddenUsersIds,
 
     //GENERAL SETTINGS
     required this.isDarkMode,
@@ -37,6 +40,7 @@ class Settings extends Equatable {
     required this.isObsConnected,
     required this.obsWebsocketUrl,
     required this.streamElementsAccessToken,
+    required this.browserTabs,
   });
 
   Settings.defaultSettings({
@@ -47,6 +51,7 @@ class Settings extends Equatable {
     this.displayTimestamp = false,
     this.alternateChannel = false,
     this.alternateChannelName = "",
+    this.hiddenUsersIds = const [],
 
     //GENERAL SETTINGS
     this.isDarkMode = true,
@@ -57,10 +62,10 @@ class Settings extends Equatable {
     this.isObsConnected = false,
     this.obsWebsocketUrl = "",
     this.streamElementsAccessToken = "",
+    this.browserTabs = const [],
   });
 
-  Map toJson() =>
-      {
+  Map toJson() => {
         //CHAT
         'isEmotes': isEmotes,
         'textSize': textSize,
@@ -68,6 +73,7 @@ class Settings extends Equatable {
         'displayTimestamp': displayTimestamp,
         'alternateChannel': alternateChannel,
         'alternateChannelName': alternateChannelName,
+        'hiddenUsersIds': hiddenUsersIds,
         //GENERAL
         'isDarkMode': isDarkMode,
         'keepSpeakerOn': keepSpeakerOn,
@@ -76,6 +82,7 @@ class Settings extends Equatable {
         'isObsConnected': isObsConnected,
         'obsWebsocketUrl': obsWebsocketUrl,
         'streamElementsAccessToken': streamElementsAccessToken,
+        'browserTabs': browserTabs,
       };
 
   @override
@@ -88,6 +95,7 @@ class Settings extends Equatable {
       displayTimestamp,
       alternateChannel,
       alternateChannelName,
+      hiddenUsersIds,
       //GENERAL
       isDarkMode,
       keepSpeakerOn,
@@ -96,6 +104,7 @@ class Settings extends Equatable {
       isObsConnected,
       obsWebsocketUrl,
       streamElementsAccessToken,
+      browserTabs,
     ];
   }
 
@@ -110,6 +119,7 @@ class Settings extends Equatable {
     bool? displayTimestamp,
     bool? alternateChannel,
     String? alternateChannelName,
+    List? hiddenUsersIds,
     //GENERAL
     bool? isDarkMode,
     bool? keepSpeakerOn,
@@ -118,6 +128,7 @@ class Settings extends Equatable {
     bool? isObsConnected,
     String? obsWebsocketUrl,
     String? streamElementsAccessToken,
+    List? browserTabs,
   }) =>
       Settings(
         //CHAT
@@ -127,14 +138,16 @@ class Settings extends Equatable {
         displayTimestamp: displayTimestamp ?? this.displayTimestamp,
         alternateChannel: alternateChannel ?? this.alternateChannel,
         alternateChannelName: alternateChannelName ?? this.alternateChannelName,
+        hiddenUsersIds: hiddenUsersIds ?? this.hiddenUsersIds,
         //GENERAL
         isDarkMode: isDarkMode ?? this.isDarkMode,
-        keepSpeakerOn:keepSpeakerOn ?? this.keepSpeakerOn,
-        keepScreenOn:keepScreenOn ?? this.keepScreenOn,
+        keepSpeakerOn: keepSpeakerOn ?? this.keepSpeakerOn,
+        keepScreenOn: keepScreenOn ?? this.keepScreenOn,
         //CONNECTIONS
         isObsConnected: isObsConnected ?? this.isObsConnected,
         obsWebsocketUrl: obsWebsocketUrl ?? this.obsWebsocketUrl,
         streamElementsAccessToken:
-        streamElementsAccessToken ?? this.streamElementsAccessToken,
+            streamElementsAccessToken ?? this.streamElementsAccessToken,
+          browserTabs: browserTabs ?? this.browserTabs,
       );
 }

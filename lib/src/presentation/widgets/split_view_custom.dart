@@ -4,8 +4,6 @@ import 'dart:collection';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 
 /// A SplitView class.
 class SplitViewCustom extends StatefulWidget {
@@ -388,8 +386,8 @@ class SplitIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 50,
-      height: 3,
+      width: this.viewMode == SplitViewMode.Vertical ? 50 : 3,
+      height: this.viewMode == SplitViewMode.Vertical ? 3 : 50,
       child: Container(
         decoration: BoxDecoration(
           color: this.color,

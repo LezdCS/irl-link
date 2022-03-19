@@ -1,8 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 
 class TwitchTabView extends GetView<TwitchTabViewController> {
@@ -11,16 +8,17 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
     return SingleChildScrollView(
       child: Obx(
         () => Container(
+          padding: EdgeInsets.only(left: 20.0, top: 12.0, right: 20.0),
           color: Theme.of(context).primaryColor,
           child: Column(
-            children: <Widget>[
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
               Row(
-                children: <Widget>[
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
                   Container(
-                    padding:
-                        EdgeInsets.only(left: 20.0, top: 12.0, bottom: 12.0),
                     child: Row(
-                      children: <Widget>[
+                      children: [
                         Icon(Icons.circle,
                             color: controller.twitchStreamInfos.value.isOnline!
                                 ? Colors.red
@@ -28,7 +26,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         Padding(padding: EdgeInsets.only(right: 10.0)),
                         Text(
                           controller.twitchStreamInfos.value.isOnline!
-                              ? "Online"
+                              ? "Live"
                               : "Offline",
                           style: TextStyle(
                             color: Theme.of(Get.context!)
@@ -40,20 +38,17 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                       ],
                     ),
                   ),
-                  Spacer(),
                   Container(
-                    padding:
-                        EdgeInsets.only(right: 20.0, top: 12.0, bottom: 12.0),
                     child: Row(
-                      children: <Widget>[
+                      children: [
                         Icon(Icons.person_outline, color: Colors.red),
                         Text(
                           controller.twitchStreamInfos.value.viewerCount
                               .toString(),
                           style: TextStyle(color: Colors.red),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(right: 10.0),
+                        SizedBox(
+                          width: 10,
                         ),
                         Text(
                           "viewers",
@@ -69,218 +64,189 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                   ),
                 ],
               ),
-              Container(
-                padding: EdgeInsets.only(right: 20, left: 20, top: 13),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            child: TextFormField(
-                              controller: controller.titleFormController,
-                              focusNode: controller.focus,
-                              style: Theme.of(Get.context!).textTheme.bodyText1,
-                              decoration: InputDecoration(
-                                border: UnderlineInputBorder(),
-                                hintText: 'Your stream\'s title',
-                                labelText: 'Enter your stream\'s title',
-                              ),
-                            ),
-                          ),
-                        ],
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: controller.titleFormController,
+                      focusNode: controller.focus,
+                      style: Theme.of(Get.context!).textTheme.bodyText1,
+                      decoration: InputDecoration(
+                        border: UnderlineInputBorder(),
+                        hintText: 'Your stream\'s title',
+                        labelText: 'Enter your stream\'s title',
                       ),
                     ),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        textStyle: TextStyle(fontSize: 12),
-                        backgroundColor: Colors.deepPurpleAccent,
-                        fixedSize: Size(50, 20),
-                      ),
-                      onPressed: () {
-                        controller.setStreamTitle();
-                        FocusScope.of(context).unfocus();
-                      },
-                      child: Text(
-                        'Change',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
+                  ),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      textStyle: TextStyle(fontSize: 12),
+                      backgroundColor: Colors.deepPurpleAccent,
+                      fixedSize: Size(50, 20),
+                    ),
+                    onPressed: () {
+                      controller.setStreamTitle();
+                      FocusScope.of(context).unfocus();
+                    },
+                    child: Text(
+                      'Change',
+                      style: TextStyle(
+                        color: Colors.white,
                       ),
                     ),
-                  ],
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: controller.raidFormController,
+                      style: Theme.of(Get.context!).textTheme.bodyText1,
+                      decoration: InputDecoration(
+                        border: UnderlineInputBorder(),
+                        hintText: 'Enter the nickname',
+                        labelText: 'Raid Someone',
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      textStyle: TextStyle(
+                        fontSize: 12,
+                        color: Colors.white,
+                      ),
+                      backgroundColor: Colors.deepPurpleAccent,
+                      fixedSize: Size(50, 20),
+                    ),
+                    onPressed: () {
+                      controller.raidSomeone();
+                      FocusScope.of(context).unfocus();
+                    },
+                    child: Text(
+                      'Raid',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Text(
+                "Shortcuts",
+                style: TextStyle(
+                  color: Theme.of(Get.context!)
+                      .textTheme
+                      .bodyText1!
+                      .color,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(right: 20, left: 20, top: 13),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            child: TextFormField(
-                              controller: controller.raidFormController,
-                              style: Theme.of(Get.context!).textTheme.bodyText1,
-                              decoration: InputDecoration(
-                                border: UnderlineInputBorder(),
-                                hintText: 'Enter the nickname',
-                                labelText: 'Raid Someone',
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        textStyle: TextStyle(
-                          fontSize: 12,
-                          color: Colors.white,
-                        ),
-                        backgroundColor: Colors.deepPurpleAccent,
-                        fixedSize: Size(50, 20),
-                      ),
-                      onPressed: () {
-                        controller.raidSomeone();
-                        FocusScope.of(context).unfocus();
+                child: GridView.count(
+                  shrinkWrap: true,
+                  primary: false,
+                  padding: EdgeInsets.only(top:10),
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  crossAxisCount: 2,
+                  childAspectRatio: 4,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        controller.twitchStreamInfos.value =
+                            controller.twitchStreamInfos.value.copyWith(
+                                isFollowerMode: !controller
+                                    .twitchStreamInfos.value.isFollowerMode!);
+                        controller.changeChatSettings();
                       },
-                      child: Text(
-                        'Raid',
-                        style: TextStyle(
-                          color: Colors.white,
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            color: controller
+                                    .twitchStreamInfos.value.isFollowerMode!
+                                ? Colors.deepPurpleAccent[200]
+                                : Colors.grey[850],
+                            borderRadius: BorderRadius.all(Radius.circular(8))),
+                        padding: EdgeInsets.all(8),
+                        child: Text(
+                          "Follower Only",
+                          textAlign: TextAlign.center,
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.all(10),
-                margin: EdgeInsets.only(
-                  top: 30,
-                ),
-                child: Column(
-                  children: <Widget>[
-                    Title(
-                      title: "Chat Moderation :",
-                      color: Colors.white,
-                      child: Text(
-                        "Chat Moderation :",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                    InkWell(
+                      onTap: () {
+                        controller.twitchStreamInfos.value =
+                            controller.twitchStreamInfos.value.copyWith(
+                                isSubscriberMode: !controller
+                                    .twitchStreamInfos.value.isSubscriberMode!);
+                        controller.changeChatSettings();
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            color: controller
+                                    .twitchStreamInfos.value.isSubscriberMode!
+                                ? Colors.deepPurpleAccent[200]
+                                : Colors.grey[850],
+                            borderRadius: BorderRadius.all(Radius.circular(8))),
+                        padding: EdgeInsets.all(8),
+                        child: Text(
+                          'Subscriber only',
+                          textAlign: TextAlign.center,
                         ),
                       ),
                     ),
-                    Wrap(
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(right: 5, top: 5),
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                              textStyle: TextStyle(fontSize: 20),
-                              backgroundColor: controller
-                                      .twitchStreamInfos.value.isFollowerMode!
-                                  ? Colors.purple
-                                  : Colors.deepPurpleAccent,
-                            ),
-                            onPressed: () {
-                              controller.twitchStreamInfos.value =
-                                  controller.twitchStreamInfos.value.copyWith(
-                                      isFollowerMode: !controller
-                                          .twitchStreamInfos
-                                          .value
-                                          .isFollowerMode!);
-                              controller.changeChatSettings();
-                            },
-                            child: Text(
-                              'Followers Only',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
+                    InkWell(
+                      onTap: () {
+                        controller.twitchStreamInfos.value =
+                            controller.twitchStreamInfos.value.copyWith(
+                                isEmoteMode: !controller
+                                    .twitchStreamInfos.value.isEmoteMode!);
+                        controller.changeChatSettings();
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            color:
+                                controller.twitchStreamInfos.value.isEmoteMode!
+                                    ? Colors.deepPurpleAccent[200]
+                                    : Colors.grey[850],
+                            borderRadius: BorderRadius.all(Radius.circular(8))),
+                        padding: EdgeInsets.all(8),
+                        child: Text(
+                          'Emote only',
+                          textAlign: TextAlign.center,
                         ),
-                        Container(
-                          margin: EdgeInsets.only(left: 5, top: 5),
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                              textStyle: TextStyle(fontSize: 20),
-                              backgroundColor: controller
-                                      .twitchStreamInfos.value.isSubscriberMode!
-                                  ? Colors.purple
-                                  : Colors.deepPurpleAccent,
-                            ),
-                            onPressed: () {
-                              controller.twitchStreamInfos.value =
-                                  controller.twitchStreamInfos.value.copyWith(
-                                      isSubscriberMode: !controller
-                                          .twitchStreamInfos
-                                          .value
-                                          .isSubscriberMode!);
-                              controller.changeChatSettings();
-                            },
-                            child: Text(
-                              'Subscribers Only',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        controller.twitchStreamInfos.value =
+                            controller.twitchStreamInfos.value.copyWith(
+                                isSlowMode: !controller
+                                    .twitchStreamInfos.value.isSlowMode!);
+                        controller.changeChatSettings();
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            color:
+                                controller.twitchStreamInfos.value.isSlowMode!
+                                    ? Colors.deepPurpleAccent[200]
+                                    : Colors.grey[850],
+                            borderRadius: BorderRadius.all(Radius.circular(8))),
+                        padding: EdgeInsets.all(8),
+                        child: Text(
+                          'Slow Mode',
+                          textAlign: TextAlign.center,
                         ),
-                        Container(
-                          margin: EdgeInsets.only(right: 5, top: 2),
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                              textStyle: TextStyle(fontSize: 20),
-                              backgroundColor: controller
-                                      .twitchStreamInfos.value.isEmoteMode!
-                                  ? Colors.purple
-                                  : Colors.deepPurpleAccent,
-                            ),
-                            onPressed: () {
-                              controller.twitchStreamInfos.value =
-                                  controller.twitchStreamInfos.value.copyWith(
-                                      isEmoteMode: !controller.twitchStreamInfos
-                                          .value.isEmoteMode!);
-                              controller.changeChatSettings();
-                            },
-                            child: Text(
-                              'Emote Only',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 5, top: 2),
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                              textStyle: TextStyle(fontSize: 20),
-                              backgroundColor:
-                                  controller.twitchStreamInfos.value.isSlowMode!
-                                      ? Colors.purple
-                                      : Colors.deepPurpleAccent,
-                            ),
-                            onPressed: () {
-                              controller.twitchStreamInfos.value =
-                                  controller.twitchStreamInfos.value.copyWith(
-                                      isSlowMode: !controller
-                                          .twitchStreamInfos.value.isSlowMode!);
-                              controller.changeChatSettings();
-                            },
-                            child: Text(
-                              'Slow Mode',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ],
                 ),

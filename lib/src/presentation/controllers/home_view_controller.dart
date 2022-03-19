@@ -2,13 +2,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/emote.dart';
+import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
+import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:irllink/src/presentation/widgets/obs_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/split_view_custom.dart';
 import 'package:irllink/src/presentation/widgets/streamelements_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/twitch_tab_view.dart';
-import 'package:irllink/src/presentation/widgets/web_page_view.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:web_socket_channel/status.dart' as status;
@@ -16,14 +17,14 @@ import 'package:web_socket_channel/status.dart' as status;
 import 'chat_view_controller.dart';
 
 class HomeViewController extends GetxController
-    with GetSingleTickerProviderStateMixin {
+    with GetTickerProviderStateMixin {
   HomeViewController({required this.homeEvents});
 
   final HomeEvents homeEvents;
 
   RxBool sound = true.obs;
   SplitViewController splitViewController =
-      new SplitViewController(limits: [null, WeightLimit(min: 0.12)]);
+      SplitViewController(limits: [null, WeightLimit(min: 0.12)]);
 
   //TABS
   late TabController tabController;
@@ -38,26 +39,30 @@ class HomeViewController extends GetxController
   //emote picker
   RxBool isPickingEmote = false.obs;
   late ChatViewController chatViewController;
+  late ObsTabViewController obsTabViewController;
+
+  late Rx<Settings> settings = Settings.defaultSettings().obs;
 
   @override
   void onInit() {
-    chatInputController = new TextEditingController();
+    chatInputController = TextEditingController();
 
     twitchData = Get.arguments[0];
 
     if (GetPlatform.isAndroid) WebView.platform = SurfaceAndroidWebView();
 
     TwitchTabView twitchPage = TwitchTabView();
-    ObsTabView obsPage = ObsTabView();
-    StreamelementsTabView streamelementsPage = StreamelementsTabView();
-    WebPageView page1View = WebPageView("Youtube", "https://www.youtube.com");
-
     tabElements.add(twitchPage);
-    tabElements.add(obsPage);
+
+    StreamelementsTabView streamelementsPage = StreamelementsTabView();
     tabElements.add(streamelementsPage);
+
+    // WebPageView page1View = WebPageView("Youtube", "https://www.youtube.com");
     // tabElements.add(page1View);
 
-    tabController = new TabController(length: tabElements.length, vsync: this);
+    tabController = TabController(length: tabElements.length, vsync: this);
+
+    this.getSettings();
 
     super.onInit();
   }
@@ -65,13 +70,30 @@ class HomeViewController extends GetxController
   @override
   void onReady() {
     chatViewController = Get.find<ChatViewController>();
-
+    obsTabViewController = Get.find<ObsTabViewController>();
     super.onReady();
   }
 
   @override
   void onClose() {
     super.onClose();
+  }
+
+  void createObsTab() {
+    if (tabElements.firstWhereOrNull((tab) => tab is ObsTabView) == null) {
+      ObsTabView obsPage = ObsTabView();
+      int newSize = tabController.length + 1;
+      tabController = TabController(length: newSize, vsync: this);
+      tabElements.add(obsPage);
+    }
+  }
+
+  void removeObsTab() {
+    if (tabElements.firstWhereOrNull((tab) => tab is ObsTabView) != null) {
+      int newSize = tabController.length - 1;
+      tabController = TabController(length: newSize, vsync: this);
+      tabElements.remove(tabElements.firstWhere((tab) => tab is ObsTabView));
+    }
   }
 
   void sendChatMessage(String message) {
@@ -94,7 +116,8 @@ class HomeViewController extends GetxController
   }
 
   void getEmotes() {
-    List<Emote> emotes = chatViewController.twitchEmotes;
+    List<Emote> emotes = List.from(chatViewController.twitchEmotes)
+      ..addAll(chatViewController.thirdPartEmotes);
     twitchEmotes
       ..clear()
       ..addAll(emotes);
@@ -102,11 +125,32 @@ class HomeViewController extends GetxController
   }
 
   void searchEmote(String input) {
-    List<Emote> emotes = chatViewController.twitchEmotes;
+    List<Emote> emotes = List.from(chatViewController.twitchEmotes)
+      ..addAll(chatViewController.thirdPartEmotes);
+    emotes = emotes
+        .where(
+          (emote) => emote.name.toLowerCase().contains(input.toLowerCase()),
+        )
+        .toList();
     twitchEmotes
       ..clear()
-      ..addAll(emotes
-          .where((emote) => emote.name.toLowerCase().contains(input))
-          .toList());
+      ..addAll(emotes);
+  }
+
+  Future getSettings() async {
+    await homeEvents.getSettings().then((value) async => {
+          if (value.error == null)
+            {
+              settings.value = value.data!,
+              if (settings.value.isObsConnected!)
+                {
+                  this.createObsTab(),
+                }
+              else
+                {
+                  this.removeObsTab(),
+                }
+            },
+        });
   }
 }

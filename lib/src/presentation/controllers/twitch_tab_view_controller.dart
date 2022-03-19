@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:irllink/src/domain/entities/twitch_stream_infos.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 
@@ -29,8 +27,8 @@ class TwitchTabViewController extends GetxController {
 
   @override
   void onInit() {
-    titleFormController = new TextEditingController();
-    raidFormController = new TextEditingController();
+    titleFormController = TextEditingController();
+    raidFormController = TextEditingController();
     super.onInit();
   }
 

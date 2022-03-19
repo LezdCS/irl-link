@@ -408,6 +408,51 @@ class TwitchRepositoryImpl extends TwitchRepository {
   }
 
   @override
+  Future<DataState<List<Emote>>> get7TvGlobalEmotes() async {
+    Response response;
+    var dio = Dio();
+    List<Emote> emotes = <Emote>[];
+    try {
+      response = await dio.get(
+        'https://api.7tv.app/v2/emotes/global',
+      );
+
+      response.data.forEach(
+        (emote) => emotes.add(
+          EmoteDTO.fromJson7Tv(emote),
+        ),
+      );
+
+      return DataSuccess(emotes);
+    } on DioError catch (e) {
+      return DataFailed("Error retrieving 7Tv global emotes");
+    }
+  }
+
+  @override
+  Future<DataState<List<Emote>>> get7TvChannelEmotes(
+      String broadcasterId) async {
+    Response response;
+    var dio = Dio();
+    List<Emote> emotes = <Emote>[];
+    try {
+      response = await dio.get(
+        'https://api.7tv.app/v2/users/$broadcasterId/emotes',
+      );
+
+      response.data.forEach(
+        (emote) => emotes.add(
+          EmoteDTO.fromJson7Tv(emote),
+        ),
+      );
+
+      return DataSuccess(emotes);
+    } on DioError catch (e) {
+      return DataFailed("Error retrieving 7Tv channel emotes");
+    }
+  }
+
+  @override
   Future<DataState<List<Emote>>> getBttvGlobalEmotes() async {
     Response response;
     var dio = Dio();
@@ -494,15 +539,14 @@ class TwitchRepositoryImpl extends TwitchRepository {
   }
 
   @override
-  Future<DataState<void>> setStreamTitle(String accessToken, String broadcasterId, String title) async {
+  Future<DataState<void>> setStreamTitle(
+      String accessToken, String broadcasterId, String title) async {
     Response response;
     var dio = Dio();
     try {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
       dio.options.headers["authorization"] = "Bearer $accessToken";
-      Map titleMap = {
-        "title": title
-      };
+      Map titleMap = {"title": title};
       response = await dio.patch('https://api.twitch.tv/helix/channels',
           queryParameters: {
             'broadcaster_id': broadcasterId,
@@ -513,6 +557,5 @@ class TwitchRepositoryImpl extends TwitchRepository {
     } on DioError catch (e) {
       return DataFailed("Error editing Stream chat settings");
     }
-
   }
 }

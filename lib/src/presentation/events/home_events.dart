@@ -87,6 +87,16 @@ class HomeEvents {
     return twitchUseCase.getBttvChannelEmotes(broadcasterId: broadcasterId);
   }
 
+  Future<DataState<List<Emote>>> get7TvChannelEmotes({
+    required String broadcasterId,
+  }) {
+    return twitchUseCase.get7TvChannelEmotes(broadcasterId: broadcasterId);
+  }
+
+  Future<DataState<List<Emote>>> get7TvGlobalEmotes() {
+    return twitchUseCase.get7TvGlobalEmotes();
+  }
+
   Future<DataState<List<Emote>>> getBttvGlobalEmotes() {
     return twitchUseCase.getBttvGlobalEmotes();
   }
@@ -109,5 +119,9 @@ class HomeEvents {
 
   Future<DataState<Settings>> getSettings() {
     return settingsUseCase.getSettings();
+  }
+
+  Future<void> setSettings({required Settings settings}) {
+    return settingsUseCase.setSettings(settings: settings);
   }
 }

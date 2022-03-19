@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/events/settings_events.dart';
@@ -13,12 +13,12 @@ class SettingsViewController extends GetxController {
   late Rx<Settings> settings = Settings.defaultSettings().obs;
 
   late TextEditingController alternateChannelChatController;
-  late TextEditingController  obsWebsocketUrlFieldController;
+  late TextEditingController obsWebsocketUrlFieldController;
 
   @override
   void onInit() {
-    alternateChannelChatController = new TextEditingController();
-    obsWebsocketUrlFieldController = new TextEditingController();
+    alternateChannelChatController = TextEditingController();
+    obsWebsocketUrlFieldController = TextEditingController();
     super.onInit();
   }
 
@@ -28,8 +28,10 @@ class SettingsViewController extends GetxController {
           if (value.error == null)
             {
               settings.value = value.data!,
-              alternateChannelChatController.text = settings.value.alternateChannelName!,
-              obsWebsocketUrlFieldController.text = settings.value.obsWebsocketUrl!,
+              alternateChannelChatController.text =
+                  settings.value.alternateChannelName!,
+              obsWebsocketUrlFieldController.text =
+                  settings.value.obsWebsocketUrl!,
             }
         });
     super.onReady();
@@ -45,6 +47,26 @@ class SettingsViewController extends GetxController {
           (value) => Get.offAllNamed(Routes.LOGIN),
         );
   }
+
+  void clearHiddenUsers() {
+    settings.value = settings.value.copyWith(hiddenUsersIds: []);
+    this.saveSettings();
+  }
+
+  void removeHiddenUser(userId) {
+    List hiddenUsersIds = settings.value.hiddenUsersIds!;
+    hiddenUsersIds.remove(userId);
+    settings.value = settings.value.copyWith(hiddenUsersIds: hiddenUsersIds);
+    saveSettings();
+  }
+
+  void addHiddenUser(String name) {}
+
+  void addBrowserTab(String name, String url) {}
+
+  void removeBrowserTab() {}
+
+  void clearBrowserTabs() {}
 
   void saveSettings() {
     settingsEvents.setSettings(settings: settings.value);
