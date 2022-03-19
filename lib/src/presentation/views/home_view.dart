@@ -48,12 +48,16 @@ class HomeView extends GetView<HomeViewController> {
                           ? SplitViewMode.Vertical
                           : SplitViewMode.Horizontal,
                       indicator: SplitIndicator(
-                        viewMode: SplitViewMode.Vertical,
+                        viewMode: context.isPortrait
+                            ? SplitViewMode.Vertical
+                            : SplitViewMode.Horizontal,
                         color: Color(0xFFFFFFFF),
                       ),
                       activeIndicator: SplitIndicator(
                         color: Color(0xFFFFFFFF),
-                        viewMode: SplitViewMode.Vertical,
+                        viewMode: context.isPortrait
+                            ? SplitViewMode.Vertical
+                            : SplitViewMode.Horizontal,
                         isActive: true,
                       ),
                       children: [
