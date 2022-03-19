@@ -59,10 +59,6 @@ class ChatViewController extends GetxController
     scrollController.addListener(scrollListener);
 
     Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      if (streamSubscription != null) {
-        streamSubscription!.cancel();
-        channel.sink.add('PART #$ircChannelJoined');
-      }
       switch (result) {
         case ConnectivityResult.wifi:
           joinIrc();
@@ -93,6 +89,11 @@ class ChatViewController extends GetxController
 
   /// Join the Twitch IRC
   Future<void> joinIrc() async {
+    if (streamSubscription != null) {
+      streamSubscription!.cancel();
+      channel.sink.add('PART #$ircChannelJoined');
+      chatMessages.clear();
+    }
     alertMessage.value = "Connecting...";
     isChatConnected.value = false;
     String token = twitchData.accessToken;
@@ -134,7 +135,7 @@ class ChatViewController extends GetxController
 
   /// Receive all the Twitch Websocket data
   void chatListener(String message) {
-    debugPrint(message);
+    //debugPrint(message);
     if (message.startsWith('PING ')) {
       channel.sink.add("PONG :tmi.twitch.tv\r\n");
     }
@@ -276,6 +277,13 @@ class ChatViewController extends GetxController
             if (value.error == null) {emotes.addAll(value.data!)}
           },
         );
+
+    return emotes;
+  }
+
+  /// Returns a List of Twitch official emotes
+  Future<List<Emote>> getTwitchCheerEmotes() async {
+    List<Emote> emotes = [];
 
     await homeEvents
         .getTwitchCheerEmotes(
@@ -439,15 +447,10 @@ class ChatViewController extends GetxController
       ircChannelJoinedChannelId = twitchData.twitchUser.id;
     }
 
-    if (streamSubscription != null) {
-      streamSubscription!.cancel();
-      channel.sink.add('PART #$ircChannelJoined');
-      chatMessages.clear();
-    }
-
+    getTwitchBadges().then((value) => twitchBadges = value);
+    getTwitchEmotes().then((value) => twitchEmotes = value);
+    getThirdPartEmotes().then((value) => thirdPartEmotes = value);
+    getTwitchCheerEmotes().then((value) => cheerEmotes = value);
     joinIrc();
-    twitchBadges = await getTwitchBadges();
-    twitchEmotes = await getTwitchEmotes();
-    thirdPartEmotes = await getThirdPartEmotes();
   }
 }
