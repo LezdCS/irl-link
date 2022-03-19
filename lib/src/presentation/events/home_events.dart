@@ -93,6 +93,10 @@ class HomeEvents {
     return twitchUseCase.get7TvChannelEmotes(broadcasterId: broadcasterId);
   }
 
+  Future<DataState<List<Emote>>> get7TvGlobalEmotes() {
+    return twitchUseCase.get7TvGlobalEmotes();
+  }
+
   Future<DataState<List<Emote>>> getBttvGlobalEmotes() {
     return twitchUseCase.getBttvGlobalEmotes();
   }

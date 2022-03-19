@@ -59,36 +59,39 @@ class ManageList extends GetView {
                       EdgeInsets.only(top: 8, left: 18, right: 18, bottom: 8),
                   itemCount: list.length,
                   onReorder: (int oldIndex, int newIndex) {
-                    if (newIndex == list.length) {
-                      newIndex -= 1;
-                    }
                     var element = list[oldIndex];
                     list.removeAt(oldIndex);
-                    list.insert(newIndex, element);
+                    list.insert(newIndex + 1, element);
                   },
                   itemBuilder: (BuildContext context, int index) {
                     var elem = list[index];
-                    return Row(
+                    return Container(
                       key: ValueKey(
                         list[index],
                       ),
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Container(
-                          child: Text(elem),
-                        ),
-                        Container(
-                          child: InkWell(
-                            onTap: () {
-                              removeFunction(elem);
-                            },
-                            child: Icon(
-                              Icons.close,
-                              color: Colors.red,
+                      color: Theme.of(context).colorScheme.secondary,
+                      padding: EdgeInsets.only(
+                          left: 10, right: 10, bottom: 5, top: 5),
+                      margin: EdgeInsets.only(bottom: 5, top: 5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            child: Text(elem),
+                          ),
+                          Container(
+                            child: InkWell(
+                              onTap: () {
+                                removeFunction(elem);
+                              },
+                              child: Icon(
+                                Icons.close,
+                                color: Colors.red,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     );
                   },
                 ),

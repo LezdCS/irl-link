@@ -127,9 +127,11 @@ class HomeViewController extends GetxController
   void searchEmote(String input) {
     List<Emote> emotes = List.from(chatViewController.twitchEmotes)
       ..addAll(chatViewController.thirdPartEmotes);
-    emotes = emotes.where(
-            (emote) => emote.name.toLowerCase().contains(input.toLowerCase()),
-      ).toList();
+    emotes = emotes
+        .where(
+          (emote) => emote.name.toLowerCase().contains(input.toLowerCase()),
+        )
+        .toList();
     twitchEmotes
       ..clear()
       ..addAll(emotes);

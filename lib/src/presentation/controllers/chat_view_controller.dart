@@ -117,7 +117,6 @@ class ChatViewController extends GetxController
 
   void ircChatClosed() {
     debugPrint("IRC Chat CLOSED");
-    joinIrc();
   }
 
   void ircChatError(Object o, StackTrace s) {
@@ -324,6 +323,10 @@ class ChatViewController extends GetxController
         .then((value) => {
               if (value.error == null) {emotes.addAll(value.data!)}
             });
+
+    await homeEvents.get7TvGlobalEmotes().then((value) => {
+          if (value.error == null) {emotes.addAll(value.data!)}
+        });
 
     return emotes;
   }

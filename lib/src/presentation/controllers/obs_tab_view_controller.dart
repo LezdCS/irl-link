@@ -4,7 +4,6 @@ import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 
-
 class ObsTabViewController extends GetxController {
   ObsTabViewController({required this.homeEvents});
 
@@ -41,8 +40,6 @@ class ObsTabViewController extends GetxController {
 
   @override
   void onClose() {
-    obsWebSocket!.close();
-
     super.onClose();
   }
 
