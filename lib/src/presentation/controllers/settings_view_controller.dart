@@ -16,9 +16,11 @@ class SettingsViewController extends GetxController {
   late TextEditingController obsWebsocketUrlFieldController;
   late TextEditingController addBrowserTitleController;
   late TextEditingController addBrowserUrlController;
+  late TextEditingController addHiddenUsernameController;
 
   final addBrowserUrlKey = GlobalKey<FormState>();
   final addBrowserTitleKey = GlobalKey<FormState>();
+  final addHiddenUserKey = GlobalKey<FormState>();
 
   @override
   void onInit() {
@@ -26,6 +28,7 @@ class SettingsViewController extends GetxController {
     obsWebsocketUrlFieldController = TextEditingController();
     addBrowserTitleController = TextEditingController();
     addBrowserUrlController = TextEditingController();
+    addHiddenUsernameController = TextEditingController();
     super.onInit();
   }
 
@@ -55,45 +58,54 @@ class SettingsViewController extends GetxController {
         );
   }
 
-  void clearHiddenUsers() {
-    settings.value = settings.value.copyWith(hiddenUsersIds: []);
-    saveSettings();
-  }
-
   void removeHiddenUser(userId) {
     List hiddenUsersIds = settings.value.hiddenUsersIds!;
     hiddenUsersIds.remove(userId);
     settings.value = settings.value.copyWith(hiddenUsersIds: hiddenUsersIds);
     saveSettings();
+    settings.refresh();
   }
-
-  void addHiddenUser(String name) {}
 
   void addBrowserTab() {
     bool isValid = false;
     isValid = addBrowserTitleKey.currentState!.validate();
     isValid = addBrowserUrlKey.currentState!.validate();
-    if (isValid) {
-      String title = addBrowserTitleController.text;
-      String url = addBrowserUrlController.text;
-      Map<String, String> tab = {'title': title, 'url': url};
-      List browserTabs = settings.value.browserTabs! == const []
-          ? []
-          : settings.value.browserTabs!;
-      browserTabs.add(tab);
-      settings.value = settings.value.copyWith(browserTabs: browserTabs);
-      saveSettings();
-      settings.refresh();
-
-      addBrowserTitleController.text = '';
-      addBrowserUrlController.text = '';
-      Get.back();
+    if (!isValid) {
+      return;
     }
+
+    String title = addBrowserTitleController.text;
+    String url = addBrowserUrlController.text;
+    Map<String, String> tab = {'title': title, 'url': url};
+    List browserTabs = settings.value.browserTabs! == const []
+        ? []
+        : settings.value.browserTabs!;
+    browserTabs.add(tab);
+    settings.value = settings.value.copyWith(browserTabs: browserTabs);
+    saveSettings();
+    settings.refresh();
+    Get.back();
   }
 
-  void injectDataToEditBrowserTab(tab) {
-    addBrowserTitleController.text = tab['title'];
-    addBrowserUrlController.text = tab['url'];
+  void editBrowserTab(elem) {
+    bool isValid = false;
+    isValid = addBrowserTitleKey.currentState!.validate();
+    isValid = addBrowserUrlKey.currentState!.validate();
+    if (!isValid) {
+      return;
+    }
+
+    String title = addBrowserTitleController.text;
+    String url = addBrowserUrlController.text;
+    elem["title"] = title;
+    elem["url"] = url;
+    List browserTabs = settings.value.browserTabs! == const []
+        ? []
+        : settings.value.browserTabs!;
+    settings.value = settings.value.copyWith(browserTabs: browserTabs);
+    saveSettings();
+    settings.refresh();
+    Get.back();
   }
 
   void removeBrowserTab(tab) {
@@ -102,11 +114,6 @@ class SettingsViewController extends GetxController {
     settings.value = settings.value.copyWith(browserTabs: tabs);
     saveSettings();
     settings.refresh();
-  }
-
-  void clearBrowserTabs() {
-    settings.value = settings.value.copyWith(browserTabs: []);
-    saveSettings();
   }
 
   void saveSettings() {

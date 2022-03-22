@@ -5,7 +5,8 @@ import 'package:irllink/src/presentation/controllers/settings_view_controller.da
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../widgets/manage_list.dart';
+import '../widgets/manage_list_hidden_users.dart';
+import '../widgets/manage_list_browser_tabs.dart';
 
 class SettingsView extends GetView<SettingsViewController> {
   final SettingsViewController controller = Get.find<SettingsViewController>();
@@ -302,16 +303,8 @@ class SettingsView extends GetView<SettingsViewController> {
                 InkWell(
                   onTap: () {
                     Get.to(
-                      () => Obx(
-                        () => ManageList(
-                          title: "Manage hidden users",
-                          list: controller.settings.value.hiddenUsersIds!.obs,
-                          addFunction: controller.addHiddenUser,
-                          removeFunction: controller.removeHiddenUser,
-                          removeAllFunction: controller.clearHiddenUsers,
-                          addDialogWidget: _addHiddenUserTabDialog(context),
-                          isEditable: false,
-                        ),
+                      () => ManageListHiddenUsers(
+                        controller: controller,
                       ),
                     );
                   },
@@ -486,18 +479,8 @@ class SettingsView extends GetView<SettingsViewController> {
                 InkWell(
                   onTap: () {
                     Get.to(
-                      () => Obx(
-                        () => ManageList(
-                          title: "Manage browser tabs",
-                          list: controller.settings.value.browserTabs!.obs,
-                          addFunction: controller.addBrowserTab,
-                          removeFunction: controller.removeBrowserTab,
-                          removeAllFunction: controller.clearBrowserTabs,
-                          addDialogWidget:
-                              _addBrowserTabDialog(context, controller),
-                          isEditable: true,
-                          editInjector: controller.injectDataToEditBrowserTab,
-                        ),
+                      () => ManageListBrowserTabs(
+                        controller: controller,
                       ),
                     );
                   },
@@ -734,83 +717,4 @@ class SettingsView extends GetView<SettingsViewController> {
       ),
     );
   }
-}
-
-Widget _addBrowserTabDialog(context, controller) {
-  return Column(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      Form(
-        key: controller.addBrowserTitleKey,
-        child: TextFormField(
-          controller: controller.addBrowserTitleController,
-          textInputAction: TextInputAction.send,
-          style: Theme.of(context).textTheme.bodyText1,
-          maxLines: 1,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter some text';
-            }
-            return null;
-          },
-          decoration: InputDecoration(
-            border: UnderlineInputBorder(),
-            hintStyle: TextStyle(
-                color: Theme.of(context).textTheme.bodyText1!.color,
-                fontSize: 16),
-            hintText: 'Tab title',
-            labelText: 'Title',
-            isDense: true,
-            contentPadding: EdgeInsets.only(left: 5),
-          ),
-        ),
-      ),
-      SizedBox(
-        height: 10,
-      ),
-      Form(
-        key: controller.addBrowserUrlKey,
-        child: TextFormField(
-          controller: controller.addBrowserUrlController,
-          textInputAction: TextInputAction.send,
-          style: Theme.of(context).textTheme.bodyText1,
-          maxLines: 1,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter some text';
-            }
-            return null;
-          },
-          decoration: InputDecoration(
-            border: UnderlineInputBorder(),
-            hintStyle: TextStyle(
-                color: Theme.of(context).textTheme.bodyText1!.color,
-                fontSize: 16),
-            hintText: 'Tab url',
-            labelText: 'URL',
-            isDense: true,
-            contentPadding: EdgeInsets.only(left: 5),
-          ),
-        ),
-      ),
-    ],
-  );
-}
-
-Widget _addHiddenUserTabDialog(BuildContext context) {
-  //todo : ajouter form
-  return TextFormField(
-    textInputAction: TextInputAction.send,
-    style: Theme.of(context).textTheme.bodyText1,
-    maxLines: 1,
-    decoration: InputDecoration(
-      border: UnderlineInputBorder(),
-      hintStyle: TextStyle(
-          color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 16),
-      hintText: 'Enter an username',
-      labelText: 'Username',
-      isDense: true,
-      contentPadding: EdgeInsets.only(left: 5),
-    ),
-  );
 }
