@@ -14,6 +14,7 @@ import 'package:web_socket_channel/io.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:web_socket_channel/status.dart' as status;
 
+import '../widgets/web_page_view.dart';
 import 'chat_view_controller.dart';
 
 class HomeViewController extends GetxController
@@ -44,12 +45,8 @@ class HomeViewController extends GetxController
   late Rx<Settings> settings = Settings.defaultSettings().obs;
 
   @override
-  void onInit() {
+  void onInit() async {
     chatInputController = TextEditingController();
-
-    twitchData = Get.arguments[0];
-
-    if (GetPlatform.isAndroid) WebView.platform = SurfaceAndroidWebView();
 
     TwitchTabView twitchPage = TwitchTabView();
     tabElements.add(twitchPage);
@@ -57,12 +54,13 @@ class HomeViewController extends GetxController
     StreamelementsTabView streamelementsPage = StreamelementsTabView();
     tabElements.add(streamelementsPage);
 
-    // WebPageView page1View = WebPageView("Youtube", "https://www.youtube.com");
-    // tabElements.add(page1View);
-
     tabController = TabController(length: tabElements.length, vsync: this);
 
-    this.getSettings();
+    twitchData = Get.arguments[0];
+
+    if (GetPlatform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+
+    await this.getSettings();
 
     super.onInit();
   }
@@ -79,21 +77,25 @@ class HomeViewController extends GetxController
     super.onClose();
   }
 
-  void createObsTab() {
-    if (tabElements.firstWhereOrNull((tab) => tab is ObsTabView) == null) {
+  Future generateTabs() async {
+    tabElements.clear();
+    TwitchTabView twitchPage = TwitchTabView();
+    tabElements.add(twitchPage);
+
+    StreamelementsTabView streamelementsPage = StreamelementsTabView();
+    tabElements.add(streamelementsPage);
+
+    if (settings.value.isObsConnected!) {
       ObsTabView obsPage = ObsTabView();
-      int newSize = tabController.length + 1;
-      tabController = TabController(length: newSize, vsync: this);
       tabElements.add(obsPage);
     }
-  }
 
-  void removeObsTab() {
-    if (tabElements.firstWhereOrNull((tab) => tab is ObsTabView) != null) {
-      int newSize = tabController.length - 1;
-      tabController = TabController(length: newSize, vsync: this);
-      tabElements.remove(tabElements.firstWhere((tab) => tab is ObsTabView));
-    }
+    settings.value.browserTabs!.forEach((element) {
+      WebPageView page = WebPageView(element['title'], element['url']);
+      tabElements.add(page);
+    });
+
+    tabController = TabController(length: tabElements.length, vsync: this);
   }
 
   void sendChatMessage(String message) {
@@ -142,14 +144,7 @@ class HomeViewController extends GetxController
           if (value.error == null)
             {
               settings.value = value.data!,
-              if (settings.value.isObsConnected!)
-                {
-                  this.createObsTab(),
-                }
-              else
-                {
-                  this.removeObsTab(),
-                }
+              await this.generateTabs(),
             },
         });
   }

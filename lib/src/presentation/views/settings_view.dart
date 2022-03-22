@@ -305,13 +305,12 @@ class SettingsView extends GetView<SettingsViewController> {
                       () => Obx(
                         () => ManageList(
                           title: "Manage hidden users",
-                          controller: controller,
-                          isReorderable: false,
                           list: controller.settings.value.hiddenUsersIds!.obs,
                           addFunction: controller.addHiddenUser,
                           removeFunction: controller.removeHiddenUser,
                           removeAllFunction: controller.clearHiddenUsers,
                           addDialogWidget: _addHiddenUserTabDialog(context),
+                          isEditable: false,
                         ),
                       ),
                     );
@@ -490,13 +489,14 @@ class SettingsView extends GetView<SettingsViewController> {
                       () => Obx(
                         () => ManageList(
                           title: "Manage browser tabs",
-                          controller: controller,
-                          isReorderable: false,
                           list: controller.settings.value.browserTabs!.obs,
                           addFunction: controller.addBrowserTab,
                           removeFunction: controller.removeBrowserTab,
                           removeAllFunction: controller.clearBrowserTabs,
-                          addDialogWidget: _addBrowserTabDialog(context),
+                          addDialogWidget:
+                              _addBrowserTabDialog(context, controller),
+                          isEditable: true,
+                          editInjector: controller.injectDataToEditBrowserTab,
                         ),
                       ),
                     );
@@ -736,48 +736,69 @@ class SettingsView extends GetView<SettingsViewController> {
   }
 }
 
-Widget _addBrowserTabDialog(context) {
+Widget _addBrowserTabDialog(context, controller) {
   return Column(
     mainAxisSize: MainAxisSize.min,
     children: [
-      TextFormField(
-        textInputAction: TextInputAction.send,
-        style: Theme.of(context).textTheme.bodyText1,
-        maxLines: 1,
-        decoration: InputDecoration(
-          border: UnderlineInputBorder(),
-          hintStyle: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1!.color,
-              fontSize: 16),
-          hintText: 'Tab title',
-          labelText: 'Title',
-          isDense: true,
-          contentPadding: EdgeInsets.only(left: 5),
+      Form(
+        key: controller.addBrowserTitleKey,
+        child: TextFormField(
+          controller: controller.addBrowserTitleController,
+          textInputAction: TextInputAction.send,
+          style: Theme.of(context).textTheme.bodyText1,
+          maxLines: 1,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter some text';
+            }
+            return null;
+          },
+          decoration: InputDecoration(
+            border: UnderlineInputBorder(),
+            hintStyle: TextStyle(
+                color: Theme.of(context).textTheme.bodyText1!.color,
+                fontSize: 16),
+            hintText: 'Tab title',
+            labelText: 'Title',
+            isDense: true,
+            contentPadding: EdgeInsets.only(left: 5),
+          ),
         ),
       ),
       SizedBox(
         height: 10,
       ),
-      TextFormField(
-        textInputAction: TextInputAction.send,
-        style: Theme.of(context).textTheme.bodyText1,
-        maxLines: 1,
-        decoration: InputDecoration(
-          border: UnderlineInputBorder(),
-          hintStyle: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1!.color,
-              fontSize: 16),
-          hintText: 'Tab url',
-          labelText: 'URL',
-          isDense: true,
-          contentPadding: EdgeInsets.only(left: 5),
+      Form(
+        key: controller.addBrowserUrlKey,
+        child: TextFormField(
+          controller: controller.addBrowserUrlController,
+          textInputAction: TextInputAction.send,
+          style: Theme.of(context).textTheme.bodyText1,
+          maxLines: 1,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter some text';
+            }
+            return null;
+          },
+          decoration: InputDecoration(
+            border: UnderlineInputBorder(),
+            hintStyle: TextStyle(
+                color: Theme.of(context).textTheme.bodyText1!.color,
+                fontSize: 16),
+            hintText: 'Tab url',
+            labelText: 'URL',
+            isDense: true,
+            contentPadding: EdgeInsets.only(left: 5),
+          ),
         ),
-      )
+      ),
     ],
   );
 }
 
 Widget _addHiddenUserTabDialog(BuildContext context) {
+  //todo : ajouter form
   return TextFormField(
     textInputAction: TextInputAction.send,
     style: Theme.of(context).textTheme.bodyText1,

@@ -1,27 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 
 class ManageList extends GetView {
   ManageList({
     required this.title,
     required this.list,
-    required this.isReorderable,
-    required this.controller,
     required this.addFunction,
     required this.removeFunction,
     required this.removeAllFunction,
     required this.addDialogWidget,
+    required this.isEditable,
+    this.editInjector,
   });
 
   final String title;
   final RxList list;
-  final bool isReorderable;
-  final SettingsViewController controller;
   final Function addFunction;
   final Function removeFunction;
   final Function removeAllFunction;
   final Widget addDialogWidget;
+  final bool isEditable;
+  final Function? editInjector;
 
   @override
   Widget build(BuildContext context) {
@@ -59,12 +58,21 @@ class ManageList extends GetView {
                       EdgeInsets.only(top: 8, left: 18, right: 18, bottom: 8),
                   itemCount: list.length,
                   onReorder: (int oldIndex, int newIndex) {
-                    var element = list[oldIndex];
-                    list.removeAt(oldIndex);
-                    list.insert(newIndex + 1, element);
+                    if (newIndex > oldIndex) {
+                      newIndex -= 1;
+                    }
+                    final element = list.removeAt(oldIndex);
+                    list.insert(newIndex, element);
                   },
                   itemBuilder: (BuildContext context, int index) {
                     var elem = list[index];
+                    var text = 'No fetchable data';
+                    //this part is messy, see later if better way to do
+                    if (list[index] is Map) {
+                      text = list[index][list[index].keys.first.toString()];
+                    } else if (list[index] is String) {
+                      text = list[index];
+                    }
                     return Container(
                       key: ValueKey(
                         list[index],
@@ -77,18 +85,51 @@ class ManageList extends GetView {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
-                            child: Text(elem),
+                            child: Text(text),
                           ),
-                          Container(
-                            child: InkWell(
-                              onTap: () {
-                                removeFunction(elem);
-                              },
-                              child: Icon(
-                                Icons.close,
-                                color: Colors.red,
+                          Wrap(
+                            children: [
+                              Visibility(
+                                visible: isEditable,
+                                child: InkWell(
+                                  onTap: () {
+                                    editInjector!(elem);
+                                    Get.defaultDialog(
+                                        content: addDialogWidget,
+                                        title: "Edit",
+                                        textCancel: "Cancel",
+                                        textConfirm: "Confirm",
+                                        titleStyle:
+                                            TextStyle(color: Colors.white),
+                                        backgroundColor: Color(0xFF282828),
+                                        buttonColor: Color(0xFF9147ff),
+                                        cancelTextColor: Color(0xFF9147ff),
+                                        confirmTextColor: Colors.white,
+                                        radius: 10,
+                                        onConfirm: () {
+                                          addFunction();
+                                        });
+                                  },
+                                  child: Icon(
+                                    Icons.edit_outlined,
+                                  ),
+                                ),
                               ),
-                            ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Container(
+                                child: InkWell(
+                                  onTap: () {
+                                    removeFunction(elem);
+                                  },
+                                  child: Icon(
+                                    Icons.close,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
