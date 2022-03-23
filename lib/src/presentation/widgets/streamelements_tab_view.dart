@@ -1,3 +1,4 @@
+import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/se_activity.dart';
@@ -66,44 +67,12 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
               itemBuilder: (BuildContext context, int index) {
                 SeActivity activity = controller
                     .activities[controller.activities.length - 1 - index];
-                return Container(
-                  padding:
-                      EdgeInsets.only(left: 3, right: 3, top: 5, bottom: 5),
-                  decoration: BoxDecoration(
-                    color: activity.colorsForEnum()[0],
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(5),
-                    ),
-                  ),
-                  margin: EdgeInsets.only(top: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(left: 8, right: 8),
-                            width: 10.0,
-                            height: 10.0,
-                            decoration: BoxDecoration(
-                              color: activity.colorsForEnum()[1],
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                          RichText(
-                            text: TextSpan(children: [
-                              TextSpan(
-                                text: activity.username,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(text: activity.textFromEnum()),
-                            ]),
-                          ),
-                        ],
-                      ),
-                      Icon(Icons.restart_alt),
-                    ],
+                return ExpandableNotifier(
+                  child: Expandable(
+                    collapsed: _activityCollapsed(activity),
+                    expanded: activity.message != ""
+                        ? _activityExpanded(activity)
+                        : _activityCollapsed(activity),
                   ),
                 );
               },
@@ -342,4 +311,112 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
       ],
     );
   }
+}
+
+Widget _activityCollapsed(SeActivity activity) {
+  return ExpandableButton(
+    child: Container(
+      padding: EdgeInsets.only(left: 3, right: 3, top: 5, bottom: 5),
+      decoration: BoxDecoration(
+        color: activity.colorsForEnum()[0],
+        borderRadius: BorderRadius.all(
+          Radius.circular(5),
+        ),
+      ),
+      margin: EdgeInsets.only(top: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              Container(
+                margin: EdgeInsets.only(left: 8, right: 8),
+                width: 10.0,
+                height: 10.0,
+                decoration: BoxDecoration(
+                  color: activity.colorsForEnum()[1],
+                  shape: BoxShape.circle,
+                ),
+              ),
+              RichText(
+                text: TextSpan(children: [
+                  TextSpan(
+                    text: activity.username,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(text: activity.textFromEnum()),
+                ]),
+              ),
+            ],
+          ),
+          InkWell(
+            onTap: () {
+              debugPrint("replay");
+            },
+            child: Icon(Icons.restart_alt),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget _activityExpanded(SeActivity activity) {
+  return ExpandableButton(
+    child: Container(
+      padding: EdgeInsets.only(left: 3, right: 3, top: 5, bottom: 20),
+      decoration: BoxDecoration(
+        color: activity.colorsForEnum()[0],
+        borderRadius: BorderRadius.all(
+          Radius.circular(5),
+        ),
+      ),
+      margin: EdgeInsets.only(top: 8),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(left: 8, right: 8),
+                    width: 10.0,
+                    height: 10.0,
+                    decoration: BoxDecoration(
+                      color: activity.colorsForEnum()[1],
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  RichText(
+                    text: TextSpan(children: [
+                      TextSpan(
+                        text: activity.username,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      TextSpan(text: activity.textFromEnum()),
+                    ]),
+                  ),
+                ],
+              ),
+              InkWell(
+                onTap: () {
+                  debugPrint("replay");
+                },
+                child: Icon(Icons.restart_alt),
+              ),
+            ],
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 3, right: 3, top: 10),
+            child: Text('"' + activity.message + '"'),
+          ),
+        ],
+      ),
+    ),
+  );
 }
