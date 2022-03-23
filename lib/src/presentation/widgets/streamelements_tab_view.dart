@@ -16,9 +16,9 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
           child: TabBar(
             controller: controller.tabController,
             isScrollable: true,
-            labelColor: Colors.purple,
+            labelColor: Theme.of(context).colorScheme.tertiary,
             unselectedLabelColor: context.theme.textTheme.bodyText1!.color,
-            indicatorColor: Colors.purple,
+            indicatorColor: Theme.of(context).colorScheme.tertiary,
             indicatorWeight: 0.000001,
             tabs: [Text("Notifications"), Text("Song Requests")],
           ),
@@ -26,7 +26,7 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
         Expanded(
           child: Container(
             decoration: BoxDecoration(
-              color: context.theme.primaryColor,
+              color: context.theme.colorScheme.background,
             ),
             child: TabBarView(
               controller: controller.tabController,
@@ -260,6 +260,9 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
             controlAffinity: ListTileControlAffinity.leading,
             title: Text(
               'Followers',
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyText1!.color,
+              ),
             ),
             value: true,
             onChanged: (bool? value) {},
@@ -271,6 +274,9 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
             controlAffinity: ListTileControlAffinity.leading,
             title: Text(
               'Subscribers',
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyText1!.color,
+              ),
             ),
             value: true,
             onChanged: (bool? value) {},
@@ -282,6 +288,9 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
             controlAffinity: ListTileControlAffinity.leading,
             title: Text(
               'Donations',
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyText1!.color,
+              ),
             ),
             value: true,
             onChanged: (bool? value) {},
@@ -293,6 +302,9 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
             controlAffinity: ListTileControlAffinity.leading,
             title: Text(
               'Bits',
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyText1!.color,
+              ),
             ),
             value: true,
             onChanged: (bool? value) {},
@@ -304,6 +316,9 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
             controlAffinity: ListTileControlAffinity.leading,
             title: Text(
               'Raids',
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyText1!.color,
+              ),
             ),
             value: true,
             onChanged: (bool? value) {},

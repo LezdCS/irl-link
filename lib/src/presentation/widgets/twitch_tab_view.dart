@@ -9,7 +9,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
       child: Obx(
         () => Container(
           padding: EdgeInsets.only(left: 20.0, top: 12.0, right: 20.0),
-          color: Theme.of(context).primaryColor,
+          color: Theme.of(context).colorScheme.background,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -19,11 +19,13 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                   Container(
                     child: Row(
                       children: [
-                        Icon(Icons.circle,
-                            color: controller.twitchStreamInfos.value.isOnline!
-                                ? Colors.red
-                                : Colors.grey),
-                        Padding(padding: EdgeInsets.only(right: 10.0)),
+                        Icon(
+                          Icons.circle,
+                          color: controller.twitchStreamInfos.value.isOnline!
+                              ? Colors.red
+                              : Theme.of(context).colorScheme.tertiaryContainer,
+                        ),
+                        Padding(padding: EdgeInsets.only(right: 6.0)),
                         Text(
                           controller.twitchStreamInfos.value.isOnline!
                               ? "Live"
@@ -42,13 +44,16 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                     child: Row(
                       children: [
                         Icon(Icons.person_outline, color: Colors.red),
+                        SizedBox(
+                          width: 2,
+                        ),
                         Text(
                           controller.twitchStreamInfos.value.viewerCount
                               .toString(),
                           style: TextStyle(color: Colors.red),
                         ),
                         SizedBox(
-                          width: 10,
+                          width: 6,
                         ),
                         Text(
                           "viewers",
@@ -138,10 +143,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
               Text(
                 "Shortcuts",
                 style: TextStyle(
-                  color: Theme.of(Get.context!)
-                      .textTheme
-                      .bodyText1!
-                      .color,
+                  color: Theme.of(Get.context!).textTheme.bodyText1!.color,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
@@ -150,7 +152,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                 child: GridView.count(
                   shrinkWrap: true,
                   primary: false,
-                  padding: EdgeInsets.only(top:10),
+                  padding: EdgeInsets.only(top: 10),
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
                   crossAxisCount: 2,
@@ -169,8 +171,10 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         decoration: BoxDecoration(
                             color: controller
                                     .twitchStreamInfos.value.isFollowerMode!
-                                ? Colors.deepPurpleAccent[200]
-                                : Colors.grey[850],
+                                ? Theme.of(context).colorScheme.tertiary
+                                : Theme.of(context)
+                                    .colorScheme
+                                    .tertiaryContainer,
                             borderRadius: BorderRadius.all(Radius.circular(8))),
                         padding: EdgeInsets.all(8),
                         child: Text(
@@ -192,8 +196,10 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         decoration: BoxDecoration(
                             color: controller
                                     .twitchStreamInfos.value.isSubscriberMode!
-                                ? Colors.deepPurpleAccent[200]
-                                : Colors.grey[850],
+                                ? Theme.of(context).colorScheme.tertiary
+                                : Theme.of(context)
+                                    .colorScheme
+                                    .tertiaryContainer,
                             borderRadius: BorderRadius.all(Radius.circular(8))),
                         padding: EdgeInsets.all(8),
                         child: Text(
@@ -215,8 +221,10 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         decoration: BoxDecoration(
                             color:
                                 controller.twitchStreamInfos.value.isEmoteMode!
-                                    ? Colors.deepPurpleAccent[200]
-                                    : Colors.grey[850],
+                                    ? Theme.of(context).colorScheme.tertiary
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .tertiaryContainer,
                             borderRadius: BorderRadius.all(Radius.circular(8))),
                         padding: EdgeInsets.all(8),
                         child: Text(
@@ -238,8 +246,10 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         decoration: BoxDecoration(
                             color:
                                 controller.twitchStreamInfos.value.isSlowMode!
-                                    ? Colors.deepPurpleAccent[200]
-                                    : Colors.grey[850],
+                                    ? Theme.of(context).colorScheme.tertiary
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .tertiaryContainer,
                             borderRadius: BorderRadius.all(Radius.circular(8))),
                         padding: EdgeInsets.all(8),
                         child: Text(

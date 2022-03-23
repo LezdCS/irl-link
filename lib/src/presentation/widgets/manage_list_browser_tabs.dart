@@ -34,7 +34,7 @@ class ManageListBrowserTabs extends GetView {
         ),
         body: Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).colorScheme.background,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

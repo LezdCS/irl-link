@@ -37,7 +37,7 @@ class ChatView extends GetView<ChatViewController> {
             width: width,
             padding: EdgeInsets.only(top: 10, bottom: height * 0.07),
             decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).colorScheme.background,
             ),
             child: controller.chatMessages.length == 0
                 ? Container(
@@ -129,7 +129,7 @@ class ChatView extends GetView<ChatViewController> {
         decoration: BoxDecoration(
           color: controller.selectedMessage.value == message
               ? Theme.of(Get.context!).colorScheme.secondary
-              : Theme.of(Get.context!).primaryColor,
+              : Theme.of(Get.context!).colorScheme.background,
           border: message.isBitDonation
               ? Border(
                   left: BorderSide(width: 5.0, color: Color(0xFF9147ff)),

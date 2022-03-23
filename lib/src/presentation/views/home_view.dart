@@ -36,7 +36,7 @@ class HomeView extends GetView<HomeViewController> {
                 child: Container(
                   constraints: BoxConstraints.expand(),
                   decoration: BoxDecoration(
-                    color: context.theme.primaryColor,
+                    color: context.theme.colorScheme.background,
                   ),
                   child: SafeArea(
                     child: SplitViewCustom(
@@ -118,9 +118,9 @@ class HomeView extends GetView<HomeViewController> {
       () => TabBar(
         controller: controller.tabController,
         isScrollable: true,
-        labelColor: Colors.purple,
+        labelColor: Theme.of(context).colorScheme.tertiary,
         unselectedLabelColor: Theme.of(context).textTheme.bodyText1!.color,
-        indicatorColor: Colors.purple,
+        indicatorColor: Theme.of(context).colorScheme.tertiary,
         labelPadding: EdgeInsets.symmetric(
             horizontal: width / (controller.tabElements.length > 2 ? 9 : 5)),
         tabs: List<Tab>.generate(
@@ -263,7 +263,7 @@ class HomeView extends GetView<HomeViewController> {
   Widget _tabs(BuildContext context) {
     return Expanded(
       child: Container(
-        color: Theme.of(context).primaryColor,
+        color: Theme.of(context).colorScheme.background,
         child: TabBarView(
           physics: NeverScrollableScrollPhysics(),
           controller: controller.tabController,
