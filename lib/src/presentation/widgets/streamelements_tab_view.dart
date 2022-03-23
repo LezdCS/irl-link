@@ -1,4 +1,5 @@
 import 'package:expandable/expandable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/se_activity.dart';
@@ -327,28 +328,32 @@ Widget _activityCollapsed(SeActivity activity) {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Wrap(
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              Container(
-                margin: EdgeInsets.only(left: 8, right: 8),
-                width: 10.0,
-                height: 10.0,
-                decoration: BoxDecoration(
-                  color: activity.colorsForEnum()[1],
-                  shape: BoxShape.circle,
-                ),
-              ),
-              RichText(
-                text: TextSpan(children: [
+          Container(
+            margin: EdgeInsets.only(left: 8, right: 8),
+            width: 10.0,
+            height: 10.0,
+            decoration: BoxDecoration(
+              color: activity.colorsForEnum()[1],
+              shape: BoxShape.circle,
+            ),
+          ),
+          Expanded(
+            child: RichText(
+              overflow: TextOverflow.ellipsis,
+              text: TextSpan(
+                children: [
                   TextSpan(
                     text: activity.username,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   TextSpan(text: activity.textFromEnum()),
-                ]),
+                  TextSpan(
+                      text: activity.message != ""
+                          ? ' "' + activity.message + '"'
+                          : ""),
+                ],
               ),
-            ],
+            ),
           ),
           InkWell(
             onTap: () {
@@ -380,28 +385,25 @@ Widget _activityExpanded(SeActivity activity) {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Wrap(
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(left: 8, right: 8),
-                    width: 10.0,
-                    height: 10.0,
-                    decoration: BoxDecoration(
-                      color: activity.colorsForEnum()[1],
-                      shape: BoxShape.circle,
+              Container(
+                margin: EdgeInsets.only(left: 8, right: 8),
+                width: 10.0,
+                height: 10.0,
+                decoration: BoxDecoration(
+                  color: activity.colorsForEnum()[1],
+                  shape: BoxShape.circle,
+                ),
+              ),
+              Expanded(
+                child: RichText(
+                  text: TextSpan(children: [
+                    TextSpan(
+                      text: activity.username,
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  RichText(
-                    text: TextSpan(children: [
-                      TextSpan(
-                        text: activity.username,
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      TextSpan(text: activity.textFromEnum()),
-                    ]),
-                  ),
-                ],
+                    TextSpan(text: activity.textFromEnum()),
+                  ]),
+                ),
               ),
               InkWell(
                 onTap: () {

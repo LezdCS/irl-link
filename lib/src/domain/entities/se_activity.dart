@@ -83,13 +83,13 @@ class SeActivity extends Equatable {
         break;
       case ActivityType.subscription:
         //todo : if is prime add (prime) after "subscribed"
-        s = ' subscribed! "${this.message}"';
+        s = ' subscribed!';
         break;
       case ActivityType.cheer:
-        s = ' sent ${this.donationAmount} bits! "${this.message}"';
+        s = ' sent ${this.donationAmount} bits!';
         break;
       case ActivityType.donation:
-        s = ' donated ${this.donationAmount}\$! "${this.message}"';
+        s = ' donated ${this.donationAmount}\$!';
         break;
       case ActivityType.raid:
         // TODO: Handle this case.

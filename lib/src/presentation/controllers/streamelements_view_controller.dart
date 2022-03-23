@@ -40,14 +40,15 @@ class StreamelementsViewController extends GetxController
     SeActivity a3 = SeActivity(
         id: "3",
         username: "Lezd",
-        message: "Ok ok",
+        message: "",
         donationAmount: null,
         soundUrl: null,
         activityType: ActivityType.follow);
     SeActivity a4 = SeActivity(
         id: "4",
         username: "Lezd",
-        message: "Ok ok",
+        message:
+            "Ok okkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
         donationAmount: "2000",
         soundUrl: null,
         activityType: ActivityType.cheer);
