@@ -113,6 +113,7 @@ class ChatViewController extends GetxController
 
   void ircChatClosed() {
     debugPrint("IRC Chat CLOSED");
+    joinIrc();
   }
 
   void ircChatError(Object o, StackTrace s) {

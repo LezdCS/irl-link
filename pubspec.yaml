@@ -33,7 +33,6 @@ dependencies:
   get_storage: ^2.0.3
   split_view: ^3.1.0
   flutter_svg: ^1.0.3
-  glob: ^2.0.2
   flutter_web_auth: ^0.4.1
   url_launcher: ^6.0.20
   web_socket_channel: ^2.1.0
@@ -47,6 +46,7 @@ dependencies:
   obs_websocket: ^2.3.1
   intl: ^0.17.0
   expandable: ^5.0.1
+  audioplayers: ^0.20.1
 
 dev_dependencies:
   flutter_test:
