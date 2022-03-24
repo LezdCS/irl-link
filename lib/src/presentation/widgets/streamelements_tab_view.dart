@@ -183,7 +183,7 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
                     padding:
                         EdgeInsets.only(left: 8, right: 8, top: 5, bottom: 5),
                     decoration: BoxDecoration(
-                      color: Colors.black26,
+                      color: Theme.of(context).colorScheme.secondary,
                       borderRadius: BorderRadius.all(
                         Radius.circular(5),
                       ),
@@ -203,11 +203,30 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
                                     TextSpan(
                                       text: song.channel,
                                       style: TextStyle(
-                                          fontWeight: FontWeight.bold),
+                                        fontWeight: FontWeight.bold,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .color,
+                                      ),
                                     ),
-                                    TextSpan(text: " - "),
+                                    TextSpan(
+                                      text: " - ",
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .color,
+                                      ),
+                                    ),
                                     TextSpan(
                                       text: song.title,
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .color,
+                                      ),
                                     )
                                   ],
                                 ),
@@ -215,12 +234,25 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
                               RichText(
                                 overflow: TextOverflow.ellipsis,
                                 text: TextSpan(children: [
-                                  TextSpan(text: "Duration: "),
+                                  TextSpan(
+                                    text: "Duration: ",
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color,
+                                    ),
+                                  ),
                                   //todo : display duration in minutes format. ex: 123 -> 2:03
                                   TextSpan(
                                     text: song.duration,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color,
+                                    ),
                                   ),
                                 ]),
                               ),
