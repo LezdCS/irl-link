@@ -32,8 +32,8 @@ class ChatViewController extends GetxController
   List<Emote> thirdPartEmotes = <Emote>[];
   List<Emote> cheerEmotes = <Emote>[];
 
-  late String ircChannelJoined;
-  late String ircChannelJoinedChannelId;
+  String ircChannelJoined = '';
+  String ircChannelJoinedChannelId = '';
 
   Rxn<TwitchChatMessage> selectedMessage = Rxn<TwitchChatMessage>();
   late TextEditingController banDurationInputController;
@@ -44,11 +44,7 @@ class ChatViewController extends GetxController
   void onInit() async {
     scrollController = ScrollController();
     banDurationInputController = TextEditingController();
-
     twitchData = Get.arguments[0];
-    ircChannelJoined = twitchData.twitchUser.login;
-    ircChannelJoinedChannelId = twitchData.twitchUser.id;
-
     await getSettings();
 
     super.onInit();
@@ -431,12 +427,13 @@ class ChatViewController extends GetxController
           if (value.error == null)
             {
               settings.value = value.data!,
-              await this.applySettings(),
             },
+          await this.applySettings(),
         });
   }
 
   Future applySettings() async {
+    String tempIrcChannelJoined = ircChannelJoined;
     if (settings.value.alternateChannel!) {
       ircChannelJoined = settings.value.alternateChannelName!;
       await homeEvents
@@ -450,10 +447,12 @@ class ChatViewController extends GetxController
       ircChannelJoinedChannelId = twitchData.twitchUser.id;
     }
 
-    getTwitchBadges().then((value) => twitchBadges = value);
-    getTwitchEmotes().then((value) => twitchEmotes = value);
-    getThirdPartEmotes().then((value) => thirdPartEmotes = value);
-    getTwitchCheerEmotes().then((value) => cheerEmotes = value);
-    joinIrc();
+    if (tempIrcChannelJoined != ircChannelJoined) {
+      getTwitchBadges().then((value) => twitchBadges = value);
+      getTwitchEmotes().then((value) => twitchEmotes = value);
+      getThirdPartEmotes().then((value) => thirdPartEmotes = value);
+      getTwitchCheerEmotes().then((value) => cheerEmotes = value);
+      joinIrc();
+    }
   }
 }
