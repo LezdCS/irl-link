@@ -5,8 +5,10 @@ enum ActivityType {
   follow,
   subscription,
   cheer,
-  donation,
+  tip,
   raid,
+  host,
+  merch,
 }
 
 class SeActivity extends Equatable {
@@ -62,7 +64,7 @@ class SeActivity extends Equatable {
         //circle color
         colors.add(Color(0xFF003B36));
         break;
-      case ActivityType.donation:
+      case ActivityType.tip:
         //background color
         colors.add(Color(0xFF8D818C));
         //circle color
@@ -73,6 +75,18 @@ class SeActivity extends Equatable {
         colors.add(Color(0xFF149911));
         //circle color
         colors.add(Color(0xFF256D1B));
+        break;
+      case ActivityType.host:
+        //background color
+        colors.add(Color(0xFF4A001F));
+        //circle color
+        colors.add(Color(0xFF2E0219));
+        break;
+      case ActivityType.merch:
+        //background color
+        colors.add(Color(0xFF4F5D75));
+        //circle color
+        colors.add(Color(0xFF2D3142));
         break;
     }
     return colors;
@@ -91,11 +105,17 @@ class SeActivity extends Equatable {
       case ActivityType.cheer:
         s = ' sent ${this.amount} bits!';
         break;
-      case ActivityType.donation:
+      case ActivityType.tip:
         s = ' donated ${this.amount}\$!';
         break;
       case ActivityType.raid:
-        s = ' raided with ${this.amount} viewers!';
+        s = ' is raiding with ${this.amount} viewers!';
+        break;
+      case ActivityType.host:
+        s = ' is hosting with ${this.amount} viewers!';
+        break;
+      case ActivityType.merch:
+        s = ' bought for ${this.amount}\$ of merch!';
         break;
     }
     return s;

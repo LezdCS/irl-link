@@ -120,32 +120,81 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
               'Now Playing',
               style: TextStyle(
                 color: Theme.of(context).textTheme.bodyText1!.color,
+                fontWeight: FontWeight.bold,
               ),
             ),
             controller.songRequestQueue.length > 0
-                ? RichText(
-                    overflow: TextOverflow.ellipsis,
-                    text: TextSpan(
+                ? Container(
+                    padding:
+                        EdgeInsets.only(left: 8, right: 8, top: 5, bottom: 5),
+                    margin: EdgeInsets.only(top: 8),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.secondary,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(5),
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextSpan(
-                          text: controller.songRequestQueue.first.channel,
-                          style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyText1!.color,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(
-                          text: " - ",
-                          style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1!.color,
+                        RichText(
+                          overflow: TextOverflow.ellipsis,
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: controller.songRequestQueue.first.channel,
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              TextSpan(
+                                text: " - ",
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                ),
+                              ),
+                              TextSpan(
+                                text: controller.songRequestQueue.first.title,
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                ),
+                              )
+                            ],
                           ),
                         ),
-                        TextSpan(
-                          text: controller.songRequestQueue.first.title,
-                          style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1!.color,
-                          ),
-                        )
+                        RichText(
+                          overflow: TextOverflow.ellipsis,
+                          text: TextSpan(children: [
+                            TextSpan(
+                              text: "Duration: ",
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
+                              ),
+                            ),
+                            TextSpan(
+                              text: controller.songRequestQueue.first.duration,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
+                              ),
+                            ),
+                          ]),
+                        ),
                       ],
                     ),
                   )
@@ -160,6 +209,7 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
                   text: "Queue ",
                   style: TextStyle(
                     color: Theme.of(context).textTheme.bodyText1!.color,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 TextSpan(
@@ -176,9 +226,9 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
               child: ListView.builder(
                 shrinkWrap: true,
                 controller: controller.songRequestScrollController,
-                itemCount: controller.songRequestQueue.length,
+                itemCount: controller.songRequestQueue.length - 1,
                 itemBuilder: (BuildContext context, int index) {
-                  SeSong song = controller.songRequestQueue[index];
+                  SeSong song = controller.songRequestQueue[index + 1];
                   return Container(
                     padding:
                         EdgeInsets.only(left: 8, right: 8, top: 5, bottom: 5),
@@ -243,7 +293,6 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
                                           .color,
                                     ),
                                   ),
-                                  //todo : display duration in minutes format. ex: 123 -> 2:03
                                   TextSpan(
                                     text: song.duration,
                                     style: TextStyle(
@@ -348,6 +397,34 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
             controlAffinity: ListTileControlAffinity.leading,
             title: Text(
               'Raids',
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyText1!.color,
+              ),
+            ),
+            value: true,
+            onChanged: (bool? value) {},
+          ),
+        ),
+        PopupMenuItem(
+          child: CheckboxListTile(
+            activeColor: Colors.deepPurple[600],
+            controlAffinity: ListTileControlAffinity.leading,
+            title: Text(
+              'Hosts',
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyText1!.color,
+              ),
+            ),
+            value: true,
+            onChanged: (bool? value) {},
+          ),
+        ),
+        PopupMenuItem(
+          child: CheckboxListTile(
+            activeColor: Colors.deepPurple[600],
+            controlAffinity: ListTileControlAffinity.leading,
+            title: Text(
+              'Merch',
               style: TextStyle(
                 color: Theme.of(context).textTheme.bodyText1!.color,
               ),

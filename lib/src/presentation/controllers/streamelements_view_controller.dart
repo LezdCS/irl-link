@@ -36,7 +36,7 @@ class StreamelementsViewController extends GetxController
         message: "Ok ok",
         amount: "30",
         soundUrl: null,
-        activityType: ActivityType.donation);
+        activityType: ActivityType.tip);
     SeActivity a3 = SeActivity(
         id: "3",
         username: "Lezd",
@@ -59,7 +59,21 @@ class StreamelementsViewController extends GetxController
         amount: "2000",
         soundUrl: null,
         activityType: ActivityType.raid);
-    activities = [a1, a2, a3, a4, a5];
+    SeActivity a6 = SeActivity(
+        id: "6",
+        username: "Lezd",
+        message: "",
+        amount: "2000",
+        soundUrl: null,
+        activityType: ActivityType.host);
+    SeActivity a7 = SeActivity(
+        id: "7",
+        username: "Lezd",
+        message: "",
+        amount: "33",
+        soundUrl: null,
+        activityType: ActivityType.merch);
+    activities = [a1, a2, a3, a4, a5, a6, a7];
 
     songRequestScrollController = ScrollController();
     SeSong s1 = SeSong(
@@ -67,28 +81,28 @@ class StreamelementsViewController extends GetxController
       videoId: "6x4HDrL1KEU",
       title: "Necrofantasia (Thousand Night Anamnesis)",
       channel: "Delta 3859",
-      duration: "123",
+      duration: "1:01",
     );
     SeSong s2 = SeSong(
       id: '',
       videoId: "qjPJHiCS7Ak",
       title: "xQc CAN'T STOP LAUGHING at UNUSUAL MEMES COMPILATION V175",
       channel: "xQcOW",
-      duration: "123",
+      duration: "2:02",
     );
     SeSong s3 = SeSong(
       id: '',
       videoId: "J_nBbJaAe68",
       title: "【東方】まるで戦闘中！東方好きに送る東方アレンジメドレー！",
       channel: "MM495",
-      duration: "123",
+      duration: "3:03",
     );
     SeSong s4 = SeSong(
       id: '',
       videoId: "cyv7YwXkFnQ",
       title: "don't worry brah (1 hour)",
       channel: "Kopera",
-      duration: "123",
+      duration: "4:04",
     );
     songRequestQueue.value = [s1, s2, s3, s4];
     super.onInit();
