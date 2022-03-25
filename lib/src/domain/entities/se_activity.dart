@@ -13,7 +13,7 @@ class SeActivity extends Equatable {
   final String id;
   final String username;
   final String message;
-  final String? donationAmount;
+  final String? amount;
   final String? soundUrl;
   final ActivityType activityType;
 
@@ -21,7 +21,7 @@ class SeActivity extends Equatable {
     required this.id,
     required this.username,
     required this.message,
-    required this.donationAmount,
+    required this.amount,
     required this.soundUrl,
     required this.activityType,
   });
@@ -32,7 +32,7 @@ class SeActivity extends Equatable {
       id,
       username,
       message,
-      donationAmount,
+      amount,
       soundUrl,
       activityType,
     ];
@@ -66,10 +66,13 @@ class SeActivity extends Equatable {
         //background color
         colors.add(Color(0xFF8D818C));
         //circle color
-        colors.add(Color(0xFFFB4B8C5));
+        colors.add(Color(0xFFB4B8C5));
         break;
       case ActivityType.raid:
-        // TODO: Handle this case.
+        //background color
+        colors.add(Color(0xFF149911));
+        //circle color
+        colors.add(Color(0xFF256D1B));
         break;
     }
     return colors;
@@ -86,13 +89,13 @@ class SeActivity extends Equatable {
         s = ' subscribed!';
         break;
       case ActivityType.cheer:
-        s = ' sent ${this.donationAmount} bits!';
+        s = ' sent ${this.amount} bits!';
         break;
       case ActivityType.donation:
-        s = ' donated ${this.donationAmount}\$!';
+        s = ' donated ${this.amount}\$!';
         break;
       case ActivityType.raid:
-        // TODO: Handle this case.
+        s = ' raided with ${this.amount} viewers!';
         break;
     }
     return s;

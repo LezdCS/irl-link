@@ -27,21 +27,21 @@ class StreamelementsViewController extends GetxController
         id: "1",
         username: "Lezd",
         message: "Ok ok",
-        donationAmount: null,
+        amount: null,
         soundUrl: null,
         activityType: ActivityType.subscription);
     SeActivity a2 = SeActivity(
         id: "2",
         username: "Lezd",
         message: "Ok ok",
-        donationAmount: "30",
+        amount: "30",
         soundUrl: null,
         activityType: ActivityType.donation);
     SeActivity a3 = SeActivity(
         id: "3",
         username: "Lezd",
         message: "",
-        donationAmount: null,
+        amount: null,
         soundUrl: null,
         activityType: ActivityType.follow);
     SeActivity a4 = SeActivity(
@@ -49,10 +49,17 @@ class StreamelementsViewController extends GetxController
         username: "Lezd",
         message:
             "Ok okkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
-        donationAmount: "2000",
+        amount: "2000",
         soundUrl: null,
         activityType: ActivityType.cheer);
-    activities = [a1, a2, a3, a4];
+    SeActivity a5 = SeActivity(
+        id: "5",
+        username: "Lezd",
+        message: "",
+        amount: "2000",
+        soundUrl: null,
+        activityType: ActivityType.raid);
+    activities = [a1, a2, a3, a4, a5];
 
     songRequestScrollController = ScrollController();
     SeSong s1 = SeSong(
