@@ -448,6 +448,8 @@ class ChatViewController extends GetxController
       ircChannelJoinedChannelId = twitchData.twitchUser.id;
     }
 
+    isAutoScrolldown.value = true;
+
     if (tempIrcChannelJoined != ircChannelJoined) {
       getTwitchBadges().then((value) => twitchBadges = value);
       getTwitchEmotes().then((value) => twitchEmotes = value);
