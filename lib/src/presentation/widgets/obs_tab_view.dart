@@ -28,7 +28,9 @@ class ObsTabView extends GetView<ObsTabViewController> {
                             ),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.tertiaryContainer,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .tertiaryContainer,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(8)),
                             ),
@@ -50,7 +52,9 @@ class ObsTabView extends GetView<ObsTabViewController> {
                             ),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.tertiaryContainer,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .tertiaryContainer,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(8),
                               ),
@@ -73,7 +77,9 @@ class ObsTabView extends GetView<ObsTabViewController> {
                             ),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.tertiaryContainer,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .tertiaryContainer,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(8),
                               ),
@@ -159,8 +165,8 @@ class ObsTabView extends GetView<ObsTabViewController> {
       separatorBuilder: (context, index) => SizedBox(
         width: 10,
       ),
-      itemBuilder: (BuildContext context, int i) {
-        var elementAt = controller.scenesList.elementAt(i);
+      itemBuilder: (BuildContext context, int index) {
+        var elementAt = controller.scenesList.elementAt(index);
         return InkWell(
           onTap: () {
             controller.setCurrentScene(elementAt);
@@ -206,7 +212,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
         childAspectRatio: 0.5,
       ),
       itemCount: controller.sourcesList.length,
-      itemBuilder: (BuildContext ctx, index) {
+      itemBuilder: (BuildContext context, int index) {
         var elementAt = controller.sourcesList.elementAt(index);
         return InkWell(
           onTap: () {

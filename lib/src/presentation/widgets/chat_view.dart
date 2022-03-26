@@ -155,7 +155,6 @@ class ChatView extends GetView<ChatViewController> {
                   visible: controller.settings.value.displayTimestamp!,
                   child: Container(
                     padding: EdgeInsets.only(right: 5),
-                    // color: Colors.red,
                     child: Text(
                       '${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(message.timestamp))}',
                       textAlign: TextAlign.end,
@@ -217,7 +216,8 @@ class ChatView extends GetView<ChatViewController> {
             children: List.generate(timeoutValues.length, (index) {
               return InkWell(
                 onTap: () => controller.timeoutMessageInstruction(
-                    controller.selectedMessage.value!, timeoutValues[index].values.first),
+                    controller.selectedMessage.value!,
+                    timeoutValues[index].values.first),
                 child: Container(
                   margin: EdgeInsets.only(right: 10),
                   padding:

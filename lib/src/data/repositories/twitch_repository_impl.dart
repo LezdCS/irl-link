@@ -130,10 +130,23 @@ class TwitchRepositoryImpl extends TwitchRepository {
   }
 
   @override
-  Future<DataState<String>> logout() async {
+  Future<DataState<String>> logout(String accessToken) async {
     final box = GetStorage();
     box.remove('twitchData');
-    //todo : call twitch api revoke access token
+    Response response;
+    var dio = Dio();
+    try {
+      response = await dio.post(
+        'https://id.twitch.tv/oauth2/revoke',
+        queryParameters: {
+          'client_id': kTwitchAuthClientId,
+          'token': accessToken
+        },
+      );
+      return DataSuccess(response.toString());
+    } on DioError catch (e) {
+      debugPrint(e.toString());
+    }
     return DataSuccess('Logged out successfuly');
   }
 

@@ -22,7 +22,9 @@ abstract class TwitchRepository {
     TwitchCredentials twitchData,
   );
 
-  Future<DataState<String>> logout();
+  Future<DataState<String>> logout(
+    String accessToken,
+  );
 
   Future<DataState<TwitchUser>> getTwitchUser(
     String? username,

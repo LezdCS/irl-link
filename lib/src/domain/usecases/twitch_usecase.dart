@@ -28,8 +28,8 @@ class TwitchUseCase {
     return twitchRepository.getTwitchUser(username, accessToken);
   }
 
-  Future<DataState<String>> logout() {
-    return twitchRepository.logout();
+  Future<DataState<String>> logout({required String accessToken}) {
+    return twitchRepository.logout(accessToken);
   }
 
   Future<DataState<List<TwitchBadge>>> getTwitchGlobalBadges(

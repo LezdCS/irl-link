@@ -121,8 +121,7 @@ class HomeView extends GetView<HomeViewController> {
         labelColor: Theme.of(context).colorScheme.tertiary,
         unselectedLabelColor: Theme.of(context).textTheme.bodyText1!.color,
         indicatorColor: Theme.of(context).colorScheme.tertiary,
-        labelPadding: EdgeInsets.symmetric(
-            horizontal: width / (controller.tabElements.length > 2 ? 9 : 5)),
+        labelPadding: EdgeInsets.symmetric(horizontal: 30),
         tabs: List<Tab>.generate(
           controller.tabElements.length,
           (int index) => Tab(
@@ -242,7 +241,8 @@ class HomeView extends GetView<HomeViewController> {
               flex: 1,
               child: InkWell(
                 onTap: () async {
-                  await Get.toNamed(Routes.SETTINGS);
+                  await Get.toNamed(Routes.SETTINGS,
+                      arguments: [controller.twitchData]);
                   controller.getSettings();
                   controller.chatViewController.getSettings();
                   controller.obsTabViewController.getSettings();

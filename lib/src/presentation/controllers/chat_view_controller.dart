@@ -78,8 +78,8 @@ class ChatViewController extends GetxController
 
   @override
   void onClose() {
-    channel.sink.add('PART #$ircChannelJoined');
-    channel.sink.close(status.goingAway);
+    streamSubscription!.cancel();
+    channel.sink.close();
     super.onClose();
   }
 
@@ -87,7 +87,7 @@ class ChatViewController extends GetxController
   Future<void> joinIrc() async {
     if (streamSubscription != null) {
       streamSubscription!.cancel();
-      channel.sink.add('PART #$ircChannelJoined');
+      channel.sink.close();
       chatMessages.clear();
     }
     alertMessage.value = "Connecting...";

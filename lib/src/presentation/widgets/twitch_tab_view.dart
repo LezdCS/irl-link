@@ -16,56 +16,48 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.circle,
-                          color: controller.twitchStreamInfos.value.isOnline!
-                              ? Colors.red
-                              : Theme.of(context).colorScheme.tertiaryContainer,
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.circle,
+                        color: controller.twitchStreamInfos.value.isOnline!
+                            ? Colors.red
+                            : Theme.of(context).colorScheme.tertiaryContainer,
+                      ),
+                      Padding(padding: EdgeInsets.only(right: 6.0)),
+                      Text(
+                        controller.twitchStreamInfos.value.isOnline!
+                            ? "Live"
+                            : "Offline",
+                        style: TextStyle(
+                          color:
+                              Theme.of(Get.context!).textTheme.bodyText1!.color,
                         ),
-                        Padding(padding: EdgeInsets.only(right: 6.0)),
-                        Text(
-                          controller.twitchStreamInfos.value.isOnline!
-                              ? "Live"
-                              : "Offline",
-                          style: TextStyle(
-                            color: Theme.of(Get.context!)
-                                .textTheme
-                                .bodyText1!
-                                .color,
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  Container(
-                    child: Row(
-                      children: [
-                        Icon(Icons.person_outline, color: Colors.red),
-                        SizedBox(
-                          width: 2,
+                  Row(
+                    children: [
+                      Icon(Icons.person_outline, color: Colors.red),
+                      SizedBox(
+                        width: 2,
+                      ),
+                      Text(
+                        controller.twitchStreamInfos.value.viewerCount
+                            .toString(),
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      SizedBox(
+                        width: 6,
+                      ),
+                      Text(
+                        "viewers",
+                        style: TextStyle(
+                          color:
+                              Theme.of(Get.context!).textTheme.bodyText1!.color,
                         ),
-                        Text(
-                          controller.twitchStreamInfos.value.viewerCount
-                              .toString(),
-                          style: TextStyle(color: Colors.red),
-                        ),
-                        SizedBox(
-                          width: 6,
-                        ),
-                        Text(
-                          "viewers",
-                          style: TextStyle(
-                            color: Theme.of(Get.context!)
-                                .textTheme
-                                .bodyText1!
-                                .color,
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -148,118 +140,64 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Container(
-                child: GridView.count(
-                  shrinkWrap: true,
-                  primary: false,
-                  padding: EdgeInsets.only(top: 10),
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  crossAxisCount: 2,
-                  childAspectRatio: 4,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        controller.twitchStreamInfos.value =
-                            controller.twitchStreamInfos.value.copyWith(
-                                isFollowerMode: !controller
-                                    .twitchStreamInfos.value.isFollowerMode!);
-                        controller.changeChatSettings();
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            color: controller
-                                    .twitchStreamInfos.value.isFollowerMode!
-                                ? Theme.of(context).colorScheme.tertiary
-                                : Theme.of(context)
-                                    .colorScheme
-                                    .tertiaryContainer,
-                            borderRadius: BorderRadius.all(Radius.circular(8))),
-                        padding: EdgeInsets.all(8),
-                        child: Text(
-                          "Follower Only",
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        controller.twitchStreamInfos.value =
-                            controller.twitchStreamInfos.value.copyWith(
-                                isSubscriberMode: !controller
-                                    .twitchStreamInfos.value.isSubscriberMode!);
-                        controller.changeChatSettings();
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            color: controller
-                                    .twitchStreamInfos.value.isSubscriberMode!
-                                ? Theme.of(context).colorScheme.tertiary
-                                : Theme.of(context)
-                                    .colorScheme
-                                    .tertiaryContainer,
-                            borderRadius: BorderRadius.all(Radius.circular(8))),
-                        padding: EdgeInsets.all(8),
-                        child: Text(
-                          'Subscriber only',
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        controller.twitchStreamInfos.value =
-                            controller.twitchStreamInfos.value.copyWith(
-                                isEmoteMode: !controller
-                                    .twitchStreamInfos.value.isEmoteMode!);
-                        controller.changeChatSettings();
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            color:
-                                controller.twitchStreamInfos.value.isEmoteMode!
-                                    ? Theme.of(context).colorScheme.tertiary
-                                    : Theme.of(context)
-                                        .colorScheme
-                                        .tertiaryContainer,
-                            borderRadius: BorderRadius.all(Radius.circular(8))),
-                        padding: EdgeInsets.all(8),
-                        child: Text(
-                          'Emote only',
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        controller.twitchStreamInfos.value =
-                            controller.twitchStreamInfos.value.copyWith(
-                                isSlowMode: !controller
-                                    .twitchStreamInfos.value.isSlowMode!);
-                        controller.changeChatSettings();
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            color:
-                                controller.twitchStreamInfos.value.isSlowMode!
-                                    ? Theme.of(context).colorScheme.tertiary
-                                    : Theme.of(context)
-                                        .colorScheme
-                                        .tertiaryContainer,
-                            borderRadius: BorderRadius.all(Radius.circular(8))),
-                        padding: EdgeInsets.all(8),
-                        child: Text(
-                          'Slow Mode',
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              GridView.count(
+                shrinkWrap: true,
+                primary: false,
+                padding: EdgeInsets.only(top: 10),
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                crossAxisCount: 2,
+                childAspectRatio: 4,
+                children: [
+                  _shortcutButton(
+                    context,
+                    'Follower only',
+                    () => {
+                      controller.twitchStreamInfos.value =
+                          controller.twitchStreamInfos.value.copyWith(
+                              isFollowerMode: !controller
+                                  .twitchStreamInfos.value.isFollowerMode!),
+                      controller.changeChatSettings(),
+                    },
+                    controller.twitchStreamInfos.value.isFollowerMode!,
+                  ),
+                  _shortcutButton(
+                    context,
+                    'Subscriber only',
+                    () => {
+                      controller.twitchStreamInfos.value =
+                          controller.twitchStreamInfos.value.copyWith(
+                              isSubscriberMode: !controller
+                                  .twitchStreamInfos.value.isSubscriberMode!),
+                      controller.changeChatSettings(),
+                    },
+                    controller.twitchStreamInfos.value.isSubscriberMode!,
+                  ),
+                  _shortcutButton(
+                    context,
+                    'Emote only',
+                    () => {
+                      controller.twitchStreamInfos.value =
+                          controller.twitchStreamInfos.value.copyWith(
+                              isEmoteMode: !controller
+                                  .twitchStreamInfos.value.isEmoteMode!),
+                      controller.changeChatSettings(),
+                    },
+                    controller.twitchStreamInfos.value.isEmoteMode!,
+                  ),
+                  _shortcutButton(
+                    context,
+                    'Slow mode',
+                    () => {
+                      controller.twitchStreamInfos.value =
+                          controller.twitchStreamInfos.value.copyWith(
+                              isSlowMode: !controller
+                                  .twitchStreamInfos.value.isSlowMode!),
+                      controller.changeChatSettings(),
+                    },
+                    controller.twitchStreamInfos.value.isSlowMode!,
+                  ),
+                ],
               ),
             ],
           ),
@@ -267,4 +205,26 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
       ),
     );
   }
+}
+
+Widget _shortcutButton(
+    BuildContext context, String text, Function onTap, bool isOn) {
+  return InkWell(
+    onTap: () {
+      onTap();
+    },
+    child: Container(
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+          color: isOn
+              ? Theme.of(context).colorScheme.tertiary
+              : Theme.of(context).colorScheme.tertiaryContainer,
+          borderRadius: BorderRadius.all(Radius.circular(8))),
+      padding: EdgeInsets.all(8),
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+      ),
+    ),
+  );
 }

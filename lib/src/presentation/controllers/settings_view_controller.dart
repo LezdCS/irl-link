@@ -5,6 +5,8 @@ import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/events/settings_events.dart';
 
+import '../../domain/entities/twitch_credentials.dart';
+
 class SettingsViewController extends GetxController {
   SettingsViewController({required this.settingsEvents});
 
@@ -22,6 +24,8 @@ class SettingsViewController extends GetxController {
   final addBrowserTitleKey = GlobalKey<FormState>();
   final addHiddenUserKey = GlobalKey<FormState>();
 
+  late TwitchCredentials twitchData;
+
   @override
   void onInit() {
     alternateChannelChatController = TextEditingController();
@@ -29,6 +33,8 @@ class SettingsViewController extends GetxController {
     addBrowserTitleController = TextEditingController();
     addBrowserUrlController = TextEditingController();
     addHiddenUsernameController = TextEditingController();
+
+    twitchData = Get.arguments[0];
     super.onInit();
   }
 
@@ -53,7 +59,7 @@ class SettingsViewController extends GetxController {
   }
 
   void logout() {
-    settingsEvents.logout().then(
+    settingsEvents.logout(accessToken: twitchData.accessToken).then(
           (value) => Get.offAllNamed(Routes.LOGIN),
         );
   }
