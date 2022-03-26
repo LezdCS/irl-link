@@ -1,5 +1,4 @@
 import 'package:expandable/expandable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/se_activity.dart';
@@ -124,80 +123,7 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
               ),
             ),
             controller.songRequestQueue.length > 0
-                ? Container(
-                    padding:
-                        EdgeInsets.only(left: 8, right: 8, top: 5, bottom: 5),
-                    margin: EdgeInsets.only(top: 8),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondary,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(5),
-                      ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RichText(
-                          overflow: TextOverflow.ellipsis,
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: controller.songRequestQueue.first.channel,
-                                style: TextStyle(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1!
-                                        .color,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(
-                                text: " - ",
-                                style: TextStyle(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                ),
-                              ),
-                              TextSpan(
-                                text: controller.songRequestQueue.first.title,
-                                style: TextStyle(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        RichText(
-                          overflow: TextOverflow.ellipsis,
-                          text: TextSpan(children: [
-                            TextSpan(
-                              text: "Duration: ",
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .color,
-                              ),
-                            ),
-                            TextSpan(
-                              text: controller.songRequestQueue.first.duration,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .color,
-                              ),
-                            ),
-                          ]),
-                        ),
-                      ],
-                    ),
-                  )
+                ? _songRow(context, controller.songRequestQueue.first)
                 : Text("No song request in queue."),
             Padding(
               padding: EdgeInsets.only(bottom: 15),
@@ -229,97 +155,7 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
                 itemCount: controller.songRequestQueue.length - 1,
                 itemBuilder: (BuildContext context, int index) {
                   SeSong song = controller.songRequestQueue[index + 1];
-                  return Container(
-                    padding:
-                        EdgeInsets.only(left: 8, right: 8, top: 5, bottom: 5),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondary,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(5),
-                      ),
-                    ),
-                    margin: EdgeInsets.only(top: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              RichText(
-                                overflow: TextOverflow.ellipsis,
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: song.channel,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: " - ",
-                                      style: TextStyle(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: song.title,
-                                      style: TextStyle(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              RichText(
-                                overflow: TextOverflow.ellipsis,
-                                text: TextSpan(children: [
-                                  TextSpan(
-                                    text: "Duration: ",
-                                    style: TextStyle(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .color,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: song.duration,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .color,
-                                    ),
-                                  ),
-                                ]),
-                              ),
-                            ],
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            controller.removeSong(song);
-                          },
-                          child: Icon(
-                            Icons.close,
-                            color: Colors.red,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
+                  return _songRow(context, song);
                 },
               ),
             ),
@@ -329,18 +165,105 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
     );
   }
 
+  Widget _songRow(BuildContext context, SeSong song) {
+    return Container(
+      padding: EdgeInsets.only(left: 8, right: 8, top: 5, bottom: 5),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.secondary,
+        borderRadius: BorderRadius.all(
+          Radius.circular(5),
+        ),
+      ),
+      margin: EdgeInsets.only(top: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                RichText(
+                  overflow: TextOverflow.ellipsis,
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: song.channel,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).textTheme.bodyText1!.color,
+                        ),
+                      ),
+                      TextSpan(
+                        text: " - ",
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyText1!.color,
+                        ),
+                      ),
+                      TextSpan(
+                        text: song.title,
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyText1!.color,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                RichText(
+                  overflow: TextOverflow.ellipsis,
+                  text: TextSpan(children: [
+                    TextSpan(
+                      text: "Duration: ",
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyText1!.color,
+                      ),
+                    ),
+                    TextSpan(
+                      text: song.duration,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).textTheme.bodyText1!.color,
+                      ),
+                    ),
+                  ]),
+                ),
+              ],
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              controller.removeSong(song);
+            },
+            child: Icon(
+              Icons.close,
+              color: Colors.red,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _activitiesSettings() {
+    List<String> settingsValues = [
+      "Followers",
+      "Subscribers",
+      "Donations",
+      "Bits",
+      "Raids",
+      "Hosts",
+      "Merch",
+    ];
     return PopupMenuButton(
       offset: Offset(30, 10),
       color: Theme.of(Get.context!).colorScheme.secondary,
       child: Icon(Icons.settings),
-      itemBuilder: (context) => [
-        PopupMenuItem(
+      itemBuilder: (context) => List.generate(settingsValues.length, (index) {
+        return PopupMenuItem(
           child: CheckboxListTile(
             activeColor: Colors.deepPurple[600],
             controlAffinity: ListTileControlAffinity.leading,
             title: Text(
-              'Followers',
+              settingsValues[index],
               style: TextStyle(
                 color: Theme.of(context).textTheme.bodyText1!.color,
               ),
@@ -348,92 +271,8 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
             value: true,
             onChanged: (bool? value) {},
           ),
-        ),
-        PopupMenuItem(
-          child: CheckboxListTile(
-            activeColor: Colors.deepPurple[600],
-            controlAffinity: ListTileControlAffinity.leading,
-            title: Text(
-              'Subscribers',
-              style: TextStyle(
-                color: Theme.of(context).textTheme.bodyText1!.color,
-              ),
-            ),
-            value: true,
-            onChanged: (bool? value) {},
-          ),
-        ),
-        PopupMenuItem(
-          child: CheckboxListTile(
-            activeColor: Colors.deepPurple[600],
-            controlAffinity: ListTileControlAffinity.leading,
-            title: Text(
-              'Donations',
-              style: TextStyle(
-                color: Theme.of(context).textTheme.bodyText1!.color,
-              ),
-            ),
-            value: true,
-            onChanged: (bool? value) {},
-          ),
-        ),
-        PopupMenuItem(
-          child: CheckboxListTile(
-            activeColor: Colors.deepPurple[600],
-            controlAffinity: ListTileControlAffinity.leading,
-            title: Text(
-              'Bits',
-              style: TextStyle(
-                color: Theme.of(context).textTheme.bodyText1!.color,
-              ),
-            ),
-            value: true,
-            onChanged: (bool? value) {},
-          ),
-        ),
-        PopupMenuItem(
-          child: CheckboxListTile(
-            activeColor: Colors.deepPurple[600],
-            controlAffinity: ListTileControlAffinity.leading,
-            title: Text(
-              'Raids',
-              style: TextStyle(
-                color: Theme.of(context).textTheme.bodyText1!.color,
-              ),
-            ),
-            value: true,
-            onChanged: (bool? value) {},
-          ),
-        ),
-        PopupMenuItem(
-          child: CheckboxListTile(
-            activeColor: Colors.deepPurple[600],
-            controlAffinity: ListTileControlAffinity.leading,
-            title: Text(
-              'Hosts',
-              style: TextStyle(
-                color: Theme.of(context).textTheme.bodyText1!.color,
-              ),
-            ),
-            value: true,
-            onChanged: (bool? value) {},
-          ),
-        ),
-        PopupMenuItem(
-          child: CheckboxListTile(
-            activeColor: Colors.deepPurple[600],
-            controlAffinity: ListTileControlAffinity.leading,
-            title: Text(
-              'Merch',
-              style: TextStyle(
-                color: Theme.of(context).textTheme.bodyText1!.color,
-              ),
-            ),
-            value: true,
-            onChanged: (bool? value) {},
-          ),
-        ),
-      ],
+        );
+      }),
     );
   }
 }
@@ -472,9 +311,10 @@ Widget _activityCollapsed(SeActivity activity) {
                   ),
                   TextSpan(text: activity.textFromEnum()),
                   TextSpan(
-                      text: activity.message != ""
-                          ? ' "' + activity.message + '"'
-                          : ""),
+                    text: activity.message != ""
+                        ? ' "' + activity.message + '"'
+                        : "",
+                  ),
                 ],
               ),
             ),
