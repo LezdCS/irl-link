@@ -320,13 +320,10 @@ class TwitchRepositoryImpl extends TwitchRepository {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
       dio.options.headers["authorization"] = "Bearer $accessToken";
 
-      final queryParameters = {'emote_set_id': setId};
-      Uri uri = Uri.https(
-        "api.twitch.tv",
-        "/helix/chat/emotes/set",
-        queryParameters,
+      response = await dio.get(
+        "https://api.twitch.tv/helix/chat/emotes/set",
+        queryParameters: {'emote_set_id': setId},
       );
-      response = await dio.getUri(uri);
       response.data['data'].forEach(
         (emote) => emotes.add(
           EmoteDTO.fromJson(emote),

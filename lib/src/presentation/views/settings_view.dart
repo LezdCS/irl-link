@@ -80,7 +80,8 @@ class SettingsView extends GetView<SettingsViewController> {
           Container(
             child: Text(
               "Chat",
-              style: TextStyle(color: Theme.of(context).colorScheme.tertiary, fontSize: 22),
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.tertiary, fontSize: 22),
             ),
           ),
           Container(
@@ -110,8 +111,10 @@ class SettingsView extends GetView<SettingsViewController> {
                             controller.saveSettings();
                           },
                           value: controller.settings.value.isEmotes!,
-                          inactiveTrackColor: Theme.of(context).colorScheme.tertiaryContainer,
-                          activeTrackColor: Theme.of(context).colorScheme.tertiary,
+                          inactiveTrackColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
+                          activeTrackColor:
+                              Theme.of(context).colorScheme.tertiary,
                           activeColor: Colors.white,
                         ),
                       )
@@ -144,7 +147,8 @@ class SettingsView extends GetView<SettingsViewController> {
                           max: 50.0,
                           divisions: 100,
                           activeColor: Theme.of(context).colorScheme.tertiary,
-                          inactiveColor: Theme.of(context).colorScheme.tertiaryContainer,
+                          inactiveColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
                           label: "${controller.settings.value.textSize}",
                         ),
                       )
@@ -177,7 +181,8 @@ class SettingsView extends GetView<SettingsViewController> {
                           max: 50.0,
                           divisions: 100,
                           activeColor: Theme.of(context).colorScheme.tertiary,
-                          inactiveColor: Theme.of(context).colorScheme.tertiaryContainer,
+                          inactiveColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
                           label: '${controller.settings.value.emotesSize}',
                         ),
                       )
@@ -206,8 +211,10 @@ class SettingsView extends GetView<SettingsViewController> {
                             controller.saveSettings();
                           },
                           value: controller.settings.value.displayTimestamp!,
-                          inactiveTrackColor: Theme.of(context).colorScheme.tertiaryContainer,
-                          activeTrackColor: Theme.of(context).colorScheme.tertiary,
+                          inactiveTrackColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
+                          activeTrackColor:
+                              Theme.of(context).colorScheme.tertiary,
                           activeColor: Colors.white,
                         ),
                       )
@@ -243,8 +250,10 @@ class SettingsView extends GetView<SettingsViewController> {
                             controller.saveSettings();
                           },
                           value: controller.settings.value.alternateChannel!,
-                          inactiveTrackColor: Theme.of(context).colorScheme.tertiaryContainer,
-                          activeTrackColor: Theme.of(context).colorScheme.tertiary,
+                          inactiveTrackColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
+                          activeTrackColor:
+                              Theme.of(context).colorScheme.tertiary,
                           activeColor: Colors.white,
                         ),
                       )
@@ -276,7 +285,8 @@ class SettingsView extends GetView<SettingsViewController> {
                           child: TextButton(
                             style: TextButton.styleFrom(
                               textStyle: TextStyle(fontSize: 12),
-                              backgroundColor: Theme.of(context).colorScheme.tertiary,
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.tertiary,
                               fixedSize: Size(50, 20),
                             ),
                             onPressed: () {
@@ -349,7 +359,8 @@ class SettingsView extends GetView<SettingsViewController> {
           Container(
             child: Text(
               "General",
-              style: TextStyle(color: Theme.of(context).colorScheme.tertiary, fontSize: 22),
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.tertiary, fontSize: 22),
             ),
           ),
           Container(
@@ -383,9 +394,11 @@ class SettingsView extends GetView<SettingsViewController> {
                             controller.saveSettings();
                           },
                           value: controller.settings.value.isDarkMode!,
-                          activeTrackColor: Theme.of(context).colorScheme.tertiary,
+                          activeTrackColor:
+                              Theme.of(context).colorScheme.tertiary,
                           activeColor: Colors.white,
-                          inactiveTrackColor: Theme.of(context).colorScheme.tertiaryContainer,
+                          inactiveTrackColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
                         ),
                       )
                     ],
@@ -413,9 +426,11 @@ class SettingsView extends GetView<SettingsViewController> {
                             controller.saveSettings();
                           },
                           value: controller.settings.value.keepSpeakerOn!,
-                          activeTrackColor: Theme.of(context).colorScheme.tertiary,
+                          activeTrackColor:
+                              Theme.of(context).colorScheme.tertiary,
                           activeColor: Colors.white,
-                          inactiveTrackColor: Theme.of(context).colorScheme.tertiaryContainer,
+                          inactiveTrackColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
                         ),
                       )
                     ],
@@ -443,9 +458,11 @@ class SettingsView extends GetView<SettingsViewController> {
                             controller.saveSettings();
                           },
                           value: controller.settings.value.keepScreenOn!,
-                          activeTrackColor: Theme.of(context).colorScheme.tertiary,
+                          activeTrackColor:
+                              Theme.of(context).colorScheme.tertiary,
                           activeColor: Colors.white,
-                          inactiveTrackColor: Theme.of(context).colorScheme.tertiaryContainer,
+                          inactiveTrackColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
                         ),
                       )
                     ],
@@ -468,7 +485,8 @@ class SettingsView extends GetView<SettingsViewController> {
           Container(
             child: Text(
               "Connections & Tabs",
-              style: TextStyle(color: Theme.of(context).colorScheme.tertiary, fontSize: 22),
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.tertiary, fontSize: 22),
             ),
           ),
           Container(
@@ -528,8 +546,10 @@ class SettingsView extends GetView<SettingsViewController> {
                           controller.saveSettings();
                         },
                         value: controller.settings.value.isObsConnected!,
-                        inactiveTrackColor: Theme.of(context).colorScheme.tertiaryContainer,
-                        activeTrackColor: Theme.of(context).colorScheme.tertiary,
+                        inactiveTrackColor:
+                            Theme.of(context).colorScheme.tertiaryContainer,
+                        activeTrackColor:
+                            Theme.of(context).colorScheme.tertiary,
                         activeColor: Colors.white,
                       ),
                     ),
@@ -561,7 +581,8 @@ class SettingsView extends GetView<SettingsViewController> {
                           child: TextButton(
                             style: TextButton.styleFrom(
                               textStyle: TextStyle(fontSize: 12),
-                              backgroundColor: Theme.of(context).colorScheme.tertiary,
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.tertiary,
                               fixedSize: Size(50, 20),
                             ),
                             onPressed: () {
@@ -645,7 +666,8 @@ class SettingsView extends GetView<SettingsViewController> {
           Container(
             child: Text(
               "Contact",
-              style: TextStyle(color: Theme.of(context).colorScheme.tertiary, fontSize: 22),
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.tertiary, fontSize: 22),
             ),
           ),
           Container(
@@ -655,7 +677,6 @@ class SettingsView extends GetView<SettingsViewController> {
               children: [
                 InkWell(
                   onTap: () {
-                    //TODO : https://pub.dev/packages/url_launcher config for android package visibility configuration (API > 30 )
                     launch("https://irllink.com");
                   },
                   child: Text(

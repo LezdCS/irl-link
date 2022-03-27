@@ -25,7 +25,7 @@ class HomeViewController extends GetxController
 
   RxBool sound = true.obs;
   SplitViewController splitViewController =
-      SplitViewController(limits: [null, WeightLimit(min: 0.12)]);
+      SplitViewController(limits: [null, WeightLimit(min: 0.12, max: 0.92)]);
 
   //TABS
   late TabController tabController;

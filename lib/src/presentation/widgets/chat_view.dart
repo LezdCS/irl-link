@@ -13,13 +13,6 @@ import 'package:collection/collection.dart';
 import 'alert_message_view.dart';
 
 class ChatView extends GetView<ChatViewController> {
-  List<Map<String, int>> timeoutValues = [
-    {"10s": 10},
-    {"1m": 60},
-    {"10m": 600},
-    {"30m": 1800},
-  ];
-
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
@@ -201,6 +194,13 @@ class ChatView extends GetView<ChatViewController> {
   }
 
   void timeoutDialog() {
+    final List<Map<String, int>> timeoutValues = [
+      {"10s": 10},
+      {"1m": 60},
+      {"10m": 600},
+      {"30m": 1800},
+    ];
+
     Get.defaultDialog(
       title: "Timeout",
       titleStyle: TextStyle(color: Colors.white),
