@@ -16,7 +16,7 @@ class SettingsEvents {
     return settingsUseCase.setSettings(settings: settings);
   }
 
-  Future<DataState<String>> logout() {
-    return twitchUseCase.logout();
+  Future<DataState<String>> logout({required String accessToken}) {
+    return twitchUseCase.logout(accessToken: accessToken);
   }
 }

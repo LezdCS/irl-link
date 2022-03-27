@@ -130,10 +130,23 @@ class TwitchRepositoryImpl extends TwitchRepository {
   }
 
   @override
-  Future<DataState<String>> logout() async {
+  Future<DataState<String>> logout(String accessToken) async {
     final box = GetStorage();
     box.remove('twitchData');
-    //todo : call twitch api revoke access token
+    Response response;
+    var dio = Dio();
+    try {
+      response = await dio.post(
+        'https://id.twitch.tv/oauth2/revoke',
+        queryParameters: {
+          'client_id': kTwitchAuthClientId,
+          'token': accessToken
+        },
+      );
+      return DataSuccess(response.toString());
+    } on DioError catch (e) {
+      debugPrint(e.toString());
+    }
     return DataSuccess('Logged out successfuly');
   }
 
@@ -307,13 +320,10 @@ class TwitchRepositoryImpl extends TwitchRepository {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
       dio.options.headers["authorization"] = "Bearer $accessToken";
 
-      final queryParameters = {'emote_set_id': setId};
-      Uri uri = Uri.https(
-        "api.twitch.tv",
-        "/helix/chat/emotes/set",
-        queryParameters,
+      response = await dio.get(
+        "https://api.twitch.tv/helix/chat/emotes/set",
+        queryParameters: {'emote_set_id': setId},
       );
-      response = await dio.getUri(uri);
       response.data['data'].forEach(
         (emote) => emotes.add(
           EmoteDTO.fromJson(emote),

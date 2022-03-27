@@ -148,6 +148,6 @@ class Settings extends Equatable {
         obsWebsocketUrl: obsWebsocketUrl ?? this.obsWebsocketUrl,
         streamElementsAccessToken:
             streamElementsAccessToken ?? this.streamElementsAccessToken,
-          browserTabs: browserTabs ?? this.browserTabs,
+        browserTabs: browserTabs ?? this.browserTabs,
       );
 }

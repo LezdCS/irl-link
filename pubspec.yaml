@@ -33,7 +33,6 @@ dependencies:
   get_storage: ^2.0.3
   split_view: ^3.1.0
   flutter_svg: ^1.0.3
-  glob: ^2.0.2
   flutter_web_auth: ^0.4.1
   url_launcher: ^6.0.20
   web_socket_channel: ^2.1.0
@@ -46,10 +45,22 @@ dependencies:
   move_to_background: ^1.0.2
   obs_websocket: ^2.3.1
   intl: ^0.17.0
+  expandable: ^5.0.1
+  audioplayers: ^0.20.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  flutter_launcher_icons: ^0.9.2
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "lib/assets/icon/icon.png"
+  remove_alpha_ios: true
+  adaptive_icon_background: "lib/assets/icon/background.png"
+  adaptive_icon_foreground: "lib/assets/icon/foreground.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

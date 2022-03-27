@@ -13,7 +13,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
         () => controller.isConnected.value
             ? Container(
                 padding: EdgeInsets.only(left: 8, top: 10, right: 8),
-                color: context.theme.primaryColor,
+                color: context.theme.colorScheme.background,
                 child: Column(
                   children: [
                     Row(
@@ -28,7 +28,9 @@ class ObsTabView extends GetView<ObsTabViewController> {
                             ),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color: Colors.grey[850],
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .tertiaryContainer,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(8)),
                             ),
@@ -50,7 +52,9 @@ class ObsTabView extends GetView<ObsTabViewController> {
                             ),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color: Colors.grey[850],
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .tertiaryContainer,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(8),
                               ),
@@ -73,7 +77,9 @@ class ObsTabView extends GetView<ObsTabViewController> {
                             ),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color: Colors.grey[850],
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .tertiaryContainer,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(8),
                               ),
@@ -110,18 +116,18 @@ class ObsTabView extends GetView<ObsTabViewController> {
                         margin: EdgeInsets.only(top: 10),
                         width: width,
                         height: 100,
-                        child: getSources(),
+                        child: getSources(context),
                       ),
                     ])
                   ],
                 ),
               )
             : Container(
-                color: context.theme.primaryColor,
+                color: context.theme.colorScheme.background,
                 child: Column(
                   children: [
                     AlertMessageView(
-                      color: Color(0xFFEC0808),
+                      color: Theme.of(context).colorScheme.error,
                       message: controller.alertMessage.value,
                       isProgress: false,
                     ),
@@ -135,7 +141,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
                         alignment: Alignment.center,
                         width: width * 0.4,
                         decoration: BoxDecoration(
-                          color: Color(0xFFA47CED),
+                          color: Theme.of(context).colorScheme.tertiary,
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
@@ -159,8 +165,8 @@ class ObsTabView extends GetView<ObsTabViewController> {
       separatorBuilder: (context, index) => SizedBox(
         width: 10,
       ),
-      itemBuilder: (BuildContext context, int i) {
-        var elementAt = controller.scenesList.elementAt(i);
+      itemBuilder: (BuildContext context, int index) {
+        var elementAt = controller.scenesList.elementAt(index);
         return InkWell(
           onTap: () {
             controller.setCurrentScene(elementAt);
@@ -173,8 +179,8 @@ class ObsTabView extends GetView<ObsTabViewController> {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: controller.currentScene == elementAt
-                  ? Colors.deepPurpleAccent[200]
-                  : Colors.grey[850],
+                  ? Theme.of(context).colorScheme.tertiary
+                  : Theme.of(context).colorScheme.tertiaryContainer,
               borderRadius: BorderRadius.all(Radius.circular(8)),
             ),
             padding: EdgeInsets.all(8),
@@ -193,7 +199,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
     );
   }
 
-  getSources() {
+  getSources(BuildContext context) {
     return GridView.builder(
       shrinkWrap: true,
       scrollDirection: Axis.horizontal,
@@ -206,7 +212,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
         childAspectRatio: 0.5,
       ),
       itemCount: controller.sourcesList.length,
-      itemBuilder: (BuildContext ctx, index) {
+      itemBuilder: (BuildContext context, int index) {
         var elementAt = controller.sourcesList.elementAt(index);
         return InkWell(
           onTap: () {
@@ -221,8 +227,8 @@ class ObsTabView extends GetView<ObsTabViewController> {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: controller.visibleSourcesList.contains(elementAt.name)
-                  ? Colors.deepPurpleAccent[200]
-                  : Colors.grey[850],
+                  ? Theme.of(context).colorScheme.tertiary
+                  : Theme.of(context).colorScheme.tertiaryContainer,
               borderRadius: BorderRadius.all(Radius.circular(8)),
             ),
             padding: EdgeInsets.all(8),

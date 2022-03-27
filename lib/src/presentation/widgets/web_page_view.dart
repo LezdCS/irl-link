@@ -20,7 +20,7 @@ class _WebPageViewState extends State<WebPageView>
   }
 
   @override
-  bool get wantKeepAlive => true; // ** and here
+  bool get wantKeepAlive => false;
 
   @override
   Widget build(BuildContext context) {

@@ -5,6 +5,8 @@ import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/events/settings_events.dart';
 
+import '../../domain/entities/twitch_credentials.dart';
+
 class SettingsViewController extends GetxController {
   SettingsViewController({required this.settingsEvents});
 
@@ -14,11 +16,25 @@ class SettingsViewController extends GetxController {
 
   late TextEditingController alternateChannelChatController;
   late TextEditingController obsWebsocketUrlFieldController;
+  late TextEditingController addBrowserTitleController;
+  late TextEditingController addBrowserUrlController;
+  late TextEditingController addHiddenUsernameController;
+
+  final addBrowserUrlKey = GlobalKey<FormState>();
+  final addBrowserTitleKey = GlobalKey<FormState>();
+  final addHiddenUserKey = GlobalKey<FormState>();
+
+  late TwitchCredentials twitchData;
 
   @override
   void onInit() {
     alternateChannelChatController = TextEditingController();
     obsWebsocketUrlFieldController = TextEditingController();
+    addBrowserTitleController = TextEditingController();
+    addBrowserUrlController = TextEditingController();
+    addHiddenUsernameController = TextEditingController();
+
+    twitchData = Get.arguments[0];
     super.onInit();
   }
 
@@ -43,14 +59,9 @@ class SettingsViewController extends GetxController {
   }
 
   void logout() {
-    settingsEvents.logout().then(
+    settingsEvents.logout(accessToken: twitchData.accessToken).then(
           (value) => Get.offAllNamed(Routes.LOGIN),
         );
-  }
-
-  void clearHiddenUsers() {
-    settings.value = settings.value.copyWith(hiddenUsersIds: []);
-    this.saveSettings();
   }
 
   void removeHiddenUser(userId) {
@@ -58,15 +69,58 @@ class SettingsViewController extends GetxController {
     hiddenUsersIds.remove(userId);
     settings.value = settings.value.copyWith(hiddenUsersIds: hiddenUsersIds);
     saveSettings();
+    settings.refresh();
   }
 
-  void addHiddenUser(String name) {}
+  void addBrowserTab() {
+    bool isValid = false;
+    isValid = addBrowserTitleKey.currentState!.validate();
+    isValid = addBrowserUrlKey.currentState!.validate();
+    if (!isValid) {
+      return;
+    }
 
-  void addBrowserTab(String name, String url) {}
+    String title = addBrowserTitleController.text;
+    String url = addBrowserUrlController.text;
+    Map<String, String> tab = {'title': title, 'url': url};
+    List browserTabs = settings.value.browserTabs! == const []
+        ? []
+        : settings.value.browserTabs!;
+    browserTabs.add(tab);
+    settings.value = settings.value.copyWith(browserTabs: browserTabs);
+    saveSettings();
+    settings.refresh();
+    Get.back();
+  }
 
-  void removeBrowserTab() {}
+  void editBrowserTab(elem) {
+    bool isValid = false;
+    isValid = addBrowserTitleKey.currentState!.validate();
+    isValid = addBrowserUrlKey.currentState!.validate();
+    if (!isValid) {
+      return;
+    }
 
-  void clearBrowserTabs() {}
+    String title = addBrowserTitleController.text;
+    String url = addBrowserUrlController.text;
+    elem["title"] = title;
+    elem["url"] = url;
+    List browserTabs = settings.value.browserTabs! == const []
+        ? []
+        : settings.value.browserTabs!;
+    settings.value = settings.value.copyWith(browserTabs: browserTabs);
+    saveSettings();
+    settings.refresh();
+    Get.back();
+  }
+
+  void removeBrowserTab(tab) {
+    List tabs = settings.value.browserTabs!;
+    tabs.remove(tab);
+    settings.value = settings.value.copyWith(browserTabs: tabs);
+    saveSettings();
+    settings.refresh();
+  }
 
   void saveSettings() {
     settingsEvents.setSettings(settings: settings.value);

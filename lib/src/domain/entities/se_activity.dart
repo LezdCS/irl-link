@@ -5,15 +5,17 @@ enum ActivityType {
   follow,
   subscription,
   cheer,
-  donation,
+  tip,
   raid,
+  host,
+  merch,
 }
 
 class SeActivity extends Equatable {
   final String id;
   final String username;
   final String message;
-  final String? donationAmount;
+  final String? amount;
   final String? soundUrl;
   final ActivityType activityType;
 
@@ -21,7 +23,7 @@ class SeActivity extends Equatable {
     required this.id,
     required this.username,
     required this.message,
-    required this.donationAmount,
+    required this.amount,
     required this.soundUrl,
     required this.activityType,
   });
@@ -32,7 +34,7 @@ class SeActivity extends Equatable {
       id,
       username,
       message,
-      donationAmount,
+      amount,
       soundUrl,
       activityType,
     ];
@@ -62,14 +64,29 @@ class SeActivity extends Equatable {
         //circle color
         colors.add(Color(0xFF003B36));
         break;
-      case ActivityType.donation:
+      case ActivityType.tip:
         //background color
         colors.add(Color(0xFF8D818C));
         //circle color
-        colors.add(Color(0xFFFB4B8C5));
+        colors.add(Color(0xFFB4B8C5));
         break;
       case ActivityType.raid:
-        // TODO: Handle this case.
+        //background color
+        colors.add(Color(0xFF149911));
+        //circle color
+        colors.add(Color(0xFF256D1B));
+        break;
+      case ActivityType.host:
+        //background color
+        colors.add(Color(0xFF4A001F));
+        //circle color
+        colors.add(Color(0xFF2E0219));
+        break;
+      case ActivityType.merch:
+        //background color
+        colors.add(Color(0xFF4F5D75));
+        //circle color
+        colors.add(Color(0xFF2D3142));
         break;
     }
     return colors;
@@ -83,16 +100,22 @@ class SeActivity extends Equatable {
         break;
       case ActivityType.subscription:
         //todo : if is prime add (prime) after "subscribed"
-        s = ' subscribed! "${this.message}"';
+        s = ' subscribed!';
         break;
       case ActivityType.cheer:
-        s = ' sent ${this.donationAmount} bits! "${this.message}"';
+        s = ' sent ${this.amount} bits!';
         break;
-      case ActivityType.donation:
-        s = ' donated ${this.donationAmount}\$! "${this.message}"';
+      case ActivityType.tip:
+        s = ' donated ${this.amount}\$!';
         break;
       case ActivityType.raid:
-        // TODO: Handle this case.
+        s = ' is raiding with ${this.amount} viewers!';
+        break;
+      case ActivityType.host:
+        s = ' is hosting with ${this.amount} viewers!';
+        break;
+      case ActivityType.merch:
+        s = ' bought for ${this.amount}\$ of merch!';
         break;
     }
     return s;

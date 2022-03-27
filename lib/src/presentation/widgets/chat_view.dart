@@ -13,13 +13,6 @@ import 'package:collection/collection.dart';
 import 'alert_message_view.dart';
 
 class ChatView extends GetView<ChatViewController> {
-  List<Map<String, int>> timeoutValues = [
-    {"10s": 10},
-    {"1m": 60},
-    {"10m": 600},
-    {"30m": 1800},
-  ];
-
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
@@ -37,7 +30,7 @@ class ChatView extends GetView<ChatViewController> {
             width: width,
             padding: EdgeInsets.only(top: 10, bottom: height * 0.07),
             decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).colorScheme.background,
             ),
             child: controller.chatMessages.length == 0
                 ? Container(
@@ -129,7 +122,7 @@ class ChatView extends GetView<ChatViewController> {
         decoration: BoxDecoration(
           color: controller.selectedMessage.value == message
               ? Theme.of(Get.context!).colorScheme.secondary
-              : Theme.of(Get.context!).primaryColor,
+              : Theme.of(Get.context!).colorScheme.background,
           border: message.isBitDonation
               ? Border(
                   left: BorderSide(width: 5.0, color: Color(0xFF9147ff)),
@@ -155,7 +148,6 @@ class ChatView extends GetView<ChatViewController> {
                   visible: controller.settings.value.displayTimestamp!,
                   child: Container(
                     padding: EdgeInsets.only(right: 5),
-                    // color: Colors.red,
                     child: Text(
                       '${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(message.timestamp))}',
                       textAlign: TextAlign.end,
@@ -202,6 +194,13 @@ class ChatView extends GetView<ChatViewController> {
   }
 
   void timeoutDialog() {
+    final List<Map<String, int>> timeoutValues = [
+      {"10s": 10},
+      {"1m": 60},
+      {"10m": 600},
+      {"30m": 1800},
+    ];
+
     Get.defaultDialog(
       title: "Timeout",
       titleStyle: TextStyle(color: Colors.white),
@@ -217,7 +216,8 @@ class ChatView extends GetView<ChatViewController> {
             children: List.generate(timeoutValues.length, (index) {
               return InkWell(
                 onTap: () => controller.timeoutMessageInstruction(
-                    controller.selectedMessage.value!, timeoutValues[index].values.first),
+                    controller.selectedMessage.value!,
+                    timeoutValues[index].values.first),
                 child: Container(
                   margin: EdgeInsets.only(right: 10),
                   padding:

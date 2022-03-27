@@ -5,7 +5,8 @@ import 'package:irllink/src/presentation/controllers/settings_view_controller.da
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../widgets/manage_list.dart';
+import '../widgets/manage_list_hidden_users.dart';
+import '../widgets/manage_list_browser_tabs.dart';
 
 class SettingsView extends GetView<SettingsViewController> {
   final SettingsViewController controller = Get.find<SettingsViewController>();
@@ -51,7 +52,7 @@ class SettingsView extends GetView<SettingsViewController> {
         ),
         body: Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).colorScheme.background,
           ),
           child: ListView(
             padding: EdgeInsets.only(top: 8, left: 10, right: 10, bottom: 8),
@@ -72,14 +73,15 @@ class SettingsView extends GetView<SettingsViewController> {
 
   Widget chatSettings(BuildContext context, double width) {
     return Container(
-      color: Theme.of(context).primaryColor,
+      color: Theme.of(context).colorScheme.background,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             child: Text(
               "Chat",
-              style: TextStyle(color: Color(0xFF6441A5), fontSize: 22),
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.tertiary, fontSize: 22),
             ),
           ),
           Container(
@@ -109,8 +111,10 @@ class SettingsView extends GetView<SettingsViewController> {
                             controller.saveSettings();
                           },
                           value: controller.settings.value.isEmotes!,
-                          inactiveTrackColor: Colors.grey,
-                          activeTrackColor: Color(0xFF6441A5),
+                          inactiveTrackColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
+                          activeTrackColor:
+                              Theme.of(context).colorScheme.tertiary,
                           activeColor: Colors.white,
                         ),
                       )
@@ -142,8 +146,9 @@ class SettingsView extends GetView<SettingsViewController> {
                           min: 0.0,
                           max: 50.0,
                           divisions: 100,
-                          activeColor: Color(0xFF6441A5),
-                          inactiveColor: Colors.grey,
+                          activeColor: Theme.of(context).colorScheme.tertiary,
+                          inactiveColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
                           label: "${controller.settings.value.textSize}",
                         ),
                       )
@@ -175,8 +180,9 @@ class SettingsView extends GetView<SettingsViewController> {
                           min: 0.0,
                           max: 50.0,
                           divisions: 100,
-                          activeColor: Color(0xFF6441A5),
-                          inactiveColor: Colors.grey,
+                          activeColor: Theme.of(context).colorScheme.tertiary,
+                          inactiveColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
                           label: '${controller.settings.value.emotesSize}',
                         ),
                       )
@@ -205,8 +211,10 @@ class SettingsView extends GetView<SettingsViewController> {
                             controller.saveSettings();
                           },
                           value: controller.settings.value.displayTimestamp!,
-                          inactiveTrackColor: Colors.grey,
-                          activeTrackColor: Color(0xFF6441A5),
+                          inactiveTrackColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
+                          activeTrackColor:
+                              Theme.of(context).colorScheme.tertiary,
                           activeColor: Colors.white,
                         ),
                       )
@@ -242,8 +250,10 @@ class SettingsView extends GetView<SettingsViewController> {
                             controller.saveSettings();
                           },
                           value: controller.settings.value.alternateChannel!,
-                          inactiveTrackColor: Colors.grey,
-                          activeTrackColor: Color(0xFF6441A5),
+                          inactiveTrackColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
+                          activeTrackColor:
+                              Theme.of(context).colorScheme.tertiary,
                           activeColor: Colors.white,
                         ),
                       )
@@ -275,7 +285,8 @@ class SettingsView extends GetView<SettingsViewController> {
                           child: TextButton(
                             style: TextButton.styleFrom(
                               textStyle: TextStyle(fontSize: 12),
-                              backgroundColor: Colors.deepPurpleAccent,
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.tertiary,
                               fixedSize: Size(50, 20),
                             ),
                             onPressed: () {
@@ -302,17 +313,8 @@ class SettingsView extends GetView<SettingsViewController> {
                 InkWell(
                   onTap: () {
                     Get.to(
-                      () => Obx(
-                        () => ManageList(
-                          title: "Manage hidden users",
-                          controller: controller,
-                          isReorderable: false,
-                          list: controller.settings.value.hiddenUsersIds!.obs,
-                          addFunction: controller.addHiddenUser,
-                          removeFunction: controller.removeHiddenUser,
-                          removeAllFunction: controller.clearHiddenUsers,
-                          addDialogWidget: _addHiddenUserTabDialog(context),
-                        ),
+                      () => ManageListHiddenUsers(
+                        controller: controller,
                       ),
                     );
                   },
@@ -350,14 +352,15 @@ class SettingsView extends GetView<SettingsViewController> {
 
   Widget generalSettings(BuildContext context, double width) {
     return Container(
-      color: Theme.of(context).primaryColor,
+      color: Theme.of(context).colorScheme.background,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             child: Text(
               "General",
-              style: TextStyle(color: Color(0xFF6441A5), fontSize: 22),
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.tertiary, fontSize: 22),
             ),
           ),
           Container(
@@ -391,9 +394,11 @@ class SettingsView extends GetView<SettingsViewController> {
                             controller.saveSettings();
                           },
                           value: controller.settings.value.isDarkMode!,
-                          activeTrackColor: Color(0xFF6441A5),
+                          activeTrackColor:
+                              Theme.of(context).colorScheme.tertiary,
                           activeColor: Colors.white,
-                          inactiveTrackColor: Colors.grey,
+                          inactiveTrackColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
                         ),
                       )
                     ],
@@ -421,9 +426,11 @@ class SettingsView extends GetView<SettingsViewController> {
                             controller.saveSettings();
                           },
                           value: controller.settings.value.keepSpeakerOn!,
-                          activeTrackColor: Color(0xFF6441A5),
+                          activeTrackColor:
+                              Theme.of(context).colorScheme.tertiary,
                           activeColor: Colors.white,
-                          inactiveTrackColor: Colors.grey,
+                          inactiveTrackColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
                         ),
                       )
                     ],
@@ -451,9 +458,11 @@ class SettingsView extends GetView<SettingsViewController> {
                             controller.saveSettings();
                           },
                           value: controller.settings.value.keepScreenOn!,
-                          activeTrackColor: Color(0xFF6441A5),
+                          activeTrackColor:
+                              Theme.of(context).colorScheme.tertiary,
                           activeColor: Colors.white,
-                          inactiveTrackColor: Colors.grey,
+                          inactiveTrackColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
                         ),
                       )
                     ],
@@ -469,14 +478,15 @@ class SettingsView extends GetView<SettingsViewController> {
 
   Widget connectionsSettings(BuildContext context, double width) {
     return Container(
-      color: Theme.of(context).primaryColor,
+      color: Theme.of(context).colorScheme.background,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             child: Text(
               "Connections & Tabs",
-              style: TextStyle(color: Color(0xFF6441A5), fontSize: 22),
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.tertiary, fontSize: 22),
             ),
           ),
           Container(
@@ -487,17 +497,8 @@ class SettingsView extends GetView<SettingsViewController> {
                 InkWell(
                   onTap: () {
                     Get.to(
-                      () => Obx(
-                        () => ManageList(
-                          title: "Manage browser tabs",
-                          controller: controller,
-                          isReorderable: false,
-                          list: controller.settings.value.browserTabs!.obs,
-                          addFunction: controller.addBrowserTab,
-                          removeFunction: controller.removeBrowserTab,
-                          removeAllFunction: controller.clearBrowserTabs,
-                          addDialogWidget: _addBrowserTabDialog(context),
-                        ),
+                      () => ManageListBrowserTabs(
+                        controller: controller,
                       ),
                     );
                   },
@@ -545,8 +546,10 @@ class SettingsView extends GetView<SettingsViewController> {
                           controller.saveSettings();
                         },
                         value: controller.settings.value.isObsConnected!,
-                        inactiveTrackColor: Colors.grey,
-                        activeTrackColor: Color(0xFF6441A5),
+                        inactiveTrackColor:
+                            Theme.of(context).colorScheme.tertiaryContainer,
+                        activeTrackColor:
+                            Theme.of(context).colorScheme.tertiary,
                         activeColor: Colors.white,
                       ),
                     ),
@@ -578,7 +581,8 @@ class SettingsView extends GetView<SettingsViewController> {
                           child: TextButton(
                             style: TextButton.styleFrom(
                               textStyle: TextStyle(fontSize: 12),
-                              backgroundColor: Colors.deepPurpleAccent,
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.tertiary,
                               fixedSize: Size(50, 20),
                             ),
                             onPressed: () {
@@ -655,14 +659,15 @@ class SettingsView extends GetView<SettingsViewController> {
 
   Widget contactSettings(BuildContext context, double width) {
     return Container(
-      color: Theme.of(context).primaryColor,
+      color: Theme.of(context).colorScheme.background,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             child: Text(
               "Contact",
-              style: TextStyle(color: Color(0xFF6441A5), fontSize: 22),
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.tertiary, fontSize: 22),
             ),
           ),
           Container(
@@ -672,7 +677,6 @@ class SettingsView extends GetView<SettingsViewController> {
               children: [
                 InkWell(
                   onTap: () {
-                    //TODO : https://pub.dev/packages/url_launcher config for android package visibility configuration (API > 30 )
                     launch("https://irllink.com");
                   },
                   child: Text(
@@ -734,62 +738,4 @@ class SettingsView extends GetView<SettingsViewController> {
       ),
     );
   }
-}
-
-Widget _addBrowserTabDialog(context) {
-  return Column(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      TextFormField(
-        textInputAction: TextInputAction.send,
-        style: Theme.of(context).textTheme.bodyText1,
-        maxLines: 1,
-        decoration: InputDecoration(
-          border: UnderlineInputBorder(),
-          hintStyle: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1!.color,
-              fontSize: 16),
-          hintText: 'Tab title',
-          labelText: 'Title',
-          isDense: true,
-          contentPadding: EdgeInsets.only(left: 5),
-        ),
-      ),
-      SizedBox(
-        height: 10,
-      ),
-      TextFormField(
-        textInputAction: TextInputAction.send,
-        style: Theme.of(context).textTheme.bodyText1,
-        maxLines: 1,
-        decoration: InputDecoration(
-          border: UnderlineInputBorder(),
-          hintStyle: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1!.color,
-              fontSize: 16),
-          hintText: 'Tab url',
-          labelText: 'URL',
-          isDense: true,
-          contentPadding: EdgeInsets.only(left: 5),
-        ),
-      )
-    ],
-  );
-}
-
-Widget _addHiddenUserTabDialog(BuildContext context) {
-  return TextFormField(
-    textInputAction: TextInputAction.send,
-    style: Theme.of(context).textTheme.bodyText1,
-    maxLines: 1,
-    decoration: InputDecoration(
-      border: UnderlineInputBorder(),
-      hintStyle: TextStyle(
-          color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 16),
-      hintText: 'Enter an username',
-      labelText: 'Username',
-      isDense: true,
-      contentPadding: EdgeInsets.only(left: 5),
-    ),
-  );
 }
