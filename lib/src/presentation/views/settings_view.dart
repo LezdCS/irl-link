@@ -270,6 +270,10 @@ class SettingsView extends GetView<SettingsViewController> {
                           child: TextFormField(
                             controller:
                                 controller.alternateChannelChatController,
+                            style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color,
+                            ),
                             decoration: InputDecoration(
                               isDense: true,
                               contentPadding: EdgeInsets.symmetric(
@@ -567,6 +571,10 @@ class SettingsView extends GetView<SettingsViewController> {
                           child: TextFormField(
                             controller:
                                 controller.obsWebsocketUrlFieldController,
+                            style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color,
+                            ),
                             decoration: InputDecoration(
                               isDense: true,
                               contentPadding: EdgeInsets.symmetric(
