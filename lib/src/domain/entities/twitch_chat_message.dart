@@ -180,15 +180,15 @@ class TwitchChatMessage extends Equatable {
           ]),
         );
       } else if (thirdPartEmotes
-              .firstWhereOrNull((element) => element.name == word) !=
-          null && settings.isEmotes!) {
+                  .firstWhereOrNull((element) => element.name == word) !=
+              null &&
+          settings.isEmotes!) {
         messageWidgetsBuild.add(
           Wrap(children: [
             Image(
-              image: NetworkImage(
-                  thirdPartEmotes
-                      .firstWhere((element) => element.name == word)
-                      .url1x),
+              image: NetworkImage(thirdPartEmotes
+                  .firstWhere((element) => element.name == word)
+                  .url1x),
             ),
             Text(' '),
           ]),
@@ -207,7 +207,7 @@ class TwitchChatMessage extends Equatable {
               style: TextStyle(
                 color:
                     Color(int.parse(cheerEmote.color!.replaceAll('#', '0xff'))),
-                fontSize:  settings.textSize,
+                fontSize: settings.textSize,
               ),
             ),
           ]),
@@ -217,7 +217,9 @@ class TwitchChatMessage extends Equatable {
           Text(
             word + " ",
             style: TextStyle(
-              color: Theme.of(Get.context!).textTheme.bodyText1!.color,
+              color: isAction
+                  ? Color(int.parse(color.replaceAll('#', '0xff')))
+                  : Theme.of(Get.context!).textTheme.bodyText1!.color,
               fontSize: settings.textSize,
               fontStyle: isAction ? FontStyle.italic : FontStyle.normal,
             ),

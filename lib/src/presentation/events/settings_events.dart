@@ -3,6 +3,8 @@ import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/usecases/settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch_usecase.dart';
 
+import '../../domain/entities/twitch_user.dart';
+
 class SettingsEvents {
   final SettingsUseCase settingsUseCase;
   final TwitchUseCase twitchUseCase;
@@ -14,6 +16,11 @@ class SettingsEvents {
 
   Future<void> setSettings({required Settings settings}) {
     return settingsUseCase.setSettings(settings: settings);
+  }
+
+  Future<DataState<List<TwitchUser>>> getTwitchUsers(
+      {required List ids, required String accessToken}) {
+    return twitchUseCase.getTwitchUsers(ids: ids, accessToken: accessToken);
   }
 
   Future<DataState<String>> logout({required String accessToken}) {

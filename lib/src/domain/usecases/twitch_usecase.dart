@@ -28,6 +28,13 @@ class TwitchUseCase {
     return twitchRepository.getTwitchUser(username, accessToken);
   }
 
+  Future<DataState<List<TwitchUser>>> getTwitchUsers({
+    required List ids,
+    required String accessToken,
+  }) {
+    return twitchRepository.getTwitchUsers(ids, accessToken);
+  }
+
   Future<DataState<String>> logout({required String accessToken}) {
     return twitchRepository.logout(accessToken);
   }

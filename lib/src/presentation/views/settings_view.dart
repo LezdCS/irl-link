@@ -293,7 +293,8 @@ class SettingsView extends GetView<SettingsViewController> {
                               controller.settings.value =
                                   controller.settings.value.copyWith(
                                       alternateChannelName: controller
-                                          .alternateChannelChatController.text);
+                                          .alternateChannelChatController.text
+                                          .toLowerCase());
                               controller.saveSettings();
                               SystemChannels.textInput
                                   .invokeMethod('TextInput.hide');
@@ -311,7 +312,7 @@ class SettingsView extends GetView<SettingsViewController> {
                   ),
                 ),
                 InkWell(
-                  onTap: () {
+                  onTap: () async {
                     Get.to(
                       () => ManageListHiddenUsers(
                         controller: controller,

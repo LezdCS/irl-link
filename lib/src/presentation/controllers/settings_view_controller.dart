@@ -6,6 +6,7 @@ import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/events/settings_events.dart';
 
 import '../../domain/entities/twitch_credentials.dart';
+import '../../domain/entities/twitch_user.dart';
 
 class SettingsViewController extends GetxController {
   SettingsViewController({required this.settingsEvents});
@@ -26,6 +27,8 @@ class SettingsViewController extends GetxController {
 
   late TwitchCredentials twitchData;
 
+  late RxList<String> usernamesHiddenUsers;
+
   @override
   void onInit() {
     alternateChannelChatController = TextEditingController();
@@ -35,6 +38,7 @@ class SettingsViewController extends GetxController {
     addHiddenUsernameController = TextEditingController();
 
     twitchData = Get.arguments[0];
+    usernamesHiddenUsers = <String>[].obs;
     super.onInit();
   }
 
@@ -48,6 +52,7 @@ class SettingsViewController extends GetxController {
                   settings.value.alternateChannelName!,
               obsWebsocketUrlFieldController.text =
                   settings.value.obsWebsocketUrl!,
+              getUsernames(),
             }
         });
     super.onReady();
@@ -124,5 +129,17 @@ class SettingsViewController extends GetxController {
 
   void saveSettings() {
     settingsEvents.setSettings(settings: settings.value);
+  }
+
+  Future getUsernames() async {
+    List<TwitchUser> users = [];
+
+    await settingsEvents
+        .getTwitchUsers(
+            ids: settings.value.hiddenUsersIds!,
+            accessToken: twitchData.accessToken)
+        .then((value) => users = value.data!);
+
+    users.forEach((user) => usernamesHiddenUsers.add(user.displayName));
   }
 }

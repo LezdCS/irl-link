@@ -19,6 +19,7 @@ import 'package:irllink/src/domain/entities/twitch_credentials.dart';
 import 'package:irllink/src/domain/entities/twitch_stream_infos.dart';
 import 'package:irllink/src/domain/repositories/twitch_repository.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:quiver/iterables.dart';
 
 //todo : call the token refresh if an api request get an error of access token
 
@@ -205,6 +206,39 @@ class TwitchRepositoryImpl extends TwitchRepository {
       return DataSuccess(twitchUser);
     } on DioError catch (e) {
       return DataFailed("Error retrieving user infos");
+    }
+  }
+
+  @override
+  Future<DataState<List<TwitchUserDTO>>> getTwitchUsers(
+      List ids, String accessToken) async {
+    Response response;
+    var dio = Dio();
+    List<TwitchUserDTO> twitchUsers = <TwitchUserDTO>[];
+    try {
+      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dio.options.headers["authorization"] = "Bearer $accessToken";
+
+      var chunks = partition(ids, 100);
+
+      for (var chunk in chunks) {
+        await Future.delayed(const Duration(seconds: 5), () async {
+          response = await dio.get(
+            'https://api.twitch.tv/helix/users',
+            queryParameters: {'id': chunk},
+          );
+
+          response.data['data'].forEach(
+            (user) => {
+              twitchUsers.add(TwitchUserDTO.fromJson(user)),
+            },
+          );
+        });
+      }
+
+      return DataSuccess(twitchUsers);
+    } on DioError catch (e) {
+      return DataFailed("Error retrieving users infos");
     }
   }
 
