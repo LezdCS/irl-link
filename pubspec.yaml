@@ -48,6 +48,7 @@ dependencies:
   expandable: ^5.0.1
   audioplayers: ^0.20.1
   quiver: ^3.0.1+1
+  socket_io_client: ^1.0.2
 
 dev_dependencies:
   flutter_test:
