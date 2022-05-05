@@ -563,53 +563,84 @@ class SettingsView extends GetView<SettingsViewController> {
                 Visibility(
                   visible: controller.settings.value.isObsConnected!,
                   child: Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Column(
                       children: [
-                        Expanded(
-                          flex: 7,
-                          child: TextFormField(
-                            controller:
-                                controller.obsWebsocketUrlFieldController,
-                            style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyText1!.color,
-                            ),
-                            decoration: InputDecoration(
-                              isDense: true,
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 0, vertical: 0),
-                              border: InputBorder.none,
-                              hintText: 'url:port',
-                              labelText: 'Weboscket Url',
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                              textStyle: TextStyle(fontSize: 12),
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.tertiary,
-                              fixedSize: Size(50, 20),
-                            ),
-                            onPressed: () {
-                              controller.settings.value =
-                                  controller.settings.value.copyWith(
-                                      obsWebsocketUrl: controller
-                                          .obsWebsocketUrlFieldController.text);
-                              controller.saveSettings();
-                              SystemChannels.textInput
-                                  .invokeMethod('TextInput.hide');
-                            },
-                            child: Text(
-                              'Save',
-                              style: TextStyle(
-                                color: Colors.white,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              flex: 7,
+                              child: TextFormField(
+                                controller:
+                                    controller.obsWebsocketUrlFieldController,
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).textTheme.bodyText1!.color,
+                                ),
+                                decoration: InputDecoration(
+                                  isDense: true,
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 0, vertical: 0),
+                                  border: InputBorder.none,
+                                  hintText: 'url',
+                                  labelText: 'Weboscket Url',
+                                ),
                               ),
                             ),
-                          ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              flex: 7,
+                              child: TextFormField(
+                                controller:
+                                controller.obsWebsocketPasswordFieldController,
+                                style: TextStyle(
+                                  color:
+                                  Theme.of(context).textTheme.bodyText1!.color,
+                                ),
+                                decoration: InputDecoration(
+                                  isDense: true,
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 0, vertical: 0),
+                                  border: InputBorder.none,
+                                  hintText: 'password',
+                                  labelText: 'Weboscket Password',
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  textStyle: TextStyle(fontSize: 12),
+                                  backgroundColor:
+                                  Theme.of(context).colorScheme.tertiary,
+                                  fixedSize: Size(50, 20),
+                                ),
+                                onPressed: () {
+                                  controller.settings.value =
+                                      controller.settings.value.copyWith(
+                                          obsWebsocketUrl: controller
+                                              .obsWebsocketUrlFieldController.text,
+                                          obsWebsocketPassword: controller
+                                            .obsWebsocketPasswordFieldController.text,
+                                      );
+                                  controller.saveSettings();
+                                  SystemChannels.textInput
+                                      .invokeMethod('TextInput.hide');
+                                },
+                                child: Text(
+                                  'Save',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),

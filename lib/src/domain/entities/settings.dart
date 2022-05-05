@@ -18,6 +18,7 @@ class Settings extends Equatable {
   //CONNECTIONS SETTINGS
   final bool? isObsConnected;
   final String? obsWebsocketUrl;
+  final String? obsWebsocketPassword;
   final String? streamElementsAccessToken;
   final List? browserTabs;
 
@@ -39,6 +40,7 @@ class Settings extends Equatable {
     //CONNECTIONS SETTINGS
     required this.isObsConnected,
     required this.obsWebsocketUrl,
+    required this.obsWebsocketPassword,
     required this.streamElementsAccessToken,
     required this.browserTabs,
   });
@@ -61,6 +63,7 @@ class Settings extends Equatable {
     //CONNECTIONS SETTINGS
     this.isObsConnected = false,
     this.obsWebsocketUrl = "",
+    this.obsWebsocketPassword = "",
     this.streamElementsAccessToken = "",
     this.browserTabs = const [],
   });
@@ -81,6 +84,7 @@ class Settings extends Equatable {
         //CONNECTIONS
         'isObsConnected': isObsConnected,
         'obsWebsocketUrl': obsWebsocketUrl,
+        'obsWebsocketPassword': obsWebsocketPassword,
         'streamElementsAccessToken': streamElementsAccessToken,
         'browserTabs': browserTabs,
       };
@@ -103,6 +107,7 @@ class Settings extends Equatable {
       //CONNECTIONS
       isObsConnected,
       obsWebsocketUrl,
+      obsWebsocketPassword,
       streamElementsAccessToken,
       browserTabs,
     ];
@@ -127,6 +132,7 @@ class Settings extends Equatable {
     //CONNECTIONS
     bool? isObsConnected,
     String? obsWebsocketUrl,
+    String? obsWebsocketPassword,
     String? streamElementsAccessToken,
     List? browserTabs,
   }) =>
@@ -146,6 +152,7 @@ class Settings extends Equatable {
         //CONNECTIONS
         isObsConnected: isObsConnected ?? this.isObsConnected,
         obsWebsocketUrl: obsWebsocketUrl ?? this.obsWebsocketUrl,
+        obsWebsocketPassword: obsWebsocketPassword ?? this.obsWebsocketPassword,
         streamElementsAccessToken:
             streamElementsAccessToken ?? this.streamElementsAccessToken,
         browserTabs: browserTabs ?? this.browserTabs,

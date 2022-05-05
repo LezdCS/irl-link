@@ -17,6 +17,7 @@ class SettingsViewController extends GetxController {
 
   late TextEditingController alternateChannelChatController;
   late TextEditingController obsWebsocketUrlFieldController;
+  late TextEditingController obsWebsocketPasswordFieldController;
   late TextEditingController addBrowserTitleController;
   late TextEditingController addBrowserUrlController;
   late TextEditingController addHiddenUsernameController;
@@ -33,6 +34,7 @@ class SettingsViewController extends GetxController {
   void onInit() {
     alternateChannelChatController = TextEditingController();
     obsWebsocketUrlFieldController = TextEditingController();
+    obsWebsocketPasswordFieldController = TextEditingController();
     addBrowserTitleController = TextEditingController();
     addBrowserUrlController = TextEditingController();
     addHiddenUsernameController = TextEditingController();
@@ -52,6 +54,8 @@ class SettingsViewController extends GetxController {
                   settings.value.alternateChannelName!,
               obsWebsocketUrlFieldController.text =
                   settings.value.obsWebsocketUrl!,
+              obsWebsocketPasswordFieldController.text =
+              settings.value.obsWebsocketPassword!,
               getUsernames(),
             }
         });

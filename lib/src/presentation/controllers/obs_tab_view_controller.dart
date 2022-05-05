@@ -43,14 +43,19 @@ class ObsTabViewController extends GetxController {
     super.onClose();
   }
 
-  /// Connect to the OBS websocket at [url]
-  void connectWs(String url) async {
+  /// Connect to the OBS websocket at [url] with optionnal [password]
+  void connectWs(String url, String password) async {
     try {
       obsWebSocket = await ObsWebSocket.connect(
           connectUrl: 'ws://$url',
           fallbackEvent: (e) => connectionLost(e),
           onError: (e) => connectFail(e),
           timeout: Duration(seconds: 30));
+
+      final AuthRequiredResponse? authRequired = await obsWebSocket?.getAuthRequired();
+      if (authRequired!.authRequired!) {
+        await obsWebSocket?.authenticate(authRequired, password);
+      }
       // success
       alertMessage.value = "Connected.";
       isConnected.value = true;
@@ -157,7 +162,7 @@ class ObsTabViewController extends GetxController {
       obsWebSocket!.close();
     }
     if (settings.value.isObsConnected!) {
-      this.connectWs(settings.value.obsWebsocketUrl!);
+      this.connectWs(settings.value.obsWebsocketUrl!, settings.value.obsWebsocketPassword!);
     }
   }
 }

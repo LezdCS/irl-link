@@ -17,6 +17,7 @@ class SettingsDTO extends Settings {
     //CONNECTIONS SETTINGS
     required bool isObsConnected,
     required String obsWebsocketUrl,
+    required String obsWebsocketPassword,
     required String streamElementsAccessToken,
     required List browserTabs,
   }) : super(
@@ -34,6 +35,7 @@ class SettingsDTO extends Settings {
           keepScreenOn: keepScreenOn,
           //CONNECTIONS SETTINGS
           obsWebsocketUrl: obsWebsocketUrl,
+          obsWebsocketPassword: obsWebsocketPassword,
           isObsConnected: isObsConnected,
           streamElementsAccessToken: streamElementsAccessToken,
           browserTabs: browserTabs,
@@ -55,6 +57,7 @@ class SettingsDTO extends Settings {
         //CONNECTIONS
         'isObsConnected': isObsConnected,
         'obsWebsocketUrl': obsWebsocketUrl,
+        'obsWebsocketPassword': obsWebsocketPassword,
         'streamElementsAccessToken': streamElementsAccessToken,
         'browserTabs': browserTabs,
       };
@@ -100,6 +103,9 @@ class SettingsDTO extends Settings {
       obsWebsocketUrl: map['obsWebsocketUrl'] != null
           ? map['obsWebsocketUrl'] as String
           : Settings.defaultSettings().obsWebsocketUrl!,
+      obsWebsocketPassword: map['obsWebsocketPassword'] != null
+          ? map['obsWebsocketPassword'] as String
+          : Settings.defaultSettings().obsWebsocketPassword!,
       streamElementsAccessToken: map['streamElementsAccessToken'] != null
           ? map['streamElementsAccessToken'] as String
           : Settings.defaultSettings().streamElementsAccessToken!,
