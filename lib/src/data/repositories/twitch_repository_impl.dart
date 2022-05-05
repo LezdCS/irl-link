@@ -345,7 +345,6 @@ class TwitchRepositoryImpl extends TwitchRepository {
     String accessToken,
     List<String> setId,
   ) async {
-    // TODO : max 25 setId per call https://api.twitch.tv/helix/chat/emotes/set?emote_set_id=301590448&emote_set_id=5678
     Response response;
     var dio = Dio();
     List<Emote> emotes = <Emote>[];
@@ -354,15 +353,21 @@ class TwitchRepositoryImpl extends TwitchRepository {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
       dio.options.headers["authorization"] = "Bearer $accessToken";
 
-      response = await dio.get(
-        "https://api.twitch.tv/helix/chat/emotes/set",
-        queryParameters: {'emote_set_id': setId},
-      );
-      response.data['data'].forEach(
-        (emote) => emotes.add(
-          EmoteDTO.fromJson(emote),
-        ),
-      );
+      var chunks = partition(setId, 25);
+
+      for (var chunk in chunks) {
+        await Future.delayed(const Duration(seconds: 5), () async {
+          response = await dio.get(
+            "https://api.twitch.tv/helix/chat/emotes/set",
+            queryParameters: {'emote_set_id': chunk},
+          );
+          response.data['data'].forEach(
+                (emote) => emotes.add(
+              EmoteDTO.fromJson(emote),
+            ),
+          );
+        });
+      }
 
       return DataSuccess(emotes);
     } on DioError catch (e) {

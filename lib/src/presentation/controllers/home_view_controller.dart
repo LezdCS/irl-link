@@ -13,6 +13,7 @@ import 'package:irllink/src/presentation/widgets/twitch_tab_view.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:web_socket_channel/status.dart' as status;
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 import '../widgets/web_page_view.dart';
 import 'chat_view_controller.dart';
@@ -62,6 +63,8 @@ class HomeViewController extends GetxController
 
     await this.getSettings();
 
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
     super.onInit();
   }
 
