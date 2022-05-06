@@ -4,6 +4,7 @@ class TwitchStreamInfos extends Equatable {
   final String? title;
   final int? viewerCount;
   final bool? isOnline;
+  final Duration? startedAtDuration;
   final bool? isEmoteMode;
   final bool? isFollowerMode;
   final bool? isSlowMode;
@@ -13,6 +14,7 @@ class TwitchStreamInfos extends Equatable {
     required this.title,
     required this.viewerCount,
     required this.isOnline,
+    required this.startedAtDuration,
     required this.isEmoteMode,
     required this.isFollowerMode,
     required this.isSlowMode,
@@ -23,6 +25,7 @@ class TwitchStreamInfos extends Equatable {
     this.title = "",
     this.viewerCount = 0,
     this.isOnline = false,
+    this.startedAtDuration =  const Duration(minutes: 0),
     this.isEmoteMode = false,
     this.isFollowerMode = false,
     this.isSlowMode = false,
@@ -45,6 +48,7 @@ class TwitchStreamInfos extends Equatable {
       title,
       viewerCount,
       isOnline,
+      startedAtDuration,
       isEmoteMode,
       isFollowerMode,
       isSlowMode,
@@ -56,6 +60,7 @@ class TwitchStreamInfos extends Equatable {
     String? title,
     int? viewerCount,
     bool? isOnline,
+    Duration? startedAtDuration,
     bool? isEmoteMode,
     bool? isFollowerMode,
     bool? isSlowMode,
@@ -65,6 +70,7 @@ class TwitchStreamInfos extends Equatable {
         title: title ?? this.title,
         viewerCount: viewerCount ?? this.viewerCount,
         isOnline: isOnline ?? this.isOnline,
+        startedAtDuration: startedAtDuration ?? this.startedAtDuration,
         isEmoteMode: isEmoteMode ?? this.isEmoteMode,
         isFollowerMode: isFollowerMode ?? this.isFollowerMode,
         isSubscriberMode: isSubscriberMode ?? this.isSubscriberMode,

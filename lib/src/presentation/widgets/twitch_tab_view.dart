@@ -36,6 +36,12 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                       ),
                     ],
                   ),
+                  Visibility(
+                    visible: controller.twitchStreamInfos.value.isOnline!,
+                    child: Container(
+                      child: Text(controller.twitchStreamInfos.value.startedAtDuration.toString().substring(0,7)),
+                    ),
+                  ),
                   Row(
                     children: [
                       Icon(Icons.person_outline, color: Colors.red),
