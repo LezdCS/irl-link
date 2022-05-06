@@ -30,6 +30,9 @@ class SettingsViewController extends GetxController {
 
   late RxList<String> usernamesHiddenUsers;
 
+  RxBool obsWebsocketPasswordShow = false.obs;
+  RxBool obsWebsocketUrlShow = false.obs;
+
   @override
   void onInit() {
     alternateChannelChatController = TextEditingController();

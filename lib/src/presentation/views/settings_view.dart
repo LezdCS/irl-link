@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -573,9 +575,13 @@ class SettingsView extends GetView<SettingsViewController> {
                               child: TextFormField(
                                 controller:
                                     controller.obsWebsocketUrlFieldController,
+                                obscureText:
+                                    !controller.obsWebsocketUrlShow.value,
                                 style: TextStyle(
-                                  color:
-                                      Theme.of(context).textTheme.bodyText1!.color,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
                                 ),
                                 decoration: InputDecoration(
                                   isDense: true,
@@ -584,6 +590,16 @@ class SettingsView extends GetView<SettingsViewController> {
                                   border: InputBorder.none,
                                   hintText: 'url',
                                   labelText: 'Weboscket Url',
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                        controller.obsWebsocketUrlShow.value
+                                            ? Icons.visibility
+                                            : Icons.visibility_off),
+                                    onPressed: () {
+                                      controller.obsWebsocketUrlShow.value =
+                                          !controller.obsWebsocketUrlShow.value;
+                                    },
+                                  ),
                                 ),
                               ),
                             ),
@@ -595,11 +611,15 @@ class SettingsView extends GetView<SettingsViewController> {
                             Expanded(
                               flex: 7,
                               child: TextFormField(
-                                controller:
-                                controller.obsWebsocketPasswordFieldController,
+                                controller: controller
+                                    .obsWebsocketPasswordFieldController,
+                                obscureText:
+                                    !controller.obsWebsocketPasswordShow.value,
                                 style: TextStyle(
-                                  color:
-                                  Theme.of(context).textTheme.bodyText1!.color,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
                                 ),
                                 decoration: InputDecoration(
                                   isDense: true,
@@ -608,6 +628,18 @@ class SettingsView extends GetView<SettingsViewController> {
                                   border: InputBorder.none,
                                   hintText: 'password',
                                   labelText: 'Weboscket Password',
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                        controller.obsWebsocketUrlShow.value
+                                            ? Icons.visibility
+                                            : Icons.visibility_off),
+                                    onPressed: () {
+                                      controller
+                                              .obsWebsocketPasswordShow.value =
+                                          !controller
+                                              .obsWebsocketPasswordShow.value;
+                                    },
+                                  ),
                                 ),
                               ),
                             ),
@@ -617,17 +649,18 @@ class SettingsView extends GetView<SettingsViewController> {
                                 style: TextButton.styleFrom(
                                   textStyle: TextStyle(fontSize: 12),
                                   backgroundColor:
-                                  Theme.of(context).colorScheme.tertiary,
+                                      Theme.of(context).colorScheme.tertiary,
                                   fixedSize: Size(50, 20),
                                 ),
                                 onPressed: () {
                                   controller.settings.value =
                                       controller.settings.value.copyWith(
-                                          obsWebsocketUrl: controller
-                                              .obsWebsocketUrlFieldController.text,
-                                          obsWebsocketPassword: controller
-                                            .obsWebsocketPasswordFieldController.text,
-                                      );
+                                    obsWebsocketUrl: controller
+                                        .obsWebsocketUrlFieldController.text,
+                                    obsWebsocketPassword: controller
+                                        .obsWebsocketPasswordFieldController
+                                        .text,
+                                  );
                                   controller.saveSettings();
                                   SystemChannels.textInput
                                       .invokeMethod('TextInput.hide');
