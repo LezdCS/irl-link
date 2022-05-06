@@ -61,6 +61,8 @@ class ObsTabViewController extends GetxController {
       isConnected.value = true;
       getSceneList();
       getCurrentScene();
+      BaseResponse? status = await obsWebSocket!.command('GetRecordingStatus');
+      isRecording.value = status!.rawResponse['isRecording'];
     } catch (e) {
       alertMessage.value = "Failed to connect to OBS";
       isConnected.value = false;
@@ -101,11 +103,8 @@ class ObsTabViewController extends GetxController {
 
   /// Toggle OBS recording
   Future<void> startStopRecording() async {
-    //TODO : to finish
+    isRecording.value = !isRecording.value;
     await obsWebSocket!.startStopRecording();
-    BaseResponse? status = await obsWebSocket!.command('GetRecordingStatus');
-    debugPrint(status!.rawResponse.toString());
-    debugPrint(status.rawResponse['isRecording'].toString());
   }
 
   /// Fetch scene list
