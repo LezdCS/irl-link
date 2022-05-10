@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -45,6 +46,8 @@ class HomeViewController extends GetxController
 
   late Rx<Settings> settings = Settings.defaultSettings().obs;
 
+  Timer? timer;
+
   @override
   void onInit() async {
     chatInputController = TextEditingController();
@@ -58,6 +61,10 @@ class HomeViewController extends GetxController
     tabController = TabController(length: tabElements.length, vsync: this);
 
     twitchData = Get.arguments[0];
+
+    timer = Timer.periodic(Duration(seconds: 13000), (Timer t) => {
+    //  TODO : call refresh token and update twitchData
+    });
 
     if (GetPlatform.isAndroid) WebView.platform = SurfaceAndroidWebView();
 
@@ -77,6 +84,7 @@ class HomeViewController extends GetxController
 
   @override
   void onClose() {
+    timer?.cancel();
     super.onClose();
   }
 
