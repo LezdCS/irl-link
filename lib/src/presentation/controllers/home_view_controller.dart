@@ -62,9 +62,14 @@ class HomeViewController extends GetxController
 
     twitchData = Get.arguments[0];
 
-    timer = Timer.periodic(Duration(seconds: 13000), (Timer t) => {
-    //  TODO : call refresh token and update twitchData
-    });
+    timer = Timer.periodic(
+      Duration(seconds: 13000),
+      (Timer t) => {
+        homeEvents.refreshAccessToken(twitchData: twitchData).then((value) => {
+              if (value.error == null) {twitchData = value.data!}
+            }),
+      },
+    );
 
     if (GetPlatform.isAndroid) WebView.platform = SurfaceAndroidWebView();
 

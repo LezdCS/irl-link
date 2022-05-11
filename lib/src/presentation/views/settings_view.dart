@@ -630,7 +630,7 @@ class SettingsView extends GetView<SettingsViewController> {
                                   labelText: 'Weboscket Password',
                                   suffixIcon: IconButton(
                                     icon: Icon(
-                                        controller.obsWebsocketUrlShow.value
+                                        controller.obsWebsocketPasswordShow.value
                                             ? Icons.visibility
                                             : Icons.visibility_off),
                                     onPressed: () {

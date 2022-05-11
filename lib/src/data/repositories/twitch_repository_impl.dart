@@ -21,8 +21,6 @@ import 'package:irllink/src/domain/repositories/twitch_repository.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:quiver/iterables.dart';
 
-//todo : call the token refresh if an api request get an error of access token
-
 class TwitchRepositoryImpl extends TwitchRepository {
   @override
   Future<DataState<TwitchCredentials>> getTwitchOauth(
@@ -165,6 +163,8 @@ class TwitchRepositoryImpl extends TwitchRepository {
       await this
           .refreshAccessToken(twitchData)
           .then((value) => twitchData = value.data!);
+      debugPrint("TWITCH DATA AFTER LOGIN");
+      debugPrint(twitchData.toString());
 
       return DataSuccess(twitchData);
     } else {
