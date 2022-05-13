@@ -20,7 +20,7 @@ class _WebPageViewState extends State<WebPageView>
   }
 
   @override
-  bool get wantKeepAlive => false;
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +28,8 @@ class _WebPageViewState extends State<WebPageView>
     return WebView(
       initialUrl: widget.url,
       javascriptMode: JavascriptMode.unrestricted,
+      initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
+      allowsInlineMediaPlayback: true,
     );
   }
 }
