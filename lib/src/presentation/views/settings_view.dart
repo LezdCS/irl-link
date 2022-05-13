@@ -443,38 +443,6 @@ class SettingsView extends GetView<SettingsViewController> {
                     ],
                   ),
                 ),
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        child: Text(
-                          "Keep screen on",
-                          style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1!.color,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        child: Switch(
-                          onChanged: (value) {
-                            controller.settings.value = controller
-                                .settings.value
-                                .copyWith(keepScreenOn: value);
-                            controller.saveSettings();
-                          },
-                          value: controller.settings.value.keepScreenOn!,
-                          activeTrackColor:
-                              Theme.of(context).colorScheme.tertiary,
-                          activeColor: Colors.white,
-                          inactiveTrackColor:
-                              Theme.of(context).colorScheme.tertiaryContainer,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
               ],
             ),
           ),
@@ -679,49 +647,49 @@ class SettingsView extends GetView<SettingsViewController> {
                     ),
                   ),
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 7,
-                      child: Container(
-                        child: Text(
-                          "Stream Elements",
-                          style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1!.color,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          textStyle: TextStyle(fontSize: 12),
-                          backgroundColor: controller.settings.value
-                                      .streamElementsAccessToken !=
-                                  ""
-                              ? Colors.redAccent
-                              : Colors.green,
-                          fixedSize: Size(50, 20),
-                        ),
-                        onPressed: () {
-                          SystemChannels.textInput
-                              .invokeMethod('TextInput.hide');
-                        },
-                        child: Text(
-                          controller.settings.value.streamElementsAccessToken !=
-                                  ""
-                              ? 'Logout'
-                              : 'Login',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     Expanded(
+                //       flex: 7,
+                //       child: Container(
+                //         child: Text(
+                //           "Stream Elements",
+                //           style: TextStyle(
+                //             color: Theme.of(context).textTheme.bodyText1!.color,
+                //             fontSize: 18,
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //     Expanded(
+                //       flex: 3,
+                //       child: TextButton(
+                //         style: TextButton.styleFrom(
+                //           textStyle: TextStyle(fontSize: 12),
+                //           backgroundColor: controller.settings.value
+                //                       .streamElementsAccessToken !=
+                //                   ""
+                //               ? Colors.redAccent
+                //               : Colors.green,
+                //           fixedSize: Size(50, 20),
+                //         ),
+                //         onPressed: () {
+                //           SystemChannels.textInput
+                //               .invokeMethod('TextInput.hide');
+                //         },
+                //         child: Text(
+                //           controller.settings.value.streamElementsAccessToken !=
+                //                   ""
+                //               ? 'Logout'
+                //               : 'Login',
+                //           style: TextStyle(
+                //             color: Colors.white,
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
               ],
             ),
           ),

@@ -13,7 +13,6 @@ class Settings extends Equatable {
   //GENERAL SETTINGS
   final bool? isDarkMode;
   final bool? keepSpeakerOn;
-  final bool? keepScreenOn;
 
   //CONNECTIONS SETTINGS
   final bool? isObsConnected;
@@ -35,7 +34,6 @@ class Settings extends Equatable {
     //GENERAL SETTINGS
     required this.isDarkMode,
     required this.keepSpeakerOn,
-    required this.keepScreenOn,
 
     //CONNECTIONS SETTINGS
     required this.isObsConnected,
@@ -58,7 +56,6 @@ class Settings extends Equatable {
     //GENERAL SETTINGS
     this.isDarkMode = true,
     this.keepSpeakerOn = true,
-    this.keepScreenOn = true,
 
     //CONNECTIONS SETTINGS
     this.isObsConnected = false,
@@ -80,7 +77,6 @@ class Settings extends Equatable {
         //GENERAL
         'isDarkMode': isDarkMode,
         'keepSpeakerOn': keepSpeakerOn,
-        'keepScreenOn': keepScreenOn,
         //CONNECTIONS
         'isObsConnected': isObsConnected,
         'obsWebsocketUrl': obsWebsocketUrl,
@@ -103,7 +99,6 @@ class Settings extends Equatable {
       //GENERAL
       isDarkMode,
       keepSpeakerOn,
-      keepScreenOn,
       //CONNECTIONS
       isObsConnected,
       obsWebsocketUrl,
@@ -128,7 +123,6 @@ class Settings extends Equatable {
     //GENERAL
     bool? isDarkMode,
     bool? keepSpeakerOn,
-    bool? keepScreenOn,
     //CONNECTIONS
     bool? isObsConnected,
     String? obsWebsocketUrl,
@@ -148,7 +142,6 @@ class Settings extends Equatable {
         //GENERAL
         isDarkMode: isDarkMode ?? this.isDarkMode,
         keepSpeakerOn: keepSpeakerOn ?? this.keepSpeakerOn,
-        keepScreenOn: keepScreenOn ?? this.keepScreenOn,
         //CONNECTIONS
         isObsConnected: isObsConnected ?? this.isObsConnected,
         obsWebsocketUrl: obsWebsocketUrl ?? this.obsWebsocketUrl,

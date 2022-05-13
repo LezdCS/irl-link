@@ -13,7 +13,6 @@ class SettingsDTO extends Settings {
     //GENERAL SETTINGS
     required bool isDarkMode,
     required bool keepSpeakerOn,
-    required bool keepScreenOn,
     //CONNECTIONS SETTINGS
     required bool isObsConnected,
     required String obsWebsocketUrl,
@@ -32,7 +31,6 @@ class SettingsDTO extends Settings {
           //GENERAL SETTINGS
           isDarkMode: isDarkMode,
           keepSpeakerOn: keepSpeakerOn,
-          keepScreenOn: keepScreenOn,
           //CONNECTIONS SETTINGS
           obsWebsocketUrl: obsWebsocketUrl,
           obsWebsocketPassword: obsWebsocketPassword,
@@ -53,7 +51,6 @@ class SettingsDTO extends Settings {
         //GENERAL
         'isDarkMode': isDarkMode,
         'keepSpeakerOn': keepSpeakerOn,
-        'keepScreenOn': keepScreenOn,
         //CONNECTIONS
         'isObsConnected': isObsConnected,
         'obsWebsocketUrl': obsWebsocketUrl,
@@ -93,9 +90,6 @@ class SettingsDTO extends Settings {
       keepSpeakerOn: map['keepSpeakerOn'] != null
           ? map['keepSpeakerOn'] as bool
           : Settings.defaultSettings().keepSpeakerOn!,
-      keepScreenOn: map['keepScreenOn'] != null
-          ? map['keepScreenOn'] as bool
-          : Settings.defaultSettings().keepScreenOn!,
       //CONNECTIONS SETTINGS
       isObsConnected: map['isObsConnected'] != null
           ? map['isObsConnected'] as bool
