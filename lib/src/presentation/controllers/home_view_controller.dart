@@ -72,19 +72,9 @@ class HomeViewController extends GetxController
       },
     );
 
-    AudioCache player = new AudioCache(prefix: '');
-    const alarmAudioPath = "lib/assets/test.mp3";
-
-    timerRefreshToken = Timer.periodic(
-      Duration(seconds: 15),
-          (Timer t) => {
-          // player.play(alarmAudioPath, stayAwake:true)
-      },
-    );
+    await this.getSettings();
 
     if (GetPlatform.isAndroid) WebView.platform = SurfaceAndroidWebView();
-
-    await this.getSettings();
 
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
@@ -168,11 +158,25 @@ class HomeViewController extends GetxController
   }
 
   Future getSettings() async {
+    AudioCache cache = AudioCache(prefix: '');
+    const path = "lib/assets/blank.mp3";
+    AudioPlayer player;
     await homeEvents.getSettings().then((value) async => {
           if (value.error == null)
             {
               settings.value = value.data!,
               await this.generateTabs(),
+              if(settings.value.keepSpeakerOn!){
+                timerRefreshToken = Timer.periodic(
+                  Duration(minutes: 5),
+                    (Timer t) async => {
+                    debugPrint("PLAYING SOUND"),
+                    player = await cache.play(path),
+                  },
+                ),
+              }else{
+                timerRefreshToken.cancel(),
+              }
             },
         });
   }
