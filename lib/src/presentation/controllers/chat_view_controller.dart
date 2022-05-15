@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/emote.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
@@ -121,11 +122,19 @@ class ChatViewController extends GetxController
   }
 
   void scrollListener() {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !scrollController.position.outOfRange) {
-      isAutoScrolldown.value = true;
-    } else {
+    // if user scroll up -> disable auto scrolldown
+    if(isAutoScrolldown.value && scrollController.position.userScrollDirection == ScrollDirection.forward){
       isAutoScrolldown.value = false;
+    }
+
+
+    double maxPosition = scrollController.position.maxScrollExtent;
+    double currentPosition = scrollController.position.pixels;
+    double difference = 10.0;
+
+    /// bottom position
+    if (!isAutoScrolldown.value && maxPosition - currentPosition <= difference ){
+      isAutoScrolldown.value = true;
     }
   }
 
@@ -172,9 +181,11 @@ class ChatViewController extends GetxController
 
                 if (scrollController.hasClients && isAutoScrolldown.value) {
                   Timer(Duration(milliseconds: 100), () {
-                    scrollController.jumpTo(
-                      scrollController.position.maxScrollExtent,
-                    );
+                    if(isAutoScrolldown.value){
+                      scrollController.jumpTo(
+                        scrollController.position.maxScrollExtent,
+                      );
+                    }
                   });
                 }
               }
