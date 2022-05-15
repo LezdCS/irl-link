@@ -22,6 +22,7 @@
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
+            android:exported="true"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
@@ -40,8 +41,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-       <activity android:name="com.linusu.flutter_web_auth.CallbackActivity"
-                 android:noHistory="true" >
+       <activity
+           android:name="com.linusu.flutter_web_auth.CallbackActivity"
+           android:exported="true"
+           android:noHistory="true"
+       >
            <intent-filter android:label="flutter_web_auth">
                <action android:name="android.intent.action.VIEW" />
 

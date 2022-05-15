@@ -43,19 +43,26 @@ class ObsTabViewController extends GetxController {
     super.onClose();
   }
 
-  /// Connect to the OBS websocket at [url]
-  void connectWs(String url) async {
+  /// Connect to the OBS websocket at [url] with optionnal [password]
+  void connectWs(String url, String password) async {
     try {
       obsWebSocket = await ObsWebSocket.connect(
           connectUrl: 'ws://$url',
           fallbackEvent: (e) => connectionLost(e),
           onError: (e) => connectFail(e),
           timeout: Duration(seconds: 30));
+
+      final AuthRequiredResponse? authRequired = await obsWebSocket?.getAuthRequired();
+      if (authRequired!.authRequired!) {
+        await obsWebSocket?.authenticate(authRequired, password);
+      }
       // success
       alertMessage.value = "Connected.";
       isConnected.value = true;
       getSceneList();
       getCurrentScene();
+      BaseResponse? status = await obsWebSocket!.command('GetRecordingStatus');
+      isRecording.value = status!.rawResponse['isRecording'];
     } catch (e) {
       alertMessage.value = "Failed to connect to OBS";
       isConnected.value = false;
@@ -96,11 +103,8 @@ class ObsTabViewController extends GetxController {
 
   /// Toggle OBS recording
   Future<void> startStopRecording() async {
-    //TODO : to finish
+    isRecording.value = !isRecording.value;
     await obsWebSocket!.startStopRecording();
-    BaseResponse? status = await obsWebSocket!.command('GetRecordingStatus');
-    debugPrint(status!.rawResponse.toString());
-    debugPrint(status.rawResponse['isRecording'].toString());
   }
 
   /// Fetch scene list
@@ -157,7 +161,7 @@ class ObsTabViewController extends GetxController {
       obsWebSocket!.close();
     }
     if (settings.value.isObsConnected!) {
-      this.connectWs(settings.value.obsWebsocketUrl!);
+      this.connectWs(settings.value.obsWebsocketUrl!, settings.value.obsWebsocketPassword!);
     }
   }
 }

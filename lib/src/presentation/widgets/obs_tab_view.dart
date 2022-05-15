@@ -86,7 +86,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
                             ),
                             padding: EdgeInsets.all(8),
                             child: Text(
-                              "Start recording",
+                              controller.isRecording.value ? "Stop recording" : "Start recording",
                               textAlign: TextAlign.center,
                             ),
                           ),

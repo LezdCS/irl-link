@@ -34,6 +34,12 @@ class HomeEvents {
     );
   }
 
+  Future<DataState<TwitchCredentials>> refreshAccessToken({
+  required TwitchCredentials twitchData,
+}) {
+    return twitchUseCase.refreshAccessToken(twitchData: twitchData);
+  }
+
   Future<DataState<List<TwitchBadge>>> getTwitchGlobalBadges(
       {required String accessToken}) {
     return twitchUseCase.getTwitchGlobalBadges(accessToken: accessToken);

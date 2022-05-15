@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
 import 'package:irllink/src/domain/entities/se_activity.dart';
 import 'package:irllink/src/domain/entities/se_song.dart';
 import 'package:irllink/src/presentation/events/streamelements_events.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 class StreamelementsViewController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -18,6 +21,8 @@ class StreamelementsViewController extends GetxController
 
   RxList<SeSong> songRequestQueue = <SeSong>[].obs;
   late ScrollController songRequestScrollController;
+
+  late Socket socket;
 
   @override
   void onInit() {
@@ -105,6 +110,8 @@ class StreamelementsViewController extends GetxController
       duration: "4:04",
     );
     songRequestQueue.value = [s1, s2, s3, s4];
+
+    connectWebsocket();
     super.onInit();
   }
 
@@ -135,5 +142,39 @@ class StreamelementsViewController extends GetxController
 
   void resetQueue() {
     songRequestQueue.clear();
+  }
+
+  /// Connect to WebSocket
+  Future<void> connectWebsocket() async {
+    socket = io(
+        'https://realtime.streamelements.com',
+        OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
+            .build());
+
+    socket.on('connect', (data) => onConnect());
+    socket.on('disconnect', (data) => onDisconnect());
+    socket.on('authenticated', (data) => onAuthenticated(data));
+    socket.on(
+      'event:test',
+      (data) => {
+        debugPrint(data.toString())
+        // Structure as on https://github.com/StreamElements/widgets/blob/master/CustomCode.md#on-event
+      },
+    );
+  }
+
+  Future<void> onConnect() async {
+    String jwt = "";
+
+    socket.emit('authenticate', {"method": 'jwt', "token": jwt});
+  }
+
+  Future<void> onDisconnect() async {
+    debugPrint('Disconnected from StreamElements websocket');
+    socket.io..disconnect()..connect();
+  }
+
+  Future<void> onAuthenticated(data) async {
+    debugPrint(data.toString());
   }
 }

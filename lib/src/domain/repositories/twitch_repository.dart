@@ -26,6 +26,11 @@ abstract class TwitchRepository {
     String accessToken,
   );
 
+  Future<DataState<List<TwitchUser>>> getTwitchUsers(
+    List ids,
+    String accessToken,
+  );
+
   Future<DataState<TwitchUser>> getTwitchUser(
     String? username,
     String accessToken,

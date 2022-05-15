@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:io';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/emote.dart';
@@ -8,12 +10,11 @@ import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dar
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:irllink/src/presentation/widgets/obs_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/split_view_custom.dart';
-import 'package:irllink/src/presentation/widgets/streamelements_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/twitch_tab_view.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:web_socket_channel/status.dart' as status;
-
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import '../widgets/web_page_view.dart';
 import 'chat_view_controller.dart';
 
@@ -44,6 +45,10 @@ class HomeViewController extends GetxController
 
   late Rx<Settings> settings = Settings.defaultSettings().obs;
 
+  late Timer timerRefreshToken;
+  late Timer timerKeepSpeakerOn;
+  // final player = AudioPlayer();
+  AudioPlayer audioPlayer = AudioPlayer();
   @override
   void onInit() async {
     chatInputController = TextEditingController();
@@ -51,17 +56,28 @@ class HomeViewController extends GetxController
     TwitchTabView twitchPage = TwitchTabView();
     tabElements.add(twitchPage);
 
-    StreamelementsTabView streamelementsPage = StreamelementsTabView();
-    tabElements.add(streamelementsPage);
+    // StreamelementsTabView streamelementsPage = StreamelementsTabView();
+    // tabElements.add(streamelementsPage);
 
     tabController = TabController(length: tabElements.length, vsync: this);
 
     twitchData = Get.arguments[0];
 
-    if (GetPlatform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+    timerRefreshToken = Timer.periodic(
+      Duration(seconds: 13000),
+      (Timer t) => {
+        homeEvents.refreshAccessToken(twitchData: twitchData).then((value) => {
+              if (value.error == null) {twitchData = value.data!}
+            }),
+      },
+    );
 
     await this.getSettings();
 
+    if (GetPlatform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
     super.onInit();
   }
 
@@ -74,6 +90,8 @@ class HomeViewController extends GetxController
 
   @override
   void onClose() {
+    timerRefreshToken.cancel();
+    timerRefreshToken.cancel();
     super.onClose();
   }
 
@@ -82,8 +100,8 @@ class HomeViewController extends GetxController
     TwitchTabView twitchPage = TwitchTabView();
     tabElements.add(twitchPage);
 
-    StreamelementsTabView streamelementsPage = StreamelementsTabView();
-    tabElements.add(streamelementsPage);
+    // StreamelementsTabView streamelementsPage = StreamelementsTabView();
+    // tabElements.add(streamelementsPage);
 
     if (settings.value.isObsConnected!) {
       ObsTabView obsPage = ObsTabView();
@@ -140,11 +158,25 @@ class HomeViewController extends GetxController
   }
 
   Future getSettings() async {
+    AudioCache cache = AudioCache(prefix: '');
+    const path = "lib/assets/blank.mp3";
+    AudioPlayer player;
     await homeEvents.getSettings().then((value) async => {
           if (value.error == null)
             {
               settings.value = value.data!,
               await this.generateTabs(),
+              if(settings.value.keepSpeakerOn!){
+                timerRefreshToken = Timer.periodic(
+                  Duration(minutes: 5),
+                    (Timer t) async => {
+                    debugPrint("PLAYING SOUND"),
+                    player = await cache.play(path),
+                  },
+                ),
+              }else{
+                timerRefreshToken.cancel(),
+              }
             },
         });
   }

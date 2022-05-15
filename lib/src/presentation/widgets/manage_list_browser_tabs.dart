@@ -85,8 +85,13 @@ class ManageListBrowserTabs extends GetView {
                                   title: "Edit",
                                   textCancel: "Cancel",
                                   textConfirm: "Confirm",
-                                  titleStyle: TextStyle(color: Colors.white),
-                                  backgroundColor: Color(0xFF282828),
+                                  titleStyle: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color,
+                                  ),
+                                  backgroundColor:  Theme.of(context).colorScheme.secondary,
                                   buttonColor: Color(0xFF9147ff),
                                   cancelTextColor: Color(0xFF9147ff),
                                   confirmTextColor: Colors.white,
@@ -156,8 +161,11 @@ class ManageListBrowserTabs extends GetView {
                             title: "Add",
                             textCancel: "Cancel",
                             textConfirm: "Add",
-                            titleStyle: TextStyle(color: Colors.white),
-                            backgroundColor: Color(0xFF282828),
+                            titleStyle: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color,
+                            ),
+                            backgroundColor:  Theme.of(context).colorScheme.secondary,
                             buttonColor: Color(0xFF9147ff),
                             cancelTextColor: Color(0xFF9147ff),
                             confirmTextColor: Colors.white,
@@ -195,7 +203,9 @@ Widget _addDialog(context, controller) {
         child: TextFormField(
           controller: controller.addBrowserTitleController,
           textInputAction: TextInputAction.send,
-          style: Theme.of(context).textTheme.bodyText1,
+          style: TextStyle(
+            color: Theme.of(context).textTheme.bodyText1!.color,
+          ),
           maxLines: 1,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -223,7 +233,9 @@ Widget _addDialog(context, controller) {
         child: TextFormField(
           controller: controller.addBrowserUrlController,
           textInputAction: TextInputAction.send,
-          style: Theme.of(context).textTheme.bodyText1,
+          style: TextStyle(
+            color: Theme.of(context).textTheme.bodyText1!.color,
+          ),
           maxLines: 1,
           textCapitalization: TextCapitalization.none,
           validator: (value) {

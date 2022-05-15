@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -270,6 +272,10 @@ class SettingsView extends GetView<SettingsViewController> {
                           child: TextFormField(
                             controller:
                                 controller.alternateChannelChatController,
+                            style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color,
+                            ),
                             decoration: InputDecoration(
                               isDense: true,
                               contentPadding: EdgeInsets.symmetric(
@@ -293,7 +299,8 @@ class SettingsView extends GetView<SettingsViewController> {
                               controller.settings.value =
                                   controller.settings.value.copyWith(
                                       alternateChannelName: controller
-                                          .alternateChannelChatController.text);
+                                          .alternateChannelChatController.text
+                                          .toLowerCase());
                               controller.saveSettings();
                               SystemChannels.textInput
                                   .invokeMethod('TextInput.hide');
@@ -311,7 +318,7 @@ class SettingsView extends GetView<SettingsViewController> {
                   ),
                 ),
                 InkWell(
-                  onTap: () {
+                  onTap: () async {
                     Get.to(
                       () => ManageListHiddenUsers(
                         controller: controller,
@@ -436,38 +443,6 @@ class SettingsView extends GetView<SettingsViewController> {
                     ],
                   ),
                 ),
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        child: Text(
-                          "Keep screen on",
-                          style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1!.color,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        child: Switch(
-                          onChanged: (value) {
-                            controller.settings.value = controller
-                                .settings.value
-                                .copyWith(keepScreenOn: value);
-                            controller.saveSettings();
-                          },
-                          value: controller.settings.value.keepScreenOn!,
-                          activeTrackColor:
-                              Theme.of(context).colorScheme.tertiary,
-                          activeColor: Colors.white,
-                          inactiveTrackColor:
-                              Theme.of(context).colorScheme.tertiaryContainer,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
               ],
             ),
           ),
@@ -558,97 +533,163 @@ class SettingsView extends GetView<SettingsViewController> {
                 Visibility(
                   visible: controller.settings.value.isObsConnected!,
                   child: Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Column(
                       children: [
-                        Expanded(
-                          flex: 7,
-                          child: TextFormField(
-                            controller:
-                                controller.obsWebsocketUrlFieldController,
-                            decoration: InputDecoration(
-                              isDense: true,
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 0, vertical: 0),
-                              border: InputBorder.none,
-                              hintText: 'url:port',
-                              labelText: 'Weboscket Url',
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                              textStyle: TextStyle(fontSize: 12),
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.tertiary,
-                              fixedSize: Size(50, 20),
-                            ),
-                            onPressed: () {
-                              controller.settings.value =
-                                  controller.settings.value.copyWith(
-                                      obsWebsocketUrl: controller
-                                          .obsWebsocketUrlFieldController.text);
-                              controller.saveSettings();
-                              SystemChannels.textInput
-                                  .invokeMethod('TextInput.hide');
-                            },
-                            child: Text(
-                              'Save',
-                              style: TextStyle(
-                                color: Colors.white,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              flex: 7,
+                              child: TextFormField(
+                                controller:
+                                    controller.obsWebsocketUrlFieldController,
+                                obscureText:
+                                    !controller.obsWebsocketUrlShow.value,
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                ),
+                                decoration: InputDecoration(
+                                  isDense: true,
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 0, vertical: 0),
+                                  border: InputBorder.none,
+                                  hintText: 'url',
+                                  labelText: 'Weboscket Url',
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                        controller.obsWebsocketUrlShow.value
+                                            ? Icons.visibility
+                                            : Icons.visibility_off),
+                                    onPressed: () {
+                                      controller.obsWebsocketUrlShow.value =
+                                          !controller.obsWebsocketUrlShow.value;
+                                    },
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              flex: 7,
+                              child: TextFormField(
+                                controller: controller
+                                    .obsWebsocketPasswordFieldController,
+                                obscureText:
+                                    !controller.obsWebsocketPasswordShow.value,
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                ),
+                                decoration: InputDecoration(
+                                  isDense: true,
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 0, vertical: 0),
+                                  border: InputBorder.none,
+                                  hintText: 'password',
+                                  labelText: 'Weboscket Password',
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                        controller.obsWebsocketPasswordShow.value
+                                            ? Icons.visibility
+                                            : Icons.visibility_off),
+                                    onPressed: () {
+                                      controller
+                                              .obsWebsocketPasswordShow.value =
+                                          !controller
+                                              .obsWebsocketPasswordShow.value;
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  textStyle: TextStyle(fontSize: 12),
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.tertiary,
+                                  fixedSize: Size(50, 20),
+                                ),
+                                onPressed: () {
+                                  controller.settings.value =
+                                      controller.settings.value.copyWith(
+                                    obsWebsocketUrl: controller
+                                        .obsWebsocketUrlFieldController.text,
+                                    obsWebsocketPassword: controller
+                                        .obsWebsocketPasswordFieldController
+                                        .text,
+                                  );
+                                  controller.saveSettings();
+                                  SystemChannels.textInput
+                                      .invokeMethod('TextInput.hide');
+                                },
+                                child: Text(
+                                  'Save',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 7,
-                      child: Container(
-                        child: Text(
-                          "Stream Elements",
-                          style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1!.color,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          textStyle: TextStyle(fontSize: 12),
-                          backgroundColor: controller.settings.value
-                                      .streamElementsAccessToken !=
-                                  ""
-                              ? Colors.redAccent
-                              : Colors.green,
-                          fixedSize: Size(50, 20),
-                        ),
-                        onPressed: () {
-                          SystemChannels.textInput
-                              .invokeMethod('TextInput.hide');
-                        },
-                        child: Text(
-                          controller.settings.value.streamElementsAccessToken !=
-                                  ""
-                              ? 'Logout'
-                              : 'Login',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     Expanded(
+                //       flex: 7,
+                //       child: Container(
+                //         child: Text(
+                //           "Stream Elements",
+                //           style: TextStyle(
+                //             color: Theme.of(context).textTheme.bodyText1!.color,
+                //             fontSize: 18,
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //     Expanded(
+                //       flex: 3,
+                //       child: TextButton(
+                //         style: TextButton.styleFrom(
+                //           textStyle: TextStyle(fontSize: 12),
+                //           backgroundColor: controller.settings.value
+                //                       .streamElementsAccessToken !=
+                //                   ""
+                //               ? Colors.redAccent
+                //               : Colors.green,
+                //           fixedSize: Size(50, 20),
+                //         ),
+                //         onPressed: () {
+                //           SystemChannels.textInput
+                //               .invokeMethod('TextInput.hide');
+                //         },
+                //         child: Text(
+                //           controller.settings.value.streamElementsAccessToken !=
+                //                   ""
+                //               ? 'Logout'
+                //               : 'Login',
+                //           style: TextStyle(
+                //             color: Colors.white,
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
               ],
             ),
           ),

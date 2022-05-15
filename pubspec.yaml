@@ -47,6 +47,10 @@ dependencies:
   intl: ^0.17.0
   expandable: ^5.0.1
   audioplayers: ^0.20.1
+  quiver: ^3.0.1+1
+  socket_io_client: ^1.0.2
+  firebase_crashlytics: ^2.6.1
+  firebase_core: ^1.14.0
 
 dev_dependencies:
   flutter_test:

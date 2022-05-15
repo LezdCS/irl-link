@@ -19,8 +19,7 @@ import 'package:irllink/src/domain/entities/twitch_credentials.dart';
 import 'package:irllink/src/domain/entities/twitch_stream_infos.dart';
 import 'package:irllink/src/domain/repositories/twitch_repository.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-
-//todo : call the token refresh if an api request get an error of access token
+import 'package:quiver/iterables.dart';
 
 class TwitchRepositoryImpl extends TwitchRepository {
   @override
@@ -164,6 +163,8 @@ class TwitchRepositoryImpl extends TwitchRepository {
       await this
           .refreshAccessToken(twitchData)
           .then((value) => twitchData = value.data!);
+      debugPrint("TWITCH DATA AFTER LOGIN");
+      debugPrint(twitchData.toString());
 
       return DataSuccess(twitchData);
     } else {
@@ -205,6 +206,39 @@ class TwitchRepositoryImpl extends TwitchRepository {
       return DataSuccess(twitchUser);
     } on DioError catch (e) {
       return DataFailed("Error retrieving user infos");
+    }
+  }
+
+  @override
+  Future<DataState<List<TwitchUserDTO>>> getTwitchUsers(
+      List ids, String accessToken) async {
+    Response response;
+    var dio = Dio();
+    List<TwitchUserDTO> twitchUsers = <TwitchUserDTO>[];
+    try {
+      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dio.options.headers["authorization"] = "Bearer $accessToken";
+
+      var chunks = partition(ids, 100);
+
+      for (var chunk in chunks) {
+        await Future.delayed(const Duration(seconds: 5), () async {
+          response = await dio.get(
+            'https://api.twitch.tv/helix/users',
+            queryParameters: {'id': chunk},
+          );
+
+          response.data['data'].forEach(
+            (user) => {
+              twitchUsers.add(TwitchUserDTO.fromJson(user)),
+            },
+          );
+        });
+      }
+
+      return DataSuccess(twitchUsers);
+    } on DioError catch (e) {
+      return DataFailed("Error retrieving users infos");
     }
   }
 
@@ -311,7 +345,6 @@ class TwitchRepositoryImpl extends TwitchRepository {
     String accessToken,
     List<String> setId,
   ) async {
-    // TODO : max 25 setId per call https://api.twitch.tv/helix/chat/emotes/set?emote_set_id=301590448&emote_set_id=5678
     Response response;
     var dio = Dio();
     List<Emote> emotes = <Emote>[];
@@ -320,15 +353,21 @@ class TwitchRepositoryImpl extends TwitchRepository {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
       dio.options.headers["authorization"] = "Bearer $accessToken";
 
-      response = await dio.get(
-        "https://api.twitch.tv/helix/chat/emotes/set",
-        queryParameters: {'emote_set_id': setId},
-      );
-      response.data['data'].forEach(
-        (emote) => emotes.add(
-          EmoteDTO.fromJson(emote),
-        ),
-      );
+      var chunks = partition(setId, 25);
+
+      for (var chunk in chunks) {
+        await Future.delayed(const Duration(seconds: 5), () async {
+          response = await dio.get(
+            "https://api.twitch.tv/helix/chat/emotes/set",
+            queryParameters: {'emote_set_id': chunk},
+          );
+          response.data['data'].forEach(
+                (emote) => emotes.add(
+              EmoteDTO.fromJson(emote),
+            ),
+          );
+        });
+      }
 
       return DataSuccess(emotes);
     } on DioError catch (e) {

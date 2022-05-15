@@ -13,10 +13,10 @@ class SettingsDTO extends Settings {
     //GENERAL SETTINGS
     required bool isDarkMode,
     required bool keepSpeakerOn,
-    required bool keepScreenOn,
     //CONNECTIONS SETTINGS
     required bool isObsConnected,
     required String obsWebsocketUrl,
+    required String obsWebsocketPassword,
     required String streamElementsAccessToken,
     required List browserTabs,
   }) : super(
@@ -31,9 +31,9 @@ class SettingsDTO extends Settings {
           //GENERAL SETTINGS
           isDarkMode: isDarkMode,
           keepSpeakerOn: keepSpeakerOn,
-          keepScreenOn: keepScreenOn,
           //CONNECTIONS SETTINGS
           obsWebsocketUrl: obsWebsocketUrl,
+          obsWebsocketPassword: obsWebsocketPassword,
           isObsConnected: isObsConnected,
           streamElementsAccessToken: streamElementsAccessToken,
           browserTabs: browserTabs,
@@ -51,10 +51,10 @@ class SettingsDTO extends Settings {
         //GENERAL
         'isDarkMode': isDarkMode,
         'keepSpeakerOn': keepSpeakerOn,
-        'keepScreenOn': keepScreenOn,
         //CONNECTIONS
         'isObsConnected': isObsConnected,
         'obsWebsocketUrl': obsWebsocketUrl,
+        'obsWebsocketPassword': obsWebsocketPassword,
         'streamElementsAccessToken': streamElementsAccessToken,
         'browserTabs': browserTabs,
       };
@@ -90,9 +90,6 @@ class SettingsDTO extends Settings {
       keepSpeakerOn: map['keepSpeakerOn'] != null
           ? map['keepSpeakerOn'] as bool
           : Settings.defaultSettings().keepSpeakerOn!,
-      keepScreenOn: map['keepScreenOn'] != null
-          ? map['keepScreenOn'] as bool
-          : Settings.defaultSettings().keepScreenOn!,
       //CONNECTIONS SETTINGS
       isObsConnected: map['isObsConnected'] != null
           ? map['isObsConnected'] as bool
@@ -100,6 +97,9 @@ class SettingsDTO extends Settings {
       obsWebsocketUrl: map['obsWebsocketUrl'] != null
           ? map['obsWebsocketUrl'] as String
           : Settings.defaultSettings().obsWebsocketUrl!,
+      obsWebsocketPassword: map['obsWebsocketPassword'] != null
+          ? map['obsWebsocketPassword'] as String
+          : Settings.defaultSettings().obsWebsocketPassword!,
       streamElementsAccessToken: map['streamElementsAccessToken'] != null
           ? map['streamElementsAccessToken'] as String
           : Settings.defaultSettings().streamElementsAccessToken!,
