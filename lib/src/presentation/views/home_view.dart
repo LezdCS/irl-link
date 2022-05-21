@@ -224,29 +224,6 @@ class HomeView extends GetView<HomeViewController> {
             Expanded(
               flex: 1,
               child: InkWell(
-                onTap: () {
-                  //TODO : open chat moderation
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return Column(
-                        children: [
-
-                        ],
-                      );
-                    },
-                  );
-                },
-                child: Icon(
-                  Icons.shield_outlined,
-                  color: Theme.of(context).primaryIconTheme.color,
-                  size: 22,
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: InkWell(
                 onTap: () async {
                   await Get.toNamed(Routes.SETTINGS,
                       arguments: [controller.twitchData]);
