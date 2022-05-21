@@ -46,8 +46,8 @@ class HomeViewController extends GetxController
 
   late Timer timerRefreshToken;
   late Timer timerKeepSpeakerOn;
-  // final player = AudioPlayer();
   AudioPlayer audioPlayer = AudioPlayer();
+
   @override
   void onInit() async {
     chatInputController = TextEditingController();

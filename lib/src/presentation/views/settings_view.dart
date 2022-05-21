@@ -563,6 +563,7 @@ class SettingsView extends GetView<SettingsViewController> {
                                         controller.obsWebsocketUrlShow.value
                                             ? Icons.visibility
                                             : Icons.visibility_off),
+                                    color: Theme.of(context).primaryIconTheme.color,
                                     onPressed: () {
                                       controller.obsWebsocketUrlShow.value =
                                           !controller.obsWebsocketUrlShow.value;
@@ -601,6 +602,7 @@ class SettingsView extends GetView<SettingsViewController> {
                                         controller.obsWebsocketPasswordShow.value
                                             ? Icons.visibility
                                             : Icons.visibility_off),
+                                    color: Theme.of(context).primaryIconTheme.color,
                                     onPressed: () {
                                       controller
                                               .obsWebsocketPasswordShow.value =
