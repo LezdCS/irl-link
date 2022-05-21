@@ -24,7 +24,6 @@ class HomeViewController extends GetxController
 
   final HomeEvents homeEvents;
 
-  RxBool sound = true.obs;
   SplitViewController splitViewController =
       SplitViewController(limits: [null, WeightLimit(min: 0.12, max: 0.92)]);
 
@@ -166,11 +165,13 @@ class HomeViewController extends GetxController
             {
               settings.value = value.data!,
               await this.generateTabs(),
+              if(!settings.value.isDarkMode!){
+                Get.changeThemeMode(ThemeMode.light)
+              },
               if(settings.value.keepSpeakerOn!){
                 timerRefreshToken = Timer.periodic(
                   Duration(minutes: 5),
                     (Timer t) async => {
-                    debugPrint("PLAYING SOUND"),
                     player = await cache.play(path),
                   },
                 ),

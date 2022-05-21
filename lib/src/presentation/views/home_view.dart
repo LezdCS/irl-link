@@ -144,8 +144,7 @@ class HomeView extends GetView<HomeViewController> {
   }
 
   Widget _bottomNavBar(double height, double width, BuildContext context) {
-    return Obx(
-      () => Container(
+    return Container(
         padding: EdgeInsets.only(left: 10),
         height: height * 0.06,
         child: Row(
@@ -226,13 +225,21 @@ class HomeView extends GetView<HomeViewController> {
               flex: 1,
               child: InkWell(
                 onTap: () {
-                  controller.sound.value = !controller.sound.value;
+                  //TODO : open chat moderation
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return Column(
+                        children: [
+
+                        ],
+                      );
+                    },
+                  );
                 },
                 child: Icon(
-                  controller.sound.value ? Icons.volume_up : Icons.volume_off,
-                  color: controller.sound.value
-                      ? Theme.of(context).primaryIconTheme.color
-                      : Color(0xFFd63031),
+                  Icons.shield_outlined,
+                  color: Theme.of(context).primaryIconTheme.color,
                   size: 22,
                 ),
               ),
@@ -255,7 +262,6 @@ class HomeView extends GetView<HomeViewController> {
               ),
             ),
           ],
-        ),
       ),
     );
   }
