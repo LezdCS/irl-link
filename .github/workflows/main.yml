@@ -16,7 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      JAVA_VERSION: "17.0"
       FLUTTER_VERSION: "3.0.1"
 
     steps:
@@ -24,7 +23,7 @@ jobs:
       
       - uses: actions/setup-java@v1
         with:
-          java-version: $JAVA_VERSION
+          java-version: '12.x'
           
       - uses: subosito/flutter-action@v2
         with:
