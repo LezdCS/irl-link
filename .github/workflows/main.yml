@@ -32,5 +32,5 @@ jobs:
       - run: flutter pub get
       - name: Analyze project source
         run: dart analyze
-      - run: flutter build apk
-      - run: flutter build appbundle
+      - run: flutter build apk --debug
+      - run: flutter build appbundle --debug
