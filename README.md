@@ -14,3 +14,6 @@ Android APKs are available on the [Play Store]() (to come) or in the [Releases](
 - Website : https://irllink.com
 - Wiki : https://github.com/LezdCS/irl_link/wiki
 - Bug Tracker : https://github.com/LezdCS/irl_link/issues
+
+## Support
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/J3J43ML34)
