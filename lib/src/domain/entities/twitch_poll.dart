@@ -13,9 +13,8 @@ class TwitchPoll extends Equatable {
   final String id;
   final String title;
   final List<Choice> choices;
-  final String totalVotes;
+  final int totalVotes;
   final PollStatus status;
-  final String endedAt;
 
   const TwitchPoll({
     required this.id,
@@ -23,7 +22,6 @@ class TwitchPoll extends Equatable {
     required this.choices,
     required this.totalVotes,
     required this.status,
-    required this.endedAt,
   });
 
   Map toJson() => {
@@ -32,7 +30,6 @@ class TwitchPoll extends Equatable {
     'choices': choices,
     'totalVotes': totalVotes,
     'status': status,
-    'endedAt': endedAt,
   };
 
   @override
@@ -43,7 +40,6 @@ class TwitchPoll extends Equatable {
       choices,
       totalVotes,
       status,
-      endedAt,
     ];
   }
 
@@ -54,7 +50,7 @@ class TwitchPoll extends Equatable {
 class Choice extends Equatable {
   final String id;
   final String title;
-  final String votes;
+  final int votes;
 
   const Choice({
     required this.id,

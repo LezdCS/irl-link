@@ -16,10 +16,15 @@ import 'package:irllink/src/data/entities/twitch_user_dto.dart';
 import 'package:irllink/src/domain/entities/emote.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
+import 'package:irllink/src/domain/entities/twitch_poll.dart';
+import 'package:irllink/src/domain/entities/twitch_prediction.dart';
 import 'package:irllink/src/domain/entities/twitch_stream_infos.dart';
 import 'package:irllink/src/domain/repositories/twitch_repository.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:quiver/iterables.dart';
+
+import '../entities/twitch_poll_dto.dart';
+import '../entities/twitch_prediction_dto.dart';
 
 class TwitchRepositoryImpl extends TwitchRepository {
   @override
@@ -41,10 +46,18 @@ class TwitchRepositoryImpl extends TwitchRepository {
         preferEphemeral: true,
       );
 
-      final accessToken = Uri.parse(result).queryParameters['access_token'];
-      final idToken = Uri.parse(result).queryParameters['id_token'];
-      final refreshToken = Uri.parse(result).queryParameters['refresh_token'];
-      final expiresIn = Uri.parse(result).queryParameters['expires_in'];
+      final accessToken = Uri
+          .parse(result)
+          .queryParameters['access_token'];
+      final idToken = Uri
+          .parse(result)
+          .queryParameters['id_token'];
+      final refreshToken = Uri
+          .parse(result)
+          .queryParameters['refresh_token'];
+      final expiresIn = Uri
+          .parse(result)
+          .queryParameters['expires_in'];
 
       Map<String, dynamic> decodedToken = JwtDecoder.decode(idToken!);
 
@@ -87,8 +100,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
   @override
   Future<DataState<TwitchCredentials>> refreshAccessToken(
-    TwitchCredentials twitchData,
-  ) async {
+      TwitchCredentials twitchData,) async {
     Response response;
     var dio = Dio();
     try {
@@ -157,7 +169,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       Map<String, dynamic> twitchDataJson = jsonDecode(twitchDataString);
 
       TwitchCredentials twitchData =
-          TwitchCredentialsDTO.fromJson(twitchDataJson);
+      TwitchCredentialsDTO.fromJson(twitchDataJson);
 
       //refresh the access token to be sure the token is going to be valid after starting the app
       await this
@@ -180,8 +192,8 @@ class TwitchRepositoryImpl extends TwitchRepository {
   }
 
   @override
-  Future<DataState<TwitchUserDTO>> getTwitchUser(
-      String? username, String accessToken) async {
+  Future<DataState<TwitchUserDTO>> getTwitchUser(String? username,
+      String accessToken) async {
     Response response;
     var dio = Dio();
     try {
@@ -201,7 +213,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       }
 
       TwitchUserDTO twitchUser =
-          TwitchUserDTO.fromJson(response.data['data'][0]);
+      TwitchUserDTO.fromJson(response.data['data'][0]);
 
       return DataSuccess(twitchUser);
     } on DioError catch (e) {
@@ -210,8 +222,8 @@ class TwitchRepositoryImpl extends TwitchRepository {
   }
 
   @override
-  Future<DataState<List<TwitchUserDTO>>> getTwitchUsers(
-      List ids, String accessToken) async {
+  Future<DataState<List<TwitchUserDTO>>> getTwitchUsers(List ids,
+      String accessToken) async {
     Response response;
     var dio = Dio();
     List<TwitchUserDTO> twitchUsers = <TwitchUserDTO>[];
@@ -229,7 +241,8 @@ class TwitchRepositoryImpl extends TwitchRepository {
           );
 
           response.data['data'].forEach(
-            (user) => {
+                (user) =>
+            {
               twitchUsers.add(TwitchUserDTO.fromJson(user)),
             },
           );
@@ -252,11 +265,12 @@ class TwitchRepositoryImpl extends TwitchRepository {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
       dio.options.headers["authorization"] = "Bearer $accessToken";
       response =
-          await dio.get('https://api.twitch.tv/helix/chat/badges/global');
+      await dio.get('https://api.twitch.tv/helix/chat/badges/global');
 
       response.data['data'].forEach(
-        (set) => set['versions'].forEach((version) =>
-            badges.add(TwitchBadgeDTO.fromJson(set['set_id'], version))),
+            (set) =>
+            set['versions'].forEach((version) =>
+                badges.add(TwitchBadgeDTO.fromJson(set['set_id'], version))),
       );
 
       return DataSuccess(badges);
@@ -279,8 +293,9 @@ class TwitchRepositoryImpl extends TwitchRepository {
           'https://api.twitch.tv/helix/chat/badges?broadcaster_id=$broadcasterId');
 
       response.data['data'].forEach(
-        (set) => set['versions'].forEach((version) =>
-            badges.add(TwitchBadgeDTO.fromJson(set['set_id'], version))),
+            (set) =>
+            set['versions'].forEach((version) =>
+                badges.add(TwitchBadgeDTO.fromJson(set['set_id'], version))),
       );
 
       return DataSuccess(badges);
@@ -298,12 +313,13 @@ class TwitchRepositoryImpl extends TwitchRepository {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
       dio.options.headers["authorization"] = "Bearer $accessToken";
       response =
-          await dio.get('https://api.twitch.tv/helix/chat/emotes/global');
+      await dio.get('https://api.twitch.tv/helix/chat/emotes/global');
 
       response.data['data'].forEach(
-        (emote) => emotes.add(
-          EmoteDTO.fromJson(emote),
-        ),
+            (emote) =>
+            emotes.add(
+              EmoteDTO.fromJson(emote),
+            ),
       );
 
       return DataSuccess(emotes);
@@ -313,10 +329,8 @@ class TwitchRepositoryImpl extends TwitchRepository {
   }
 
   @override
-  Future<DataState<List<Emote>>> getTwitchChannelEmotes(
-    String accessToken,
-    String broadcasterId,
-  ) async {
+  Future<DataState<List<Emote>>> getTwitchChannelEmotes(String accessToken,
+      String broadcasterId,) async {
     Response response;
     var dio = Dio();
     List<Emote> emotes = <Emote>[];
@@ -329,9 +343,10 @@ class TwitchRepositoryImpl extends TwitchRepository {
       );
 
       response.data['data'].forEach(
-        (emote) => emotes.add(
-          EmoteDTO.fromJson(emote),
-        ),
+            (emote) =>
+            emotes.add(
+              EmoteDTO.fromJson(emote),
+            ),
       );
 
       return DataSuccess(emotes);
@@ -341,10 +356,8 @@ class TwitchRepositoryImpl extends TwitchRepository {
   }
 
   @override
-  Future<DataState<List<Emote>>> getTwitchSetsEmotes(
-    String accessToken,
-    List<String> setId,
-  ) async {
+  Future<DataState<List<Emote>>> getTwitchSetsEmotes(String accessToken,
+      List<String> setId,) async {
     Response response;
     var dio = Dio();
     List<Emote> emotes = <Emote>[];
@@ -362,9 +375,10 @@ class TwitchRepositoryImpl extends TwitchRepository {
             queryParameters: {'emote_set_id': chunk},
           );
           response.data['data'].forEach(
-                (emote) => emotes.add(
-              EmoteDTO.fromJson(emote),
-            ),
+                (emote) =>
+                emotes.add(
+                  EmoteDTO.fromJson(emote),
+                ),
           );
         });
       }
@@ -376,8 +390,8 @@ class TwitchRepositoryImpl extends TwitchRepository {
   }
 
   @override
-  Future<DataState<List<Emote>>> getTwitchCheerEmotes(
-      String accessToken, String broadcasterId) async {
+  Future<DataState<List<Emote>>> getTwitchCheerEmotes(String accessToken,
+      String broadcasterId) async {
     Response response;
     var dio = Dio();
     List<Emote> emotes = <Emote>[];
@@ -390,11 +404,13 @@ class TwitchRepositoryImpl extends TwitchRepository {
       );
 
       response.data['data'].forEach(
-        (prefix) => prefix['tiers'].forEach(
-          (emote) => emotes.add(
-            EmoteDTO.fromJsonCheerEmotes(emote, prefix['prefix']),
-          ),
-        ),
+            (prefix) =>
+            prefix['tiers'].forEach(
+                  (emote) =>
+                  emotes.add(
+                    EmoteDTO.fromJsonCheerEmotes(emote, prefix['prefix']),
+                  ),
+            ),
       );
 
       return DataSuccess(emotes);
@@ -415,11 +431,12 @@ class TwitchRepositoryImpl extends TwitchRepository {
       );
 
       response.data['sets'][response.data['sets'].keys.toList()[0]]['emoticons']
-          .forEach((emote) => {
-                emotes.add(
-                  EmoteDTO.fromJsonFrankerfacez(emote),
-                ),
-              });
+          .forEach((emote) =>
+      {
+        emotes.add(
+          EmoteDTO.fromJsonFrankerfacez(emote),
+        ),
+      });
 
       return DataSuccess(emotes);
     } on DioError catch (e) {
@@ -439,15 +456,17 @@ class TwitchRepositoryImpl extends TwitchRepository {
       );
 
       response.data['channelEmotes'].forEach(
-        (emote) => emotes.add(
-          EmoteDTO.fromJsonBttv(emote),
-        ),
+            (emote) =>
+            emotes.add(
+              EmoteDTO.fromJsonBttv(emote),
+            ),
       );
 
       response.data['sharedEmotes'].forEach(
-        (emote) => emotes.add(
-          EmoteDTO.fromJsonBttv(emote),
-        ),
+            (emote) =>
+            emotes.add(
+              EmoteDTO.fromJsonBttv(emote),
+            ),
       );
 
       return DataSuccess(emotes);
@@ -467,9 +486,10 @@ class TwitchRepositoryImpl extends TwitchRepository {
       );
 
       response.data.forEach(
-        (emote) => emotes.add(
-          EmoteDTO.fromJson7Tv(emote),
-        ),
+            (emote) =>
+            emotes.add(
+              EmoteDTO.fromJson7Tv(emote),
+            ),
       );
 
       return DataSuccess(emotes);
@@ -490,9 +510,10 @@ class TwitchRepositoryImpl extends TwitchRepository {
       );
 
       response.data.forEach(
-        (emote) => emotes.add(
-          EmoteDTO.fromJson7Tv(emote),
-        ),
+            (emote) =>
+            emotes.add(
+              EmoteDTO.fromJson7Tv(emote),
+            ),
       );
 
       return DataSuccess(emotes);
@@ -512,9 +533,10 @@ class TwitchRepositoryImpl extends TwitchRepository {
       );
 
       response.data.forEach(
-        (emote) => emotes.add(
-          EmoteDTO.fromJsonBttv(emote),
-        ),
+            (emote) =>
+            emotes.add(
+              EmoteDTO.fromJsonBttv(emote),
+            ),
       );
 
       return DataSuccess(emotes);
@@ -524,8 +546,8 @@ class TwitchRepositoryImpl extends TwitchRepository {
   }
 
   @override
-  Future<DataState<TwitchStreamInfos>> getStreamInfo(
-      String accessToken, String broadcasterId) async {
+  Future<DataState<TwitchStreamInfos>> getStreamInfo(String accessToken,
+      String broadcasterId) async {
     Response response;
     Response response2;
     var dio = Dio();
@@ -588,8 +610,8 @@ class TwitchRepositoryImpl extends TwitchRepository {
   }
 
   @override
-  Future<DataState<void>> setStreamTitle(
-      String accessToken, String broadcasterId, String title) async {
+  Future<DataState<void>> setStreamTitle(String accessToken,
+      String broadcasterId, String title) async {
     Response response;
     var dio = Dio();
     try {
@@ -605,6 +627,94 @@ class TwitchRepositoryImpl extends TwitchRepository {
       return DataSuccess("");
     } on DioError catch (e) {
       return DataFailed("Error editing Stream chat settings");
+    }
+  }
+
+  @override
+  Future<DataState<TwitchPoll>> getPoll(String accessToken,
+      String broadcasterId) async {
+    Response response;
+    var dio = Dio();
+    TwitchPoll? poll;
+    try {
+      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dio.options.headers["authorization"] = "Bearer $accessToken";
+      response = await dio.get(
+          'https://api.twitch.tv/helix/polls?broadcaster_id=$broadcasterId');
+
+      if (response.data['data'] == null) {
+        return DataFailed("There is no poll");
+      } else {
+        poll = TwitchPollDTO.fromJson(response.data['data'][0]);
+        if (poll.status == PollStatus.ACTIVE ||
+            poll.status == PollStatus.COMPLETED ||
+            poll.status == PollStatus.TERMINATED) {
+          return DataSuccess(poll);
+        }
+        return DataFailed("No poll to show");
+      }
+    } on DioError catch (e) {
+      print(e.response);
+      return DataFailed("Error retrieving Twitch Poll");
+    }
+  }
+
+  @override
+  Future<DataState<TwitchPoll>> endPoll(String accessToken,
+      String broadcasterId, String pollId, String status) async {
+    var dio = Dio();
+    Response response;
+    TwitchPoll? poll;
+
+    try {
+      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dio.options.headers["authorization"] = "Bearer $accessToken";
+
+      Map body = {
+        "broadcaster_id": broadcasterId,
+        "id": pollId,
+        "status": status
+      };
+
+      response = await dio.patch(
+        'https://api.twitch.tv/helix/polls',
+        data: jsonEncode(body),
+      );
+
+      poll = TwitchPollDTO.fromJson(response.data['data'][0]);
+
+      return DataSuccess(poll);
+    } on DioError catch (e) {
+      print(e.response);
+      return DataFailed("Error ending poll");
+    }
+  }
+
+  @override
+  Future<DataState<TwitchPrediction>> getPrediction(String accessToken, String broadcasterId) async {
+    Response response;
+    var dio = Dio();
+    TwitchPrediction? prediction;
+    try {
+      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dio.options.headers["authorization"] = "Bearer $accessToken";
+      response = await dio.get(
+          'https://api.twitch.tv/helix/predictions?broadcaster_id=$broadcasterId');
+
+      if (response.data['data'] == null) {
+        return DataFailed("There is no prediction");
+      } else {
+        prediction = TwitchPredictionDTO.fromJson(response.data['data'][0]);
+        if (prediction.status == PredictionStatus.RESOLVED ||
+            prediction.status == PredictionStatus.ACTIVE ||
+            prediction.status == PredictionStatus.LOCKED) {
+          return DataSuccess(prediction);
+        }
+        return DataFailed("No prediction to show");
+      }
+    } on DioError catch (e) {
+      print(e.response);
+      return DataFailed("Error retrieving Twitch Prediction");
     }
   }
 }

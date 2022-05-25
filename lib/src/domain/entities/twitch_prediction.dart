@@ -13,10 +13,9 @@ class TwitchPrediction extends Equatable {
   final String id;
   final String title;
   final String winningOutcomeId;
-  final String totalUsers;
+  final int totalUsers;
   final List<Outcome> outcomes;
   final PredictionStatus status;
-  final String endedAt;
 
   const TwitchPrediction({
     required this.id,
@@ -25,7 +24,6 @@ class TwitchPrediction extends Equatable {
     required this.totalUsers,
     required this.outcomes,
     required this.status,
-    required this.endedAt,
   });
 
   Map toJson() => {
@@ -35,7 +33,6 @@ class TwitchPrediction extends Equatable {
     'totalUsers': totalUsers,
     'outcomes': outcomes,
     'status': status,
-    'endedAt': endedAt,
   };
 
   @override
@@ -47,7 +44,6 @@ class TwitchPrediction extends Equatable {
       totalUsers,
       outcomes,
       status,
-      endedAt,
     ];
   }
 
@@ -58,8 +54,8 @@ class TwitchPrediction extends Equatable {
 class Outcome extends Equatable {
   final String id;
   final String title;
-  final String users;
-  final String channelPoints;
+  final int users;
+  final int channelPoints;
   final Color color;
 
   const Outcome({

@@ -5,6 +5,8 @@ import 'package:irllink/src/domain/entities/emote.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
+import 'package:irllink/src/domain/entities/twitch_poll.dart';
+import 'package:irllink/src/domain/entities/twitch_prediction.dart';
 import 'package:irllink/src/domain/entities/twitch_stream_infos.dart';
 import 'package:irllink/src/domain/entities/twitch_user.dart';
 import 'package:irllink/src/domain/usecases/settings_usecase.dart';
@@ -13,6 +15,7 @@ import 'package:irllink/src/domain/usecases/twitch_usecase.dart';
 class HomeEvents {
   final TwitchUseCase twitchUseCase;
   final SettingsUseCase settingsUseCase;
+
   HomeEvents({required this.twitchUseCase, required this.settingsUseCase});
 
   Future<DataState<TwitchCredentials>> getTwitchFromLocal() {
@@ -35,8 +38,8 @@ class HomeEvents {
   }
 
   Future<DataState<TwitchCredentials>> refreshAccessToken({
-  required TwitchCredentials twitchData,
-}) {
+    required TwitchCredentials twitchData,
+  }) {
     return twitchUseCase.refreshAccessToken(twitchData: twitchData);
   }
 
@@ -129,5 +132,20 @@ class HomeEvents {
 
   Future<void> setSettings({required Settings settings}) {
     return settingsUseCase.setSettings(settings: settings);
+  }
+
+  Future<DataState<TwitchPoll>> getPoll(
+      String accessToken, String broadcasterId) {
+    return twitchUseCase.getPoll(accessToken, broadcasterId);
+  }
+
+  Future<DataState<TwitchPoll>> endPoll(
+      String accessToken, String broadcasterId, String pollId, String status) {
+    return twitchUseCase.endPoll(accessToken, broadcasterId, pollId, status);
+  }
+
+  Future<DataState<TwitchPrediction>> getPrediction(
+      String accessToken, String broadcasterId) {
+    return twitchUseCase.getPrediction(accessToken, broadcasterId);
   }
 }

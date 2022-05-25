@@ -51,6 +51,7 @@ dependencies:
   socket_io_client: ^1.0.2
   firebase_crashlytics: ^2.8.0
   firebase_core: ^1.17.0
+  percent_indicator: ^4.2.2
 
 dev_dependencies:
   flutter_test:

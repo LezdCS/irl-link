@@ -4,8 +4,11 @@ import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/domain/entities/emote.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
+import 'package:irllink/src/domain/entities/twitch_prediction.dart';
 import 'package:irllink/src/domain/entities/twitch_stream_infos.dart';
 import 'package:irllink/src/domain/entities/twitch_user.dart';
+
+import '../entities/twitch_poll.dart';
 
 abstract class TwitchRepository {
   Future<DataState<TwitchCredentials>> getTwitchOauth(
@@ -86,4 +89,16 @@ abstract class TwitchRepository {
 
   Future<DataState<void>> setStreamTitle(
       String accessToken, String broadcasterId, String title);
+
+  Future<DataState<TwitchPoll>> getPoll(
+      String accessToken, String broadcasterId);
+
+  // status is either TERMINATED to end poll and display the result to viewer
+  // or ARCHIVED to end the poll and hide it
+  Future<DataState<TwitchPoll>> endPoll(
+      String accessToken, String broadcasterId, String pollId, String status);
+
+  Future<DataState<TwitchPrediction>> getPrediction(
+      String accessToken, String broadcasterId
+      );
 }
