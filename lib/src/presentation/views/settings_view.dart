@@ -673,10 +673,12 @@ class SettingsView extends GetView<SettingsViewController> {
                         InkWell(
                           onTap: () {
                             launchUrlString(
-                                "https://www.irllink.com/blog/obs-websocket");
+                              "https://www.irllink.com/wiki/obs-websocket",
+                              mode: LaunchMode.externalApplication,
+                            );
                           },
                           child: Row(
-                            mainAxisAlignment : MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
                                 Icons.open_in_browser,
