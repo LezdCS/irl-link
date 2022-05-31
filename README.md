@@ -10,6 +10,10 @@ IRL Link is a mobile application to monitor your IRL Stream.
 Android APKs are available on the [Play Store]() (to come) or in the [Releases](https://github.com/LezdCS/irl_link/releases) section.
 
 ## Quick links
+- Roadmap : https://lezd.notion.site/bed347da755c4cc59cf563aab75851d7?v=64b491196c814cd68449c494caff229a
 - Website : https://irllink.com
 - Wiki : https://github.com/LezdCS/irl_link/wiki
 - Bug Tracker : https://github.com/LezdCS/irl_link/issues
+
+## Support
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/J3J43ML34)

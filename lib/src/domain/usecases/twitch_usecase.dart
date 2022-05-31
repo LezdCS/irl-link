@@ -4,12 +4,16 @@ import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/domain/entities/emote.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
+import 'package:irllink/src/domain/entities/twitch_prediction.dart';
 import 'package:irllink/src/domain/entities/twitch_stream_infos.dart';
 import 'package:irllink/src/domain/entities/twitch_user.dart';
 import 'package:irllink/src/domain/repositories/twitch_repository.dart';
 
+import '../entities/twitch_poll.dart';
+
 class TwitchUseCase {
   final TwitchRepository twitchRepository;
+
   TwitchUseCase({required this.twitchRepository});
 
   Future<DataState<TwitchCredentials>> getTwitchFromLocal() {
@@ -119,5 +123,20 @@ class TwitchUseCase {
   Future<DataState<void>> setStreamTitle(
       String accessToken, String broadcasterId, String title) {
     return twitchRepository.setStreamTitle(accessToken, broadcasterId, title);
+  }
+
+  Future<DataState<TwitchPoll>> getPoll(
+      String accessToken, String broadcasterId) {
+    return twitchRepository.getPoll(accessToken, broadcasterId);
+  }
+
+  Future<DataState<TwitchPoll>> endPoll(
+      String accessToken, String broadcasterId, String pollId, String status) {
+    return twitchRepository.endPoll(accessToken, broadcasterId, pollId, status);
+  }
+
+  Future<DataState<TwitchPrediction>> getPrediction(
+      String accessToken, String broadcasterId) {
+    return twitchRepository.getPrediction(accessToken, broadcasterId);
   }
 }

@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../widgets/manage_list_hidden_users.dart';
 import '../widgets/manage_list_browser_tabs.dart';
@@ -60,11 +61,29 @@ class SettingsView extends GetView<SettingsViewController> {
             padding: EdgeInsets.only(top: 8, left: 10, right: 10, bottom: 8),
             children: [
               chatSettings(context, width),
-              Divider(),
+              Divider(
+                height: 20,
+                thickness: 2,
+                indent: 0,
+                endIndent: 0,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
               connectionsSettings(context, width),
-              Divider(),
+              Divider(
+                height: 20,
+                thickness: 2,
+                indent: 0,
+                endIndent: 0,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
               generalSettings(context, width),
-              Divider(),
+              Divider(
+                height: 20,
+                thickness: 2,
+                indent: 0,
+                endIndent: 0,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
               contactSettings(context, width),
             ],
           ),
@@ -557,12 +576,15 @@ class SettingsView extends GetView<SettingsViewController> {
                                       horizontal: 0, vertical: 0),
                                   border: InputBorder.none,
                                   hintText: 'url',
-                                  labelText: 'Weboscket Url',
+                                  labelText: 'Websocket Url',
                                   suffixIcon: IconButton(
                                     icon: Icon(
                                         controller.obsWebsocketUrlShow.value
                                             ? Icons.visibility
                                             : Icons.visibility_off),
+                                    color: Theme.of(context)
+                                        .primaryIconTheme
+                                        .color,
                                     onPressed: () {
                                       controller.obsWebsocketUrlShow.value =
                                           !controller.obsWebsocketUrlShow.value;
@@ -577,7 +599,6 @@ class SettingsView extends GetView<SettingsViewController> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
-                              flex: 7,
                               child: TextFormField(
                                 controller: controller
                                     .obsWebsocketPasswordFieldController,
@@ -595,12 +616,15 @@ class SettingsView extends GetView<SettingsViewController> {
                                       horizontal: 0, vertical: 0),
                                   border: InputBorder.none,
                                   hintText: 'password',
-                                  labelText: 'Weboscket Password',
+                                  labelText: 'Websocket Password',
                                   suffixIcon: IconButton(
-                                    icon: Icon(
-                                        controller.obsWebsocketPasswordShow.value
-                                            ? Icons.visibility
-                                            : Icons.visibility_off),
+                                    icon: Icon(controller
+                                            .obsWebsocketPasswordShow.value
+                                        ? Icons.visibility
+                                        : Icons.visibility_off),
+                                    color: Theme.of(context)
+                                        .primaryIconTheme
+                                        .color,
                                     onPressed: () {
                                       controller
                                               .obsWebsocketPasswordShow.value =
@@ -611,8 +635,11 @@ class SettingsView extends GetView<SettingsViewController> {
                                 ),
                               ),
                             ),
+                          ],
+                        ),
+                        Row(
+                          children: [
                             Expanded(
-                              flex: 3,
                               child: TextButton(
                                 style: TextButton.styleFrom(
                                   textStyle: TextStyle(fontSize: 12),
@@ -643,6 +670,29 @@ class SettingsView extends GetView<SettingsViewController> {
                             ),
                           ],
                         ),
+                        InkWell(
+                          onTap: () {
+                            launchUrlString(
+                              "https://www.irllink.com/wiki/obs-websocket",
+                              mode: LaunchMode.externalApplication,
+                            );
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.open_in_browser,
+                                color: Colors.blue,
+                              ),
+                              Text(
+                                "How can I get these parameters ?",
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
                       ],
                     ),
                   ),

@@ -13,7 +13,13 @@ class TwitchAuthParams {
     this.redirectUri = 'https://irllink.com/twitch/app/auth',
     this.responseType = 'code',
     this.scopes =
-        'openid channel_editor chat:read chat:edit channel:moderate moderator:manage:chat_settings channel:manage:broadcast',
+        'openid '
+        'channel_editor channel:moderate '
+        'chat:read chat:edit '
+        'moderator:manage:chat_settings '
+        'channel:manage:broadcast '
+        'channel:read:polls channel:manage:polls '
+        'channel:read:predictions channel:manage:predictions',
     this.forceVerify = 'true',
     this.claims = '{"userinfo":{"picture":null, "preferred_username":null}}',
   });

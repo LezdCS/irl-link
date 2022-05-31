@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/twitch_stream_infos.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 
+import '../../domain/entities/twitch_poll.dart';
+import '../../domain/entities/twitch_prediction.dart';
 import 'home_view_controller.dart';
 
 class TwitchTabViewController extends GetxController {
@@ -11,13 +13,9 @@ class TwitchTabViewController extends GetxController {
 
   final HomeEvents homeEvents;
 
-  RxString streamTitle = "".obs; // titre du stream
-  String raid = ""; // pseudo de la personne qui va se faire raid
-
   late TextEditingController titleFormController;
-  late TextEditingController raidFormController;
+  RxString streamTitle = "".obs;
 
-  // si il edit le titre alors on ne doit pas changer le titre lors d'un fetch des infos de stream
   FocusNode focus = FocusNode();
 
   late HomeViewController homeViewController;
@@ -25,10 +23,17 @@ class TwitchTabViewController extends GetxController {
   Rx<TwitchStreamInfos> twitchStreamInfos =
       TwitchStreamInfos.defaultInfos().obs;
 
+  late Rx<TwitchPrediction>? prediction;
+  RxString selectedOutcomeId = "-1".obs;
+
+  late Rx<TwitchPoll>? poll;
+
   @override
   void onInit() {
     titleFormController = TextEditingController();
-    raidFormController = TextEditingController();
+    prediction = null;
+    poll = null;
+    
     super.onInit();
   }
 
@@ -36,9 +41,19 @@ class TwitchTabViewController extends GetxController {
   void onReady() async {
     homeViewController = Get.find<HomeViewController>();
 
-    getStreamInfos();
-    Timer.periodic(Duration(seconds: 30), (timer) {
-      getStreamInfos();
+    refreshData();
+    Timer.periodic(Duration(seconds: 20), (timer) {
+      refreshData();
+    });
+
+    Timer.periodic(Duration(seconds: 5), (timer) {
+      if (poll != null) {
+        getPoll();
+      }
+
+      if (prediction != null) {
+        getPrediction();
+      }
     });
     super.onReady();
   }
@@ -48,10 +63,10 @@ class TwitchTabViewController extends GetxController {
     super.onClose();
   }
 
-  void raidSomeone() {
-    raid = raidFormController.text;
-    homeViewController.sendChatMessage("/raid " + raid);
-    raidFormController.text = "";
+  void refreshData() {
+    getStreamInfos();
+    getPoll();
+    getPrediction();
   }
 
   void changeChatSettings() {
@@ -63,6 +78,75 @@ class TwitchTabViewController extends GetxController {
     homeEvents.setStreamTitle(homeViewController.twitchData.accessToken,
         homeViewController.twitchData.twitchUser.id, titleFormController.text);
   }
+
+  void getPoll() {
+    homeEvents
+        .getPoll(homeViewController.twitchData.accessToken,
+            homeViewController.twitchData.twitchUser.id)
+        .then((value) => {
+              if (value.error != null)
+                {
+                  poll = null,
+                }
+              else
+                {
+                  if (poll == null)
+                    {
+                      poll = value.data!.obs,
+                    }
+                  else
+                    {
+                      poll!.value = value.data!,
+                    }
+                }
+            });
+  }
+
+  // status is either TERMINATED to end poll and display the result to viewer
+  // or ARCHIVED to end the poll and hide it
+  void endPoll(String status) {
+    homeEvents
+        .endPoll(homeViewController.twitchData.accessToken,
+            homeViewController.twitchData.twitchUser.id, poll!.value.id, status)
+        .then((value) => {
+              if (value.data != null)
+                {
+                  poll!.value = value.data!,
+                }
+              else
+                {
+                  poll = null,
+                }
+            });
+  }
+
+  void getPrediction() {
+    homeEvents
+        .getPrediction(homeViewController.twitchData.accessToken,
+            homeViewController.twitchData.twitchUser.id)
+        .then((value) => {
+              if (value.error != null)
+                {
+                  prediction = null,
+                }
+              else
+                {
+                  if (prediction == null)
+                    {
+                      prediction = value.data!.obs,
+                    }
+                  else
+                    {
+                      prediction!.value = value.data!,
+                    }
+                }
+            });
+  }
+
+  // status is either RESOLVED to end prediction with a winner (should provide winning_outcome_id)
+  // or CANCELED to end the prediction and refund
+  // or LOCKED to lock prediction so user can no longer make predictions
+  void endPrediction(String status, String? winningOutcomeId) {}
 
   void getStreamInfos() {
     homeEvents

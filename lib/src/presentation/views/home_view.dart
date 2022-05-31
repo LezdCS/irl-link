@@ -144,8 +144,7 @@ class HomeView extends GetView<HomeViewController> {
   }
 
   Widget _bottomNavBar(double height, double width, BuildContext context) {
-    return Obx(
-      () => Container(
+    return Container(
         padding: EdgeInsets.only(left: 10),
         height: height * 0.06,
         child: Row(
@@ -225,21 +224,6 @@ class HomeView extends GetView<HomeViewController> {
             Expanded(
               flex: 1,
               child: InkWell(
-                onTap: () {
-                  controller.sound.value = !controller.sound.value;
-                },
-                child: Icon(
-                  controller.sound.value ? Icons.volume_up : Icons.volume_off,
-                  color: controller.sound.value
-                      ? Theme.of(context).primaryIconTheme.color
-                      : Color(0xFFd63031),
-                  size: 22,
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: InkWell(
                 onTap: () async {
                   await Get.toNamed(Routes.SETTINGS,
                       arguments: [controller.twitchData]);
@@ -255,7 +239,6 @@ class HomeView extends GetView<HomeViewController> {
               ),
             ),
           ],
-        ),
       ),
     );
   }

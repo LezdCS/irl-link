@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
+import 'package:obs_websocket/obs_websocket.dart';
 
 import 'alert_message_view.dart';
 
@@ -20,7 +21,8 @@ class ObsTabView extends GetView<ObsTabViewController> {
                       children: [
                         InkWell(
                           onTap: () {
-                            controller.startStream();
+                            controller.isStreaming.value ?
+                            controller.stopStream() : controller.startStream();
                           },
                           child: Container(
                             constraints: BoxConstraints(
@@ -35,33 +37,8 @@ class ObsTabView extends GetView<ObsTabViewController> {
                                   BorderRadius.all(Radius.circular(8)),
                             ),
                             padding: EdgeInsets.all(8),
-                            child: Text(
-                              "Start stream",
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        InkWell(
-                          onTap: () {
-                            controller.stopStream();
-                          },
-                          child: Container(
-                            constraints: BoxConstraints(
-                              minWidth: 80.0,
-                            ),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .tertiaryContainer,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8),
-                              ),
-                            ),
-                            padding: EdgeInsets.all(8),
-                            child: Text(
-                              "Stop stream",
+                            child: Text( controller.isStreaming.value?
+                              "Stop stream" : "Start stream",
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -213,29 +190,26 @@ class ObsTabView extends GetView<ObsTabViewController> {
       ),
       itemCount: controller.sourcesList.length,
       itemBuilder: (BuildContext context, int index) {
-        var elementAt = controller.sourcesList.elementAt(index);
+        SceneDetail source = controller.sourcesList.elementAt(index);
         return InkWell(
           onTap: () {
             controller.setSourceVisibleState(
-                elementAt.name,
-                controller.visibleSourcesList.contains(elementAt.name)
-                    ? false
-                    : true);
-            controller.sourcesList.refresh();
+                source.name,
+                !source.render);
           },
           child: Container(
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: controller.visibleSourcesList.contains(elementAt.name)
+              color: source.render
                   ? Theme.of(context).colorScheme.tertiary
                   : Theme.of(context).colorScheme.tertiaryContainer,
               borderRadius: BorderRadius.all(Radius.circular(8)),
             ),
             padding: EdgeInsets.all(8),
             child: Tooltip(
-              message: elementAt.name,
+              message: source.name,
               child: Text(
-                elementAt.name,
+                source.name,
                 textAlign: TextAlign.center,
               ),
             ),
