@@ -190,26 +190,24 @@ class ObsTabView extends GetView<ObsTabViewController> {
       ),
       itemCount: controller.sourcesList.length,
       itemBuilder: (BuildContext context, int index) {
-        SceneDetail source = controller.sourcesList.elementAt(index);
+        SceneItemDetail source = controller.sourcesList.elementAt(index);
         return InkWell(
           onTap: () {
-            controller.setSourceVisibleState(
-                source.name,
-                !source.render);
+            controller.setSourceVisibleState(source);
           },
           child: Container(
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: source.render
+              color: source.sceneItemEnabled
                   ? Theme.of(context).colorScheme.tertiary
                   : Theme.of(context).colorScheme.tertiaryContainer,
               borderRadius: BorderRadius.all(Radius.circular(8)),
             ),
             padding: EdgeInsets.all(8),
             child: Tooltip(
-              message: source.name,
+              message: source.sourceName,
               child: Text(
-                source.name,
+                source.sourceName,
                 textAlign: TextAlign.center,
               ),
             ),

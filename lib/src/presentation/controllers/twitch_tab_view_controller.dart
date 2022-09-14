@@ -28,6 +28,8 @@ class TwitchTabViewController extends GetxController {
 
   late Rx<TwitchPoll>? poll;
 
+  Rx<Duration> myDuration = Duration(seconds: 15).obs;
+
   @override
   void onInit() {
     titleFormController = TextEditingController();
@@ -42,17 +44,17 @@ class TwitchTabViewController extends GetxController {
     homeViewController = Get.find<HomeViewController>();
 
     refreshData();
-    Timer.periodic(Duration(seconds: 20), (timer) {
+    Timer.periodic(Duration(seconds: 15), (timer) {
       refreshData();
     });
 
-    Timer.periodic(Duration(seconds: 5), (timer) {
-      if (poll != null) {
-        getPoll();
-      }
-
-      if (prediction != null) {
-        getPrediction();
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      final reduceSecondsBy = 1;
+      final seconds = myDuration.value.inSeconds - reduceSecondsBy;
+      if (seconds < 0) {
+        myDuration.value = Duration(seconds: 15);
+      } else {
+        myDuration.value = Duration(seconds: seconds);
       }
     });
     super.onReady();

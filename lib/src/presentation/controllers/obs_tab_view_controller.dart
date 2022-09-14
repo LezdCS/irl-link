@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
@@ -16,7 +18,7 @@ class ObsTabViewController extends GetxController {
   RxList scenesList = RxList();
   RxString currentScene = RxString("");
 
-  RxList<SceneDetail> sourcesList = RxList();
+  RxList<SceneItemDetail> sourcesList = RxList();
 
   RxBool isStreaming = false.obs;
   RxBool isRecording = false.obs;
@@ -43,72 +45,56 @@ class ObsTabViewController extends GetxController {
   void connectWs(String url, String password) async {
     try {
       obsWebSocket = await ObsWebSocket.connect(
-        connectUrl: 'ws://$url',
+        'ws://$url',
+        password: password,
         onDone: connectionLost,
         timeout: Duration(seconds: 30),
       );
 
-      obsWebSocket!.addHandler<RecordingStateEvent>(
-          (RecordingStateEvent recordingStateEvent) async {
-        switch (recordingStateEvent.type) {
-          case 'RecordingStarted':
-            isRecording.value = true;
-            break;
-          case 'RecordingStopped':
-            isRecording.value = false;
-            break;
-        }
+      await obsWebSocket!.listen(EventSubscription.all.code);
+
+      obsWebSocket!.addHandler<RecordStateChanged>(
+          (RecordStateChanged recordingStateChanged) {
+            isRecording.value = recordingStateChanged.outputActive;
       });
 
-      obsWebSocket!.addHandler<StreamStateEvent>(
-          (StreamStateEvent streamStateEvent) async {
-        switch (streamStateEvent.type) {
-          case 'StreamStarted':
-            isStreaming.value = true;
-            break;
-          case 'StreamStoppedEvent':
-            isStreaming.value = false;
-            break;
-        }
+      obsWebSocket!.addHandler<StreamStateChanged>(
+          (StreamStateChanged streamStateChanged) {
+            isStreaming.value = streamStateChanged.outputActive;
       });
 
-      obsWebSocket!.addHandler<StreamStatusEvent>(
-          (StreamStatusEvent streamStatusEvent) async {
-        //emit every 2 secs if stream is active
-        // https://pub.dev/documentation/obs_websocket/latest/obs_websocket/StreamStatusEvent-class.html
-        //TODO : display some of the informations on the OBS View
-        debugPrint(streamStatusEvent.toString());
+      obsWebSocket!.addHandler<SceneItemEnableStateChanged>(
+          (SceneItemEnableStateChanged sceneItemEnableStateChanged) {
+            SceneItemDetail s = sourcesList.firstWhere(
+            (source) => source.sceneItemId == sceneItemEnableStateChanged.sceneItemId);
+
+            Map<String, dynamic> srcJson = s.toJson();
+            srcJson['sceneItemTransform'] = srcJson['sceneItemTransform'].toJson();
+            srcJson['sceneItemEnabled'] = sceneItemEnableStateChanged.sceneItemEnabled;
+            SceneItemDetail updatedSource = SceneItemDetail.fromJson(srcJson);
+            sourcesList[sourcesList.indexOf(s)] = updatedSource;
       });
 
-      obsWebSocket!.addHandler<SceneItemStateEvent>(
-          (SceneItemStateEvent sceneItemStateEvent) async {
-        SceneDetail s = sourcesList
-            .firstWhere((source) => source.id == sceneItemStateEvent.itemId);
-
-        Map<String, dynamic> srcJson = s.toJson();
-        srcJson['render'] = sceneItemStateEvent.itemVisible;
-        SceneDetail updatedSource = SceneDetail.fromJson(srcJson);
-        sourcesList[sourcesList.indexOf(s)] = updatedSource;
-      });
-
-      obsWebSocket!.addFallbackListener((BaseEvent baseEvent) {
-        if (baseEvent.updateType == 'SwitchScenes') {
+      obsWebSocket!.addFallbackListener((Event event) {
+        if (event.eventType == 'CurrentProgramSceneChanged') {
           getCurrentScene();
         }
       });
-
-      final AuthRequiredResponse? authRequired =
-          await obsWebSocket?.getAuthRequired();
-      if (authRequired!.authRequired!) {
-        await obsWebSocket?.authenticate(authRequired, password);
-      }
 
       alertMessage.value = "Connected.";
       isConnected.value = true;
       getSceneList();
       getCurrentScene();
-      //TODO : get stream status (only once)
-      //TODO : get recording status (only once)
+
+      final StreamStatusResponse streamStatus = await obsWebSocket!.stream.getStatus;
+      isStreaming.value = streamStatus.outputActive;
+
+      final RecordStatusResponse recordStatus = await obsWebSocket!.record.getRecordStatus();
+      isRecording.value = recordStatus.outputActive;
+
+      final StatsResponse statsResponse = await obsWebSocket!.general.getStats();
+      debugPrint(statsResponse.toString());
+
     } catch (e) {
       alertMessage.value = "Failed to connect to OBS";
       isConnected.value = false;
@@ -129,56 +115,65 @@ class ObsTabViewController extends GetxController {
 
   /// Start the stream
   Future<void> startStream() async {
-    final StreamStatusResponse status = await obsWebSocket!.getStreamStatus();
+    final StreamStatusResponse status = await obsWebSocket!.stream.getStatus;
 
-    if (!status.streaming) {
-      await obsWebSocket!.startStreaming();
+    if (!status.outputActive) {
+      await obsWebSocket!.stream.startStream();
     }
   }
 
   /// Stop the stream
   Future<void> stopStream() async {
-    final StreamStatusResponse status = await obsWebSocket!.getStreamStatus();
+    final StreamStatusResponse status = await obsWebSocket!.stream.getStatus;
 
-    if (status.streaming) {
-      await obsWebSocket!.stopStreaming();
+    if (!status.outputActive) {
+      await obsWebSocket!.stream.stopStream();
     }
   }
 
   /// Toggle OBS recording
   Future<void> startStopRecording() async {
-    await obsWebSocket!.startStopRecording();
+    await obsWebSocket!.record.toggleRecord();
   }
 
   /// Fetch scene list
   Future<void> getSceneList() async {
-    BaseResponse? response = await obsWebSocket!.command('GetSceneList');
+    SceneListResponse? response = await obsWebSocket!.scenes.getSceneList();
     scenesList.clear();
 
-    if (response!.status) {
-      List respScenes = response.rawResponse["scenes"];
+    List<Scene> respScenes = response.scenes;
 
-      for (var i = 0; i < respScenes.length; i++)
-        scenesList.add(respScenes[i]["name"]);
+    for (var i = 0; i < respScenes.length; i++) {
+      scenesList.add(respScenes[i].sceneName);
     }
   }
 
   /// Fetch current scene and its sources
   Future<void> getCurrentScene() async {
-    Scene response = await obsWebSocket!.getCurrentScene();
+    String currentSceneName =
+        await obsWebSocket!.scenes.getCurrentProgramScene();
 
-    currentScene.value = response.name;
-    sourcesList.value = response.scenes;
+    currentScene.value = currentSceneName;
+
+    List<SceneItemDetail> sources =
+        await obsWebSocket!.sceneItems.getSceneItemList(currentSceneName);
+    sourcesList.value = sources;
   }
 
   /// Switch to the scene named [sceneName]
   Future<void> setCurrentScene(String sceneName) async {
-    await obsWebSocket!.setCurrentScene(sceneName);
+    await obsWebSocket!.scenes.setCurrentProgramScene(sceneName);
   }
 
-  /// Show or hide the source named [sourceName] according to the [value]
-  void setSourceVisibleState(String sourceName, bool value) {
-    obsWebSocket!.setSceneItemRender({"source": sourceName, "render": value});
+  /// Show or hide the source named [sourceName] according to the [sceneItemEnabled]
+  void setSourceVisibleState(SceneItemDetail source) {
+    obsWebSocket!.sceneItems.setEnabled(
+      SceneItemEnableStateChanged(
+        sceneName: currentScene.value,
+        sceneItemId: source.sceneItemId,
+        sceneItemEnabled: !source.sceneItemEnabled,
+      ),
+    );
   }
 
   Future getSettings() async {
