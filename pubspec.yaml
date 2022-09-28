@@ -43,7 +43,7 @@ dependencies:
   wakelock: ^0.6.1+2
   connectivity_plus: ^2.3.0
   move_to_background: ^1.0.2
-  obs_websocket: ^5.0.0+4
+  obs_websocket: ^5.0.0+10
   intl: ^0.17.0
   expandable: ^5.0.1
   audioplayers: ^0.20.1
