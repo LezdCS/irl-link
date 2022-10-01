@@ -12,6 +12,7 @@ class TwitchCredentialsDTO extends TwitchCredentials {
     required String expiresIn,
     required TwitchDecodedIdTokenDTO decodedIdToken,
     required TwitchUserDTO twitchUser,
+    required String scopes,
   }) : super(
           accessToken: accessToken,
           idToken: idToken,
@@ -19,6 +20,7 @@ class TwitchCredentialsDTO extends TwitchCredentials {
           expiresIn: expiresIn,
           decodedIdToken: decodedIdToken,
           twitchUser: twitchUser,
+          scopes: scopes,
         );
 
   Map toJson() => {
@@ -28,6 +30,7 @@ class TwitchCredentialsDTO extends TwitchCredentials {
         'expiresIn': expiresIn,
         'decodedIdToken': jsonEncode(decodedIdToken),
         'twitchUser': jsonEncode(twitchUser),
+        'scopes': scopes,
       };
 
   factory TwitchCredentialsDTO.fromJson(Map<String, dynamic> map) {
@@ -39,6 +42,7 @@ class TwitchCredentialsDTO extends TwitchCredentials {
       decodedIdToken:
           TwitchDecodedIdTokenDTO.fromJson(jsonDecode(map['decodedIdToken'])),
       twitchUser: TwitchUserDTO.fromJson(jsonDecode(map['twitchUser'])),
+      scopes: map['scopes'] as String,
     );
   }
 }
