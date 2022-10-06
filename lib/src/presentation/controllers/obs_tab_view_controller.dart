@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -19,6 +20,9 @@ class ObsTabViewController extends GetxController {
   RxString currentScene = RxString("");
 
   RxList<SceneItemDetail> sourcesList = RxList();
+  RxMap<String, double> sourcesVolumesMap = RxMap();
+
+  Rx<Uint8List> sceneScreenshot = Base64Decoder().convert("").obs;
 
   RxBool isStreaming = false.obs;
   RxBool isRecording = false.obs;
@@ -55,29 +59,36 @@ class ObsTabViewController extends GetxController {
 
       obsWebSocket!.addHandler<RecordStateChanged>(
           (RecordStateChanged recordingStateChanged) {
-            isRecording.value = recordingStateChanged.outputActive;
+        isRecording.value = recordingStateChanged.outputActive;
       });
 
       obsWebSocket!.addHandler<StreamStateChanged>(
           (StreamStateChanged streamStateChanged) {
-            isStreaming.value = streamStateChanged.outputActive;
+        isStreaming.value = streamStateChanged.outputActive;
       });
 
       obsWebSocket!.addHandler<SceneItemEnableStateChanged>(
           (SceneItemEnableStateChanged sceneItemEnableStateChanged) {
-            SceneItemDetail s = sourcesList.firstWhere(
-            (source) => source.sceneItemId == sceneItemEnableStateChanged.sceneItemId);
+        SceneItemDetail s = sourcesList.firstWhere((source) =>
+            source.sceneItemId == sceneItemEnableStateChanged.sceneItemId);
 
-            Map<String, dynamic> srcJson = s.toJson();
-            srcJson['sceneItemTransform'] = srcJson['sceneItemTransform'].toJson();
-            srcJson['sceneItemEnabled'] = sceneItemEnableStateChanged.sceneItemEnabled;
-            SceneItemDetail updatedSource = SceneItemDetail.fromJson(srcJson);
-            sourcesList[sourcesList.indexOf(s)] = updatedSource;
+        Map<String, dynamic> srcJson = s.toJson();
+        srcJson['sceneItemTransform'] = srcJson['sceneItemTransform'].toJson();
+        srcJson['sceneItemEnabled'] =
+            sceneItemEnableStateChanged.sceneItemEnabled;
+        SceneItemDetail updatedSource = SceneItemDetail.fromJson(srcJson);
+        sourcesList[sourcesList.indexOf(s)] = updatedSource;
       });
 
       obsWebSocket!.addFallbackListener((Event event) {
         if (event.eventType == 'CurrentProgramSceneChanged') {
           getCurrentScene();
+        }
+        if (event.eventType == 'InputVolumeChanged') {
+          sourcesVolumesMap[event.eventData?['inputName']] =
+              event.eventData?['inputVolumeDb'];
+          sourcesList.refresh();
+          sourcesVolumesMap.refresh();
         }
       });
 
@@ -86,15 +97,17 @@ class ObsTabViewController extends GetxController {
       getSceneList();
       getCurrentScene();
 
-      final StreamStatusResponse streamStatus = await obsWebSocket!.stream.getStatus;
+      final StreamStatusResponse streamStatus =
+          await obsWebSocket!.stream.getStatus;
       isStreaming.value = streamStatus.outputActive;
 
-      final RecordStatusResponse recordStatus = await obsWebSocket!.record.getRecordStatus();
+      final RecordStatusResponse recordStatus =
+          await obsWebSocket!.record.getRecordStatus();
       isRecording.value = recordStatus.outputActive;
 
-      final StatsResponse statsResponse = await obsWebSocket!.general.getStats();
+      final StatsResponse statsResponse =
+          await obsWebSocket!.general.getStats();
       debugPrint(statsResponse.toString());
-
     } catch (e) {
       alertMessage.value = "Failed to connect to OBS";
       isConnected.value = false;
@@ -158,6 +171,15 @@ class ObsTabViewController extends GetxController {
     List<SceneItemDetail> sources =
         await obsWebSocket!.sceneItems.getSceneItemList(currentSceneName);
     sourcesList.value = sources;
+    sourcesVolumesMap.clear();
+    sources.forEach((source) async {
+      var response = await obsWebSocket!.send("GetInputVolume",
+          {"inputName": source.sourceName}).catchError((e) {});
+      if (response?.requestStatus.code == 100) {
+        sourcesVolumesMap[source.sourceName] =
+            response?.responseData?['inputVolumeDb'];
+      }
+    });
   }
 
   /// Switch to the scene named [sceneName]
@@ -174,6 +196,23 @@ class ObsTabViewController extends GetxController {
         sceneItemEnabled: !source.sceneItemEnabled,
       ),
     );
+  }
+
+  void setInputVolume(String inputName, double inputVolumeDb) {
+    obsWebSocket!.send("SetInputVolume",
+        {"inputName": inputName, "inputVolumeDb": inputVolumeDb});
+    sourcesList.refresh();
+    sourcesVolumesMap.refresh();
+  }
+
+  void getSourceScreenshot(String sourceName) async {
+    var response = await obsWebSocket!.send("GetSourceScreenshot", {
+      "sourceName": sourceName,
+      "imageFormat": "png"
+    });
+
+    String imageBase64 = response?.responseData?['imageData'].split(",").last;
+    sceneScreenshot.value = Base64Decoder().convert(imageBase64);
   }
 
   Future getSettings() async {

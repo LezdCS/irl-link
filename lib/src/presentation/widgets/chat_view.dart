@@ -96,9 +96,13 @@ class ChatView extends GetView<ChatViewController> {
           bottom: height * 0.07,
           left: 0,
           right: 0,
-          child: Visibility(
-            visible: controller.selectedMessage.value != null,
-            child: moderationView(width),
+          child: AnimatedSlide(
+            offset: controller.selectedMessage.value  != null ? Offset.zero : Offset(0, 1),
+            duration: Duration(milliseconds: 200),
+            child: Visibility(
+              visible: controller.selectedMessage.value != null,
+              child: moderationView(width),
+            ),
           ),
         ),
         AnimatedOpacity(

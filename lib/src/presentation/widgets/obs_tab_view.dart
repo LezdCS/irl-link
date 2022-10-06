@@ -21,8 +21,9 @@ class ObsTabView extends GetView<ObsTabViewController> {
                       children: [
                         InkWell(
                           onTap: () {
-                            controller.isStreaming.value ?
-                            controller.stopStream() : controller.startStream();
+                            controller.isStreaming.value
+                                ? controller.stopStream()
+                                : controller.startStream();
                           },
                           child: Container(
                             constraints: BoxConstraints(
@@ -37,8 +38,10 @@ class ObsTabView extends GetView<ObsTabViewController> {
                                   BorderRadius.all(Radius.circular(8)),
                             ),
                             padding: EdgeInsets.all(8),
-                            child: Text( controller.isStreaming.value?
-                              "Stop stream" : "Start stream",
+                            child: Text(
+                              controller.isStreaming.value
+                                  ? "Stop stream"
+                                  : "Start stream",
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -63,7 +66,55 @@ class ObsTabView extends GetView<ObsTabViewController> {
                             ),
                             padding: EdgeInsets.all(8),
                             child: Text(
-                              controller.isRecording.value ? "Stop recording" : "Start recording",
+                              controller.isRecording.value
+                                  ? "Stop recording"
+                                  : "Start recording",
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        InkWell(
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext dialogContext) {
+                                  return AlertDialog(
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Obx(
+                                          () => Container(
+                                            color: Colors.black,
+                                            child: Image(
+                                                image: Image.memory(controller
+                                                        .sceneScreenshot.value)
+                                                    .image),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                });
+                            controller.getSourceScreenshot(
+                                controller.currentScene.value);
+                          },
+                          child: Container(
+                            constraints: BoxConstraints(
+                              minWidth: 80.0,
+                            ),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .tertiaryContainer,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(8),
+                              ),
+                            ),
+                            padding: EdgeInsets.all(8),
+                            child: Text(
+                              "Preview scene",
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -191,9 +242,46 @@ class ObsTabView extends GetView<ObsTabViewController> {
       itemCount: controller.sourcesList.length,
       itemBuilder: (BuildContext context, int index) {
         SceneItemDetail source = controller.sourcesList.elementAt(index);
-        return InkWell(
+        double? sourceVolume = controller.sourcesVolumesMap[source.sourceName];
+        return GestureDetector(
           onTap: () {
             controller.setSourceVisibleState(source);
+          },
+          onLongPress: () {
+            showDialog<void>(
+              context: context,
+              builder: (BuildContext dialogContext) {
+                return AlertDialog(
+                  title: Text(source.sourceName, textAlign: TextAlign.center),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Visibility(
+                        visible: sourceVolume != null,
+                        child: Obx(
+                          () => Slider(
+                            value: controller
+                                    .sourcesVolumesMap[source.sourceName] ??
+                                0,
+                            onChanged: (value) {
+                              controller.setInputVolume(
+                                  source.sourceName, value);
+                            },
+                            min: -100,
+                            max: 0,
+                            label: controller
+                                    .sourcesVolumesMap[source.sourceName]!
+                                    .toStringAsFixed(2) +
+                                " dB",
+                            divisions: 400,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
           },
           child: Container(
             alignment: Alignment.center,
@@ -204,12 +292,9 @@ class ObsTabView extends GetView<ObsTabViewController> {
               borderRadius: BorderRadius.all(Radius.circular(8)),
             ),
             padding: EdgeInsets.all(8),
-            child: Tooltip(
-              message: source.sourceName,
-              child: Text(
-                source.sourceName,
-                textAlign: TextAlign.center,
-              ),
+            child: Text(
+              source.sourceName,
+              textAlign: TextAlign.center,
             ),
           ),
         );
