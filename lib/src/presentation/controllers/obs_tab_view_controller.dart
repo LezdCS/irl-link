@@ -90,6 +90,18 @@ class ObsTabViewController extends GetxController {
           sourcesList.refresh();
           sourcesVolumesMap.refresh();
         }
+        if(event.eventType == 'SceneListChanged') {
+          getSceneList();
+        }
+        if(event.eventType == 'SceneItemCreated') {
+          getCurrentScene();
+        }
+        if(event.eventType == 'SceneItemRemoved') {
+          getCurrentScene();
+        }
+        if(event.eventType == 'InputNameChanged') {
+          getCurrentScene();
+        }
       });
 
       alertMessage.value = "Connected.";
