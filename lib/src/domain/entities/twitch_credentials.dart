@@ -11,6 +11,7 @@ class TwitchCredentials extends Equatable {
   final String expiresIn;
   final TwitchDecodedIdToken decodedIdToken;
   final TwitchUser twitchUser;
+  final String scopes;
 
   const TwitchCredentials({
     required this.accessToken,
@@ -19,6 +20,7 @@ class TwitchCredentials extends Equatable {
     required this.expiresIn,
     required this.decodedIdToken,
     required this.twitchUser,
+    required this.scopes,
   });
 
   Map toJson() => {
@@ -28,6 +30,7 @@ class TwitchCredentials extends Equatable {
         'expiresIn': expiresIn,
         'decodedIdToken': jsonEncode(decodedIdToken),
         'twitchUser': jsonEncode(twitchUser),
+        'scopes': scopes,
       };
 
   @override
@@ -39,6 +42,7 @@ class TwitchCredentials extends Equatable {
       expiresIn,
       decodedIdToken,
       twitchUser,
+      scopes,
     ];
   }
 

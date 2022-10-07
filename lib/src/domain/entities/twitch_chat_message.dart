@@ -154,41 +154,103 @@ class TwitchChatMessage extends Equatable {
 
     List<Widget> messageWidgetsBuild = [];
 
-    for (String word in messageString.trim().split(' ')) {
-      if (emotesIdsPositions.entries.firstWhereOrNull((element) => element.value
+    for (int i = 0; i < messageString.trim().split(' ').length; i++) {
+      String word = messageString.trim().split(' ')[i];
+      var emote = emotesIdsPositions.entries.firstWhereOrNull((element) =>
+          element.value
               .where((position) =>
                   messageString.substring(
                       int.parse(position[0]), int.parse(position[1]) + 1) ==
                   word)
-              .isNotEmpty) !=
-          null) {
+              .isNotEmpty);
+
+      var thirdPartyEmote =
+          thirdPartEmotes.firstWhereOrNull((element) => element.name == word);
+      bool isNextWordThirdPartEmoteZeroWidth = false;
+
+      if (emote != null || thirdPartyEmote != null) {
+        if (i < messageString.trim().split(' ').length - 1) {
+          String nextWord = messageString.trim().split(' ')[i + 1];
+          var thirdPartEmote = thirdPartEmotes
+              .firstWhereOrNull((element) => element.name == nextWord);
+          isNextWordThirdPartEmoteZeroWidth =
+              thirdPartEmote?.isZeroWidth ?? false;
+
+          if (isNextWordThirdPartEmoteZeroWidth) {
+            messageWidgetsBuild.add(Stack(
+              children: [
+                emote != null
+                    ? Image(
+                        image: NetworkImage(
+                            "https://static-cdn.jtvnw.net/emoticons/v2/" +
+                                emote.key +
+                                "/default/dark/1.0"),
+                      )
+                    : Image(
+                        image: NetworkImage(thirdPartyEmote!.url1x),
+                      ),
+                Image(
+                  image: NetworkImage(thirdPartEmotes
+                      .firstWhereOrNull((element) => element.name == nextWord)!
+                      .url1x),
+                ),
+              ],
+            ));
+          }
+        }
+      }
+
+      if (emote != null) {
+        if (isNextWordThirdPartEmoteZeroWidth) {
+          continue;
+        }
         messageWidgetsBuild.add(
           Wrap(children: [
             Image(
               image: NetworkImage("https://static-cdn.jtvnw.net/emoticons/v2/" +
-                  emotesIdsPositions.entries
-                      .firstWhere((element) => element.value
-                          .where((position) =>
-                              messageString.substring(int.parse(position[0]),
-                                  int.parse(position[1]) + 1) ==
-                              word)
-                          .isNotEmpty)
-                      .key +
+                  emote.key +
                   "/default/dark/1.0"),
             ),
             Text(' '),
           ]),
         );
-      } else if (thirdPartEmotes
-                  .firstWhereOrNull((element) => element.name == word) !=
-              null &&
-          settings.isEmotes!) {
+      } else if (thirdPartyEmote != null && settings.isEmotes!) {
+        if (thirdPartyEmote.isZeroWidth) {
+          bool isPreviousWordWasAnEmoteOrThirdEmote = false;
+          if (i > 0) {
+            String previousWord = messageString.trim().split(' ')[i - 1];
+            bool isPreviousWordEmote = emotesIdsPositions.entries
+                    .firstWhereOrNull((element) => element.value
+                        .where((position) =>
+                            messageString.substring(int.parse(position[0]),
+                                int.parse(position[1]) + 1) ==
+                            previousWord)
+                        .isNotEmpty) !=
+                null;
+            bool isPreviousWordThirdPartyEmote =
+                thirdPartEmotes.firstWhereOrNull(
+                        (element) => element.name == previousWord) !=
+                    null;
+            isPreviousWordWasAnEmoteOrThirdEmote =
+                isPreviousWordEmote || isPreviousWordThirdPartyEmote;
+            if (isPreviousWordWasAnEmoteOrThirdEmote) {
+              continue;
+            }
+          } else {
+            if (i != 0) {
+              continue;
+            }
+          }
+        }
+
+        if (isNextWordThirdPartEmoteZeroWidth) {
+          continue;
+        }
+
         messageWidgetsBuild.add(
           Wrap(children: [
             Image(
-              image: NetworkImage(thirdPartEmotes
-                  .firstWhere((element) => element.name == word)
-                  .url1x),
+              image: NetworkImage(thirdPartyEmote.url1x),
             ),
             Text(' '),
           ]),

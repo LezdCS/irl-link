@@ -9,6 +9,7 @@ class EmoteDTO extends Emote {
     required String url4x,
     required String? color,
     required EmoteType emoteType,
+    required bool isZeroWidth,
   }) : super(
           id: id,
           name: name,
@@ -17,6 +18,7 @@ class EmoteDTO extends Emote {
           url4x: url4x,
           color: color,
           emoteType: emoteType,
+          isZeroWidth: isZeroWidth,
         );
 
   factory EmoteDTO.fromJson(Map<String, dynamic> map) {
@@ -43,6 +45,7 @@ class EmoteDTO extends Emote {
       url4x: map['images']['url_4x'] as String,
       color: null,
       emoteType: emoteType,
+      isZeroWidth: false,
     );
   }
 
@@ -56,6 +59,7 @@ class EmoteDTO extends Emote {
       url4x: map['images']['dark']['animated']["4"] as String,
       color: map["color"] as String,
       emoteType: EmoteType.cheer,
+      isZeroWidth: false,
     );
   }
 
@@ -68,6 +72,7 @@ class EmoteDTO extends Emote {
       url4x: map['urls']['4'] != null ? "https:"+map['urls']['4']  : "",
       color: null,
       emoteType: EmoteType.thirdPart,
+      isZeroWidth: false,
     );
   }
 
@@ -80,6 +85,7 @@ class EmoteDTO extends Emote {
       url4x: "https://cdn.betterttv.net/emote/" + map['id'] + "/3x",
       color: null,
       emoteType: EmoteType.thirdPart,
+      isZeroWidth: false,
     );
   }
 
@@ -92,6 +98,7 @@ class EmoteDTO extends Emote {
       url4x: map['urls'][2][1].toString(),
       color: null,
       emoteType: EmoteType.thirdPart,
+      isZeroWidth: map['visibility_simple'].contains("ZERO_WIDTH") ? true : false,
     );
   }
 }

@@ -17,6 +17,7 @@ class Emote extends Equatable {
   final String url4x;
   final String? color;
   final EmoteType emoteType;
+  final bool isZeroWidth;
 
   const Emote({
     required this.id,
@@ -26,6 +27,7 @@ class Emote extends Equatable {
     required this.url4x,
     required this.color,
     required this.emoteType,
+    required this.isZeroWidth,
   });
 
   @override
@@ -38,6 +40,7 @@ class Emote extends Equatable {
       url4x,
       color,
       emoteType,
+      isZeroWidth,
     ];
   }
 

@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -768,7 +766,13 @@ class SettingsView extends GetView<SettingsViewController> {
               children: [
                 InkWell(
                   onTap: () {
-                    launch("https://irllink.com");
+                    launchUrl(
+                      Uri(
+                        scheme: "https",
+                        host: "irllink.com",
+                      ),
+                      mode: LaunchMode.externalApplication,
+                    );
                   },
                   child: Text(
                     'irllink.com',
@@ -780,7 +784,9 @@ class SettingsView extends GetView<SettingsViewController> {
                 ),
                 InkWell(
                   onTap: () {
-                    launch("mailto:support@irllink.com");
+                    launchUrl(
+                      Uri(scheme: "mailto", path: "support@irllink.com"),
+                    );
                   },
                   child: Text(
                     'support@irllink.com',
@@ -797,7 +803,14 @@ class SettingsView extends GetView<SettingsViewController> {
                   children: [
                     InkWell(
                       onTap: () {
-                        launch("https://github.com/LezdCS/irl_link");
+                        launchUrl(
+                          Uri(
+                            scheme: "https",
+                            host: "github.com",
+                            path: "/LezdCS/irl_link",
+                          ),
+                          mode: LaunchMode.externalApplication,
+                        );
                       },
                       child: SvgPicture.asset(
                         './lib/assets/icon-github.svg',
@@ -811,7 +824,14 @@ class SettingsView extends GetView<SettingsViewController> {
                     ),
                     InkWell(
                       onTap: () {
-                        launch("https://twitter.com/LezdCS");
+                        launchUrl(
+                          Uri(
+                            scheme: "https",
+                            host: "twitter.com",
+                            path: "/LezdCS",
+                          ),
+                          mode: LaunchMode.externalApplication,
+                        );
                       },
                       child: SvgPicture.asset(
                         './lib/assets/icon-twitter.svg',
