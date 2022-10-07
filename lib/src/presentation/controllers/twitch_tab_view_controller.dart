@@ -35,7 +35,7 @@ class TwitchTabViewController extends GetxController {
     titleFormController = TextEditingController();
     prediction = null;
     poll = null;
-    
+
     super.onInit();
   }
 
@@ -66,6 +66,7 @@ class TwitchTabViewController extends GetxController {
   }
 
   void refreshData() {
+    myDuration.value = Duration(seconds: 15);
     getStreamInfos();
     getPoll();
     getPrediction();

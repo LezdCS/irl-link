@@ -90,16 +90,16 @@ class ObsTabViewController extends GetxController {
           sourcesList.refresh();
           sourcesVolumesMap.refresh();
         }
-        if(event.eventType == 'SceneListChanged') {
+        if (event.eventType == 'SceneListChanged') {
           getSceneList();
         }
-        if(event.eventType == 'SceneItemCreated') {
+        if (event.eventType == 'SceneItemCreated') {
           getCurrentScene();
         }
-        if(event.eventType == 'SceneItemRemoved') {
+        if (event.eventType == 'SceneItemRemoved') {
           getCurrentScene();
         }
-        if(event.eventType == 'InputNameChanged') {
+        if (event.eventType == 'InputNameChanged') {
           getCurrentScene();
         }
       });
@@ -124,12 +124,6 @@ class ObsTabViewController extends GetxController {
       alertMessage.value = "Failed to connect to OBS";
       isConnected.value = false;
     }
-  }
-
-  void connectionFailed(Object o, StackTrace s) {
-    debugPrint("connectionFailed");
-    isConnected.value = false;
-    alertMessage.value = "Can't connect to OBS...";
   }
 
   void connectionLost() {
@@ -218,10 +212,8 @@ class ObsTabViewController extends GetxController {
   }
 
   void getSourceScreenshot(String sourceName) async {
-    var response = await obsWebSocket!.send("GetSourceScreenshot", {
-      "sourceName": sourceName,
-      "imageFormat": "png"
-    });
+    var response = await obsWebSocket!.send("GetSourceScreenshot",
+        {"sourceName": sourceName, "imageFormat": "png"});
 
     String imageBase64 = response?.responseData?['imageData'].split(",").last;
     sceneScreenshot.value = Base64Decoder().convert(imageBase64);

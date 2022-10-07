@@ -21,6 +21,20 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Padding(
+                  padding: EdgeInsets.only(bottom: 8.0),
+                  child:  LinearPercentIndicator(
+                    animation: true,
+                    animateFromLastPercent: true,
+                    barRadius: Radius.circular(8),
+                    padding: EdgeInsets.symmetric(horizontal: 0.0),
+                    lineHeight: 3.0,
+                    percent: controller.myDuration.value.inSeconds / 15,
+                    backgroundColor:
+                    Theme.of(context).colorScheme.secondary,
+                    progressColor: Theme.of(context).colorScheme.tertiary,
+                  ),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
