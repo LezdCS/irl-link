@@ -97,7 +97,9 @@ class ChatView extends GetView<ChatViewController> {
           left: 0,
           right: 0,
           child: AnimatedSlide(
-            offset: controller.selectedMessage.value  != null ? Offset.zero : Offset(0, 1),
+            offset: controller.selectedMessage.value != null
+                ? Offset.zero
+                : Offset(0, 1),
             duration: Duration(milliseconds: 200),
             child: Visibility(
               visible: controller.selectedMessage.value != null,
@@ -331,8 +333,14 @@ class ChatView extends GetView<ChatViewController> {
               Wrap(
                 children: [
                   InkWell(
-                    onTap: () => launch("https://twitch.tv/" +
-                        controller.selectedMessage.value!.authorName),
+                    onTap: () => launchUrl(
+                      Uri(
+                        scheme: "https",
+                        host: "twitch.tv",
+                        path: controller.selectedMessage.value!.authorName,
+                      ),
+                      mode: LaunchMode.externalApplication,
+                    ),
                     child: Icon(
                       Icons.open_in_browser,
                       color: Colors.white,

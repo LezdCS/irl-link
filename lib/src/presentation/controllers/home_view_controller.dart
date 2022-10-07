@@ -159,7 +159,6 @@ class HomeViewController extends GetxController
   Future getSettings() async {
     AudioCache cache = AudioCache(prefix: '');
     const path = "lib/assets/blank.mp3";
-    AudioPlayer player;
     await homeEvents.getSettings().then((value) async => {
           if (value.error == null)
             {
@@ -172,7 +171,7 @@ class HomeViewController extends GetxController
                 timerRefreshToken = Timer.periodic(
                   Duration(minutes: 5),
                     (Timer t) async => {
-                    player = await cache.play(path),
+                    await cache.play(path),
                   },
                 ),
               }else{

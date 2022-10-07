@@ -76,7 +76,14 @@ class LoginView extends GetView<LoginViewController> {
               children: [
                 InkWell(
                   onTap: () {
-                    launch("https://github.com/LezdCS/irl_link");
+                    launchUrl(
+                      Uri(
+                        scheme: "https",
+                        host: "github.com",
+                        path: "/LezdCS/irllink",
+                      ),
+                      mode: LaunchMode.externalApplication,
+                    );
                   },
                   child: SvgPicture.asset(
                     './lib/assets/icon-github.svg',
@@ -90,7 +97,14 @@ class LoginView extends GetView<LoginViewController> {
                 ),
                 InkWell(
                   onTap: () {
-                    launch("https://twitter.com/LezdCS");
+                    launchUrl(
+                      Uri(
+                        scheme: "https",
+                        host: "twitter.com",
+                        path: "/LezdCS",
+                      ),
+                      mode: LaunchMode.externalApplication,
+                    );
                   },
                   child: SvgPicture.asset(
                     './lib/assets/icon-twitter.svg',

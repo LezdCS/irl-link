@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -73,7 +72,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       );
 
       await this
-          .getTwitchUser(null, accessToken!)
+          .getTwitchUser(null, accessToken)
           .then((value) => twitchUser = value.data!);
 
       final twitchData = TwitchCredentialsDTO(
@@ -123,6 +122,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       debugPrint('token refreshed');
       return DataSuccess(newTwitchData);
     } on DioError catch (e) {
+      debugPrint(e.toString());
       return DataFailed("Refresh encountered issues");
     }
   }
@@ -235,6 +235,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(twitchUser);
     } on DioError catch (e) {
+      debugPrint(e.toString());
       return DataFailed("Error retrieving user infos");
     }
   }
@@ -268,6 +269,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(twitchUsers);
     } on DioError catch (e) {
+      debugPrint(e.toString());
       return DataFailed("Error retrieving users infos");
     }
   }
@@ -291,7 +293,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(badges);
     } on DioError catch (e) {
-      print(e.response);
+      debugPrint(e.toString());
       return DataFailed("Error retrieving Twitch global badges");
     }
   }
@@ -315,6 +317,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(badges);
     } on DioError catch (e) {
+      debugPrint(e.toString());
       return DataFailed("Error retrieving Twitch broadcaster channel badges");
     }
   }
@@ -338,6 +341,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(emotes);
     } on DioError catch (e) {
+      debugPrint(e.toString());
       return DataFailed("Error retrieving global emotes");
     }
   }
@@ -366,6 +370,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(emotes);
     } on DioError catch (e) {
+      debugPrint(e.toString());
       return DataFailed("Error retrieving channel emotes");
     }
   }
@@ -401,6 +406,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(emotes);
     } on DioError catch (e) {
+      debugPrint(e.toString());
       return DataFailed("Error retrieving sets emotes");
     }
   }
@@ -429,6 +435,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(emotes);
     } on DioError catch (e) {
+      debugPrint(e.toString());
       return DataFailed("Error retrieving channel cheer emotes");
     }
   }
@@ -453,6 +460,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(emotes);
     } on DioError catch (e) {
+      debugPrint(e.toString());
       return DataFailed("Error retrieving FFZ global emotes");
     }
   }
@@ -482,6 +490,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(emotes);
     } on DioError catch (e) {
+      debugPrint(e.toString());
       return DataFailed("Error retrieving FFZ channel emotes");
     }
   }
@@ -504,6 +513,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(emotes);
     } on DioError catch (e) {
+      debugPrint(e.toString());
       return DataFailed("Error retrieving 7Tv global emotes");
     }
   }
@@ -527,6 +537,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(emotes);
     } on DioError catch (e) {
+      debugPrint(e.toString());
       return DataFailed("Error retrieving 7Tv channel emotes");
     }
   }
@@ -549,6 +560,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(emotes);
     } on DioError catch (e) {
+      debugPrint(e.toString());
       return DataFailed("Error retrieving BTTV Global emotes");
     }
   }
@@ -581,6 +593,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(twitchStreamInfosDto);
     } on DioError catch (e) {
+      debugPrint(e.toString());
       return DataFailed("Error Getting Stream Infos");
     }
   }
@@ -613,6 +626,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(response);
     } on DioError catch (e) {
+      debugPrint(e.toString());
       return DataFailed("Error editing Stream chat settings");
     }
   }
@@ -620,13 +634,12 @@ class TwitchRepositoryImpl extends TwitchRepository {
   @override
   Future<DataState<void>> setStreamTitle(
       String accessToken, String broadcasterId, String title) async {
-    Response response;
     var dio = Dio();
     try {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
       dio.options.headers["authorization"] = "Bearer $accessToken";
       Map titleMap = {"title": title};
-      response = await dio.patch('https://api.twitch.tv/helix/channels',
+      await dio.patch('https://api.twitch.tv/helix/channels',
           queryParameters: {
             'broadcaster_id': broadcasterId,
             'moderator_id': broadcasterId
@@ -634,6 +647,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
           data: jsonEncode(titleMap));
       return DataSuccess("");
     } on DioError catch (e) {
+      debugPrint(e.toString());
       return DataFailed("Error editing Stream chat settings");
     }
   }
