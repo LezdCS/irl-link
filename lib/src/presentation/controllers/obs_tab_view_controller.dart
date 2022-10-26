@@ -145,7 +145,7 @@ class ObsTabViewController extends GetxController {
   Future<void> stopStream() async {
     final StreamStatusResponse status = await obsWebSocket!.stream.getStatus;
 
-    if (!status.outputActive) {
+    if (status.outputActive) {
       await obsWebSocket!.stream.stopStream();
     }
   }

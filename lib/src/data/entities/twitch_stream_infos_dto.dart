@@ -39,10 +39,11 @@ class TwitchStreamInfosDto extends TwitchStreamInfos {
     DateFormat df = new DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     String startedAtRaw = map2['data'].length > 0 && map2['data'][0]['started_at'] != null
         ? map2['data'][0]['started_at']
-        : df.format(DateTime.now());
+        : df.format(DateTime.now().toUtc());
 
     DateTime startedAt = df.parse(startedAtRaw);
-    Duration startedAtDuration = DateTime.now().difference(startedAt);
+    DateTime now = df.parse(df.format(DateTime.now().toUtc()));
+    Duration startedAtDuration = now.difference(startedAt);
     return TwitchStreamInfosDto(
       viewerCount:
           map2['data'].length > 0 && map2['data'][0]['viewer_count'] != null
