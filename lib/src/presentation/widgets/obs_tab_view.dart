@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
+import 'package:marquee/marquee.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 
 import 'alert_message_view.dart';
@@ -31,9 +32,11 @@ class ObsTabView extends GetView<ObsTabViewController> {
                             ),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .tertiaryContainer,
+                              color: controller.isStreaming.value
+                                  ? Theme.of(context).colorScheme.error
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .tertiaryContainer,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(8)),
                             ),
@@ -57,9 +60,11 @@ class ObsTabView extends GetView<ObsTabViewController> {
                             ),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .tertiaryContainer,
+                              color: controller.isRecording.value
+                                  ? Theme.of(context).colorScheme.error
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .tertiaryContainer,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(8),
                               ),
@@ -121,7 +126,13 @@ class ObsTabView extends GetView<ObsTabViewController> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 10),
+                    Divider(
+                      height: 40,
+                      thickness: 4,
+                      indent: 0,
+                      endIndent: 0,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
                     Wrap(children: [
                       Text(
                         "Scenes",
@@ -134,16 +145,22 @@ class ObsTabView extends GetView<ObsTabViewController> {
                         child: getScenes(),
                       ),
                     ]),
-                    SizedBox(height: 10),
+                    Divider(
+                      height: 40,
+                      thickness: 4,
+                      indent: 0,
+                      endIndent: 0,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
                     Wrap(children: [
                       Text(
-                        "Sources",
+                        "Sources (long press on source for details)",
                         style: TextStyle(color: Colors.white),
                       ),
                       Container(
                         margin: EdgeInsets.only(top: 10),
                         width: width,
-                        height: 100,
+                        height: 200,
                         child: getSources(context),
                       ),
                     ])
@@ -230,14 +247,14 @@ class ObsTabView extends GetView<ObsTabViewController> {
   getSources(BuildContext context) {
     return GridView.builder(
       shrinkWrap: true,
-      scrollDirection: Axis.horizontal,
+      scrollDirection: Axis.vertical,
       physics: ScrollPhysics(),
       primary: true,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-        childAspectRatio: 0.5,
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 100,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 0,
+        childAspectRatio: 5 / 2,
       ),
       itemCount: controller.sourcesList.length,
       itemBuilder: (BuildContext context, int index) {
@@ -283,19 +300,36 @@ class ObsTabView extends GetView<ObsTabViewController> {
               },
             );
           },
-          child: Container(
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: source.sceneItemEnabled
-                  ? Theme.of(context).colorScheme.tertiary
-                  : Theme.of(context).colorScheme.tertiaryContainer,
-              borderRadius: BorderRadius.all(Radius.circular(8)),
+          child: ChoiceChip(
+            disabledColor: Theme.of(context).colorScheme.tertiaryContainer,
+            selectedColor: Theme.of(context).colorScheme.tertiary,
+            avatar: sourceVolume != null
+                ? Icon(
+                    Icons.volume_up,
+                    size: 18,
+                  )
+                : null,
+            label: Container(
+              width: 100,
+              height: 17,
+              child: source.sourceName.length > 12
+                  ? Marquee(
+                      text: source.sourceName,
+                      scrollAxis: Axis.horizontal,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      blankSpace: 10.0,
+                      velocity: 30.0,
+                      startAfter: Duration(seconds: 2),
+                      pauseAfterRound: Duration(seconds: 2),
+                    )
+                  : Text(
+                      source.sourceName,
+                      softWrap: false,
+                      textAlign: TextAlign.center,
+                    ),
             ),
-            padding: EdgeInsets.all(8),
-            child: Text(
-              source.sourceName,
-              textAlign: TextAlign.center,
-            ),
+            labelStyle: TextStyle(color: Colors.white),
+            selected: source.sceneItemEnabled,
           ),
         );
       },
