@@ -90,7 +90,7 @@ class HomeViewController extends GetxController
   @override
   void onClose() {
     timerRefreshToken.cancel();
-    timerRefreshToken.cancel();
+    timerKeepSpeakerOn.cancel();
     super.onClose();
   }
 
@@ -168,14 +168,14 @@ class HomeViewController extends GetxController
                 Get.changeThemeMode(ThemeMode.light)
               },
               if(settings.value.keepSpeakerOn!){
-                timerRefreshToken = Timer.periodic(
+                timerKeepSpeakerOn = Timer.periodic(
                   Duration(minutes: 5),
                     (Timer t) async => {
                     await cache.play(path),
                   },
                 ),
               }else{
-                timerRefreshToken.cancel(),
+                timerKeepSpeakerOn.cancel(),
               }
             },
         });
