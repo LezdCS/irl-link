@@ -203,22 +203,22 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                     ),
                   ],
                 ),
-                Divider(
-                  height: 40,
-                  thickness: 4,
-                  indent: 0,
-                  endIndent: 0,
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-                _prediction(context, controller),
-                Divider(
-                  height: 40,
-                  thickness: 4,
-                  indent: 0,
-                  endIndent: 0,
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-                _poll(context, controller),
+                // Divider(
+                //   height: 40,
+                //   thickness: 4,
+                //   indent: 0,
+                //   endIndent: 0,
+                //   color: Theme.of(context).colorScheme.secondary,
+                // ),
+                // _prediction(context, controller),
+                // Divider(
+                //   height: 40,
+                //   thickness: 4,
+                //   indent: 0,
+                //   endIndent: 0,
+                //   color: Theme.of(context).colorScheme.secondary,
+                // ),
+                // _poll(context, controller),
               ],
             ),
           ),
@@ -363,8 +363,9 @@ Widget _prediction(
                 ),
               ],
             )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          : Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "No prediction running",
@@ -505,8 +506,9 @@ Widget _poll(
                 ),
               ],
             )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          : Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "No poll running",
