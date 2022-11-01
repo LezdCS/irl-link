@@ -70,6 +70,9 @@ class ChatViewController extends GetxController
           break;
         case ConnectivityResult.bluetooth:
           break;
+        case ConnectivityResult.vpn:
+          // TODO: Handle this case.
+          break;
       }
     });
 
@@ -122,17 +125,19 @@ class ChatViewController extends GetxController
 
   void scrollListener() {
     // if user scroll up -> disable auto scrolldown
-    if(isAutoScrolldown.value && scrollController.position.userScrollDirection == ScrollDirection.forward){
+    if (isAutoScrolldown.value &&
+        scrollController.position.userScrollDirection ==
+            ScrollDirection.forward) {
       isAutoScrolldown.value = false;
     }
-
 
     double maxPosition = scrollController.position.maxScrollExtent;
     double currentPosition = scrollController.position.pixels;
     double difference = 10.0;
 
     /// bottom position
-    if (!isAutoScrolldown.value && maxPosition - currentPosition <= difference ){
+    if (!isAutoScrolldown.value &&
+        maxPosition - currentPosition <= difference) {
       isAutoScrolldown.value = true;
     }
   }
@@ -180,7 +185,7 @@ class ChatViewController extends GetxController
 
                 if (scrollController.hasClients && isAutoScrolldown.value) {
                   Timer(Duration(milliseconds: 100), () {
-                    if(isAutoScrolldown.value){
+                    if (isAutoScrolldown.value) {
                       scrollController.jumpTo(
                         scrollController.position.maxScrollExtent,
                       );
