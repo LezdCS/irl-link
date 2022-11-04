@@ -61,7 +61,12 @@ class HomeView extends GetView<HomeViewController> {
                         isActive: true,
                       ),
                       children: [
-                        _top(context, height, width),
+                        controller.tabElements.length >= 1
+                            ? _top(context, height, width)
+                            : Text(
+                                "No tabs",
+                                textAlign: TextAlign.center,
+                              ),
                         _bottom(context, height, width),
                       ],
                     ),
@@ -87,12 +92,24 @@ class HomeView extends GetView<HomeViewController> {
   Widget _bottom(BuildContext context, double height, double width) {
     return Stack(
       children: [
-        Listener(
-          onPointerUp: (_) => {
-            controller.isPickingEmote.value = false,
-          },
-          child: ChatView(),
-        ),
+        controller.twitchData != null
+            ? Listener(
+                onPointerUp: (_) => {
+                  controller.isPickingEmote.value = false,
+                },
+                child: ChatView(),
+              )
+            : Column(
+                children: [
+                  Container(
+                    width: width,
+                    child: Text(
+                      "Login with Twitch to access chat",
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
         Visibility(
           visible: controller.isPickingEmote.value,
           child: Positioned(
@@ -145,100 +162,104 @@ class HomeView extends GetView<HomeViewController> {
 
   Widget _bottomNavBar(double height, double width, BuildContext context) {
     return Container(
-        padding: EdgeInsets.only(left: 10),
-        height: height * 0.06,
-        child: Row(
-          children: [
-            Expanded(
-              flex: 5,
-              child: Stack(
-                alignment: AlignmentDirectional.center,
-                children: [
-                  Container(
-                    child: SvgPicture.asset(
-                      './lib/assets/chatinput.svg',
-                      semanticsLabel: 'chat input',
-                      fit: BoxFit.fitWidth,
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(left: 5, right: 5),
-                    child: Row(
-                      children: [
-                        InkWell(
-                          onTap: () => controller.getEmotes(),
-                          child: Image(
-                            image:
-                                AssetImage("lib/assets/twitchSmileEmoji.png"),
-                            width: 30,
-                          ),
+      padding: EdgeInsets.only(left: 10),
+      height: height * 0.06,
+      child: Row(
+        children: [
+          Expanded(
+            flex: 5,
+            child: controller.twitchData != null
+                ? Stack(
+                    alignment: AlignmentDirectional.center,
+                    children: [
+                      Container(
+                        child: SvgPicture.asset(
+                          './lib/assets/chatinput.svg',
+                          semanticsLabel: 'chat input',
+                          fit: BoxFit.fitWidth,
                         ),
-                        Expanded(
-                          child: TextField(
-                            controller: controller.chatInputController,
-                            onSubmitted: (String value) {
-                              controller.sendChatMessage(value);
-                              FocusScope.of(context).unfocus();
-                            },
-                            onTap: () {
-                              controller.chatViewController.selectedMessage
-                                  .value = null;
-                              controller.isPickingEmote.value = false;
-                            },
-                            textInputAction: TextInputAction.send,
-                            style: Theme.of(context).textTheme.bodyText1,
-                            maxLines: 1,
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintStyle: TextStyle(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color,
-                                  fontSize: 16),
-                              hintText: 'Send a message',
-                              isDense: true,
-                              contentPadding: EdgeInsets.only(left: 5),
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(left: 5, right: 5),
+                        child: Row(
+                          children: [
+                            InkWell(
+                              onTap: () => controller.getEmotes(),
+                              child: Image(
+                                image: AssetImage(
+                                    "lib/assets/twitchSmileEmoji.png"),
+                                width: 30,
+                              ),
                             ),
-                          ),
+                            Expanded(
+                              child: TextField(
+                                controller: controller.chatInputController,
+                                onSubmitted: (String value) {
+                                  controller.sendChatMessage(value);
+                                  FocusScope.of(context).unfocus();
+                                },
+                                onTap: () {
+                                  controller.chatViewController.selectedMessage
+                                      .value = null;
+                                  controller.isPickingEmote.value = false;
+                                },
+                                textInputAction: TextInputAction.send,
+                                style: Theme.of(context).textTheme.bodyText1,
+                                maxLines: 1,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintStyle: TextStyle(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color,
+                                      fontSize: 16),
+                                  hintText: 'Send a message',
+                                  isDense: true,
+                                  contentPadding: EdgeInsets.only(left: 5),
+                                ),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                controller.sendChatMessage(
+                                    controller.chatInputController.text);
+                                controller.chatInputController.text = '';
+                                FocusScope.of(context).unfocus();
+                              },
+                              child: SvgPicture.asset(
+                                './lib/assets/sendArrow.svg',
+                                semanticsLabel: 'send message',
+                                width: 21,
+                              ),
+                            ),
+                          ],
                         ),
-                        InkWell(
-                          onTap: () {
-                            controller.sendChatMessage(
-                                controller.chatInputController.text);
-                            controller.chatInputController.text = '';
-                            FocusScope.of(context).unfocus();
-                          },
-                          child: SvgPicture.asset(
-                            './lib/assets/sendArrow.svg',
-                            semanticsLabel: 'send message',
-                            width: 21,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: InkWell(
-                onTap: () async {
-                  await Get.toNamed(Routes.SETTINGS,
-                      arguments: [controller.twitchData]);
-                  controller.getSettings();
+                      ),
+                    ],
+                  )
+                : SizedBox(),
+          ),
+          Expanded(
+            flex: 1,
+            child: InkWell(
+              onTap: () async {
+                await Get.toNamed(Routes.SETTINGS,
+                    arguments: [controller.twitchData]);
+                if (controller.twitchData != null) {
                   controller.chatViewController.getSettings();
-                  controller.obsTabViewController.getSettings();
-                },
-                child: Icon(
-                  Icons.settings,
-                  color: Theme.of(context).primaryIconTheme.color,
-                  size: 22,
-                ),
+                }
+                controller.getSettings();
+                controller.obsTabViewController.getSettings();
+              },
+              child: Icon(
+                Icons.settings,
+                color: Theme.of(context).primaryIconTheme.color,
+                size: 22,
               ),
             ),
-          ],
+          ),
+        ],
       ),
     );
   }

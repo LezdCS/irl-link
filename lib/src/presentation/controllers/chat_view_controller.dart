@@ -22,8 +22,8 @@ class ChatViewController extends GetxController
   RxBool isAutoScrolldown = true.obs;
   RxBool isChatConnected = false.obs;
   RxString alertMessage = "Connecting...".obs;
-  late IOWebSocketChannel channel;
-  late TwitchCredentials twitchData;
+  IOWebSocketChannel? channel;
+  TwitchCredentials? twitchData;
   StreamSubscription? streamSubscription;
   RxList<TwitchChatMessage> chatMessages = <TwitchChatMessage>[].obs;
 
@@ -44,8 +44,10 @@ class ChatViewController extends GetxController
   void onInit() async {
     scrollController = ScrollController();
     banDurationInputController = TextEditingController();
-    twitchData = Get.arguments[0];
-    await getSettings();
+    if (Get.arguments != null) {
+      twitchData = Get.arguments[0];
+      await getSettings();
+    }
 
     super.onInit();
   }
@@ -53,36 +55,37 @@ class ChatViewController extends GetxController
   @override
   void onReady() {
     scrollController.addListener(scrollListener);
-
-    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      switch (result) {
-        case ConnectivityResult.wifi:
-          joinIrc();
-          break;
-        case ConnectivityResult.mobile:
-          joinIrc();
-          break;
-        case ConnectivityResult.none:
-          alertMessage.value = "Network connectivity lost";
-          isChatConnected.value = false;
-          break;
-        case ConnectivityResult.ethernet:
-          break;
-        case ConnectivityResult.bluetooth:
-          break;
-        case ConnectivityResult.vpn:
-          // TODO: Handle this case.
-          break;
-      }
-    });
+    if (twitchData != null) {
+      Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+        switch (result) {
+          case ConnectivityResult.wifi:
+            joinIrc();
+            break;
+          case ConnectivityResult.mobile:
+            joinIrc();
+            break;
+          case ConnectivityResult.none:
+            alertMessage.value = "Network connectivity lost";
+            isChatConnected.value = false;
+            break;
+          case ConnectivityResult.ethernet:
+            break;
+          case ConnectivityResult.bluetooth:
+            break;
+          case ConnectivityResult.vpn:
+            // TODO: Handle this case.
+            break;
+        }
+      });
+    }
 
     super.onReady();
   }
 
   @override
   void onClose() {
-    streamSubscription!.cancel();
-    channel.sink.close();
+    streamSubscription?.cancel();
+    channel?.sink.close();
     super.onClose();
   }
 
@@ -90,28 +93,28 @@ class ChatViewController extends GetxController
   Future<void> joinIrc() async {
     if (streamSubscription != null) {
       streamSubscription!.cancel();
-      channel.sink.close();
+      channel!.sink.close();
       chatMessages.clear();
     }
     alertMessage.value = "Connecting...";
     isChatConnected.value = false;
-    String token = twitchData.accessToken;
-    String nick = twitchData.twitchUser.login;
+    String token = twitchData!.accessToken;
+    String nick = twitchData!.twitchUser.login;
 
     channel = IOWebSocketChannel.connect("wss://irc-ws.chat.twitch.tv:443");
 
-    streamSubscription = channel.stream.listen(
+    streamSubscription = channel!.stream.listen(
         (message) => chatListener(message),
         onDone: ircChatClosed,
         onError: ircChatError);
 
-    channel.sink.add('CAP REQ :twitch.tv/membership');
-    channel.sink.add('CAP REQ :twitch.tv/tags');
-    channel.sink.add('CAP REQ :twitch.tv/commands');
-    channel.sink.add('PASS oauth:' + token);
-    channel.sink.add('NICK ' + nick);
+    channel!.sink.add('CAP REQ :twitch.tv/membership');
+    channel!.sink.add('CAP REQ :twitch.tv/tags');
+    channel!.sink.add('CAP REQ :twitch.tv/commands');
+    channel!.sink.add('PASS oauth:' + token);
+    channel!.sink.add('NICK ' + nick);
 
-    channel.sink.add('JOIN #$ircChannelJoined');
+    channel!.sink.add('JOIN #$ircChannelJoined');
   }
 
   void ircChatClosed() {
@@ -146,7 +149,7 @@ class ChatViewController extends GetxController
   void chatListener(String message) {
     //debugPrint(message);
     if (message.startsWith('PING ')) {
-      channel.sink.add("PONG :tmi.twitch.tv\r\n");
+      channel!.sink.add("PONG :tmi.twitch.tv\r\n");
     }
 
     if (message.startsWith('@')) {
@@ -252,7 +255,7 @@ class ChatViewController extends GetxController
       });
       List<String> emoteSetsIds = messageMapped["emote-sets"]!.split(',');
       homeEvents
-          .getTwitchSetsEmotes(twitchData.accessToken, emoteSetsIds)
+          .getTwitchSetsEmotes(twitchData!.accessToken, emoteSetsIds)
           .then((value) {
         for (var emote in value.data!) {
           if (twitchEmotes
@@ -269,7 +272,7 @@ class ChatViewController extends GetxController
   Future<List<Emote>> getTwitchEmotes() async {
     List<Emote> emotes = [];
 
-    await homeEvents.getTwitchEmotes(twitchData.accessToken).then(
+    await homeEvents.getTwitchEmotes(twitchData!.accessToken).then(
           (value) => {
             if (value.error == null)
               {
@@ -280,8 +283,8 @@ class ChatViewController extends GetxController
 
     await homeEvents
         .getTwitchChannelEmotes(
-          twitchData.accessToken,
-          twitchData.twitchUser.id,
+          twitchData!.accessToken,
+          twitchData!.twitchUser.id,
         )
         .then(
           (value) => {
@@ -298,7 +301,7 @@ class ChatViewController extends GetxController
 
     await homeEvents
         .getTwitchCheerEmotes(
-          twitchData.accessToken,
+          twitchData!.accessToken,
           ircChannelJoinedChannelId,
         )
         .then(
@@ -348,14 +351,14 @@ class ChatViewController extends GetxController
     List<TwitchBadge> badges = [];
 
     await homeEvents
-        .getTwitchGlobalBadges(accessToken: twitchData.accessToken)
+        .getTwitchGlobalBadges(accessToken: twitchData!.accessToken)
         .then((value) => {
               if (value.error == null) {badges.addAll(value.data!)}
             });
 
     await homeEvents
         .getTwitchChannelBadges(
-          accessToken: twitchData.accessToken,
+          accessToken: twitchData!.accessToken,
           broadcasterId: ircChannelJoinedChannelId,
         )
         .then(
@@ -385,14 +388,14 @@ class ChatViewController extends GetxController
 
   /// Delete [message] by his id
   void deleteMessageInstruction(TwitchChatMessage message) {
-    channel.sink
+    channel!.sink
         .add('PRIVMSG #$ircChannelJoined :/delete ${message.messageId}\r\n');
     selectedMessage.value = null;
   }
 
   /// Ban user for specific [duration] based on the author name in the [message]
   void timeoutMessageInstruction(TwitchChatMessage message, int duration) {
-    channel.sink.add(
+    channel!.sink.add(
         'PRIVMSG #$ircChannelJoined :/timeout ${message.authorName} $duration reason\r\n');
 
     Get.back();
@@ -401,7 +404,7 @@ class ChatViewController extends GetxController
 
   /// Ban user based on the author name in the [message]
   void banMessageInstruction(TwitchChatMessage message) {
-    channel.sink.add(
+    channel!.sink.add(
         'PRIVMSG #$ircChannelJoined :/ban ${message.authorName} reason\r\n');
     selectedMessage.value = null;
   }
@@ -455,12 +458,12 @@ class ChatViewController extends GetxController
       await homeEvents
           .getTwitchUser(
             username: ircChannelJoined,
-            accessToken: twitchData.accessToken,
+            accessToken: twitchData!.accessToken,
           )
           .then((value) => ircChannelJoinedChannelId = value.data!.id);
     } else {
-      ircChannelJoined = twitchData.twitchUser.login;
-      ircChannelJoinedChannelId = twitchData.twitchUser.id;
+      ircChannelJoined = twitchData!.twitchUser.login;
+      ircChannelJoinedChannelId = twitchData!.twitchUser.id;
     }
 
     isAutoScrolldown.value = true;

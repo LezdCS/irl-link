@@ -28,6 +28,8 @@ class TwitchTabViewController extends GetxController {
 
   late Rx<TwitchPoll>? poll;
 
+  Timer? refreshDataTimer;
+  Timer? refreshDataTimerProgressBar;
   Rx<Duration> myDuration = Duration(seconds: 15).obs;
 
   @override
@@ -43,25 +45,30 @@ class TwitchTabViewController extends GetxController {
   void onReady() async {
     homeViewController = Get.find<HomeViewController>();
 
-    refreshData();
-    Timer.periodic(Duration(seconds: 15), (timer) {
+    if (homeViewController.twitchData != null) {
       refreshData();
-    });
+      refreshDataTimer = Timer.periodic(Duration(seconds: 15), (timer) {
+        refreshData();
+      });
 
-    Timer.periodic(Duration(seconds: 1), (timer) {
-      final reduceSecondsBy = 1;
-      final seconds = myDuration.value.inSeconds - reduceSecondsBy;
-      if (seconds < 0) {
-        myDuration.value = Duration(seconds: 15);
-      } else {
-        myDuration.value = Duration(seconds: seconds);
-      }
-    });
+      refreshDataTimerProgressBar = Timer.periodic(Duration(seconds: 1), (timer) {
+        final reduceSecondsBy = 1;
+        final seconds = myDuration.value.inSeconds - reduceSecondsBy;
+        if (seconds < 0) {
+          myDuration.value = Duration(seconds: 15);
+        } else {
+          myDuration.value = Duration(seconds: seconds);
+        }
+      });
+    }
+
     super.onReady();
   }
 
   @override
   void onClose() {
+    refreshDataTimer?.cancel();
+    refreshDataTimerProgressBar?.cancel();
     super.onClose();
   }
 
@@ -73,19 +80,19 @@ class TwitchTabViewController extends GetxController {
   }
 
   void changeChatSettings() {
-    homeEvents.setChatSettings(homeViewController.twitchData.accessToken,
-        homeViewController.twitchData.twitchUser.id, twitchStreamInfos.value);
+    homeEvents.setChatSettings(homeViewController.twitchData!.accessToken,
+        homeViewController.twitchData!.twitchUser.id, twitchStreamInfos.value);
   }
 
   void setStreamTitle() {
-    homeEvents.setStreamTitle(homeViewController.twitchData.accessToken,
-        homeViewController.twitchData.twitchUser.id, titleFormController.text);
+    homeEvents.setStreamTitle(homeViewController.twitchData!.accessToken,
+        homeViewController.twitchData!.twitchUser.id, titleFormController.text);
   }
 
   void getPoll() {
     homeEvents
-        .getPoll(homeViewController.twitchData.accessToken,
-            homeViewController.twitchData.twitchUser.id)
+        .getPoll(homeViewController.twitchData!.accessToken,
+            homeViewController.twitchData!.twitchUser.id)
         .then((value) => {
               if (value.error != null)
                 {
@@ -105,12 +112,43 @@ class TwitchTabViewController extends GetxController {
             });
   }
 
+  void createPoll(String question, List<Choice> choices) {
+    TwitchPoll newPoll = TwitchPoll(
+        id: "",
+        title: "",
+        choices: choices,
+        status: PollStatus.ACTIVE,
+        totalVotes: 0);
+    homeEvents.createPoll(homeViewController.twitchData!.accessToken,
+        homeViewController.twitchData!.twitchUser.id, newPoll);
+    // .then((value) => {
+    //       if (value.error != null)
+    //         {
+    //           poll = null,
+    //         }
+    //       else
+    //         {
+    //           if (poll == null)
+    //             {
+    //               poll = value.data!.obs,
+    //             }
+    //           else
+    //             {
+    //               poll!.value = value.data!,
+    //             }
+    //         }
+    //     });
+  }
+
   // status is either TERMINATED to end poll and display the result to viewer
   // or ARCHIVED to end the poll and hide it
   void endPoll(String status) {
     homeEvents
-        .endPoll(homeViewController.twitchData.accessToken,
-            homeViewController.twitchData.twitchUser.id, poll!.value.id, status)
+        .endPoll(
+            homeViewController.twitchData!.accessToken,
+            homeViewController.twitchData!.twitchUser.id,
+            poll!.value.id,
+            status)
         .then((value) => {
               if (value.data != null)
                 {
@@ -125,8 +163,8 @@ class TwitchTabViewController extends GetxController {
 
   void getPrediction() {
     homeEvents
-        .getPrediction(homeViewController.twitchData.accessToken,
-            homeViewController.twitchData.twitchUser.id)
+        .getPrediction(homeViewController.twitchData!.accessToken,
+            homeViewController.twitchData!.twitchUser.id)
         .then((value) => {
               if (value.error != null)
                 {
@@ -154,8 +192,8 @@ class TwitchTabViewController extends GetxController {
   void getStreamInfos() {
     homeEvents
         .getStreamInfo(
-          homeViewController.twitchData.accessToken,
-          homeViewController.twitchData.twitchUser.id,
+          homeViewController.twitchData!.accessToken,
+          homeViewController.twitchData!.twitchUser.id,
         )
         .then(
           (value) => {

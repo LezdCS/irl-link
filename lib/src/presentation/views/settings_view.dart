@@ -28,17 +28,23 @@ class SettingsView extends GetView<SettingsViewController> {
           actions: [
             InkWell(
               onTap: () {
-                controller.logout();
+                if (controller.twitchData != null) {
+                  controller.logout();
+                } else {
+                  controller.login();
+                }
               },
               child: Container(
                 margin: EdgeInsets.only(right: 10, top: 10, bottom: 10),
                 padding: EdgeInsets.only(left: 8, right: 8),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: Colors.red,
+                  color: controller.twitchData != null
+                      ? Colors.red
+                      : Colors.purple,
                   borderRadius: BorderRadius.circular(6),
                 ),
-                child: Text("Logout"),
+                child: Text(controller.twitchData != null ? "Logout" : "Login"),
               ),
             ),
           ],
@@ -174,40 +180,40 @@ class SettingsView extends GetView<SettingsViewController> {
                     ],
                   ),
                 ),
-                Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        child: Text(
-                          "Badges & emotes size",
-                          style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyText1!.color,
-                              fontSize: 18),
-                        ),
-                      ),
-                      Container(
-                        child: Slider(
-                          onChanged: (value) {
-                            controller.settings.value = controller
-                                .settings.value
-                                .copyWith(emotesSize: value);
-                            controller.saveSettings();
-                          },
-                          value: controller.settings.value.emotesSize!,
-                          min: 0.0,
-                          max: 50.0,
-                          divisions: 100,
-                          activeColor: Theme.of(context).colorScheme.tertiary,
-                          inactiveColor:
-                              Theme.of(context).colorScheme.tertiaryContainer,
-                          label: '${controller.settings.value.emotesSize}',
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+                // Container(
+                  // child: Column(
+                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //   children: [
+                      // Container(
+                      //   child: Text(
+                      //     "Badges & emotes size",
+                      //     style: TextStyle(
+                      //         color:
+                      //             Theme.of(context).textTheme.bodyText1!.color,
+                      //         fontSize: 18),
+                      //   ),
+                      // ),
+                      // Container(
+                      //   child: Slider(
+                      //     onChanged: (value) {
+                      //       controller.settings.value = controller
+                      //           .settings.value
+                      //           .copyWith(emotesSize: value);
+                      //       controller.saveSettings();
+                      //     },
+                      //     value: controller.settings.value.emotesSize!,
+                      //     min: 0.0,
+                      //     max: 50.0,
+                      //     divisions: 100,
+                      //     activeColor: Theme.of(context).colorScheme.tertiary,
+                      //     inactiveColor:
+                      //         Theme.of(context).colorScheme.tertiaryContainer,
+                      //     label: '${controller.settings.value.emotesSize}',
+                      //   ),
+                      // )
+                //     ],
+                //   ),
+                // ),
                 Container(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -246,7 +252,7 @@ class SettingsView extends GetView<SettingsViewController> {
                     children: [
                       Container(
                         child: Text(
-                          "Join alternate channel chat",
+                          "Join another streamer chat",
                           style: TextStyle(
                               color:
                                   Theme.of(context).textTheme.bodyText1!.color,
@@ -434,7 +440,7 @@ class SettingsView extends GetView<SettingsViewController> {
                     children: [
                       Container(
                         child: Text(
-                          "Keep speaker on",
+                          "Prevent speaker from sleeping",
                           style: TextStyle(
                             color: Theme.of(context).textTheme.bodyText1!.color,
                             fontSize: 18,
