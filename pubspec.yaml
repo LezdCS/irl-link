@@ -54,6 +54,7 @@ dependencies:
   percent_indicator: ^4.2.2
   fl_chart: ^0.55.2
   marquee: ^2.2.3
+  faker: ^2.0.0
 
 dev_dependencies:
   flutter_test:

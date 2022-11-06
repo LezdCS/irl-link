@@ -4,7 +4,8 @@ import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:collection/collection.dart';
-
+import 'package:uuid/uuid.dart';
+import 'package:faker/faker.dart';
 import 'emote.dart';
 
 //ignore: must_be_immutable
@@ -61,6 +62,31 @@ class TwitchChatMessage extends Equatable {
   @override
   bool get stringify => true;
 
+  factory TwitchChatMessage.randomGeneration() {
+    Uuid uuid = Uuid();
+    List<TwitchBadge> badges = [];
+    String message = faker.lorem.sentence();
+    return TwitchChatMessage(
+      messageId: uuid.v4(),
+      badges: badges,
+      color: "#FF0000",
+      authorName: faker.internet.userName(),
+      authorId: uuid.v4(),
+      emotes: {},
+      message: message,
+      messageWidgetsBuild: [
+        Wrap(children: [Text(message)])
+      ],
+      timestamp: faker.date
+          .dateTime(minYear: 2000, maxYear: 2020)
+          .microsecondsSinceEpoch,
+      isBitDonation: false,
+      bitAmount: 0,
+      isAction: false,
+      isDeleted: false,
+    );
+  }
+
   factory TwitchChatMessage.fromString({
     required List<TwitchBadge> twitchBadges,
     required List<Emote> cheerEmotes,
@@ -76,42 +102,12 @@ class TwitchChatMessage extends Equatable {
       messageMapped[elementSplited[0]] = elementSplited[1];
     });
 
-    List<TwitchBadge> badges = <TwitchBadge>[];
-    List badgesSplited = messageMapped['badges'].toString().split(',');
-    if (badgesSplited.isNotEmpty) {
-      badgesSplited.forEach((i) {
-        TwitchBadge? badgeFound = twitchBadges.firstWhereOrNull((badge) =>
-            badge.setId == i.split('/')[0] &&
-            badge.versionId == i.split('/')[1]);
-        if (badgeFound != null) {
-          badges.add(badgeFound);
-        }
-      });
-    }
+    List<TwitchBadge> badges =
+        getBadges(messageMapped['badges'].toString(), twitchBadges);
 
     String color = messageMapped['color']!;
-    List<List<String>> defaultColors = [
-      ["Red", "#FF0000"],
-      ["Blue", "#0000FF"],
-      ["Green", "#00FF00"],
-      ["FireBrick", "#B22222"],
-      ["Coral", "#FF7F50"],
-      ["YellowGreen", "#9ACD32"],
-      ["OrangeRed", "#FF4500"],
-      ["SeaGreen", "#2E8B57"],
-      ["GoldenRod", "#DAA520"],
-      ["Chocolate", "#D2691E"],
-      ["CadetBlue", "#5F9EA0"],
-      ["DodgerBlue", "#1E90FF"],
-      ["HotPink", "#FF69B4"],
-      ["BlueViolet", "#8A2BE2"],
-      ["SpringGreen", "#00FF7F"]
-    ];
     if (color == "") {
-      var n = messageMapped['display-name']!.codeUnitAt(0) +
-          messageMapped['display-name']!
-              .codeUnitAt(messageMapped['display-name']!.length - 1);
-      color = defaultColors[n % defaultColors.length][1];
+      color = randomUsernameColor(messageMapped['display-name']!);
     }
 
     Map<String, List<List<String>>> emotesIdsPositions = {};
@@ -156,7 +152,8 @@ class TwitchChatMessage extends Equatable {
 
     for (int i = 0; i < messageString.trim().split(' ').length; i++) {
       String word = messageString.trim().split(' ')[i];
-      var emote = emotesIdsPositions.entries.firstWhereOrNull((element) =>
+
+      MapEntry? emote = emotesIdsPositions.entries.firstWhereOrNull((element) =>
           element.value
               .where((position) =>
                   messageString.substring(
@@ -164,7 +161,7 @@ class TwitchChatMessage extends Equatable {
                   word)
               .isNotEmpty);
 
-      var thirdPartyEmote =
+      Emote? thirdPartyEmote =
           thirdPartEmotes.firstWhereOrNull((element) => element.name == word);
       bool isNextWordThirdPartEmoteZeroWidth = false;
 
@@ -180,15 +177,8 @@ class TwitchChatMessage extends Equatable {
             messageWidgetsBuild.add(Stack(
               children: [
                 emote != null
-                    ? Image(
-                        image: NetworkImage(
-                            "https://static-cdn.jtvnw.net/emoticons/v2/" +
-                                emote.key +
-                                "/default/dark/1.0"),
-                      )
-                    : Image(
-                        image: NetworkImage(thirdPartyEmote!.url1x),
-                      ),
+                    ? _twitchEmote(emote)
+                    : _thirdPartEmote(thirdPartyEmote!),
                 Image(
                   image: NetworkImage(thirdPartEmotes
                       .firstWhereOrNull((element) => element.name == nextWord)!
@@ -201,22 +191,18 @@ class TwitchChatMessage extends Equatable {
       }
 
       if (emote != null) {
-        if (isNextWordThirdPartEmoteZeroWidth) {
-          continue;
-        }
+        if (isNextWordThirdPartEmoteZeroWidth) continue;
+
         messageWidgetsBuild.add(
           Wrap(children: [
-            Image(
-              image: NetworkImage("https://static-cdn.jtvnw.net/emoticons/v2/" +
-                  emote.key +
-                  "/default/dark/1.0"),
-            ),
+            _twitchEmote(emote),
             Text(' '),
           ]),
         );
       } else if (thirdPartyEmote != null && settings.isEmotes!) {
+        if (isNextWordThirdPartEmoteZeroWidth) continue;
+
         if (thirdPartyEmote.isZeroWidth) {
-          bool isPreviousWordWasAnEmoteOrThirdEmote = false;
           if (i > 0) {
             String previousWord = messageString.trim().split(' ')[i - 1];
             bool isPreviousWordEmote = emotesIdsPositions.entries
@@ -231,27 +217,13 @@ class TwitchChatMessage extends Equatable {
                 thirdPartEmotes.firstWhereOrNull(
                         (element) => element.name == previousWord) !=
                     null;
-            isPreviousWordWasAnEmoteOrThirdEmote =
-                isPreviousWordEmote || isPreviousWordThirdPartyEmote;
-            if (isPreviousWordWasAnEmoteOrThirdEmote) {
-              continue;
-            }
-          } else {
-            if (i != 0) {
-              continue;
-            }
-          }
-        }
-
-        if (isNextWordThirdPartEmoteZeroWidth) {
-          continue;
+            if (isPreviousWordEmote || isPreviousWordThirdPartyEmote) continue;
+          } else if (i != 0) continue;
         }
 
         messageWidgetsBuild.add(
           Wrap(children: [
-            Image(
-              image: NetworkImage(thirdPartyEmote.url1x),
-            ),
+            _thirdPartEmote(thirdPartyEmote),
             Text(' '),
           ]),
         );
@@ -259,21 +231,7 @@ class TwitchChatMessage extends Equatable {
           cheerEmotes.firstWhereOrNull((emote) => emote.name == word) != null) {
         Emote? cheerEmote =
             cheerEmotes.firstWhereOrNull((emote) => emote.name == word);
-        messageWidgetsBuild.add(
-          Wrap(children: [
-            Image(
-              image: NetworkImage(cheerEmote!.url1x),
-            ),
-            Text(
-              cheerEmote.id + ' ',
-              style: TextStyle(
-                color:
-                    Color(int.parse(cheerEmote.color!.replaceAll('#', '0xff'))),
-                fontSize: settings.textSize,
-              ),
-            ),
-          ]),
-        );
+        messageWidgetsBuild.add(_cheerEmote(cheerEmote!, settings.textSize!));
       } else {
         messageWidgetsBuild.add(
           Text(
@@ -307,4 +265,72 @@ class TwitchChatMessage extends Equatable {
       isDeleted: false,
     );
   }
+}
+
+List<TwitchBadge> getBadges(
+    String badgesString, List<TwitchBadge> twitchBadges) {
+  List<TwitchBadge> badges = <TwitchBadge>[];
+  List badgesSplited = badgesString.split(',');
+  if (badgesSplited.isNotEmpty) {
+    badgesSplited.forEach((i) {
+      TwitchBadge? badgeFound = twitchBadges.firstWhereOrNull((badge) =>
+          badge.setId == i.split('/')[0] && badge.versionId == i.split('/')[1]);
+      if (badgeFound != null) {
+        badges.add(badgeFound);
+      }
+    });
+  }
+  return badges;
+}
+
+String randomUsernameColor(String username) {
+  List<List<String>> defaultColors = [
+    ["Red", "#FF0000"],
+    ["Blue", "#0000FF"],
+    ["Green", "#00FF00"],
+    ["FireBrick", "#B22222"],
+    ["Coral", "#FF7F50"],
+    ["YellowGreen", "#9ACD32"],
+    ["OrangeRed", "#FF4500"],
+    ["SeaGreen", "#2E8B57"],
+    ["GoldenRod", "#DAA520"],
+    ["Chocolate", "#D2691E"],
+    ["CadetBlue", "#5F9EA0"],
+    ["DodgerBlue", "#1E90FF"],
+    ["HotPink", "#FF69B4"],
+    ["BlueViolet", "#8A2BE2"],
+    ["SpringGreen", "#00FF7F"]
+  ];
+
+  var n = username.codeUnitAt(0) + username.codeUnitAt(username.length - 1);
+  return defaultColors[n % defaultColors.length][1];
+}
+
+Widget _cheerEmote(Emote cheerEmote, double textSize) {
+  return Wrap(children: [
+    Image(
+      image: NetworkImage(cheerEmote.url1x),
+    ),
+    Text(
+      cheerEmote.id + ' ',
+      style: TextStyle(
+        color: Color(int.parse(cheerEmote.color!.replaceAll('#', '0xff'))),
+        fontSize: textSize,
+      ),
+    ),
+  ]);
+}
+
+Widget _thirdPartEmote(Emote emote) {
+  return Image(
+    image: NetworkImage(emote.url1x),
+  );
+}
+
+Widget _twitchEmote(MapEntry emote) {
+  return Image(
+    image: NetworkImage("https://static-cdn.jtvnw.net/emoticons/v2/" +
+        emote.key +
+        "/default/dark/1.0"),
+  );
 }

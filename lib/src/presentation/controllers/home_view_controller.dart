@@ -98,12 +98,10 @@ class HomeViewController extends GetxController
   Future generateTabs() async {
     tabElements.clear();
 
-    if(twitchData != null){
-      TwitchTabView twitchPage = TwitchTabView();
-      tabElements.add(twitchPage);
-    }
+    TwitchTabView twitchPage = TwitchTabView();
+    tabElements.add(twitchPage);
 
-    if (settings.value.isObsConnected!) {
+    if (settings.value.isObsConnected! || twitchData != null) {
       ObsTabView obsPage = ObsTabView();
       tabElements.add(obsPage);
     }

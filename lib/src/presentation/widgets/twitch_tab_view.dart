@@ -9,7 +9,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () {
+      onRefresh: () async {
         controller.refreshData();
         return Future.delayed(Duration(seconds: 1));
       },
@@ -157,11 +157,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                       context,
                       'Follower only',
                       () => {
-                        controller.twitchStreamInfos.value =
-                            controller.twitchStreamInfos.value.copyWith(
-                                isFollowerMode: !controller
-                                    .twitchStreamInfos.value.isFollowerMode!),
-                        controller.changeChatSettings(),
+                        controller.toggleFollowerOnly(),
                       },
                       controller.twitchStreamInfos.value.isFollowerMode!,
                     ),
@@ -169,11 +165,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                       context,
                       'Subscriber only',
                       () => {
-                        controller.twitchStreamInfos.value =
-                            controller.twitchStreamInfos.value.copyWith(
-                                isSubscriberMode: !controller
-                                    .twitchStreamInfos.value.isSubscriberMode!),
-                        controller.changeChatSettings(),
+                        controller.toggleSubOnly(),
                       },
                       controller.twitchStreamInfos.value.isSubscriberMode!,
                     ),
@@ -181,11 +173,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                       context,
                       'Emote only',
                       () => {
-                        controller.twitchStreamInfos.value =
-                            controller.twitchStreamInfos.value.copyWith(
-                                isEmoteMode: !controller
-                                    .twitchStreamInfos.value.isEmoteMode!),
-                        controller.changeChatSettings(),
+                        controller.toggleEmoteOnly(),
                       },
                       controller.twitchStreamInfos.value.isEmoteMode!,
                     ),
@@ -193,11 +181,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                       context,
                       'Slow mode',
                       () => {
-                        controller.twitchStreamInfos.value =
-                            controller.twitchStreamInfos.value.copyWith(
-                                isSlowMode: !controller
-                                    .twitchStreamInfos.value.isSlowMode!),
-                        controller.changeChatSettings(),
+                        controller.toggleSlowMode(),
                       },
                       controller.twitchStreamInfos.value.isSlowMode!,
                     ),

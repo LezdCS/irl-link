@@ -51,16 +51,17 @@ class TwitchTabViewController extends GetxController {
         refreshData();
       });
 
-      refreshDataTimerProgressBar = Timer.periodic(Duration(seconds: 1), (timer) {
-        final reduceSecondsBy = 1;
-        final seconds = myDuration.value.inSeconds - reduceSecondsBy;
-        if (seconds < 0) {
-          myDuration.value = Duration(seconds: 15);
-        } else {
-          myDuration.value = Duration(seconds: seconds);
-        }
-      });
     }
+
+    refreshDataTimerProgressBar = Timer.periodic(Duration(seconds: 1), (timer) {
+      final reduceSecondsBy = 1;
+      final seconds = myDuration.value.inSeconds - reduceSecondsBy;
+      if (seconds < 0) {
+        myDuration.value = Duration(seconds: 15);
+      } else {
+        myDuration.value = Duration(seconds: seconds);
+      }
+    });
 
     super.onReady();
   }
@@ -74,17 +75,54 @@ class TwitchTabViewController extends GetxController {
 
   void refreshData() {
     myDuration.value = Duration(seconds: 15);
+    if(homeViewController.twitchData == null) return;
     getStreamInfos();
     getPoll();
     getPrediction();
   }
 
+  void toggleFollowerOnly() {
+
+    twitchStreamInfos.value =
+        twitchStreamInfos.value.copyWith(
+            isFollowerMode: !twitchStreamInfos.value.isFollowerMode!);
+    changeChatSettings();
+  }
+
+  void toggleSubOnly() {
+
+    twitchStreamInfos.value =
+        twitchStreamInfos.value.copyWith(
+            isSubscriberMode: !twitchStreamInfos.value.isSubscriberMode!);
+    changeChatSettings();
+  }
+
+  void toggleEmoteOnly() {
+
+    twitchStreamInfos.value =
+        twitchStreamInfos.value.copyWith(
+            isEmoteMode: !twitchStreamInfos.value.isEmoteMode!);
+    changeChatSettings();
+  }
+
+  void toggleSlowMode() {
+
+    twitchStreamInfos.value =
+        twitchStreamInfos.value.copyWith(
+            isSlowMode: !twitchStreamInfos.value.isSlowMode!);
+    changeChatSettings();
+  }
+
   void changeChatSettings() {
+    if(homeViewController.twitchData == null) return;
+
     homeEvents.setChatSettings(homeViewController.twitchData!.accessToken,
         homeViewController.twitchData!.twitchUser.id, twitchStreamInfos.value);
   }
 
   void setStreamTitle() {
+    if(homeViewController.twitchData == null) return;
+
     homeEvents.setStreamTitle(homeViewController.twitchData!.accessToken,
         homeViewController.twitchData!.twitchUser.id, titleFormController.text);
   }

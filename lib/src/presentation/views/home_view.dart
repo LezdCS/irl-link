@@ -92,24 +92,12 @@ class HomeView extends GetView<HomeViewController> {
   Widget _bottom(BuildContext context, double height, double width) {
     return Stack(
       children: [
-        controller.twitchData != null
-            ? Listener(
-                onPointerUp: (_) => {
-                  controller.isPickingEmote.value = false,
-                },
-                child: ChatView(),
-              )
-            : Column(
-                children: [
-                  Container(
-                    width: width,
-                    child: Text(
-                      "Login with Twitch to access chat",
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
-              ),
+        Listener(
+          onPointerUp: (_) => {
+            controller.isPickingEmote.value = false,
+          },
+          child: ChatView(),
+        ),
         Visibility(
           visible: controller.isPickingEmote.value,
           child: Positioned(
