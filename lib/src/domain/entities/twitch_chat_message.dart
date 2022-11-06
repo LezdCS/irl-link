@@ -65,12 +65,13 @@ class TwitchChatMessage extends Equatable {
   factory TwitchChatMessage.randomGeneration() {
     Uuid uuid = Uuid();
     List<TwitchBadge> badges = [];
+    String username = faker.internet.userName();
     String message = faker.lorem.sentence();
     return TwitchChatMessage(
       messageId: uuid.v4(),
       badges: badges,
-      color: "#FF0000",
-      authorName: faker.internet.userName(),
+      color: randomUsernameColor(username),
+      authorName: username,
       authorId: uuid.v4(),
       emotes: {},
       message: message,
@@ -168,24 +169,22 @@ class TwitchChatMessage extends Equatable {
       if (emote != null || thirdPartyEmote != null) {
         if (i < messageString.trim().split(' ').length - 1) {
           String nextWord = messageString.trim().split(' ')[i + 1];
-          var thirdPartEmote = thirdPartEmotes
+          var zeroWidthEmote = thirdPartEmotes
               .firstWhereOrNull((element) => element.name == nextWord);
           isNextWordThirdPartEmoteZeroWidth =
-              thirdPartEmote?.isZeroWidth ?? false;
+              zeroWidthEmote?.isZeroWidth ?? false;
 
           if (isNextWordThirdPartEmoteZeroWidth) {
-            messageWidgetsBuild.add(Stack(
-              children: [
-                emote != null
-                    ? _twitchEmote(emote)
-                    : _thirdPartEmote(thirdPartyEmote!),
-                Image(
-                  image: NetworkImage(thirdPartEmotes
-                      .firstWhereOrNull((element) => element.name == nextWord)!
-                      .url1x),
-                ),
-              ],
-            ));
+            messageWidgetsBuild.add(
+              Stack(
+                children: [
+                  emote != null
+                      ? _twitchEmote(emote)
+                      : _thirdPartEmote(thirdPartyEmote!),
+                  _thirdPartEmote(zeroWidthEmote!),
+                ],
+              ),
+            );
           }
         }
       }
@@ -194,10 +193,12 @@ class TwitchChatMessage extends Equatable {
         if (isNextWordThirdPartEmoteZeroWidth) continue;
 
         messageWidgetsBuild.add(
-          Wrap(children: [
-            _twitchEmote(emote),
-            Text(' '),
-          ]),
+          Wrap(
+            children: [
+              _twitchEmote(emote),
+              Text(' '),
+            ],
+          ),
         );
       } else if (thirdPartyEmote != null && settings.isEmotes!) {
         if (isNextWordThirdPartEmoteZeroWidth) continue;
@@ -222,28 +223,24 @@ class TwitchChatMessage extends Equatable {
         }
 
         messageWidgetsBuild.add(
-          Wrap(children: [
-            _thirdPartEmote(thirdPartyEmote),
-            Text(' '),
-          ]),
+          Wrap(
+            children: [
+              _thirdPartEmote(thirdPartyEmote),
+              Text(' '),
+            ],
+          ),
         );
       } else if (isBitDonation &&
           cheerEmotes.firstWhereOrNull((emote) => emote.name == word) != null) {
-        Emote? cheerEmote =
-            cheerEmotes.firstWhereOrNull((emote) => emote.name == word);
-        messageWidgetsBuild.add(_cheerEmote(cheerEmote!, settings.textSize!));
+        messageWidgetsBuild.add(
+          _cheerEmote(
+            cheerEmotes.firstWhereOrNull((emote) => emote.name == word)!,
+            settings.textSize!,
+          ),
+        );
       } else {
         messageWidgetsBuild.add(
-          Text(
-            word + " ",
-            style: TextStyle(
-              color: isAction
-                  ? Color(int.parse(color.replaceAll('#', '0xff')))
-                  : Theme.of(Get.context!).textTheme.bodyText1!.color,
-              fontSize: settings.textSize,
-              fontStyle: isAction ? FontStyle.italic : FontStyle.normal,
-            ),
-          ),
+          _word(word, isAction, color, settings.textSize!),
         );
       }
     }
@@ -332,5 +329,18 @@ Widget _twitchEmote(MapEntry emote) {
     image: NetworkImage("https://static-cdn.jtvnw.net/emoticons/v2/" +
         emote.key +
         "/default/dark/1.0"),
+  );
+}
+
+Widget _word(String word, bool isAction, String color, double textSize) {
+  return Text(
+    word + " ",
+    style: TextStyle(
+      color: isAction
+          ? Color(int.parse(color.replaceAll('#', '0xff')))
+          : Theme.of(Get.context!).textTheme.bodyText1!.color,
+      fontSize: textSize,
+      fontStyle: isAction ? FontStyle.italic : FontStyle.normal,
+    ),
   );
 }
