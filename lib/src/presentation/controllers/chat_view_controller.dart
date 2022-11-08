@@ -21,6 +21,9 @@ class ChatViewController extends GetxController
   late ScrollController scrollController;
   RxBool isAutoScrolldown = true.obs;
   RxBool isChatConnected = false.obs;
+  RxBool isAlertProgress = true.obs;
+  Rx<Color> alertColor = Color(0xFFEC7508).obs;
+
   RxString alertMessage = "Connecting...".obs;
   IOWebSocketChannel? channel;
   TwitchCredentials? twitchData;
@@ -39,6 +42,7 @@ class ChatViewController extends GetxController
   late TextEditingController banDurationInputController;
 
   late Rx<Settings> settings = Settings.defaultSettings().obs;
+  Timer? chatDemoTimer;
 
   @override
   void onInit() async {
@@ -47,6 +51,27 @@ class ChatViewController extends GetxController
     if (Get.arguments != null) {
       twitchData = Get.arguments[0];
       await getSettings();
+    } else {
+      chatDemoTimer = Timer.periodic(
+        Duration(seconds: 1),
+        (Timer t) => {
+          chatMessages.add(TwitchChatMessage.randomGeneration()),
+          if (scrollController.hasClients && isAutoScrolldown.value)
+            {
+              Timer(Duration(milliseconds: 100), () {
+                if (isAutoScrolldown.value) {
+                  scrollController.jumpTo(
+                    scrollController.position.maxScrollExtent,
+                  );
+                }
+              }),
+            }
+        },
+      );
+      alertMessage.value = "DEMO";
+      alertColor.value = Color(0xFF196DEE);
+      isChatConnected.value = false;
+      isAlertProgress.value = false;
     }
 
     super.onInit();
@@ -67,6 +92,8 @@ class ChatViewController extends GetxController
           case ConnectivityResult.none:
             alertMessage.value = "Network connectivity lost";
             isChatConnected.value = false;
+            alertColor.value = Color(0xFFEC7508);
+            isAlertProgress.value = true;
             break;
           case ConnectivityResult.ethernet:
             break;
@@ -84,6 +111,7 @@ class ChatViewController extends GetxController
 
   @override
   void onClose() {
+    chatDemoTimer?.cancel();
     streamSubscription?.cancel();
     channel?.sink.close();
     super.onClose();
@@ -98,6 +126,9 @@ class ChatViewController extends GetxController
     }
     alertMessage.value = "Connecting...";
     isChatConnected.value = false;
+    alertColor.value = Color(0xFFEC7508);
+    isAlertProgress.value = true;
+
     String token = twitchData!.accessToken;
     String nick = twitchData!.twitchUser.login;
 
@@ -246,6 +277,8 @@ class ChatViewController extends GetxController
     } else if (message.toString().contains("GLOBALUSERSTATE")) {
       alertMessage.value = "Connected";
       isChatConnected.value = true;
+      alertColor.value = Color(0xFF33A031);
+      isAlertProgress.value = false;
 
       final Map<String, String> messageMapped = {};
       List messageSplited = message.split(';');
@@ -388,14 +421,16 @@ class ChatViewController extends GetxController
 
   /// Delete [message] by his id
   void deleteMessageInstruction(TwitchChatMessage message) {
-    channel!.sink
+    channel?.sink
         .add('PRIVMSG #$ircChannelJoined :/delete ${message.messageId}\r\n');
     selectedMessage.value = null;
+
+    if (twitchData == null) message.isDeleted = true;
   }
 
   /// Ban user for specific [duration] based on the author name in the [message]
   void timeoutMessageInstruction(TwitchChatMessage message, int duration) {
-    channel!.sink.add(
+    channel?.sink.add(
         'PRIVMSG #$ircChannelJoined :/timeout ${message.authorName} $duration reason\r\n');
 
     Get.back();
@@ -404,13 +439,15 @@ class ChatViewController extends GetxController
 
   /// Ban user based on the author name in the [message]
   void banMessageInstruction(TwitchChatMessage message) {
-    channel!.sink.add(
+    channel?.sink.add(
         'PRIVMSG #$ircChannelJoined :/ban ${message.authorName} reason\r\n');
     selectedMessage.value = null;
   }
 
   /// Hide every future messages from an user (only on this application, not on Twitch)
   void hideUser(TwitchChatMessage message) {
+    if (twitchData == null) return;
+
     List hiddenUsersIds = settings.value.hiddenUsersIds! != const []
         ? settings.value.hiddenUsersIds!
         : [];

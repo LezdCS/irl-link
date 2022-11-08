@@ -51,10 +51,9 @@ class HomeViewController extends GetxController
 
   @override
   void onInit() async {
+    chatInputController = TextEditingController();
 
     if(Get.arguments != null) {
-
-      chatInputController = TextEditingController();
 
       TwitchTabView twitchPage = TwitchTabView();
       tabElements.add(twitchPage);
@@ -101,7 +100,7 @@ class HomeViewController extends GetxController
     TwitchTabView twitchPage = TwitchTabView();
     tabElements.add(twitchPage);
 
-    if (settings.value.isObsConnected! || twitchData != null) {
+    if (settings.value.isObsConnected! || twitchData == null) {
       ObsTabView obsPage = ObsTabView();
       tabElements.add(obsPage);
     }
@@ -115,6 +114,8 @@ class HomeViewController extends GetxController
   }
 
   void sendChatMessage(String message) {
+    if(twitchData == null) return;
+
     String token = twitchData!.accessToken;
     String nick = twitchData!.twitchUser.login;
     WebSocket.connect("wss://irc-ws.chat.twitch.tv:443").then((ws) {

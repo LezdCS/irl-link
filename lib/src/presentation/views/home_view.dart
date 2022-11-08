@@ -156,77 +156,74 @@ class HomeView extends GetView<HomeViewController> {
         children: [
           Expanded(
             flex: 5,
-            child: controller.twitchData != null
-                ? Stack(
-                    alignment: AlignmentDirectional.center,
+            child: Stack(
+              alignment: AlignmentDirectional.center,
+              children: [
+                Container(
+                  child: SvgPicture.asset(
+                    './lib/assets/chatinput.svg',
+                    semanticsLabel: 'chat input',
+                    fit: BoxFit.fitWidth,
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.only(left: 5, right: 5),
+                  child: Row(
                     children: [
-                      Container(
-                        child: SvgPicture.asset(
-                          './lib/assets/chatinput.svg',
-                          semanticsLabel: 'chat input',
-                          fit: BoxFit.fitWidth,
+                      InkWell(
+                        onTap: () => controller.getEmotes(),
+                        child: Image(
+                          image: AssetImage("lib/assets/twitchSmileEmoji.png"),
+                          width: 30,
                         ),
                       ),
-                      Container(
-                        padding: EdgeInsets.only(left: 5, right: 5),
-                        child: Row(
-                          children: [
-                            InkWell(
-                              onTap: () => controller.getEmotes(),
-                              child: Image(
-                                image: AssetImage(
-                                    "lib/assets/twitchSmileEmoji.png"),
-                                width: 30,
-                              ),
-                            ),
-                            Expanded(
-                              child: TextField(
-                                controller: controller.chatInputController,
-                                onSubmitted: (String value) {
-                                  controller.sendChatMessage(value);
-                                  FocusScope.of(context).unfocus();
-                                },
-                                onTap: () {
-                                  controller.chatViewController.selectedMessage
-                                      .value = null;
-                                  controller.isPickingEmote.value = false;
-                                },
-                                textInputAction: TextInputAction.send,
-                                style: Theme.of(context).textTheme.bodyText1,
-                                maxLines: 1,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintStyle: TextStyle(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .color,
-                                      fontSize: 16),
-                                  hintText: 'Send a message',
-                                  isDense: true,
-                                  contentPadding: EdgeInsets.only(left: 5),
-                                ),
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () {
-                                controller.sendChatMessage(
-                                    controller.chatInputController.text);
-                                controller.chatInputController.text = '';
-                                FocusScope.of(context).unfocus();
-                              },
-                              child: SvgPicture.asset(
-                                './lib/assets/sendArrow.svg',
-                                semanticsLabel: 'send message',
-                                width: 21,
-                              ),
-                            ),
-                          ],
+                      Expanded(
+                        child: TextField(
+                          controller: controller.chatInputController,
+                          onSubmitted: (String value) {
+                            controller.sendChatMessage(value);
+                            FocusScope.of(context).unfocus();
+                          },
+                          onTap: () {
+                            controller.chatViewController.selectedMessage
+                                .value = null;
+                            controller.isPickingEmote.value = false;
+                          },
+                          textInputAction: TextInputAction.send,
+                          style: Theme.of(context).textTheme.bodyText1,
+                          maxLines: 1,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
+                                fontSize: 16),
+                            hintText: 'Send a message',
+                            isDense: true,
+                            contentPadding: EdgeInsets.only(left: 5),
+                          ),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          controller.sendChatMessage(
+                              controller.chatInputController.text);
+                          controller.chatInputController.text = '';
+                          FocusScope.of(context).unfocus();
+                        },
+                        child: SvgPicture.asset(
+                          './lib/assets/sendArrow.svg',
+                          semanticsLabel: 'send message',
+                          width: 21,
                         ),
                       ),
                     ],
-                  )
-                : SizedBox(),
+                  ),
+                ),
+              ],
+            ),
           ),
           Expanded(
             flex: 1,

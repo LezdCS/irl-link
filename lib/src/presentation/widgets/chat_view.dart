@@ -111,11 +111,9 @@ class ChatView extends GetView<ChatViewController> {
           opacity: controller.isChatConnected.value ? 0.0 : 1.0,
           duration: Duration(milliseconds: 1000),
           child: AlertMessageView(
-            color: controller.isChatConnected.value
-                ? Color(0xFF33A031)
-                : Color(0xFFEC7508),
+            color: controller.alertColor.value,
             message: controller.alertMessage.value,
-            isProgress: !controller.isChatConnected.value,
+            isProgress: controller.isAlertProgress.value,
           ),
         ),
       ]),

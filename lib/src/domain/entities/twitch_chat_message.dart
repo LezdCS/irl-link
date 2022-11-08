@@ -67,23 +67,39 @@ class TwitchChatMessage extends Equatable {
     List<TwitchBadge> badges = [];
     String username = faker.internet.userName();
     String message = faker.lorem.sentence();
+    Map emotesIdsPositions = {};
+    List thirdPartEmotes = [];
+    List cheerEmotes = [];
+    bool isAction = false;
+    String color = randomUsernameColor(username);
+    bool isBitDonation = false;
+    Settings settings = Settings.defaultSettings();
+
+    List<Widget> messageWidgetsBuild = stringToWidgets(
+      message,
+      emotesIdsPositions,
+      thirdPartEmotes,
+      settings,
+      isBitDonation,
+      cheerEmotes,
+      isAction,
+      color,
+    );
     return TwitchChatMessage(
       messageId: uuid.v4(),
       badges: badges,
-      color: randomUsernameColor(username),
+      color: color,
       authorName: username,
       authorId: uuid.v4(),
       emotes: {},
       message: message,
-      messageWidgetsBuild: [
-        Wrap(children: [Text(message)])
-      ],
+      messageWidgetsBuild: messageWidgetsBuild,
       timestamp: faker.date
           .dateTime(minYear: 2000, maxYear: 2020)
           .microsecondsSinceEpoch,
-      isBitDonation: false,
+      isBitDonation: isBitDonation,
       bitAmount: 0,
-      isAction: false,
+      isAction: isAction,
       isDeleted: false,
     );
   }
@@ -149,101 +165,16 @@ class TwitchChatMessage extends Equatable {
           .trim();
     }
 
-    List<Widget> messageWidgetsBuild = [];
-
-    for (int i = 0; i < messageString.trim().split(' ').length; i++) {
-      String word = messageString.trim().split(' ')[i];
-
-      MapEntry? emote = emotesIdsPositions.entries.firstWhereOrNull((element) =>
-          element.value
-              .where((position) =>
-                  messageString.substring(
-                      int.parse(position[0]), int.parse(position[1]) + 1) ==
-                  word)
-              .isNotEmpty);
-
-      Emote? thirdPartyEmote =
-          thirdPartEmotes.firstWhereOrNull((element) => element.name == word);
-      bool isNextWordThirdPartEmoteZeroWidth = false;
-
-      if (emote != null || thirdPartyEmote != null) {
-        if (i < messageString.trim().split(' ').length - 1) {
-          String nextWord = messageString.trim().split(' ')[i + 1];
-          var zeroWidthEmote = thirdPartEmotes
-              .firstWhereOrNull((element) => element.name == nextWord);
-          isNextWordThirdPartEmoteZeroWidth =
-              zeroWidthEmote?.isZeroWidth ?? false;
-
-          if (isNextWordThirdPartEmoteZeroWidth) {
-            messageWidgetsBuild.add(
-              Stack(
-                children: [
-                  emote != null
-                      ? _twitchEmote(emote)
-                      : _thirdPartEmote(thirdPartyEmote!),
-                  _thirdPartEmote(zeroWidthEmote!),
-                ],
-              ),
-            );
-          }
-        }
-      }
-
-      if (emote != null) {
-        if (isNextWordThirdPartEmoteZeroWidth) continue;
-
-        messageWidgetsBuild.add(
-          Wrap(
-            children: [
-              _twitchEmote(emote),
-              Text(' '),
-            ],
-          ),
-        );
-      } else if (thirdPartyEmote != null && settings.isEmotes!) {
-        if (isNextWordThirdPartEmoteZeroWidth) continue;
-
-        if (thirdPartyEmote.isZeroWidth) {
-          if (i > 0) {
-            String previousWord = messageString.trim().split(' ')[i - 1];
-            bool isPreviousWordEmote = emotesIdsPositions.entries
-                    .firstWhereOrNull((element) => element.value
-                        .where((position) =>
-                            messageString.substring(int.parse(position[0]),
-                                int.parse(position[1]) + 1) ==
-                            previousWord)
-                        .isNotEmpty) !=
-                null;
-            bool isPreviousWordThirdPartyEmote =
-                thirdPartEmotes.firstWhereOrNull(
-                        (element) => element.name == previousWord) !=
-                    null;
-            if (isPreviousWordEmote || isPreviousWordThirdPartyEmote) continue;
-          } else if (i != 0) continue;
-        }
-
-        messageWidgetsBuild.add(
-          Wrap(
-            children: [
-              _thirdPartEmote(thirdPartyEmote),
-              Text(' '),
-            ],
-          ),
-        );
-      } else if (isBitDonation &&
-          cheerEmotes.firstWhereOrNull((emote) => emote.name == word) != null) {
-        messageWidgetsBuild.add(
-          _cheerEmote(
-            cheerEmotes.firstWhereOrNull((emote) => emote.name == word)!,
-            settings.textSize!,
-          ),
-        );
-      } else {
-        messageWidgetsBuild.add(
-          _word(word, isAction, color, settings.textSize!),
-        );
-      }
-    }
+    List<Widget> messageWidgetsBuild = stringToWidgets(
+      messageString,
+      emotesIdsPositions,
+      thirdPartEmotes,
+      settings,
+      isBitDonation,
+      cheerEmotes,
+      isAction,
+      color,
+    );
 
     return TwitchChatMessage(
       messageId: messageMapped['id'] as String,
@@ -343,4 +274,112 @@ Widget _word(String word, bool isAction, String color, double textSize) {
       fontStyle: isAction ? FontStyle.italic : FontStyle.normal,
     ),
   );
+}
+
+List<Widget> stringToWidgets(
+  String messageString,
+  Map emotesIdsPositions,
+  List thirdPartEmotes,
+  Settings settings,
+  bool isBitDonation,
+  List cheerEmotes,
+  bool isAction,
+  String color,
+) {
+  List<Widget> messageWidgetsBuild = [];
+
+  for (int i = 0; i < messageString.trim().split(' ').length; i++) {
+    String word = messageString.trim().split(' ')[i];
+
+    MapEntry? emote = emotesIdsPositions.entries.firstWhereOrNull((element) =>
+        element.value
+            .where((position) =>
+                messageString.substring(
+                    int.parse(position[0]), int.parse(position[1]) + 1) ==
+                word)
+            .isNotEmpty);
+
+    Emote? thirdPartyEmote =
+        thirdPartEmotes.firstWhereOrNull((element) => element.name == word);
+    bool isNextWordThirdPartEmoteZeroWidth = false;
+
+    if (emote != null || thirdPartyEmote != null) {
+      if (i < messageString.trim().split(' ').length - 1) {
+        String nextWord = messageString.trim().split(' ')[i + 1];
+        var zeroWidthEmote = thirdPartEmotes
+            .firstWhereOrNull((element) => element.name == nextWord);
+        isNextWordThirdPartEmoteZeroWidth =
+            zeroWidthEmote?.isZeroWidth ?? false;
+
+        if (isNextWordThirdPartEmoteZeroWidth) {
+          messageWidgetsBuild.add(
+            Stack(
+              children: [
+                emote != null
+                    ? _twitchEmote(emote)
+                    : _thirdPartEmote(thirdPartyEmote!),
+                _thirdPartEmote(zeroWidthEmote!),
+              ],
+            ),
+          );
+        }
+      }
+    }
+
+    if (emote != null) {
+      if (isNextWordThirdPartEmoteZeroWidth) continue;
+
+      messageWidgetsBuild.add(
+        Wrap(
+          children: [
+            _twitchEmote(emote),
+            Text(' '),
+          ],
+        ),
+      );
+    } else if (thirdPartyEmote != null && settings.isEmotes!) {
+      if (isNextWordThirdPartEmoteZeroWidth) continue;
+
+      if (thirdPartyEmote.isZeroWidth) {
+        if (i > 0) {
+          String previousWord = messageString.trim().split(' ')[i - 1];
+          bool isPreviousWordEmote = emotesIdsPositions.entries
+                  .firstWhereOrNull((element) => element.value
+                      .where((position) =>
+                          messageString.substring(int.parse(position[0]),
+                              int.parse(position[1]) + 1) ==
+                          previousWord)
+                      .isNotEmpty) !=
+              null;
+          bool isPreviousWordThirdPartyEmote = thirdPartEmotes.firstWhereOrNull(
+                  (element) => element.name == previousWord) !=
+              null;
+          if (isPreviousWordEmote || isPreviousWordThirdPartyEmote) continue;
+        } else if (i != 0) continue;
+      }
+
+      messageWidgetsBuild.add(
+        Wrap(
+          children: [
+            _thirdPartEmote(thirdPartyEmote),
+            Text(' '),
+          ],
+        ),
+      );
+    } else if (isBitDonation &&
+        cheerEmotes.firstWhereOrNull((emote) => emote.name == word) != null) {
+      messageWidgetsBuild.add(
+        _cheerEmote(
+          cheerEmotes.firstWhereOrNull((emote) => emote.name == word)!,
+          settings.textSize!,
+        ),
+      );
+    } else {
+      messageWidgetsBuild.add(
+        _word(word, isAction, color, settings.textSize!),
+      );
+    }
+  }
+
+  return messageWidgetsBuild;
 }
