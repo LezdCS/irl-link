@@ -15,6 +15,7 @@ import 'package:web_socket_channel/io.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import '../../../routes/app_routes.dart';
 import '../widgets/web_page_view.dart';
 import 'chat_view_controller.dart';
 
@@ -31,7 +32,7 @@ class HomeViewController extends GetxController
   late TabController tabController;
   RxList<Widget> tabElements = <Widget>[].obs;
 
-  late TwitchCredentials twitchData;
+  TwitchCredentials? twitchData;
 
   //chat input
   late TextEditingController chatInputController;
@@ -44,33 +45,32 @@ class HomeViewController extends GetxController
 
   late Rx<Settings> settings = Settings.defaultSettings().obs;
 
-  late Timer timerRefreshToken;
-  late Timer timerKeepSpeakerOn;
+  Timer? timerRefreshToken;
+  Timer? timerKeepSpeakerOn;
   AudioPlayer audioPlayer = AudioPlayer();
 
   @override
   void onInit() async {
     chatInputController = TextEditingController();
 
-    TwitchTabView twitchPage = TwitchTabView();
-    tabElements.add(twitchPage);
+    if(Get.arguments != null) {
 
-    // StreamelementsTabView streamelementsPage = StreamelementsTabView();
-    // tabElements.add(streamelementsPage);
+      TwitchTabView twitchPage = TwitchTabView();
+      tabElements.add(twitchPage);
 
-    tabController = TabController(length: tabElements.length, vsync: this);
+      tabController = TabController(length: tabElements.length, vsync: this);
 
-    twitchData = Get.arguments[0];
+      twitchData = Get.arguments[0];
 
-    timerRefreshToken = Timer.periodic(
-      Duration(seconds: 13000),
-      (Timer t) => {
-        homeEvents.refreshAccessToken(twitchData: twitchData).then((value) => {
-              if (value.error == null) {twitchData = value.data!}
-            }),
-      },
-    );
-
+      timerRefreshToken = Timer.periodic(
+        Duration(seconds: 13000),
+            (Timer t) => {
+          homeEvents.refreshAccessToken(twitchData: twitchData!).then((value) => {
+            if (value.error == null) {twitchData = value.data!}
+          }),
+        },
+      );
+    }
     await this.getSettings();
 
     if (GetPlatform.isAndroid) WebView.platform = SurfaceAndroidWebView();
@@ -89,20 +89,18 @@ class HomeViewController extends GetxController
 
   @override
   void onClose() {
-    timerRefreshToken.cancel();
-    timerKeepSpeakerOn.cancel();
+    timerRefreshToken?.cancel();
+    timerKeepSpeakerOn?.cancel();
     super.onClose();
   }
 
   Future generateTabs() async {
     tabElements.clear();
+
     TwitchTabView twitchPage = TwitchTabView();
     tabElements.add(twitchPage);
 
-    // StreamelementsTabView streamelementsPage = StreamelementsTabView();
-    // tabElements.add(streamelementsPage);
-
-    if (settings.value.isObsConnected!) {
+    if (settings.value.isObsConnected! || twitchData == null) {
       ObsTabView obsPage = ObsTabView();
       tabElements.add(obsPage);
     }
@@ -116,8 +114,10 @@ class HomeViewController extends GetxController
   }
 
   void sendChatMessage(String message) {
-    String token = twitchData.accessToken;
-    String nick = twitchData.twitchUser.login;
+    if(twitchData == null) return;
+
+    String token = twitchData!.accessToken;
+    String nick = twitchData!.twitchUser.login;
     WebSocket.connect("wss://irc-ws.chat.twitch.tv:443").then((ws) {
       IOWebSocketChannel channel = IOWebSocketChannel(ws);
       channel.sink.add('PASS oauth:' + token);
@@ -156,6 +156,10 @@ class HomeViewController extends GetxController
       ..addAll(emotes);
   }
 
+  void login() {
+    Get.offAllNamed(Routes.LOGIN);
+  }
+
   Future getSettings() async {
     AudioCache cache = AudioCache(prefix: '');
     const path = "lib/assets/blank.mp3";
@@ -175,7 +179,7 @@ class HomeViewController extends GetxController
                   },
                 ),
               }else{
-                timerKeepSpeakerOn.cancel(),
+                timerKeepSpeakerOn?.cancel(),
               }
             },
         });

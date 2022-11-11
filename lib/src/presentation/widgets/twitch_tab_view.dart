@@ -3,13 +3,14 @@ import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch_prediction.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
+import 'package:irllink/src/presentation/widgets/alert_message_view.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class TwitchTabView extends GetView<TwitchTabViewController> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () {
+      onRefresh: () async {
         controller.refreshData();
         return Future.delayed(Duration(seconds: 1));
       },
@@ -21,17 +22,24 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Visibility(
+                  visible: controller.homeViewController.twitchData == null,
+                  child: AlertMessageView(
+                    color: Color(0xFF196DEE),
+                    message: "DEMO",
+                    isProgress: false,
+                  ),
+                ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 8.0),
-                  child:  LinearPercentIndicator(
+                  child: LinearPercentIndicator(
                     animation: true,
                     animateFromLastPercent: true,
                     barRadius: Radius.circular(8),
                     padding: EdgeInsets.symmetric(horizontal: 0.0),
                     lineHeight: 3.0,
                     percent: controller.myDuration.value.inSeconds / 15,
-                    backgroundColor:
-                    Theme.of(context).colorScheme.secondary,
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
                     progressColor: Theme.of(context).colorScheme.tertiary,
                   ),
                 ),
@@ -157,11 +165,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                       context,
                       'Follower only',
                       () => {
-                        controller.twitchStreamInfos.value =
-                            controller.twitchStreamInfos.value.copyWith(
-                                isFollowerMode: !controller
-                                    .twitchStreamInfos.value.isFollowerMode!),
-                        controller.changeChatSettings(),
+                        controller.toggleFollowerOnly(),
                       },
                       controller.twitchStreamInfos.value.isFollowerMode!,
                     ),
@@ -169,11 +173,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                       context,
                       'Subscriber only',
                       () => {
-                        controller.twitchStreamInfos.value =
-                            controller.twitchStreamInfos.value.copyWith(
-                                isSubscriberMode: !controller
-                                    .twitchStreamInfos.value.isSubscriberMode!),
-                        controller.changeChatSettings(),
+                        controller.toggleSubOnly(),
                       },
                       controller.twitchStreamInfos.value.isSubscriberMode!,
                     ),
@@ -181,11 +181,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                       context,
                       'Emote only',
                       () => {
-                        controller.twitchStreamInfos.value =
-                            controller.twitchStreamInfos.value.copyWith(
-                                isEmoteMode: !controller
-                                    .twitchStreamInfos.value.isEmoteMode!),
-                        controller.changeChatSettings(),
+                        controller.toggleEmoteOnly(),
                       },
                       controller.twitchStreamInfos.value.isEmoteMode!,
                     ),
@@ -193,11 +189,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                       context,
                       'Slow mode',
                       () => {
-                        controller.twitchStreamInfos.value =
-                            controller.twitchStreamInfos.value.copyWith(
-                                isSlowMode: !controller
-                                    .twitchStreamInfos.value.isSlowMode!),
-                        controller.changeChatSettings(),
+                        controller.toggleSlowMode(),
                       },
                       controller.twitchStreamInfos.value.isSlowMode!,
                     ),

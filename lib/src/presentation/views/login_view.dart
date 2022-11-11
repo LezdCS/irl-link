@@ -26,16 +26,35 @@ class LoginView extends GetView<LoginViewController> {
   }
 
   Widget _loginButton(context) {
-    return Container(
-      padding: EdgeInsets.only(left: 10, right: 10),
-      child: InkWell(
-        onTap: () {
-          controller.login();
-        },
-        child: Image(
-          image: AssetImage("lib/assets/login.png"),
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.only(left: 10, right: 10),
+          child: InkWell(
+            onTap: () {
+              controller.login();
+            },
+            child: Image(
+              image: AssetImage("lib/assets/login.png"),
+            ),
+          ),
         ),
-      ),
+        InkWell(
+          onTap: () {
+            controller.homeWitoutLogin();
+          },
+          child: Container(
+            padding: EdgeInsets.only(top: 10),
+            child: Text(
+              "Maybe later",
+              style: TextStyle(
+                fontSize: 13,
+                color: Colors.grey,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -60,8 +79,13 @@ class LoginView extends GetView<LoginViewController> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        Image(
-          image: AssetImage("lib/assets/logo.png"),
+        Text(
+          "IRL LINK",
+          style: TextStyle(
+            fontSize: 34,
+            fontFamily: "Roboto",
+            fontWeight: FontWeight.bold,
+          ),
         ),
         content,
         Container(),
@@ -80,7 +104,7 @@ class LoginView extends GetView<LoginViewController> {
                       Uri(
                         scheme: "https",
                         host: "github.com",
-                        path: "/LezdCS/irllink",
+                        path: "/LezdCS/irl-link",
                       ),
                       mode: LaunchMode.externalApplication,
                     );

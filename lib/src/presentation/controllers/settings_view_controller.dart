@@ -26,7 +26,7 @@ class SettingsViewController extends GetxController {
   final addBrowserTitleKey = GlobalKey<FormState>();
   final addHiddenUserKey = GlobalKey<FormState>();
 
-  late TwitchCredentials twitchData;
+  TwitchCredentials? twitchData;
 
   late RxList<String> usernamesHiddenUsers;
 
@@ -42,13 +42,16 @@ class SettingsViewController extends GetxController {
     addBrowserUrlController = TextEditingController();
     addHiddenUsernameController = TextEditingController();
 
-    twitchData = Get.arguments[0];
+    if(Get.arguments != null) {
+      twitchData = Get.arguments[0];
+    }
     usernamesHiddenUsers = <String>[].obs;
     super.onInit();
   }
 
   @override
   void onReady() {
+    if(twitchData != null) {
     settingsEvents.getSettings().then((value) => {
           if (value.error == null)
             {
@@ -62,6 +65,8 @@ class SettingsViewController extends GetxController {
               getUsernames(),
             }
         });
+    }
+
     super.onReady();
   }
 
@@ -71,9 +76,13 @@ class SettingsViewController extends GetxController {
   }
 
   void logout() {
-    settingsEvents.logout(accessToken: twitchData.accessToken).then(
+    settingsEvents.logout(accessToken: twitchData!.accessToken).then(
           (value) => Get.offAllNamed(Routes.LOGIN),
         );
+  }
+
+  void login() {
+    Get.offAllNamed(Routes.LOGIN);
   }
 
   void removeHiddenUser(userId) {
@@ -144,7 +153,7 @@ class SettingsViewController extends GetxController {
     await settingsEvents
         .getTwitchUsers(
             ids: settings.value.hiddenUsersIds!,
-            accessToken: twitchData.accessToken)
+            accessToken: twitchData!.accessToken)
         .then((value) => users = value.data!);
 
     users.forEach((user) => usernamesHiddenUsers.add(user.displayName));

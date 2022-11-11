@@ -93,6 +93,9 @@ abstract class TwitchRepository {
   Future<DataState<TwitchPoll>> getPoll(
       String accessToken, String broadcasterId);
 
+  Future<DataState<TwitchPoll>> createPoll(
+      String accessToken, String broadcasterId, TwitchPoll newPoll);
+
   // status is either TERMINATED to end poll and display the result to viewer
   // or ARCHIVED to end the poll and hide it
   Future<DataState<TwitchPoll>> endPoll(

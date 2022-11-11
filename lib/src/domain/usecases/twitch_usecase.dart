@@ -130,6 +130,11 @@ class TwitchUseCase {
     return twitchRepository.getPoll(accessToken, broadcasterId);
   }
 
+  Future<DataState<TwitchPoll>> createPoll(
+      String accessToken, String broadcasterId, TwitchPoll newPoll) {
+    return twitchRepository.createPoll(accessToken, broadcasterId, newPoll);
+  }
+
   Future<DataState<TwitchPoll>> endPoll(
       String accessToken, String broadcasterId, String pollId, String status) {
     return twitchRepository.endPoll(accessToken, broadcasterId, pollId, status);

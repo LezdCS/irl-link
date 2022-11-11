@@ -139,6 +139,11 @@ class HomeEvents {
     return twitchUseCase.getPoll(accessToken, broadcasterId);
   }
 
+  Future<void>? createPoll(
+      String accessToken, String broadcasterId, TwitchPoll newPoll) {
+    return twitchUseCase.createPoll(accessToken, broadcasterId, newPoll);
+  }
+
   Future<DataState<TwitchPoll>> endPoll(
       String accessToken, String broadcasterId, String pollId, String status) {
     return twitchUseCase.endPoll(accessToken, broadcasterId, pollId, status);

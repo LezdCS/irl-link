@@ -64,4 +64,8 @@ class LoginViewController extends GetxController {
       return true;
     }
   }
+
+  void homeWitoutLogin() {
+    Get.offAllNamed(Routes.HOME);
+  }
 }
