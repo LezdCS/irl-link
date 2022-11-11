@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch_prediction.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
+import 'package:irllink/src/presentation/widgets/alert_message_view.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class TwitchTabView extends GetView<TwitchTabViewController> {
@@ -21,17 +22,24 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Visibility(
+                  visible: controller.homeViewController.twitchData == null,
+                  child: AlertMessageView(
+                    color: Color(0xFF196DEE),
+                    message: "DEMO",
+                    isProgress: false,
+                  ),
+                ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 8.0),
-                  child:  LinearPercentIndicator(
+                  child: LinearPercentIndicator(
                     animation: true,
                     animateFromLastPercent: true,
                     barRadius: Radius.circular(8),
                     padding: EdgeInsets.symmetric(horizontal: 0.0),
                     lineHeight: 3.0,
                     percent: controller.myDuration.value.inSeconds / 15,
-                    backgroundColor:
-                    Theme.of(context).colorScheme.secondary,
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
                     progressColor: Theme.of(context).colorScheme.tertiary,
                   ),
                 ),

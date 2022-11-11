@@ -174,13 +174,13 @@ class TwitchRepositoryImpl extends TwitchRepository {
       TwitchAuthParams params = TwitchAuthParams();
 
       List paramsScopesList = params.scopes.split(' ');
-      paramsScopesList.sort((a, b){
+      paramsScopesList.sort((a, b) {
         return a.compareTo(b);
       });
       String paramsScopesOrdered = paramsScopesList.join(' ');
 
       List savedScopesList = twitchData.scopes.split(' ');
-      savedScopesList.sort((a, b){
+      savedScopesList.sort((a, b) {
         return a.compareTo(b);
       });
       String savedScopesOrdered = savedScopesList.join(' ');
@@ -735,6 +735,26 @@ class TwitchRepositoryImpl extends TwitchRepository {
         }
         return DataFailed("No prediction to show");
       }
+    } on DioError catch (e) {
+      print(e.response);
+      return DataFailed("Error retrieving Twitch Prediction");
+    }
+  }
+
+  @override
+  Future<DataState<TwitchPoll>> createPoll(
+      String accessToken, String broadcasterId, TwitchPoll newPoll) async {
+    Response response;
+    var dio = Dio();
+    TwitchPrediction? prediction;
+    try {
+      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dio.options.headers["authorization"] = "Bearer $accessToken";
+      // response = await dio.post(
+      //     'https://api.twitch.tv/helix/predictions?broadcaster_id=$broadcasterId');
+
+      return DataSuccess(newPoll);
+
     } on DioError catch (e) {
       print(e.response);
       return DataFailed("Error retrieving Twitch Prediction");
