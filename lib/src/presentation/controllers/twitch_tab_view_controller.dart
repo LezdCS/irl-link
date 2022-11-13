@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/domain/entities/twitch_credentials.dart';
 import 'package:irllink/src/domain/entities/twitch_stream_infos.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 
@@ -19,6 +20,7 @@ class TwitchTabViewController extends GetxController {
   FocusNode focus = FocusNode();
 
   late HomeViewController homeViewController;
+  RxBool isDemo = false.obs;
 
   Rx<TwitchStreamInfos> twitchStreamInfos =
       TwitchStreamInfos.defaultInfos().obs;
@@ -50,7 +52,8 @@ class TwitchTabViewController extends GetxController {
       refreshDataTimer = Timer.periodic(Duration(seconds: 15), (timer) {
         refreshData();
       });
-
+    } else {
+      isDemo.value = true;
     }
 
     refreshDataTimerProgressBar = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -75,53 +78,45 @@ class TwitchTabViewController extends GetxController {
 
   void refreshData() {
     myDuration.value = Duration(seconds: 15);
-    if(homeViewController.twitchData == null) return;
+    if (homeViewController.twitchData == null) return;
     getStreamInfos();
     getPoll();
     getPrediction();
   }
 
   void toggleFollowerOnly() {
-
-    twitchStreamInfos.value =
-        twitchStreamInfos.value.copyWith(
-            isFollowerMode: !twitchStreamInfos.value.isFollowerMode!);
+    twitchStreamInfos.value = twitchStreamInfos.value
+        .copyWith(isFollowerMode: !twitchStreamInfos.value.isFollowerMode!);
     changeChatSettings();
   }
 
   void toggleSubOnly() {
-
-    twitchStreamInfos.value =
-        twitchStreamInfos.value.copyWith(
-            isSubscriberMode: !twitchStreamInfos.value.isSubscriberMode!);
+    twitchStreamInfos.value = twitchStreamInfos.value
+        .copyWith(isSubscriberMode: !twitchStreamInfos.value.isSubscriberMode!);
     changeChatSettings();
   }
 
   void toggleEmoteOnly() {
-
-    twitchStreamInfos.value =
-        twitchStreamInfos.value.copyWith(
-            isEmoteMode: !twitchStreamInfos.value.isEmoteMode!);
+    twitchStreamInfos.value = twitchStreamInfos.value
+        .copyWith(isEmoteMode: !twitchStreamInfos.value.isEmoteMode!);
     changeChatSettings();
   }
 
   void toggleSlowMode() {
-
-    twitchStreamInfos.value =
-        twitchStreamInfos.value.copyWith(
-            isSlowMode: !twitchStreamInfos.value.isSlowMode!);
+    twitchStreamInfos.value = twitchStreamInfos.value
+        .copyWith(isSlowMode: !twitchStreamInfos.value.isSlowMode!);
     changeChatSettings();
   }
 
   void changeChatSettings() {
-    if(homeViewController.twitchData == null) return;
+    if (homeViewController.twitchData == null) return;
 
     homeEvents.setChatSettings(homeViewController.twitchData!.accessToken,
         homeViewController.twitchData!.twitchUser.id, twitchStreamInfos.value);
   }
 
   void setStreamTitle() {
-    if(homeViewController.twitchData == null) return;
+    if (homeViewController.twitchData == null) return;
 
     homeEvents.setStreamTitle(homeViewController.twitchData!.accessToken,
         homeViewController.twitchData!.twitchUser.id, titleFormController.text);
