@@ -323,7 +323,7 @@ class SettingsView extends GetView<SettingsViewController> {
                                   controller.settings.value.copyWith(
                                       alternateChannelName: controller
                                           .alternateChannelChatController.text
-                                          .toLowerCase());
+                                          .toLowerCase().trim());
                               controller.saveSettings();
                               SystemChannels.textInput
                                   .invokeMethod('TextInput.hide');
