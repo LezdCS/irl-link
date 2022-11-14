@@ -490,7 +490,7 @@ class ChatViewController extends GetxController
 
   Future applySettings() async {
     String tempIrcChannelJoined = ircChannelJoined;
-    if (settings.value.alternateChannel!) {
+    if (settings.value.alternateChannel! && settings.value.alternateChannelName! != '') {
       ircChannelJoined = settings.value.alternateChannelName!;
       await homeEvents
           .getTwitchUser(

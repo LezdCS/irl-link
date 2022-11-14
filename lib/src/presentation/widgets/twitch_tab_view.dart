@@ -23,7 +23,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Visibility(
-                  visible: controller.homeViewController.twitchData == null,
+                  visible: controller.isDemo.value,
                   child: AlertMessageView(
                     color: Color(0xFF196DEE),
                     message: "DEMO",

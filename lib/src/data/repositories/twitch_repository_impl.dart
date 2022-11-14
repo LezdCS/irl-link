@@ -43,7 +43,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       final result = await FlutterWebAuth.authenticate(
         url: url.toString(),
         callbackUrlScheme: kRedirectScheme,
-        preferEphemeral: true,
+        preferEphemeral: false,
       );
 
       final accessToken = Uri.parse(result).queryParameters['access_token'];

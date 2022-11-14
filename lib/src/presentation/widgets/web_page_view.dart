@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -14,6 +16,8 @@ class WebPageView extends StatefulWidget {
 
 class _WebPageViewState extends State<WebPageView>
     with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
+  WebViewController? _controller;
+
   @override
   void initState() {
     super.initState();
@@ -30,6 +34,14 @@ class _WebPageViewState extends State<WebPageView>
       javascriptMode: JavascriptMode.unrestricted,
       initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
       allowsInlineMediaPlayback: true,
+      gestureRecognizers: Set()
+      ..add(
+        Factory<EagerGestureRecognizer>(
+            () => EagerGestureRecognizer()),
+      ),
+      onWebViewCreated: (WebViewController webViewController) {
+        _controller = webViewController;
+      },
     );
   }
 }
