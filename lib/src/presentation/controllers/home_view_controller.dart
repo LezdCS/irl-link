@@ -12,7 +12,6 @@ import 'package:irllink/src/presentation/widgets/obs_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/split_view_custom.dart';
 import 'package:irllink/src/presentation/widgets/twitch_tab_view.dart';
 import 'package:web_socket_channel/io.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import '../../../routes/app_routes.dart';
@@ -72,8 +71,6 @@ class HomeViewController extends GetxController
       );
     }
     await this.getSettings();
-
-    if (GetPlatform.isAndroid) WebView.platform = SurfaceAndroidWebView();
 
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;

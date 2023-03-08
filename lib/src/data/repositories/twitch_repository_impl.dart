@@ -664,7 +664,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       response = await dio.get(
           'https://api.twitch.tv/helix/polls?broadcaster_id=$broadcasterId');
 
-      if (response.data['data'] == null) {
+      if (response.data['data'] == null || response.data['data'].isEmpty) {
         return DataFailed("There is no poll");
       } else {
         poll = TwitchPollDTO.fromJson(response.data['data'][0]);
@@ -724,7 +724,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       response = await dio.get(
           'https://api.twitch.tv/helix/predictions?broadcaster_id=$broadcasterId');
 
-      if (response.data['data'] == null) {
+      if (response.data['data'] == null  || response.data['data'].isEmpty) {
         return DataFailed("There is no prediction");
       } else {
         prediction = TwitchPredictionDTO.fromJson(response.data['data'][0]);
