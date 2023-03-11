@@ -704,6 +704,10 @@ class SettingsView extends GetView<SettingsViewController> {
                                   fixedSize: Size(50, 20),
                                 ),
                                 onPressed: () {
+                                  Get.defaultDialog(
+                                    title: "History",
+                                    content: _obsHistory(controller),
+                                  );
                                   FocusManager.instance.primaryFocus?.unfocus();
                                 },
                                 child: Row(
@@ -877,18 +881,50 @@ class SettingsView extends GetView<SettingsViewController> {
           controller.obsWebsocketPasswordFieldController.text = password;
           controller.obsWebsocketUrlFieldController.text = url;
 
-          controller.settings.value = controller
-              .settings.value
-              .copyWith(obsWebsocketUrl: url);
+          controller.settings.value =
+              controller.settings.value.copyWith(obsWebsocketUrl: url);
 
-          controller.settings.value = controller
-              .settings.value
+          controller.settings.value = controller.settings.value
               .copyWith(obsWebsocketPassword: password);
 
           controller.saveSettings();
           Get.back();
         }
       },
+    );
+  }
+
+  Widget _obsHistory(SettingsViewController controller) {
+    return Container(
+      child: Container(
+        height: 200,
+        child: ListView.builder(
+          itemCount: controller.settings.value.obsConnectionsHistory!.length,
+          itemBuilder: (context, index) {
+            String url = controller.settings.value.obsConnectionsHistory![index]['url']!;
+            String password = controller.settings.value.obsConnectionsHistory![index]['password']!;
+
+            return ListTile(
+              title: Text(url),
+              onTap: () {
+                controller
+                    .obsWebsocketUrlFieldController
+                    .text = url;
+                controller
+                    .obsWebsocketPasswordFieldController
+                    .text = password;
+                controller.settings.value =
+                    controller
+                        .settings.value
+                        .copyWith(
+                        obsWebsocketUrl: url, obsWebsocketPassword: password);
+                controller.saveSettings();
+                Get.back();
+              },
+            );
+          },
+        ),
+      ),
     );
   }
 }

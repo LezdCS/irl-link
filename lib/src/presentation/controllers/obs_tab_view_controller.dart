@@ -29,8 +29,12 @@ class ObsTabViewController extends GetxController {
 
   late Rx<Settings> settings = Settings.defaultSettings().obs;
 
+  RxMap<Map, DateTime> obsData = <Map, DateTime>{}.obs;
+
   @override
   void onInit() {
+    obsData[{}] = DateTime.now();
+
     super.onInit();
   }
 
@@ -106,6 +110,23 @@ class ObsTabViewController extends GetxController {
 
       alertMessage.value = "Connected.";
       isConnected.value = true;
+
+      List obsConnectionsHistory = settings.value.obsConnectionsHistory!;
+      if (obsConnectionsHistory.firstWhereOrNull(
+            (element) =>
+                element['url'] == url && element['password'] == password,
+          ) ==
+          null) {
+        obsConnectionsHistory.add({
+          "url": url,
+          "password": password,
+        });
+
+        settings.value =
+            settings.value.copyWith(obsConnectionsHistory: obsConnectionsHistory);
+        homeEvents.setSettings(settings: settings.value);
+      }
+
       getSceneList();
       getCurrentScene();
 
