@@ -3,8 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
 // Import for Android features.
 import 'package:webview_flutter_android/webview_flutter_android.dart';
+
 // Import for iOS features.
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
@@ -20,10 +22,9 @@ class WebPageView extends StatefulWidget {
 
 class _WebPageViewState extends State<WebPageView>
     with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
-    late final PlatformWebViewControllerCreationParams params;
-    
-    late WebViewController _controller;
-    late AndroidWebViewController _androidController;
+
+  late final PlatformWebViewControllerCreationParams params;
+  late WebViewController controller;
 
   @override
   void initState() {
@@ -31,21 +32,21 @@ class _WebPageViewState extends State<WebPageView>
 
     if (WebViewPlatform.instance is WebKitWebViewPlatform) {
       params = WebKitWebViewControllerCreationParams(
-      allowsInlineMediaPlayback: true,
-    );
+        allowsInlineMediaPlayback: true,
+      );
     } else {
       params = PlatformWebViewControllerCreationParams();
     }
 
-    if (_controller.platform is AndroidWebViewController) {
-    AndroidWebViewController.enableDebugging(true);
-    (_controller.platform as AndroidWebViewController)
-        .setMediaPlaybackRequiresUserGesture(false);
-    }
+    controller = WebViewController.fromPlatformCreationParams(params)
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(Uri.https(widget.url));
 
-    _controller = WebViewController.fromPlatformCreationParams(params)
-    ..setJavaScriptMode(JavaScriptMode.unrestricted)
-    ..loadRequest(Uri.parse(widget.url));
+    if (controller.platform is AndroidWebViewController) {
+      AndroidWebViewController.enableDebugging(true);
+      (controller.platform as AndroidWebViewController)
+          .setMediaPlaybackRequiresUserGesture(false);
+    }
   }
 
   @override
@@ -55,12 +56,11 @@ class _WebPageViewState extends State<WebPageView>
   Widget build(BuildContext context) {
     super.build(context);
     return WebViewWidget(
-      controller: _controller,
+      controller: controller,
       gestureRecognizers: Set()
-      ..add(
-        Factory<EagerGestureRecognizer>(
-            () => EagerGestureRecognizer()),
-      ),
+        ..add(
+          Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer()),
+        ),
     );
   }
 }
