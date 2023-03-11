@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:flutter/services.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -21,30 +23,32 @@ class SettingsView extends GetView<SettingsViewController> {
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back,
-              color: Theme.of(context).textTheme.bodyText1!.color,
+              color: Theme.of(context).textTheme.bodyLarge!.color,
             ),
             onPressed: () => Get.back(),
           ),
           actions: [
-            InkWell(
-              onTap: () {
-                if (controller.twitchData != null) {
-                  controller.logout();
-                } else {
-                  controller.login();
-                }
-              },
-              child: Container(
-                margin: EdgeInsets.only(right: 10, top: 10, bottom: 10),
-                padding: EdgeInsets.only(left: 8, right: 8),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: controller.twitchData != null
+            Container(
+              margin: EdgeInsets.only(right: 6, top: 10, bottom: 10),
+              padding: EdgeInsets.only(left: 8, right: 8),
+              child: TextButton(
+                onPressed: () {
+                  if (controller.twitchData != null) {
+                    controller.logout();
+                  } else {
+                    controller.login();
+                  }
+                },
+                style: TextButton.styleFrom(
+                  textStyle: TextStyle(fontSize: 12),
+                  backgroundColor: controller.twitchData != null
                       ? Colors.red
                       : Colors.purple,
-                  borderRadius: BorderRadius.circular(6),
                 ),
-                child: Text(controller.twitchData != null ? "Logout" : "Login"),
+                child: Text(
+                  controller.twitchData != null ? "Logout" : "Login",
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ),
           ],
@@ -52,7 +56,7 @@ class SettingsView extends GetView<SettingsViewController> {
           title: Text(
             "Settings",
             style: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1!.color,
+              color: Theme.of(context).textTheme.bodyLarge!.color,
             ),
           ),
           centerTitle: false,
@@ -122,7 +126,7 @@ class SettingsView extends GetView<SettingsViewController> {
                         child: Text(
                           "FFZ, BTTV & 7TV emotes",
                           style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1!.color,
+                            color: Theme.of(context).textTheme.bodyLarge!.color,
                             fontSize: 18,
                           ),
                         ),
@@ -155,7 +159,7 @@ class SettingsView extends GetView<SettingsViewController> {
                           "Text size",
                           style: TextStyle(
                               color:
-                                  Theme.of(context).textTheme.bodyText1!.color,
+                                  Theme.of(context).textTheme.bodyLarge!.color,
                               fontSize: 18),
                         ),
                       ),
@@ -180,40 +184,6 @@ class SettingsView extends GetView<SettingsViewController> {
                     ],
                   ),
                 ),
-                // Container(
-                  // child: Column(
-                  //   crossAxisAlignment: CrossAxisAlignment.start,
-                  //   children: [
-                      // Container(
-                      //   child: Text(
-                      //     "Badges & emotes size",
-                      //     style: TextStyle(
-                      //         color:
-                      //             Theme.of(context).textTheme.bodyText1!.color,
-                      //         fontSize: 18),
-                      //   ),
-                      // ),
-                      // Container(
-                      //   child: Slider(
-                      //     onChanged: (value) {
-                      //       controller.settings.value = controller
-                      //           .settings.value
-                      //           .copyWith(emotesSize: value);
-                      //       controller.saveSettings();
-                      //     },
-                      //     value: controller.settings.value.emotesSize!,
-                      //     min: 0.0,
-                      //     max: 50.0,
-                      //     divisions: 100,
-                      //     activeColor: Theme.of(context).colorScheme.tertiary,
-                      //     inactiveColor:
-                      //         Theme.of(context).colorScheme.tertiaryContainer,
-                      //     label: '${controller.settings.value.emotesSize}',
-                      //   ),
-                      // )
-                //     ],
-                //   ),
-                // ),
                 Container(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -223,7 +193,7 @@ class SettingsView extends GetView<SettingsViewController> {
                           "Show message timestamp",
                           style: TextStyle(
                               color:
-                                  Theme.of(context).textTheme.bodyText1!.color,
+                                  Theme.of(context).textTheme.bodyLarge!.color,
                               fontSize: 18),
                         ),
                       ),
@@ -255,7 +225,7 @@ class SettingsView extends GetView<SettingsViewController> {
                           "Join another streamer chat",
                           style: TextStyle(
                               color:
-                                  Theme.of(context).textTheme.bodyText1!.color,
+                                  Theme.of(context).textTheme.bodyLarge!.color,
                               fontSize: 18),
                         ),
                       ),
@@ -292,46 +262,72 @@ class SettingsView extends GetView<SettingsViewController> {
                       children: [
                         Expanded(
                           flex: 7,
-                          child: TextFormField(
-                            controller:
-                                controller.alternateChannelChatController,
-                            style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyText1!.color,
-                            ),
-                            decoration: InputDecoration(
-                              isDense: true,
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 0, vertical: 0),
-                              border: InputBorder.none,
-                              hintText: 'Nickname',
-                              labelText: 'Twitch nickname',
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                              textStyle: TextStyle(fontSize: 12),
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.tertiary,
-                              fixedSize: Size(50, 20),
-                            ),
-                            onPressed: () {
-                              controller.settings.value =
-                                  controller.settings.value.copyWith(
-                                      alternateChannelName: controller
-                                          .alternateChannelChatController.text
-                                          .toLowerCase().trim());
-                              controller.saveSettings();
-                              SystemChannels.textInput
-                                  .invokeMethod('TextInput.hide');
-                            },
-                            child: Text(
-                              'Save',
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 10.0),
+                            child: TextFormField(
+                              controller:
+                                  controller.alternateChannelChatController,
+                              onChanged: (value) {
+                                controller.settings.value =
+                                    controller.settings.value.copyWith(
+                                        alternateChannelName: controller
+                                            .alternateChannelChatController.text
+                                            .toLowerCase()
+                                            .trim());
+                                controller.saveSettings();
+                              },
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .color,
+                              ),
+                              decoration: InputDecoration(
+                                isDense: true,
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 12),
+                                enabledBorder: Theme.of(context)
+                                    .inputDecorationTheme
+                                    .border,
+                                hintText: 'Nickname',
+                                labelText: 'Twitch username',
+                                filled: false,
+                                labelStyle: TextStyle(
+                                  color: Theme.of(context).colorScheme.tertiary,
+                                ),
+                                suffixIconConstraints: BoxConstraints(
+                                  minWidth: 2,
+                                  minHeight: 2,
+                                ),
+                                suffixIcon: controller
+                                        .alternateChannelChatController
+                                        .text
+                                        .isNotEmpty
+                                    ? IconButton(
+                                        iconSize: 20,
+                                        icon: Icon(
+                                          Icons.clear,
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge!
+                                              .color,
+                                        ),
+                                        onPressed: () {
+                                          controller
+                                              .alternateChannelChatController
+                                              .clear();
+                                          controller.settings.value = controller
+                                              .settings.value
+                                              .copyWith(
+                                                  alternateChannelName: controller
+                                                      .alternateChannelChatController
+                                                      .text
+                                                      .toLowerCase()
+                                                      .trim());
+                                          controller.saveSettings();
+                                        },
+                                      )
+                                    : null,
                               ),
                             ),
                           ),
@@ -349,7 +345,7 @@ class SettingsView extends GetView<SettingsViewController> {
                     );
                   },
                   child: Container(
-                    padding: EdgeInsets.only(top: 5, bottom: 10),
+                    padding: EdgeInsets.only(top: 10, bottom: 10),
                     child: Row(
                       children: [
                         Icon(
@@ -363,7 +359,7 @@ class SettingsView extends GetView<SettingsViewController> {
                             "Manage hidden users",
                             style: TextStyle(
                               color:
-                                  Theme.of(context).textTheme.bodyText1!.color,
+                                  Theme.of(context).textTheme.bodyLarge!.color,
                               fontSize: 18,
                             ),
                           ),
@@ -407,7 +403,7 @@ class SettingsView extends GetView<SettingsViewController> {
                         child: Text(
                           "Dark mode",
                           style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1!.color,
+                            color: Theme.of(context).textTheme.bodyLarge!.color,
                             fontSize: 18,
                           ),
                         ),
@@ -442,7 +438,7 @@ class SettingsView extends GetView<SettingsViewController> {
                         child: Text(
                           "Prevent speaker from sleeping",
                           style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1!.color,
+                            color: Theme.of(context).textTheme.bodyLarge!.color,
                             fontSize: 18,
                           ),
                         ),
@@ -515,7 +511,7 @@ class SettingsView extends GetView<SettingsViewController> {
                             "Manage browser tabs",
                             style: TextStyle(
                               color:
-                                  Theme.of(context).textTheme.bodyText1!.color,
+                                  Theme.of(context).textTheme.bodyLarge!.color,
                               fontSize: 18,
                             ),
                           ),
@@ -531,7 +527,7 @@ class SettingsView extends GetView<SettingsViewController> {
                       child: Text(
                         "OBS",
                         style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyText1!.color,
+                          color: Theme.of(context).textTheme.bodyLarge!.color,
                           fontSize: 18,
                         ),
                       ),
@@ -568,19 +564,30 @@ class SettingsView extends GetView<SettingsViewController> {
                                     controller.obsWebsocketUrlFieldController,
                                 obscureText:
                                     !controller.obsWebsocketUrlShow.value,
+                                onChanged: (value) {
+                                  controller.settings.value = controller
+                                      .settings.value
+                                      .copyWith(obsWebsocketUrl: value);
+                                  controller.saveSettings();
+                                },
                                 style: TextStyle(
                                   color: Theme.of(context)
                                       .textTheme
-                                      .bodyText1!
+                                      .bodyLarge!
                                       .color,
                                 ),
                                 decoration: InputDecoration(
                                   isDense: true,
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: 0, vertical: 0),
-                                  border: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
                                   hintText: 'url',
                                   labelText: 'Websocket Url',
+                                  labelStyle: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.tertiary,
+                                  ),
                                   suffixIcon: IconButton(
                                     icon: Icon(
                                         controller.obsWebsocketUrlShow.value
@@ -608,19 +615,30 @@ class SettingsView extends GetView<SettingsViewController> {
                                     .obsWebsocketPasswordFieldController,
                                 obscureText:
                                     !controller.obsWebsocketPasswordShow.value,
+                                onChanged: (value) {
+                                  controller.settings.value = controller
+                                      .settings.value
+                                      .copyWith(obsWebsocketPassword: value);
+                                  controller.saveSettings();
+                                },
                                 style: TextStyle(
                                   color: Theme.of(context)
                                       .textTheme
-                                      .bodyText1!
+                                      .bodyLarge!
                                       .color,
                                 ),
                                 decoration: InputDecoration(
                                   isDense: true,
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: 0, vertical: 0),
-                                  border: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
                                   hintText: 'password',
                                   labelText: 'Websocket Password',
+                                  labelStyle: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.tertiary,
+                                  ),
                                   suffixIcon: IconButton(
                                     icon: Icon(controller
                                             .obsWebsocketPasswordShow.value
@@ -652,23 +670,54 @@ class SettingsView extends GetView<SettingsViewController> {
                                   fixedSize: Size(50, 20),
                                 ),
                                 onPressed: () {
-                                  controller.settings.value =
-                                      controller.settings.value.copyWith(
-                                    obsWebsocketUrl: controller
-                                        .obsWebsocketUrlFieldController.text,
-                                    obsWebsocketPassword: controller
-                                        .obsWebsocketPasswordFieldController
-                                        .text,
-                                  );
-                                  controller.saveSettings();
-                                  SystemChannels.textInput
-                                      .invokeMethod('TextInput.hide');
+                                  MobileScannerController cameraController =
+                                      MobileScannerController();
+
+                                  Get.dialog(_qrPasswordScanner(
+                                      cameraController, controller));
+
+                                  FocusManager.instance.primaryFocus?.unfocus();
                                 },
-                                child: Text(
-                                  'Save',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Scan QR code',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    SizedBox(width: 10),
+                                    Icon(Icons.qr_code, color: Colors.white),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            Expanded(
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  textStyle: TextStyle(fontSize: 12),
+                                  backgroundColor: Theme.of(context)
+                                      .colorScheme
+                                      .tertiaryContainer,
+                                  fixedSize: Size(50, 20),
+                                ),
+                                onPressed: () {
+                                  FocusManager.instance.primaryFocus?.unfocus();
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'History',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    SizedBox(width: 10),
+                                    Icon(Icons.history, color: Colors.white),
+                                  ],
                                 ),
                               ),
                             ),
@@ -701,49 +750,6 @@ class SettingsView extends GetView<SettingsViewController> {
                     ),
                   ),
                 ),
-                // Row(
-                //   children: [
-                //     Expanded(
-                //       flex: 7,
-                //       child: Container(
-                //         child: Text(
-                //           "Stream Elements",
-                //           style: TextStyle(
-                //             color: Theme.of(context).textTheme.bodyText1!.color,
-                //             fontSize: 18,
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //     Expanded(
-                //       flex: 3,
-                //       child: TextButton(
-                //         style: TextButton.styleFrom(
-                //           textStyle: TextStyle(fontSize: 12),
-                //           backgroundColor: controller.settings.value
-                //                       .streamElementsAccessToken !=
-                //                   ""
-                //               ? Colors.redAccent
-                //               : Colors.green,
-                //           fixedSize: Size(50, 20),
-                //         ),
-                //         onPressed: () {
-                //           SystemChannels.textInput
-                //               .invokeMethod('TextInput.hide');
-                //         },
-                //         child: Text(
-                //           controller.settings.value.streamElementsAccessToken !=
-                //                   ""
-                //               ? 'Logout'
-                //               : 'Login',
-                //           style: TextStyle(
-                //             color: Colors.white,
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //   ],
-                // ),
               ],
             ),
           ),
@@ -853,6 +859,36 @@ class SettingsView extends GetView<SettingsViewController> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _qrPasswordScanner(MobileScannerController controllerCamera,
+      SettingsViewController controller) {
+    return MobileScanner(
+      controller: controllerCamera,
+      onDetect: (capture) {
+        if (capture.barcodes.isEmpty) {
+          debugPrint('Failed to scan Barcode');
+        } else {
+          final String code = capture.barcodes.first.rawValue!;
+          debugPrint('Barcode found! $code');
+          String password = code.split("/").last;
+          String url = code.split("/")[2];
+          controller.obsWebsocketPasswordFieldController.text = password;
+          controller.obsWebsocketUrlFieldController.text = url;
+
+          controller.settings.value = controller
+              .settings.value
+              .copyWith(obsWebsocketUrl: url);
+
+          controller.settings.value = controller
+              .settings.value
+              .copyWith(obsWebsocketPassword: password);
+
+          controller.saveSettings();
+          Get.back();
+        }
+      },
     );
   }
 }
