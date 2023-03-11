@@ -91,7 +91,8 @@ class ManageListBrowserTabs extends GetView {
                                         .bodyLarge!
                                         .color,
                                   ),
-                                  backgroundColor:  Theme.of(context).colorScheme.secondary,
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.background,
                                   buttonColor: Color(0xFF9147ff),
                                   cancelTextColor: Color(0xFF9147ff),
                                   confirmTextColor: Colors.white,
@@ -165,7 +166,8 @@ class ManageListBrowserTabs extends GetView {
                               color:
                                   Theme.of(context).textTheme.bodyLarge!.color,
                             ),
-                            backgroundColor:  Theme.of(context).colorScheme.secondary,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.background,
                             buttonColor: Color(0xFF9147ff),
                             cancelTextColor: Color(0xFF9147ff),
                             confirmTextColor: Colors.white,
@@ -214,10 +216,14 @@ Widget _addDialog(context, controller) {
             return null;
           },
           decoration: InputDecoration(
-            border: UnderlineInputBorder(),
+            enabledBorder: InputBorder.none,
+            focusedBorder: InputBorder.none,
             hintStyle: TextStyle(
                 color: Theme.of(context).textTheme.bodyLarge!.color,
                 fontSize: 16),
+            labelStyle: TextStyle(
+              color: Theme.of(context).textTheme.bodyLarge!.color,
+            ),
             hintText: 'Tab title',
             labelText: 'Title',
             isDense: true,
@@ -245,10 +251,14 @@ Widget _addDialog(context, controller) {
             return null;
           },
           decoration: InputDecoration(
-            border: UnderlineInputBorder(),
+            enabledBorder: InputBorder.none,
+            focusedBorder: InputBorder.none,
             hintStyle: TextStyle(
                 color: Theme.of(context).textTheme.bodyLarge!.color,
                 fontSize: 16),
+            labelStyle: TextStyle(
+              color: Theme.of(context).textTheme.bodyLarge!.color,
+            ),
             hintText: 'Tab url',
             labelText: 'URL',
             isDense: true,
@@ -280,12 +290,16 @@ Widget _editDialog(context, controller, elem) {
             return null;
           },
           decoration: InputDecoration(
-            border: UnderlineInputBorder(),
+            enabledBorder: InputBorder.none,
+            focusedBorder: InputBorder.none,
             hintStyle: TextStyle(
                 color: Theme.of(context).textTheme.bodyLarge!.color,
                 fontSize: 16),
             hintText: 'Tab title',
             labelText: 'Title',
+            labelStyle: TextStyle(
+              color: Theme.of(context).textTheme.bodyLarge!.color,
+            ),
             isDense: true,
             contentPadding: EdgeInsets.only(left: 5),
           ),
@@ -309,12 +323,16 @@ Widget _editDialog(context, controller, elem) {
             return null;
           },
           decoration: InputDecoration(
-            border: UnderlineInputBorder(),
+            enabledBorder: InputBorder.none,
+            focusedBorder: InputBorder.none,
             hintStyle: TextStyle(
                 color: Theme.of(context).textTheme.bodyLarge!.color,
                 fontSize: 16),
             hintText: 'Tab url',
             labelText: 'URL',
+            labelStyle: TextStyle(
+              color: Theme.of(context).textTheme.bodyLarge!.color,
+            ),
             isDense: true,
             contentPadding: EdgeInsets.only(left: 5),
           ),

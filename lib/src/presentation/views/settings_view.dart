@@ -674,7 +674,7 @@ class SettingsView extends GetView<SettingsViewController> {
                                       MobileScannerController();
 
                                   Get.dialog(_qrPasswordScanner(
-                                      cameraController, controller));
+                                      cameraController, controller, context));
 
                                   FocusManager.instance.primaryFocus?.unfocus();
                                 },
@@ -706,6 +706,13 @@ class SettingsView extends GetView<SettingsViewController> {
                                 onPressed: () {
                                   Get.defaultDialog(
                                     title: "History",
+                                    cancelTextColor: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .color,
+                                    textCancel: "Cancel",
+                                    backgroundColor:
+                                        Theme.of(context).colorScheme.background,
                                     content: _obsHistory(controller),
                                   );
                                   FocusManager.instance.primaryFocus?.unfocus();
@@ -867,30 +874,82 @@ class SettingsView extends GetView<SettingsViewController> {
   }
 
   Widget _qrPasswordScanner(MobileScannerController controllerCamera,
-      SettingsViewController controller) {
-    return MobileScanner(
-      controller: controllerCamera,
-      onDetect: (capture) {
-        if (capture.barcodes.isEmpty) {
-          debugPrint('Failed to scan Barcode');
-        } else {
-          final String code = capture.barcodes.first.rawValue!;
-          debugPrint('Barcode found! $code');
-          String password = code.split("/").last;
-          String url = code.split("/")[2];
-          controller.obsWebsocketPasswordFieldController.text = password;
-          controller.obsWebsocketUrlFieldController.text = url;
+      SettingsViewController controller, BuildContext context) {
+    final scanWindow = Rect.fromCenter(
+      center: MediaQuery.of(context).size.center(Offset.zero),
+      width: 250,
+      height: 250,
+    );
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        MobileScanner(
+          controller: controllerCamera,
+          scanWindow: scanWindow,
+          onDetect: (capture) {
+            if (capture.barcodes.isEmpty) {
+            } else {
+              final String code = capture.barcodes.first.rawValue!;
+              String password = code.split("/").last;
+              String url = code.split("/")[2];
+              controller.obsWebsocketPasswordFieldController.text = password;
+              controller.obsWebsocketUrlFieldController.text = url;
 
-          controller.settings.value =
-              controller.settings.value.copyWith(obsWebsocketUrl: url);
+              controller.settings.value =
+                  controller.settings.value.copyWith(obsWebsocketUrl: url);
 
-          controller.settings.value = controller.settings.value
-              .copyWith(obsWebsocketPassword: password);
+              controller.settings.value = controller.settings.value
+                  .copyWith(obsWebsocketPassword: password);
 
-          controller.saveSettings();
-          Get.back();
-        }
-      },
+              controller.saveSettings();
+              Get.back();
+            }
+          },
+        ),
+        CustomPaint(
+          painter: ScannerOverlay(scanWindow),
+        ),
+        Positioned(
+          width: MediaQuery.of(context).size.width,
+          bottom: 100,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 100,
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                  ),
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: Text(
+                    "Close",
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Positioned(
+          width: MediaQuery.of(context).size.width,
+          top: 100,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Scan your OBS QR code",
+                style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                    decoration: TextDecoration.none),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -901,23 +960,18 @@ class SettingsView extends GetView<SettingsViewController> {
         child: ListView.builder(
           itemCount: controller.settings.value.obsConnectionsHistory!.length,
           itemBuilder: (context, index) {
-            String url = controller.settings.value.obsConnectionsHistory![index]['url']!;
-            String password = controller.settings.value.obsConnectionsHistory![index]['password']!;
+            String url =
+                controller.settings.value.obsConnectionsHistory![index]['url']!;
+            String password = controller
+                .settings.value.obsConnectionsHistory![index]['password']!;
 
             return ListTile(
               title: Text(url),
               onTap: () {
-                controller
-                    .obsWebsocketUrlFieldController
-                    .text = url;
-                controller
-                    .obsWebsocketPasswordFieldController
-                    .text = password;
-                controller.settings.value =
-                    controller
-                        .settings.value
-                        .copyWith(
-                        obsWebsocketUrl: url, obsWebsocketPassword: password);
+                controller.obsWebsocketUrlFieldController.text = url;
+                controller.obsWebsocketPasswordFieldController.text = password;
+                controller.settings.value = controller.settings.value.copyWith(
+                    obsWebsocketUrl: url, obsWebsocketPassword: password);
                 controller.saveSettings();
                 Get.back();
               },
@@ -926,5 +980,34 @@ class SettingsView extends GetView<SettingsViewController> {
         ),
       ),
     );
+  }
+}
+
+class ScannerOverlay extends CustomPainter {
+  ScannerOverlay(this.scanWindow);
+
+  final Rect scanWindow;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final backgroundPath = Path()..addRect(Rect.largest);
+    final cutoutPath = Path()..addRect(scanWindow);
+
+    final backgroundPaint = Paint()
+      ..color = Colors.black.withOpacity(0.7)
+      ..style = PaintingStyle.fill
+      ..blendMode = BlendMode.dstOut;
+
+    final backgroundWithCutout = Path.combine(
+      PathOperation.difference,
+      backgroundPath,
+      cutoutPath,
+    );
+    canvas.drawPath(backgroundWithCutout, backgroundPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
   }
 }
