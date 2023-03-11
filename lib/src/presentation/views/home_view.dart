@@ -124,9 +124,11 @@ class HomeView extends GetView<HomeViewController> {
         controller: controller.tabController,
         isScrollable: true,
         labelColor: Theme.of(context).colorScheme.tertiary,
-        unselectedLabelColor: Theme.of(context).textTheme.bodyText1!.color,
+        unselectedLabelColor: Theme.of(context).textTheme.bodyLarge!.color,
         indicatorColor: Theme.of(context).colorScheme.tertiary,
         labelPadding: EdgeInsets.symmetric(horizontal: 30),
+        indicatorSize: TabBarIndicatorSize.tab,
+        indicatorWeight: 2,
         tabs: List<Tab>.generate(
           controller.tabElements.length,
           (int index) => Tab(
@@ -190,18 +192,20 @@ class HomeView extends GetView<HomeViewController> {
                             controller.isPickingEmote.value = false;
                           },
                           textInputAction: TextInputAction.send,
-                          style: Theme.of(context).textTheme.bodyText1,
+                          style: Theme.of(context).textTheme.bodyLarge,
                           maxLines: 1,
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintStyle: TextStyle(
                                 color: Theme.of(context)
                                     .textTheme
-                                    .bodyText1!
+                                    .bodyLarge!
                                     .color,
                                 fontSize: 16),
                             hintText: 'Send a message',
                             isDense: true,
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
                             contentPadding: EdgeInsets.only(left: 5),
                           ),
                         ),
