@@ -129,6 +129,7 @@ class HomeView extends GetView<HomeViewController> {
         labelPadding: EdgeInsets.symmetric(horizontal: 30),
         indicatorSize: TabBarIndicatorSize.tab,
         indicatorWeight: 2,
+        dividerColor: Colors.transparent,
         tabs: List<Tab>.generate(
           controller.tabElements.length,
           (int index) => Tab(

@@ -216,8 +216,12 @@ Widget _addDialog(context, controller) {
             return null;
           },
           decoration: InputDecoration(
-            enabledBorder: InputBorder.none,
-            focusedBorder: InputBorder.none,
+            isDense: true,
+            contentPadding: EdgeInsets.symmetric(
+                horizontal: 8, vertical: 12),
+            enabledBorder: Theme.of(context)
+                .inputDecorationTheme
+                .border,
             hintStyle: TextStyle(
                 color: Theme.of(context).textTheme.bodyLarge!.color,
                 fontSize: 16),
@@ -226,8 +230,6 @@ Widget _addDialog(context, controller) {
             ),
             hintText: 'Tab title',
             labelText: 'Title',
-            isDense: true,
-            contentPadding: EdgeInsets.only(left: 5),
           ),
         ),
       ),
@@ -251,8 +253,12 @@ Widget _addDialog(context, controller) {
             return null;
           },
           decoration: InputDecoration(
-            enabledBorder: InputBorder.none,
-            focusedBorder: InputBorder.none,
+            isDense: true,
+            contentPadding: EdgeInsets.symmetric(
+                horizontal: 8, vertical: 12),
+            enabledBorder: Theme.of(context)
+                .inputDecorationTheme
+                .border,
             hintStyle: TextStyle(
                 color: Theme.of(context).textTheme.bodyLarge!.color,
                 fontSize: 16),
@@ -261,8 +267,6 @@ Widget _addDialog(context, controller) {
             ),
             hintText: 'Tab url',
             labelText: 'URL',
-            isDense: true,
-            contentPadding: EdgeInsets.only(left: 5),
           ),
         ),
       ),
@@ -290,8 +294,12 @@ Widget _editDialog(context, controller, elem) {
             return null;
           },
           decoration: InputDecoration(
-            enabledBorder: InputBorder.none,
-            focusedBorder: InputBorder.none,
+            isDense: true,
+            contentPadding: EdgeInsets.symmetric(
+                horizontal: 8, vertical: 12),
+            enabledBorder: Theme.of(context)
+                .inputDecorationTheme
+                .border,
             hintStyle: TextStyle(
                 color: Theme.of(context).textTheme.bodyLarge!.color,
                 fontSize: 16),
@@ -300,8 +308,6 @@ Widget _editDialog(context, controller, elem) {
             labelStyle: TextStyle(
               color: Theme.of(context).textTheme.bodyLarge!.color,
             ),
-            isDense: true,
-            contentPadding: EdgeInsets.only(left: 5),
           ),
         ),
       ),
@@ -323,8 +329,12 @@ Widget _editDialog(context, controller, elem) {
             return null;
           },
           decoration: InputDecoration(
-            enabledBorder: InputBorder.none,
-            focusedBorder: InputBorder.none,
+            isDense: true,
+            contentPadding: EdgeInsets.symmetric(
+                horizontal: 8, vertical: 12),
+            enabledBorder: Theme.of(context)
+                .inputDecorationTheme
+                .border,
             hintStyle: TextStyle(
                 color: Theme.of(context).textTheme.bodyLarge!.color,
                 fontSize: 16),
@@ -333,8 +343,6 @@ Widget _editDialog(context, controller, elem) {
             labelStyle: TextStyle(
               color: Theme.of(context).textTheme.bodyLarge!.color,
             ),
-            isDense: true,
-            contentPadding: EdgeInsets.only(left: 5),
           ),
         ),
       ),
