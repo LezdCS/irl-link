@@ -1,10 +1,10 @@
 [
   {
     "language": "en-GB",
-    "text": "British English release notes text"
+    "text": "Use material 3. You can now scan the OBS WebSocket QR code instead of writing the url and password!"
   },
   {
     "language": "en-US",
-    "text": "The US English release notes text"
+    "text": "Use material 3. You can now scan the OBS WebSocket QR code instead of writing the url and password!"
   }
 ]
