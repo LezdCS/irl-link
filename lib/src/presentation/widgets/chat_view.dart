@@ -208,7 +208,7 @@ class ChatView extends GetView<ChatViewController> {
     Get.defaultDialog(
       title: "Timeout",
       titleStyle: TextStyle(color: Colors.white),
-      backgroundColor: Color(0xFF282828),
+      backgroundColor: Color(0xFF0e0e10),
       buttonColor: Color(0xFF9147ff),
       cancelTextColor: Color(0xFF9147ff),
       textCancel: "Cancel",
@@ -267,7 +267,8 @@ class ChatView extends GetView<ChatViewController> {
                     style: TextStyle(color: Colors.white),
                     maxLines: 1,
                     decoration: InputDecoration(
-                      border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
                       hintStyle: TextStyle(color: Colors.grey, fontSize: 16),
                       hintText: 'Custom duration (s)',
                       isDense: true,

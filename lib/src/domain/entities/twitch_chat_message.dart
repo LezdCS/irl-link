@@ -269,7 +269,7 @@ Widget _word(String word, bool isAction, String color, double textSize) {
     style: TextStyle(
       color: isAction
           ? Color(int.parse(color.replaceAll('#', '0xff')))
-          : Theme.of(Get.context!).textTheme.bodyText1!.color,
+          : Theme.of(Get.context!).textTheme.bodyLarge!.color,
       fontSize: textSize,
       fontStyle: isAction ? FontStyle.italic : FontStyle.normal,
     ),

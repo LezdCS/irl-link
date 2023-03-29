@@ -19,6 +19,7 @@ class SettingsDTO extends Settings {
     required String obsWebsocketPassword,
     required String streamElementsAccessToken,
     required List browserTabs,
+    required List obsConnectionsHistory,
   }) : super(
           //CHAT SETTINGS
           isEmotes: isEmotes,
@@ -37,6 +38,7 @@ class SettingsDTO extends Settings {
           isObsConnected: isObsConnected,
           streamElementsAccessToken: streamElementsAccessToken,
           browserTabs: browserTabs,
+          obsConnectionsHistory: obsConnectionsHistory,
         );
 
   Map toJson() => {
@@ -57,6 +59,7 @@ class SettingsDTO extends Settings {
         'obsWebsocketPassword': obsWebsocketPassword,
         'streamElementsAccessToken': streamElementsAccessToken,
         'browserTabs': browserTabs,
+    'obsConnectionsHistory': obsConnectionsHistory,
       };
 
   factory SettingsDTO.fromJson(Map<String, dynamic> map) {
@@ -106,6 +109,9 @@ class SettingsDTO extends Settings {
       browserTabs: map['browserTabs'] != null
           ? map['browserTabs'] as List
           : Settings.defaultSettings().browserTabs!,
+        obsConnectionsHistory: map['obsConnectionsHistory'] != null
+          ? map['obsConnectionsHistory'] as List
+          : Settings.defaultSettings().obsConnectionsHistory!,
     );
   }
 }

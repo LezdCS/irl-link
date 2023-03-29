@@ -102,6 +102,9 @@ class ChatViewController extends GetxController
           case ConnectivityResult.vpn:
             // TODO: Handle this case.
             break;
+          case ConnectivityResult.other:
+            joinIrc();
+            break;
         }
       });
     }

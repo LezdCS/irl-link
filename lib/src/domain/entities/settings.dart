@@ -20,6 +20,7 @@ class Settings extends Equatable {
   final String? obsWebsocketPassword;
   final String? streamElementsAccessToken;
   final List? browserTabs;
+  final List? obsConnectionsHistory;
 
   const Settings({
     //CHAT SETTINGS
@@ -41,6 +42,7 @@ class Settings extends Equatable {
     required this.obsWebsocketPassword,
     required this.streamElementsAccessToken,
     required this.browserTabs,
+    required this.obsConnectionsHistory,
   });
 
   Settings.defaultSettings({
@@ -63,6 +65,7 @@ class Settings extends Equatable {
     this.obsWebsocketPassword = "",
     this.streamElementsAccessToken = "",
     this.browserTabs = const [],
+    this.obsConnectionsHistory = const [],
   });
 
   Map toJson() => {
@@ -83,6 +86,7 @@ class Settings extends Equatable {
         'obsWebsocketPassword': obsWebsocketPassword,
         'streamElementsAccessToken': streamElementsAccessToken,
         'browserTabs': browserTabs,
+        'obsConnectionsHistory': obsConnectionsHistory,
       };
 
   @override
@@ -105,6 +109,7 @@ class Settings extends Equatable {
       obsWebsocketPassword,
       streamElementsAccessToken,
       browserTabs,
+      obsConnectionsHistory,
     ];
   }
 
@@ -129,6 +134,7 @@ class Settings extends Equatable {
     String? obsWebsocketPassword,
     String? streamElementsAccessToken,
     List? browserTabs,
+    List? obsConnectionsHistory,
   }) =>
       Settings(
         //CHAT
@@ -149,5 +155,7 @@ class Settings extends Equatable {
         streamElementsAccessToken:
             streamElementsAccessToken ?? this.streamElementsAccessToken,
         browserTabs: browserTabs ?? this.browserTabs,
+        obsConnectionsHistory:
+            obsConnectionsHistory ?? this.obsConnectionsHistory,
       );
 }

@@ -16,7 +16,7 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
             controller: controller.tabController,
             isScrollable: true,
             labelColor: Theme.of(context).colorScheme.tertiary,
-            unselectedLabelColor: context.theme.textTheme.bodyText1!.color,
+            unselectedLabelColor: context.theme.textTheme.bodyLarge!.color,
             indicatorColor: Theme.of(context).colorScheme.tertiary,
             indicatorWeight: 0.000001,
             tabs: [Text("Notifications"), Text("Song Requests")],
@@ -118,7 +118,7 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
             Text(
               'Now Playing',
               style: TextStyle(
-                color: Theme.of(context).textTheme.bodyText1!.color,
+                color: Theme.of(context).textTheme.bodyLarge!.color,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -134,7 +134,7 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
                 TextSpan(
                   text: "Queue ",
                   style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyText1!.color,
+                    color: Theme.of(context).textTheme.bodyLarge!.color,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -143,7 +143,7 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
                       controller.songRequestQueue.length.toString() +
                       " videos)",
                   style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyText1!.color,
+                    color: Theme.of(context).textTheme.bodyLarge!.color,
                   ),
                 ),
               ]),
@@ -190,19 +190,19 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
                         text: song.channel,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Theme.of(context).textTheme.bodyText1!.color,
+                          color: Theme.of(context).textTheme.bodyLarge!.color,
                         ),
                       ),
                       TextSpan(
                         text: " - ",
                         style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyText1!.color,
+                          color: Theme.of(context).textTheme.bodyLarge!.color,
                         ),
                       ),
                       TextSpan(
                         text: song.title,
                         style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyText1!.color,
+                          color: Theme.of(context).textTheme.bodyLarge!.color,
                         ),
                       )
                     ],
@@ -214,14 +214,14 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
                     TextSpan(
                       text: "Duration: ",
                       style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyText1!.color,
+                        color: Theme.of(context).textTheme.bodyLarge!.color,
                       ),
                     ),
                     TextSpan(
                       text: song.duration,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Theme.of(context).textTheme.bodyText1!.color,
+                        color: Theme.of(context).textTheme.bodyLarge!.color,
                       ),
                     ),
                   ]),
@@ -265,7 +265,7 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
             title: Text(
               settingsValues[index],
               style: TextStyle(
-                color: Theme.of(context).textTheme.bodyText1!.color,
+                color: Theme.of(context).textTheme.bodyLarge!.color,
               ),
             ),
             value: true,

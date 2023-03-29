@@ -62,7 +62,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                           style: TextStyle(
                             color: Theme.of(Get.context!)
                                 .textTheme
-                                .bodyText1!
+                                .bodyLarge!
                                 .color,
                           ),
                         ),
@@ -96,7 +96,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                           style: TextStyle(
                             color: Theme.of(Get.context!)
                                 .textTheme
-                                .bodyText1!
+                                .bodyLarge!
                                 .color,
                           ),
                         ),
@@ -107,14 +107,21 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                 Row(
                   children: [
                     Expanded(
-                      child: TextFormField(
-                        controller: controller.titleFormController,
-                        focusNode: controller.focus,
-                        style: Theme.of(Get.context!).textTheme.bodyText1,
-                        decoration: InputDecoration(
-                          border: UnderlineInputBorder(),
-                          hintText: 'Your stream\'s title',
-                          labelText: 'Stream title',
+                      child: Container(
+                        padding: EdgeInsets.only(top: 12, right: 10),
+                        child: TextFormField(
+                          controller: controller.titleFormController,
+                          focusNode: controller.focus,
+                          style: Theme.of(Get.context!).textTheme.bodyLarge,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 7),
+                            hintText: 'Your stream\'s title',
+                            labelText: 'Stream title',
+                            labelStyle: TextStyle(
+                              color: Theme.of(context).colorScheme.tertiary,
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -147,7 +154,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                 Text(
                   "Shortcuts",
                   style: TextStyle(
-                    color: Theme.of(Get.context!).textTheme.bodyText1!.color,
+                    color: Theme.of(Get.context!).textTheme.bodyLarge!.color,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
@@ -230,7 +237,7 @@ Widget _prediction(
       Text(
         "Prediction",
         style: TextStyle(
-          color: Theme.of(Get.context!).textTheme.bodyText1!.color,
+          color: Theme.of(Get.context!).textTheme.bodyLarge!.color,
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
@@ -274,7 +281,7 @@ Widget _prediction(
                                 style: TextStyle(
                                   color: Theme.of(Get.context!)
                                       .textTheme
-                                      .bodyText1!
+                                      .bodyLarge!
                                       .color,
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
@@ -362,7 +369,7 @@ Widget _prediction(
                 Text(
                   "No prediction running",
                   style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyText1!.color,
+                    color: Theme.of(context).textTheme.bodyLarge!.color,
                   ),
                 ),
                 TextButton(
@@ -394,7 +401,7 @@ Widget _poll(
       Text(
         "Poll",
         style: TextStyle(
-          color: Theme.of(Get.context!).textTheme.bodyText1!.color,
+          color: Theme.of(Get.context!).textTheme.bodyLarge!.color,
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
@@ -424,7 +431,7 @@ Widget _poll(
                               style: TextStyle(
                                 color: Theme.of(Get.context!)
                                     .textTheme
-                                    .bodyText1!
+                                    .bodyLarge!
                                     .color,
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
@@ -505,7 +512,7 @@ Widget _poll(
                 Text(
                   "No poll running",
                   style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyText1!.color,
+                    color: Theme.of(context).textTheme.bodyLarge!.color,
                   ),
                 ),
                 TextButton(

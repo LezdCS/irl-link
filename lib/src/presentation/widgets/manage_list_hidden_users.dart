@@ -18,7 +18,7 @@ class ManageListHiddenUsers extends GetView {
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back,
-              color: Theme.of(context).textTheme.bodyText1!.color,
+              color: Theme.of(context).textTheme.bodyLarge!.color,
             ),
             onPressed: () => Get.back(),
           ),
@@ -27,7 +27,7 @@ class ManageListHiddenUsers extends GetView {
           title: Text(
             "Manage hidden users",
             style: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1!.color,
+              color: Theme.of(context).textTheme.bodyLarge!.color,
             ),
           ),
           centerTitle: false,
@@ -46,7 +46,7 @@ class ManageListHiddenUsers extends GetView {
                         child: Text(
                           "Nothing in the list!",
                           style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1!.color,
+                            color: Theme.of(context).textTheme.bodyLarge!.color,
                           ),
                         ),
                       )
@@ -65,7 +65,7 @@ class ManageListHiddenUsers extends GetView {
                                   style: TextStyle(
                                     color: Theme.of(context)
                                         .textTheme
-                                        .bodyText1!
+                                        .bodyLarge!
                                         .color,
                                   ),
                                 ),
@@ -112,7 +112,7 @@ class ManageListHiddenUsers extends GetView {
                                         style: TextStyle(
                                           color: Theme.of(context)
                                               .textTheme
-                                              .bodyText1!
+                                              .bodyLarge!
                                               .color,
                                           fontSize: 20,
                                         ),
