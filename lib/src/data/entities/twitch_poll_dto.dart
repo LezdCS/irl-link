@@ -30,12 +30,12 @@ class TwitchPollDTO extends TwitchPoll {
 
     Choice c;
     map['choices'].forEach((choice) => {
-      c = ChoiceDTO.fromJson(choice),
-      choices.add(c),
-      totalVotes += c.votes,
-    });
+          c = ChoiceDTO.fromJson(choice),
+          choices.add(c),
+          totalVotes += c.votes,
+        });
 
-    switch (map["status"]){
+    switch (map["status"]) {
       case "ACTIVE":
         status = PollStatus.ACTIVE;
         break;

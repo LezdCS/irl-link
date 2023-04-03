@@ -171,7 +171,9 @@ class StreamelementsViewController extends GetxController
 
   Future<void> onDisconnect() async {
     debugPrint('Disconnected from StreamElements websocket');
-    socket.io..disconnect()..connect();
+    socket.io
+      ..disconnect()
+      ..connect();
   }
 
   Future<void> onAuthenticated(data) async {

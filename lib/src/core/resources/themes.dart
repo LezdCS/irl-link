@@ -11,7 +11,6 @@ class Themes {
       //buttons color
       tertiary: Colors.deepPurpleAccent[200],
       tertiaryContainer: Colors.grey[850],
-
     ),
     textTheme: TextTheme(bodyLarge: TextStyle(color: Colors.white)),
     primaryIconTheme: IconThemeData(color: Colors.white),
@@ -38,7 +37,6 @@ class Themes {
       //buttons color
       tertiary: Colors.deepPurpleAccent[200],
       tertiaryContainer: Colors.grey[850],
-
     ),
     textTheme: TextTheme(bodyLarge: TextStyle(color: Colors.black)),
     primaryIconTheme: IconThemeData(color: Colors.black),

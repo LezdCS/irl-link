@@ -59,7 +59,7 @@ class SettingsDTO extends Settings {
         'obsWebsocketPassword': obsWebsocketPassword,
         'streamElementsAccessToken': streamElementsAccessToken,
         'browserTabs': browserTabs,
-    'obsConnectionsHistory': obsConnectionsHistory,
+        'obsConnectionsHistory': obsConnectionsHistory,
       };
 
   factory SettingsDTO.fromJson(Map<String, dynamic> map) {
@@ -109,7 +109,7 @@ class SettingsDTO extends Settings {
       browserTabs: map['browserTabs'] != null
           ? map['browserTabs'] as List
           : Settings.defaultSettings().browserTabs!,
-        obsConnectionsHistory: map['obsConnectionsHistory'] != null
+      obsConnectionsHistory: map['obsConnectionsHistory'] != null
           ? map['obsConnectionsHistory'] as List
           : Settings.defaultSettings().obsConnectionsHistory!,
     );

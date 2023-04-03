@@ -42,7 +42,7 @@ class SettingsViewController extends GetxController {
     addBrowserUrlController = TextEditingController();
     addHiddenUsernameController = TextEditingController();
 
-    if(Get.arguments != null) {
+    if (Get.arguments != null) {
       twitchData = Get.arguments[0];
     }
     usernamesHiddenUsers = <String>[].obs;
@@ -51,20 +51,20 @@ class SettingsViewController extends GetxController {
 
   @override
   void onReady() {
-    if(twitchData != null) {
-    settingsEvents.getSettings().then((value) => {
-          if (value.error == null)
-            {
-              settings.value = value.data!,
-              alternateChannelChatController.text =
-                  settings.value.alternateChannelName!,
-              obsWebsocketUrlFieldController.text =
-                  settings.value.obsWebsocketUrl!,
-              obsWebsocketPasswordFieldController.text =
-              settings.value.obsWebsocketPassword!,
-              getUsernames(),
-            }
-        });
+    if (twitchData != null) {
+      settingsEvents.getSettings().then((value) => {
+            if (value.error == null)
+              {
+                settings.value = value.data!,
+                alternateChannelChatController.text =
+                    settings.value.alternateChannelName!,
+                obsWebsocketUrlFieldController.text =
+                    settings.value.obsWebsocketUrl!,
+                obsWebsocketPasswordFieldController.text =
+                    settings.value.obsWebsocketPassword!,
+                getUsernames(),
+              }
+          });
     }
 
     super.onReady();

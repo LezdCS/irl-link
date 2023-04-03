@@ -22,7 +22,6 @@ class WebPageView extends StatefulWidget {
 
 class _WebPageViewState extends State<WebPageView>
     with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
-
   late final PlatformWebViewControllerCreationParams params;
   late WebViewController controller;
 

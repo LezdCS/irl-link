@@ -25,12 +25,12 @@ class TwitchPoll extends Equatable {
   });
 
   Map toJson() => {
-    'id': id,
-    'title': title,
-    'choices': choices,
-    'totalVotes': totalVotes,
-    'status': status,
-  };
+        'id': id,
+        'title': title,
+        'choices': choices,
+        'totalVotes': totalVotes,
+        'status': status,
+      };
 
   @override
   List<Object?> get props {
@@ -59,10 +59,10 @@ class Choice extends Equatable {
   });
 
   Map toJson() => {
-    'id': id,
-    'title': title,
-    'votes': votes,
-  };
+        'id': id,
+        'title': title,
+        'votes': votes,
+      };
 
   @override
   List<Object?> get props {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../domain/entities/twitch_prediction.dart';
 
-
 class TwitchPredictionDTO extends TwitchPrediction {
   const TwitchPredictionDTO({
     required String id,
@@ -11,22 +10,22 @@ class TwitchPredictionDTO extends TwitchPrediction {
     required List<Outcome> outcomes,
     required PredictionStatus status,
   }) : super(
-    id: id,
-    title: title,
-    winningOutcomeId: winningOutcomeId,
-    totalUsers: totalUsers,
-    outcomes:outcomes,
-    status: status,
-  );
+          id: id,
+          title: title,
+          winningOutcomeId: winningOutcomeId,
+          totalUsers: totalUsers,
+          outcomes: outcomes,
+          status: status,
+        );
 
   Map toJson() => {
-    'id': id,
-    'title': title,
-    'winningOutcomeId': winningOutcomeId,
-    'totalUsers': totalUsers,
-    'outcomes': outcomes,
-    'status': status,
-  };
+        'id': id,
+        'title': title,
+        'winningOutcomeId': winningOutcomeId,
+        'totalUsers': totalUsers,
+        'outcomes': outcomes,
+        'status': status,
+      };
 
   factory TwitchPredictionDTO.fromJson(Map<String, dynamic> map) {
     List<Outcome> outcomes = [];
@@ -35,12 +34,12 @@ class TwitchPredictionDTO extends TwitchPrediction {
 
     Outcome o;
     map['outcomes'].forEach((outcome) => {
-      o = OutcomeDTO.fromJson(outcome),
-      outcomes.add(o),
-      totalUsers += o.users,
-    });
+          o = OutcomeDTO.fromJson(outcome),
+          outcomes.add(o),
+          totalUsers += o.users,
+        });
 
-    switch (map["status"]){
+    switch (map["status"]) {
       case "RESOLVED":
         status = PredictionStatus.RESOLVED;
         break;
@@ -64,9 +63,6 @@ class TwitchPredictionDTO extends TwitchPrediction {
     );
   }
 }
-
-
-
 
 class OutcomeDTO extends Outcome {
   const OutcomeDTO({
@@ -92,9 +88,9 @@ class OutcomeDTO extends Outcome {
 
   factory OutcomeDTO.fromJson(Map<String, dynamic> map) {
     Color color;
-    if(map['color'] == "PINK"){
+    if (map['color'] == "PINK") {
       color = Colors.pink;
-    }else{
+    } else {
       color = Colors.blue;
     }
     return OutcomeDTO(
