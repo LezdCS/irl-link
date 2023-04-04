@@ -122,8 +122,8 @@ class ObsTabViewController extends GetxController {
           "password": password,
         });
 
-        settings.value =
-            settings.value.copyWith(obsConnectionsHistory: obsConnectionsHistory);
+        settings.value = settings.value
+            .copyWith(obsConnectionsHistory: obsConnectionsHistory);
         homeEvents.setSettings(settings: settings.value);
       }
 

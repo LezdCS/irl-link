@@ -217,11 +217,8 @@ Widget _addDialog(context, controller) {
           },
           decoration: InputDecoration(
             isDense: true,
-            contentPadding: EdgeInsets.symmetric(
-                horizontal: 8, vertical: 12),
-            enabledBorder: Theme.of(context)
-                .inputDecorationTheme
-                .border,
+            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+            enabledBorder: Theme.of(context).inputDecorationTheme.border,
             hintStyle: TextStyle(
                 color: Theme.of(context).textTheme.bodyLarge!.color,
                 fontSize: 16),
@@ -254,11 +251,8 @@ Widget _addDialog(context, controller) {
           },
           decoration: InputDecoration(
             isDense: true,
-            contentPadding: EdgeInsets.symmetric(
-                horizontal: 8, vertical: 12),
-            enabledBorder: Theme.of(context)
-                .inputDecorationTheme
-                .border,
+            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+            enabledBorder: Theme.of(context).inputDecorationTheme.border,
             hintStyle: TextStyle(
                 color: Theme.of(context).textTheme.bodyLarge!.color,
                 fontSize: 16),
@@ -295,11 +289,8 @@ Widget _editDialog(context, controller, elem) {
           },
           decoration: InputDecoration(
             isDense: true,
-            contentPadding: EdgeInsets.symmetric(
-                horizontal: 8, vertical: 12),
-            enabledBorder: Theme.of(context)
-                .inputDecorationTheme
-                .border,
+            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+            enabledBorder: Theme.of(context).inputDecorationTheme.border,
             hintStyle: TextStyle(
                 color: Theme.of(context).textTheme.bodyLarge!.color,
                 fontSize: 16),
@@ -330,11 +321,8 @@ Widget _editDialog(context, controller, elem) {
           },
           decoration: InputDecoration(
             isDense: true,
-            contentPadding: EdgeInsets.symmetric(
-                horizontal: 8, vertical: 12),
-            enabledBorder: Theme.of(context)
-                .inputDecorationTheme
-                .border,
+            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+            enabledBorder: Theme.of(context).inputDecorationTheme.border,
             hintStyle: TextStyle(
                 color: Theme.of(context).textTheme.bodyLarge!.color,
                 fontSize: 16),

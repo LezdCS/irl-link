@@ -453,7 +453,7 @@ Widget _poll(
                                               PollStatus.TERMINATED) &&
                                       percentage > 0.5)
                                   ? Colors.green
-                                  : Theme.of(context).backgroundColor,
+                                  : Theme.of(context).colorScheme.background,
                               center: Text(
                                   (percentage * 100).toStringAsFixed(2) + " %"),
                             ),

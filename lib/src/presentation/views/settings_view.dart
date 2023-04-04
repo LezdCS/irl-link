@@ -711,8 +711,9 @@ class SettingsView extends GetView<SettingsViewController> {
                                         .bodyLarge!
                                         .color,
                                     textCancel: "Cancel",
-                                    backgroundColor:
-                                        Theme.of(context).colorScheme.background,
+                                    backgroundColor: Theme.of(context)
+                                        .colorScheme
+                                        .background,
                                     content: _obsHistory(controller),
                                   );
                                   FocusManager.instance.primaryFocus?.unfocus();
