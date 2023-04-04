@@ -52,8 +52,7 @@ class HomeViewController extends GetxController
   void onInit() async {
     chatInputController = TextEditingController();
 
-    if(Get.arguments != null) {
-
+    if (Get.arguments != null) {
       TwitchTabView twitchPage = TwitchTabView();
       tabElements.add(twitchPage);
 
@@ -63,11 +62,11 @@ class HomeViewController extends GetxController
 
       timerRefreshToken = Timer.periodic(
         Duration(seconds: 13000),
-            (Timer t) => {
-          homeEvents.refreshAccessToken(twitchData: twitchData!).then((value) => {
-            if (value.error == null) {twitchData = value.data!}
-          }),
-        },
+        (Timer t) => homeEvents
+            .refreshAccessToken(twitchData: twitchData!)
+            .then((value) => {
+                  if (value.error == null) {twitchData = value.data!}
+                }),
       );
     }
     await this.getSettings();
@@ -111,7 +110,7 @@ class HomeViewController extends GetxController
   }
 
   void sendChatMessage(String message) {
-    if(twitchData == null) return;
+    if (twitchData == null) return;
 
     String token = twitchData!.accessToken;
     String nick = twitchData!.twitchUser.login;
@@ -165,19 +164,19 @@ class HomeViewController extends GetxController
             {
               settings.value = value.data!,
               await this.generateTabs(),
-              if(!settings.value.isDarkMode!){
-                Get.changeThemeMode(ThemeMode.light)
-              },
-              if(settings.value.keepSpeakerOn!){
-                timerKeepSpeakerOn = Timer.periodic(
-                  Duration(minutes: 5),
-                    (Timer t) async => {
-                    await cache.play(path),
-                  },
-                ),
-              }else{
-                timerKeepSpeakerOn?.cancel(),
-              }
+              if (!settings.value.isDarkMode!)
+                {Get.changeThemeMode(ThemeMode.light)},
+              if (settings.value.keepSpeakerOn!)
+                {
+                  timerKeepSpeakerOn = Timer.periodic(
+                    Duration(minutes: 5),
+                    (Timer t) async => await cache.play(path),
+                  ),
+                }
+              else
+                {
+                  timerKeepSpeakerOn?.cancel(),
+                }
             },
         });
   }

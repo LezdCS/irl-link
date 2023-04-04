@@ -67,9 +67,9 @@ class EmoteDTO extends Emote {
     return EmoteDTO(
       id: map["id"].toString(),
       name: map["name"],
-      url1x: "https:"+map['urls']['1'],
-      url2x: map['urls']['2'] != null ? "https:"+map['urls']['2']  : "",
-      url4x: map['urls']['4'] != null ? "https:"+map['urls']['4']  : "",
+      url1x: "https:" + map['urls']['1'],
+      url2x: map['urls']['2'] != null ? "https:" + map['urls']['2'] : "",
+      url4x: map['urls']['4'] != null ? "https:" + map['urls']['4'] : "",
       color: null,
       emoteType: EmoteType.thirdPart,
       isZeroWidth: false,
@@ -98,7 +98,8 @@ class EmoteDTO extends Emote {
       url4x: map['urls'][2][1].toString(),
       color: null,
       emoteType: EmoteType.thirdPart,
-      isZeroWidth: map['visibility_simple'].contains("ZERO_WIDTH") ? true : false,
+      isZeroWidth:
+          map['visibility_simple'].contains("ZERO_WIDTH") ? true : false,
     );
   }
 }

@@ -27,13 +27,13 @@ class TwitchPrediction extends Equatable {
   });
 
   Map toJson() => {
-    'id': id,
-    'title': title,
-    'winningOutcomeId': winningOutcomeId,
-    'totalUsers': totalUsers,
-    'outcomes': outcomes,
-    'status': status,
-  };
+        'id': id,
+        'title': title,
+        'winningOutcomeId': winningOutcomeId,
+        'totalUsers': totalUsers,
+        'outcomes': outcomes,
+        'status': status,
+      };
 
   @override
   List<Object?> get props {
@@ -67,12 +67,12 @@ class Outcome extends Equatable {
   });
 
   Map toJson() => {
-    'id': id,
-    'title': title,
-    'users': users,
-    'channelPoints': channelPoints,
-    'color': color,
-  };
+        'id': id,
+        'title': title,
+        'users': users,
+        'channelPoints': channelPoints,
+        'color': color,
+      };
 
   @override
   List<Object?> get props {

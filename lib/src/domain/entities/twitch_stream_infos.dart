@@ -25,7 +25,7 @@ class TwitchStreamInfos extends Equatable {
     this.title = "",
     this.viewerCount = 0,
     this.isOnline = false,
-    this.startedAtDuration =  const Duration(minutes: 0),
+    this.startedAtDuration = const Duration(minutes: 0),
     this.isEmoteMode = false,
     this.isFollowerMode = false,
     this.isSlowMode = false,

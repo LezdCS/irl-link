@@ -12,8 +12,7 @@ class TwitchAuthParams {
     this.clientId = kTwitchAuthClientId,
     this.redirectUri = 'https://irllink.com/twitch/app/auth',
     this.responseType = 'code',
-    this.scopes =
-        'openid '
+    this.scopes = 'openid '
         'channel_editor channel:moderate '
         'chat:read chat:edit '
         'moderator:manage:chat_settings '

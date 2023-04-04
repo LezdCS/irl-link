@@ -102,6 +102,5 @@ abstract class TwitchRepository {
       String accessToken, String broadcasterId, String pollId, String status);
 
   Future<DataState<TwitchPrediction>> getPrediction(
-      String accessToken, String broadcasterId
-      );
+      String accessToken, String broadcasterId);
 }

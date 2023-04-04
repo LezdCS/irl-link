@@ -35,11 +35,11 @@ class TwitchStreamInfosDto extends TwitchStreamInfos {
 
   factory TwitchStreamInfosDto.fromJson(Map<String, dynamic> map1,
       Map<String, dynamic> map2, Map<String, dynamic> map3) {
-
     DateFormat df = new DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-    String startedAtRaw = map2['data'].length > 0 && map2['data'][0]['started_at'] != null
-        ? map2['data'][0]['started_at']
-        : df.format(DateTime.now().toUtc());
+    String startedAtRaw =
+        map2['data'].length > 0 && map2['data'][0]['started_at'] != null
+            ? map2['data'][0]['started_at']
+            : df.format(DateTime.now().toUtc());
 
     DateTime startedAt = df.parse(startedAtRaw);
     DateTime now = df.parse(df.format(DateTime.now().toUtc()));

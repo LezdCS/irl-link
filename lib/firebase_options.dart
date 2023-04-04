@@ -53,7 +53,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1012029402006',
     projectId: 'irl-link',
     storageBucket: 'irl-link.appspot.com',
-    iosClientId: '1012029402006-s3d36cnvqn9au4slc0fhg3p1e1c28qds.apps.googleusercontent.com',
+    iosClientId:
+        '1012029402006-s3d36cnvqn9au4slc0fhg3p1e1c28qds.apps.googleusercontent.com',
     iosBundleId: 'dev.lezd.www.irllink',
   );
 }
