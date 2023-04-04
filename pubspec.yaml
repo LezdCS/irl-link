@@ -49,8 +49,8 @@ dependencies:
   audioplayers: ^0.20.1
   quiver: ^3.1.0
   socket_io_client: ^2.0.1
-  firebase_crashlytics: ^3.0.17
-  firebase_core: ^2.8.0
+  firebase_crashlytics: ^3.1.0
+  firebase_core: ^2.9.0
   percent_indicator: ^4.2.3
   fl_chart: ^0.61.0
   marquee: ^2.2.3
