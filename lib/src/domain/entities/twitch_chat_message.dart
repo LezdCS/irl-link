@@ -4,6 +4,10 @@ import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:collection/collection.dart';
+import 'package:irllink/src/presentation/widgets/chat/cheer_emote.dart';
+import 'package:irllink/src/presentation/widgets/chat/third_part_emote.dart';
+import 'package:irllink/src/presentation/widgets/chat/twitch_emote.dart';
+import 'package:irllink/src/presentation/widgets/chat/word.dart';
 import 'package:uuid/uuid.dart';
 import 'package:faker/faker.dart';
 import 'emote.dart';
@@ -113,33 +117,44 @@ class TwitchChatMessage extends Equatable {
   }) {
     final Map<String, String> messageMapped = {};
 
+    //We split the message by ';' to get the different parts
     List messageSplited = message.split(';');
+    //We split each part by '=' to get the key and the value
     messageSplited.forEach((element) {
       List elementSplited = element.split('=');
       messageMapped[elementSplited[0]] = elementSplited[1];
     });
 
+    //We get the badges
     List<TwitchBadge> badges =
         getBadges(messageMapped['badges'].toString(), twitchBadges);
 
+    //We get the color
     String color = messageMapped['color']!;
+    //If the color is empty, we generate a random color
     if (color == "") {
       color = randomUsernameColor(messageMapped['display-name']!);
     }
 
     Map<String, List<List<String>>> emotesIdsPositions = {};
     List<String> tempEmoteList = [];
+    //We get the emotes
     if (messageMapped['emotes'] != "") {
+      //We check if there is multiple emotes
       bool multipleEmotes = messageMapped['emotes']!.contains('/');
+      //If there is multiple emotes, we split them
       if (multipleEmotes) {
         tempEmoteList = messageMapped['emotes']!.split('/');
       } else {
         tempEmoteList = [messageMapped['emotes']!];
       }
 
+      //We get the emotes positions
       tempEmoteList.forEach((element) {
         List<List<String>> positions = [];
+        //We check if there is multiple positions for the same emote
         bool sameEmote = element.split(':')[1].toString().contains(',');
+        //If there is multiple positions for the same emote, we split them
         if (sameEmote) {
           for (String position in element.split(':')[1].split(',')) {
             positions.add(position.split('-'));
@@ -148,15 +163,19 @@ class TwitchChatMessage extends Equatable {
           positions = [element.split(':')[1].split('-')];
         }
 
+        //We add the emote id and the positions to the map
         emotesIdsPositions[element.split(':')[0]] = positions;
       });
     }
 
+    //We check if the message is a bit donation
     bool isBitDonation = messageMapped['bits'] != null;
 
+    //We get the message wrote by the user
     List messageList = messageSplited.last.split(':').sublist(2);
     String messageString = messageList.join(':');
 
+    //We check if the message is an action (/me)
     bool isAction = messageString.startsWith("ACTION");
     if (isAction) {
       messageString = messageString
@@ -195,15 +214,22 @@ class TwitchChatMessage extends Equatable {
   }
 }
 
+//We get the badges from the badges string
 List<TwitchBadge> getBadges(
     String badgesString, List<TwitchBadge> twitchBadges) {
   List<TwitchBadge> badges = <TwitchBadge>[];
+  //We split the badges string by ','
   List badgesSplited = badgesString.split(',');
+  //We check if the badges string is not empty
   if (badgesSplited.isNotEmpty) {
+    //We loop through the badges
     badgesSplited.forEach((i) {
+      //We check if the badge is in the list of badges
       TwitchBadge? badgeFound = twitchBadges.firstWhereOrNull((badge) =>
           badge.setId == i.split('/')[0] && badge.versionId == i.split('/')[1]);
+      //If the badge is in the list of badges
       if (badgeFound != null) {
+        //We add the badge to the list
         badges.add(badgeFound);
       }
     });
@@ -232,48 +258,6 @@ String randomUsernameColor(String username) {
 
   var n = username.codeUnitAt(0) + username.codeUnitAt(username.length - 1);
   return defaultColors[n % defaultColors.length][1];
-}
-
-Widget _cheerEmote(Emote cheerEmote, double textSize) {
-  return Wrap(children: [
-    Image(
-      image: NetworkImage(cheerEmote.url1x),
-    ),
-    Text(
-      cheerEmote.id + ' ',
-      style: TextStyle(
-        color: Color(int.parse(cheerEmote.color!.replaceAll('#', '0xff'))),
-        fontSize: textSize,
-      ),
-    ),
-  ]);
-}
-
-Widget _thirdPartEmote(Emote emote) {
-  return Image(
-    image: NetworkImage(emote.url1x),
-  );
-}
-
-Widget _twitchEmote(MapEntry emote) {
-  return Image(
-    image: NetworkImage("https://static-cdn.jtvnw.net/emoticons/v2/" +
-        emote.key +
-        "/default/dark/1.0"),
-  );
-}
-
-Widget _word(String word, bool isAction, String color, double textSize) {
-  return Text(
-    word + " ",
-    style: TextStyle(
-      color: isAction
-          ? Color(int.parse(color.replaceAll('#', '0xff')))
-          : Theme.of(Get.context!).textTheme.bodyLarge!.color,
-      fontSize: textSize,
-      fontStyle: isAction ? FontStyle.italic : FontStyle.normal,
-    ),
-  );
 }
 
 List<Widget> stringToWidgets(
@@ -316,9 +300,9 @@ List<Widget> stringToWidgets(
             Stack(
               children: [
                 emote != null
-                    ? _twitchEmote(emote)
-                    : _thirdPartEmote(thirdPartyEmote!),
-                _thirdPartEmote(zeroWidthEmote!),
+                    ? TwitchEmote(emote: emote)
+                    : ThirdPartEmote(emote: thirdPartyEmote!),
+                ThirdPartEmote(emote: thirdPartyEmote!),
               ],
             ),
           );
@@ -332,7 +316,7 @@ List<Widget> stringToWidgets(
       messageWidgetsBuild.add(
         Wrap(
           children: [
-            _twitchEmote(emote),
+            TwitchEmote(emote: emote),
             Text(' '),
           ],
         ),
@@ -361,7 +345,7 @@ List<Widget> stringToWidgets(
       messageWidgetsBuild.add(
         Wrap(
           children: [
-            _thirdPartEmote(thirdPartyEmote),
+            ThirdPartEmote(emote: thirdPartyEmote),
             Text(' '),
           ],
         ),
@@ -369,14 +353,20 @@ List<Widget> stringToWidgets(
     } else if (isBitDonation &&
         cheerEmotes.firstWhereOrNull((emote) => emote.name == word) != null) {
       messageWidgetsBuild.add(
-        _cheerEmote(
-          cheerEmotes.firstWhereOrNull((emote) => emote.name == word)!,
-          settings.textSize!,
+        CheerEmote(
+          cheerEmote:
+              cheerEmotes.firstWhereOrNull((emote) => emote.name == word)!,
+          textSize: settings.textSize!,
         ),
       );
     } else {
       messageWidgetsBuild.add(
-        _word(word, isAction, color, settings.textSize!),
+        Word(
+          word: word,
+          isAction: isAction,
+          color: color,
+          textSize: settings.textSize!,
+        ),
       );
     }
   }
