@@ -579,9 +579,7 @@ class SettingsView extends GetView<SettingsViewController> {
                                 decoration: InputDecoration(
                                   isDense: true,
                                   contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 0, vertical: 0),
-                                  enabledBorder: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
+                                      horizontal: 8, vertical: 7),
                                   hintText: 'url',
                                   labelText: 'Websocket Url',
                                   labelStyle: TextStyle(
@@ -606,6 +604,8 @@ class SettingsView extends GetView<SettingsViewController> {
                             ),
                           ],
                         ),
+                        SizedBox(height: 10),
+
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -630,9 +630,7 @@ class SettingsView extends GetView<SettingsViewController> {
                                 decoration: InputDecoration(
                                   isDense: true,
                                   contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 0, vertical: 0),
-                                  enabledBorder: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
+                                      horizontal: 8, vertical: 7),
                                   hintText: 'password',
                                   labelText: 'Websocket Password',
                                   labelStyle: TextStyle(
@@ -659,6 +657,7 @@ class SettingsView extends GetView<SettingsViewController> {
                             ),
                           ],
                         ),
+                        SizedBox(height: 6),
                         Row(
                           children: [
                             Expanded(
