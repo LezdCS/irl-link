@@ -105,6 +105,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                   ],
                 ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Expanded(
                       child: Container(
