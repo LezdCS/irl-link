@@ -32,6 +32,7 @@ class _WebPageViewState extends State<WebPageView>
     if (WebViewPlatform.instance is WebKitWebViewPlatform) {
       params = WebKitWebViewControllerCreationParams(
         allowsInlineMediaPlayback: true,
+        mediaTypesRequiringUserAction: Set(),
       );
     } else {
       params = PlatformWebViewControllerCreationParams();
