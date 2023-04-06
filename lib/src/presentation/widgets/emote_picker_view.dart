@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class EmotePickerView extends GetView {
   final HomeViewController homeViewController;
@@ -68,12 +69,9 @@ class EmotePickerView extends GetView {
                               " " +
                               homeViewController.twitchEmotes[i].name +
                               " ",
-                      child: Image.network(
-                        homeViewController.twitchEmotes[i].url1x,
-                        errorBuilder: (BuildContext context, Object exception,
-                            StackTrace? stackTrace) {
-                          return Text(stackTrace!.toString());
-                        },
+                      child: FadeInImage.memoryNetwork(
+                        image: homeViewController.twitchEmotes[i].url1x,
+                        placeholder: kTransparentImage,
                       ),
                     );
                   },

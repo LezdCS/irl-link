@@ -42,7 +42,7 @@ dependencies:
   obs_websocket: ^5.0.0+15
   intl: ^0.18.0
   expandable: ^5.0.1
-  audioplayers: ^0.20.1
+  audioplayers: ^3.0.1
   quiver: ^3.1.0
   socket_io_client: ^2.0.1
   firebase_crashlytics: ^3.1.0
@@ -52,6 +52,7 @@ dependencies:
   marquee: ^2.2.3
   faker: ^2.1.0
   mobile_scanner: ^3.2.0
+  transparent_image: ^2.0.1
 
 dev_dependencies:
   flutter_lints: ^2.0.1
