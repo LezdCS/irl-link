@@ -157,7 +157,7 @@ class HomeViewController extends GetxController
   }
 
   Future getSettings() async {
-    const path = "lib/assets/blank.mp3";
+    const path = "../lib/assets/blank.mp3";
     await homeEvents.getSettings().then((value) async => {
           if (value.error == null)
             {
