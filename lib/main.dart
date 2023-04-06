@@ -8,6 +8,7 @@ import 'package:irllink/src/core/resources/themes.dart';
 import 'package:irllink/src/presentation/views/login_view.dart';
 import 'package:wakelock/wakelock.dart';
 import 'firebase_options.dart';
+import 'src/core/resources/AppTranslations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,6 +32,9 @@ class Main extends StatelessWidget {
       initialBinding: LoginBindings(),
       getPages: AppPages.routes,
       debugShowCheckedModeBanner: false,
+      translations: AppTranslations(),
+      locale: Get.deviceLocale,
+      fallbackLocale: Locale('en', 'US')
     );
   }
 }
