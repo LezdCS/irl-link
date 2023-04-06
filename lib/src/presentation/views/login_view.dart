@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/presentation/controllers/login_view_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:irllink/src/core/utils/globals.dart' as Globals;
 
 class LoginView extends GetView<LoginViewController> {
   @override
@@ -138,7 +139,9 @@ class LoginView extends GetView<LoginViewController> {
                   ),
                 ),
               ],
-            )
+            ),
+            SizedBox(height: 10),
+            Text("Version: ${Globals.version}")
           ],
         ),
       ],
