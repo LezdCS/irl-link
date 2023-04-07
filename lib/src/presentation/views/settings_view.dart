@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:irllink/src/core/utils/globals.dart' as Globals;
 
 import '../widgets/manage_list_hidden_users.dart';
 import '../widgets/manage_list_browser_tabs.dart';
@@ -93,6 +93,10 @@ class SettingsView extends GetView<SettingsViewController> {
                 color: Theme.of(context).colorScheme.secondary,
               ),
               contactSettings(context, width),
+              Container(
+                padding: EdgeInsets.only(left: 4, right: 4, top: 6),
+                child: Text("Version: ${Globals.version}"),
+              ),
             ],
           ),
         ),
@@ -579,9 +583,7 @@ class SettingsView extends GetView<SettingsViewController> {
                                 decoration: InputDecoration(
                                   isDense: true,
                                   contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 0, vertical: 0),
-                                  enabledBorder: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
+                                      horizontal: 8, vertical: 7),
                                   hintText: 'url',
                                   labelText: 'Websocket Url',
                                   labelStyle: TextStyle(
@@ -606,6 +608,7 @@ class SettingsView extends GetView<SettingsViewController> {
                             ),
                           ],
                         ),
+                        SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -630,9 +633,7 @@ class SettingsView extends GetView<SettingsViewController> {
                                 decoration: InputDecoration(
                                   isDense: true,
                                   contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 0, vertical: 0),
-                                  enabledBorder: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
+                                      horizontal: 8, vertical: 7),
                                   hintText: 'password',
                                   labelText: 'Websocket Password',
                                   labelStyle: TextStyle(
@@ -659,6 +660,7 @@ class SettingsView extends GetView<SettingsViewController> {
                             ),
                           ],
                         ),
+                        SizedBox(height: 6),
                         Row(
                           children: [
                             Expanded(

@@ -1,4 +1,3 @@
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
@@ -11,6 +10,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:collection/collection.dart';
 
 import 'alert_message_view.dart';
+import 'chat/timestamp.dart';
+import 'chat/author_name.dart';
 
 class ChatView extends GetView<ChatViewController> {
   @override
@@ -152,13 +153,8 @@ class ChatView extends GetView<ChatViewController> {
                   visible: controller.settings.value.displayTimestamp!,
                   child: Container(
                     padding: EdgeInsets.only(right: 5),
-                    child: Text(
-                      '${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(message.timestamp))}',
-                      textAlign: TextAlign.end,
-                      style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400),
+                    child: Timestamp(
+                      timestamp: message.timestamp,
                     ),
                   ),
                 ),
@@ -170,16 +166,11 @@ class ChatView extends GetView<ChatViewController> {
                       filterQuality: FilterQuality.high,
                     ),
                   ),
-                Text(
-                  message.isAction
-                      ? message.authorName + " "
-                      : message.authorName + ": ",
-                  style: TextStyle(
-                    color:
-                        Color(int.parse(message.color.replaceAll('#', '0xff'))),
-                    fontSize: controller.settings.value.textSize,
-                    fontWeight: FontWeight.bold,
-                  ),
+                AuthorName(
+                  isAction: message.isAction,
+                  authorName: message.authorName,
+                  color: message.color,
+                  textSize: controller.settings.value.textSize!,
                 ),
                 if (message.isDeleted)
                   Text(

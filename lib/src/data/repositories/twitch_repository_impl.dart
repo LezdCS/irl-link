@@ -119,7 +119,6 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       await this.validateToken(newTwitchData.accessToken);
 
-      debugPrint('token refreshed');
       return DataSuccess(newTwitchData);
     } on DioError catch (e) {
       debugPrint(e.toString());
@@ -193,8 +192,6 @@ class TwitchRepositoryImpl extends TwitchRepository {
       await this
           .refreshAccessToken(twitchData)
           .then((value) => twitchData = value.data!);
-      debugPrint("TWITCH DATA AFTER LOGIN");
-      debugPrint(twitchData.toString());
 
       return DataSuccess(twitchData);
     } else {

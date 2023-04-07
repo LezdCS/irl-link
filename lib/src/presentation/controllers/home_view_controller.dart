@@ -157,8 +157,7 @@ class HomeViewController extends GetxController
   }
 
   Future getSettings() async {
-    AudioCache cache = AudioCache(prefix: '');
-    const path = "lib/assets/blank.mp3";
+    const path = "../lib/assets/blank.mp3";
     await homeEvents.getSettings().then((value) async => {
           if (value.error == null)
             {
@@ -170,7 +169,8 @@ class HomeViewController extends GetxController
                 {
                   timerKeepSpeakerOn = Timer.periodic(
                     Duration(minutes: 5),
-                    (Timer t) async => await cache.play(path),
+                    (Timer t) async =>
+                        await audioPlayer.play(AssetSource(path)),
                   ),
                 }
               else
