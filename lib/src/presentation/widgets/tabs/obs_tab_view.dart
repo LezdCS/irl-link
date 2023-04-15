@@ -5,7 +5,7 @@ import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dar
 import 'package:marquee/marquee.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 
-import 'alert_message_view.dart';
+import '../alert_message_view.dart';
 
 class ObsTabView extends GetView<ObsTabViewController> {
   @override

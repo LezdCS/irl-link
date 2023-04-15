@@ -3,13 +3,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:flutter/services.dart';
+import 'package:irllink/src/presentation/widgets/settings_view/tts.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:irllink/src/core/utils/globals.dart' as Globals;
 
-import '../widgets/manage_list_hidden_users.dart';
-import '../widgets/manage_list_browser_tabs.dart';
+import '../widgets/settings_view/manage_list_hidden_users.dart';
+import '../widgets/settings_view/manage_list_browser_tabs.dart';
 
 class SettingsView extends GetView<SettingsViewController> {
   final SettingsViewController controller = Get.find<SettingsViewController>();
@@ -155,18 +156,21 @@ class SettingsView extends GetView<SettingsViewController> {
                   ),
                 ),
                 Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        child: Text(
-                          "Text size",
+                      Text(
+                        "Text size",
+                        style: TextStyle(
+                            color: Theme.of(context).textTheme.bodyLarge!.color,
+                            fontSize: 18),
+                      ),
+                      Text(
+                          controller.settings.value.textSize!.ceil().toString(),
                           style: TextStyle(
                               color:
                                   Theme.of(context).textTheme.bodyLarge!.color,
-                              fontSize: 18),
-                        ),
-                      ),
+                              fontSize: 18)),
                       Container(
                         child: Slider(
                           onChanged: (value) {
@@ -348,28 +352,84 @@ class SettingsView extends GetView<SettingsViewController> {
                       ),
                     );
                   },
-                  child: Container(
-                    padding: EdgeInsets.only(top: 10, bottom: 10),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.list,
-                          color: Theme.of(context).primaryIconTheme.color,
-                          size: 22,
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: 10),
-                          child: Text(
-                            "Manage hidden users",
-                            style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                              fontSize: 18,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(top: 10, bottom: 10),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.list,
+                              color: Theme.of(context).primaryIconTheme.color,
+                              size: 22,
                             ),
-                          ),
+                            Container(
+                              padding: EdgeInsets.only(left: 10),
+                              child: Text(
+                                "Manage hidden users",
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .color,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: Theme.of(context).primaryIconTheme.color,
+                        size: 18,
+                      ),
+                    ],
+                  ),
+                ),
+                InkWell(
+                  onTap: () async {
+                    Get.to(
+                      () => Tts(
+                        controller: controller,
+                      ),
+                    );
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(top: 10, bottom: 10),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.spatial_audio_off_rounded,
+                              color: Theme.of(context).primaryIconTheme.color,
+                              size: 22,
+                            ),
+                            Container(
+                              padding: EdgeInsets.only(left: 10),
+                              child: Text(
+                                "Text To Speech",
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .color,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: Theme.of(context).primaryIconTheme.color,
+                        size: 18,
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -500,28 +560,40 @@ class SettingsView extends GetView<SettingsViewController> {
                       ),
                     );
                   },
-                  child: Container(
-                    padding: EdgeInsets.only(top: 10),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.list,
-                          color: Theme.of(context).primaryIconTheme.color,
-                          size: 22,
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: 10),
-                          child: Text(
-                            "Manage browser tabs",
-                            style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                              fontSize: 18,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(top: 10),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.list,
+                              color: Theme.of(context).primaryIconTheme.color,
+                              size: 22,
                             ),
-                          ),
+                            Container(
+                              padding: EdgeInsets.only(left: 10),
+                              child: Text(
+                                "Manage browser tabs",
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .color,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: Theme.of(context).primaryIconTheme.color,
+                        size: 18,
+                      ),
+                    ],
                   ),
                 ),
                 Row(

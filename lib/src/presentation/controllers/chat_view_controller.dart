@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/emote.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
@@ -44,8 +46,14 @@ class ChatViewController extends GetxController
   late Rx<Settings> settings = Settings.defaultSettings().obs;
   Timer? chatDemoTimer;
 
+  late FlutterTts flutterTts;
+
   @override
   void onInit() async {
+    flutterTts = FlutterTts();
+    flutterTts.setEngine(flutterTts.getDefaultEngine.toString());
+    initTts();
+
     scrollController = ScrollController();
     banDurationInputController = TextEditingController();
     if (Get.arguments != null) {
@@ -73,7 +81,6 @@ class ChatViewController extends GetxController
       isChatConnected.value = false;
       isAlertProgress.value = false;
     }
-
     super.onInit();
   }
 
@@ -219,6 +226,7 @@ class ChatViewController extends GetxController
               if (!settings.value.hiddenUsersIds!
                   .contains(chatMessage.authorId)) {
                 chatMessages.add(chatMessage);
+                // readTts(chatMessage);
 
                 if (scrollController.hasClients && isAutoScrolldown.value) {
                   Timer(Duration(milliseconds: 100), () {
@@ -516,5 +524,32 @@ class ChatViewController extends GetxController
       getTwitchCheerEmotes().then((value) => cheerEmotes = value);
       joinIrc();
     }
+  }
+
+  void initTts() async {
+    //  The following setup allows background music and in-app audio session to continue simultaneously:
+    await flutterTts.setIosAudioCategory(
+        IosTextToSpeechAudioCategory.ambient,
+        [
+          IosTextToSpeechAudioCategoryOptions.allowBluetooth,
+          IosTextToSpeechAudioCategoryOptions.allowBluetoothA2DP,
+          IosTextToSpeechAudioCategoryOptions.mixWithOthers
+        ],
+        IosTextToSpeechAudioMode.voicePrompt);
+
+    await flutterTts.awaitSpeakCompletion(true);
+    await flutterTts.setLanguage("en-US");
+    await flutterTts.setSpeechRate(0.4);
+    await flutterTts.setVolume(1.0);
+    await flutterTts.setPitch(1.0);
+    await flutterTts.setVoice({"name": "Karen", "locale": "en-US"});
+
+    if (Platform.isAndroid) {
+      await flutterTts.setQueueMode(1);
+    }
+  }
+
+  void readTts(TwitchChatMessage message) {
+    flutterTts.speak("${message.authorName} said ${message.message}");
   }
 }

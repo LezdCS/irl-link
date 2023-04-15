@@ -10,8 +10,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:collection/collection.dart';
 
 import 'alert_message_view.dart';
-import 'chat/timestamp.dart';
-import 'chat/author_name.dart';
+import 'chat_message/timestamp.dart';
+import 'chat_message/author_name.dart';
 
 class ChatView extends GetView<ChatViewController> {
   @override

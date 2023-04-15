@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../controllers/settings_view_controller.dart';
+import '../../controllers/settings_view_controller.dart';
 
 class ManageListBrowserTabs extends GetView {
   ManageListBrowserTabs({
