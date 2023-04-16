@@ -52,7 +52,6 @@ class ChatViewController extends GetxController
   void onInit() async {
     flutterTts = FlutterTts();
     flutterTts.setEngine(flutterTts.getDefaultEngine.toString());
-    initTts();
 
     scrollController = ScrollController();
     banDurationInputController = TextEditingController();
@@ -226,7 +225,9 @@ class ChatViewController extends GetxController
               if (!settings.value.hiddenUsersIds!
                   .contains(chatMessage.authorId)) {
                 chatMessages.add(chatMessage);
-                // readTts(chatMessage);
+                if(settings.value.ttsEnabled!){
+                  readTts(chatMessage);
+                }
 
                 if (scrollController.hasClients && isAutoScrolldown.value) {
                   Timer(Duration(milliseconds: 100), () {
@@ -524,9 +525,11 @@ class ChatViewController extends GetxController
       getTwitchCheerEmotes().then((value) => cheerEmotes = value);
       joinIrc();
     }
+
+    initTts(settings.value);
   }
 
-  void initTts() async {
+  void initTts(Settings settings) async {
     //  The following setup allows background music and in-app audio session to continue simultaneously:
     await flutterTts.setIosAudioCategory(
         IosTextToSpeechAudioCategory.ambient,
@@ -538,11 +541,11 @@ class ChatViewController extends GetxController
         IosTextToSpeechAudioMode.voicePrompt);
 
     await flutterTts.awaitSpeakCompletion(true);
-    await flutterTts.setLanguage("en-US");
-    await flutterTts.setSpeechRate(0.4);
-    await flutterTts.setVolume(1.0);
-    await flutterTts.setPitch(1.0);
-    await flutterTts.setVoice({"name": "Karen", "locale": "en-US"});
+    await flutterTts.setLanguage(settings.language!);
+    await flutterTts.setSpeechRate(settings.rate!);
+    await flutterTts.setVolume(settings.volume!);
+    await flutterTts.setPitch(settings.pitch!);
+    await flutterTts.setVoice(settings.voice!);
 
     if (Platform.isAndroid) {
       await flutterTts.setQueueMode(1);

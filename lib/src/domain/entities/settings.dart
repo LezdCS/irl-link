@@ -22,6 +22,16 @@ class Settings extends Equatable {
   final List? browserTabs;
   final List? obsConnectionsHistory;
 
+  //TTS SETTIGS
+  final bool? ttsEnabled;
+  final String? language;
+  final List? prefixsToIgnore;
+  final List? prefixsToUseTtsOnly;
+  final double? volume;
+  final double? pitch;
+  final double? rate;
+  final Map<String, String>? voice;
+
   const Settings({
     //CHAT SETTINGS
     required this.isEmotes,
@@ -43,6 +53,16 @@ class Settings extends Equatable {
     required this.streamElementsAccessToken,
     required this.browserTabs,
     required this.obsConnectionsHistory,
+
+    //TTS SETTIGS
+    required this.ttsEnabled,
+    required this.language,
+    required this.prefixsToIgnore,
+    required this.prefixsToUseTtsOnly,
+    required this.volume,
+    required this.pitch,
+    required this.rate,
+    required this.voice,
   });
 
   Settings.defaultSettings({
@@ -66,6 +86,16 @@ class Settings extends Equatable {
     this.streamElementsAccessToken = "",
     this.browserTabs = const [],
     this.obsConnectionsHistory = const [],
+
+    //TTS SETTINGS
+    this.ttsEnabled = false,
+    this.language = "en-US",
+    this.prefixsToIgnore = const [],
+    this.prefixsToUseTtsOnly = const [],
+    this.volume = 1.0,
+    this.pitch = 1.0,
+    this.rate = 0.5,
+    this.voice = const {"name": "en-us-x-sfg-local", "locale": "en-US"},
   });
 
   Map toJson() => {
@@ -87,6 +117,15 @@ class Settings extends Equatable {
         'streamElementsAccessToken': streamElementsAccessToken,
         'browserTabs': browserTabs,
         'obsConnectionsHistory': obsConnectionsHistory,
+        //TTS
+        'ttsEnabled': ttsEnabled,
+        'language': language,
+        'prefixsToIgnore': prefixsToIgnore,
+        'prefixsToUseTtsOnly': prefixsToUseTtsOnly,
+        'volume': volume,
+        'pitch': pitch,
+        'rate': rate,
+        'voice': voice,
       };
 
   @override
@@ -110,6 +149,15 @@ class Settings extends Equatable {
       streamElementsAccessToken,
       browserTabs,
       obsConnectionsHistory,
+      //TTS
+      ttsEnabled,
+      language,
+      prefixsToIgnore,
+      prefixsToUseTtsOnly,
+      volume,
+      pitch,
+      rate,
+      voice,
     ];
   }
 
@@ -135,6 +183,15 @@ class Settings extends Equatable {
     String? streamElementsAccessToken,
     List? browserTabs,
     List? obsConnectionsHistory,
+    //TTS
+    bool? ttsEnabled,
+    String? language,
+    List? prefixsToIgnore,
+    List? prefixsToUseTtsOnly,
+    double? volume,
+    double? pitch,
+    double? rate,
+    Map<String, String>? voice,
   }) =>
       Settings(
         //CHAT
@@ -157,5 +214,14 @@ class Settings extends Equatable {
         browserTabs: browserTabs ?? this.browserTabs,
         obsConnectionsHistory:
             obsConnectionsHistory ?? this.obsConnectionsHistory,
+        //TTS
+        ttsEnabled: ttsEnabled ?? this.ttsEnabled,
+        language: language ?? this.language,
+        prefixsToIgnore: prefixsToIgnore ?? this.prefixsToIgnore,
+        prefixsToUseTtsOnly: prefixsToUseTtsOnly ?? this.prefixsToUseTtsOnly,
+        volume: volume ?? this.volume,
+        pitch: pitch ?? this.pitch,
+        rate: rate ?? this.rate,
+        voice: voice ?? this.voice,
       );
 }
