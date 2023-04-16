@@ -70,42 +70,23 @@ class Tts extends StatelessWidget {
                       fontSize: 18,
                     ),
                   ),
-                  DropdownMenu(
-                    initialSelection: controller.ttsLanguages.firstWhere(
+                  DropdownButton(
+                    value: controller.ttsLanguages.firstWhere(
                       (element) =>
                           element == controller.settings.value.language,
                     ),
-                    inputDecorationTheme: InputDecorationTheme(
-                      contentPadding: EdgeInsets.only(left: 10),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: Theme.of(context).colorScheme.tertiary,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: Theme.of(context).colorScheme.tertiary,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: Theme.of(context).colorScheme.tertiary,
-                        ),
-                      ),
-                    ),
-                    onSelected: (value) {
+                    onChanged: (value) {
                       controller.settings.value =
-                          controller.settings.value.copyWith(language: value);
+                          controller.settings.value.copyWith(language: value.toString());
                       controller.saveSettings();
                     },
-                    dropdownMenuEntries: List.generate(
+                    items: List.generate(
                       controller.ttsLanguages.length,
-                      (index) => DropdownMenuEntry(
+                      (index) => DropdownMenuItem(
                         value: controller.ttsLanguages[index],
-                        label: controller.ttsLanguages[index],
+                        child: Text(
+                          controller.ttsLanguages[index],
+                        ),
                       ),
                     ),
                   ),
@@ -121,47 +102,26 @@ class Tts extends StatelessWidget {
                       fontSize: 18,
                     ),
                   ),
-                  DropdownMenu(
-                    initialSelection: controller.ttsVoices.firstWhere(
+                  DropdownButton(
+                    value: controller.ttsVoices.firstWhere(
                       (element) =>
                           element["name"] ==
                           controller.settings.value.voice!["name"],
                     ),
-                    inputDecorationTheme: InputDecorationTheme(
-                      contentPadding: EdgeInsets.only(left: 10),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: Theme.of(context).colorScheme.tertiary,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: Theme.of(context).colorScheme.tertiary,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: Theme.of(context).colorScheme.tertiary,
-                        ),
-                      ),
-                    ),
-                    onSelected: (value) {
+                    onChanged: (Object? value) {
                       Map<String, String> voice = {
-                        "name": value["name"],
-                        "locale": value["locale"],
+                        "name": (value as Map)["name"],
+                        "locale": (value)["locale"],
                       };
                       controller.settings.value =
                           controller.settings.value.copyWith(voice: voice);
                       controller.saveSettings();
                     },
-                    dropdownMenuEntries: List.generate(
+                    items: List.generate(
                       controller.ttsVoices.length,
-                      (index) => DropdownMenuEntry(
+                      (index) => DropdownMenuItem(
                         value: controller.ttsVoices[index],
-                        label: controller.ttsVoices[index]["name"],
+                        child: Text(controller.ttsVoices[index]["name"]),
                       ),
                     ),
                   ),
