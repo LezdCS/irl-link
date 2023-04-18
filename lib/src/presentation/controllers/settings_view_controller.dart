@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
@@ -33,6 +34,13 @@ class SettingsViewController extends GetxController {
   RxBool obsWebsocketPasswordShow = false.obs;
   RxBool obsWebsocketUrlShow = false.obs;
 
+  RxList ttsLanguages = [].obs;
+  RxList ttsVoices = [].obs;
+  late TextEditingController addTtsIgnoredUsersController;
+  late TextEditingController addTtsIgnoredPrefixsController;
+  late TextEditingController addTtsAllowedPrefixsController;
+
+
   @override
   void onInit() {
     alternateChannelChatController = TextEditingController();
@@ -41,11 +49,16 @@ class SettingsViewController extends GetxController {
     addBrowserTitleController = TextEditingController();
     addBrowserUrlController = TextEditingController();
     addHiddenUsernameController = TextEditingController();
+    addTtsIgnoredUsersController = TextEditingController();
+    addTtsIgnoredPrefixsController = TextEditingController();
+    addTtsAllowedPrefixsController = TextEditingController();
 
     if (Get.arguments != null) {
       twitchData = Get.arguments[0];
     }
     usernamesHiddenUsers = <String>[].obs;
+    getTtsLanguages();
+    getTtsVoices();
     super.onInit();
   }
 
@@ -157,5 +170,21 @@ class SettingsViewController extends GetxController {
         .then((value) => users = value.data!);
 
     users.forEach((user) => usernamesHiddenUsers.add(user.displayName));
+  }
+
+  void getTtsLanguages() {
+    FlutterTts flutterTts = FlutterTts();
+    flutterTts.getLanguages.then((value) => {
+          ttsLanguages.value = value,
+          ttsLanguages.sort((a, b) => a.compareTo(b))
+        });
+  }
+
+  void getTtsVoices() {
+    FlutterTts flutterTts = FlutterTts();
+    flutterTts.getVoices.then((value) => {
+          ttsVoices.value = value,
+          ttsVoices.sort((a, b) => a['name'].compareTo(b['name']))
+        });
   }
 }

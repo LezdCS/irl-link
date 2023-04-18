@@ -20,6 +20,16 @@ class SettingsDTO extends Settings {
     required String streamElementsAccessToken,
     required List browserTabs,
     required List obsConnectionsHistory,
+    //TTS SETTINGS
+    required bool ttsEnabled,
+    required String language,
+    required List prefixsToIgnore,
+    required List prefixsToUseTtsOnly,
+    required double volume,
+    required double pitch,
+    required double rate,
+    required Map<String, String> voice,
+    required List ttsUsersToIgnore,
   }) : super(
           //CHAT SETTINGS
           isEmotes: isEmotes,
@@ -39,6 +49,16 @@ class SettingsDTO extends Settings {
           streamElementsAccessToken: streamElementsAccessToken,
           browserTabs: browserTabs,
           obsConnectionsHistory: obsConnectionsHistory,
+          //TTS SETTINGS
+          ttsEnabled: ttsEnabled,
+          language: language,
+          prefixsToIgnore: prefixsToIgnore,
+          prefixsToUseTtsOnly: prefixsToUseTtsOnly,
+          volume: volume,
+          pitch: pitch,
+          rate: rate,
+          voice: voice,
+      ttsUsersToIgnore: ttsUsersToIgnore,
         );
 
   Map toJson() => {
@@ -112,6 +132,34 @@ class SettingsDTO extends Settings {
       obsConnectionsHistory: map['obsConnectionsHistory'] != null
           ? map['obsConnectionsHistory'] as List
           : Settings.defaultSettings().obsConnectionsHistory!,
+      //TTS SETTINGS
+      ttsEnabled: map['ttsEnabled'] != null
+          ? map['ttsEnabled'] as bool
+          : Settings.defaultSettings().ttsEnabled!,
+      language: map['language'] != null
+          ? map['language'] as String
+          : Settings.defaultSettings().language!,
+      prefixsToIgnore: map['prefixsToIgnore'] != null
+          ? map['prefixsToIgnore'] as List
+          : Settings.defaultSettings().prefixsToIgnore!,
+      prefixsToUseTtsOnly: map['prefixsToUseTtsOnly'] != null
+          ? map['prefixsToUseTtsOnly'] as List
+          : Settings.defaultSettings().prefixsToUseTtsOnly!,
+      volume: map['volume'] != null
+          ? map['volume'] as double
+          : Settings.defaultSettings().volume!,
+      pitch: map['pitch'] != null
+          ? map['pitch'] as double
+          : Settings.defaultSettings().pitch!,
+      rate: map['rate'] != null
+          ? map['rate'] as double
+          : Settings.defaultSettings().rate!,
+      voice: map['voice'] != null
+          ? {"name": map["voice"]["name"], "locale": map["voice"]["locale"]}
+          : Settings.defaultSettings().voice!,
+      ttsUsersToIgnore: map['ttsUsersToIgnore'] != null
+          ? map['ttsUsersToIgnore'] as List
+          : Settings.defaultSettings().ttsUsersToIgnore!,
     );
   }
 }

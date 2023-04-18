@@ -5,10 +5,10 @@ import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/chat_view.dart';
 import 'package:irllink/src/presentation/widgets/emote_picker_view.dart';
-import 'package:irllink/src/presentation/widgets/obs_tab_view.dart';
+import 'package:irllink/src/presentation/widgets/tabs/obs_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/split_view_custom.dart';
-import 'package:irllink/src/presentation/widgets/streamelements_tab_view.dart';
-import 'package:irllink/src/presentation/widgets/twitch_tab_view.dart';
+import 'package:irllink/src/presentation/widgets/tabs/streamelements_tab_view.dart';
+import 'package:irllink/src/presentation/widgets/tabs/twitch_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/web_page_view.dart';
 import 'package:move_to_background/move_to_background.dart';
 

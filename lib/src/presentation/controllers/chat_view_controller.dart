@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/emote.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
@@ -41,11 +43,18 @@ class ChatViewController extends GetxController
   Rxn<TwitchChatMessage> selectedMessage = Rxn<TwitchChatMessage>();
   late TextEditingController banDurationInputController;
 
-  late Rx<Settings> settings = Settings.defaultSettings().obs;
+  late Rx<Settings> settings = Settings
+      .defaultSettings()
+      .obs;
   Timer? chatDemoTimer;
+
+  late FlutterTts flutterTts;
 
   @override
   void onInit() async {
+    flutterTts = FlutterTts();
+    flutterTts.setEngine(flutterTts.getDefaultEngine.toString());
+
     scrollController = ScrollController();
     banDurationInputController = TextEditingController();
     if (Get.arguments != null) {
@@ -54,7 +63,8 @@ class ChatViewController extends GetxController
     } else {
       chatDemoTimer = Timer.periodic(
         Duration(seconds: 1),
-        (Timer t) => {
+            (Timer t) =>
+        {
           chatMessages.add(TwitchChatMessage.randomGeneration()),
           if (scrollController.hasClients && isAutoScrolldown.value)
             {
@@ -73,7 +83,6 @@ class ChatViewController extends GetxController
       isChatConnected.value = false;
       isAlertProgress.value = false;
     }
-
     super.onInit();
   }
 
@@ -100,7 +109,7 @@ class ChatViewController extends GetxController
           case ConnectivityResult.bluetooth:
             break;
           case ConnectivityResult.vpn:
-            // TODO: Handle this case.
+          // TODO: Handle this case.
             break;
           case ConnectivityResult.other:
             joinIrc();
@@ -138,7 +147,7 @@ class ChatViewController extends GetxController
     channel = IOWebSocketChannel.connect("wss://irc-ws.chat.twitch.tv:443");
 
     streamSubscription = channel!.stream.listen(
-        (message) => chatListener(message),
+            (message) => chatListener(message),
         onDone: ircChatClosed,
         onError: ircChatError);
 
@@ -149,14 +158,17 @@ class ChatViewController extends GetxController
     channel!.sink.add('NICK ' + nick);
 
     channel!.sink.add('JOIN #$ircChannelJoined');
+    flutterTts.stop();
   }
 
   void ircChatClosed() {
     debugPrint("IRC Chat CLOSED");
+    flutterTts.stop();
     joinIrc();
   }
 
   void ircChatError(Object o, StackTrace s) {
+    flutterTts.stop();
     debugPrint("IRC Chat ERROR");
   }
 
@@ -197,7 +209,7 @@ class ChatViewController extends GetxController
         "ROOMSTATE"
       ];
       String? keyResult =
-          keys.firstWhereOrNull((key) => messageSplited.last.contains(key));
+      keys.firstWhereOrNull((key) => messageSplited.last.contains(key));
 
       final Map<String, String> messageMapped = {};
       messageSplited.forEach((element) {
@@ -219,6 +231,9 @@ class ChatViewController extends GetxController
               if (!settings.value.hiddenUsersIds!
                   .contains(chatMessage.authorId)) {
                 chatMessages.add(chatMessage);
+                if (settings.value.ttsEnabled!) {
+                  readTts(chatMessage);
+                }
 
                 if (scrollController.hasClients && isAutoScrolldown.value) {
                   Timer(Duration(milliseconds: 100), () {
@@ -260,7 +275,7 @@ class ChatViewController extends GetxController
 
               chatMessages
                   .firstWhereOrNull((message) =>
-                      message.messageId == messageMapped['target-msg-id'])!
+              message.messageId == messageMapped['target-msg-id'])!
                   .isDeleted = true;
 
               chatMessages.refresh();
@@ -295,7 +310,7 @@ class ChatViewController extends GetxController
           .then((value) {
         for (var emote in value.data!) {
           if (twitchEmotes
-                  .firstWhereOrNull((element) => element.id == emote.id) ==
+              .firstWhereOrNull((element) => element.id == emote.id) ==
               null) {
             twitchEmotes.add(emote);
           }
@@ -309,24 +324,26 @@ class ChatViewController extends GetxController
     List<Emote> emotes = [];
 
     await homeEvents.getTwitchEmotes(twitchData!.accessToken).then(
-          (value) => {
-            if (value.error == null)
-              {
-                emotes.addAll(value.data!),
-              }
-          },
-        );
+          (value) =>
+      {
+        if (value.error == null)
+          {
+            emotes.addAll(value.data!),
+          }
+      },
+    );
 
     await homeEvents
         .getTwitchChannelEmotes(
-          twitchData!.accessToken,
-          twitchData!.twitchUser.id,
-        )
+      twitchData!.accessToken,
+      twitchData!.twitchUser.id,
+    )
         .then(
-          (value) => {
-            if (value.error == null) {emotes.addAll(value.data!)}
-          },
-        );
+          (value) =>
+      {
+        if (value.error == null) {emotes.addAll(value.data!)}
+      },
+    );
 
     return emotes;
   }
@@ -337,14 +354,15 @@ class ChatViewController extends GetxController
 
     await homeEvents
         .getTwitchCheerEmotes(
-          twitchData!.accessToken,
-          ircChannelJoinedChannelId,
-        )
+      twitchData!.accessToken,
+      ircChannelJoinedChannelId,
+    )
         .then(
-          (value) => {
-            if (value.error == null) {emotes.addAll(value.data!)}
-          },
-        );
+          (value) =>
+      {
+        if (value.error == null) {emotes.addAll(value.data!)}
+      },
+    );
 
     return emotes;
   }
@@ -353,31 +371,36 @@ class ChatViewController extends GetxController
   Future<List<Emote>> getThirdPartEmotes() async {
     List<Emote> emotes = [];
 
-    await homeEvents.getBttvGlobalEmotes().then((value) => {
-          if (value.error == null) {emotes.addAll(value.data!)}
-        });
+    await homeEvents.getBttvGlobalEmotes().then((value) =>
+    {
+      if (value.error == null) {emotes.addAll(value.data!)}
+    });
 
     await homeEvents
         .getBttvChannelEmotes(broadcasterId: ircChannelJoinedChannelId)
-        .then((value) => {
-              if (value.error == null) {emotes.addAll(value.data!)}
-            });
+        .then((value) =>
+    {
+      if (value.error == null) {emotes.addAll(value.data!)}
+    });
 
     await homeEvents
         .getFrankerfacezEmotes(broadcasterId: ircChannelJoinedChannelId)
-        .then((value) => {
-              if (value.error == null) {emotes.addAll(value.data!)}
-            });
+        .then((value) =>
+    {
+      if (value.error == null) {emotes.addAll(value.data!)}
+    });
 
     await homeEvents
         .get7TvChannelEmotes(broadcasterId: ircChannelJoinedChannelId)
-        .then((value) => {
-              if (value.error == null) {emotes.addAll(value.data!)}
-            });
+        .then((value) =>
+    {
+      if (value.error == null) {emotes.addAll(value.data!)}
+    });
 
-    await homeEvents.get7TvGlobalEmotes().then((value) => {
-          if (value.error == null) {emotes.addAll(value.data!)}
-        });
+    await homeEvents.get7TvGlobalEmotes().then((value) =>
+    {
+      if (value.error == null) {emotes.addAll(value.data!)}
+    });
 
     return emotes;
   }
@@ -388,32 +411,33 @@ class ChatViewController extends GetxController
 
     await homeEvents
         .getTwitchGlobalBadges(accessToken: twitchData!.accessToken)
-        .then((value) => {
-              if (value.error == null) {badges.addAll(value.data!)}
-            });
+        .then((value) =>
+    {
+      if (value.error == null) {badges.addAll(value.data!)}
+    });
 
     await homeEvents
         .getTwitchChannelBadges(
-          accessToken: twitchData!.accessToken,
-          broadcasterId: ircChannelJoinedChannelId,
-        )
+      accessToken: twitchData!.accessToken,
+      broadcasterId: ircChannelJoinedChannelId,
+    )
         .then(
           (channelBadges) => {addChannelBadges(badges, channelBadges)},
-        );
+    );
 
     return badges;
   }
 
   /// Replace Twitch default [badges] with Channel badges
-  Future<List<TwitchBadge>> addChannelBadges(
-      List<TwitchBadge> badges, channelBadges) async {
+  Future<List<TwitchBadge>> addChannelBadges(List<TwitchBadge> badges,
+      channelBadges) async {
     channelBadges.data!.forEach((badge) {
       if (badges.firstWhereOrNull((badgeFromList) =>
-              badge.setId == badgeFromList.setId &&
-              badge.versionId == badgeFromList.versionId) !=
+      badge.setId == badgeFromList.setId &&
+          badge.versionId == badgeFromList.versionId) !=
           null) {
         badges.remove(badges.firstWhere((badgeFromList) =>
-            badge.setId == badgeFromList.setId &&
+        badge.setId == badgeFromList.setId &&
             badge.versionId == badgeFromList.versionId));
       }
       badges.addAll(channelBadges.data!);
@@ -434,7 +458,8 @@ class ChatViewController extends GetxController
   /// Ban user for specific [duration] based on the author name in the [message]
   void timeoutMessageInstruction(TwitchChatMessage message, int duration) {
     channel?.sink.add(
-        'PRIVMSG #$ircChannelJoined :/timeout ${message.authorName} $duration reason\r\n');
+        'PRIVMSG #$ircChannelJoined :/timeout ${message
+            .authorName} $duration reason\r\n');
 
     Get.back();
     selectedMessage.value = null;
@@ -455,7 +480,7 @@ class ChatViewController extends GetxController
         ? settings.value.hiddenUsersIds!
         : [];
     if (hiddenUsersIds
-            .firstWhereOrNull((userId) => userId == message.authorId) ==
+        .firstWhereOrNull((userId) => userId == message.authorId) ==
         null) {
       //add user
       hiddenUsersIds.add(message.authorId);
@@ -482,13 +507,14 @@ class ChatViewController extends GetxController
   }
 
   Future getSettings() async {
-    await homeEvents.getSettings().then((value) async => {
-          if (value.error == null)
-            {
-              settings.value = value.data!,
-            },
-          await this.applySettings(),
-        });
+    await homeEvents.getSettings().then((value) async =>
+    {
+      if (value.error == null)
+        {
+          settings.value = value.data!,
+        },
+      await this.applySettings(),
+    });
   }
 
   Future applySettings() async {
@@ -498,9 +524,9 @@ class ChatViewController extends GetxController
       ircChannelJoined = settings.value.alternateChannelName!;
       await homeEvents
           .getTwitchUser(
-            username: ircChannelJoined,
-            accessToken: twitchData!.accessToken,
-          )
+        username: ircChannelJoined,
+        accessToken: twitchData!.accessToken,
+      )
           .then((value) => ircChannelJoinedChannelId = value.data!.id);
     } else {
       ircChannelJoined = twitchData!.twitchUser.login;
@@ -516,5 +542,54 @@ class ChatViewController extends GetxController
       getTwitchCheerEmotes().then((value) => cheerEmotes = value);
       joinIrc();
     }
+
+    initTts(settings.value);
+  }
+
+  void initTts(Settings settings) async {
+    //  The following setup allows background music and in-app audio session to continue simultaneously:
+    await flutterTts.setIosAudioCategory(
+        IosTextToSpeechAudioCategory.ambient,
+        [
+          IosTextToSpeechAudioCategoryOptions.allowBluetooth,
+          IosTextToSpeechAudioCategoryOptions.allowBluetoothA2DP,
+          IosTextToSpeechAudioCategoryOptions.mixWithOthers
+        ],
+        IosTextToSpeechAudioMode.voicePrompt);
+
+    await flutterTts.awaitSpeakCompletion(true);
+    await flutterTts.setLanguage(settings.language!);
+    await flutterTts.setSpeechRate(settings.rate!);
+    await flutterTts.setVolume(settings.volume!);
+    await flutterTts.setPitch(settings.pitch!);
+    await flutterTts.setVoice(settings.voice!);
+
+    if (Platform.isAndroid) {
+      await flutterTts.setQueueMode(1);
+    }
+  }
+
+  void readTts(TwitchChatMessage message) {
+    //check if user is ignored
+    if (settings.value.ttsUsersToIgnore!.contains(message.authorName)) {
+      return;
+    }
+    //check if message start with ignored prefix
+    for (String prefix in settings.value.prefixsToIgnore!) {
+      if (message.message.startsWith(prefix)) {
+        return;
+      }
+    }
+    //check if message start with allowed prefix
+    if (settings.value.prefixsToUseTtsOnly!.isNotEmpty) {
+      for (String prefix in settings.value.prefixsToUseTtsOnly!) {
+        debugPrint(message.message.startsWith(prefix) ? "true" : "false");
+        if (message.message.startsWith(prefix) == false) {
+          return;
+        }
+      }
+    }
+
+    flutterTts.speak("${message.authorName} said ${message.message}");
   }
 }
