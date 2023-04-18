@@ -580,6 +580,16 @@ class ChatViewController extends GetxController
         return;
       }
     }
+    //check if message start with allowed prefix
+    if (settings.value.prefixsToUseTtsOnly!.isNotEmpty) {
+      for (String prefix in settings.value.prefixsToUseTtsOnly!) {
+        debugPrint(message.message.startsWith(prefix) ? "true" : "false");
+        if (message.message.startsWith(prefix) == false) {
+          return;
+        }
+      }
+    }
+
     flutterTts.speak("${message.authorName} said ${message.message}");
   }
 }
