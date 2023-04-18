@@ -203,70 +203,88 @@ class Tts extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Prefixs ignored",
-                            style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                              fontSize: 18,
+                InkWell(
+                  onTap: () {
+                    _dialogAddIgnoredPrefixs(
+                      controller,
+                    );
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Prefixs ignored",
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .color,
+                                fontSize: 18,
+                              ),
                             ),
-                          ),
-                          Text(
-                            "Messages with these prefixs will not be read aloud.",
-                            style: TextStyle(
-                              color: Colors.grey[400],
-                              fontSize: 14,
+                            Text(
+                              "Messages with these prefixs will not be read aloud.",
+                              style: TextStyle(
+                                color: Colors.grey[400],
+                                fontSize: 14,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios,
-                      color: Theme.of(context).primaryIconTheme.color,
-                      size: 18,
-                    ),
-                  ],
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: Theme.of(context).primaryIconTheme.color,
+                        size: 18,
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Prefixs allowed",
-                            style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                              fontSize: 18,
+                InkWell(
+                  onTap: () {
+                    // _dialogAddAllowedPrefixs(
+                    //   controller,
+                    // );
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Prefixs allowed",
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .color,
+                                fontSize: 18,
+                              ),
                             ),
-                          ),
-                          Text(
-                            "Only messages with these prefixs will be read aloud.",
-                            style: TextStyle(
-                              color: Colors.grey[400],
-                              fontSize: 14,
+                            Text(
+                              "Only messages with these prefixs will be read aloud.",
+                              style: TextStyle(
+                                color: Colors.grey[400],
+                                fontSize: 14,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios,
-                      color: Theme.of(context).primaryIconTheme.color,
-                      size: 18,
-                    ),
-                  ],
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: Theme.of(context).primaryIconTheme.color,
+                        size: 18,
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(height: 20),
                 InkWell(
@@ -328,7 +346,10 @@ class Tts extends StatelessWidget {
       content: Obx(
         () => Column(
           children: [
-            Text("Users that will not be read aloud."),
+            Text(
+              "Users that will not be read aloud.",
+              style: TextStyle(color: Colors.grey[400]),
+            ),
             SizedBox(height: 10),
             ListView.builder(
               shrinkWrap: true,
@@ -377,14 +398,112 @@ class Tts extends StatelessWidget {
                             Theme.of(Get.context!).colorScheme.tertiary,
                       ),
                       onPressed: () {
-                        controller.settings.value.ttsUsersToIgnore!
-                            .add(controller.addTtsIgnoredUsersController.text);
+                        controller.settings.value.ttsUsersToIgnore!.add(
+                            controller.addTtsIgnoredUsersController.text
+                                .trim());
                         controller.settings.value = controller.settings.value
                             .copyWith(
-                                ttsUsersToIgnore:
-                                    controller.settings.value.ttsUsersToIgnore!);
+                                ttsUsersToIgnore: controller
+                                    .settings.value.ttsUsersToIgnore!);
                         controller.settings.refresh();
                         controller.addTtsIgnoredUsersController.clear();
+                        controller.saveSettings();
+                      },
+                      child: Text(
+                        "Add",
+                        style: TextStyle(
+                            color: Theme.of(Get.context!)
+                                .textTheme
+                                .bodyLarge!
+                                .color),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _dialogAddIgnoredPrefixs(
+    SettingsViewController controller,
+  ) {
+    Get.defaultDialog(
+      title: "Ignored prefixs",
+      titleStyle: TextStyle(color: Colors.white),
+      backgroundColor: Color(0xFF0e0e10),
+      buttonColor: Color(0xFF9147ff),
+      cancelTextColor: Color(0xFF9147ff),
+      textCancel: "Back",
+      radius: 10,
+      content: Obx(
+        () => Column(
+          children: [
+            Text(
+              "Message starting with these prefixs will not be read aloud.",
+              style: TextStyle(color: Colors.grey[400]),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 10),
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: controller.settings.value.prefixsToIgnore!.length,
+              itemBuilder: (context, index) {
+                return Chip(
+                  onDeleted: () {
+                    controller.settings.value.prefixsToIgnore!.removeAt(index);
+                    controller.settings.value = controller.settings.value
+                        .copyWith(
+                            prefixsToIgnore:
+                                controller.settings.value.prefixsToIgnore!);
+                    controller.settings.refresh();
+                    controller.saveSettings();
+                  },
+                  label:
+                      Text(controller.settings.value.prefixsToIgnore![index]),
+                );
+              },
+            ),
+            Row(
+              children: [
+                Expanded(
+                  flex: 7,
+                  child: TextField(
+                    controller: controller.addTtsIgnoredPrefixsController,
+                    decoration: InputDecoration(
+                      isDense: true,
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                      hintText: 'Prefix',
+                      labelText: 'Prefix',
+                      labelStyle: TextStyle(
+                        color: Theme.of(Get.context!).colorScheme.tertiary,
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Container(
+                    margin: EdgeInsets.only(left: 10),
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor:
+                            Theme.of(Get.context!).colorScheme.tertiary,
+                      ),
+                      onPressed: () {
+                        controller.settings.value.prefixsToIgnore!.add(
+                            controller.addTtsIgnoredPrefixsController.text
+                                .trim());
+                        controller.settings.value = controller.settings.value
+                            .copyWith(
+                                prefixsToIgnore:
+                                    controller.settings.value.prefixsToIgnore!);
+                        controller.settings.refresh();
+                        controller.addTtsIgnoredPrefixsController.clear();
                         controller.saveSettings();
                       },
                       child: Text(
