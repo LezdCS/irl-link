@@ -36,6 +36,7 @@ class SettingsViewController extends GetxController {
 
   RxList ttsLanguages = [].obs;
   RxList ttsVoices = [].obs;
+  late TextEditingController addTtsIgnoredUsersController;
 
   @override
   void onInit() {
@@ -45,6 +46,7 @@ class SettingsViewController extends GetxController {
     addBrowserTitleController = TextEditingController();
     addBrowserUrlController = TextEditingController();
     addHiddenUsernameController = TextEditingController();
+    addTtsIgnoredUsersController = TextEditingController();
 
     if (Get.arguments != null) {
       twitchData = Get.arguments[0];

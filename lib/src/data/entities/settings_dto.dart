@@ -29,6 +29,7 @@ class SettingsDTO extends Settings {
     required double pitch,
     required double rate,
     required Map<String, String> voice,
+    required List ttsUsersToIgnore,
   }) : super(
           //CHAT SETTINGS
           isEmotes: isEmotes,
@@ -57,6 +58,7 @@ class SettingsDTO extends Settings {
           pitch: pitch,
           rate: rate,
           voice: voice,
+      ttsUsersToIgnore: ttsUsersToIgnore,
         );
 
   Map toJson() => {
@@ -155,6 +157,9 @@ class SettingsDTO extends Settings {
       voice: map['voice'] != null
           ? {"name": map["voice"]["name"], "locale": map["voice"]["locale"]}
           : Settings.defaultSettings().voice!,
+      ttsUsersToIgnore: map['ttsUsersToIgnore'] != null
+          ? map['ttsUsersToIgnore'] as List
+          : Settings.defaultSettings().ttsUsersToIgnore!,
     );
   }
 }

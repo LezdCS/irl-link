@@ -553,6 +553,9 @@ class ChatViewController extends GetxController
   }
 
   void readTts(TwitchChatMessage message) {
+    if(settings.value.ttsUsersToIgnore!.contains(message.authorName)){
+      return;
+    }
     flutterTts.speak("${message.authorName} said ${message.message}");
   }
 }
