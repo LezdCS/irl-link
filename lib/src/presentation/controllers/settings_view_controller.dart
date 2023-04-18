@@ -167,11 +167,17 @@ class SettingsViewController extends GetxController {
 
   void getTtsLanguages() {
     FlutterTts flutterTts = FlutterTts();
-    flutterTts.getLanguages.then((value) => ttsLanguages.value = value);
+    flutterTts.getLanguages.then((value) => {
+          ttsLanguages.value = value,
+          ttsLanguages.sort((a, b) => a.compareTo(b))
+        });
   }
 
   void getTtsVoices() {
     FlutterTts flutterTts = FlutterTts();
-    flutterTts.getVoices.then((value) => ttsVoices.value = value);
+    flutterTts.getVoices.then((value) => {
+          ttsVoices.value = value,
+          ttsVoices.sort((a, b) => a['name'].compareTo(b['name']))
+        });
   }
 }
