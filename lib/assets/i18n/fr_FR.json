@@ -19,7 +19,7 @@
   "enable_tts": "Activer la synthèse vocale",
   "voice": "Voix",
   "speech_rate": "Vitesse d'élocution",
-  "Pitch": "Pitch",
+  "pitch": "Pitch",
   "prefixs_ignored": "Préfixes ignorés",
   "prefixs_ignored_details": "Les messages comportant ces préfixes ne seront pas lus à haute voix.",
   "prefixs_allowed": "Préfixes autorisés",

@@ -19,7 +19,7 @@
   "enable_tts": "Enable Text To Speech",
   "voice": "Voice",
   "speech_rate": "Speech rate",
-  "Pitch": "Pitch",
+  "pitch": "Pitch",
   "prefixs_ignored": "Prefixs ignored",
   "prefixs_ignored_details": "Messages with these prefixs will not be read aloud.",
   "prefixs_allowed": "Prefixs allowed",
