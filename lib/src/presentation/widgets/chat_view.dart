@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
@@ -350,12 +351,18 @@ class ChatView extends GetView<ChatViewController> {
             ],
           ),
           SizedBox(height: 10),
-          Text(
-            controller.selectedMessage.value?.message ?? "",
-            style: TextStyle(
-              color: Color(0xFF575757),
-              fontStyle: FontStyle.italic,
-              fontSize: 14,
+          GestureDetector(
+            onLongPress: (){
+              Clipboard.setData(ClipboardData(text: controller.selectedMessage.value?.message ?? ""));
+              Get.snackbar("Copied", "Message copied to clipboard");
+            },
+            child: Text(
+              controller.selectedMessage.value?.message ?? "",
+              style: TextStyle(
+                color: Color(0xFF575757),
+                fontStyle: FontStyle.italic,
+                fontSize: 14,
+              ),
             ),
           ),
           InkWell(
