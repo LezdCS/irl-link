@@ -23,7 +23,7 @@ class Tts extends StatelessWidget {
           actions: [],
           backgroundColor: Theme.of(context).colorScheme.secondary,
           title: Text(
-            "Text To Speech",
+            "text_to_speech".tr,
             style: TextStyle(
               color: Theme.of(context).textTheme.bodyLarge!.color,
             ),
@@ -40,7 +40,7 @@ class Tts extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Enable Text To Speech",
+                      "enable_tts".tr,
                       style: TextStyle(
                         color: Theme.of(context).textTheme.bodyLarge!.color,
                         fontSize: 18,
@@ -64,7 +64,7 @@ class Tts extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Language",
+                      "language".tr,
                       style: TextStyle(
                         color: Theme.of(context).textTheme.bodyLarge!.color,
                         fontSize: 18,
@@ -96,7 +96,7 @@ class Tts extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Voice",
+                      "voice".tr,
                       style: TextStyle(
                         color: Theme.of(context).textTheme.bodyLarge!.color,
                         fontSize: 18,
@@ -156,7 +156,7 @@ class Tts extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Speech rate",
+                      "speech_rate".tr,
                       style: TextStyle(
                         color: Theme.of(context).textTheme.bodyLarge!.color,
                         fontSize: 18,
@@ -181,7 +181,7 @@ class Tts extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Pitch",
+                      "pitch".tr,
                       style: TextStyle(
                         color: Theme.of(context).textTheme.bodyLarge!.color,
                         fontSize: 18,
@@ -217,7 +217,7 @@ class Tts extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Prefixs ignored",
+                              "prefixs_ignored".tr,
                               style: TextStyle(
                                 color: Theme.of(context)
                                     .textTheme
@@ -227,7 +227,7 @@ class Tts extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              "Messages with these prefixs will not be read aloud.",
+                              "prefixs_ignored_details".tr,
                               style: TextStyle(
                                 color: Colors.grey[400],
                                 fontSize: 14,
@@ -259,7 +259,7 @@ class Tts extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Prefixs allowed",
+                              "prefixs_allowed".tr,
                               style: TextStyle(
                                 color: Theme.of(context)
                                     .textTheme
@@ -269,7 +269,7 @@ class Tts extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              "Only messages with these prefixs will be read aloud.",
+                              "prefixs_allowed_details".tr,
                               style: TextStyle(
                                 color: Colors.grey[400],
                                 fontSize: 14,
@@ -300,7 +300,7 @@ class Tts extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Ignored users",
+                            "ignored_users".tr,
                             style: TextStyle(
                               color:
                                   Theme.of(context).textTheme.bodyLarge!.color,
@@ -308,7 +308,7 @@ class Tts extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            "Users that will not be read aloud.",
+                            "ignored_users_details".tr,
                             style: TextStyle(
                               color: Colors.grey[400],
                               fontSize: 14,
@@ -410,7 +410,7 @@ class Tts extends StatelessWidget {
                         controller.saveSettings();
                       },
                       child: Text(
-                        "Add",
+                        "add".tr,
                         style: TextStyle(
                             color: Theme.of(Get.context!)
                                 .textTheme
@@ -507,7 +507,7 @@ class Tts extends StatelessWidget {
                         controller.saveSettings();
                       },
                       child: Text(
-                        "Add",
+                        "add".tr,
                         style: TextStyle(
                             color: Theme.of(Get.context!)
                                 .textTheme
@@ -604,7 +604,7 @@ class Tts extends StatelessWidget {
                         controller.saveSettings();
                       },
                       child: Text(
-                        "Add",
+                        "add".tr,
                         style: TextStyle(
                             color: Theme.of(Get.context!)
                                 .textTheme

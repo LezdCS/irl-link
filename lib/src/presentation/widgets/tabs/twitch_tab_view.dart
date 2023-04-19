@@ -57,8 +57,8 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         Padding(padding: EdgeInsets.only(right: 6.0)),
                         Text(
                           controller.twitchStreamInfos.value.isOnline!
-                              ? "Live"
-                              : "Offline",
+                              ? "live".tr
+                              : "offline".tr,
                           style: TextStyle(
                             color: Theme.of(Get.context!)
                                 .textTheme
@@ -92,7 +92,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                           width: 6,
                         ),
                         Text(
-                          "viewers",
+                          "viewers".tr,
                           style: TextStyle(
                             color: Theme.of(Get.context!)
                                 .textTheme
@@ -118,7 +118,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                             contentPadding: EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 7),
                             hintText: 'Your stream\'s title',
-                            labelText: 'Stream title',
+                            labelText: 'stream_title'.tr,
                             labelStyle: TextStyle(
                               color: Theme.of(context).colorScheme.tertiary,
                             ),
@@ -137,7 +137,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         FocusScope.of(context).unfocus();
                       },
                       child: Text(
-                        'Change',
+                        'change'.tr,
                         style: TextStyle(
                           color: Colors.white,
                         ),
@@ -153,7 +153,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                   color: Theme.of(context).colorScheme.secondary,
                 ),
                 Text(
-                  "Shortcuts",
+                  "shortcuts".tr,
                   style: TextStyle(
                     color: Theme.of(Get.context!).textTheme.bodyLarge!.color,
                     fontSize: 16,
@@ -171,7 +171,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                   children: [
                     _shortcutButton(
                       context,
-                      'Follower only',
+                      'follower_only'.tr,
                       () => {
                         controller.toggleFollowerOnly(),
                       },
@@ -179,7 +179,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                     ),
                     _shortcutButton(
                       context,
-                      'Subscriber only',
+                      'subscriber_only'.tr,
                       () => {
                         controller.toggleSubOnly(),
                       },
@@ -187,7 +187,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                     ),
                     _shortcutButton(
                       context,
-                      'Emote only',
+                      'emote_only'.tr,
                       () => {
                         controller.toggleEmoteOnly(),
                       },
@@ -195,7 +195,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                     ),
                     _shortcutButton(
                       context,
-                      'Slow mode',
+                      'slow_mode'.tr,
                       () => {
                         controller.toggleSlowMode(),
                       },
@@ -327,7 +327,7 @@ Widget _prediction(
                           controller.endPrediction("CANCELED", null);
                         },
                         child: Text(
-                          "Cancel",
+                          "cancel".tr,
                           style: TextStyle(
                             color: Colors.white,
                           ),
@@ -480,7 +480,7 @@ Widget _poll(
                           controller.endPoll("ARCHIVED");
                         },
                         child: Text(
-                          "Cancel",
+                          "cancel".tr,
                           style: TextStyle(
                             color: Colors.white,
                           ),

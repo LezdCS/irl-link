@@ -203,7 +203,7 @@ class HomeView extends GetView<HomeViewController> {
                                     .bodyLarge!
                                     .color,
                                 fontSize: 16),
-                            hintText: 'Send a message',
+                            hintText: 'send_message'.tr,
                             isDense: true,
                             enabledBorder: InputBorder.none,
                             focusedBorder: InputBorder.none,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
@@ -202,7 +203,7 @@ class ChatView extends GetView<ChatViewController> {
       backgroundColor: Color(0xFF0e0e10),
       buttonColor: Color(0xFF9147ff),
       cancelTextColor: Color(0xFF9147ff),
-      textCancel: "Cancel",
+      textCancel: "cancel".tr,
       radius: 10,
       content: Column(
         children: [

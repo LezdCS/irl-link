@@ -9,6 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:irllink/src/core/utils/globals.dart' as Globals;
 
+import '../../core/resources/AppTranslations.dart';
 import '../widgets/settings_view/manage_list_hidden_users.dart';
 import '../widgets/settings_view/manage_list_browser_tabs.dart';
 
@@ -160,7 +161,7 @@ class SettingsView extends GetView<SettingsViewController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Text size",
+                        "text_size".tr,
                         style: TextStyle(
                             color: Theme.of(context).textTheme.bodyLarge!.color,
                             fontSize: 18),
@@ -198,7 +199,7 @@ class SettingsView extends GetView<SettingsViewController> {
                     children: [
                       Container(
                         child: Text(
-                          "Show message timestamp",
+                          "show_timestamp".tr,
                           style: TextStyle(
                               color:
                                   Theme.of(context).textTheme.bodyLarge!.color,
@@ -230,7 +231,7 @@ class SettingsView extends GetView<SettingsViewController> {
                     children: [
                       Container(
                         child: Text(
-                          "Join another streamer chat",
+                          "join_another_chat".tr,
                           style: TextStyle(
                               color:
                                   Theme.of(context).textTheme.bodyLarge!.color,
@@ -367,7 +368,7 @@ class SettingsView extends GetView<SettingsViewController> {
                             Container(
                               padding: EdgeInsets.only(left: 10),
                               child: Text(
-                                "Manage hidden users",
+                                "manage_hidden_users".tr,
                                 style: TextStyle(
                                   color: Theme.of(context)
                                       .textTheme
@@ -411,7 +412,7 @@ class SettingsView extends GetView<SettingsViewController> {
                             Container(
                               padding: EdgeInsets.only(left: 10),
                               child: Text(
-                                "Text To Speech",
+                                "text_to_speech".tr,
                                 style: TextStyle(
                                   color: Theme.of(context)
                                       .textTheme
@@ -465,7 +466,7 @@ class SettingsView extends GetView<SettingsViewController> {
                     children: [
                       Container(
                         child: Text(
-                          "Dark mode",
+                          "dark_mode".tr,
                           style: TextStyle(
                             color: Theme.of(context).textTheme.bodyLarge!.color,
                             fontSize: 18,
@@ -498,9 +499,9 @@ class SettingsView extends GetView<SettingsViewController> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
+                      Expanded(
                         child: Text(
-                          "Prevent speaker from sleeping",
+                          "prevent_speaker".tr,
                           style: TextStyle(
                             color: Theme.of(context).textTheme.bodyLarge!.color,
                             fontSize: 18,
@@ -526,6 +527,35 @@ class SettingsView extends GetView<SettingsViewController> {
                     ],
                   ),
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "language".tr,
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyLarge!.color,
+                        fontSize: 18,
+                      ),
+                    ),
+                    DropdownButton(
+                        value: supportedLanguages.firstWhere((element) =>
+                            element['languageCode'] ==
+                                Get.locale!.languageCode &&
+                            element['countryCode'] == Get.locale!.countryCode),
+                        items: List.generate(
+                          supportedLanguages.length,
+                          (index) => DropdownMenuItem(
+                            value: supportedLanguages[index],
+                            child: Text(supportedLanguages[index]['name']!),
+                          ),
+                        ),
+                        onChanged: (value) {
+                          Locale locale = new Locale(
+                              value!['languageCode']!, value['countryCode']!);
+                          Get.updateLocale(locale);
+                        }),
+                  ],
+                ),
               ],
             ),
           ),
@@ -542,7 +572,7 @@ class SettingsView extends GetView<SettingsViewController> {
         children: [
           Container(
             child: Text(
-              "Connections & Tabs",
+              "connections_tabs".tr,
               style: TextStyle(
                   color: Theme.of(context).colorScheme.tertiary, fontSize: 22),
             ),
@@ -575,7 +605,7 @@ class SettingsView extends GetView<SettingsViewController> {
                             Container(
                               padding: EdgeInsets.only(left: 10),
                               child: Text(
-                                "Manage browser tabs",
+                                "manage_browser_tabs".tr,
                                 style: TextStyle(
                                   color: Theme.of(context)
                                       .textTheme
@@ -756,7 +786,7 @@ class SettingsView extends GetView<SettingsViewController> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      'Scan QR code',
+                                      'scan_qr'.tr,
                                       style: TextStyle(
                                         color: Colors.white,
                                       ),
@@ -784,7 +814,7 @@ class SettingsView extends GetView<SettingsViewController> {
                                         .textTheme
                                         .bodyLarge!
                                         .color,
-                                    textCancel: "Cancel",
+                                    textCancel: "cancel".tr,
                                     backgroundColor: Theme.of(context)
                                         .colorScheme
                                         .background,
@@ -796,7 +826,7 @@ class SettingsView extends GetView<SettingsViewController> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      'History',
+                                      'history'.tr,
                                       style: TextStyle(
                                         color: Colors.white,
                                       ),
@@ -824,7 +854,7 @@ class SettingsView extends GetView<SettingsViewController> {
                                 color: Colors.blue,
                               ),
                               Text(
-                                "How can I get these parameters ?",
+                                "how_can_i".tr,
                                 style: TextStyle(
                                   color: Colors.blue,
                                 ),
@@ -1000,7 +1030,7 @@ class SettingsView extends GetView<SettingsViewController> {
                     Get.back();
                   },
                   child: Text(
-                    "Close",
+                    "close".tr,
                     style: TextStyle(fontSize: 18, color: Colors.white),
                   ),
                 ),
