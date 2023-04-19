@@ -24,6 +24,7 @@ void main() async {
   Globals.buildNumber = packageInfo.buildNumber;
   Globals.appName = packageInfo.appName;
   Globals.packageName = packageInfo.packageName;
+  AppTranslations.initLanguages();
   runApp(Main());
 }
 

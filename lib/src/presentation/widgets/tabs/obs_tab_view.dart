@@ -19,116 +19,121 @@ class ObsTabView extends GetView<ObsTabViewController> {
                 color: context.theme.colorScheme.background,
                 child: Column(
                   children: [
-                    Row(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            controller.isStreaming.value
-                                ? controller.stopStream()
-                                : controller.startStream();
-                          },
-                          child: Container(
-                            constraints: BoxConstraints(
-                              minWidth: 80.0,
-                            ),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: controller.isStreaming.value
-                                  ? Theme.of(context).colorScheme.error
-                                  : Theme.of(context)
-                                      .colorScheme
-                                      .tertiaryContainer,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
-                            ),
-                            padding: EdgeInsets.all(8),
-                            child: Text(
+                    Container(
+                      height: 40,
+                      child: ListView(
+                        shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                        children: [
+                          InkWell(
+                            onTap: () {
                               controller.isStreaming.value
-                                  ? "Stop stream"
-                                  : "Start stream",
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        InkWell(
-                          onTap: () {
-                            controller.startStopRecording();
-                          },
-                          child: Container(
-                            constraints: BoxConstraints(
-                              minWidth: 80.0,
-                            ),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: controller.isRecording.value
-                                  ? Theme.of(context).colorScheme.error
-                                  : Theme.of(context)
-                                      .colorScheme
-                                      .tertiaryContainer,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8),
+                                  ? controller.stopStream()
+                                  : controller.startStream();
+                            },
+                            child: Container(
+                              constraints: BoxConstraints(
+                                minWidth: 80.0,
+                              ),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: controller.isStreaming.value
+                                    ? Theme.of(context).colorScheme.error
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .tertiaryContainer,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8)),
+                              ),
+                              padding: EdgeInsets.all(8),
+                              child: Text(
+                                controller.isStreaming.value
+                                    ? "stop_stream".tr
+                                    : "start_stream".tr,
+                                textAlign: TextAlign.center,
                               ),
                             ),
-                            padding: EdgeInsets.all(8),
-                            child: Text(
-                              controller.isRecording.value
-                                  ? "Stop recording"
-                                  : "Start recording",
-                              textAlign: TextAlign.center,
+                          ),
+                          SizedBox(width: 10),
+                          InkWell(
+                            onTap: () {
+                              controller.startStopRecording();
+                            },
+                            child: Container(
+                              constraints: BoxConstraints(
+                                minWidth: 80.0,
+                              ),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: controller.isRecording.value
+                                    ? Theme.of(context).colorScheme.error
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .tertiaryContainer,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8),
+                                ),
+                              ),
+                              padding: EdgeInsets.all(8),
+                              child: Text(
+                                controller.isRecording.value
+                                    ? "stop_recording".tr
+                                    : "start_recording".tr,
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(width: 10),
-                        InkWell(
-                          onTap: () {
-                            Get.defaultDialog(
-                              title: "Preview OBS",
-                              titleStyle: TextStyle(color: Colors.white),
-                              backgroundColor: Color(0xFF0e0e10),
-                              buttonColor: Color(0xFF9147ff),
-                              cancelTextColor: Color(0xFF9147ff),
-                              textCancel: "Return",
-                              radius: 10,
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Obx(
-                                    () => Container(
-                                      color: Colors.black,
-                                      child: Image(
-                                          image: Image.memory(controller
-                                                  .sceneScreenshot.value)
-                                              .image),
+                          SizedBox(width: 10),
+                          InkWell(
+                            onTap: () {
+                              Get.defaultDialog(
+                                title: "preview_obs".tr,
+                                titleStyle: TextStyle(color: Colors.white),
+                                backgroundColor: Color(0xFF0e0e10),
+                                buttonColor: Color(0xFF9147ff),
+                                cancelTextColor: Color(0xFF9147ff),
+                                textCancel: "return".tr,
+                                radius: 10,
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Obx(
+                                      () => Container(
+                                        color: Colors.black,
+                                        child: Image(
+                                            image: Image.memory(controller
+                                                    .sceneScreenshot.value)
+                                                .image),
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
+                              );
+                              controller.getSourceScreenshot(
+                                  controller.currentScene.value);
+                            },
+                            child: Container(
+                              constraints: BoxConstraints(
+                                minWidth: 80.0,
                               ),
-                            );
-                            controller.getSourceScreenshot(
-                                controller.currentScene.value);
-                          },
-                          child: Container(
-                            constraints: BoxConstraints(
-                              minWidth: 80.0,
-                            ),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .tertiaryContainer,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .tertiaryContainer,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8),
+                                ),
                               ),
-                            ),
-                            padding: EdgeInsets.all(8),
-                            child: Text(
-                              "Preview scene",
-                              textAlign: TextAlign.center,
+                              padding: EdgeInsets.all(8),
+                              child: Text(
+                                "Preview scene",
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     // SizedBox(height: 10),
                     // Row(
@@ -162,7 +167,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
                     ),
                     Wrap(children: [
                       Text(
-                        "Scenes",
+                        "scenes".tr,
                         style: TextStyle(color: Colors.white),
                       ),
                       Container(
@@ -181,7 +186,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
                     ),
                     Wrap(children: [
                       Text(
-                        "Sources (long press on source for details)",
+                        "sources".tr,
                         style: TextStyle(color: Colors.white),
                       ),
                       Container(
@@ -311,7 +316,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
               backgroundColor: Color(0xFF0e0e10),
               buttonColor: Color(0xFF9147ff),
               cancelTextColor: Color(0xFF9147ff),
-              textCancel: "Return",
+              textCancel: "return".tr,
               radius: 10,
               content: Column(
                 mainAxisSize: MainAxisSize.min,

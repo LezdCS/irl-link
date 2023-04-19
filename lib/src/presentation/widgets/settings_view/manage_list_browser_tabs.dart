@@ -83,7 +83,7 @@ class ManageListBrowserTabs extends GetView {
                                   content:
                                       _editDialog(context, controller, elem),
                                   title: "Edit",
-                                  textCancel: "Cancel",
+                                  textCancel: "cancel".tr,
                                   textConfirm: "Confirm",
                                   titleStyle: TextStyle(
                                     color: Theme.of(context)
@@ -159,9 +159,9 @@ class ManageListBrowserTabs extends GetView {
                         onTap: () {
                           Get.defaultDialog(
                             content: _addDialog(context, controller),
-                            title: "Add",
-                            textCancel: "Cancel",
-                            textConfirm: "Add",
+                            title: "add".tr,
+                            textCancel: "cancel".tr,
+                            textConfirm: "add".tr,
                             titleStyle: TextStyle(
                               color:
                                   Theme.of(context).textTheme.bodyLarge!.color,
@@ -178,7 +178,7 @@ class ManageListBrowserTabs extends GetView {
                           );
                         },
                         child: Text(
-                          "Add",
+                          "add".tr,
                           textAlign: TextAlign.center,
                         ),
                       ),
