@@ -26,6 +26,7 @@
   "prefixs_allowed_details": "Seuls les messages portant ces préfixes seront lus à haute voix.",
   "ignored_users": "Utilisateurs ignorés",
   "ignored_users_details": "Les utilisateurs qui ne seront pas lus à haute voix.",
+  "user_said_message": "@authorName a dit @message",
 
   "offline": "Hors-ligne",
   "live": "En direct",

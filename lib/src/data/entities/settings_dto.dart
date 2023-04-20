@@ -30,6 +30,7 @@ class SettingsDTO extends Settings {
     required double rate,
     required Map<String, String> voice,
     required List ttsUsersToIgnore,
+    required bool ttsMuteViewerName,
   }) : super(
           //CHAT SETTINGS
           isEmotes: isEmotes,
@@ -58,7 +59,8 @@ class SettingsDTO extends Settings {
           pitch: pitch,
           rate: rate,
           voice: voice,
-      ttsUsersToIgnore: ttsUsersToIgnore,
+          ttsUsersToIgnore: ttsUsersToIgnore,
+          ttsMuteViewerName: ttsMuteViewerName,
         );
 
   Map toJson() => {
@@ -80,6 +82,17 @@ class SettingsDTO extends Settings {
         'streamElementsAccessToken': streamElementsAccessToken,
         'browserTabs': browserTabs,
         'obsConnectionsHistory': obsConnectionsHistory,
+        //TTS
+        'ttsEnabled': ttsEnabled,
+        'language': language,
+        'prefixsToIgnore': prefixsToIgnore,
+        'prefixsToUseTtsOnly': prefixsToUseTtsOnly,
+        'volume': volume,
+        'pitch': pitch,
+        'rate': rate,
+        'voice': voice,
+        'ttsUsersToIgnore': ttsUsersToIgnore,
+        'ttsMuteViewerName': ttsMuteViewerName,
       };
 
   factory SettingsDTO.fromJson(Map<String, dynamic> map) {
@@ -160,6 +173,9 @@ class SettingsDTO extends Settings {
       ttsUsersToIgnore: map['ttsUsersToIgnore'] != null
           ? map['ttsUsersToIgnore'] as List
           : Settings.defaultSettings().ttsUsersToIgnore!,
+      ttsMuteViewerName: map['ttsMuteViewerName'] != null
+          ? map['ttsMuteViewerName'] as bool
+          : Settings.defaultSettings().ttsMuteViewerName!,
     );
   }
 }

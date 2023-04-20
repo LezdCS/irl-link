@@ -32,6 +32,7 @@ class Settings extends Equatable {
   final double? rate;
   final Map<String, String>? voice;
   final List? ttsUsersToIgnore;
+  final bool? ttsMuteViewerName;
 
   const Settings({
     //CHAT SETTINGS
@@ -65,6 +66,7 @@ class Settings extends Equatable {
     required this.rate,
     required this.voice,
     required this.ttsUsersToIgnore,
+    required this.ttsMuteViewerName,
   });
 
   Settings.defaultSettings({
@@ -99,6 +101,7 @@ class Settings extends Equatable {
     this.rate = 0.5,
     this.voice = const {"name": "en-us-x-sfg-local", "locale": "en-US"},
     this.ttsUsersToIgnore = const [],
+    this.ttsMuteViewerName = false,
   });
 
   Map toJson() => {
@@ -130,6 +133,7 @@ class Settings extends Equatable {
         'rate': rate,
         'voice': voice,
         'ttsUsersToIgnore': ttsUsersToIgnore,
+        'ttsMuteViewerName': ttsMuteViewerName,
       };
 
   @override
@@ -163,6 +167,7 @@ class Settings extends Equatable {
       rate,
       voice,
       ttsUsersToIgnore,
+      ttsMuteViewerName,
     ];
   }
 
@@ -198,6 +203,7 @@ class Settings extends Equatable {
     double? rate,
     Map<String, String>? voice,
     List? ttsUsersToIgnore,
+    bool? ttsMuteViewerName,
   }) =>
       Settings(
         //CHAT
@@ -230,5 +236,6 @@ class Settings extends Equatable {
         rate: rate ?? this.rate,
         voice: voice ?? this.voice,
         ttsUsersToIgnore: ttsUsersToIgnore ?? this.ttsUsersToIgnore,
+        ttsMuteViewerName: ttsMuteViewerName ?? this.ttsMuteViewerName,
       );
 }
