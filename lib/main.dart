@@ -7,6 +7,7 @@ import 'package:irllink/src/bindings/login_bindings.dart';
 import 'package:irllink/src/core/resources/themes.dart';
 import 'package:irllink/src/presentation/views/login_view.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:upgrader/upgrader.dart';
 import 'package:wakelock/wakelock.dart';
 import 'firebase_options.dart';
 import 'src/core/resources/AppTranslations.dart';
@@ -32,7 +33,10 @@ class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      home: LoginView(),
+      home: UpgradeAlert(
+        upgrader: Upgrader(shouldPopScope: () => true),
+        child: LoginView(),
+      ),
       theme: Themes().lightTheme,
       darkTheme: Themes().darkTheme,
       themeMode: ThemeMode.dark,
@@ -42,7 +46,7 @@ class Main extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       translations: AppTranslations(),
       locale: Get.deviceLocale,
-      fallbackLocale: Locale('en', 'US')
+      fallbackLocale: Locale('en', 'US'),
     );
   }
 }
