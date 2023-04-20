@@ -8,6 +8,8 @@ import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:irllink/src/domain/entities/twitch_chat_message.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
+import 'package:irllink/src/presentation/widgets/chat_message/highlight_message_row.dart';
+import 'package:irllink/src/presentation/widgets/chat_message/message_row.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:collection/collection.dart';
 
@@ -49,20 +51,34 @@ class ChatView extends GetView<ChatViewController> {
                     controller: controller.scrollController,
                     itemCount: controller.chatMessages.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return InkWell(
-                        onTap: () {
-                          if (FocusScope.of(context).isFirstFocus) {
-                            FocusScope.of(context).unfocus();
-                          }
-                          controller.selectedMessage.value = null;
-                        },
-                        onLongPress: () {
-                          if (controller.selectedMessage.value == null) {
-                            controller.selectedMessage.value =
-                                controller.chatMessages[index];
-                          }
-                        },
-                        child: chatMessage(controller.chatMessages[index]),
+                      TwitchChatMessage message =
+                          controller.chatMessages[index];
+                      return Container(
+                        padding: EdgeInsets.only(top: 1, bottom: 1),
+                        child: InkWell(
+                          onTap: () {
+                            if (FocusScope.of(context).isFirstFocus) {
+                              FocusScope.of(context).unfocus();
+                            }
+                            controller.selectedMessage.value = null;
+                          },
+                          onLongPress: () {
+                            if (controller.selectedMessage.value == null) {
+                              controller.selectedMessage.value = message;
+                            }
+                          },
+                          child: message.highlightType != null
+                              ? HighlightMessageRow(
+                                  controller: controller,
+                                  message: message,
+                                  child: chatMessage(message),
+                                )
+                              : MessageRow(
+                                  controller: controller,
+                                  message: message,
+                                  child: chatMessage(message),
+                                ),
+                        ),
                       );
                     },
                   ),
@@ -124,70 +140,44 @@ class ChatView extends GetView<ChatViewController> {
   }
 
   Widget chatMessage(TwitchChatMessage message) {
-    return Container(
-        padding: EdgeInsets.only(top: 2, bottom: 2, left: 5),
-        decoration: BoxDecoration(
-          color: controller.selectedMessage.value == message
-              ? Theme.of(Get.context!).colorScheme.secondary
-              : Theme.of(Get.context!).colorScheme.background,
-          border: message.isBitDonation
-              ? Border(
-                  left: BorderSide(width: 5.0, color: Color(0xFF9147ff)),
-                )
-              : null,
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        Visibility(
+          visible: controller.settings.value.displayTimestamp!,
+          child: Container(
+            padding: EdgeInsets.only(right: 5),
+            child: Timestamp(
+              timestamp: message.timestamp,
+            ),
+          ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Visibility(
-              visible: message.isBitDonation,
-              child: Container(
-                child: Text(
-                  'Cheered ${message.bitAmount.toString()} Bits',
-                  style: TextStyle(color: Colors.grey, fontSize: 15),
-                ),
-              ),
+        for (TwitchBadge badge in message.badges)
+          Container(
+            padding: EdgeInsets.only(right: 4, top: 3),
+            child: Image(
+              image: NetworkImage(badge.imageUrl1x),
+              filterQuality: FilterQuality.high,
             ),
-            Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                Visibility(
-                  visible: controller.settings.value.displayTimestamp!,
-                  child: Container(
-                    padding: EdgeInsets.only(right: 5),
-                    child: Timestamp(
-                      timestamp: message.timestamp,
-                    ),
-                  ),
-                ),
-                for (TwitchBadge badge in message.badges)
-                  Container(
-                    padding: EdgeInsets.only(right: 4, top: 3),
-                    child: Image(
-                      image: NetworkImage(badge.imageUrl1x),
-                      filterQuality: FilterQuality.high,
-                    ),
-                  ),
-                AuthorName(
-                  isAction: message.isAction,
-                  authorName: message.authorName,
-                  color: message.color,
-                  textSize: controller.settings.value.textSize!,
-                ),
-                if (message.isDeleted)
-                  Text(
-                    "<message deleted>",
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 19,
-                    ),
-                  )
-                else
-                  for (Widget i in message.messageWidgetsBuild) i,
-              ],
+          ),
+        AuthorName(
+          isAction: message.isAction,
+          authorName: message.authorName,
+          color: message.color,
+          textSize: controller.settings.value.textSize!,
+        ),
+        if (message.isDeleted)
+          Text(
+            "<message deleted>",
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 19,
             ),
-          ],
-        ));
+          )
+        else
+          for (Widget i in message.messageWidgetsBuild) i,
+      ],
+    );
   }
 
   void timeoutDialog() {
@@ -352,8 +342,9 @@ class ChatView extends GetView<ChatViewController> {
           ),
           SizedBox(height: 10),
           GestureDetector(
-            onLongPress: (){
-              Clipboard.setData(ClipboardData(text: controller.selectedMessage.value?.message ?? ""));
+            onLongPress: () {
+              Clipboard.setData(ClipboardData(
+                  text: controller.selectedMessage.value?.message ?? ""));
               Get.snackbar("Copied", "Message copied to clipboard");
             },
             child: Text(

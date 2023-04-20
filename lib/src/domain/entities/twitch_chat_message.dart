@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,6 +14,16 @@ import 'package:uuid/uuid.dart';
 import 'package:faker/faker.dart';
 import 'emote.dart';
 
+enum HighlightType {
+  firstTimeChatter,
+  subscription,
+  bitDonation,
+  raid,
+  channelPointRedemption,
+  announcement,
+  shoutout,
+}
+
 //ignore: must_be_immutable
 class TwitchChatMessage extends Equatable {
   final String messageId;
@@ -23,7 +35,7 @@ class TwitchChatMessage extends Equatable {
   final String message;
   final List<Widget> messageWidgetsBuild;
   final int timestamp;
-  final bool isBitDonation;
+  final HighlightType? highlightType;
   final int bitAmount;
   final bool isAction;
   bool isDeleted;
@@ -38,7 +50,7 @@ class TwitchChatMessage extends Equatable {
     required this.message,
     required this.messageWidgetsBuild,
     required this.timestamp,
-    required this.isBitDonation,
+    required this.highlightType,
     required this.bitAmount,
     required this.isAction,
     required this.isDeleted,
@@ -56,7 +68,7 @@ class TwitchChatMessage extends Equatable {
       message,
       messageWidgetsBuild,
       timestamp,
-      isBitDonation,
+      highlightType,
       bitAmount,
       isAction,
       isDeleted,
@@ -76,7 +88,13 @@ class TwitchChatMessage extends Equatable {
     List cheerEmotes = [];
     bool isAction = false;
     String color = randomUsernameColor(username);
-    bool isBitDonation = false;
+
+    List<HighlightType> types = List.from(HighlightType.values);
+
+    var random = Random();
+    HighlightType? highlightType =
+        random.nextInt(10) == 1 ? types[random.nextInt(types.length)] : null;
+
     Settings settings = Settings.defaultSettings();
 
     List<Widget> messageWidgetsBuild = stringToWidgets(
@@ -84,7 +102,7 @@ class TwitchChatMessage extends Equatable {
       emotesIdsPositions,
       thirdPartEmotes,
       settings,
-      isBitDonation,
+      highlightType,
       cheerEmotes,
       isAction,
       color,
@@ -101,7 +119,7 @@ class TwitchChatMessage extends Equatable {
       timestamp: faker.date
           .dateTime(minYear: 2000, maxYear: 2020)
           .microsecondsSinceEpoch,
-      isBitDonation: isBitDonation,
+      highlightType: highlightType,
       bitAmount: 0,
       isAction: isAction,
       isDeleted: false,
@@ -168,8 +186,17 @@ class TwitchChatMessage extends Equatable {
       });
     }
 
+    HighlightType? highlightType;
     //We check if the message is a bit donation
-    bool isBitDonation = messageMapped['bits'] != null;
+    if (messageMapped['bits'] != null) {
+      highlightType = HighlightType.bitDonation;
+    }else if (messageMapped["custom-reward-id"] != null){
+      highlightType = HighlightType.channelPointRedemption;
+    }
+
+    if(messageMapped["first-msg"] == "1"){
+      highlightType = HighlightType.firstTimeChatter;
+    }
 
     //We get the message wrote by the user
     List messageList = messageSplited.last.split(':').sublist(2);
@@ -189,7 +216,7 @@ class TwitchChatMessage extends Equatable {
       emotesIdsPositions,
       thirdPartEmotes,
       settings,
-      isBitDonation,
+      highlightType,
       cheerEmotes,
       isAction,
       color,
@@ -205,7 +232,7 @@ class TwitchChatMessage extends Equatable {
       message: messageString,
       messageWidgetsBuild: messageWidgetsBuild,
       timestamp: int.parse(messageMapped['tmi-sent-ts'] as String),
-      isBitDonation: isBitDonation,
+      highlightType: highlightType,
       bitAmount:
           messageMapped['bits'] == null ? 0 : int.parse(messageMapped['bits']!),
       isAction: isAction,
@@ -265,7 +292,7 @@ List<Widget> stringToWidgets(
   Map emotesIdsPositions,
   List thirdPartEmotes,
   Settings settings,
-  bool isBitDonation,
+  HighlightType? highlightType,
   List cheerEmotes,
   bool isAction,
   String color,
@@ -350,7 +377,7 @@ List<Widget> stringToWidgets(
           ],
         ),
       );
-    } else if (isBitDonation &&
+    } else if (highlightType == HighlightType.bitDonation &&
         cheerEmotes.firstWhereOrNull((emote) => emote.name == word) != null) {
       messageWidgetsBuild.add(
         CheerEmote(

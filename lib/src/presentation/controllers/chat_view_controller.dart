@@ -62,7 +62,7 @@ class ChatViewController extends GetxController
       await getSettings();
     } else {
       chatDemoTimer = Timer.periodic(
-        Duration(seconds: 1),
+        Duration(seconds: 3),
             (Timer t) =>
         {
           chatMessages.add(TwitchChatMessage.randomGeneration()),
@@ -193,7 +193,6 @@ class ChatViewController extends GetxController
 
   /// Receive all the Twitch Websocket data
   void chatListener(String message) {
-    //debugPrint(message);
     if (message.startsWith('PING ')) {
       channel!.sink.add("PONG :tmi.twitch.tv\r\n");
     }
@@ -206,6 +205,7 @@ class ChatViewController extends GetxController
         "CLEARCHAT",
         "CLEARMSG",
         "NOTICE",
+        "USERNOTICE",
         "ROOMSTATE"
       ];
       String? keyResult =
@@ -216,7 +216,7 @@ class ChatViewController extends GetxController
         List elementSplited = element.split('=');
         messageMapped[elementSplited[0]] = elementSplited[1];
       });
-
+      
       if (keyResult != null) {
         switch (keyResult) {
           case "PRIVMSG":
@@ -286,6 +286,10 @@ class ChatViewController extends GetxController
               //error and success messages are send by notice
               //https://dev.twitch.tv/docs/irc/msg-id
             }
+            break;
+          case "USERNOTICE":
+            //TODO: announcment
+            //TODO: subscriber
             break;
           default:
             {}
@@ -583,7 +587,6 @@ class ChatViewController extends GetxController
     //check if message start with allowed prefix
     if (settings.value.prefixsToUseTtsOnly!.isNotEmpty) {
       for (String prefix in settings.value.prefixsToUseTtsOnly!) {
-        debugPrint(message.message.startsWith(prefix) ? "true" : "false");
         if (message.message.startsWith(prefix) == false) {
           return;
         }
