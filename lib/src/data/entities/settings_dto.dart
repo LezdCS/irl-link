@@ -13,6 +13,7 @@ class SettingsDTO extends Settings {
     //GENERAL SETTINGS
     required bool isDarkMode,
     required bool keepSpeakerOn,
+    required Map appLanguage,
     //CONNECTIONS SETTINGS
     required bool isObsConnected,
     required String obsWebsocketUrl,
@@ -30,6 +31,7 @@ class SettingsDTO extends Settings {
     required double rate,
     required Map<String, String> voice,
     required List ttsUsersToIgnore,
+    required bool ttsMuteViewerName,
   }) : super(
           //CHAT SETTINGS
           isEmotes: isEmotes,
@@ -42,6 +44,7 @@ class SettingsDTO extends Settings {
           //GENERAL SETTINGS
           isDarkMode: isDarkMode,
           keepSpeakerOn: keepSpeakerOn,
+          appLanguage: appLanguage,
           //CONNECTIONS SETTINGS
           obsWebsocketUrl: obsWebsocketUrl,
           obsWebsocketPassword: obsWebsocketPassword,
@@ -58,7 +61,8 @@ class SettingsDTO extends Settings {
           pitch: pitch,
           rate: rate,
           voice: voice,
-      ttsUsersToIgnore: ttsUsersToIgnore,
+          ttsUsersToIgnore: ttsUsersToIgnore,
+          ttsMuteViewerName: ttsMuteViewerName,
         );
 
   Map toJson() => {
@@ -73,6 +77,7 @@ class SettingsDTO extends Settings {
         //GENERAL
         'isDarkMode': isDarkMode,
         'keepSpeakerOn': keepSpeakerOn,
+        'appLanguage': appLanguage,
         //CONNECTIONS
         'isObsConnected': isObsConnected,
         'obsWebsocketUrl': obsWebsocketUrl,
@@ -80,6 +85,17 @@ class SettingsDTO extends Settings {
         'streamElementsAccessToken': streamElementsAccessToken,
         'browserTabs': browserTabs,
         'obsConnectionsHistory': obsConnectionsHistory,
+        //TTS
+        'ttsEnabled': ttsEnabled,
+        'language': language,
+        'prefixsToIgnore': prefixsToIgnore,
+        'prefixsToUseTtsOnly': prefixsToUseTtsOnly,
+        'volume': volume,
+        'pitch': pitch,
+        'rate': rate,
+        'voice': voice,
+        'ttsUsersToIgnore': ttsUsersToIgnore,
+        'ttsMuteViewerName': ttsMuteViewerName,
       };
 
   factory SettingsDTO.fromJson(Map<String, dynamic> map) {
@@ -113,6 +129,9 @@ class SettingsDTO extends Settings {
       keepSpeakerOn: map['keepSpeakerOn'] != null
           ? map['keepSpeakerOn'] as bool
           : Settings.defaultSettings().keepSpeakerOn!,
+        appLanguage: map['appLanguage'] != null
+          ? map['appLanguage'] as Map
+          : Settings.defaultSettings().appLanguage!,
       //CONNECTIONS SETTINGS
       isObsConnected: map['isObsConnected'] != null
           ? map['isObsConnected'] as bool
@@ -160,6 +179,9 @@ class SettingsDTO extends Settings {
       ttsUsersToIgnore: map['ttsUsersToIgnore'] != null
           ? map['ttsUsersToIgnore'] as List
           : Settings.defaultSettings().ttsUsersToIgnore!,
+      ttsMuteViewerName: map['ttsMuteViewerName'] != null
+          ? map['ttsMuteViewerName'] as bool
+          : Settings.defaultSettings().ttsMuteViewerName!,
     );
   }
 }

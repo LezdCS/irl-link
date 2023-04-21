@@ -13,6 +13,7 @@ class Settings extends Equatable {
   //GENERAL SETTINGS
   final bool? isDarkMode;
   final bool? keepSpeakerOn;
+  final Map? appLanguage;
 
   //CONNECTIONS SETTINGS
   final bool? isObsConnected;
@@ -32,6 +33,7 @@ class Settings extends Equatable {
   final double? rate;
   final Map<String, String>? voice;
   final List? ttsUsersToIgnore;
+  final bool? ttsMuteViewerName;
 
   const Settings({
     //CHAT SETTINGS
@@ -46,6 +48,7 @@ class Settings extends Equatable {
     //GENERAL SETTINGS
     required this.isDarkMode,
     required this.keepSpeakerOn,
+    required this.appLanguage,
 
     //CONNECTIONS SETTINGS
     required this.isObsConnected,
@@ -65,6 +68,7 @@ class Settings extends Equatable {
     required this.rate,
     required this.voice,
     required this.ttsUsersToIgnore,
+    required this.ttsMuteViewerName,
   });
 
   Settings.defaultSettings({
@@ -80,6 +84,7 @@ class Settings extends Equatable {
     //GENERAL SETTINGS
     this.isDarkMode = true,
     this.keepSpeakerOn = true,
+    this.appLanguage = const {"languageCode": "en", "countryCode": "US"},
 
     //CONNECTIONS SETTINGS
     this.isObsConnected = false,
@@ -99,6 +104,7 @@ class Settings extends Equatable {
     this.rate = 0.5,
     this.voice = const {"name": "en-us-x-sfg-local", "locale": "en-US"},
     this.ttsUsersToIgnore = const [],
+    this.ttsMuteViewerName = false,
   });
 
   Map toJson() => {
@@ -113,6 +119,7 @@ class Settings extends Equatable {
         //GENERAL
         'isDarkMode': isDarkMode,
         'keepSpeakerOn': keepSpeakerOn,
+        'appLanguage': appLanguage,
         //CONNECTIONS
         'isObsConnected': isObsConnected,
         'obsWebsocketUrl': obsWebsocketUrl,
@@ -130,6 +137,7 @@ class Settings extends Equatable {
         'rate': rate,
         'voice': voice,
         'ttsUsersToIgnore': ttsUsersToIgnore,
+        'ttsMuteViewerName': ttsMuteViewerName,
       };
 
   @override
@@ -146,6 +154,7 @@ class Settings extends Equatable {
       //GENERAL
       isDarkMode,
       keepSpeakerOn,
+      appLanguage,
       //CONNECTIONS
       isObsConnected,
       obsWebsocketUrl,
@@ -163,6 +172,7 @@ class Settings extends Equatable {
       rate,
       voice,
       ttsUsersToIgnore,
+      ttsMuteViewerName,
     ];
   }
 
@@ -181,6 +191,7 @@ class Settings extends Equatable {
     //GENERAL
     bool? isDarkMode,
     bool? keepSpeakerOn,
+    Map<String, String>? appLanguage,
     //CONNECTIONS
     bool? isObsConnected,
     String? obsWebsocketUrl,
@@ -198,6 +209,7 @@ class Settings extends Equatable {
     double? rate,
     Map<String, String>? voice,
     List? ttsUsersToIgnore,
+    bool? ttsMuteViewerName,
   }) =>
       Settings(
         //CHAT
@@ -211,6 +223,7 @@ class Settings extends Equatable {
         //GENERAL
         isDarkMode: isDarkMode ?? this.isDarkMode,
         keepSpeakerOn: keepSpeakerOn ?? this.keepSpeakerOn,
+        appLanguage: appLanguage ?? this.appLanguage,
         //CONNECTIONS
         isObsConnected: isObsConnected ?? this.isObsConnected,
         obsWebsocketUrl: obsWebsocketUrl ?? this.obsWebsocketUrl,
@@ -230,5 +243,6 @@ class Settings extends Equatable {
         rate: rate ?? this.rate,
         voice: voice ?? this.voice,
         ttsUsersToIgnore: ttsUsersToIgnore ?? this.ttsUsersToIgnore,
+        ttsMuteViewerName: ttsMuteViewerName ?? this.ttsMuteViewerName,
       );
 }

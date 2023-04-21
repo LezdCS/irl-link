@@ -203,6 +203,31 @@ class Tts extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Mute viewer name",
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyLarge!.color,
+                        fontSize: 18,
+                      ),
+                    ),
+                    Switch(
+                      value: controller.settings.value.ttsMuteViewerName!,
+                      onChanged: (value) {
+                        controller.settings.value = controller.settings.value
+                            .copyWith(ttsMuteViewerName: value);
+                        controller.saveSettings();
+                      },
+                      inactiveTrackColor:
+                          Theme.of(context).colorScheme.tertiaryContainer,
+                      activeTrackColor: Theme.of(context).colorScheme.tertiary,
+                      activeColor: Colors.white,
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
                 InkWell(
                   onTap: () {
                     _dialogAddIgnoredPrefixs(
@@ -526,8 +551,8 @@ class Tts extends StatelessWidget {
   }
 
   void _dialogAddAllowedPrefixs(
-      SettingsViewController controller,
-      ) {
+    SettingsViewController controller,
+  ) {
     Get.defaultDialog(
       title: "Allowed prefixs",
       titleStyle: TextStyle(color: Colors.white),
@@ -537,7 +562,7 @@ class Tts extends StatelessWidget {
       textCancel: "Back",
       radius: 10,
       content: Obx(
-            () => Column(
+        () => Column(
           children: [
             Text(
               "Only messages starting with these prefixs will be read aloud.",
@@ -551,16 +576,17 @@ class Tts extends StatelessWidget {
               itemBuilder: (context, index) {
                 return Chip(
                   onDeleted: () {
-                    controller.settings.value.prefixsToUseTtsOnly!.removeAt(index);
+                    controller.settings.value.prefixsToUseTtsOnly!
+                        .removeAt(index);
                     controller.settings.value = controller.settings.value
                         .copyWith(
-                        prefixsToUseTtsOnly:
-                        controller.settings.value.prefixsToUseTtsOnly!);
+                            prefixsToUseTtsOnly:
+                                controller.settings.value.prefixsToUseTtsOnly!);
                     controller.settings.refresh();
                     controller.saveSettings();
                   },
-                  label:
-                  Text(controller.settings.value.prefixsToUseTtsOnly![index]),
+                  label: Text(
+                      controller.settings.value.prefixsToUseTtsOnly![index]),
                 );
               },
             ),
@@ -573,7 +599,7 @@ class Tts extends StatelessWidget {
                     decoration: InputDecoration(
                       isDense: true,
                       contentPadding:
-                      EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                          EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                       hintText: 'Prefix',
                       labelText: 'Prefix',
                       labelStyle: TextStyle(
@@ -589,7 +615,7 @@ class Tts extends StatelessWidget {
                     child: TextButton(
                       style: TextButton.styleFrom(
                         backgroundColor:
-                        Theme.of(Get.context!).colorScheme.tertiary,
+                            Theme.of(Get.context!).colorScheme.tertiary,
                       ),
                       onPressed: () {
                         controller.settings.value.prefixsToUseTtsOnly!.add(
@@ -597,8 +623,8 @@ class Tts extends StatelessWidget {
                                 .trim());
                         controller.settings.value = controller.settings.value
                             .copyWith(
-                            prefixsToUseTtsOnly:
-                            controller.settings.value.prefixsToUseTtsOnly!);
+                                prefixsToUseTtsOnly: controller
+                                    .settings.value.prefixsToUseTtsOnly!);
                         controller.settings.refresh();
                         controller.addTtsAllowedPrefixsController.clear();
                         controller.saveSettings();

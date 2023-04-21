@@ -234,8 +234,10 @@ class HomeView extends GetView<HomeViewController> {
             flex: 1,
             child: InkWell(
               onTap: () async {
-                await Get.toNamed(Routes.SETTINGS,
-                    arguments: [controller.twitchData]);
+                await Get.toNamed(
+                  Routes.SETTINGS,
+                  arguments: [controller.twitchData],
+                );
                 if (controller.twitchData != null) {
                   controller.chatViewController.getSettings();
                 }
