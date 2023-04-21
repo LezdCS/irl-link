@@ -560,6 +560,11 @@ class ChatViewController extends GetxController
     if (Platform.isAndroid) {
       await flutterTts.setQueueMode(1);
     }
+
+    if(!settings.ttsEnabled!){
+      //prevent the queue to continue if we come back from settings and turn off TTS
+      flutterTts.stop();
+    }
   }
 
   void readTts(TwitchChatMessage message) {
