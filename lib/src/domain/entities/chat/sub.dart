@@ -96,7 +96,7 @@ class Sub extends TwitchChatMessage {
       isDeleted: false,
       tier: messageMapped["msg-param-sub-plan"] as String,
       months: messageMapped["msg-param-cumulative-months"] as String,
-      isGift: messageMapped["msg-param-was-gifted"] as bool,
+      isGift: messageMapped["msg-param-was-gifted"] == "true",
     );
   }
 }
