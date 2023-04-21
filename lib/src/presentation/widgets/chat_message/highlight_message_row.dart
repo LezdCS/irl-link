@@ -46,7 +46,7 @@ class HighlightMessageRow extends StatelessWidget {
               style: TextStyle(color: Colors.grey, fontSize: 15),
             ),
           ),
-          child,
+          message.messageWidgetsBuild.length > 0 ? child : Container(),
         ],
       ),
     );
@@ -96,7 +96,7 @@ class HighlightMessageRow extends StatelessWidget {
           "border": Color(0xFF9147ff),
           "background": Color(0xFF9147ff).withOpacity(0.2)
         };
-        case HighlightType.announcement:
+      case HighlightType.announcement:
         return {
           "border": Color(0xffff475c),
           "background": Color(0xffff475c).withOpacity(0.2)
