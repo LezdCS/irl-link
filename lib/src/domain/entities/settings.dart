@@ -13,6 +13,7 @@ class Settings extends Equatable {
   //GENERAL SETTINGS
   final bool? isDarkMode;
   final bool? keepSpeakerOn;
+  final Map? appLanguage;
 
   //CONNECTIONS SETTINGS
   final bool? isObsConnected;
@@ -47,6 +48,7 @@ class Settings extends Equatable {
     //GENERAL SETTINGS
     required this.isDarkMode,
     required this.keepSpeakerOn,
+    required this.appLanguage,
 
     //CONNECTIONS SETTINGS
     required this.isObsConnected,
@@ -82,6 +84,7 @@ class Settings extends Equatable {
     //GENERAL SETTINGS
     this.isDarkMode = true,
     this.keepSpeakerOn = true,
+    this.appLanguage = const {"languageCode": "en", "countryCode": "US"},
 
     //CONNECTIONS SETTINGS
     this.isObsConnected = false,
@@ -116,6 +119,7 @@ class Settings extends Equatable {
         //GENERAL
         'isDarkMode': isDarkMode,
         'keepSpeakerOn': keepSpeakerOn,
+        'appLanguage': appLanguage,
         //CONNECTIONS
         'isObsConnected': isObsConnected,
         'obsWebsocketUrl': obsWebsocketUrl,
@@ -150,6 +154,7 @@ class Settings extends Equatable {
       //GENERAL
       isDarkMode,
       keepSpeakerOn,
+      appLanguage,
       //CONNECTIONS
       isObsConnected,
       obsWebsocketUrl,
@@ -186,6 +191,7 @@ class Settings extends Equatable {
     //GENERAL
     bool? isDarkMode,
     bool? keepSpeakerOn,
+    Map<String, String>? appLanguage,
     //CONNECTIONS
     bool? isObsConnected,
     String? obsWebsocketUrl,
@@ -217,6 +223,7 @@ class Settings extends Equatable {
         //GENERAL
         isDarkMode: isDarkMode ?? this.isDarkMode,
         keepSpeakerOn: keepSpeakerOn ?? this.keepSpeakerOn,
+        appLanguage: appLanguage ?? this.appLanguage,
         //CONNECTIONS
         isObsConnected: isObsConnected ?? this.isObsConnected,
         obsWebsocketUrl: obsWebsocketUrl ?? this.obsWebsocketUrl,

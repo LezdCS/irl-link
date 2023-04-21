@@ -157,27 +157,29 @@ class HomeViewController extends GetxController
   }
 
   Future getSettings() async {
-    const path = "../lib/assets/blank.mp3";
-    await homeEvents.getSettings().then((value) async => {
-          if (value.error == null)
-            {
-              settings.value = value.data!,
-              await this.generateTabs(),
-              if (!settings.value.isDarkMode!)
-                {Get.changeThemeMode(ThemeMode.light)},
-              if (settings.value.keepSpeakerOn!)
-                {
-                  timerKeepSpeakerOn = Timer.periodic(
-                    Duration(minutes: 5),
-                    (Timer t) async =>
-                        await audioPlayer.play(AssetSource(path)),
-                  ),
-                }
-              else
-                {
-                  timerKeepSpeakerOn?.cancel(),
-                }
-            },
-        });
+    await homeEvents.getSettings().then((value) async => applySettings(value));
+  }
+
+  void applySettings(value) async {
+    {
+      if (value.error != null) return;
+      settings.value = value.data!;
+      await this.generateTabs();
+      if (!settings.value.isDarkMode!) {
+        Get.changeThemeMode(ThemeMode.light);
+      }
+      if (settings.value.keepSpeakerOn!) {
+        const path = "../lib/assets/blank.mp3";
+        timerKeepSpeakerOn = Timer.periodic(
+          Duration(minutes: 5),
+          (Timer t) async => await audioPlayer.play(AssetSource(path)),
+        );
+      } else {
+        timerKeepSpeakerOn?.cancel();
+      }
+      Locale locale = new Locale(
+          settings.value.appLanguage!["languageCode"], settings.value.appLanguage!["countryCode"]);
+      Get.updateLocale(locale);
+    }
   }
 }

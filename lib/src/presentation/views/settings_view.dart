@@ -554,6 +554,12 @@ class SettingsView extends GetView<SettingsViewController> {
                           Locale locale = new Locale(
                               value!['languageCode']!, value['countryCode']!);
                           Get.updateLocale(locale);
+                          controller.settings.value = controller.settings.value
+                              .copyWith(appLanguage: {
+                            "languageCode": value['languageCode']!,
+                            "countryCode": value['countryCode']!
+                          });
+                          controller.saveSettings();
                         }),
                   ],
                 ),
