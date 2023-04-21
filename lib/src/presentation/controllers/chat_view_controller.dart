@@ -14,6 +14,7 @@ import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:web_socket_channel/io.dart';
 
 import '../../domain/entities/chat/sub.dart';
+import '../../domain/entities/chat/sub_gift.dart';
 
 class ChatViewController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -308,6 +309,14 @@ class ChatViewController extends GetxController
                 chatMessages.add(subMessage);
                 break;
               case "subgift":
+                SubGift subGift = SubGift.fromString(
+                  twitchBadges: twitchBadges,
+                  thirdPartEmotes: thirdPartEmotes,
+                  cheerEmotes: cheerEmotes,
+                  message: message,
+                  settings: settings.value,
+                );
+                chatMessages.add(subGift);
                 break;
               case "announcement":
                 TwitchChatMessage announcement = TwitchChatMessage.fromString(

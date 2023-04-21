@@ -17,6 +17,7 @@ import '../emote.dart';
 enum HighlightType {
   firstTimeChatter,
   subscription,
+  subscriptionGifted,
   bitDonation,
   raid,
   channelPointRedemption,
