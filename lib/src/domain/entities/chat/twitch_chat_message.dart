@@ -66,8 +66,8 @@ class TwitchChatMessage {
     List<HighlightType> types = List.from(HighlightType.values);
 
     Random random = Random();
-    HighlightType? highlightType =
-        random.nextInt(10) == 1 ? types[random.nextInt(types.length)] : null;
+    HighlightType? highlightType;
+        // random.nextInt(10) < 5 ? types[random.nextInt(types.length)] : null;
 
     List<Widget> messageInWidgets = messageToWidgets(
       messageString: message,
