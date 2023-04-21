@@ -62,7 +62,7 @@ class HighlightMessageRow extends StatelessWidget {
       case HighlightType.subscription:
         Sub msg = message as Sub;
         bool isPrime = msg.tier == "Prime";
-        return "${message.authorName} subscribed(${isPrime ? " with prime" : ""}). They've been subscribed for ${msg.months} months.";
+        return "${message.authorName} subscribed${isPrime ? " with prime" : ""}. They've been subscribed for ${msg.months} months.";
       case HighlightType.announcement:
         return "Announcement";
       default:

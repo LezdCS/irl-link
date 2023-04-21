@@ -277,7 +277,6 @@ class ChatViewController extends GetxController
             break;
           case "USERNOTICE":
             final Map<String, String> messageMapped = {};
-            debugPrint("USERNOTICE");
             //We split the message by ';' to get the different parts
             List messageSplited = message.split(';');
             //We split each part by '=' to get the key and the value
@@ -311,7 +310,6 @@ class ChatViewController extends GetxController
               case "subgift":
                 break;
               case "announcement":
-                debugPrint("annooonce");
                 TwitchChatMessage announcement = TwitchChatMessage.fromString(
                   twitchBadges: twitchBadges,
                   thirdPartEmotes: thirdPartEmotes,
