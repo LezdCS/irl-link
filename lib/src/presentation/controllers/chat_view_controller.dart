@@ -8,10 +8,12 @@ import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/emote.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
-import 'package:irllink/src/domain/entities/twitch_chat_message.dart';
+import 'package:irllink/src/domain/entities/chat/twitch_chat_message.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:web_socket_channel/io.dart';
+
+import '../../domain/entities/chat/sub.dart';
 
 class ChatViewController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -199,10 +201,9 @@ class ChatViewController extends GetxController
       List<String> keys = [
         "PRIVMSG",
         "CLEARCHAT",
-        "CLEARCHAT",
         "CLEARMSG",
-        "NOTICE",
         "USERNOTICE",
+        "NOTICE",
         "ROOMSTATE"
       ];
       String? keyResult =
@@ -230,16 +231,6 @@ class ChatViewController extends GetxController
                 chatMessages.add(chatMessage);
                 if (settings.value.ttsEnabled!) {
                   readTts(chatMessage);
-                }
-
-                if (scrollController.hasClients && isAutoScrolldown.value) {
-                  Timer(Duration(milliseconds: 100), () {
-                    if (isAutoScrolldown.value) {
-                      scrollController.jumpTo(
-                        scrollController.position.maxScrollExtent,
-                      );
-                    }
-                  });
                 }
               }
             }
@@ -285,15 +276,65 @@ class ChatViewController extends GetxController
             }
             break;
           case "USERNOTICE":
-            //TODO: announcment
-            //TODO: subscriber
-            //TODO: resub
-            //TODO: subgift
-            //TODO: raid
-            break;
-          default:
-            {}
-            break;
+            final Map<String, String> messageMapped = {};
+            debugPrint("USERNOTICE");
+            //We split the message by ';' to get the different parts
+            List messageSplited = message.split(';');
+            //We split each part by '=' to get the key and the value
+            messageSplited.forEach((element) {
+              List elementSplited = element.split('=');
+              messageMapped[elementSplited[0]] = elementSplited[1];
+            });
+
+            String messageId = messageMapped['msg-id']!;
+            switch (messageId) {
+              case "sub":
+                Sub subMessage = Sub.fromString(
+                  twitchBadges: twitchBadges,
+                  thirdPartEmotes: thirdPartEmotes,
+                  cheerEmotes: cheerEmotes,
+                  message: message,
+                  settings: settings.value,
+                );
+                chatMessages.add(subMessage);
+                break;
+              case "resub":
+                Sub subMessage = Sub.fromString(
+                  twitchBadges: twitchBadges,
+                  thirdPartEmotes: thirdPartEmotes,
+                  cheerEmotes: cheerEmotes,
+                  message: message,
+                  settings: settings.value,
+                );
+                chatMessages.add(subMessage);
+                break;
+              case "subgift":
+                break;
+              case "announcement":
+                debugPrint("annooonce");
+                TwitchChatMessage announcement = TwitchChatMessage.fromString(
+                  twitchBadges: twitchBadges,
+                  thirdPartEmotes: thirdPartEmotes,
+                  cheerEmotes: cheerEmotes,
+                  message: message,
+                  settings: settings.value,
+                );
+                chatMessages.add(announcement);
+                break;
+              case "raid":
+                break;
+              default:
+                break;
+            }
+        }
+        if (scrollController.hasClients && isAutoScrolldown.value) {
+          Timer(Duration(milliseconds: 100), () {
+            if (isAutoScrolldown.value) {
+              scrollController.jumpTo(
+                scrollController.position.maxScrollExtent,
+              );
+            }
+          });
         }
       }
     } else if (message.toString().contains("GLOBALUSERSTATE")) {
@@ -561,7 +602,7 @@ class ChatViewController extends GetxController
       await flutterTts.setQueueMode(1);
     }
 
-    if(!settings.ttsEnabled!){
+    if (!settings.ttsEnabled!) {
       //prevent the queue to continue if we come back from settings and turn off TTS
       flutterTts.stop();
     }

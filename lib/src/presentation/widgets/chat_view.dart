@@ -6,7 +6,7 @@ import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
-import 'package:irllink/src/domain/entities/twitch_chat_message.dart';
+import 'package:irllink/src/domain/entities/chat/twitch_chat_message.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/chat_message/highlight_message_row.dart';
 import 'package:irllink/src/presentation/widgets/chat_message/message_row.dart';

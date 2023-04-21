@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/domain/entities/twitch_chat_message.dart';
+import 'package:irllink/src/domain/entities/chat/sub.dart';
+import 'package:irllink/src/domain/entities/chat/twitch_chat_message.dart';
 
 import '../../controllers/chat_view_controller.dart';
 
@@ -58,6 +59,12 @@ class HighlightMessageRow extends StatelessWidget {
         return "First message";
       case HighlightType.channelPointRedemption:
         return "Redeemed a reward";
+      case HighlightType.subscription:
+        Sub msg = message as Sub;
+        bool isPrime = msg.tier == "Prime";
+        return "${message.authorName} subscribed(${isPrime ? " with prime" : ""}). They've been subscribed for ${msg.months} months.";
+      case HighlightType.announcement:
+        return "Announcement";
       default:
         return "";
     }
@@ -72,13 +79,23 @@ class HighlightMessageRow extends StatelessWidget {
         };
       case HighlightType.firstTimeChatter:
         return {
-          "border": Color(0xFF00b5ad),
-          "background": Color(0xFF00b5ad).withOpacity(0.2)
+          "border": Color(0xff0033b5),
+          "background": Color(0xff0033b5).withOpacity(0.2)
         };
       case HighlightType.channelPointRedemption:
         return {
-          "border": Color(0xffb54b00),
-          "background": Color(0xffb54b00).withOpacity(0.2)
+          "border": Color(0xffb500a6),
+          "background": Color(0xffb500a6).withOpacity(0.2)
+        };
+      case HighlightType.subscription:
+        return {
+          "border": Color(0xFF9147ff),
+          "background": Color(0xFF9147ff).withOpacity(0.2)
+        };
+        case HighlightType.announcement:
+        return {
+          "border": Color(0xffff475c),
+          "background": Color(0xffff475c).withOpacity(0.2)
         };
       default:
         return {
