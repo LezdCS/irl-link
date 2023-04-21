@@ -190,11 +190,11 @@ class TwitchChatMessage extends Equatable {
     //We check if the message is a bit donation
     if (messageMapped['bits'] != null) {
       highlightType = HighlightType.bitDonation;
-    }else if (messageMapped["custom-reward-id"] != null){
+    } else if (messageMapped["custom-reward-id"] != null) {
       highlightType = HighlightType.channelPointRedemption;
     }
 
-    if(messageMapped["first-msg"] == "1"){
+    if (messageMapped["first-msg"] == "1") {
       highlightType = HighlightType.firstTimeChatter;
     }
 
@@ -312,69 +312,17 @@ List<Widget> stringToWidgets(
 
     Emote? thirdPartyEmote =
         thirdPartEmotes.firstWhereOrNull((element) => element.name == word);
-    bool isNextWordThirdPartEmoteZeroWidth = false;
-
-    if (emote != null || thirdPartyEmote != null) {
-      if (i < messageString.trim().split(' ').length - 1) {
-        String nextWord = messageString.trim().split(' ')[i + 1];
-        var zeroWidthEmote = thirdPartEmotes
-            .firstWhereOrNull((element) => element.name == nextWord);
-        isNextWordThirdPartEmoteZeroWidth =
-            zeroWidthEmote?.isZeroWidth ?? false;
-
-        if (isNextWordThirdPartEmoteZeroWidth) {
-          messageWidgetsBuild.add(
-            Stack(
-              children: [
-                emote != null
-                    ? TwitchEmote(emote: emote)
-                    : ThirdPartEmote(emote: thirdPartyEmote!),
-                ThirdPartEmote(emote: thirdPartyEmote!),
-              ],
-            ),
-          );
-        }
-      }
-    }
 
     if (emote != null) {
-      if (isNextWordThirdPartEmoteZeroWidth) continue;
-
       messageWidgetsBuild.add(
-        Wrap(
-          children: [
-            TwitchEmote(emote: emote),
-            Text(' '),
-          ],
+        TwitchEmote(
+          emote: emote,
         ),
       );
-    } else if (thirdPartyEmote != null && settings.isEmotes!) {
-      if (isNextWordThirdPartEmoteZeroWidth) continue;
-
-      if (thirdPartyEmote.isZeroWidth) {
-        if (i > 0) {
-          String previousWord = messageString.trim().split(' ')[i - 1];
-          bool isPreviousWordEmote = emotesIdsPositions.entries
-                  .firstWhereOrNull((element) => element.value
-                      .where((position) =>
-                          messageString.substring(int.parse(position[0]),
-                              int.parse(position[1]) + 1) ==
-                          previousWord)
-                      .isNotEmpty) !=
-              null;
-          bool isPreviousWordThirdPartyEmote = thirdPartEmotes.firstWhereOrNull(
-                  (element) => element.name == previousWord) !=
-              null;
-          if (isPreviousWordEmote || isPreviousWordThirdPartyEmote) continue;
-        } else if (i != 0) continue;
-      }
-
+    } else if (thirdPartyEmote != null) {
       messageWidgetsBuild.add(
-        Wrap(
-          children: [
-            ThirdPartEmote(emote: thirdPartyEmote),
-            Text(' '),
-          ],
+        ThirdPartEmote(
+          emote: thirdPartyEmote,
         ),
       );
     } else if (highlightType == HighlightType.bitDonation &&
