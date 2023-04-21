@@ -134,7 +134,7 @@ class TwitchChatMessage {
     if (messageMapped["first-msg"] == "1") {
       highlightType = HighlightType.firstTimeChatter;
     }
-    if(messageMapped["msg-id"] == "announcement") {
+    if (messageMapped["msg-id"] == "announcement") {
       highlightType = HighlightType.announcement;
     }
 
@@ -248,14 +248,24 @@ class TwitchChatMessage {
 
       if (emote != null) {
         messageWidgetsBuild.add(
-          TwitchEmote(
-            emote: emote,
+          Wrap(
+            children: [
+              TwitchEmote(
+                emote: emote,
+              ),
+              Text(' '),
+            ],
           ),
         );
       } else if (thirdPartyEmote != null) {
         messageWidgetsBuild.add(
-          ThirdPartEmote(
-            emote: thirdPartyEmote,
+          Wrap(
+            children: [
+              ThirdPartEmote(
+                emote: thirdPartyEmote,
+              ),
+              Text(' '),
+            ],
           ),
         );
       } else if (highlightType == HighlightType.bitDonation &&
