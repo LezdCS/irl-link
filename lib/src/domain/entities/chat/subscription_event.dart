@@ -5,12 +5,12 @@ import '../emote.dart';
 import '../settings.dart';
 import '../twitch_badge.dart';
 
-class SubGift extends TwitchChatMessage {
-  final String giftedName;
+class SubscriptionEvent extends TwitchChatMessage {
+  final String months;
   final String tier;
-  final String systemMessage;
+  final bool isGift;
 
-  SubGift({
+  SubscriptionEvent({
     required messageId,
     required badges,
     required color,
@@ -25,25 +25,25 @@ class SubGift extends TwitchChatMessage {
     required isAction,
     required isDeleted,
     required this.tier,
-    required this.giftedName,
-    required this.systemMessage,
+    required this.months,
+    required this.isGift,
   }) : super(
-    messageId: messageId,
-    badges: badges,
-    color: color,
-    authorName: authorName,
-    authorId: authorId,
-    emotes: emotes,
-    message: message,
-    messageWidgetsBuild: messageWidgetsBuild,
-    timestamp: timestamp,
-    highlightType: highlightType,
-    bitAmount: bitAmount,
-    isAction: isAction,
-    isDeleted: isDeleted,
-  );
+          messageId: messageId,
+          badges: badges,
+          color: color,
+          authorName: authorName,
+          authorId: authorId,
+          emotes: emotes,
+          message: message,
+          messageWidgetsBuild: messageWidgetsBuild,
+          timestamp: timestamp,
+          highlightType: highlightType,
+          bitAmount: bitAmount,
+          isAction: isAction,
+          isDeleted: isDeleted,
+        );
 
-  factory SubGift.fromString({
+  factory SubscriptionEvent.fromString({
     required List<TwitchBadge> twitchBadges,
     required List<Emote> cheerEmotes,
     required List<Emote> thirdPartEmotes,
@@ -58,7 +58,10 @@ class SubGift extends TwitchChatMessage {
       messageMapped[elementSplited[0]] = elementSplited[1];
     });
 
-    String color = TwitchChatMessage.randomUsernameColor(messageMapped['display-name']!);
+    String color = messageMapped['color']!;
+    if (color == "") {
+      color = TwitchChatMessage.randomUsernameColor(messageMapped['display-name']!);
+    }
 
     Map<String, List<List<String>>> emotesIdsPositions =
     TwitchChatMessage.parseEmotes(messageMapped);
@@ -77,7 +80,7 @@ class SubGift extends TwitchChatMessage {
       color: color,
     );
 
-    return SubGift(
+    return SubscriptionEvent(
       messageId: messageMapped['id'] as String,
       badges: TwitchChatMessage.getBadges(messageMapped['badges'].toString(), twitchBadges),
       color: color,
@@ -87,13 +90,13 @@ class SubGift extends TwitchChatMessage {
       message: messageString,
       messageWidgetsBuild: messageInWidgets,
       timestamp: int.parse(messageMapped['tmi-sent-ts'] as String),
-      highlightType: HighlightType.subscriptionGifted,
+      highlightType: HighlightType.subscription,
       bitAmount: 0,
       isAction: false,
       isDeleted: false,
       tier: messageMapped["msg-param-sub-plan"] as String,
-      giftedName: messageMapped["msg-param-recipient-display-name"] as String,
-      systemMessage: messageMapped["system-msg"] as String,
+      months: messageMapped["msg-param-cumulative-months"] as String,
+      isGift: messageMapped["msg-param-was-gifted"] == "true",
     );
   }
 }

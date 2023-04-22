@@ -13,8 +13,8 @@ import 'package:irllink/src/domain/entities/twitch_credentials.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:web_socket_channel/io.dart';
 
-import '../../domain/entities/chat/sub.dart';
-import '../../domain/entities/chat/sub_gift.dart';
+import '../../domain/entities/chat/subscription_event.dart';
+import '../../domain/entities/chat/sub_gift_event.dart';
 
 class ChatViewController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -289,7 +289,7 @@ class ChatViewController extends GetxController
             String messageId = messageMapped['msg-id']!;
             switch (messageId) {
               case "sub":
-                Sub subMessage = Sub.fromString(
+                SubscriptionEvent subMessage = SubscriptionEvent.fromString(
                   twitchBadges: twitchBadges,
                   thirdPartEmotes: thirdPartEmotes,
                   cheerEmotes: cheerEmotes,
@@ -299,7 +299,7 @@ class ChatViewController extends GetxController
                 chatMessages.add(subMessage);
                 break;
               case "resub":
-                Sub subMessage = Sub.fromString(
+                SubscriptionEvent subMessage = SubscriptionEvent.fromString(
                   twitchBadges: twitchBadges,
                   thirdPartEmotes: thirdPartEmotes,
                   cheerEmotes: cheerEmotes,
@@ -309,7 +309,7 @@ class ChatViewController extends GetxController
                 chatMessages.add(subMessage);
                 break;
               case "subgift":
-                SubGift subGift = SubGift.fromString(
+                SubGiftEvent subGift = SubGiftEvent.fromString(
                   twitchBadges: twitchBadges,
                   thirdPartEmotes: thirdPartEmotes,
                   cheerEmotes: cheerEmotes,

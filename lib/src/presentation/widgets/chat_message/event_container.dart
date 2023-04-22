@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/domain/entities/chat/sub.dart';
 import 'package:irllink/src/domain/entities/chat/twitch_chat_message.dart';
 
-import '../../../domain/entities/chat/sub_gift.dart';
+import '../../../domain/entities/chat/sub_gift_event.dart';
+import '../../../domain/entities/chat/subscription_event.dart';
 import '../../controllers/chat_view_controller.dart';
 
-class HighlightMessageRow extends StatelessWidget {
+class EventContainer extends StatelessWidget {
   final ChatViewController controller;
   final TwitchChatMessage message;
   final Widget child;
 
-  const HighlightMessageRow({
+  const EventContainer({
     required this.controller,
     required this.message,
     required this.child,
@@ -61,13 +61,13 @@ class HighlightMessageRow extends StatelessWidget {
       case HighlightType.channelPointRedemption:
         return "Redeemed a reward";
       case HighlightType.subscription:
-        Sub msg = message as Sub;
+        SubscriptionEvent msg = message as SubscriptionEvent;
         bool isPrime = msg.tier == "Prime";
-        return "${message.authorName} subscribed${isPrime ? " with prime" : ""}. They've been subscribed for ${msg.months} months.";
+        return "${message.authorName} subscribed${isPrime ? " with prime" : ""}. They've subscribed for ${msg.months} months.";
       case HighlightType.announcement:
         return "Announcement";
       case HighlightType.subscriptionGifted:
-        SubGift msg = message as SubGift;
+        SubGiftEvent msg = message as SubGiftEvent;
         return "${message.authorName} gifted a subscription to ${msg.giftedName}";
       default:
         return "";
