@@ -39,6 +39,7 @@ class SettingsViewController extends GetxController {
   late TextEditingController addTtsIgnoredUsersController;
   late TextEditingController addTtsIgnoredPrefixsController;
   late TextEditingController addTtsAllowedPrefixsController;
+  Rx<Color> nothingJustToRefreshDialog = Colors.grey.obs;
 
 
   @override

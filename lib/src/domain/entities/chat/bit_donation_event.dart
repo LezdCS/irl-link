@@ -5,12 +5,10 @@ import '../emote.dart';
 import '../settings.dart';
 import '../twitch_badge.dart';
 
-class SubGift extends TwitchChatMessage {
-  final String giftedName;
-  final String tier;
-  final String systemMessage;
+class BitDonationEvent extends TwitchChatMessage {
+  final int totalBits;
 
-  SubGift({
+  BitDonationEvent({
     required messageId,
     required badges,
     required color,
@@ -21,12 +19,9 @@ class SubGift extends TwitchChatMessage {
     required messageWidgetsBuild,
     required timestamp,
     required highlightType,
-    required bitAmount,
     required isAction,
     required isDeleted,
-    required this.tier,
-    required this.giftedName,
-    required this.systemMessage,
+    required this.totalBits,
   }) : super(
     messageId: messageId,
     badges: badges,
@@ -38,12 +33,11 @@ class SubGift extends TwitchChatMessage {
     messageWidgetsBuild: messageWidgetsBuild,
     timestamp: timestamp,
     highlightType: highlightType,
-    bitAmount: bitAmount,
     isAction: isAction,
     isDeleted: isDeleted,
   );
 
-  factory SubGift.fromString({
+  factory BitDonationEvent.fromString({
     required List<TwitchBadge> twitchBadges,
     required List<Emote> cheerEmotes,
     required List<Emote> thirdPartEmotes,
@@ -58,7 +52,8 @@ class SubGift extends TwitchChatMessage {
       messageMapped[elementSplited[0]] = elementSplited[1];
     });
 
-    String color = TwitchChatMessage.randomUsernameColor(messageMapped['display-name']!);
+    String color =
+    TwitchChatMessage.randomUsernameColor(messageMapped['display-name']!);
 
     Map<String, List<List<String>>> emotesIdsPositions =
     TwitchChatMessage.parseEmotes(messageMapped);
@@ -71,15 +66,16 @@ class SubGift extends TwitchChatMessage {
       emotesIdsPositions: emotesIdsPositions,
       thirdPartEmotes: thirdPartEmotes,
       settings: settings,
-      highlightType: HighlightType.subscription,
+      highlightType: HighlightType.bitDonation,
       cheerEmotes: cheerEmotes,
       isAction: false,
       color: color,
     );
 
-    return SubGift(
+    return BitDonationEvent(
       messageId: messageMapped['id'] as String,
-      badges: TwitchChatMessage.getBadges(messageMapped['badges'].toString(), twitchBadges),
+      badges: TwitchChatMessage.getBadges(
+          messageMapped['badges'].toString(), twitchBadges),
       color: color,
       authorName: messageMapped['display-name'] as String,
       authorId: messageMapped['user-id'] as String,
@@ -87,13 +83,51 @@ class SubGift extends TwitchChatMessage {
       message: messageString,
       messageWidgetsBuild: messageInWidgets,
       timestamp: int.parse(messageMapped['tmi-sent-ts'] as String),
-      highlightType: HighlightType.subscriptionGifted,
-      bitAmount: 0,
+      highlightType: HighlightType.bitDonation,
       isAction: false,
       isDeleted: false,
-      tier: messageMapped["msg-param-sub-plan"] as String,
-      giftedName: messageMapped["msg-param-recipient-display-name"] as String,
-      systemMessage: messageMapped["system-msg"] as String,
+      totalBits:  messageMapped['bits'] == null ? 0 : int.parse(messageMapped['bits']!),
+    );
+  }
+
+  factory BitDonationEvent.randomGeneration() {
+    String message = "Here for you :)";
+    List<Widget> messageInWidgets = TwitchChatMessage.messageToWidgets(
+      messageString: message,
+      emotesIdsPositions: <String, List<List<String>>>{},
+      thirdPartEmotes: <Emote>[],
+      settings: Settings.defaultSettings(),
+      highlightType: HighlightType.bitDonation,
+      cheerEmotes: <Emote>[],
+      isAction: false,
+      color: '#000000',
+    );
+    List badges = <TwitchBadge>[
+      TwitchBadge(
+        setId: 'sub-gifter',
+        versionId: '1',
+        imageUrl1x:
+        'https://static-cdn.jtvnw.net/badges/v1/a5ef6c17-2e5b-4d8f-9b80-2779fd722414/1',
+        imageUrl2x:
+        'https://static-cdn.jtvnw.net/badges/v1/a5ef6c17-2e5b-4d8f-9b80-2779fd722414/2',
+        imageUrl4x:
+        'https://static-cdn.jtvnw.net/badges/v1/a5ef6c17-2e5b-4d8f-9b80-2779fd722414/3',
+      ),
+    ];
+    return BitDonationEvent(
+      messageId: '123456789',
+      badges: badges,
+      color: TwitchChatMessage.randomUsernameColor('Lezd'),
+      authorName: 'Lezd',
+      authorId: '123456789',
+      emotes: <String, List<dynamic>>{},
+      message: message,
+      messageWidgetsBuild: messageInWidgets,
+      timestamp: 123456789,
+      highlightType: HighlightType.bitDonation,
+      isAction: false,
+      isDeleted: false,
+      totalBits: 400,
     );
   }
 }

@@ -5,6 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/domain/entities/chat/announcement_event.dart';
+import 'package:irllink/src/domain/entities/chat/bit_donation_event.dart';
+import 'package:irllink/src/domain/entities/chat/incoming_raid_event.dart';
+import 'package:irllink/src/domain/entities/chat/reward_redemption_event.dart';
 import 'package:irllink/src/domain/entities/emote.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
@@ -13,8 +17,8 @@ import 'package:irllink/src/domain/entities/twitch_credentials.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:web_socket_channel/io.dart';
 
-import '../../domain/entities/chat/sub.dart';
-import '../../domain/entities/chat/sub_gift.dart';
+import '../../domain/entities/chat/subscription_event.dart';
+import '../../domain/entities/chat/sub_gift_event.dart';
 
 class ChatViewController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -65,7 +69,7 @@ class ChatViewController extends GetxController
       chatDemoTimer = Timer.periodic(
         Duration(seconds: 3),
         (Timer t) => {
-          chatMessages.add(TwitchChatMessage.randomGeneration()),
+          chatMessages.add(TwitchChatMessage.randomGeneration(null)),
           if (scrollController.hasClients && isAutoScrolldown.value)
             {
               Timer(Duration(milliseconds: 100), () {
@@ -220,6 +224,30 @@ class ChatViewController extends GetxController
         switch (keyResult) {
           case "PRIVMSG":
             {
+              if (messageMapped['bits'] != null) {
+                BitDonationEvent bitDonationEvent = BitDonationEvent.fromString(
+                  twitchBadges: twitchBadges,
+                  cheerEmotes: cheerEmotes,
+                  thirdPartEmotes: thirdPartEmotes,
+                  message: message,
+                  settings: settings.value,
+                );
+                chatMessages.add(bitDonationEvent);
+                break;
+              }
+              if (messageMapped["custom-reward-id"] != null) {
+                RewardRedemptionEvent rewardRedemptionEvent =
+                    RewardRedemptionEvent.fromString(
+                  twitchBadges: twitchBadges,
+                  thirdPartEmotes: thirdPartEmotes,
+                  cheerEmotes: cheerEmotes,
+                  message: message,
+                  settings: settings.value,
+                );
+                chatMessages.add(rewardRedemptionEvent);
+                break;
+              }
+
               TwitchChatMessage chatMessage = TwitchChatMessage.fromString(
                 twitchBadges: twitchBadges,
                 thirdPartEmotes: thirdPartEmotes,
@@ -288,8 +316,19 @@ class ChatViewController extends GetxController
 
             String messageId = messageMapped['msg-id']!;
             switch (messageId) {
+              case "announcement":
+                AnnouncementEvent announcementEvent = AnnouncementEvent
+                    .fromString(
+                  twitchBadges: twitchBadges,
+                  thirdPartEmotes: thirdPartEmotes,
+                  cheerEmotes: cheerEmotes,
+                  message: message,
+                  settings: settings.value,
+                );
+                chatMessages.add(announcementEvent);
+                break;
               case "sub":
-                Sub subMessage = Sub.fromString(
+                SubscriptionEvent subMessage = SubscriptionEvent.fromString(
                   twitchBadges: twitchBadges,
                   thirdPartEmotes: thirdPartEmotes,
                   cheerEmotes: cheerEmotes,
@@ -299,7 +338,7 @@ class ChatViewController extends GetxController
                 chatMessages.add(subMessage);
                 break;
               case "resub":
-                Sub subMessage = Sub.fromString(
+                SubscriptionEvent subMessage = SubscriptionEvent.fromString(
                   twitchBadges: twitchBadges,
                   thirdPartEmotes: thirdPartEmotes,
                   cheerEmotes: cheerEmotes,
@@ -309,7 +348,7 @@ class ChatViewController extends GetxController
                 chatMessages.add(subMessage);
                 break;
               case "subgift":
-                SubGift subGift = SubGift.fromString(
+                SubGiftEvent subGift = SubGiftEvent.fromString(
                   twitchBadges: twitchBadges,
                   thirdPartEmotes: thirdPartEmotes,
                   cheerEmotes: cheerEmotes,
@@ -329,6 +368,14 @@ class ChatViewController extends GetxController
                 chatMessages.add(announcement);
                 break;
               case "raid":
+                IncomingRaidEvent raid = IncomingRaidEvent.fromString(
+                  twitchBadges: twitchBadges,
+                  thirdPartEmotes: thirdPartEmotes,
+                  cheerEmotes: cheerEmotes,
+                  message: message,
+                  settings: settings.value,
+                );
+                chatMessages.add(raid);
                 break;
               default:
                 break;
