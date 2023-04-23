@@ -21,7 +21,6 @@ class SubscriptionEvent extends TwitchChatMessage {
     required messageWidgetsBuild,
     required timestamp,
     required highlightType,
-    required bitAmount,
     required isAction,
     required isDeleted,
     required this.tier,
@@ -38,7 +37,6 @@ class SubscriptionEvent extends TwitchChatMessage {
           messageWidgetsBuild: messageWidgetsBuild,
           timestamp: timestamp,
           highlightType: highlightType,
-          bitAmount: bitAmount,
           isAction: isAction,
           isDeleted: isDeleted,
         );
@@ -60,11 +58,12 @@ class SubscriptionEvent extends TwitchChatMessage {
 
     String color = messageMapped['color']!;
     if (color == "") {
-      color = TwitchChatMessage.randomUsernameColor(messageMapped['display-name']!);
+      color =
+          TwitchChatMessage.randomUsernameColor(messageMapped['display-name']!);
     }
 
     Map<String, List<List<String>>> emotesIdsPositions =
-    TwitchChatMessage.parseEmotes(messageMapped);
+        TwitchChatMessage.parseEmotes(messageMapped);
 
     List messageList = messageSplited.last.split(':').sublist(2);
     String messageString = messageList.join(':');
@@ -82,7 +81,8 @@ class SubscriptionEvent extends TwitchChatMessage {
 
     return SubscriptionEvent(
       messageId: messageMapped['id'] as String,
-      badges: TwitchChatMessage.getBadges(messageMapped['badges'].toString(), twitchBadges),
+      badges: TwitchChatMessage.getBadges(
+          messageMapped['badges'].toString(), twitchBadges),
       color: color,
       authorName: messageMapped['display-name'] as String,
       authorId: messageMapped['user-id'] as String,
@@ -91,12 +91,54 @@ class SubscriptionEvent extends TwitchChatMessage {
       messageWidgetsBuild: messageInWidgets,
       timestamp: int.parse(messageMapped['tmi-sent-ts'] as String),
       highlightType: HighlightType.subscription,
-      bitAmount: 0,
       isAction: false,
       isDeleted: false,
       tier: messageMapped["msg-param-sub-plan"] as String,
       months: messageMapped["msg-param-cumulative-months"] as String,
       isGift: messageMapped["msg-param-was-gifted"] == "true",
+    );
+  }
+
+  factory SubscriptionEvent.randomGeneration() {
+    String message = "4 months already eheh";
+    List<Widget> messageInWidgets = TwitchChatMessage.messageToWidgets(
+      messageString: message,
+      emotesIdsPositions: <String, List<List<String>>>{},
+      thirdPartEmotes: <Emote>[],
+      settings: Settings.defaultSettings(),
+      highlightType: HighlightType.subscription,
+      cheerEmotes: <Emote>[],
+      isAction: false,
+      color: '#000000',
+    );
+    List badges = <TwitchBadge>[
+      TwitchBadge(
+        setId: 'sub-gifter',
+        versionId: '1',
+        imageUrl1x:
+            'https://static-cdn.jtvnw.net/badges/v1/a5ef6c17-2e5b-4d8f-9b80-2779fd722414/1',
+        imageUrl2x:
+            'https://static-cdn.jtvnw.net/badges/v1/a5ef6c17-2e5b-4d8f-9b80-2779fd722414/2',
+        imageUrl4x:
+            'https://static-cdn.jtvnw.net/badges/v1/a5ef6c17-2e5b-4d8f-9b80-2779fd722414/3',
+      ),
+    ];
+    return SubscriptionEvent(
+      messageId: '123456789',
+      badges: badges,
+      color: TwitchChatMessage.randomUsernameColor('Lezd'),
+      authorName: 'Lezd',
+      authorId: '123456789',
+      emotes: <String, List<dynamic>>{},
+      message: message,
+      messageWidgetsBuild: messageInWidgets,
+      timestamp: 123456789,
+      highlightType: HighlightType.subscription,
+      isAction: false,
+      isDeleted: false,
+      tier: '1000',
+      months: '4',
+      isGift: false,
     );
   }
 }

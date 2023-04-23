@@ -19,7 +19,6 @@ class AnnouncementEvent extends TwitchChatMessage {
     required messageWidgetsBuild,
     required timestamp,
     required highlightType,
-    required bitAmount,
     required isAction,
     required isDeleted,
     required this.announcementColor,
@@ -34,7 +33,6 @@ class AnnouncementEvent extends TwitchChatMessage {
           messageWidgetsBuild: messageWidgetsBuild,
           timestamp: timestamp,
           highlightType: highlightType,
-          bitAmount: bitAmount,
           isAction: isAction,
           isDeleted: isDeleted,
         );
@@ -54,8 +52,10 @@ class AnnouncementEvent extends TwitchChatMessage {
       messageMapped[elementSplited[0]] = elementSplited[1];
     });
 
-    String color =
-        TwitchChatMessage.randomUsernameColor(messageMapped['display-name']!);
+    String color = messageMapped['color']!;
+    if (color == "") {
+      color = TwitchChatMessage.randomUsernameColor(messageMapped['display-name']!);
+    }
 
     Map<String, List<List<String>>> emotesIdsPositions =
         TwitchChatMessage.parseEmotes(messageMapped);
@@ -86,7 +86,6 @@ class AnnouncementEvent extends TwitchChatMessage {
       messageWidgetsBuild: messageInWidgets,
       timestamp: int.parse(messageMapped['tmi-sent-ts'] as String),
       highlightType: HighlightType.announcement,
-      bitAmount: 0,
       isAction: false,
       isDeleted: false,
       announcementColor: messageMapped["msg-param-color"] as String,
@@ -125,7 +124,6 @@ class AnnouncementEvent extends TwitchChatMessage {
       messageWidgetsBuild: messageInWidgets,
       timestamp: 123456789,
       highlightType: HighlightType.announcement,
-      bitAmount: 0,
       isAction: false,
       isDeleted: false,
       announcementColor: '#000000',

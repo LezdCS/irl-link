@@ -21,7 +21,6 @@ class SubGiftEvent extends TwitchChatMessage {
     required messageWidgetsBuild,
     required timestamp,
     required highlightType,
-    required bitAmount,
     required isAction,
     required isDeleted,
     required this.tier,
@@ -38,7 +37,6 @@ class SubGiftEvent extends TwitchChatMessage {
     messageWidgetsBuild: messageWidgetsBuild,
     timestamp: timestamp,
     highlightType: highlightType,
-    bitAmount: bitAmount,
     isAction: isAction,
     isDeleted: isDeleted,
   );
@@ -88,7 +86,6 @@ class SubGiftEvent extends TwitchChatMessage {
       messageWidgetsBuild: messageInWidgets,
       timestamp: int.parse(messageMapped['tmi-sent-ts'] as String),
       highlightType: HighlightType.subscriptionGifted,
-      bitAmount: 0,
       isAction: false,
       isDeleted: false,
       tier: messageMapped["msg-param-sub-plan"] as String,

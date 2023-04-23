@@ -36,7 +36,6 @@ class TwitchChatMessage {
   final List<Widget> messageWidgetsBuild;
   final int timestamp;
   final HighlightType? highlightType;
-  final int bitAmount;
   final bool isAction;
   bool isDeleted;
 
@@ -51,12 +50,11 @@ class TwitchChatMessage {
     required this.messageWidgetsBuild,
     required this.timestamp,
     required this.highlightType,
-    required this.bitAmount,
     required this.isAction,
     required this.isDeleted,
   });
 
-  factory TwitchChatMessage.randomGeneration() {
+  factory TwitchChatMessage.randomGeneration(HighlightType? _highlightType) {
     Uuid uuid = Uuid();
     String username = faker.internet.userName();
     String message = faker.lorem.sentence();
@@ -65,7 +63,7 @@ class TwitchChatMessage {
     List<HighlightType> types = List.from(HighlightType.values);
 
     Random random = Random();
-    HighlightType? highlightType;
+    HighlightType? highlightType = _highlightType ?? null;
         // random.nextInt(10) < 5 ? types[random.nextInt(types.length)] : null;
 
     List<Widget> messageInWidgets = messageToWidgets(
@@ -91,7 +89,6 @@ class TwitchChatMessage {
           .dateTime(minYear: 2000, maxYear: 2020)
           .microsecondsSinceEpoch,
       highlightType: highlightType,
-      bitAmount: 0,
       isAction: false,
       isDeleted: false,
     );
@@ -124,17 +121,8 @@ class TwitchChatMessage {
         parseEmotes(messageMapped);
 
     HighlightType? highlightType;
-    //We check if the message is a bit donation
-    if (messageMapped['bits'] != null) {
-      highlightType = HighlightType.bitDonation;
-    } else if (messageMapped["custom-reward-id"] != null) {
-      highlightType = HighlightType.channelPointRedemption;
-    }
     if (messageMapped["first-msg"] == "1") {
       highlightType = HighlightType.firstTimeChatter;
-    }
-    if (messageMapped["msg-id"] == "announcement") {
-      highlightType = HighlightType.announcement;
     }
 
     //We get the message wrote by the user
@@ -172,8 +160,6 @@ class TwitchChatMessage {
       messageWidgetsBuild: messageInWidgets,
       timestamp: int.parse(messageMapped['tmi-sent-ts'] as String),
       highlightType: highlightType,
-      bitAmount:
-          messageMapped['bits'] == null ? 0 : int.parse(messageMapped['bits']!),
       isAction: isAction,
       isDeleted: false,
     );
