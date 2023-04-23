@@ -42,7 +42,7 @@ dependencies:
   obs_websocket: ^5.1.0+1
   intl: ^0.18.1
   expandable: ^5.0.1
-  audioplayers: ^3.0.1
+  audioplayers: ^4.0.1
   quiver: ^3.2.1
   socket_io_client: ^2.0.1
   firebase_crashlytics: ^3.1.1
