@@ -40,7 +40,7 @@ class _WebPageViewState extends State<WebPageView>
 
     controller = WebViewController.fromPlatformCreationParams(params)
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.https(widget.url));
+      ..loadRequest(Uri.parse(widget.url));
 
     if (controller.platform is AndroidWebViewController) {
       AndroidWebViewController.enableDebugging(true);
