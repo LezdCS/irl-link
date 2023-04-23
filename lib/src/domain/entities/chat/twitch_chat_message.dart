@@ -18,7 +18,7 @@ enum HighlightType {
   subscription,
   subscriptionGifted,
   bitDonation,
-  raid,
+  incomingRaid,
   channelPointRedemption,
   announcement,
   shoutout,

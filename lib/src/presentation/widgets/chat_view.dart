@@ -61,20 +61,20 @@ class ChatView extends GetView<ChatViewController> {
                           },
                           child: message.highlightType != null
                               ? EventContainer(
-                                  controller: controller,
                                   message: message,
-                                  child: MessageRow(
-                                    controller: controller,
-                                    message: message,
-                                  ),
+                                  selectedMessage:
+                                      controller.selectedMessage.value,
+                                  displayTimestamp: controller
+                                      .settings.value.displayTimestamp!,
+                                  textSize: controller.settings.value.textSize!,
                                 )
                               : MessageContainer(
-                                  controller: controller,
+                                  selectedMessage:
+                                      controller.selectedMessage.value,
                                   message: message,
-                                  child: MessageRow(
-                                    controller: controller,
-                                    message: message,
-                                  ),
+                                  displayTimestamp: controller
+                                      .settings.value.displayTimestamp!,
+                                  textSize: controller.settings.value.textSize!,
                                 ),
                         ),
                       );

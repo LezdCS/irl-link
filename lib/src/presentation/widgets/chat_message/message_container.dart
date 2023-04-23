@@ -2,31 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/chat/twitch_chat_message.dart';
 
-import '../../controllers/chat_view_controller.dart';
+import 'message_row.dart';
 
 class MessageContainer extends StatelessWidget {
-  final ChatViewController controller;
+  final TwitchChatMessage? selectedMessage;
   final TwitchChatMessage message;
-  final Widget child;
+  final bool displayTimestamp;
+  final double textSize;
 
   const MessageContainer({
-    required this.controller,
+    required this.selectedMessage,
     required this.message,
-    required this.child,
+    required this.displayTimestamp,
+    required this.textSize,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => Container(
+    return  Container(
         padding: EdgeInsets.only(top: 2, bottom: 2, left: 5),
         decoration: BoxDecoration(
-          color: controller.selectedMessage.value == message
+          color: selectedMessage != null && selectedMessage == message
               ? Theme.of(Get.context!).colorScheme.secondary
               : Theme.of(Get.context!).colorScheme.background,
         ),
-        child: child,
-      ),
+        child: MessageRow(
+          message: message,
+          displayTimestamp: displayTimestamp,
+          textSize: textSize,
+        ),
     );
   }
 }

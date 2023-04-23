@@ -4,17 +4,19 @@ import 'package:irllink/src/domain/entities/chat/twitch_chat_message.dart';
 
 import '../../../domain/entities/chat/sub_gift_event.dart';
 import '../../../domain/entities/chat/subscription_event.dart';
-import '../../controllers/chat_view_controller.dart';
+import 'message_row.dart';
 
 class EventContainer extends StatelessWidget {
-  final ChatViewController controller;
   final TwitchChatMessage message;
-  final Widget child;
+  final TwitchChatMessage? selectedMessage;
+  final bool displayTimestamp;
+  final double textSize;
 
   const EventContainer({
-    required this.controller,
     required this.message,
-    required this.child,
+    required this.selectedMessage,
+    required this.displayTimestamp,
+    required this.textSize,
   });
 
   @override
@@ -23,7 +25,7 @@ class EventContainer extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(top: 2, bottom: 2, left: 5),
       decoration: BoxDecoration(
-        color: controller.selectedMessage.value == message
+        color: selectedMessage != null && selectedMessage == message
             ? Theme.of(Get.context!).colorScheme.secondary
             : getColorFromType(message.highlightType!)["background"],
         border: Border(
@@ -40,13 +42,25 @@ class EventContainer extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            child: Text(
-              getStringFromType(message.highlightType!, message),
-              style: TextStyle(color: Colors.grey, fontSize: 15),
-            ),
+          Row(
+            children: [
+              getIconFromType(message.highlightType!),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  getStringFromType(message.highlightType!, message),
+                  style: TextStyle(color: Colors.grey[300], fontSize: 16),
+                ),
+              ),
+            ],
           ),
-          message.messageWidgetsBuild.length > 0 ? child : Container(),
+          message.messageWidgetsBuild.length > 0
+              ? MessageRow(
+                  message: message,
+                  displayTimestamp: displayTimestamp,
+                  textSize: textSize,
+                )
+              : Container(),
         ],
       ),
     );
@@ -68,9 +82,9 @@ class EventContainer extends StatelessWidget {
         return "Announcement";
       case HighlightType.subscriptionGifted:
         SubGiftEvent msg = message as SubGiftEvent;
-        return "${message.authorName} gifted a subscription to ${msg.giftedName}";
+        return "${message.authorName} gifted a subscription to ${msg.giftedName}!";
       default:
-        return "";
+        return "Unsupported event";
     }
   }
 
@@ -108,9 +122,28 @@ class EventContainer extends StatelessWidget {
         };
       default:
         return {
-          "border": Colors.white,
-          "background": Colors.white.withOpacity(0.2)
+          "border": Colors.black,
+          "background": Colors.black.withOpacity(0.2)
         };
+    }
+  }
+
+  Icon getIconFromType(HighlightType type) {
+    switch (type) {
+      case HighlightType.bitDonation:
+        return Icon(Icons.attach_money);
+      case HighlightType.firstTimeChatter:
+        return Icon(Icons.chat, size: 16,);
+      case HighlightType.channelPointRedemption:
+        return Icon(Icons.redeem);
+      case HighlightType.subscription:
+        return Icon(Icons.star);
+      case HighlightType.announcement:
+        return Icon(Icons.campaign);
+      case HighlightType.subscriptionGifted:
+        return Icon(Icons.card_giftcard);
+      default:
+        return Icon(Icons.auto_awesome);
     }
   }
 }
