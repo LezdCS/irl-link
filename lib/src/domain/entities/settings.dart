@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:irllink/src/domain/entities/settings/chat_events_settings.dart';
 
 class Settings extends Equatable {
   //CHAT SETTINGS
@@ -9,6 +10,7 @@ class Settings extends Equatable {
   final bool? alternateChannel;
   final String? alternateChannelName;
   final List? hiddenUsersIds;
+  final ChatEventsSettings? chatEventsSettings;
 
   //GENERAL SETTINGS
   final bool? isDarkMode;
@@ -44,6 +46,7 @@ class Settings extends Equatable {
     required this.alternateChannel,
     required this.alternateChannelName,
     required this.hiddenUsersIds,
+    required this.chatEventsSettings,
 
     //GENERAL SETTINGS
     required this.isDarkMode,
@@ -80,6 +83,14 @@ class Settings extends Equatable {
     this.alternateChannel = false,
     this.alternateChannelName = "",
     this.hiddenUsersIds = const [],
+    this.chatEventsSettings = const ChatEventsSettings(
+      firstsMessages: true,
+      subscriptions: true,
+      bitsDonations: true,
+      announcements: true,
+      incomingRaids: true,
+      redemptions: true,
+    ),
 
     //GENERAL SETTINGS
     this.isDarkMode = true,
@@ -116,6 +127,7 @@ class Settings extends Equatable {
         'alternateChannel': alternateChannel,
         'alternateChannelName': alternateChannelName,
         'hiddenUsersIds': hiddenUsersIds,
+        'chatEventsSettings': chatEventsSettings?.toJson(),
         //GENERAL
         'isDarkMode': isDarkMode,
         'keepSpeakerOn': keepSpeakerOn,
@@ -151,6 +163,7 @@ class Settings extends Equatable {
       alternateChannel,
       alternateChannelName,
       hiddenUsersIds,
+      chatEventsSettings,
       //GENERAL
       isDarkMode,
       keepSpeakerOn,
@@ -188,6 +201,7 @@ class Settings extends Equatable {
     bool? alternateChannel,
     String? alternateChannelName,
     List? hiddenUsersIds,
+    ChatEventsSettings? chatEventsSettings,
     //GENERAL
     bool? isDarkMode,
     bool? keepSpeakerOn,
@@ -220,6 +234,7 @@ class Settings extends Equatable {
         alternateChannel: alternateChannel ?? this.alternateChannel,
         alternateChannelName: alternateChannelName ?? this.alternateChannelName,
         hiddenUsersIds: hiddenUsersIds ?? this.hiddenUsersIds,
+        chatEventsSettings: chatEventsSettings ?? this.chatEventsSettings,
         //GENERAL
         isDarkMode: isDarkMode ?? this.isDarkMode,
         keepSpeakerOn: keepSpeakerOn ?? this.keepSpeakerOn,

@@ -69,7 +69,8 @@ class ChatViewController extends GetxController
       chatDemoTimer = Timer.periodic(
         Duration(seconds: 3),
         (Timer t) => {
-          chatMessages.add(TwitchChatMessage.randomGeneration(null)),
+          chatMessages
+              .add(TwitchChatMessage.randomGeneration(null, null, null)),
           if (scrollController.hasClients && isAutoScrolldown.value)
             {
               Timer(Duration(milliseconds: 100), () {
@@ -225,6 +226,9 @@ class ChatViewController extends GetxController
           case "PRIVMSG":
             {
               if (messageMapped['bits'] != null) {
+                if (!settings.value.chatEventsSettings!.bitsDonations) {
+                  return;
+                }
                 BitDonationEvent bitDonationEvent = BitDonationEvent.fromString(
                   twitchBadges: twitchBadges,
                   cheerEmotes: cheerEmotes,
@@ -232,10 +236,20 @@ class ChatViewController extends GetxController
                   message: message,
                   settings: settings.value,
                 );
+                if (settings.value.hiddenUsersIds!
+                    .contains(bitDonationEvent.authorId)) {
+                  return;
+                }
+                if (settings.value.ttsEnabled!) {
+                  readTts(bitDonationEvent);
+                }
                 chatMessages.add(bitDonationEvent);
                 break;
               }
               if (messageMapped["custom-reward-id"] != null) {
+                if (!settings.value.chatEventsSettings!.redemptions) {
+                  return;
+                }
                 RewardRedemptionEvent rewardRedemptionEvent =
                     RewardRedemptionEvent.fromString(
                   twitchBadges: twitchBadges,
@@ -244,6 +258,13 @@ class ChatViewController extends GetxController
                   message: message,
                   settings: settings.value,
                 );
+                if (settings.value.hiddenUsersIds!
+                    .contains(rewardRedemptionEvent.authorId)) {
+                  return;
+                }
+                if (settings.value.ttsEnabled!) {
+                  readTts(rewardRedemptionEvent);
+                }
                 chatMessages.add(rewardRedemptionEvent);
                 break;
               }
@@ -255,13 +276,14 @@ class ChatViewController extends GetxController
                 message: message,
                 settings: settings.value,
               );
-              if (!settings.value.hiddenUsersIds!
+              if (settings.value.hiddenUsersIds!
                   .contains(chatMessage.authorId)) {
-                chatMessages.add(chatMessage);
-                if (settings.value.ttsEnabled!) {
-                  readTts(chatMessage);
-                }
+                return;
               }
+              if (settings.value.ttsEnabled!) {
+                readTts(chatMessage);
+              }
+              chatMessages.add(chatMessage);
             }
             break;
           case 'ROOMSTATE':
@@ -317,17 +339,30 @@ class ChatViewController extends GetxController
             String messageId = messageMapped['msg-id']!;
             switch (messageId) {
               case "announcement":
-                AnnouncementEvent announcementEvent = AnnouncementEvent
-                    .fromString(
+                if (!settings.value.chatEventsSettings!.announcements) {
+                  return;
+                }
+                AnnouncementEvent announcementEvent =
+                    AnnouncementEvent.fromString(
                   twitchBadges: twitchBadges,
                   thirdPartEmotes: thirdPartEmotes,
                   cheerEmotes: cheerEmotes,
                   message: message,
                   settings: settings.value,
                 );
+                if (settings.value.hiddenUsersIds!
+                    .contains(announcementEvent.authorId)) {
+                  return;
+                }
+                if (settings.value.ttsEnabled!) {
+                  readTts(announcementEvent);
+                }
                 chatMessages.add(announcementEvent);
                 break;
               case "sub":
+                if (!settings.value.chatEventsSettings!.subscriptions) {
+                  return;
+                }
                 SubscriptionEvent subMessage = SubscriptionEvent.fromString(
                   twitchBadges: twitchBadges,
                   thirdPartEmotes: thirdPartEmotes,
@@ -335,9 +370,19 @@ class ChatViewController extends GetxController
                   message: message,
                   settings: settings.value,
                 );
+                if (settings.value.hiddenUsersIds!
+                    .contains(subMessage.authorId)) {
+                  return;
+                }
+                if (settings.value.ttsEnabled!) {
+                  readTts(subMessage);
+                }
                 chatMessages.add(subMessage);
                 break;
               case "resub":
+                if (!settings.value.chatEventsSettings!.subscriptions) {
+                  return;
+                }
                 SubscriptionEvent subMessage = SubscriptionEvent.fromString(
                   twitchBadges: twitchBadges,
                   thirdPartEmotes: thirdPartEmotes,
@@ -345,9 +390,19 @@ class ChatViewController extends GetxController
                   message: message,
                   settings: settings.value,
                 );
+                if (settings.value.hiddenUsersIds!
+                    .contains(subMessage.authorId)) {
+                  return;
+                }
+                if (settings.value.ttsEnabled!) {
+                  readTts(subMessage);
+                }
                 chatMessages.add(subMessage);
                 break;
               case "subgift":
+                if (!settings.value.chatEventsSettings!.subscriptions) {
+                  return;
+                }
                 SubGiftEvent subGift = SubGiftEvent.fromString(
                   twitchBadges: twitchBadges,
                   thirdPartEmotes: thirdPartEmotes,
@@ -355,19 +410,16 @@ class ChatViewController extends GetxController
                   message: message,
                   settings: settings.value,
                 );
+                if (settings.value.hiddenUsersIds!
+                    .contains(subGift.authorId)) {
+                  return;
+                }
                 chatMessages.add(subGift);
                 break;
-              case "announcement":
-                TwitchChatMessage announcement = TwitchChatMessage.fromString(
-                  twitchBadges: twitchBadges,
-                  thirdPartEmotes: thirdPartEmotes,
-                  cheerEmotes: cheerEmotes,
-                  message: message,
-                  settings: settings.value,
-                );
-                chatMessages.add(announcement);
-                break;
               case "raid":
+                if (!settings.value.chatEventsSettings!.incomingRaids) {
+                  return;
+                }
                 IncomingRaidEvent raid = IncomingRaidEvent.fromString(
                   twitchBadges: twitchBadges,
                   thirdPartEmotes: thirdPartEmotes,
@@ -375,6 +427,10 @@ class ChatViewController extends GetxController
                   message: message,
                   settings: settings.value,
                 );
+                if (settings.value.hiddenUsersIds!
+                    .contains(raid.authorId)) {
+                  return;
+                }
                 chatMessages.add(raid);
                 break;
               default:
