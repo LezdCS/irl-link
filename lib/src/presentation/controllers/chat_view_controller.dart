@@ -69,7 +69,8 @@ class ChatViewController extends GetxController
       chatDemoTimer = Timer.periodic(
         Duration(seconds: 3),
         (Timer t) => {
-          chatMessages.add(TwitchChatMessage.randomGeneration(null, null, null)),
+          chatMessages
+              .add(TwitchChatMessage.randomGeneration(null, null, null)),
           if (scrollController.hasClients && isAutoScrolldown.value)
             {
               Timer(Duration(milliseconds: 100), () {
@@ -235,6 +236,13 @@ class ChatViewController extends GetxController
                   message: message,
                   settings: settings.value,
                 );
+                if (settings.value.hiddenUsersIds!
+                    .contains(bitDonationEvent.authorId)) {
+                  return;
+                }
+                if (settings.value.ttsEnabled!) {
+                  readTts(bitDonationEvent);
+                }
                 chatMessages.add(bitDonationEvent);
                 break;
               }
@@ -250,6 +258,13 @@ class ChatViewController extends GetxController
                   message: message,
                   settings: settings.value,
                 );
+                if (settings.value.hiddenUsersIds!
+                    .contains(rewardRedemptionEvent.authorId)) {
+                  return;
+                }
+                if (settings.value.ttsEnabled!) {
+                  readTts(rewardRedemptionEvent);
+                }
                 chatMessages.add(rewardRedemptionEvent);
                 break;
               }
@@ -261,13 +276,14 @@ class ChatViewController extends GetxController
                 message: message,
                 settings: settings.value,
               );
-              if (!settings.value.hiddenUsersIds!
+              if (settings.value.hiddenUsersIds!
                   .contains(chatMessage.authorId)) {
-                chatMessages.add(chatMessage);
-                if (settings.value.ttsEnabled!) {
-                  readTts(chatMessage);
-                }
+                return;
               }
+              if (settings.value.ttsEnabled!) {
+                readTts(chatMessage);
+              }
+              chatMessages.add(chatMessage);
             }
             break;
           case 'ROOMSTATE':
@@ -326,14 +342,21 @@ class ChatViewController extends GetxController
                 if (!settings.value.chatEventsSettings!.announcements) {
                   return;
                 }
-                AnnouncementEvent announcementEvent = AnnouncementEvent
-                    .fromString(
+                AnnouncementEvent announcementEvent =
+                    AnnouncementEvent.fromString(
                   twitchBadges: twitchBadges,
                   thirdPartEmotes: thirdPartEmotes,
                   cheerEmotes: cheerEmotes,
                   message: message,
                   settings: settings.value,
                 );
+                if (settings.value.hiddenUsersIds!
+                    .contains(announcementEvent.authorId)) {
+                  return;
+                }
+                if (settings.value.ttsEnabled!) {
+                  readTts(announcementEvent);
+                }
                 chatMessages.add(announcementEvent);
                 break;
               case "sub":
@@ -347,6 +370,13 @@ class ChatViewController extends GetxController
                   message: message,
                   settings: settings.value,
                 );
+                if (settings.value.hiddenUsersIds!
+                    .contains(subMessage.authorId)) {
+                  return;
+                }
+                if (settings.value.ttsEnabled!) {
+                  readTts(subMessage);
+                }
                 chatMessages.add(subMessage);
                 break;
               case "resub":
@@ -360,6 +390,13 @@ class ChatViewController extends GetxController
                   message: message,
                   settings: settings.value,
                 );
+                if (settings.value.hiddenUsersIds!
+                    .contains(subMessage.authorId)) {
+                  return;
+                }
+                if (settings.value.ttsEnabled!) {
+                  readTts(subMessage);
+                }
                 chatMessages.add(subMessage);
                 break;
               case "subgift":
@@ -373,6 +410,10 @@ class ChatViewController extends GetxController
                   message: message,
                   settings: settings.value,
                 );
+                if (settings.value.hiddenUsersIds!
+                    .contains(subGift.authorId)) {
+                  return;
+                }
                 chatMessages.add(subGift);
                 break;
               case "raid":
@@ -386,6 +427,10 @@ class ChatViewController extends GetxController
                   message: message,
                   settings: settings.value,
                 );
+                if (settings.value.hiddenUsersIds!
+                    .contains(raid.authorId)) {
+                  return;
+                }
                 chatMessages.add(raid);
                 break;
               default:
