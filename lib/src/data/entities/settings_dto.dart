@@ -1,4 +1,7 @@
+import 'package:irllink/src/data/entities/settings/chat_events_settings_dto.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
+
+import '../../domain/entities/settings/chat_events_settings.dart';
 
 class SettingsDTO extends Settings {
   const SettingsDTO({
@@ -10,6 +13,7 @@ class SettingsDTO extends Settings {
     required bool alternateChannel,
     required String alternateChannelName,
     required List hiddenUsersIds,
+    required ChatEventsSettings chatEventsSettings,
     //GENERAL SETTINGS
     required bool isDarkMode,
     required bool keepSpeakerOn,
@@ -41,6 +45,7 @@ class SettingsDTO extends Settings {
           alternateChannel: alternateChannel,
           alternateChannelName: alternateChannelName,
           hiddenUsersIds: hiddenUsersIds,
+          chatEventsSettings: chatEventsSettings,
           //GENERAL SETTINGS
           isDarkMode: isDarkMode,
           keepSpeakerOn: keepSpeakerOn,
@@ -74,6 +79,7 @@ class SettingsDTO extends Settings {
         'alternateChannel': alternateChannel,
         'alternateChannelName': alternateChannelName,
         'hiddenUsersIds': hiddenUsersIds,
+        'chatEventsSettings': chatEventsSettings?.toJson(),
         //GENERAL
         'isDarkMode': isDarkMode,
         'keepSpeakerOn': keepSpeakerOn,
@@ -122,6 +128,9 @@ class SettingsDTO extends Settings {
       hiddenUsersIds: map['hiddenUsersIds'] != null
           ? map['hiddenUsersIds'] as List
           : Settings.defaultSettings().hiddenUsersIds!,
+      chatEventsSettings: map['chatEventsSettings'] != null
+          ? ChatEventsSettingsDTO.fromJson(map['chatEventsSettings'])
+          : Settings.defaultSettings().chatEventsSettings!,
       //GENERAL SETTINGS
       isDarkMode: map['isDarkMode'] != null
           ? map['isDarkMode'] as bool

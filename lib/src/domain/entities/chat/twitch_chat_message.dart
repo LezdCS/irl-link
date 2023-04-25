@@ -54,17 +54,18 @@ class TwitchChatMessage {
     required this.isDeleted,
   });
 
-  factory TwitchChatMessage.randomGeneration(HighlightType? _highlightType) {
+  factory TwitchChatMessage.randomGeneration(
+      HighlightType? _highlightType, String? _message, String? _username) {
     Uuid uuid = Uuid();
-    String username = faker.internet.userName();
-    String message = faker.lorem.sentence();
+    String username = _username ?? faker.internet.userName();
+    String message = _message ?? faker.lorem.sentence();
     String color = randomUsernameColor(username);
 
     List<HighlightType> types = List.from(HighlightType.values);
 
     Random random = Random();
     HighlightType? highlightType = _highlightType ?? null;
-        // random.nextInt(10) < 5 ? types[random.nextInt(types.length)] : null;
+    // random.nextInt(10) < 5 ? types[random.nextInt(types.length)] : null;
 
     List<Widget> messageInWidgets = messageToWidgets(
       messageString: message,
@@ -122,7 +123,9 @@ class TwitchChatMessage {
 
     HighlightType? highlightType;
     if (messageMapped["first-msg"] == "1") {
-      highlightType = HighlightType.firstTimeChatter;
+      if (settings.chatEventsSettings!.firstsMessages) {
+        highlightType = HighlightType.firstTimeChatter;
+      }
     }
 
     //We get the message wrote by the user

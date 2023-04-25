@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:flutter/services.dart';
+import 'package:irllink/src/presentation/widgets/settings_view/chat_events.dart';
 import 'package:irllink/src/presentation/widgets/settings_view/tts.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -344,6 +345,50 @@ class SettingsView extends GetView<SettingsViewController> {
                         ),
                       ],
                     ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () async {
+                    Get.to(
+                      () => ChatEvents(
+                        controller: controller,
+                      ),
+                    );
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(top: 10, bottom: 10),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.reviews,
+                              color: Theme.of(context).primaryIconTheme.color,
+                              size: 22,
+                            ),
+                            Container(
+                              padding: EdgeInsets.only(left: 10),
+                              child: Text(
+                                "Chat events",
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .color,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: Theme.of(context).primaryIconTheme.color,
+                        size: 18,
+                      ),
+                    ],
                   ),
                 ),
                 InkWell(

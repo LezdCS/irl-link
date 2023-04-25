@@ -16,247 +16,326 @@ class ChatEvents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Theme.of(context).textTheme.bodyLarge!.color,
+    return Obx(
+      () => Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.background,
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Theme.of(context).textTheme.bodyLarge!.color,
+            ),
+            onPressed: () => Get.back(),
           ),
-          onPressed: () => Get.back(),
-        ),
-        actions: [],
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        title: Text(
-          "Chat events",
-          style: TextStyle(
-            color: Theme.of(context).textTheme.bodyLarge!.color,
+          actions: [],
+          backgroundColor: Theme.of(context).colorScheme.secondary,
+          title: Text(
+            "Chat events",
+            style: TextStyle(
+              color: Theme.of(context).textTheme.bodyLarge!.color,
+            ),
           ),
+          centerTitle: false,
         ),
-        centerTitle: false,
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.only(top: 8, left: 10, right: 10, bottom: 8),
-          color: Theme.of(context).colorScheme.background,
-          child: Column(
-            children: [
-              Column(
-                children: [
-                  EventContainer(
-                    message: TwitchChatMessage.randomGeneration(
-                      HighlightType.firstTimeChatter,
+        body: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.only(top: 8, left: 10, right: 10, bottom: 8),
+            color: Theme.of(context).colorScheme.background,
+            child: Column(
+              children: [
+                Column(
+                  children: [
+                    EventContainer(
+                      message: TwitchChatMessage.randomGeneration(
+                        HighlightType.firstTimeChatter,
+                        "Hey guys, I'm new here!",
+                        "Lezd",
+                      ),
+                      selectedMessage: null,
+                      displayTimestamp: false,
+                      textSize: 16,
                     ),
-                    selectedMessage: null,
-                    displayTimestamp: false,
-                    textSize: 16,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "First time chatter",
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge!.color,
-                          fontSize: 18,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "First time chatter",
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.bodyLarge!.color,
+                            fontSize: 18,
+                          ),
                         ),
-                      ),
-                      Switch(
-                        value: true,
-                        onChanged: (value) {},
-                        inactiveTrackColor:
-                            Theme.of(context).colorScheme.tertiaryContainer,
-                        activeTrackColor:
-                            Theme.of(context).colorScheme.tertiary,
-                        activeColor: Colors.white,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  EventContainer(
-                    message: SubscriptionEvent.randomGeneration(),
-                    selectedMessage: null,
-                    displayTimestamp: false,
-                    textSize: 16,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Subscriptions",
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge!.color,
-                          fontSize: 18,
+                        Switch(
+                          value: controller.settings.value.chatEventsSettings!
+                              .firstsMessages,
+                          onChanged: (value) {
+                            controller.settings.value =
+                                controller.settings.value.copyWith(
+                              chatEventsSettings: controller
+                                  .settings.value.chatEventsSettings!
+                                  .copyWith(
+                                firstsMessages: value,
+                              ),
+                            );
+                            controller.saveSettings();
+                          },
+                          inactiveTrackColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
+                          activeTrackColor:
+                              Theme.of(context).colorScheme.tertiary,
+                          activeColor: Colors.white,
                         ),
-                      ),
-                      Switch(
-                        value: true,
-                        onChanged: (value) {},
-                        inactiveTrackColor:
-                            Theme.of(context).colorScheme.tertiaryContainer,
-                        activeTrackColor:
-                            Theme.of(context).colorScheme.tertiary,
-                        activeColor: Colors.white,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  EventContainer(
-                    message: BitDonationEvent.randomGeneration(),
-                    selectedMessage: null,
-                    displayTimestamp: false,
-                    textSize: 16,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Bits donations",
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge!.color,
-                          fontSize: 18,
+                      ],
+                    ),
+                  ],
+                ),
+                Divider(
+                  height: 20,
+                  thickness: 2,
+                  indent: 0,
+                  endIndent: 0,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                Column(
+                  children: [
+                    EventContainer(
+                      message: SubscriptionEvent.randomGeneration(),
+                      selectedMessage: null,
+                      displayTimestamp: false,
+                      textSize: 16,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Subscriptions",
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.bodyLarge!.color,
+                            fontSize: 18,
+                          ),
                         ),
-                      ),
-                      Switch(
-                        value: true,
-                        onChanged: (value) {},
-                        inactiveTrackColor:
-                            Theme.of(context).colorScheme.tertiaryContainer,
-                        activeTrackColor:
-                            Theme.of(context).colorScheme.tertiary,
-                        activeColor: Colors.white,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  EventContainer(
-                    message: AnnouncementEvent.randomGeneration(),
-                    selectedMessage: null,
-                    displayTimestamp: false,
-                    textSize: 16,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Announcements",
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge!.color,
-                          fontSize: 18,
+                        Switch(
+                          value: controller
+                              .settings.value.chatEventsSettings!.subscriptions,
+                          onChanged: (value) {
+                            controller.settings.value =
+                                controller.settings.value.copyWith(
+                              chatEventsSettings: controller
+                                  .settings.value.chatEventsSettings!
+                                  .copyWith(
+                                subscriptions: value,
+                              ),
+                            );
+                            controller.saveSettings();
+                          },
+                          inactiveTrackColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
+                          activeTrackColor:
+                              Theme.of(context).colorScheme.tertiary,
+                          activeColor: Colors.white,
                         ),
-                      ),
-                      Switch(
-                        value: true,
-                        onChanged: (value) {},
-                        inactiveTrackColor:
-                            Theme.of(context).colorScheme.tertiaryContainer,
-                        activeTrackColor:
-                            Theme.of(context).colorScheme.tertiary,
-                        activeColor: Colors.white,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              // Column(
-              //   children: [
-              //     //todo: display example of widget
-              //     Row(
-              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //       children: [
-              //         Text(
-              //           "Shoutouts",
-              //           style: TextStyle(
-              //             color: Theme.of(context).textTheme.bodyLarge!.color,
-              //             fontSize: 18,
-              //           ),
-              //         ),
-              //         Switch(
-              //           value: true,
-              //           onChanged: (value) {},
-              //           inactiveTrackColor:
-              //               Theme.of(context).colorScheme.tertiaryContainer,
-              //           activeTrackColor:
-              //               Theme.of(context).colorScheme.tertiary,
-              //           activeColor: Colors.white,
-              //         ),
-              //       ],
-              //     ),
-              //   ],
-              // ),
-              Column(
-                children: [
-                  EventContainer(
-                    message: IncomingRaidEvent.randomGeneration(),
-                    selectedMessage: null,
-                    displayTimestamp: false,
-                    textSize: 16,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Incoming raids",
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge!.color,
-                          fontSize: 18,
+                      ],
+                    ),
+                  ],
+                ),
+                Divider(
+                  height: 20,
+                  thickness: 2,
+                  indent: 0,
+                  endIndent: 0,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                Column(
+                  children: [
+                    EventContainer(
+                      message: BitDonationEvent.randomGeneration(),
+                      selectedMessage: null,
+                      displayTimestamp: false,
+                      textSize: 16,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Bits donations",
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.bodyLarge!.color,
+                            fontSize: 18,
+                          ),
                         ),
-                      ),
-                      Switch(
-                        value: true,
-                        onChanged: (value) {},
-                        inactiveTrackColor:
-                            Theme.of(context).colorScheme.tertiaryContainer,
-                        activeTrackColor:
-                            Theme.of(context).colorScheme.tertiary,
-                        activeColor: Colors.white,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  EventContainer(
-                    message: RewardRedemptionEvent.randomGeneration(),
-                    selectedMessage: null,
-                    displayTimestamp: false,
-                    textSize: 16,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Channelpoint redemptions",
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge!.color,
-                          fontSize: 18,
+                        Switch(
+                          value: controller
+                              .settings.value.chatEventsSettings!.bitsDonations,
+                          onChanged: (value) {
+                            controller.settings.value =
+                                controller.settings.value.copyWith(
+                              chatEventsSettings: controller
+                                  .settings.value.chatEventsSettings!
+                                  .copyWith(
+                                bitsDonations: value,
+                              ),
+                            );
+                            controller.saveSettings();
+                          },
+                          inactiveTrackColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
+                          activeTrackColor:
+                              Theme.of(context).colorScheme.tertiary,
+                          activeColor: Colors.white,
                         ),
-                      ),
-                      Switch(
-                        value: true,
-                        onChanged: (value) {},
-                        inactiveTrackColor:
-                            Theme.of(context).colorScheme.tertiaryContainer,
-                        activeTrackColor:
-                            Theme.of(context).colorScheme.tertiary,
-                        activeColor: Colors.white,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
+                      ],
+                    ),
+                  ],
+                ),
+                Divider(
+                  height: 20,
+                  thickness: 2,
+                  indent: 0,
+                  endIndent: 0,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                Column(
+                  children: [
+                    EventContainer(
+                      message: AnnouncementEvent.randomGeneration(),
+                      selectedMessage: null,
+                      displayTimestamp: false,
+                      textSize: 16,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Announcements",
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.bodyLarge!.color,
+                            fontSize: 18,
+                          ),
+                        ),
+                        Switch(
+                          value: controller
+                              .settings.value.chatEventsSettings!.announcements,
+                          onChanged: (value) {
+                            controller.settings.value =
+                                controller.settings.value.copyWith(
+                              chatEventsSettings: controller
+                                  .settings.value.chatEventsSettings!
+                                  .copyWith(
+                                announcements: value,
+                              ),
+                            );
+                            controller.saveSettings();
+                          },
+                          inactiveTrackColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
+                          activeTrackColor:
+                              Theme.of(context).colorScheme.tertiary,
+                          activeColor: Colors.white,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Divider(
+                  height: 20,
+                  thickness: 2,
+                  indent: 0,
+                  endIndent: 0,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                Column(
+                  children: [
+                    EventContainer(
+                      message: IncomingRaidEvent.randomGeneration(),
+                      selectedMessage: null,
+                      displayTimestamp: false,
+                      textSize: 16,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Incoming raids",
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.bodyLarge!.color,
+                            fontSize: 18,
+                          ),
+                        ),
+                        Switch(
+                          value: controller
+                              .settings.value.chatEventsSettings!.incomingRaids,
+                          onChanged: (value) {
+                            controller.settings.value =
+                                controller.settings.value.copyWith(
+                              chatEventsSettings: controller
+                                  .settings.value.chatEventsSettings!
+                                  .copyWith(
+                                incomingRaids: value,
+                              ),
+                            );
+                            controller.saveSettings();
+                          },
+                          inactiveTrackColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
+                          activeTrackColor:
+                              Theme.of(context).colorScheme.tertiary,
+                          activeColor: Colors.white,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Divider(
+                  height: 20,
+                  thickness: 2,
+                  indent: 0,
+                  endIndent: 0,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                Column(
+                  children: [
+                    EventContainer(
+                      message: RewardRedemptionEvent.randomGeneration(),
+                      selectedMessage: null,
+                      displayTimestamp: false,
+                      textSize: 16,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Channelpoint redemptions",
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.bodyLarge!.color,
+                            fontSize: 18,
+                          ),
+                        ),
+                        Switch(
+                          value: controller
+                              .settings.value.chatEventsSettings!.redemptions,
+                          onChanged: (value) {
+                            controller.settings.value =
+                                controller.settings.value.copyWith(
+                              chatEventsSettings: controller
+                                  .settings.value.chatEventsSettings!
+                                  .copyWith(
+                                redemptions: value,
+                              ),
+                            );
+                            controller.saveSettings();
+                          },
+                          inactiveTrackColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
+                          activeTrackColor:
+                              Theme.of(context).colorScheme.tertiary,
+                          activeColor: Colors.white,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

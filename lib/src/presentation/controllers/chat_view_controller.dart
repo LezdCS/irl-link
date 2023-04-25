@@ -69,7 +69,7 @@ class ChatViewController extends GetxController
       chatDemoTimer = Timer.periodic(
         Duration(seconds: 3),
         (Timer t) => {
-          chatMessages.add(TwitchChatMessage.randomGeneration(null)),
+          chatMessages.add(TwitchChatMessage.randomGeneration(null, null, null)),
           if (scrollController.hasClients && isAutoScrolldown.value)
             {
               Timer(Duration(milliseconds: 100), () {
@@ -225,6 +225,9 @@ class ChatViewController extends GetxController
           case "PRIVMSG":
             {
               if (messageMapped['bits'] != null) {
+                if (!settings.value.chatEventsSettings!.bitsDonations) {
+                  return;
+                }
                 BitDonationEvent bitDonationEvent = BitDonationEvent.fromString(
                   twitchBadges: twitchBadges,
                   cheerEmotes: cheerEmotes,
@@ -236,6 +239,9 @@ class ChatViewController extends GetxController
                 break;
               }
               if (messageMapped["custom-reward-id"] != null) {
+                if (!settings.value.chatEventsSettings!.redemptions) {
+                  return;
+                }
                 RewardRedemptionEvent rewardRedemptionEvent =
                     RewardRedemptionEvent.fromString(
                   twitchBadges: twitchBadges,
@@ -317,6 +323,9 @@ class ChatViewController extends GetxController
             String messageId = messageMapped['msg-id']!;
             switch (messageId) {
               case "announcement":
+                if (!settings.value.chatEventsSettings!.announcements) {
+                  return;
+                }
                 AnnouncementEvent announcementEvent = AnnouncementEvent
                     .fromString(
                   twitchBadges: twitchBadges,
@@ -328,6 +337,9 @@ class ChatViewController extends GetxController
                 chatMessages.add(announcementEvent);
                 break;
               case "sub":
+                if (!settings.value.chatEventsSettings!.subscriptions) {
+                  return;
+                }
                 SubscriptionEvent subMessage = SubscriptionEvent.fromString(
                   twitchBadges: twitchBadges,
                   thirdPartEmotes: thirdPartEmotes,
@@ -338,6 +350,9 @@ class ChatViewController extends GetxController
                 chatMessages.add(subMessage);
                 break;
               case "resub":
+                if (!settings.value.chatEventsSettings!.subscriptions) {
+                  return;
+                }
                 SubscriptionEvent subMessage = SubscriptionEvent.fromString(
                   twitchBadges: twitchBadges,
                   thirdPartEmotes: thirdPartEmotes,
@@ -348,6 +363,9 @@ class ChatViewController extends GetxController
                 chatMessages.add(subMessage);
                 break;
               case "subgift":
+                if (!settings.value.chatEventsSettings!.subscriptions) {
+                  return;
+                }
                 SubGiftEvent subGift = SubGiftEvent.fromString(
                   twitchBadges: twitchBadges,
                   thirdPartEmotes: thirdPartEmotes,
@@ -357,17 +375,10 @@ class ChatViewController extends GetxController
                 );
                 chatMessages.add(subGift);
                 break;
-              case "announcement":
-                TwitchChatMessage announcement = TwitchChatMessage.fromString(
-                  twitchBadges: twitchBadges,
-                  thirdPartEmotes: thirdPartEmotes,
-                  cheerEmotes: cheerEmotes,
-                  message: message,
-                  settings: settings.value,
-                );
-                chatMessages.add(announcement);
-                break;
               case "raid":
+                if (!settings.value.chatEventsSettings!.incomingRaids) {
+                  return;
+                }
                 IncomingRaidEvent raid = IncomingRaidEvent.fromString(
                   twitchBadges: twitchBadges,
                   thirdPartEmotes: thirdPartEmotes,
