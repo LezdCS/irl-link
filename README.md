@@ -16,13 +16,14 @@ Soon to be released on the iOS App Store!
 
 ## Screenshots
 <div>
-<img src="https://user-images.githubusercontent.com/63884731/234378285-f1a74cd4-30bb-4d2f-91c3-fa033d243dd8.png" width="200">
-<img src="https://user-images.githubusercontent.com/63884731/234378475-d2ff4b61-612a-493e-a98a-f352f2e9946b.png" width="200">
-<img src="https://user-images.githubusercontent.com/63884731/234378524-4371fd19-bea3-4a82-9906-5bbeccd1e426.png" width="200">
+<img src="https://user-images.githubusercontent.com/63884731/234930179-d560bf12-fe8a-4940-9608-dfa7ca974b16.png" width="200">
+<img src="https://user-images.githubusercontent.com/63884731/234930963-7874318f-37fe-4fdf-8daa-755c00db093b.png" width="200">
+<img src="https://user-images.githubusercontent.com/63884731/234930982-ae78c20a-ef54-416a-89e9-f58b06e79398.png" width="200">
+<img src="https://user-images.githubusercontent.com/63884731/234931180-c16d2cbe-0bbf-4a16-b18b-8965fb6de55b.png" width="200">
+<img src="https://user-images.githubusercontent.com/63884731/234931194-490a8f15-f6ec-46c9-8459-b7f5913b2a9c.png" width="200">
 </div>
 
 ## Quick links
-- Roadmap : https://lezd.notion.site/bed347da755c4cc59cf563aab75851d7?v=64b491196c814cd68449c494caff229a
 - Website : https://irllink.com
 - Wiki : https://github.com/LezdCS/irl_link/wiki
 - Bug Tracker : https://github.com/LezdCS/irl_link/issues
