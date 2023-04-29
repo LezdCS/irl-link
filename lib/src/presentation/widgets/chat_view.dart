@@ -25,6 +25,7 @@ class ChatView extends GetView<ChatViewController> {
           },
           child: Container(
             width: width,
+            height: double.infinity,
             padding: EdgeInsets.only(top: 10, bottom: height * 0.07),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.background,
