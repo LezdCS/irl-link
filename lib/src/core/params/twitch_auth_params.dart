@@ -16,6 +16,8 @@ class TwitchAuthParams {
         'channel_editor channel:moderate '
         'chat:read chat:edit '
         'moderator:manage:chat_settings '
+        'moderator:manage:banned_users '
+        'moderator:manage:chat_messages '
         'channel:manage:broadcast '
         'channel:read:polls channel:manage:polls '
         'channel:read:predictions channel:manage:predictions',
