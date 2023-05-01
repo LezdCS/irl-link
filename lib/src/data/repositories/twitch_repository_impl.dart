@@ -13,6 +13,7 @@ import 'package:irllink/src/data/entities/twitch_credentials_dto.dart';
 import 'package:irllink/src/data/entities/twitch_decoded_idtoken_dto.dart';
 import 'package:irllink/src/data/entities/twitch_stream_infos_dto.dart';
 import 'package:irllink/src/data/entities/twitch_user_dto.dart';
+import 'package:irllink/src/domain/entities/chat/twitch_chat_message.dart';
 import 'package:irllink/src/domain/entities/emote.dart';
 import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
@@ -754,6 +755,66 @@ class TwitchRepositoryImpl extends TwitchRepository {
     } on DioError catch (e) {
       print(e.response);
       return DataFailed("Error retrieving Twitch Prediction");
+    }
+  }
+
+  @override
+  Future<void> banUser(
+    String accessToken,
+    String broadcasterId,
+    TwitchChatMessage message,
+    int? duration,
+  ) async {
+    Response response;
+    var dio = Dio();
+    try {
+      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dio.options.headers["authorization"] = "Bearer $accessToken";
+      Map body = {
+        "data": {
+          "user_id": message.authorId,
+        },
+      };
+      if (duration != null) {
+        debugPrint(duration.toString());
+        body['data']['duration'] = duration.toString();
+      }
+      debugPrint(body.toString());
+
+      response = await dio.post(
+        'https://api.twitch.tv/helix/moderation/bans',
+        queryParameters: {
+          'broadcaster_id': broadcasterId,
+          'moderator_id': broadcasterId,
+        },
+        data: jsonEncode(body),
+      );
+    } on DioError catch (e) {
+      debugPrint(e.response.toString());
+    }
+  }
+
+  @override
+  Future<void> deleteMessage(
+    String accessToken,
+    String broadcasterId,
+    TwitchChatMessage message,
+  ) async {
+    Response response;
+    var dio = Dio();
+    try {
+      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dio.options.headers["authorization"] = "Bearer $accessToken";
+      response = await dio.delete(
+        'https://api.twitch.tv/helix/moderation/chat',
+        queryParameters: {
+          'broadcaster_id': broadcasterId,
+          'moderator_id': broadcasterId,
+          'message_id': message.messageId,
+        },
+      );
+    } on DioError catch (e) {
+      debugPrint(e.response.toString());
     }
   }
 }

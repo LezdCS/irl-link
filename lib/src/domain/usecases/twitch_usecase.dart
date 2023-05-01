@@ -9,6 +9,7 @@ import 'package:irllink/src/domain/entities/twitch_stream_infos.dart';
 import 'package:irllink/src/domain/entities/twitch_user.dart';
 import 'package:irllink/src/domain/repositories/twitch_repository.dart';
 
+import '../entities/chat/twitch_chat_message.dart';
 import '../entities/twitch_poll.dart';
 
 class TwitchUseCase {
@@ -143,5 +144,23 @@ class TwitchUseCase {
   Future<DataState<TwitchPrediction>> getPrediction(
       String accessToken, String broadcasterId) {
     return twitchRepository.getPrediction(accessToken, broadcasterId);
+  }
+
+  Future<void> banUser(
+    String accessToken,
+    String broadcasterId,
+    TwitchChatMessage message,
+    int? duration,
+  ) {
+    return twitchRepository.banUser(
+        accessToken, broadcasterId, message, duration);
+  }
+
+  Future<void> deleteMessage(
+    String accessToken,
+    String broadcasterId,
+    TwitchChatMessage message,
+  ) {
+    return twitchRepository.deleteMessage(accessToken, broadcasterId, message);
   }
 }

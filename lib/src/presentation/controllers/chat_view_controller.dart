@@ -410,8 +410,7 @@ class ChatViewController extends GetxController
                   message: message,
                   settings: settings.value,
                 );
-                if (settings.value.hiddenUsersIds!
-                    .contains(subGift.authorId)) {
+                if (settings.value.hiddenUsersIds!.contains(subGift.authorId)) {
                   return;
                 }
                 chatMessages.add(subGift);
@@ -427,8 +426,7 @@ class ChatViewController extends GetxController
                   message: message,
                   settings: settings.value,
                 );
-                if (settings.value.hiddenUsersIds!
-                    .contains(raid.authorId)) {
+                if (settings.value.hiddenUsersIds!.contains(raid.authorId)) {
                   return;
                 }
                 chatMessages.add(raid);
@@ -597,23 +595,24 @@ class ChatViewController extends GetxController
     channel?.sink
         .add('PRIVMSG #$ircChannelJoined :/delete ${message.messageId}\r\n');
     selectedMessage.value = null;
+    homeEvents.deleteMessage(
+        twitchData!.accessToken, ircChannelJoinedChannelId, message);
 
     if (twitchData == null) message.isDeleted = true;
   }
 
   /// Ban user for specific [duration] based on the author name in the [message]
   void timeoutMessageInstruction(TwitchChatMessage message, int duration) {
-    channel?.sink.add(
-        'PRIVMSG #$ircChannelJoined :/timeout ${message.authorName} $duration reason\r\n');
-
+    homeEvents.banUser(
+        twitchData!.accessToken, ircChannelJoinedChannelId, message, duration);
     Get.back();
     selectedMessage.value = null;
   }
 
   /// Ban user based on the author name in the [message]
   void banMessageInstruction(TwitchChatMessage message) {
-    channel?.sink.add(
-        'PRIVMSG #$ircChannelJoined :/ban ${message.authorName} reason\r\n');
+    homeEvents.banUser(
+        twitchData!.accessToken, ircChannelJoinedChannelId, message, null);
     selectedMessage.value = null;
   }
 

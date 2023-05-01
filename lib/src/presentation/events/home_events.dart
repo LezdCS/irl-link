@@ -12,6 +12,8 @@ import 'package:irllink/src/domain/entities/twitch_user.dart';
 import 'package:irllink/src/domain/usecases/settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch_usecase.dart';
 
+import '../../domain/entities/chat/twitch_chat_message.dart';
+
 class HomeEvents {
   final TwitchUseCase twitchUseCase;
   final SettingsUseCase settingsUseCase;
@@ -152,5 +154,22 @@ class HomeEvents {
   Future<DataState<TwitchPrediction>> getPrediction(
       String accessToken, String broadcasterId) {
     return twitchUseCase.getPrediction(accessToken, broadcasterId);
+  }
+
+  Future<void> banUser(
+    String accessToken,
+    String broadcasterId,
+    TwitchChatMessage message,
+    int? duration,
+  ) {
+    return twitchUseCase.banUser(accessToken, broadcasterId, message, duration);
+  }
+
+  Future<void> deleteMessage(
+    String accessToken,
+    String broadcasterId,
+    TwitchChatMessage message,
+  ) {
+    return twitchUseCase.deleteMessage(accessToken, broadcasterId, message);
   }
 }
