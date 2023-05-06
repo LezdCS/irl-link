@@ -24,29 +24,29 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.5
-  webview_flutter: ^4.1.0
+  webview_flutter: ^4.2.0
   get: ^4.6.5
   get_storage: ^2.1.1
-  split_view: ^3.1.0
+  split_view: ^3.2.1
   flutter_svg: ^2.0.5
   flutter_web_auth: ^0.5.0
   url_launcher: ^6.1.10
   web_socket_channel: ^2.4.0
-  http: ^0.13.5
+  http: ^0.13.6
   jwt_decoder: ^2.0.1
   equatable: ^2.0.5
   dio: ^5.1.1
   wakelock: ^0.6.2
-  connectivity_plus: ^3.0.4
+  connectivity_plus: ^3.0.6
   move_to_background: ^1.0.2
   obs_websocket: ^5.1.0+1
   intl: ^0.18.1
   expandable: ^5.0.1
   audioplayers: ^4.0.1
   quiver: ^3.2.1
-  socket_io_client: ^2.0.1
-  firebase_crashlytics: ^3.1.1
-  firebase_core: ^2.10.0
+  socket_io_client: ^2.0.2
+  firebase_crashlytics: ^3.2.0
+  firebase_core: ^2.11.0
   percent_indicator: ^4.2.3
   fl_chart: ^0.62.0
   marquee: ^2.2.3
@@ -54,8 +54,8 @@ dependencies:
   mobile_scanner: ^3.2.0
   transparent_image: ^2.0.1
   flutter_tts: ^3.6.3
-  package_info_plus: ^3.1.0
-  upgrader: ^6.2.0
+  package_info_plus: ^3.1.2
+  upgrader: ^6.3.0
 
 dev_dependencies:
   flutter_lints: ^2.0.1
