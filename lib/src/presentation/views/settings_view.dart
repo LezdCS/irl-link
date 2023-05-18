@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:flutter/services.dart';
 import 'package:irllink/src/presentation/widgets/settings_view/chat_events.dart';
+import 'package:irllink/src/presentation/widgets/settings_view/stream_elements.dart';
 import 'package:irllink/src/presentation/widgets/settings_view/tts.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -14,6 +15,7 @@ import '../../core/resources/AppTranslations.dart';
 import '../widgets/settings_view/manage_list_hidden_users.dart';
 import '../widgets/settings_view/manage_list_browser_tabs.dart';
 import '../widgets/settings_view/obs_settings.dart';
+import '../widgets/settings_view/subscription.dart';
 
 class SettingsView extends GetView<SettingsViewController> {
   final SettingsViewController controller = Get.find<SettingsViewController>();
@@ -37,7 +39,7 @@ class SettingsView extends GetView<SettingsViewController> {
               padding: EdgeInsets.only(left: 8, right: 8),
               child: TextButton(
                 onPressed: () {
-                  if (controller.twitchData != null) {
+                  if (controller.homeViewController.twitchData != null) {
                     controller.logout();
                   } else {
                     controller.login();
@@ -45,12 +47,15 @@ class SettingsView extends GetView<SettingsViewController> {
                 },
                 style: TextButton.styleFrom(
                   textStyle: TextStyle(fontSize: 12),
-                  backgroundColor: controller.twitchData != null
-                      ? Colors.red
-                      : Colors.purple,
+                  backgroundColor:
+                      controller.homeViewController.twitchData != null
+                          ? Colors.red
+                          : Colors.purple,
                 ),
                 child: Text(
-                  controller.twitchData != null ? "Logout" : "Login",
+                  controller.homeViewController.twitchData != null
+                      ? "Logout"
+                      : "Login",
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -72,6 +77,14 @@ class SettingsView extends GetView<SettingsViewController> {
           child: ListView(
             padding: EdgeInsets.only(top: 8, left: 10, right: 10, bottom: 8),
             children: [
+              Subscription(controller: controller),
+              Divider(
+                height: 20,
+                thickness: 2,
+                indent: 0,
+                endIndent: 0,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
               chatSettings(context, width),
               Divider(
                 height: 20,
@@ -118,7 +131,7 @@ class SettingsView extends GetView<SettingsViewController> {
             child: Text(
               "Chat",
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.tertiary, fontSize: 22),
+                  color: Theme.of(context).colorScheme.tertiary, fontSize: 20),
             ),
           ),
           Container(
@@ -142,12 +155,13 @@ class SettingsView extends GetView<SettingsViewController> {
                       Container(
                         child: Switch(
                           onChanged: (value) {
-                            controller.settings.value = controller
-                                .settings.value
-                                .copyWith(isEmotes: value);
+                            controller.homeViewController.settings.value =
+                                controller.homeViewController.settings.value
+                                    .copyWith(isEmotes: value);
                             controller.saveSettings();
                           },
-                          value: controller.settings.value.isEmotes!,
+                          value: controller
+                              .homeViewController.settings.value.isEmotes!,
                           inactiveTrackColor:
                               Theme.of(context).colorScheme.tertiaryContainer,
                           activeTrackColor:
@@ -169,7 +183,9 @@ class SettingsView extends GetView<SettingsViewController> {
                             fontSize: 18),
                       ),
                       Text(
-                          controller.settings.value.textSize!.ceil().toString(),
+                          controller.homeViewController.settings.value.textSize!
+                              .ceil()
+                              .toString(),
                           style: TextStyle(
                               color:
                                   Theme.of(context).textTheme.bodyLarge!.color,
@@ -177,19 +193,21 @@ class SettingsView extends GetView<SettingsViewController> {
                       Container(
                         child: Slider(
                           onChanged: (value) {
-                            controller.settings.value = controller
-                                .settings.value
-                                .copyWith(textSize: value);
+                            controller.homeViewController.settings.value =
+                                controller.homeViewController.settings.value
+                                    .copyWith(textSize: value);
                             controller.saveSettings();
                           },
-                          value: controller.settings.value.textSize!,
+                          value: controller
+                              .homeViewController.settings.value.textSize!,
                           min: 0.0,
                           max: 50.0,
                           divisions: 100,
                           activeColor: Theme.of(context).colorScheme.tertiary,
                           inactiveColor:
                               Theme.of(context).colorScheme.tertiaryContainer,
-                          label: "${controller.settings.value.textSize}",
+                          label:
+                              "${controller.homeViewController.settings.value.textSize}",
                         ),
                       )
                     ],
@@ -211,12 +229,13 @@ class SettingsView extends GetView<SettingsViewController> {
                       Container(
                         child: Switch(
                           onChanged: (value) {
-                            controller.settings.value = controller
-                                .settings.value
-                                .copyWith(displayTimestamp: value);
+                            controller.homeViewController.settings.value =
+                                controller.homeViewController.settings.value
+                                    .copyWith(displayTimestamp: value);
                             controller.saveSettings();
                           },
-                          value: controller.settings.value.displayTimestamp!,
+                          value: controller.homeViewController.settings.value
+                              .displayTimestamp!,
                           inactiveTrackColor:
                               Theme.of(context).colorScheme.tertiaryContainer,
                           activeTrackColor:
@@ -243,19 +262,20 @@ class SettingsView extends GetView<SettingsViewController> {
                       Container(
                         child: Switch(
                           onChanged: (value) {
-                            controller.settings.value = controller
-                                .settings.value
-                                .copyWith(alternateChannel: value);
+                            controller.homeViewController.settings.value =
+                                controller.homeViewController.settings.value
+                                    .copyWith(alternateChannel: value);
                             if (!value) {
-                              controller.settings.value = controller
-                                  .settings.value
-                                  .copyWith(alternateChannelName: '');
+                              controller.homeViewController.settings.value =
+                                  controller.homeViewController.settings.value
+                                      .copyWith(alternateChannelName: '');
                               controller.alternateChannelChatController.text =
                                   '';
                             }
                             controller.saveSettings();
                           },
-                          value: controller.settings.value.alternateChannel!,
+                          value: controller.homeViewController.settings.value
+                              .alternateChannel!,
                           inactiveTrackColor:
                               Theme.of(context).colorScheme.tertiaryContainer,
                           activeTrackColor:
@@ -267,7 +287,8 @@ class SettingsView extends GetView<SettingsViewController> {
                   ),
                 ),
                 Visibility(
-                  visible: controller.settings.value.alternateChannel!,
+                  visible: controller
+                      .homeViewController.settings.value.alternateChannel!,
                   child: Container(
                     child: Row(
                       children: [
@@ -279,12 +300,14 @@ class SettingsView extends GetView<SettingsViewController> {
                               controller:
                                   controller.alternateChannelChatController,
                               onChanged: (value) {
-                                controller.settings.value =
-                                    controller.settings.value.copyWith(
-                                        alternateChannelName: controller
-                                            .alternateChannelChatController.text
-                                            .toLowerCase()
-                                            .trim());
+                                controller.homeViewController.settings.value =
+                                    controller.homeViewController.settings.value
+                                        .copyWith(
+                                            alternateChannelName: controller
+                                                .alternateChannelChatController
+                                                .text
+                                                .toLowerCase()
+                                                .trim());
                                 controller.saveSettings();
                               },
                               style: TextStyle(
@@ -327,14 +350,17 @@ class SettingsView extends GetView<SettingsViewController> {
                                           controller
                                               .alternateChannelChatController
                                               .clear();
-                                          controller.settings.value = controller
-                                              .settings.value
-                                              .copyWith(
-                                                  alternateChannelName: controller
-                                                      .alternateChannelChatController
-                                                      .text
-                                                      .toLowerCase()
-                                                      .trim());
+                                          controller.homeViewController.settings
+                                                  .value =
+                                              controller.homeViewController
+                                                  .settings.value
+                                                  .copyWith(
+                                                      alternateChannelName:
+                                                          controller
+                                                              .alternateChannelChatController
+                                                              .text
+                                                              .toLowerCase()
+                                                              .trim());
                                           controller.saveSettings();
                                         },
                                       )
@@ -497,7 +523,7 @@ class SettingsView extends GetView<SettingsViewController> {
             child: Text(
               "General",
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.tertiary, fontSize: 22),
+                  color: Theme.of(context).colorScheme.tertiary, fontSize: 20),
             ),
           ),
           Container(
@@ -525,12 +551,13 @@ class SettingsView extends GetView<SettingsViewController> {
                             value
                                 ? Get.changeThemeMode(ThemeMode.dark)
                                 : Get.changeThemeMode(ThemeMode.light);
-                            controller.settings.value = controller
-                                .settings.value
-                                .copyWith(isDarkMode: value);
+                            controller.homeViewController.settings.value =
+                                controller.homeViewController.settings.value
+                                    .copyWith(isDarkMode: value);
                             controller.saveSettings();
                           },
-                          value: controller.settings.value.isDarkMode!,
+                          value: controller
+                              .homeViewController.settings.value.isDarkMode!,
                           activeTrackColor:
                               Theme.of(context).colorScheme.tertiary,
                           activeColor: Colors.white,
@@ -557,12 +584,13 @@ class SettingsView extends GetView<SettingsViewController> {
                       Container(
                         child: Switch(
                           onChanged: (value) {
-                            controller.settings.value = controller
-                                .settings.value
-                                .copyWith(keepSpeakerOn: value);
+                            controller.homeViewController.settings.value =
+                                controller.homeViewController.settings.value
+                                    .copyWith(keepSpeakerOn: value);
                             controller.saveSettings();
                           },
-                          value: controller.settings.value.keepSpeakerOn!,
+                          value: controller
+                              .homeViewController.settings.value.keepSpeakerOn!,
                           activeTrackColor:
                               Theme.of(context).colorScheme.tertiary,
                           activeColor: Colors.white,
@@ -599,8 +627,9 @@ class SettingsView extends GetView<SettingsViewController> {
                           Locale locale = new Locale(
                               value!['languageCode']!, value['countryCode']!);
                           Get.updateLocale(locale);
-                          controller.settings.value = controller.settings.value
-                              .copyWith(appLanguage: {
+                          controller.homeViewController.settings.value =
+                              controller.homeViewController.settings.value
+                                  .copyWith(appLanguage: {
                             "languageCode": value['languageCode']!,
                             "countryCode": value['countryCode']!
                           });
@@ -626,7 +655,7 @@ class SettingsView extends GetView<SettingsViewController> {
             child: Text(
               "connections_tabs".tr,
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.tertiary, fontSize: 22),
+                  color: Theme.of(context).colorScheme.tertiary, fontSize: 20),
             ),
           ),
           Container(
@@ -693,11 +722,13 @@ class SettingsView extends GetView<SettingsViewController> {
                     Container(
                       child: Switch(
                         onChanged: (value) {
-                          controller.settings.value = controller.settings.value
-                              .copyWith(isObsConnected: value);
+                          controller.homeViewController.settings.value =
+                              controller.homeViewController.settings.value
+                                  .copyWith(isObsConnected: value);
                           controller.saveSettings();
                         },
-                        value: controller.settings.value.isObsConnected!,
+                        value: controller
+                            .homeViewController.settings.value.isObsConnected!,
                         inactiveTrackColor:
                             Theme.of(context).colorScheme.tertiaryContainer,
                         activeTrackColor:
@@ -708,11 +739,14 @@ class SettingsView extends GetView<SettingsViewController> {
                   ],
                 ),
                 Visibility(
-                  visible: controller.settings.value.isObsConnected!,
+                  visible: controller
+                      .homeViewController.settings.value.isObsConnected!,
                   child: ObsSettings(
                     controller: controller,
                   ),
                 ),
+                SizedBox(height: 12),
+                StreamElements(controller: controller),
               ],
             ),
           ),
@@ -731,7 +765,7 @@ class SettingsView extends GetView<SettingsViewController> {
             child: Text(
               "Contact",
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.tertiary, fontSize: 22),
+                  color: Theme.of(context).colorScheme.tertiary, fontSize: 20),
             ),
           ),
           Container(

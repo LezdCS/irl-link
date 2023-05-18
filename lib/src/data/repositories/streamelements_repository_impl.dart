@@ -1,6 +1,9 @@
 // import 'package:flutter_web_auth/flutter_web_auth.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:irllink/src/domain/entities/se_activity.dart';
 // import 'package:irllink/src/core/utils/constants.dart';
 
 import 'package:irllink/src/domain/repositories/streamelements_repository.dart';
@@ -36,5 +39,19 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
   Future<DataState<void>> disconnect() {
     // TODO: implement disconnect
     throw UnimplementedError();
+  }
+
+  @override
+  Future<void> replayActivity(String token, SeActivity activity) async {
+    var dio = Dio();
+    Response response;
+    try {
+      dio.options.headers["Authorization"] = "Bearer ${token}";
+      response = await dio.post(
+        'https://api.streamelements.com/kappa/v2/activities/${activity.channel}/${activity.id}/replay',
+      );
+    } on DioError catch (e) {
+      debugPrint(e.toString());
+    }
   }
 }

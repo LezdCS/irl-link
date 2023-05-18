@@ -8,24 +8,33 @@ enum ActivityType {
   tip,
   raid,
   host,
-  merch,
 }
 
 class SeActivity extends Equatable {
   final String id;
+  final String channel;
   final String username;
-  final String message;
-  final String? amount;
-  final String? soundUrl;
   final ActivityType activityType;
+  final String? message;
+  final String? amount;
+  final String? tier;
+  final bool? gifted;
+  final String? sender;
+  final String? currency;
+  final bool? isTest;
 
   const SeActivity({
     required this.id,
+    required this.channel,
     required this.username,
-    required this.message,
-    required this.amount,
-    required this.soundUrl,
     required this.activityType,
+    this.message,
+    this.amount,
+    this.tier,
+    this.gifted,
+    this.sender,
+    this.currency,
+    this.isTest,
   });
 
   @override
@@ -35,7 +44,6 @@ class SeActivity extends Equatable {
       username,
       message,
       amount,
-      soundUrl,
       activityType,
     ];
   }
@@ -82,12 +90,6 @@ class SeActivity extends Equatable {
         //circle color
         colors.add(Color(0xFF2E0219));
         break;
-      case ActivityType.merch:
-        //background color
-        colors.add(Color(0xFF4F5D75));
-        //circle color
-        colors.add(Color(0xFF2D3142));
-        break;
     }
     return colors;
   }
@@ -99,8 +101,14 @@ class SeActivity extends Equatable {
         s = " just followed!";
         break;
       case ActivityType.subscription:
-        //todo : if is prime add (prime) after "subscribed"
-        s = ' subscribed!';
+        bool isPrime = this.tier == "prime";
+        bool isGift = this.gifted == true;
+        if (isGift) {
+          s = ' got gifted a sub by ${this.sender}';
+        }
+        else {
+          s = ' subscribed${isPrime? " with prime": ""}!';
+        }
         break;
       case ActivityType.cheer:
         s = ' sent ${this.amount} bits!';
@@ -113,9 +121,6 @@ class SeActivity extends Equatable {
         break;
       case ActivityType.host:
         s = ' is hosting with ${this.amount} viewers!';
-        break;
-      case ActivityType.merch:
-        s = ' bought for ${this.amount}\$ of merch!';
         break;
     }
     return s;

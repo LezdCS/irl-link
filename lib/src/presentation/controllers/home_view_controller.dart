@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:irllink/src/domain/entities/emote.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:irllink/src/presentation/widgets/tabs/obs_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/split_view_custom.dart';
@@ -15,6 +17,7 @@ import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import '../../../routes/app_routes.dart';
+import '../widgets/tabs/streamelements_tab_view.dart';
 import '../widgets/web_page_view.dart';
 import 'chat_view_controller.dart';
 
@@ -41,12 +44,20 @@ class HomeViewController extends GetxController
   RxBool isPickingEmote = false.obs;
   late ChatViewController chatViewController;
   late ObsTabViewController obsTabViewController;
+  late StreamelementsViewController streamelementsViewController;
 
   late Rx<Settings> settings = Settings.defaultSettings().obs;
 
   Timer? timerRefreshToken;
   Timer? timerKeepSpeakerOn;
   AudioPlayer audioPlayer = AudioPlayer();
+
+  late StreamSubscription<List<PurchaseDetails>> subscription;
+  List<ProductDetails> products = [];
+  RxBool purchasePending = false.obs;
+  RxList<PurchaseDetails> purchases = <PurchaseDetails>[].obs;
+
+  RxBool displayDashboard = false.obs;
 
   @override
   void onInit() async {
@@ -70,9 +81,12 @@ class HomeViewController extends GetxController
       );
     }
     await this.getSettings();
+    await this.getStoreProducts();
 
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+
+    initListeningStorePurchase();
     super.onInit();
   }
 
@@ -80,6 +94,7 @@ class HomeViewController extends GetxController
   void onReady() {
     chatViewController = Get.find<ChatViewController>();
     obsTabViewController = Get.find<ObsTabViewController>();
+    streamelementsViewController = Get.find<StreamelementsViewController>();
     super.onReady();
   }
 
@@ -95,6 +110,15 @@ class HomeViewController extends GetxController
 
     TwitchTabView twitchPage = TwitchTabView();
     tabElements.add(twitchPage);
+
+    bool isSubscribed = purchases.firstWhereOrNull(
+          (element) => element.productID == "irl_premium_subscription",
+        ) !=
+        null;
+    if (isSubscribed && settings.value.streamElementsAccessToken != null && settings.value.streamElementsAccessToken!.isNotEmpty) {
+      StreamelementsTabView streamelementsPage = StreamelementsTabView();
+      tabElements.add(streamelementsPage);
+    }
 
     if (settings.value.isObsConnected! || twitchData == null) {
       ObsTabView obsPage = ObsTabView();
@@ -157,10 +181,12 @@ class HomeViewController extends GetxController
   }
 
   Future getSettings() async {
-    await homeEvents.getSettings().then((value) async => applySettings(value));
+    await homeEvents
+        .getSettings()
+        .then((value) async => await applySettings(value));
   }
 
-  void applySettings(value) async {
+  Future applySettings(value) async {
     {
       if (value.error != null) return;
       settings.value = value.data!;
@@ -177,9 +203,101 @@ class HomeViewController extends GetxController
       } else {
         timerKeepSpeakerOn?.cancel();
       }
-      Locale locale = new Locale(
-          settings.value.appLanguage!["languageCode"], settings.value.appLanguage!["countryCode"]);
+      Locale locale = new Locale(settings.value.appLanguage!["languageCode"],
+          settings.value.appLanguage!["countryCode"]);
       Get.updateLocale(locale);
     }
+  }
+
+  void getStore() async {
+    final bool available = await InAppPurchase.instance.isAvailable();
+    if (!available) {
+      // The store cannot be reached or accessed. Update the UI accordingly.
+    }
+  }
+
+  void initListeningStorePurchase() async {
+    final Stream purchaseUpdated = InAppPurchase.instance.purchaseStream;
+    subscription = purchaseUpdated.listen((purchaseDetailsList) {
+      listenToPurchaseUpdated(purchaseDetailsList);
+    }, onDone: () {
+      subscription.cancel();
+    }, onError: (error) {
+      // handle error here.
+    }) as StreamSubscription<List<PurchaseDetails>>;
+
+    await InAppPurchase.instance.restorePurchases();
+  }
+
+  void listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
+    purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
+      if (purchaseDetails.status == PurchaseStatus.pending) {
+        purchasePending.value = true;
+      } else {
+        if (purchaseDetails.status == PurchaseStatus.error) {
+          purchasePending.value = false;
+          Get.snackbar(
+            "Error",
+            purchaseDetails.error!.message,
+            snackPosition: SnackPosition.TOP,
+            icon: Icon(Icons.error_outline, color: Colors.red),
+            borderWidth: 1,
+            borderColor: Colors.red,
+          );
+        } else if (purchaseDetails.status == PurchaseStatus.purchased ||
+            purchaseDetails.status == PurchaseStatus.restored) {
+          bool valid = await verifyPurchase(purchaseDetails);
+          if (valid) {
+            deliverProduct(purchaseDetails);
+          } else {
+            Get.snackbar(
+              "Error",
+              "Invalid purchase",
+              snackPosition: SnackPosition.BOTTOM,
+              icon: Icon(Icons.error_outline, color: Colors.red),
+              borderWidth: 1,
+              borderColor: Colors.red,
+            );
+            purchasePending.value = false;
+          }
+        }
+        if (purchaseDetails.pendingCompletePurchase) {
+          await InAppPurchase.instance.completePurchase(purchaseDetails);
+        }
+      }
+    });
+  }
+
+  Future<bool> verifyPurchase(PurchaseDetails purchaseDetails) {
+    // IMPORTANT!! Always verify a purchase before delivering the product.
+    // For the purpose of an example, we directly return true.
+    return Future<bool>.value(true);
+  }
+
+  Future<void> deliverProduct(PurchaseDetails purchaseDetails) async {
+    purchases.add(purchaseDetails);
+    purchasePending.value = false;
+
+    if (purchaseDetails.status == PurchaseStatus.purchased) {
+      Get.back();
+      Get.snackbar(
+        "Success",
+        "Thanks for your purchase, enjoy your premium subscription!",
+        snackPosition: SnackPosition.BOTTOM,
+        icon: Icon(Icons.check, color: Colors.green),
+        borderWidth: 1,
+        borderColor: Colors.green,
+      );
+    }
+  }
+
+  Future<void> getStoreProducts() async {
+    const Set<String> _kIds = <String>{'irl_premium_subscription'};
+    final ProductDetailsResponse response =
+        await InAppPurchase.instance.queryProductDetails(_kIds);
+    if (response.notFoundIDs.isNotEmpty) {
+      // Handle the error.
+    }
+    products = response.productDetails;
   }
 }

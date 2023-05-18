@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:irllink/src/domain/entities/settings/chat_events_settings.dart';
+import 'package:irllink/src/domain/entities/settings/floating_dashboard_settings.dart';
 
 class Settings extends Equatable {
   //CHAT SETTINGS
@@ -16,6 +17,7 @@ class Settings extends Equatable {
   final bool? isDarkMode;
   final bool? keepSpeakerOn;
   final Map? appLanguage;
+  final FloatingDashboardSettings? floatingDashboardSettings;
 
   //CONNECTIONS SETTINGS
   final bool? isObsConnected;
@@ -52,6 +54,7 @@ class Settings extends Equatable {
     required this.isDarkMode,
     required this.keepSpeakerOn,
     required this.appLanguage,
+    required this.floatingDashboardSettings,
 
     //CONNECTIONS SETTINGS
     required this.isObsConnected,
@@ -96,6 +99,9 @@ class Settings extends Equatable {
     this.isDarkMode = true,
     this.keepSpeakerOn = true,
     this.appLanguage = const {"languageCode": "en", "countryCode": "US"},
+    this.floatingDashboardSettings = const FloatingDashboardSettings(
+      userEvents: [],
+    ),
 
     //CONNECTIONS SETTINGS
     this.isObsConnected = false,
@@ -132,6 +138,7 @@ class Settings extends Equatable {
         'isDarkMode': isDarkMode,
         'keepSpeakerOn': keepSpeakerOn,
         'appLanguage': appLanguage,
+        'floatingDashboardSettings': floatingDashboardSettings?.toJson(),
         //CONNECTIONS
         'isObsConnected': isObsConnected,
         'obsWebsocketUrl': obsWebsocketUrl,
@@ -168,6 +175,7 @@ class Settings extends Equatable {
       isDarkMode,
       keepSpeakerOn,
       appLanguage,
+      floatingDashboardSettings,
       //CONNECTIONS
       isObsConnected,
       obsWebsocketUrl,
@@ -206,6 +214,7 @@ class Settings extends Equatable {
     bool? isDarkMode,
     bool? keepSpeakerOn,
     Map<String, String>? appLanguage,
+    FloatingDashboardSettings? floatingDashboardSettings,
     //CONNECTIONS
     bool? isObsConnected,
     String? obsWebsocketUrl,
@@ -239,6 +248,8 @@ class Settings extends Equatable {
         isDarkMode: isDarkMode ?? this.isDarkMode,
         keepSpeakerOn: keepSpeakerOn ?? this.keepSpeakerOn,
         appLanguage: appLanguage ?? this.appLanguage,
+        floatingDashboardSettings:
+            floatingDashboardSettings ?? this.floatingDashboardSettings,
         //CONNECTIONS
         isObsConnected: isObsConnected ?? this.isObsConnected,
         obsWebsocketUrl: obsWebsocketUrl ?? this.obsWebsocketUrl,

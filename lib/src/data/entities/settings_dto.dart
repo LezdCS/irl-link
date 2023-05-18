@@ -1,7 +1,9 @@
 import 'package:irllink/src/data/entities/settings/chat_events_settings_dto.dart';
+import 'package:irllink/src/data/entities/settings/floating_dashboard_settings_dto.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 
 import '../../domain/entities/settings/chat_events_settings.dart';
+import '../../domain/entities/settings/floating_dashboard_settings.dart';
 
 class SettingsDTO extends Settings {
   const SettingsDTO({
@@ -18,6 +20,7 @@ class SettingsDTO extends Settings {
     required bool isDarkMode,
     required bool keepSpeakerOn,
     required Map appLanguage,
+    required FloatingDashboardSettings floatingDashboardSettings,
     //CONNECTIONS SETTINGS
     required bool isObsConnected,
     required String obsWebsocketUrl,
@@ -50,6 +53,7 @@ class SettingsDTO extends Settings {
           isDarkMode: isDarkMode,
           keepSpeakerOn: keepSpeakerOn,
           appLanguage: appLanguage,
+          floatingDashboardSettings: floatingDashboardSettings,
           //CONNECTIONS SETTINGS
           obsWebsocketUrl: obsWebsocketUrl,
           obsWebsocketPassword: obsWebsocketPassword,
@@ -84,6 +88,7 @@ class SettingsDTO extends Settings {
         'isDarkMode': isDarkMode,
         'keepSpeakerOn': keepSpeakerOn,
         'appLanguage': appLanguage,
+        'floatingDashboardSettings': floatingDashboardSettings?.toJson(),
         //CONNECTIONS
         'isObsConnected': isObsConnected,
         'obsWebsocketUrl': obsWebsocketUrl,
@@ -141,6 +146,9 @@ class SettingsDTO extends Settings {
         appLanguage: map['appLanguage'] != null
           ? map['appLanguage'] as Map
           : Settings.defaultSettings().appLanguage!,
+      floatingDashboardSettings: map['floatingDashboardSettings'] != null
+          ? FloatingDashboardSettingsDTO.fromJson(map['floatingDashboardSettings'])
+          : Settings.defaultSettings().floatingDashboardSettings!,
       //CONNECTIONS SETTINGS
       isObsConnected: map['isObsConnected'] != null
           ? map['isObsConnected'] as bool

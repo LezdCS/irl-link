@@ -2,11 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
+import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/events/settings_events.dart';
 
-import '../../domain/entities/twitch_credentials.dart';
 import '../../domain/entities/twitch_user.dart';
 
 class SettingsViewController extends GetxController {
@@ -14,11 +15,10 @@ class SettingsViewController extends GetxController {
 
   final SettingsEvents settingsEvents;
 
-  late Rx<Settings> settings = Settings.defaultSettings().obs;
-
   late TextEditingController alternateChannelChatController;
   late TextEditingController obsWebsocketUrlFieldController;
   late TextEditingController obsWebsocketPasswordFieldController;
+  late TextEditingController streamElementsFieldController;
   late TextEditingController addBrowserTitleController;
   late TextEditingController addBrowserUrlController;
   late TextEditingController addHiddenUsernameController;
@@ -27,12 +27,11 @@ class SettingsViewController extends GetxController {
   final addBrowserTitleKey = GlobalKey<FormState>();
   final addHiddenUserKey = GlobalKey<FormState>();
 
-  TwitchCredentials? twitchData;
-
   late RxList<String> usernamesHiddenUsers;
 
   RxBool obsWebsocketPasswordShow = false.obs;
   RxBool obsWebsocketUrlShow = false.obs;
+  RxBool seJwtShow = false.obs;
 
   RxList ttsLanguages = [].obs;
   RxList ttsVoices = [].obs;
@@ -41,11 +40,15 @@ class SettingsViewController extends GetxController {
   late TextEditingController addTtsAllowedPrefixsController;
   Rx<Color> nothingJustToRefreshDialog = Colors.grey.obs;
 
+  late HomeViewController homeViewController;
 
   @override
   void onInit() {
+    homeViewController = Get.find<HomeViewController>();
+
     alternateChannelChatController = TextEditingController();
     obsWebsocketUrlFieldController = TextEditingController();
+    streamElementsFieldController = TextEditingController();
     obsWebsocketPasswordFieldController = TextEditingController();
     addBrowserTitleController = TextEditingController();
     addBrowserUrlController = TextEditingController();
@@ -54,9 +57,6 @@ class SettingsViewController extends GetxController {
     addTtsIgnoredPrefixsController = TextEditingController();
     addTtsAllowedPrefixsController = TextEditingController();
 
-    if (Get.arguments != null) {
-      twitchData = Get.arguments[0];
-    }
     usernamesHiddenUsers = <String>[].obs;
     getTtsLanguages();
     getTtsVoices();
@@ -65,20 +65,17 @@ class SettingsViewController extends GetxController {
 
   @override
   void onReady() {
-    if (twitchData != null) {
-      settingsEvents.getSettings().then((value) => {
-            if (value.error == null)
-              {
-                settings.value = value.data!,
-                alternateChannelChatController.text =
-                    settings.value.alternateChannelName!,
-                obsWebsocketUrlFieldController.text =
-                    settings.value.obsWebsocketUrl!,
-                obsWebsocketPasswordFieldController.text =
-                    settings.value.obsWebsocketPassword!,
-                getUsernames(),
-              }
-          });
+    if (homeViewController.twitchData != null) {
+      alternateChannelChatController.text =
+          homeViewController.settings.value.alternateChannelName!;
+      obsWebsocketUrlFieldController.text =
+          homeViewController.settings.value.obsWebsocketUrl!;
+      obsWebsocketPasswordFieldController.text =
+          homeViewController.settings.value.obsWebsocketPassword!;
+      streamElementsFieldController.text =
+          homeViewController.settings.value.streamElementsAccessToken!;
+
+      getUsernames();
     }
 
     super.onReady();
@@ -90,7 +87,9 @@ class SettingsViewController extends GetxController {
   }
 
   void logout() {
-    settingsEvents.logout(accessToken: twitchData!.accessToken).then(
+    settingsEvents
+        .logout(accessToken: homeViewController.twitchData!.accessToken)
+        .then(
           (value) => Get.offAllNamed(Routes.LOGIN),
         );
   }
@@ -100,11 +99,12 @@ class SettingsViewController extends GetxController {
   }
 
   void removeHiddenUser(userId) {
-    List hiddenUsersIds = settings.value.hiddenUsersIds!;
+    List hiddenUsersIds = homeViewController.settings.value.hiddenUsersIds!;
     hiddenUsersIds.remove(userId);
-    settings.value = settings.value.copyWith(hiddenUsersIds: hiddenUsersIds);
+    homeViewController.settings.value = homeViewController.settings.value
+        .copyWith(hiddenUsersIds: hiddenUsersIds);
     saveSettings();
-    settings.refresh();
+    homeViewController.settings.refresh();
   }
 
   void addBrowserTab() {
@@ -118,13 +118,15 @@ class SettingsViewController extends GetxController {
     String title = addBrowserTitleController.text;
     String url = addBrowserUrlController.text;
     Map<String, String> tab = {'title': title, 'url': url};
-    List browserTabs = settings.value.browserTabs! == const []
-        ? []
-        : settings.value.browserTabs!;
+    List browserTabs =
+        homeViewController.settings.value.browserTabs! == const []
+            ? []
+            : homeViewController.settings.value.browserTabs!;
     browserTabs.add(tab);
-    settings.value = settings.value.copyWith(browserTabs: browserTabs);
+    homeViewController.settings.value =
+        homeViewController.settings.value.copyWith(browserTabs: browserTabs);
     saveSettings();
-    settings.refresh();
+    homeViewController.settings.refresh();
     Get.back();
   }
 
@@ -140,25 +142,28 @@ class SettingsViewController extends GetxController {
     String url = addBrowserUrlController.text;
     elem["title"] = title;
     elem["url"] = url;
-    List browserTabs = settings.value.browserTabs! == const []
-        ? []
-        : settings.value.browserTabs!;
-    settings.value = settings.value.copyWith(browserTabs: browserTabs);
+    List browserTabs =
+        homeViewController.settings.value.browserTabs! == const []
+            ? []
+            : homeViewController.settings.value.browserTabs!;
+    homeViewController.settings.value =
+        homeViewController.settings.value.copyWith(browserTabs: browserTabs);
     saveSettings();
-    settings.refresh();
+    homeViewController.settings.refresh();
     Get.back();
   }
 
   void removeBrowserTab(tab) {
-    List tabs = settings.value.browserTabs!;
+    List tabs = homeViewController.settings.value.browserTabs!;
     tabs.remove(tab);
-    settings.value = settings.value.copyWith(browserTabs: tabs);
+    homeViewController.settings.value =
+        homeViewController.settings.value.copyWith(browserTabs: tabs);
     saveSettings();
-    settings.refresh();
+    homeViewController.settings.refresh();
   }
 
   void saveSettings() {
-    settingsEvents.setSettings(settings: settings.value);
+    settingsEvents.setSettings(settings: homeViewController.settings.value);
   }
 
   Future getUsernames() async {
@@ -166,8 +171,8 @@ class SettingsViewController extends GetxController {
 
     await settingsEvents
         .getTwitchUsers(
-            ids: settings.value.hiddenUsersIds!,
-            accessToken: twitchData!.accessToken)
+            ids: homeViewController.settings.value.hiddenUsersIds!,
+            accessToken: homeViewController.twitchData!.accessToken)
         .then((value) => users = value.data!);
 
     users.forEach((user) => usernamesHiddenUsers.add(user.displayName));
@@ -187,5 +192,12 @@ class SettingsViewController extends GetxController {
           ttsVoices.value = value,
           ttsVoices.sort((a, b) => a['name'].compareTo(b['name']))
         });
+  }
+
+  void purchase() async {
+    final ProductDetails productDetails = homeViewController.products[0];
+    final PurchaseParam purchaseParam =
+        PurchaseParam(productDetails: productDetails);
+    InAppPurchase.instance.buyNonConsumable(purchaseParam: purchaseParam);
   }
 }

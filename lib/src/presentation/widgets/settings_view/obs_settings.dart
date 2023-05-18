@@ -14,7 +14,7 @@ class ObsSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-          () => Column(
+      () => Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -25,7 +25,7 @@ class ObsSettings extends StatelessWidget {
                   controller: controller.obsWebsocketUrlFieldController,
                   obscureText: !controller.obsWebsocketUrlShow.value,
                   onChanged: (value) {
-                    controller.settings.value = controller.settings.value
+                    controller.homeViewController.settings.value = controller.homeViewController.settings.value
                         .copyWith(obsWebsocketUrl: value);
                     controller.saveSettings();
                   },
@@ -35,7 +35,7 @@ class ObsSettings extends StatelessWidget {
                   decoration: InputDecoration(
                     isDense: true,
                     contentPadding:
-                    EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+                        EdgeInsets.symmetric(horizontal: 8, vertical: 7),
                     hintText: 'url',
                     labelText: 'Websocket Url',
                     labelStyle: TextStyle(
@@ -48,7 +48,7 @@ class ObsSettings extends StatelessWidget {
                       color: Theme.of(context).primaryIconTheme.color,
                       onPressed: () {
                         controller.obsWebsocketUrlShow.value =
-                        !controller.obsWebsocketUrlShow.value;
+                            !controller.obsWebsocketUrlShow.value;
                       },
                     ),
                   ),
@@ -65,7 +65,7 @@ class ObsSettings extends StatelessWidget {
                   controller: controller.obsWebsocketPasswordFieldController,
                   obscureText: !controller.obsWebsocketPasswordShow.value,
                   onChanged: (value) {
-                    controller.settings.value = controller.settings.value
+                    controller.homeViewController.settings.value = controller.homeViewController.settings.value
                         .copyWith(obsWebsocketPassword: value);
                     controller.saveSettings();
                   },
@@ -75,7 +75,7 @@ class ObsSettings extends StatelessWidget {
                   decoration: InputDecoration(
                     isDense: true,
                     contentPadding:
-                    EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+                        EdgeInsets.symmetric(horizontal: 8, vertical: 7),
                     hintText: 'password',
                     labelText: 'Websocket Password',
                     labelStyle: TextStyle(
@@ -88,7 +88,7 @@ class ObsSettings extends StatelessWidget {
                       color: Theme.of(context).primaryIconTheme.color,
                       onPressed: () {
                         controller.obsWebsocketPasswordShow.value =
-                        !controller.obsWebsocketPasswordShow.value;
+                            !controller.obsWebsocketPasswordShow.value;
                       },
                     ),
                   ),
@@ -108,7 +108,7 @@ class ObsSettings extends StatelessWidget {
                   ),
                   onPressed: () {
                     MobileScannerController cameraController =
-                    MobileScannerController();
+                        MobileScannerController();
 
                     Get.dialog(_qrPasswordScanner(
                         cameraController, controller, context));
@@ -136,14 +136,14 @@ class ObsSettings extends StatelessWidget {
                   style: TextButton.styleFrom(
                     textStyle: TextStyle(fontSize: 12),
                     backgroundColor:
-                    Theme.of(context).colorScheme.tertiaryContainer,
+                        Theme.of(context).colorScheme.tertiaryContainer,
                     fixedSize: Size(50, 20),
                   ),
                   onPressed: () {
                     Get.defaultDialog(
                       title: "History",
                       cancelTextColor:
-                      Theme.of(context).textTheme.bodyLarge!.color,
+                          Theme.of(context).textTheme.bodyLarge!.color,
                       textCancel: "cancel".tr,
                       backgroundColor: Theme.of(context).colorScheme.background,
                       content: _obsHistory(controller),
@@ -217,10 +217,10 @@ class ObsSettings extends StatelessWidget {
               controller.obsWebsocketPasswordFieldController.text = password;
               controller.obsWebsocketUrlFieldController.text = url;
 
-              controller.settings.value =
-                  controller.settings.value.copyWith(obsWebsocketUrl: url);
+              controller.homeViewController.settings.value =
+                  controller.homeViewController.settings.value.copyWith(obsWebsocketUrl: url);
 
-              controller.settings.value = controller.settings.value
+              controller.homeViewController.settings.value = controller.homeViewController.settings.value
                   .copyWith(obsWebsocketPassword: password);
 
               controller.saveSettings();
@@ -280,19 +280,19 @@ class ObsSettings extends StatelessWidget {
       child: Container(
         height: 200,
         child: ListView.builder(
-          itemCount: controller.settings.value.obsConnectionsHistory!.length,
+          itemCount: controller.homeViewController.settings.value.obsConnectionsHistory!.length,
           itemBuilder: (context, index) {
             String url =
-            controller.settings.value.obsConnectionsHistory![index]['url']!;
+                controller.homeViewController.settings.value.obsConnectionsHistory![index]['url']!;
             String password = controller
-                .settings.value.obsConnectionsHistory![index]['password']!;
+                .homeViewController.settings.value.obsConnectionsHistory![index]['password']!;
 
             return ListTile(
               title: Text(url),
               onTap: () {
                 controller.obsWebsocketUrlFieldController.text = url;
                 controller.obsWebsocketPasswordFieldController.text = password;
-                controller.settings.value = controller.settings.value.copyWith(
+                controller.homeViewController.settings.value = controller.homeViewController.settings.value.copyWith(
                     obsWebsocketUrl: url, obsWebsocketPassword: password);
                 controller.saveSettings();
                 Get.back();

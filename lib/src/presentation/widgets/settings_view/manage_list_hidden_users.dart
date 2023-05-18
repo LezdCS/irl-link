@@ -40,7 +40,9 @@ class ManageListHiddenUsers extends GetView {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                child: controller.settings.value.hiddenUsersIds!.length <= 0
+                child: controller.homeViewController.settings.value
+                            .hiddenUsersIds!.length <=
+                        0
                     ? Container(
                         padding: EdgeInsets.only(top: 20),
                         child: Text(
@@ -51,7 +53,8 @@ class ManageListHiddenUsers extends GetView {
                         ),
                       )
                     : controller.usernamesHiddenUsers.length !=
-                            controller.settings.value.hiddenUsersIds!.length
+                            controller.homeViewController.settings.value
+                                .hiddenUsersIds!.length
                         ? Container(
                             padding: EdgeInsets.only(top: 20),
                             child: Column(
@@ -81,15 +84,16 @@ class ManageListHiddenUsers extends GetView {
                               if (newIndex > oldIndex) {
                                 newIndex -= 1;
                               }
-                              final element = controller
+                              final element = controller.homeViewController
                                   .settings.value.hiddenUsersIds!
                                   .removeAt(oldIndex);
-                              controller.settings.value.hiddenUsersIds!
+                              controller.homeViewController.settings.value
+                                  .hiddenUsersIds!
                                   .insert(newIndex, element);
                             },
                             itemBuilder: (BuildContext context, int index) {
-                              var elem = controller
-                                  .settings.value.hiddenUsersIds![index];
+                              var elem = controller.homeViewController.settings
+                                  .value.hiddenUsersIds![index];
 
                               return Container(
                                 key: ValueKey(

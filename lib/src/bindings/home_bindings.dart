@@ -44,16 +44,19 @@ class HomeBindings extends Bindings {
         ));
     Get.find<ObsTabViewController>();
 
-    // Get.lazyPut<StreamelementsViewController>(
-    //   () => StreamelementsViewController(
-    //     streamelementsEvents: StreamelementsEvents(
-    //       streamelementsUseCase: StreamelementsUseCase(
-    //         streamelementsRepository: StreamelementsRepositoryImpl(),
-    //       ),
-    //     ),
-    //   ),
-    // );
-    // Get.find<StreamelementsViewController>();
+    Get.lazyPut<StreamelementsViewController>(
+      () => StreamelementsViewController(
+        streamelementsEvents: StreamelementsEvents(
+          streamelementsUseCase: StreamelementsUseCase(
+            streamelementsRepository: StreamelementsRepositoryImpl(),
+          ),
+          settingsUseCase: SettingsUseCase(
+            settingsRepository: SettingsRepositoryImpl(),
+          ),
+        ),
+      ),
+    );
+    Get.find<StreamelementsViewController>();
 
     Get.lazyPut<ChatViewController>(
       () => ChatViewController(
