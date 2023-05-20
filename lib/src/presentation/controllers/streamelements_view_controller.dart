@@ -126,7 +126,6 @@ class StreamelementsViewController extends GetxController
   }
 
   Future<void> onConnect() async {
-    debugPrint("ok");
     socket?.emit('authenticate', {"method": 'jwt', "token": jwt});
   }
 

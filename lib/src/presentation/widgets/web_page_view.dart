@@ -38,9 +38,15 @@ class _WebPageViewState extends State<WebPageView>
       params = PlatformWebViewControllerCreationParams();
     }
 
+    //create an Uri based on an url that can have a scheme or not
+    Uri uri = Uri.parse(widget.url);
+    if (uri.scheme.isEmpty) {
+      uri = uri.replace(scheme: 'https');
+    }
+
     controller = WebViewController.fromPlatformCreationParams(params)
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse(widget.url));
+      ..loadRequest(uri);
 
     if (controller.platform is AndroidWebViewController) {
       AndroidWebViewController.enableDebugging(true);
