@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../../controllers/settings_view_controller.dart';
 
 class StreamElements extends GetView {
@@ -12,10 +14,11 @@ class StreamElements extends GetView {
 
   @override
   Widget build(BuildContext context) {
-    bool isSubscribed = controller.homeViewController.purchases.firstWhereOrNull(
-          (element) => element.productID == "irl_premium_subscription",
-    ) !=
-        null;
+    bool isSubscribed =
+        controller.homeViewController.purchases.firstWhereOrNull(
+              (element) => element.productID == "irl_premium_subscription",
+            ) !=
+            null;
     return Obx(
       () => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,7 +72,7 @@ class StreamElements extends GetView {
               controller.saveSettings();
             },
             obscureText: !controller.seJwtShow.value,
-            enabled: isSubscribed ? true: false,
+            enabled: isSubscribed ? true : false,
             decoration: InputDecoration(
               isDense: true,
               disabledBorder: OutlineInputBorder(
@@ -77,10 +80,11 @@ class StreamElements extends GetView {
                   color: Colors.grey[700]!,
                 ),
               ),
-              contentPadding:
-                  EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+              contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
               hintText: 'StreamElements Access Token',
-              labelText: isSubscribed ? 'StreamElements Access Token' : 'Subscribe to unlock this feature',
+              labelText: isSubscribed
+                  ? 'StreamElements Access Token'
+                  : 'Subscribe to unlock this feature',
               labelStyle: TextStyle(
                 color: Theme.of(context).colorScheme.tertiary,
               ),
@@ -93,6 +97,42 @@ class StreamElements extends GetView {
                   controller.seJwtShow.value = !controller.seJwtShow.value;
                 },
               ),
+            ),
+          ),
+          SizedBox(height: 6),
+          RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: 'To get your Access Token ',
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyLarge!.color,
+                  ),
+                ),
+                WidgetSpan(
+                  child: InkWell(
+                    onTap: () {
+                      launchUrlString(
+                        "https://streamelements.com/dashboard/account/channels",
+                        mode: LaunchMode.externalApplication,
+                      );
+                    },
+                    child: Text(
+                      "click here",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.tertiary,
+                      ),
+                    ),
+                  ),
+                ),
+                TextSpan(
+                  text: '. Then press "Show Secret" and copy your JWT Token!',
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyLarge!.color,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
