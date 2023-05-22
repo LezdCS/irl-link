@@ -28,7 +28,7 @@ dependencies:
   get: ^4.6.5
   get_storage: ^2.1.1
   split_view: ^3.2.1
-  flutter_svg: ^2.0.5
+  flutter_svg: ^2.0.6
   flutter_web_auth: ^0.5.0
   url_launcher: ^6.1.11
   web_socket_channel: ^2.4.0
@@ -37,7 +37,7 @@ dependencies:
   equatable: ^2.0.5
   dio: ^5.1.2
   wakelock: ^0.6.2
-  connectivity_plus: ^4.0.0
+  connectivity_plus: ^4.0.1
   move_to_background: ^1.0.2
   obs_websocket: ^5.1.0+1
   intl: ^0.18.1
@@ -54,7 +54,7 @@ dependencies:
   mobile_scanner: ^3.2.0
   transparent_image: ^2.0.1
   flutter_tts: ^3.6.3
-  package_info_plus: ^4.0.0
+  package_info_plus: ^4.0.1
   upgrader: ^7.0.0
   in_app_purchase: ^3.1.5
   floating_draggable_widget: ^2.1.2
