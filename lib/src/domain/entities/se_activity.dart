@@ -68,21 +68,21 @@ class SeActivity extends Equatable {
         break;
       case ActivityType.cheer:
         //background color
-        colors.add(Color(0xFF00698B));
+        colors.add(Color(0xFF7B3EEA));
         //circle color
-        colors.add(Color(0xFF003B36));
+        colors.add(Color(0xFF32097F));
         break;
       case ActivityType.tip:
-        //background color
-        colors.add(Color(0xFF8D818C));
-        //circle color
-        colors.add(Color(0xFFB4B8C5));
-        break;
-      case ActivityType.raid:
         //background color
         colors.add(Color(0xFF149911));
         //circle color
         colors.add(Color(0xFF256D1B));
+        break;
+      case ActivityType.raid:
+        //background color
+        colors.add(Color(0xFF4A001F));
+        //circle color
+        colors.add(Color(0xFF2E0219));
         break;
       case ActivityType.host:
         //background color
