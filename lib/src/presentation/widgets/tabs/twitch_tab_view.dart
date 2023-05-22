@@ -128,7 +128,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
-                        textStyle: TextStyle(fontSize: 12),
+                        textStyle: TextStyle(fontSize: 11),
                         backgroundColor: Colors.deepPurpleAccent,
                         fixedSize: Size(50, 20),
                       ),
