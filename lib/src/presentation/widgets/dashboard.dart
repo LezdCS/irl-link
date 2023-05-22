@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
-import 'dart:math' as math;
-
 import '../../domain/entities/settings/floating_event.dart';
 
 class Dashboard extends GetView {
@@ -37,11 +35,12 @@ class Dashboard extends GetView {
       ),
     ];
     return Positioned(
-      top: MediaQuery.of(context).size.height / 2 - 100,
-      left: MediaQuery.of(context).size.width / 2 - 125,
+      top: MediaQuery.of(context).size.height / 2 - 120,
+      left: MediaQuery.of(context).size.width / 2 - 150,
       child: Container(
-        width: 250,
-        height: 200,
+        width: 300,
+        height: 234,
+        padding: EdgeInsets.all(4),
         decoration: BoxDecoration(
           color: context.theme.colorScheme.secondary,
           borderRadius: BorderRadius.all(
@@ -54,7 +53,6 @@ class Dashboard extends GetView {
         ),
         child: GridView.builder(
           itemCount: events.length,
-          padding: EdgeInsets.only(top: 0),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             childAspectRatio: 3 / 2.3,
@@ -79,6 +77,13 @@ class Dashboard extends GetView {
 
   Widget _eventButton(FloatingEvent event) {
     return Container(
+      margin: EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color:  Theme.of(Get.context!).colorScheme.tertiaryContainer,
+        borderRadius: BorderRadius.all(
+          Radius.circular(8),
+        ),
+      ),
       alignment: Alignment.center,
       child: TextButton(
         style: TextButton.styleFrom(
@@ -100,8 +105,16 @@ class Dashboard extends GetView {
 
   Widget _eventSlider(FloatingEvent event) {
     return Container(
+      margin: EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color:  Theme.of(Get.context!).colorScheme.tertiaryContainer,
+        borderRadius: BorderRadius.all(
+          Radius.circular(8),
+        ),
+      ),
       alignment: Alignment.center,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(event.title ?? ""),
           Slider(
@@ -117,8 +130,16 @@ class Dashboard extends GetView {
 
   Widget _eventToggle(FloatingEvent event) {
     return Container(
+      margin: EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color:  Theme.of(Get.context!).colorScheme.tertiaryContainer,
+        borderRadius: BorderRadius.all(
+          Radius.circular(8),
+        ),
+      ),
       alignment: Alignment.center,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(event.title ?? ""),
           Switch(
