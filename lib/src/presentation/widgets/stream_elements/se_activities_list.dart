@@ -229,7 +229,7 @@ Widget _activityCollapsed(
     child: Container(
       padding: EdgeInsets.only(left: 3, right: 3, top: 5, bottom: 5),
       decoration: BoxDecoration(
-        color: activity.colorsForEnum()[0],
+        color: activity.colorsForEnum()[1],
         borderRadius: BorderRadius.all(
           Radius.circular(5),
         ),
@@ -246,10 +246,17 @@ Widget _activityCollapsed(
               text: TextSpan(
                 children: [
                   TextSpan(
+                    text: activity.textFromEnum(),
+                    style: TextStyle(
+                      color: activity.colorsForEnum()[0],
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  WidgetSpan(child: SizedBox(width: 4)),
+                  TextSpan(
                     text: activity.username,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  TextSpan(text: activity.textFromEnum()),
                   TextSpan(
                     text: activity.message != null
                         ? ' "' + activity.message! + '"'
@@ -277,7 +284,7 @@ Widget _activityExpanded(
     child: Container(
       padding: EdgeInsets.only(left: 3, right: 3, top: 5, bottom: 20),
       decoration: BoxDecoration(
-        color: activity.colorsForEnum()[0],
+        color: activity.colorsForEnum()[1],
         borderRadius: BorderRadius.all(
           Radius.circular(5),
         ),
@@ -296,10 +303,17 @@ Widget _activityExpanded(
                 child: RichText(
                   text: TextSpan(children: [
                     TextSpan(
+                      text: activity.textFromEnum(),
+                      style: TextStyle(
+                        color: activity.colorsForEnum()[0],
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    WidgetSpan(child: SizedBox(width: 4)),
+                    TextSpan(
                       text: activity.username,
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    TextSpan(text: activity.textFromEnum()),
                   ]),
                 ),
               ),

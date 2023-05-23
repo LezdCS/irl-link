@@ -64,29 +64,29 @@ class SeActivity extends Equatable {
         //background color
         colors.add(Color(0xFFA47CED));
         //circle color
-        colors.add(Color(0xFF6441A5));
+        colors.add(Color(0xFF341D5B));
         break;
       case ActivityType.cheer:
         //background color
-        colors.add(Color(0xFF7B3EEA));
+        colors.add(Color(0xFF8B52F3));
         //circle color
-        colors.add(Color(0xFF32097F));
+        colors.add(Color(0xFF230D4C));
         break;
       case ActivityType.tip:
         //background color
-        colors.add(Color(0xFF149911));
+        colors.add(Color(0xFF13C50F));
         //circle color
-        colors.add(Color(0xFF256D1B));
+        colors.add(Color(0xFF0C250A));
         break;
       case ActivityType.raid:
         //background color
-        colors.add(Color(0xFF4A001F));
+        colors.add(Color(0xFFCE1260));
         //circle color
         colors.add(Color(0xFF2E0219));
         break;
       case ActivityType.host:
         //background color
-        colors.add(Color(0xFF4A001F));
+        colors.add(Color(0xFFCE1260));
         //circle color
         colors.add(Color(0xFF2E0219));
         break;
@@ -98,28 +98,28 @@ class SeActivity extends Equatable {
     String s = '';
     switch (this.activityType) {
       case ActivityType.follow:
-        s = " just followed!";
+        s = "Follow";
         break;
       case ActivityType.subscription:
         bool isPrime = this.tier == "prime";
         bool isGift = this.gifted == true;
         if (isGift) {
-          s = ' got gifted a sub by ${this.sender}';
+          s = 'Got gifted a sub by ${this.sender}';
         } else {
-          s = ' subscribed${isPrime ? " with prime" : ""}!';
+          s = 'Subscribed${isPrime ? " with prime" : ""}';
         }
         break;
       case ActivityType.cheer:
-        s = ' sent ${this.amount} bits!';
+        s = 'Cheered ${this.amount} bits!';
         break;
       case ActivityType.tip:
-        s = ' donated ${this.amount}\$!';
+        s = 'Donated ${this.amount}\$!';
         break;
       case ActivityType.raid:
-        s = ' is raiding with ${this.amount} viewers!';
+        s = '${this.amount} Raiders';
         break;
       case ActivityType.host:
-        s = ' is hosting with ${this.amount} viewers!';
+        s = '${this.amount} Hosted viewers';
         break;
     }
     return s;
