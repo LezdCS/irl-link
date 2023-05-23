@@ -105,9 +105,8 @@ class SeActivity extends Equatable {
         bool isGift = this.gifted == true;
         if (isGift) {
           s = ' got gifted a sub by ${this.sender}';
-        }
-        else {
-          s = ' subscribed${isPrime? " with prime": ""}!';
+        } else {
+          s = ' subscribed${isPrime ? " with prime" : ""}!';
         }
         break;
       case ActivityType.cheer:
@@ -124,5 +123,48 @@ class SeActivity extends Equatable {
         break;
     }
     return s;
+  }
+
+  Icon getIcon() {
+    Icon icon = Icon(Icons.person);
+    switch (this.activityType) {
+      case ActivityType.follow:
+        icon = Icon(
+          Icons.person_add,
+          size: 18,
+        );
+        break;
+      case ActivityType.subscription:
+        icon = Icon(
+          Icons.star,
+          size: 18,
+        );
+        break;
+      case ActivityType.cheer:
+        icon = Icon(
+          Icons.toll,
+          size: 18,
+        );
+        break;
+      case ActivityType.tip:
+        icon = Icon(
+          Icons.attach_money,
+          size: 18,
+        );
+        break;
+      case ActivityType.raid:
+        icon = Icon(
+          Icons.diversity_3,
+          size: 18,
+        );
+        break;
+      case ActivityType.host:
+        icon = Icon(
+          Icons.diversity_3,
+          size: 18,
+        );
+        break;
+    }
+    return icon;
   }
 }

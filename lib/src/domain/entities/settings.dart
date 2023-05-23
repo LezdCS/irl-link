@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:irllink/src/domain/entities/settings/chat_events_settings.dart';
 import 'package:irllink/src/domain/entities/settings/floating_dashboard_settings.dart';
+import 'package:irllink/src/domain/entities/settings/stream_elements_settings.dart';
 
 class Settings extends Equatable {
   //CHAT SETTINGS
@@ -26,6 +27,7 @@ class Settings extends Equatable {
   final String? streamElementsAccessToken;
   final List? browserTabs;
   final List? obsConnectionsHistory;
+  final StreamElementsSettings? streamElementsSettings;
 
   //TTS SETTIGS
   final bool? ttsEnabled;
@@ -63,6 +65,7 @@ class Settings extends Equatable {
     required this.streamElementsAccessToken,
     required this.browserTabs,
     required this.obsConnectionsHistory,
+    required this.streamElementsSettings,
 
     //TTS SETTIGS
     required this.ttsEnabled,
@@ -110,6 +113,15 @@ class Settings extends Equatable {
     this.streamElementsAccessToken = "",
     this.browserTabs = const [],
     this.obsConnectionsHistory = const [],
+    this.streamElementsSettings = const StreamElementsSettings(
+      showFollowerActivity: true,
+      showSubscriberActivity: true,
+      showDonationActivity: true,
+      showCheerActivity: true,
+      showRaidActivity: true,
+      showHostActivity: true,
+      showMerchActivity: true,
+    ),
 
     //TTS SETTINGS
     this.ttsEnabled = false,
@@ -146,6 +158,7 @@ class Settings extends Equatable {
         'streamElementsAccessToken': streamElementsAccessToken,
         'browserTabs': browserTabs,
         'obsConnectionsHistory': obsConnectionsHistory,
+        'streamElementsSettings': streamElementsSettings?.toJson(),
         //TTS
         'ttsEnabled': ttsEnabled,
         'language': language,
@@ -183,6 +196,7 @@ class Settings extends Equatable {
       streamElementsAccessToken,
       browserTabs,
       obsConnectionsHistory,
+      streamElementsSettings,
       //TTS
       ttsEnabled,
       language,
@@ -222,6 +236,7 @@ class Settings extends Equatable {
     String? streamElementsAccessToken,
     List? browserTabs,
     List? obsConnectionsHistory,
+    StreamElementsSettings? streamElementsSettings,
     //TTS
     bool? ttsEnabled,
     String? language,
@@ -259,6 +274,8 @@ class Settings extends Equatable {
         browserTabs: browserTabs ?? this.browserTabs,
         obsConnectionsHistory:
             obsConnectionsHistory ?? this.obsConnectionsHistory,
+        streamElementsSettings:
+            streamElementsSettings ?? this.streamElementsSettings,
         //TTS
         ttsEnabled: ttsEnabled ?? this.ttsEnabled,
         language: language ?? this.language,

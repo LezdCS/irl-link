@@ -51,40 +51,180 @@ class SeActivitiesList extends GetView {
   }
 
   Widget _activitiesSettings() {
-    List<String> settingsValues = [
-      "Followers",
-      "Subscribers",
-      "Donations",
-      "Bits",
-      "Raids",
-      "Hosts",
-      "Merch",
-    ];
     return PopupMenuButton(
       offset: Offset(30, 10),
       color: Theme.of(Get.context!).colorScheme.secondary,
       child: Icon(Icons.settings),
-      itemBuilder: (context) => List.generate(settingsValues.length, (index) {
-        return PopupMenuItem(
-          child: CheckboxListTile(
-            activeColor: Colors.deepPurple[600],
-            controlAffinity: ListTileControlAffinity.leading,
-            title: Text(
-              settingsValues[index],
-              style: TextStyle(
-                color: Theme.of(context).textTheme.bodyLarge!.color,
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          child: Obx(
+            () => CheckboxListTile(
+              activeColor: Colors.deepPurple[600],
+              controlAffinity: ListTileControlAffinity.leading,
+              title: Text(
+                "Followers",
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyLarge!.color,
+                ),
               ),
+              value: controller.homeViewController.settings.value
+                  .streamElementsSettings!.showFollowerActivity,
+              onChanged: (bool? value) {
+                controller.homeViewController.settings.value =
+                    controller.homeViewController.settings.value.copyWith(
+                  streamElementsSettings: controller
+                      .homeViewController.settings.value.streamElementsSettings!
+                      .copyWith(showFollowerActivity: value),
+                );
+                controller.homeViewController.homeEvents.setSettings(
+                  settings: controller.homeViewController.settings.value,
+                );
+              },
             ),
-            value: true,
-            onChanged: (bool? value) {},
           ),
-        );
-      }),
+        ),
+        PopupMenuItem(
+          child: Obx(
+            () => CheckboxListTile(
+              activeColor: Colors.deepPurple[600],
+              controlAffinity: ListTileControlAffinity.leading,
+              title: Text(
+                "Subscriptions",
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyLarge!.color,
+                ),
+              ),
+              value: controller.homeViewController.settings.value
+                  .streamElementsSettings!.showSubscriberActivity,
+              onChanged: (bool? value) {
+                controller.homeViewController.settings.value =
+                    controller.homeViewController.settings.value.copyWith(
+                  streamElementsSettings: controller
+                      .homeViewController.settings.value.streamElementsSettings!
+                      .copyWith(showSubscriberActivity: value),
+                );
+                controller.homeViewController.homeEvents.setSettings(
+                  settings: controller.homeViewController.settings.value,
+                );
+              },
+            ),
+          ),
+        ),
+        PopupMenuItem(
+          child: Obx(
+            () => CheckboxListTile(
+              activeColor: Colors.deepPurple[600],
+              controlAffinity: ListTileControlAffinity.leading,
+              title: Text(
+                "Bits",
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyLarge!.color,
+                ),
+              ),
+              value: controller.homeViewController.settings.value
+                  .streamElementsSettings!.showCheerActivity,
+              onChanged: (bool? value) {
+                controller.homeViewController.settings.value =
+                    controller.homeViewController.settings.value.copyWith(
+                  streamElementsSettings: controller
+                      .homeViewController.settings.value.streamElementsSettings!
+                      .copyWith(showCheerActivity: value),
+                );
+                controller.homeViewController.homeEvents.setSettings(
+                  settings: controller.homeViewController.settings.value,
+                );
+              },
+            ),
+          ),
+        ),
+        PopupMenuItem(
+          child: Obx(
+            () => CheckboxListTile(
+              activeColor: Colors.deepPurple[600],
+              controlAffinity: ListTileControlAffinity.leading,
+              title: Text(
+                "Donations",
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyLarge!.color,
+                ),
+              ),
+              value: controller.homeViewController.settings.value
+                  .streamElementsSettings!.showDonationActivity,
+              onChanged: (bool? value) {
+                controller.homeViewController.settings.value =
+                    controller.homeViewController.settings.value.copyWith(
+                  streamElementsSettings: controller
+                      .homeViewController.settings.value.streamElementsSettings!
+                      .copyWith(showDonationActivity: value),
+                );
+                controller.homeViewController.homeEvents.setSettings(
+                  settings: controller.homeViewController.settings.value,
+                );
+              },
+            ),
+          ),
+        ),
+        PopupMenuItem(
+          child: Obx(
+            () => CheckboxListTile(
+              activeColor: Colors.deepPurple[600],
+              controlAffinity: ListTileControlAffinity.leading,
+              title: Text(
+                "Raids",
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyLarge!.color,
+                ),
+              ),
+              value: controller.homeViewController.settings.value
+                  .streamElementsSettings!.showRaidActivity,
+              onChanged: (bool? value) {
+                controller.homeViewController.settings.value =
+                    controller.homeViewController.settings.value.copyWith(
+                  streamElementsSettings: controller
+                      .homeViewController.settings.value.streamElementsSettings!
+                      .copyWith(showRaidActivity: value),
+                );
+                controller.homeViewController.homeEvents.setSettings(
+                  settings: controller.homeViewController.settings.value,
+                );
+              },
+            ),
+          ),
+        ),
+        PopupMenuItem(
+          child: Obx(
+            () => CheckboxListTile(
+              activeColor: Colors.deepPurple[600],
+              controlAffinity: ListTileControlAffinity.leading,
+              title: Text(
+                "Hosts",
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyLarge!.color,
+                ),
+              ),
+              value: controller.homeViewController.settings.value
+                  .streamElementsSettings!.showHostActivity,
+              onChanged: (bool? value) {
+                controller.homeViewController.settings.value =
+                    controller.homeViewController.settings.value.copyWith(
+                  streamElementsSettings: controller
+                      .homeViewController.settings.value.streamElementsSettings!
+                      .copyWith(showHostActivity: value),
+                );
+                controller.homeViewController.homeEvents.setSettings(
+                  settings: controller.homeViewController.settings.value,
+                );
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
 
-Widget _activityCollapsed(StreamelementsViewController controller, SeActivity activity) {
+Widget _activityCollapsed(
+    StreamelementsViewController controller, SeActivity activity) {
   return ExpandableButton(
     child: Container(
       padding: EdgeInsets.only(left: 3, right: 3, top: 5, bottom: 5),
@@ -98,15 +238,8 @@ Widget _activityCollapsed(StreamelementsViewController controller, SeActivity ac
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            margin: EdgeInsets.only(left: 8, right: 8),
-            width: 10.0,
-            height: 10.0,
-            decoration: BoxDecoration(
-              color: activity.colorsForEnum()[1],
-              shape: BoxShape.circle,
-            ),
-          ),
+          activity.getIcon(),
+          SizedBox(width: 4),
           Expanded(
             child: RichText(
               overflow: TextOverflow.ellipsis,
@@ -138,7 +271,8 @@ Widget _activityCollapsed(StreamelementsViewController controller, SeActivity ac
   );
 }
 
-Widget _activityExpanded( StreamelementsViewController controller ,SeActivity activity) {
+Widget _activityExpanded(
+    StreamelementsViewController controller, SeActivity activity) {
   return ExpandableButton(
     child: Container(
       padding: EdgeInsets.only(left: 3, right: 3, top: 5, bottom: 20),
@@ -156,15 +290,8 @@ Widget _activityExpanded( StreamelementsViewController controller ,SeActivity ac
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                margin: EdgeInsets.only(left: 8, right: 8),
-                width: 10.0,
-                height: 10.0,
-                decoration: BoxDecoration(
-                  color: activity.colorsForEnum()[1],
-                  shape: BoxShape.circle,
-                ),
-              ),
+              activity.getIcon(),
+              SizedBox(width: 4),
               Expanded(
                 child: RichText(
                   text: TextSpan(children: [
