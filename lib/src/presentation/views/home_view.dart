@@ -281,8 +281,8 @@ class HomeView extends GetView<HomeViewController> {
                 if (controller.twitchData != null) {
                   controller.chatViewController.applySettings();
                 }
-                controller.obsTabViewController.applySettings();
-                controller.streamelementsViewController.applySettings();
+                controller.obsTabViewController?.applySettings();
+                controller.streamelementsViewController?.applySettings();
               },
               child: Icon(
                 Icons.settings,

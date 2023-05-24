@@ -43,8 +43,8 @@ class HomeViewController extends GetxController
   //emote picker
   RxBool isPickingEmote = false.obs;
   late ChatViewController chatViewController;
-  late ObsTabViewController obsTabViewController;
-  late StreamelementsViewController streamelementsViewController;
+  ObsTabViewController? obsTabViewController;
+  StreamelementsViewController? streamelementsViewController;
 
   late Rx<Settings> settings = Settings.defaultSettings().obs;
 
