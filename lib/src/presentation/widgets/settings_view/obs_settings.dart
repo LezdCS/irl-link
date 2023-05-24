@@ -124,7 +124,7 @@ class ObsSettings extends StatelessWidget {
                           color: Colors.white,
                         ),
                       ),
-                      SizedBox(width: 10),
+                      SizedBox(width: 5),
                       Icon(Icons.qr_code, color: Colors.white),
                     ],
                   ),
