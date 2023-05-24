@@ -93,8 +93,6 @@ class HomeViewController extends GetxController
   @override
   void onReady() {
     chatViewController = Get.find<ChatViewController>();
-    obsTabViewController = Get.find<ObsTabViewController>();
-    streamelementsViewController = Get.find<StreamelementsViewController>();
     super.onReady();
   }
 
@@ -116,11 +114,13 @@ class HomeViewController extends GetxController
         ) !=
         null;
     if (isSubscribed && settings.value.streamElementsAccessToken != null && settings.value.streamElementsAccessToken!.isNotEmpty) {
+      streamelementsViewController = Get.find<StreamelementsViewController>();
       StreamelementsTabView streamelementsPage = StreamelementsTabView();
       tabElements.add(streamelementsPage);
     }
 
     if (settings.value.isObsConnected! || twitchData == null) {
+      obsTabViewController = Get.find<ObsTabViewController>();
       ObsTabView obsPage = ObsTabView();
       tabElements.add(obsPage);
     }
@@ -190,7 +190,7 @@ class HomeViewController extends GetxController
     {
       if (value.error != null) return;
       settings.value = value.data!;
-      await this.generateTabs();
+      await generateTabs();
       if (!settings.value.isDarkMode!) {
         Get.changeThemeMode(ThemeMode.light);
       }
@@ -276,6 +276,7 @@ class HomeViewController extends GetxController
 
   Future<void> deliverProduct(PurchaseDetails purchaseDetails) async {
     purchases.add(purchaseDetails);
+    getSettings();
     purchasePending.value = false;
 
     if (purchaseDetails.status == PurchaseStatus.purchased) {

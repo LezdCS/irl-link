@@ -42,7 +42,6 @@ class HomeBindings extends Bindings {
             ),
           ),
         ));
-    Get.find<ObsTabViewController>();
 
     Get.lazyPut<StreamelementsViewController>(
       () => StreamelementsViewController(
@@ -56,7 +55,6 @@ class HomeBindings extends Bindings {
         ),
       ),
     );
-    Get.find<StreamelementsViewController>();
 
     Get.lazyPut<ChatViewController>(
       () => ChatViewController(
