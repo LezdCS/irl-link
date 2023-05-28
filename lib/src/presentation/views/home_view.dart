@@ -1,5 +1,6 @@
 import 'package:floating_draggable_widget/floating_draggable_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
@@ -25,91 +26,96 @@ class HomeView extends GetView<HomeViewController> {
         MoveToBackground.moveTaskToBack();
         return false;
       },
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        body: Obx(
-          () => FloatingDraggableWidget(
-            floatingWidget: InkWell(
-              // onTap: () {
-                // controller.displayDashboard.value =
-                //     !controller.displayDashboard.value;
-              // },
-              // child: Container(
-              //   decoration: BoxDecoration(
-              //     shape: BoxShape.circle,
-              //     color: context.theme.colorScheme.tertiary,
-              //   ),
-              //   child: Icon(
-              //     Icons.dashboard_rounded,
-              //     size: 30,
-              //   ),
-              // ),
-            ),
-            floatingWidgetWidth: 0,
-            floatingWidgetHeight: 0,
-            dy: height - 130,
-            dx: width - 70,
-            mainScreenWidget: Listener(
-              onPointerUp: (_) => {
-                FocusScope.of(context).unfocus(),
-              },
-              child: Container(
-                constraints: BoxConstraints.expand(),
-                decoration: BoxDecoration(
-                  color: context.theme.colorScheme.background,
-                ),
-                child: SafeArea(
-                  child: Stack(
-                    children: [
-                      Listener(
-                        onPointerUp: (_) => {
-                          controller.displayDashboard.value = false,
-                        },
-                        child: SplitView(
-                          controller: controller.splitViewController,
-                          gripColor: context.theme.colorScheme.secondary,
-                          gripColorActive: context.theme.colorScheme.secondary,
-                          gripSize: 8,
-                          viewMode: context.isPortrait
-                              ? SplitViewMode.Vertical
-                              : SplitViewMode.Horizontal,
-                          indicator: SplitIndicator(
+      child: AnnotatedRegion(
+        value: SystemUiOverlayStyle(
+          systemNavigationBarColor: Theme.of(context).colorScheme.background,
+        ),
+        child: Scaffold(
+          resizeToAvoidBottomInset: true,
+          body: Obx(
+            () => FloatingDraggableWidget(
+              floatingWidget: InkWell(
+                // onTap: () {
+                  // controller.displayDashboard.value =
+                  //     !controller.displayDashboard.value;
+                // },
+                // child: Container(
+                //   decoration: BoxDecoration(
+                //     shape: BoxShape.circle,
+                //     color: context.theme.colorScheme.tertiary,
+                //   ),
+                //   child: Icon(
+                //     Icons.dashboard_rounded,
+                //     size: 30,
+                //   ),
+                // ),
+              ),
+              floatingWidgetWidth: 0,
+              floatingWidgetHeight: 0,
+              dy: height - 130,
+              dx: width - 70,
+              mainScreenWidget: Listener(
+                onPointerUp: (_) => {
+                  FocusScope.of(context).unfocus(),
+                },
+                child: Container(
+                  constraints: BoxConstraints.expand(),
+                  decoration: BoxDecoration(
+                    color: context.theme.colorScheme.background,
+                  ),
+                  child: SafeArea(
+                    child: Stack(
+                      children: [
+                        Listener(
+                          onPointerUp: (_) => {
+                            controller.displayDashboard.value = false,
+                          },
+                          child: SplitView(
+                            controller: controller.splitViewController,
+                            gripColor: context.theme.colorScheme.secondary,
+                            gripColorActive: context.theme.colorScheme.secondary,
+                            gripSize: 8,
                             viewMode: context.isPortrait
                                 ? SplitViewMode.Vertical
                                 : SplitViewMode.Horizontal,
-                            color: Color(0xFF464444),
+                            indicator: SplitIndicator(
+                              viewMode: context.isPortrait
+                                  ? SplitViewMode.Vertical
+                                  : SplitViewMode.Horizontal,
+                              color: Color(0xFF464444),
+                            ),
+                            activeIndicator: SplitIndicator(
+                              color: Color(0xFF464444),
+                              viewMode: context.isPortrait
+                                  ? SplitViewMode.Vertical
+                                  : SplitViewMode.Horizontal,
+                              isActive: true,
+                            ),
+                            children: [
+                              controller.tabElements.length >= 1
+                                  ? _top(context, height, width)
+                                  : Text(
+                                      "No tabs",
+                                      textAlign: TextAlign.center,
+                                    ),
+                              _bottom(context, height, width),
+                            ],
                           ),
-                          activeIndicator: SplitIndicator(
-                            color: Color(0xFF464444),
-                            viewMode: context.isPortrait
-                                ? SplitViewMode.Vertical
-                                : SplitViewMode.Horizontal,
-                            isActive: true,
+                        ),
+                        Visibility(
+                          visible: controller.displayDashboard.value,
+                          child: Dashboard(
+                            controller: controller,
                           ),
-                          children: [
-                            controller.tabElements.length >= 1
-                                ? _top(context, height, width)
-                                : Text(
-                                    "No tabs",
-                                    textAlign: TextAlign.center,
-                                  ),
-                            _bottom(context, height, width),
-                          ],
                         ),
-                      ),
-                      Visibility(
-                        visible: controller.displayDashboard.value,
-                        child: Dashboard(
-                          controller: controller,
+                        Visibility(
+                          visible: controller.purchasePending.value,
+                          child: CircularProgressIndicator(
+                            color: context.theme.colorScheme.tertiary,
+                          ),
                         ),
-                      ),
-                      Visibility(
-                        visible: controller.purchasePending.value,
-                        child: CircularProgressIndicator(
-                          color: context.theme.colorScheme.tertiary,
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
