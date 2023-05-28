@@ -296,75 +296,84 @@ class SettingsView extends GetView<SettingsViewController> {
                           flex: 7,
                           child: Padding(
                             padding: const EdgeInsets.only(right: 10.0),
-                            child: TextFormField(
-                              controller:
-                                  controller.alternateChannelChatController,
-                              onChanged: (value) {
-                                controller.homeViewController.settings.value =
-                                    controller.homeViewController.settings.value
-                                        .copyWith(
-                                            alternateChannelName: controller
-                                                .alternateChannelChatController
-                                                .text
-                                                .toLowerCase()
-                                                .trim());
-                                controller.saveSettings();
-                              },
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .color,
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8),
+                                ),
+                                color: Theme.of(context).colorScheme.secondary,
                               ),
-                              decoration: InputDecoration(
-                                isDense: true,
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 12),
-                                enabledBorder: Theme.of(context)
-                                    .inputDecorationTheme
-                                    .border,
-                                hintText: 'Nickname',
-                                labelText: 'Twitch username',
-                                filled: false,
-                                labelStyle: TextStyle(
-                                  color: Theme.of(context).colorScheme.tertiary,
+                              child: TextFormField(
+                                controller:
+                                    controller.alternateChannelChatController,
+                                onChanged: (value) {
+                                  controller.homeViewController.settings.value =
+                                      controller.homeViewController.settings.value
+                                          .copyWith(
+                                              alternateChannelName: controller
+                                                  .alternateChannelChatController
+                                                  .text
+                                                  .toLowerCase()
+                                                  .trim());
+                                  controller.saveSettings();
+                                },
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .color,
                                 ),
-                                suffixIconConstraints: BoxConstraints(
-                                  minWidth: 2,
-                                  minHeight: 2,
+                                decoration: InputDecoration(
+                                  isDense: true,
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 12),
+                                  enabledBorder: Theme.of(context)
+                                      .inputDecorationTheme
+                                      .border,
+                                  hintText: 'Nickname',
+                                  labelText: 'Twitch username',
+                                  filled: false,
+                                  labelStyle: TextStyle(
+                                    color: Theme.of(context).colorScheme.tertiary,
+                                  ),
+                                  suffixIconConstraints: BoxConstraints(
+                                    minWidth: 2,
+                                    minHeight: 2,
+                                  ),
+                                  suffixIcon: controller
+                                          .alternateChannelChatController
+                                          .text
+                                          .isNotEmpty
+                                      ? IconButton(
+                                          iconSize: 20,
+                                          icon: Icon(
+                                            Icons.clear,
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge!
+                                                .color,
+                                          ),
+                                          onPressed: () {
+                                            controller
+                                                .alternateChannelChatController
+                                                .clear();
+                                            controller.homeViewController.settings
+                                                    .value =
+                                                controller.homeViewController
+                                                    .settings.value
+                                                    .copyWith(
+                                                        alternateChannelName:
+                                                            controller
+                                                                .alternateChannelChatController
+                                                                .text
+                                                                .toLowerCase()
+                                                                .trim());
+                                            controller.saveSettings();
+                                          },
+                                        )
+                                      : null,
                                 ),
-                                suffixIcon: controller
-                                        .alternateChannelChatController
-                                        .text
-                                        .isNotEmpty
-                                    ? IconButton(
-                                        iconSize: 20,
-                                        icon: Icon(
-                                          Icons.clear,
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge!
-                                              .color,
-                                        ),
-                                        onPressed: () {
-                                          controller
-                                              .alternateChannelChatController
-                                              .clear();
-                                          controller.homeViewController.settings
-                                                  .value =
-                                              controller.homeViewController
-                                                  .settings.value
-                                                  .copyWith(
-                                                      alternateChannelName:
-                                                          controller
-                                                              .alternateChannelChatController
-                                                              .text
-                                                              .toLowerCase()
-                                                              .trim());
-                                          controller.saveSettings();
-                                        },
-                                      )
-                                    : null,
                               ),
                             ),
                           ),
@@ -604,7 +613,7 @@ class SettingsView extends GetView<SettingsViewController> {
                   children: [
                     Expanded(
                       child: Text(
-                        "Display viewer counts",
+                        "Display viewer count",
                         style: TextStyle(
                           color: Theme.of(context).textTheme.bodyLarge!.color,
                           fontSize: 18,
@@ -739,13 +748,11 @@ class SettingsView extends GetView<SettingsViewController> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      child: Text(
-                        "OBS",
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge!.color,
-                          fontSize: 18,
-                        ),
+                    Text(
+                      "OBS",
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyLarge!.color,
+                        fontSize: 18,
                       ),
                     ),
                     Container(
@@ -774,7 +781,7 @@ class SettingsView extends GetView<SettingsViewController> {
                     controller: controller,
                   ),
                 ),
-                SizedBox(height: 12),
+                SizedBox(height: 10),
                 StreamElements(controller: controller),
               ],
             ),
