@@ -3,9 +3,10 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:obs_websocket/obs_websocket.dart';
+
+import 'home_view_controller.dart';
 
 class ObsTabViewController extends GetxController {
   ObsTabViewController({required this.homeEvents});
@@ -27,20 +28,21 @@ class ObsTabViewController extends GetxController {
   RxBool isStreaming = false.obs;
   RxBool isRecording = false.obs;
 
-  late Rx<Settings> settings = Settings.defaultSettings().obs;
-
   RxMap<Map, DateTime> obsData = <Map, DateTime>{}.obs;
+
+  late HomeViewController homeViewController;
 
   @override
   void onInit() {
     obsData[{}] = DateTime.now();
+    homeViewController = Get.find<HomeViewController>();
 
     super.onInit();
   }
 
   @override
   Future<void> onReady() async {
-    await getSettings();
+    await applySettings();
     super.onReady();
   }
 
@@ -111,7 +113,7 @@ class ObsTabViewController extends GetxController {
       alertMessage.value = "Connected.";
       isConnected.value = true;
 
-      List obsConnectionsHistory = settings.value.obsConnectionsHistory!;
+      List obsConnectionsHistory = homeViewController.settings.value.obsConnectionsHistory!;
       if (obsConnectionsHistory.firstWhereOrNull(
             (element) =>
                 element['url'] == url && element['password'] == password,
@@ -122,9 +124,9 @@ class ObsTabViewController extends GetxController {
           "password": password,
         });
 
-        settings.value = settings.value
+        homeViewController.settings.value = homeViewController.settings.value
             .copyWith(obsConnectionsHistory: obsConnectionsHistory);
-        homeEvents.setSettings(settings: settings.value);
+        homeEvents.setSettings(settings: homeViewController.settings.value);
       }
 
       getSceneList();
@@ -201,7 +203,9 @@ class ObsTabViewController extends GetxController {
     sourcesVolumesMap.clear();
     sources.forEach((source) async {
       var response = await obsWebSocket!.send("GetInputVolume",
-          {"inputName": source.sourceName}).catchError((e) {});
+          {"inputName": source.sourceName}).catchError((e) {
+            return null;
+      });
       if (response?.requestStatus.code == 100) {
         sourcesVolumesMap[source.sourceName] =
             response?.responseData?['inputVolumeDb'];
@@ -240,23 +244,13 @@ class ObsTabViewController extends GetxController {
     sceneScreenshot.value = Base64Decoder().convert(imageBase64);
   }
 
-  Future getSettings() async {
-    await homeEvents.getSettings().then((value) async => {
-          if (value.error == null)
-            {
-              settings.value = value.data!,
-              this.applySettings(),
-            },
-        });
-  }
-
   Future applySettings() async {
     if (obsWebSocket != null) {
       obsWebSocket!.close();
     }
-    if (settings.value.isObsConnected!) {
-      this.connectWs(settings.value.obsWebsocketUrl!,
-          settings.value.obsWebsocketPassword!);
+    if (homeViewController.settings.value.isObsConnected!) {
+      this.connectWs(homeViewController.settings.value.obsWebsocketUrl!,
+          homeViewController.settings.value.obsWebsocketPassword!);
     }
   }
 }

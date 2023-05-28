@@ -19,6 +19,7 @@ import 'package:web_socket_channel/io.dart';
 
 import '../../domain/entities/chat/subscription_event.dart';
 import '../../domain/entities/chat/sub_gift_event.dart';
+import 'home_view_controller.dart';
 
 class ChatViewController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -50,13 +51,16 @@ class ChatViewController extends GetxController
   Rxn<TwitchChatMessage> selectedMessage = Rxn<TwitchChatMessage>();
   late TextEditingController banDurationInputController;
 
-  late Rx<Settings> settings = Settings.defaultSettings().obs;
   Timer? chatDemoTimer;
 
   late FlutterTts flutterTts;
 
+  late HomeViewController homeViewController;
+
   @override
   void onInit() async {
+    homeViewController = Get.find<HomeViewController>();
+
     flutterTts = FlutterTts();
     flutterTts.setEngine(flutterTts.getDefaultEngine.toString());
 
@@ -64,7 +68,7 @@ class ChatViewController extends GetxController
     banDurationInputController = TextEditingController();
     if (Get.arguments != null) {
       twitchData = Get.arguments[0];
-      await getSettings();
+      await applySettings();
     } else {
       chatDemoTimer = Timer.periodic(
         Duration(seconds: 3),
@@ -226,7 +230,7 @@ class ChatViewController extends GetxController
           case "PRIVMSG":
             {
               if (messageMapped['bits'] != null) {
-                if (!settings.value.chatEventsSettings!.bitsDonations) {
+                if (!homeViewController.settings.value.chatEventsSettings!.bitsDonations) {
                   return;
                 }
                 BitDonationEvent bitDonationEvent = BitDonationEvent.fromString(
@@ -234,20 +238,20 @@ class ChatViewController extends GetxController
                   cheerEmotes: cheerEmotes,
                   thirdPartEmotes: thirdPartEmotes,
                   message: message,
-                  settings: settings.value,
+                  settings: homeViewController.settings.value,
                 );
-                if (settings.value.hiddenUsersIds!
+                if (homeViewController.settings.value.hiddenUsersIds!
                     .contains(bitDonationEvent.authorId)) {
                   return;
                 }
-                if (settings.value.ttsEnabled!) {
+                if (homeViewController.settings.value.ttsEnabled!) {
                   readTts(bitDonationEvent);
                 }
                 chatMessages.add(bitDonationEvent);
                 break;
               }
               if (messageMapped["custom-reward-id"] != null) {
-                if (!settings.value.chatEventsSettings!.redemptions) {
+                if (!homeViewController.settings.value.chatEventsSettings!.redemptions) {
                   return;
                 }
                 RewardRedemptionEvent rewardRedemptionEvent =
@@ -256,13 +260,13 @@ class ChatViewController extends GetxController
                   thirdPartEmotes: thirdPartEmotes,
                   cheerEmotes: cheerEmotes,
                   message: message,
-                  settings: settings.value,
+                  settings: homeViewController.settings.value,
                 );
-                if (settings.value.hiddenUsersIds!
+                if (homeViewController.settings.value.hiddenUsersIds!
                     .contains(rewardRedemptionEvent.authorId)) {
                   return;
                 }
-                if (settings.value.ttsEnabled!) {
+                if (homeViewController.settings.value.ttsEnabled!) {
                   readTts(rewardRedemptionEvent);
                 }
                 chatMessages.add(rewardRedemptionEvent);
@@ -274,13 +278,13 @@ class ChatViewController extends GetxController
                 thirdPartEmotes: thirdPartEmotes,
                 cheerEmotes: cheerEmotes,
                 message: message,
-                settings: settings.value,
+                settings: homeViewController.settings.value,
               );
-              if (settings.value.hiddenUsersIds!
+              if (homeViewController.settings.value.hiddenUsersIds!
                   .contains(chatMessage.authorId)) {
                 return;
               }
-              if (settings.value.ttsEnabled!) {
+              if (homeViewController.settings.value.ttsEnabled!) {
                 readTts(chatMessage);
               }
               chatMessages.add(chatMessage);
@@ -339,7 +343,7 @@ class ChatViewController extends GetxController
             String messageId = messageMapped['msg-id']!;
             switch (messageId) {
               case "announcement":
-                if (!settings.value.chatEventsSettings!.announcements) {
+                if (!homeViewController.settings.value.chatEventsSettings!.announcements) {
                   return;
                 }
                 AnnouncementEvent announcementEvent =
@@ -348,19 +352,19 @@ class ChatViewController extends GetxController
                   thirdPartEmotes: thirdPartEmotes,
                   cheerEmotes: cheerEmotes,
                   message: message,
-                  settings: settings.value,
+                  settings: homeViewController.settings.value,
                 );
-                if (settings.value.hiddenUsersIds!
+                if (homeViewController.settings.value.hiddenUsersIds!
                     .contains(announcementEvent.authorId)) {
                   return;
                 }
-                if (settings.value.ttsEnabled!) {
+                if (homeViewController.settings.value.ttsEnabled!) {
                   readTts(announcementEvent);
                 }
                 chatMessages.add(announcementEvent);
                 break;
               case "sub":
-                if (!settings.value.chatEventsSettings!.subscriptions) {
+                if (!homeViewController.settings.value.chatEventsSettings!.subscriptions) {
                   return;
                 }
                 SubscriptionEvent subMessage = SubscriptionEvent.fromString(
@@ -368,19 +372,19 @@ class ChatViewController extends GetxController
                   thirdPartEmotes: thirdPartEmotes,
                   cheerEmotes: cheerEmotes,
                   message: message,
-                  settings: settings.value,
+                  settings: homeViewController.settings.value,
                 );
-                if (settings.value.hiddenUsersIds!
+                if (homeViewController.settings.value.hiddenUsersIds!
                     .contains(subMessage.authorId)) {
                   return;
                 }
-                if (settings.value.ttsEnabled!) {
+                if (homeViewController.settings.value.ttsEnabled!) {
                   readTts(subMessage);
                 }
                 chatMessages.add(subMessage);
                 break;
               case "resub":
-                if (!settings.value.chatEventsSettings!.subscriptions) {
+                if (!homeViewController.settings.value.chatEventsSettings!.subscriptions) {
                   return;
                 }
                 SubscriptionEvent subMessage = SubscriptionEvent.fromString(
@@ -388,19 +392,19 @@ class ChatViewController extends GetxController
                   thirdPartEmotes: thirdPartEmotes,
                   cheerEmotes: cheerEmotes,
                   message: message,
-                  settings: settings.value,
+                  settings: homeViewController.settings.value,
                 );
-                if (settings.value.hiddenUsersIds!
+                if (homeViewController.settings.value.hiddenUsersIds!
                     .contains(subMessage.authorId)) {
                   return;
                 }
-                if (settings.value.ttsEnabled!) {
+                if (homeViewController.settings.value.ttsEnabled!) {
                   readTts(subMessage);
                 }
                 chatMessages.add(subMessage);
                 break;
               case "subgift":
-                if (!settings.value.chatEventsSettings!.subscriptions) {
+                if (!homeViewController.settings.value.chatEventsSettings!.subscriptions) {
                   return;
                 }
                 SubGiftEvent subGift = SubGiftEvent.fromString(
@@ -408,15 +412,15 @@ class ChatViewController extends GetxController
                   thirdPartEmotes: thirdPartEmotes,
                   cheerEmotes: cheerEmotes,
                   message: message,
-                  settings: settings.value,
+                  settings: homeViewController.settings.value,
                 );
-                if (settings.value.hiddenUsersIds!.contains(subGift.authorId)) {
+                if (homeViewController.settings.value.hiddenUsersIds!.contains(subGift.authorId)) {
                   return;
                 }
                 chatMessages.add(subGift);
                 break;
               case "raid":
-                if (!settings.value.chatEventsSettings!.incomingRaids) {
+                if (!homeViewController.settings.value.chatEventsSettings!.incomingRaids) {
                   return;
                 }
                 IncomingRaidEvent raid = IncomingRaidEvent.fromString(
@@ -424,9 +428,9 @@ class ChatViewController extends GetxController
                   thirdPartEmotes: thirdPartEmotes,
                   cheerEmotes: cheerEmotes,
                   message: message,
-                  settings: settings.value,
+                  settings: homeViewController.settings.value,
                 );
-                if (settings.value.hiddenUsersIds!.contains(raid.authorId)) {
+                if (homeViewController.settings.value.hiddenUsersIds!.contains(raid.authorId)) {
                   return;
                 }
                 chatMessages.add(raid);
@@ -620,19 +624,19 @@ class ChatViewController extends GetxController
   void hideUser(TwitchChatMessage message) {
     if (twitchData == null) return;
 
-    List hiddenUsersIds = settings.value.hiddenUsersIds! != const []
-        ? settings.value.hiddenUsersIds!
+    List hiddenUsersIds = homeViewController.settings.value.hiddenUsersIds! != const []
+        ? homeViewController.settings.value.hiddenUsersIds!
         : [];
     if (hiddenUsersIds
             .firstWhereOrNull((userId) => userId == message.authorId) ==
         null) {
       //add user
       hiddenUsersIds.add(message.authorId);
-      settings.value = settings.value.copyWith(hiddenUsersIds: hiddenUsersIds);
+      homeViewController.settings.value = homeViewController.settings.value.copyWith(hiddenUsersIds: hiddenUsersIds);
     } else {
       //remove user
       hiddenUsersIds.remove(message.authorId);
-      settings.value = settings.value.copyWith(hiddenUsersIds: hiddenUsersIds);
+      homeViewController.settings.value = homeViewController.settings.value.copyWith(hiddenUsersIds: hiddenUsersIds);
     }
     saveSettings();
     selectedMessage.refresh();
@@ -647,24 +651,14 @@ class ChatViewController extends GetxController
   }
 
   void saveSettings() {
-    homeEvents.setSettings(settings: settings.value);
-  }
-
-  Future getSettings() async {
-    await homeEvents.getSettings().then((value) async => {
-          if (value.error == null)
-            {
-              settings.value = value.data!,
-            },
-          await this.applySettings(),
-        });
+    homeEvents.setSettings(settings: homeViewController.settings.value);
   }
 
   Future applySettings() async {
     String tempIrcChannelJoined = ircChannelJoined;
-    if (settings.value.alternateChannel! &&
-        settings.value.alternateChannelName! != '') {
-      ircChannelJoined = settings.value.alternateChannelName!;
+    if (homeViewController.settings.value.alternateChannel! &&
+        homeViewController.settings.value.alternateChannelName! != '') {
+      ircChannelJoined = homeViewController.settings.value.alternateChannelName!;
       await homeEvents
           .getTwitchUser(
             username: ircChannelJoined,
@@ -686,7 +680,7 @@ class ChatViewController extends GetxController
       joinIrc();
     }
 
-    initTts(settings.value);
+    initTts(homeViewController.settings.value);
   }
 
   void initTts(Settings settings) async {
@@ -719,18 +713,18 @@ class ChatViewController extends GetxController
 
   void readTts(TwitchChatMessage message) {
     //check if user is ignored
-    if (settings.value.ttsUsersToIgnore!.contains(message.authorName)) {
+    if (homeViewController.settings.value.ttsUsersToIgnore!.contains(message.authorName)) {
       return;
     }
     //check if message start with ignored prefix
-    for (String prefix in settings.value.prefixsToIgnore!) {
+    for (String prefix in homeViewController.settings.value.prefixsToIgnore!) {
       if (message.message.startsWith(prefix)) {
         return;
       }
     }
     //check if message start with allowed prefix
-    if (settings.value.prefixsToUseTtsOnly!.isNotEmpty) {
-      for (String prefix in settings.value.prefixsToUseTtsOnly!) {
+    if (homeViewController.settings.value.prefixsToUseTtsOnly!.isNotEmpty) {
+      for (String prefix in homeViewController.settings.value.prefixsToUseTtsOnly!) {
         if (message.message.startsWith(prefix) == false) {
           return;
         }
@@ -739,7 +733,7 @@ class ChatViewController extends GetxController
     String text = "user_said_message".trParams(
       {'authorName': message.authorName, 'message': message.message},
     );
-    if (settings.value.ttsMuteViewerName!) {
+    if (homeViewController.settings.value.ttsMuteViewerName!) {
       text = message.message;
     }
     flutterTts.speak(text);

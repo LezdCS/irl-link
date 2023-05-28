@@ -8,110 +8,39 @@ import 'package:irllink/src/domain/entities/se_song.dart';
 import 'package:irllink/src/presentation/events/streamelements_events.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
+import 'home_view_controller.dart';
+
 class StreamelementsViewController extends GetxController
-    with GetSingleTickerProviderStateMixin {
+    with GetTickerProviderStateMixin {
   StreamelementsViewController({required this.streamelementsEvents});
 
   final StreamelementsEvents streamelementsEvents;
 
   late TabController tabController;
 
-  late List<SeActivity> activities;
+  RxList<SeActivity> activities = <SeActivity>[].obs;
   late ScrollController activitiesScrollController;
 
   RxList<SeSong> songRequestQueue = <SeSong>[].obs;
   late ScrollController songRequestScrollController;
 
-  late Socket socket;
+  Socket? socket;
+  late String jwt = "";
+
+  RxBool isSocketConnected = false.obs;
+
+  late HomeViewController homeViewController;
 
   @override
-  void onInit() {
-    tabController = TabController(length: 2, vsync: this);
+  Future<void> onInit() async {
+    homeViewController = Get.find<HomeViewController>();
+
+    tabController = TabController(length: 1, vsync: this);
     activitiesScrollController = ScrollController();
-    SeActivity a1 = SeActivity(
-        id: "1",
-        username: "Lezd",
-        message: "Ok ok",
-        amount: null,
-        soundUrl: null,
-        activityType: ActivityType.subscription);
-    SeActivity a2 = SeActivity(
-        id: "2",
-        username: "Lezd",
-        message: "Ok ok",
-        amount: "30",
-        soundUrl: null,
-        activityType: ActivityType.tip);
-    SeActivity a3 = SeActivity(
-        id: "3",
-        username: "Lezd",
-        message: "",
-        amount: null,
-        soundUrl: null,
-        activityType: ActivityType.follow);
-    SeActivity a4 = SeActivity(
-        id: "4",
-        username: "Lezd",
-        message:
-            "Ok okkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
-        amount: "2000",
-        soundUrl: null,
-        activityType: ActivityType.cheer);
-    SeActivity a5 = SeActivity(
-        id: "5",
-        username: "Lezd",
-        message: "",
-        amount: "2000",
-        soundUrl: null,
-        activityType: ActivityType.raid);
-    SeActivity a6 = SeActivity(
-        id: "6",
-        username: "Lezd",
-        message: "",
-        amount: "2000",
-        soundUrl: null,
-        activityType: ActivityType.host);
-    SeActivity a7 = SeActivity(
-        id: "7",
-        username: "Lezd",
-        message: "",
-        amount: "33",
-        soundUrl: null,
-        activityType: ActivityType.merch);
-    activities = [a1, a2, a3, a4, a5, a6, a7];
-
     songRequestScrollController = ScrollController();
-    SeSong s1 = SeSong(
-      id: '',
-      videoId: "6x4HDrL1KEU",
-      title: "Necrofantasia (Thousand Night Anamnesis)",
-      channel: "Delta 3859",
-      duration: "1:01",
-    );
-    SeSong s2 = SeSong(
-      id: '',
-      videoId: "qjPJHiCS7Ak",
-      title: "xQc CAN'T STOP LAUGHING at UNUSUAL MEMES COMPILATION V175",
-      channel: "xQcOW",
-      duration: "2:02",
-    );
-    SeSong s3 = SeSong(
-      id: '',
-      videoId: "J_nBbJaAe68",
-      title: "【東方】まるで戦闘中！東方好きに送る東方アレンジメドレー！",
-      channel: "MM495",
-      duration: "3:03",
-    );
-    SeSong s4 = SeSong(
-      id: '',
-      videoId: "cyv7YwXkFnQ",
-      title: "don't worry brah (1 hour)",
-      channel: "Kopera",
-      duration: "4:04",
-    );
-    songRequestQueue.value = [s1, s2, s3, s4];
 
-    connectWebsocket();
+    homeViewController.homeEvents.getSettings().then((value) => applySettings());
+
     super.onInit();
   }
 
@@ -122,7 +51,22 @@ class StreamelementsViewController extends GetxController
 
   @override
   void onClose() {
+    socket?.close();
     super.onClose();
+  }
+
+  void replayEvent(SeActivity activity) {
+    streamelementsEvents.replayActivity(jwt, activity);
+  }
+
+  Future<void> applySettings() async {
+    if (jwt != homeViewController.settings.value.streamElementsAccessToken!) {
+      socket?.dispose();
+      socket = null;
+      activities.clear();
+      jwt = homeViewController.settings.value.streamElementsAccessToken!;
+      connectWebsocket();
+    }
   }
 
   Future<void> login() async {
@@ -148,35 +92,233 @@ class StreamelementsViewController extends GetxController
   Future<void> connectWebsocket() async {
     socket = io(
         'https://realtime.streamelements.com',
-        OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
+        OptionBuilder()
+            .setTransports(['websocket']) // for Flutter or Dart VM
+            .disableAutoConnect()
             .build());
-
-    socket.on('connect', (data) => onConnect());
-    socket.on('disconnect', (data) => onDisconnect());
-    socket.on('authenticated', (data) => onAuthenticated(data));
-    socket.on(
+    socket!.connect();
+    socket!.on('connect_error', (data) => onError());
+    socket!.on('connect', (data) => onConnect());
+    socket!.on('disconnect', (data) => onDisconnect());
+    socket!.on('authenticated', (data) => onAuthenticated(data));
+    socket!.on(
       'event:test',
       (data) => {
-        debugPrint(data.toString())
-        // Structure as on https://github.com/StreamElements/widgets/blob/master/CustomCode.md#on-event
+        parseTestEvent(data),
+      },
+    );
+    socket!.on('event', (data) {
+      // Structure as on https://dev.streamelements.com/docs/widgets/6707a030af0b9-custom-widget-events
+      parseEvent(data);
+    });
+    socket!.on(
+      'event:update',
+      (data) => {
+        // debugPrint(data.toString())
+      },
+    );
+    socket!.on(
+      'event:reset',
+      (data) => {
+        // debugPrint(data.toString())
       },
     );
   }
 
   Future<void> onConnect() async {
-    String jwt = "";
+    socket?.emit('authenticate', {"method": 'jwt', "token": jwt});
+  }
 
-    socket.emit('authenticate', {"method": 'jwt', "token": jwt});
+  Future<void> onError() async {
+    isSocketConnected.value = false;
+    debugPrint('Error connecting to StreamElements websocket');
   }
 
   Future<void> onDisconnect() async {
+    isSocketConnected.value = false;
     debugPrint('Disconnected from StreamElements websocket');
-    socket.io
-      ..disconnect()
-      ..connect();
   }
 
   Future<void> onAuthenticated(data) async {
-    debugPrint(data.toString());
+    isSocketConnected.value = true;
+    debugPrint('Connected to StreamElements websocket');
+  }
+
+  void parseTestEvent(data) {
+    dynamic widget = data[0];
+    String listener = widget["listener"];
+    dynamic event = widget["event"];
+    switch (listener) {
+      case "follower-latest":
+        if (!homeViewController.settings.value.streamElementsSettings!
+            .showFollowerActivity) return;
+        SeActivity activity = new SeActivity(
+          id: "1",
+          channel: "",
+          username: event["name"],
+          activityType: ActivityType.follow,
+          isTest: true,
+        );
+        activities.add(activity);
+        break;
+      case "subscriber-latest":
+        if (!homeViewController.settings.value.streamElementsSettings!
+            .showSubscriberActivity) return;
+        SeActivity activity = new SeActivity(
+          id: "1",
+          channel: "",
+          username: event["name"],
+          message: event["message"],
+          tier: event["tier"],
+          gifted: event["gifted"],
+          sender: event["sender"],
+          activityType: ActivityType.subscription,
+          isTest: true,
+        );
+        activities.add(activity);
+        break;
+      case "tip-latest":
+        if (!homeViewController.settings.value.streamElementsSettings!
+            .showDonationActivity) return;
+        SeActivity activity = new SeActivity(
+          id: "1",
+          channel: "",
+          username: event["name"],
+          message: event["message"],
+          amount: event["amount"].toString(),
+          activityType: ActivityType.tip,
+          isTest: true,
+        );
+        activities.add(activity);
+        break;
+      case "cheer-latest":
+        if (!homeViewController
+            .settings.value.streamElementsSettings!.showCheerActivity) return;
+        SeActivity activity = new SeActivity(
+          id: "1",
+          channel: "",
+          username: event["name"],
+          message: event["message"],
+          amount: event["amount"].toString(),
+          activityType: ActivityType.cheer,
+          isTest: true,
+        );
+        activities.add(activity);
+        break;
+      case "host-latest":
+        if (!homeViewController
+            .settings.value.streamElementsSettings!.showHostActivity) return;
+        SeActivity activity = new SeActivity(
+          id: "1",
+          channel: "",
+          username: event["name"],
+          amount: event["amount"].toString(),
+          activityType: ActivityType.host,
+          isTest: true,
+        );
+        activities.add(activity);
+        break;
+      case "raid-latest":
+        if (!homeViewController
+            .settings.value.streamElementsSettings!.showRaidActivity) return;
+        SeActivity activity = new SeActivity(
+          channel: "",
+          id: "1",
+          username: event["name"],
+          amount: event["amount"].toString(),
+          activityType: ActivityType.raid,
+          isTest: true,
+        );
+        activities.add(activity);
+        break;
+      default:
+        break;
+    }
+  }
+
+  void parseEvent(data) {
+    dynamic event = data[0];
+    String type = event["type"];
+    switch (type) {
+      case "follow":
+        if (!homeViewController.settings.value.streamElementsSettings!
+            .showFollowerActivity) return;
+        SeActivity activity = new SeActivity(
+          id: event["_id"],
+          channel: event["channel"],
+          username: event["data"]["displayName"],
+          activityType: ActivityType.follow,
+        );
+        activities.add(activity);
+        break;
+      case "subscriber":
+        if (!homeViewController.settings.value.streamElementsSettings!
+            .showSubscriberActivity) return;
+        SeActivity activity = new SeActivity(
+          id: event["_id"],
+          channel: event["channel"],
+          username: event["data"]["displayName"],
+          message: event["data"]["message"],
+          amount: event["data"]["amount"].toString(),
+          tier: event["data"]["tier"],
+          gifted: event["data"]["gifted"],
+          sender: event["data"]["sender"],
+          activityType: ActivityType.subscription,
+        );
+        activities.add(activity);
+        break;
+      case "tip":
+        if (!homeViewController.settings.value.streamElementsSettings!
+            .showDonationActivity) return;
+        SeActivity activity = new SeActivity(
+          id: event["_id"],
+          channel: event["channel"],
+          username: event["data"]["displayName"],
+          amount: event["data"]["amount"].toString(),
+          currency: event["data"]["currency"],
+          activityType: ActivityType.tip,
+        );
+        activities.add(activity);
+        break;
+      case "cheer":
+        if (!homeViewController
+            .settings.value.streamElementsSettings!.showCheerActivity) return;
+        SeActivity activity = new SeActivity(
+          id: event["_id"],
+          channel: event["channel"],
+          username: event["data"]["displayName"],
+          message: event["data"]["message"],
+          amount: event["data"]["amount"].toString(),
+          activityType: ActivityType.cheer,
+        );
+        activities.add(activity);
+        break;
+      case "host":
+        if (!homeViewController
+            .settings.value.streamElementsSettings!.showHostActivity) return;
+        SeActivity activity = new SeActivity(
+          id: event["_id"],
+          channel: event["channel"],
+          username: event["data"]["displayName"],
+          amount: event["data"]["amount"].toString(),
+          activityType: ActivityType.host,
+        );
+        activities.add(activity);
+        break;
+      case "raid":
+        if (!homeViewController
+            .settings.value.streamElementsSettings!.showRaidActivity) return;
+        SeActivity activity = new SeActivity(
+          id: event["_id"],
+          channel: event["channel"],
+          username: event["data"]["displayName"],
+          amount: event["data"]["amount"].toString(),
+          activityType: ActivityType.raid,
+        );
+        activities.add(activity);
+        break;
+      default:
+        break;
+    }
   }
 }

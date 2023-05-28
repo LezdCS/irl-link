@@ -742,9 +742,9 @@ class TwitchRepositoryImpl extends TwitchRepository {
   @override
   Future<DataState<TwitchPoll>> createPoll(
       String accessToken, String broadcasterId, TwitchPoll newPoll) async {
-    Response response;
+    // Response response;
     var dio = Dio();
-    TwitchPrediction? prediction;
+    // TwitchPrediction? prediction;
     try {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
       dio.options.headers["authorization"] = "Bearer $accessToken";
@@ -765,7 +765,6 @@ class TwitchRepositoryImpl extends TwitchRepository {
     TwitchChatMessage message,
     int? duration,
   ) async {
-    Response response;
     var dio = Dio();
     try {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
@@ -776,12 +775,10 @@ class TwitchRepositoryImpl extends TwitchRepository {
         },
       };
       if (duration != null) {
-        debugPrint(duration.toString());
         body['data']['duration'] = duration.toString();
       }
-      debugPrint(body.toString());
 
-      response = await dio.post(
+      await dio.post(
         'https://api.twitch.tv/helix/moderation/bans',
         queryParameters: {
           'broadcaster_id': broadcasterId,
@@ -800,12 +797,11 @@ class TwitchRepositoryImpl extends TwitchRepository {
     String broadcasterId,
     TwitchChatMessage message,
   ) async {
-    Response response;
     var dio = Dio();
     try {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
       dio.options.headers["authorization"] = "Bearer $accessToken";
-      response = await dio.delete(
+      await dio.delete(
         'https://api.twitch.tv/helix/moderation/chat',
         queryParameters: {
           'broadcaster_id': broadcasterId,

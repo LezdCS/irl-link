@@ -77,30 +77,33 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                             .substring(0, 7)),
                       ),
                     ),
-                    Row(
-                      children: [
-                        Icon(Icons.person_outline, color: Colors.red),
-                        SizedBox(
-                          width: 2,
-                        ),
-                        Text(
-                          controller.twitchStreamInfos.value.viewerCount
-                              .toString(),
-                          style: TextStyle(color: Colors.red),
-                        ),
-                        SizedBox(
-                          width: 6,
-                        ),
-                        Text(
-                          "viewers".tr,
-                          style: TextStyle(
-                            color: Theme.of(Get.context!)
-                                .textTheme
-                                .bodyLarge!
-                                .color,
+                    Visibility(
+                      visible: controller.homeViewController.settings.value.displayViewerCount!,
+                      child: Row(
+                        children: [
+                          Icon(Icons.person_outline, color: Colors.red),
+                          SizedBox(
+                            width: 2,
                           ),
-                        ),
-                      ],
+                          Text(
+                            controller.twitchStreamInfos.value.viewerCount
+                                .toString(),
+                            style: TextStyle(color: Colors.red),
+                          ),
+                          SizedBox(
+                            width: 6,
+                          ),
+                          Text(
+                            "viewers".tr,
+                            style: TextStyle(
+                              color: Theme.of(Get.context!)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .color,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -128,7 +131,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
-                        textStyle: TextStyle(fontSize: 12),
+                        textStyle: TextStyle(fontSize: 11),
                         backgroundColor: Colors.deepPurpleAccent,
                         fixedSize: Size(50, 20),
                       ),
@@ -228,7 +231,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
   }
 }
 
-Widget _prediction(
+Widget prediction(
   BuildContext context,
   TwitchTabViewController controller,
 ) {
@@ -392,7 +395,7 @@ Widget _prediction(
   );
 }
 
-Widget _poll(
+Widget poll(
   BuildContext context,
   TwitchTabViewController controller,
 ) {

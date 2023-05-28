@@ -1,16 +1,18 @@
+import 'package:floating_draggable_widget/floating_draggable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/chat_view.dart';
+import 'package:irllink/src/presentation/widgets/dashboard.dart';
 import 'package:irllink/src/presentation/widgets/emote_picker_view.dart';
 import 'package:irllink/src/presentation/widgets/tabs/obs_tab_view.dart';
-import 'package:irllink/src/presentation/widgets/split_view_custom.dart';
 import 'package:irllink/src/presentation/widgets/tabs/streamelements_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/tabs/twitch_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/web_page_view.dart';
 import 'package:move_to_background/move_to_background.dart';
+import 'package:split_view/split_view.dart';
 
 class HomeView extends GetView<HomeViewController> {
   @override
@@ -26,54 +28,92 @@ class HomeView extends GetView<HomeViewController> {
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         body: Obx(
-          () => Stack(
-            children: [
-              GestureDetector(
-                onTap: () => {
-                  FocusScope.of(context).unfocus(),
-                  controller.isPickingEmote.value = false,
-                },
-                child: Container(
-                  constraints: BoxConstraints.expand(),
-                  decoration: BoxDecoration(
-                    color: context.theme.colorScheme.background,
-                  ),
-                  child: SafeArea(
-                    child: SplitViewCustom(
-                      controller: controller.splitViewController,
-                      gripColor: context.theme.colorScheme.secondary,
-                      gripColorActive: context.theme.colorScheme.secondary,
-                      gripSize: 14,
-                      viewMode: context.isPortrait
-                          ? SplitViewMode.Vertical
-                          : SplitViewMode.Horizontal,
-                      indicator: SplitIndicator(
-                        viewMode: context.isPortrait
-                            ? SplitViewMode.Vertical
-                            : SplitViewMode.Horizontal,
-                        color: Color(0xFFFFFFFF),
+          () => FloatingDraggableWidget(
+            floatingWidget: InkWell(
+              // onTap: () {
+                // controller.displayDashboard.value =
+                //     !controller.displayDashboard.value;
+              // },
+              // child: Container(
+              //   decoration: BoxDecoration(
+              //     shape: BoxShape.circle,
+              //     color: context.theme.colorScheme.tertiary,
+              //   ),
+              //   child: Icon(
+              //     Icons.dashboard_rounded,
+              //     size: 30,
+              //   ),
+              // ),
+            ),
+            floatingWidgetWidth: 0,
+            floatingWidgetHeight: 0,
+            dy: height - 130,
+            dx: width - 70,
+            mainScreenWidget: Listener(
+              onPointerUp: (_) => {
+                FocusScope.of(context).unfocus(),
+              },
+              child: Container(
+                constraints: BoxConstraints.expand(),
+                decoration: BoxDecoration(
+                  color: context.theme.colorScheme.background,
+                ),
+                child: SafeArea(
+                  child: Stack(
+                    children: [
+                      Listener(
+                        onPointerUp: (_) => {
+                          controller.displayDashboard.value = false,
+                        },
+                        child: SplitView(
+                          controller: controller.splitViewController,
+                          gripColor: context.theme.colorScheme.secondary,
+                          gripColorActive: context.theme.colorScheme.secondary,
+                          gripSize: 8,
+                          viewMode: context.isPortrait
+                              ? SplitViewMode.Vertical
+                              : SplitViewMode.Horizontal,
+                          indicator: SplitIndicator(
+                            viewMode: context.isPortrait
+                                ? SplitViewMode.Vertical
+                                : SplitViewMode.Horizontal,
+                            color: Color(0xFF464444),
+                          ),
+                          activeIndicator: SplitIndicator(
+                            color: Color(0xFF464444),
+                            viewMode: context.isPortrait
+                                ? SplitViewMode.Vertical
+                                : SplitViewMode.Horizontal,
+                            isActive: true,
+                          ),
+                          children: [
+                            controller.tabElements.length >= 1
+                                ? _top(context, height, width)
+                                : Text(
+                                    "No tabs",
+                                    textAlign: TextAlign.center,
+                                  ),
+                            _bottom(context, height, width),
+                          ],
+                        ),
                       ),
-                      activeIndicator: SplitIndicator(
-                        color: Color(0xFFFFFFFF),
-                        viewMode: context.isPortrait
-                            ? SplitViewMode.Vertical
-                            : SplitViewMode.Horizontal,
-                        isActive: true,
+                      Visibility(
+                        visible: controller.displayDashboard.value,
+                        child: Dashboard(
+                          controller: controller,
+                        ),
                       ),
-                      children: [
-                        controller.tabElements.length >= 1
-                            ? _top(context, height, width)
-                            : Text(
-                                "No tabs",
-                                textAlign: TextAlign.center,
-                              ),
-                        _bottom(context, height, width),
-                      ],
-                    ),
+                      Visibility(
+                        visible: controller.purchasePending.value,
+                        child: CircularProgressIndicator(
+                          color: context.theme.colorScheme.tertiary,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -236,13 +276,13 @@ class HomeView extends GetView<HomeViewController> {
               onTap: () async {
                 await Get.toNamed(
                   Routes.SETTINGS,
-                  arguments: [controller.twitchData],
                 );
+                await controller.getSettings();
                 if (controller.twitchData != null) {
-                  controller.chatViewController.getSettings();
+                  controller.chatViewController.applySettings();
                 }
-                controller.getSettings();
-                controller.obsTabViewController.getSettings();
+                controller.obsTabViewController?.applySettings();
+                controller.streamelementsViewController?.applySettings();
               },
               child: Icon(
                 Icons.settings,

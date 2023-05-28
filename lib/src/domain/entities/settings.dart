@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:irllink/src/domain/entities/settings/chat_events_settings.dart';
+import 'package:irllink/src/domain/entities/settings/floating_dashboard_settings.dart';
+import 'package:irllink/src/domain/entities/settings/stream_elements_settings.dart';
 
 class Settings extends Equatable {
   //CHAT SETTINGS
@@ -15,7 +17,9 @@ class Settings extends Equatable {
   //GENERAL SETTINGS
   final bool? isDarkMode;
   final bool? keepSpeakerOn;
+  final bool? displayViewerCount;
   final Map? appLanguage;
+  final FloatingDashboardSettings? floatingDashboardSettings;
 
   //CONNECTIONS SETTINGS
   final bool? isObsConnected;
@@ -24,6 +28,7 @@ class Settings extends Equatable {
   final String? streamElementsAccessToken;
   final List? browserTabs;
   final List? obsConnectionsHistory;
+  final StreamElementsSettings? streamElementsSettings;
 
   //TTS SETTIGS
   final bool? ttsEnabled;
@@ -52,6 +57,8 @@ class Settings extends Equatable {
     required this.isDarkMode,
     required this.keepSpeakerOn,
     required this.appLanguage,
+    required this.displayViewerCount,
+    required this.floatingDashboardSettings,
 
     //CONNECTIONS SETTINGS
     required this.isObsConnected,
@@ -60,6 +67,7 @@ class Settings extends Equatable {
     required this.streamElementsAccessToken,
     required this.browserTabs,
     required this.obsConnectionsHistory,
+    required this.streamElementsSettings,
 
     //TTS SETTIGS
     required this.ttsEnabled,
@@ -95,7 +103,11 @@ class Settings extends Equatable {
     //GENERAL SETTINGS
     this.isDarkMode = true,
     this.keepSpeakerOn = true,
+    this.displayViewerCount = true,
     this.appLanguage = const {"languageCode": "en", "countryCode": "US"},
+    this.floatingDashboardSettings = const FloatingDashboardSettings(
+      userEvents: [],
+    ),
 
     //CONNECTIONS SETTINGS
     this.isObsConnected = false,
@@ -104,6 +116,15 @@ class Settings extends Equatable {
     this.streamElementsAccessToken = "",
     this.browserTabs = const [],
     this.obsConnectionsHistory = const [],
+    this.streamElementsSettings = const StreamElementsSettings(
+      showFollowerActivity: true,
+      showSubscriberActivity: true,
+      showDonationActivity: true,
+      showCheerActivity: true,
+      showRaidActivity: true,
+      showHostActivity: true,
+      showMerchActivity: true,
+    ),
 
     //TTS SETTINGS
     this.ttsEnabled = false,
@@ -131,7 +152,9 @@ class Settings extends Equatable {
         //GENERAL
         'isDarkMode': isDarkMode,
         'keepSpeakerOn': keepSpeakerOn,
+        'displayViewerCount': displayViewerCount,
         'appLanguage': appLanguage,
+        'floatingDashboardSettings': floatingDashboardSettings?.toJson(),
         //CONNECTIONS
         'isObsConnected': isObsConnected,
         'obsWebsocketUrl': obsWebsocketUrl,
@@ -139,6 +162,7 @@ class Settings extends Equatable {
         'streamElementsAccessToken': streamElementsAccessToken,
         'browserTabs': browserTabs,
         'obsConnectionsHistory': obsConnectionsHistory,
+        'streamElementsSettings': streamElementsSettings?.toJson(),
         //TTS
         'ttsEnabled': ttsEnabled,
         'language': language,
@@ -167,7 +191,9 @@ class Settings extends Equatable {
       //GENERAL
       isDarkMode,
       keepSpeakerOn,
+      displayViewerCount,
       appLanguage,
+      floatingDashboardSettings,
       //CONNECTIONS
       isObsConnected,
       obsWebsocketUrl,
@@ -175,6 +201,7 @@ class Settings extends Equatable {
       streamElementsAccessToken,
       browserTabs,
       obsConnectionsHistory,
+      streamElementsSettings,
       //TTS
       ttsEnabled,
       language,
@@ -205,7 +232,9 @@ class Settings extends Equatable {
     //GENERAL
     bool? isDarkMode,
     bool? keepSpeakerOn,
+    bool? displayViewerCount,
     Map<String, String>? appLanguage,
+    FloatingDashboardSettings? floatingDashboardSettings,
     //CONNECTIONS
     bool? isObsConnected,
     String? obsWebsocketUrl,
@@ -213,6 +242,7 @@ class Settings extends Equatable {
     String? streamElementsAccessToken,
     List? browserTabs,
     List? obsConnectionsHistory,
+    StreamElementsSettings? streamElementsSettings,
     //TTS
     bool? ttsEnabled,
     String? language,
@@ -238,7 +268,10 @@ class Settings extends Equatable {
         //GENERAL
         isDarkMode: isDarkMode ?? this.isDarkMode,
         keepSpeakerOn: keepSpeakerOn ?? this.keepSpeakerOn,
+        displayViewerCount: displayViewerCount ?? this.displayViewerCount,
         appLanguage: appLanguage ?? this.appLanguage,
+        floatingDashboardSettings:
+            floatingDashboardSettings ?? this.floatingDashboardSettings,
         //CONNECTIONS
         isObsConnected: isObsConnected ?? this.isObsConnected,
         obsWebsocketUrl: obsWebsocketUrl ?? this.obsWebsocketUrl,
@@ -248,6 +281,8 @@ class Settings extends Equatable {
         browserTabs: browserTabs ?? this.browserTabs,
         obsConnectionsHistory:
             obsConnectionsHistory ?? this.obsConnectionsHistory,
+        streamElementsSettings:
+            streamElementsSettings ?? this.streamElementsSettings,
         //TTS
         ttsEnabled: ttsEnabled ?? this.ttsEnabled,
         language: language ?? this.language,

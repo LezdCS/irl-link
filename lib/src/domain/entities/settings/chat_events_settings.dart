@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 
 class ChatEventsSettings extends Equatable {
   final bool firstsMessages;

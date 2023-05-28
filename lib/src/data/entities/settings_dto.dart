@@ -1,7 +1,11 @@
 import 'package:irllink/src/data/entities/settings/chat_events_settings_dto.dart';
+import 'package:irllink/src/data/entities/settings/floating_dashboard_settings_dto.dart';
+import 'package:irllink/src/data/entities/settings/stream_elements_settings_dto.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 
 import '../../domain/entities/settings/chat_events_settings.dart';
+import '../../domain/entities/settings/floating_dashboard_settings.dart';
+import '../../domain/entities/settings/stream_elements_settings.dart';
 
 class SettingsDTO extends Settings {
   const SettingsDTO({
@@ -17,7 +21,9 @@ class SettingsDTO extends Settings {
     //GENERAL SETTINGS
     required bool isDarkMode,
     required bool keepSpeakerOn,
+    required bool displayViewerCount,
     required Map appLanguage,
+    required FloatingDashboardSettings floatingDashboardSettings,
     //CONNECTIONS SETTINGS
     required bool isObsConnected,
     required String obsWebsocketUrl,
@@ -25,6 +31,7 @@ class SettingsDTO extends Settings {
     required String streamElementsAccessToken,
     required List browserTabs,
     required List obsConnectionsHistory,
+    required StreamElementsSettings streamElementsSettings,
     //TTS SETTINGS
     required bool ttsEnabled,
     required String language,
@@ -49,7 +56,9 @@ class SettingsDTO extends Settings {
           //GENERAL SETTINGS
           isDarkMode: isDarkMode,
           keepSpeakerOn: keepSpeakerOn,
+          displayViewerCount: displayViewerCount,
           appLanguage: appLanguage,
+          floatingDashboardSettings: floatingDashboardSettings,
           //CONNECTIONS SETTINGS
           obsWebsocketUrl: obsWebsocketUrl,
           obsWebsocketPassword: obsWebsocketPassword,
@@ -57,6 +66,7 @@ class SettingsDTO extends Settings {
           streamElementsAccessToken: streamElementsAccessToken,
           browserTabs: browserTabs,
           obsConnectionsHistory: obsConnectionsHistory,
+          streamElementsSettings: streamElementsSettings,
           //TTS SETTINGS
           ttsEnabled: ttsEnabled,
           language: language,
@@ -83,7 +93,9 @@ class SettingsDTO extends Settings {
         //GENERAL
         'isDarkMode': isDarkMode,
         'keepSpeakerOn': keepSpeakerOn,
+        'displayViewerCount': displayViewerCount,
         'appLanguage': appLanguage,
+        'floatingDashboardSettings': floatingDashboardSettings?.toJson(),
         //CONNECTIONS
         'isObsConnected': isObsConnected,
         'obsWebsocketUrl': obsWebsocketUrl,
@@ -91,6 +103,7 @@ class SettingsDTO extends Settings {
         'streamElementsAccessToken': streamElementsAccessToken,
         'browserTabs': browserTabs,
         'obsConnectionsHistory': obsConnectionsHistory,
+        'streamElementsSettings': streamElementsSettings?.toJson(),
         //TTS
         'ttsEnabled': ttsEnabled,
         'language': language,
@@ -138,9 +151,15 @@ class SettingsDTO extends Settings {
       keepSpeakerOn: map['keepSpeakerOn'] != null
           ? map['keepSpeakerOn'] as bool
           : Settings.defaultSettings().keepSpeakerOn!,
+      displayViewerCount: map['displayViewerCount'] != null
+          ? map['displayViewerCount'] as bool
+          : Settings.defaultSettings().displayViewerCount!,
         appLanguage: map['appLanguage'] != null
           ? map['appLanguage'] as Map
           : Settings.defaultSettings().appLanguage!,
+      floatingDashboardSettings: map['floatingDashboardSettings'] != null
+          ? FloatingDashboardSettingsDTO.fromJson(map['floatingDashboardSettings'])
+          : Settings.defaultSettings().floatingDashboardSettings!,
       //CONNECTIONS SETTINGS
       isObsConnected: map['isObsConnected'] != null
           ? map['isObsConnected'] as bool
@@ -160,6 +179,9 @@ class SettingsDTO extends Settings {
       obsConnectionsHistory: map['obsConnectionsHistory'] != null
           ? map['obsConnectionsHistory'] as List
           : Settings.defaultSettings().obsConnectionsHistory!,
+      streamElementsSettings: map['streamElementsSettings'] != null
+          ? StreamElementsSettingsDTO.fromJson(map['streamElementsSettings'])
+          : Settings.defaultSettings().streamElementsSettings!,
       //TTS SETTINGS
       ttsEnabled: map['ttsEnabled'] != null
           ? map['ttsEnabled'] as bool

@@ -8,24 +8,33 @@ enum ActivityType {
   tip,
   raid,
   host,
-  merch,
 }
 
 class SeActivity extends Equatable {
   final String id;
+  final String channel;
   final String username;
-  final String message;
-  final String? amount;
-  final String? soundUrl;
   final ActivityType activityType;
+  final String? message;
+  final String? amount;
+  final String? tier;
+  final bool? gifted;
+  final String? sender;
+  final String? currency;
+  final bool? isTest;
 
   const SeActivity({
     required this.id,
+    required this.channel,
     required this.username,
-    required this.message,
-    required this.amount,
-    required this.soundUrl,
     required this.activityType,
+    this.message,
+    this.amount,
+    this.tier,
+    this.gifted,
+    this.sender,
+    this.currency,
+    this.isTest,
   });
 
   @override
@@ -35,7 +44,6 @@ class SeActivity extends Equatable {
       username,
       message,
       amount,
-      soundUrl,
       activityType,
     ];
   }
@@ -56,37 +64,31 @@ class SeActivity extends Equatable {
         //background color
         colors.add(Color(0xFFA47CED));
         //circle color
-        colors.add(Color(0xFF6441A5));
+        colors.add(Color(0xFF341D5B));
         break;
       case ActivityType.cheer:
         //background color
-        colors.add(Color(0xFF00698B));
+        colors.add(Color(0xFF8B52F3));
         //circle color
-        colors.add(Color(0xFF003B36));
+        colors.add(Color(0xFF230D4C));
         break;
       case ActivityType.tip:
         //background color
-        colors.add(Color(0xFF8D818C));
+        colors.add(Color(0xFF13C50F));
         //circle color
-        colors.add(Color(0xFFB4B8C5));
+        colors.add(Color(0xFF0C250A));
         break;
       case ActivityType.raid:
         //background color
-        colors.add(Color(0xFF149911));
-        //circle color
-        colors.add(Color(0xFF256D1B));
-        break;
-      case ActivityType.host:
-        //background color
-        colors.add(Color(0xFF4A001F));
+        colors.add(Color(0xFFCE1260));
         //circle color
         colors.add(Color(0xFF2E0219));
         break;
-      case ActivityType.merch:
+      case ActivityType.host:
         //background color
-        colors.add(Color(0xFF4F5D75));
+        colors.add(Color(0xFFCE1260));
         //circle color
-        colors.add(Color(0xFF2D3142));
+        colors.add(Color(0xFF2E0219));
         break;
     }
     return colors;
@@ -96,28 +98,73 @@ class SeActivity extends Equatable {
     String s = '';
     switch (this.activityType) {
       case ActivityType.follow:
-        s = " just followed!";
+        s = "Follow";
         break;
       case ActivityType.subscription:
-        //todo : if is prime add (prime) after "subscribed"
-        s = ' subscribed!';
+        bool isPrime = this.tier == "prime";
+        bool isGift = this.gifted == true;
+        if (isGift) {
+          s = 'Got gifted a sub by ${this.sender}';
+        } else {
+          s = 'Subscribed${isPrime ? " with prime" : ""}';
+        }
         break;
       case ActivityType.cheer:
-        s = ' sent ${this.amount} bits!';
+        s = 'Cheered ${this.amount} bits!';
         break;
       case ActivityType.tip:
-        s = ' donated ${this.amount}\$!';
+        s = 'Donated ${this.amount}\$!';
         break;
       case ActivityType.raid:
-        s = ' is raiding with ${this.amount} viewers!';
+        s = '${this.amount} Raiders';
         break;
       case ActivityType.host:
-        s = ' is hosting with ${this.amount} viewers!';
-        break;
-      case ActivityType.merch:
-        s = ' bought for ${this.amount}\$ of merch!';
+        s = '${this.amount} Hosted viewers';
         break;
     }
     return s;
+  }
+
+  Icon getIcon() {
+    Icon icon = Icon(Icons.person);
+    switch (this.activityType) {
+      case ActivityType.follow:
+        icon = Icon(
+          Icons.person_add,
+          size: 18,
+        );
+        break;
+      case ActivityType.subscription:
+        icon = Icon(
+          Icons.star,
+          size: 18,
+        );
+        break;
+      case ActivityType.cheer:
+        icon = Icon(
+          Icons.toll,
+          size: 18,
+        );
+        break;
+      case ActivityType.tip:
+        icon = Icon(
+          Icons.attach_money,
+          size: 18,
+        );
+        break;
+      case ActivityType.raid:
+        icon = Icon(
+          Icons.diversity_3,
+          size: 18,
+        );
+        break;
+      case ActivityType.host:
+        icon = Icon(
+          Icons.diversity_3,
+          size: 18,
+        );
+        break;
+    }
+    return icon;
   }
 }

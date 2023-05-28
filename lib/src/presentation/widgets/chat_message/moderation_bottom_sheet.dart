@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/domain/entities/chat/twitch_chat_message.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../controllers/chat_view_controller.dart';
@@ -106,7 +105,7 @@ class ModerationBottomSheet extends StatelessWidget {
               onTap: () =>
                   controller.hideUser(controller.selectedMessage.value!),
               child: (controller.selectedMessage.value != null &&
-                      controller.settings.value.hiddenUsersIds!
+                      controller.homeViewController.settings.value.hiddenUsersIds!
                               .firstWhereOrNull((userId) =>
                                   controller.selectedMessage.value!.authorId ==
                                   userId) !=

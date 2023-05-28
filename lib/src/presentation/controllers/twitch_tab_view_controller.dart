@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/domain/entities/twitch_credentials.dart';
 import 'package:irllink/src/domain/entities/twitch_stream_infos.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 
@@ -36,6 +35,7 @@ class TwitchTabViewController extends GetxController {
 
   @override
   void onInit() {
+    homeViewController = Get.find<HomeViewController>();
     titleFormController = TextEditingController();
     prediction = null;
     poll = null;
@@ -45,7 +45,6 @@ class TwitchTabViewController extends GetxController {
 
   @override
   void onReady() async {
-    homeViewController = Get.find<HomeViewController>();
 
     if (homeViewController.twitchData != null) {
       refreshData();
