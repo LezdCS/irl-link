@@ -11,8 +11,8 @@ import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dar
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:irllink/src/presentation/widgets/tabs/obs_tab_view.dart';
-import 'package:irllink/src/presentation/widgets/split_view_custom.dart';
 import 'package:irllink/src/presentation/widgets/tabs/twitch_tab_view.dart';
+import 'package:split_view/split_view.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -27,7 +27,7 @@ class HomeViewController extends GetxController
 
   final HomeEvents homeEvents;
 
-  SplitViewController splitViewController =
+  SplitViewController? splitViewController =
       SplitViewController(limits: [null, WeightLimit(min: 0.12, max: 0.92)]);
 
   //TABS

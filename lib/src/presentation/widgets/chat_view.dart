@@ -4,7 +4,6 @@ import 'package:irllink/src/domain/entities/chat/twitch_chat_message.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/chat_message/event_container.dart';
 import 'package:irllink/src/presentation/widgets/chat_message/message_container.dart';
-import 'package:irllink/src/presentation/widgets/chat_message/message_row.dart';
 import 'package:irllink/src/presentation/widgets/chat_message/moderation_bottom_sheet.dart';
 
 import 'alert_message_view.dart';

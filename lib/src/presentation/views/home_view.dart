@@ -8,11 +8,11 @@ import 'package:irllink/src/presentation/widgets/chat_view.dart';
 import 'package:irllink/src/presentation/widgets/dashboard.dart';
 import 'package:irllink/src/presentation/widgets/emote_picker_view.dart';
 import 'package:irllink/src/presentation/widgets/tabs/obs_tab_view.dart';
-import 'package:irllink/src/presentation/widgets/split_view_custom.dart';
 import 'package:irllink/src/presentation/widgets/tabs/streamelements_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/tabs/twitch_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/web_page_view.dart';
 import 'package:move_to_background/move_to_background.dart';
+import 'package:split_view/split_view.dart';
 
 class HomeView extends GetView<HomeViewController> {
   @override
@@ -65,7 +65,7 @@ class HomeView extends GetView<HomeViewController> {
                         onPointerUp: (_) => {
                           controller.displayDashboard.value = false,
                         },
-                        child: SplitViewCustom(
+                        child: SplitView(
                           controller: controller.splitViewController,
                           gripColor: context.theme.colorScheme.secondary,
                           gripColorActive: context.theme.colorScheme.secondary,
@@ -77,10 +77,10 @@ class HomeView extends GetView<HomeViewController> {
                             viewMode: context.isPortrait
                                 ? SplitViewMode.Vertical
                                 : SplitViewMode.Horizontal,
-                            color: Color(0xFFFFFFFF),
+                            color: Color(0xFF464444),
                           ),
                           activeIndicator: SplitIndicator(
-                            color: Color(0xFFFFFFFF),
+                            color: Color(0xFF464444),
                             viewMode: context.isPortrait
                                 ? SplitViewMode.Vertical
                                 : SplitViewMode.Horizontal,

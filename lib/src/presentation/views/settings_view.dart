@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
-import 'package:flutter/services.dart';
 import 'package:irllink/src/presentation/widgets/settings_view/chat_events.dart';
 import 'package:irllink/src/presentation/widgets/settings_view/stream_elements.dart';
 import 'package:irllink/src/presentation/widgets/settings_view/tts.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 import 'package:irllink/src/core/utils/globals.dart' as Globals;
 
 import '../../core/resources/AppTranslations.dart';
