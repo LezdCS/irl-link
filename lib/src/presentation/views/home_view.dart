@@ -30,23 +30,23 @@ class HomeView extends GetView<HomeViewController> {
         body: Obx(
           () => FloatingDraggableWidget(
             floatingWidget: InkWell(
-              onTap: () {
-                controller.displayDashboard.value =
-                    !controller.displayDashboard.value;
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: context.theme.colorScheme.tertiary,
-                ),
-                child: Icon(
-                  Icons.dashboard_rounded,
-                  size: 30,
-                ),
-              ),
+              // onTap: () {
+                // controller.displayDashboard.value =
+                //     !controller.displayDashboard.value;
+              // },
+              // child: Container(
+              //   decoration: BoxDecoration(
+              //     shape: BoxShape.circle,
+              //     color: context.theme.colorScheme.tertiary,
+              //   ),
+              //   child: Icon(
+              //     Icons.dashboard_rounded,
+              //     size: 30,
+              //   ),
+              // ),
             ),
-            floatingWidgetWidth: 60,
-            floatingWidgetHeight: 60,
+            floatingWidgetWidth: 0,
+            floatingWidgetHeight: 0,
             dy: height - 130,
             dx: width - 70,
             mainScreenWidget: Listener(
