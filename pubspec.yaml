@@ -24,7 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.5
-  webview_flutter: ^4.2.0
+  webview_flutter: ^4.2.1
   get: ^4.6.5
   get_storage: ^2.1.1
   split_view: ^3.2.1
@@ -55,8 +55,8 @@ dependencies:
   transparent_image: ^2.0.1
   flutter_tts: ^3.6.3
   package_info_plus: ^4.0.1
-  upgrader: ^7.0.0
-  in_app_purchase: ^3.1.5
+  upgrader: ^7.0.1
+  in_app_purchase: ^3.1.7
   floating_draggable_widget: ^2.1.2
 
 dependency_overrides:
