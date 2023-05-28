@@ -1,5 +1,4 @@
 import 'package:irllink/src/domain/entities/settings.dart';
-import 'package:irllink/src/domain/entities/settings/chat_events_settings.dart';
 import 'package:irllink/src/domain/entities/settings/stream_elements_settings.dart';
 
 class StreamElementsSettingsDTO extends StreamElementsSettings {

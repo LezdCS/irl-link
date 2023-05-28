@@ -1,10 +1,7 @@
 import 'dart:convert';
 
-import 'package:irllink/src/domain/entities/settings.dart';
-
 import 'package:irllink/src/domain/entities/settings/floating_dashboard_settings.dart';
 
-import '../../../domain/entities/settings/floating_event.dart';
 import 'flaoting_event_dto.dart';
 
 class FloatingDashboardSettingsDTO extends FloatingDashboardSettings {

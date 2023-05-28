@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 
@@ -204,7 +203,9 @@ class ObsTabViewController extends GetxController {
     sourcesVolumesMap.clear();
     sources.forEach((source) async {
       var response = await obsWebSocket!.send("GetInputVolume",
-          {"inputName": source.sourceName}).catchError((e) {});
+          {"inputName": source.sourceName}).catchError((e) {
+            return null;
+      });
       if (response?.requestStatus.code == 100) {
         sourcesVolumesMap[source.sourceName] =
             response?.responseData?['inputVolumeDb'];

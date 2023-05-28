@@ -6,4 +6,5 @@ abstract class StreamelementsRepository {
   Future<DataState<void>> login(StreamelementsAuthParams params);
   Future<DataState<void>> disconnect();
   Future<void> replayActivity(String token, SeActivity activity);
+  Future<DataState<List<SeActivity>>> getLastActivities(String token, String channel);
 }

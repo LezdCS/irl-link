@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
@@ -61,9 +59,9 @@ class TwitchChatMessage {
     String message = _message ?? faker.lorem.sentence();
     String color = randomUsernameColor(username);
 
-    List<HighlightType> types = List.from(HighlightType.values);
+    // List<HighlightType> types = List.from(HighlightType.values);
 
-    Random random = Random();
+    // Random random = Random();
     HighlightType? highlightType = _highlightType ?? null;
     // random.nextInt(10) < 5 ? types[random.nextInt(types.length)] : null;
 

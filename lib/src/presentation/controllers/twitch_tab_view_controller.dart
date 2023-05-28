@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/domain/entities/twitch_credentials.dart';
 import 'package:irllink/src/domain/entities/twitch_stream_infos.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 

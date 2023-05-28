@@ -231,7 +231,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
   }
 }
 
-Widget _prediction(
+Widget prediction(
   BuildContext context,
   TwitchTabViewController controller,
 ) {
@@ -395,7 +395,7 @@ Widget _prediction(
   );
 }
 
-Widget _poll(
+Widget poll(
   BuildContext context,
   TwitchTabViewController controller,
 ) {
