@@ -69,7 +69,7 @@ class HomeView extends GetView<HomeViewController> {
                           controller: controller.splitViewController,
                           gripColor: context.theme.colorScheme.secondary,
                           gripColorActive: context.theme.colorScheme.secondary,
-                          gripSize: 14,
+                          gripSize: 8,
                           viewMode: context.isPortrait
                               ? SplitViewMode.Vertical
                               : SplitViewMode.Horizontal,
