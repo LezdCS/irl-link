@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:irllink/src/domain/entities/emote.dart';
 
 class ThirdPartEmote extends StatelessWidget {
-
   final Emote emote;
 
   const ThirdPartEmote({required this.emote});

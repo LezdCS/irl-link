@@ -21,7 +21,8 @@ class FloatingEventDTO extends FloatingEvent {
   factory FloatingEventDTO.fromJson(Map<String, dynamic> map) {
     return FloatingEventDTO(
       title: map['title'] ?? "None",
-      dashboardActionsType: map['dashboardActionsType'] ?? DashboardActionsTypes.button,
+      dashboardActionsType:
+          map['dashboardActionsType'] ?? DashboardActionsTypes.button,
       color: map['color'] ?? Colors.grey,
     );
   }

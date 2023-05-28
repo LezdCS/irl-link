@@ -40,7 +40,9 @@ class ManageListBrowserTabs extends GetView {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                child: controller.homeViewController.settings.value.browserTabs!.length <= 0
+                child: controller.homeViewController.settings.value.browserTabs!
+                            .length <=
+                        0
                     ? Container(
                         padding: EdgeInsets.only(top: 20),
                         child: Text(
@@ -54,24 +56,27 @@ class ManageListBrowserTabs extends GetView {
                         shrinkWrap: true,
                         padding: EdgeInsets.only(
                             top: 8, left: 18, right: 18, bottom: 8),
-                        itemCount:
-                            controller.homeViewController.settings.value.browserTabs!.length,
+                        itemCount: controller.homeViewController.settings.value
+                            .browserTabs!.length,
                         onReorder: (int oldIndex, int newIndex) {
                           if (newIndex > oldIndex) {
                             newIndex -= 1;
                           }
-                          final element = controller.homeViewController.settings.value.browserTabs!
+                          final element = controller
+                              .homeViewController.settings.value.browserTabs!
                               .removeAt(oldIndex);
-                          controller.homeViewController.settings.value.browserTabs!
+                          controller
+                              .homeViewController.settings.value.browserTabs!
                               .insert(newIndex, element);
                           controller.saveSettings();
                         },
                         itemBuilder: (BuildContext context, int index) {
-                          var elem =
-                              controller.homeViewController.settings.value.browserTabs![index];
+                          var elem = controller.homeViewController.settings
+                              .value.browserTabs![index];
                           return Container(
                             key: ValueKey(
-                              controller.homeViewController.settings.value.browserTabs![index],
+                              controller.homeViewController.settings.value
+                                  .browserTabs![index],
                             ),
                             color: Theme.of(context).colorScheme.secondary,
                             padding: EdgeInsets.only(

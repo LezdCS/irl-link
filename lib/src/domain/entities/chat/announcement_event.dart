@@ -54,7 +54,8 @@ class AnnouncementEvent extends TwitchChatMessage {
 
     String color = messageMapped['color']!;
     if (color == "") {
-      color = TwitchChatMessage.randomUsernameColor(messageMapped['display-name']!);
+      color =
+          TwitchChatMessage.randomUsernameColor(messageMapped['display-name']!);
     }
 
     Map<String, List<List<String>>> emotesIdsPositions =
@@ -108,9 +109,12 @@ class AnnouncementEvent extends TwitchChatMessage {
       TwitchBadge(
         setId: 'sub-gifter',
         versionId: '1',
-        imageUrl1x: 'https://static-cdn.jtvnw.net/badges/v1/a5ef6c17-2e5b-4d8f-9b80-2779fd722414/1',
-        imageUrl2x: 'https://static-cdn.jtvnw.net/badges/v1/a5ef6c17-2e5b-4d8f-9b80-2779fd722414/2',
-        imageUrl4x: 'https://static-cdn.jtvnw.net/badges/v1/a5ef6c17-2e5b-4d8f-9b80-2779fd722414/3',
+        imageUrl1x:
+            'https://static-cdn.jtvnw.net/badges/v1/a5ef6c17-2e5b-4d8f-9b80-2779fd722414/1',
+        imageUrl2x:
+            'https://static-cdn.jtvnw.net/badges/v1/a5ef6c17-2e5b-4d8f-9b80-2779fd722414/2',
+        imageUrl4x:
+            'https://static-cdn.jtvnw.net/badges/v1/a5ef6c17-2e5b-4d8f-9b80-2779fd722414/3',
       ),
     ];
     return AnnouncementEvent(

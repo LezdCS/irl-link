@@ -55,14 +55,14 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
   }
 
   @override
-  Future<DataState<List<SeActivity>>> getLastActivities(String token, String channel) async {
+  Future<DataState<List<SeActivity>>> getLastActivities(
+      String token, String channel) async {
     var dio = Dio();
     List<SeActivity> activities = [];
     try {
       dio.options.headers["Authorization"] = "Bearer $token";
-      await dio.post(
-        'https://api.streamelements.com/kappa/v2/activities/$channel'
-      );
+      await dio
+          .post('https://api.streamelements.com/kappa/v2/activities/$channel');
       return DataSuccess(activities);
     } on DioError catch (e) {
       debugPrint(e.toString());

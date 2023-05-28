@@ -45,7 +45,6 @@ class TwitchTabViewController extends GetxController {
 
   @override
   void onReady() async {
-
     if (homeViewController.twitchData != null) {
       refreshData();
       refreshDataTimer = Timer.periodic(Duration(seconds: 15), (timer) {

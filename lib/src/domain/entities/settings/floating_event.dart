@@ -58,10 +58,10 @@ class FloatingEvent extends Equatable {
   }
 
   Map toJson() => {
-    'title': title,
-    'dashboardActionsType': dashboardActionsType,
-    'color': color,
-  };
+        'title': title,
+        'dashboardActionsType': dashboardActionsType,
+        'color': color,
+      };
 
   @override
   bool get stringify => true;

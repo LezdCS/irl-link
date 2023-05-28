@@ -154,11 +154,12 @@ class SettingsDTO extends Settings {
       displayViewerCount: map['displayViewerCount'] != null
           ? map['displayViewerCount'] as bool
           : Settings.defaultSettings().displayViewerCount!,
-        appLanguage: map['appLanguage'] != null
+      appLanguage: map['appLanguage'] != null
           ? map['appLanguage'] as Map
           : Settings.defaultSettings().appLanguage!,
       floatingDashboardSettings: map['floatingDashboardSettings'] != null
-          ? FloatingDashboardSettingsDTO.fromJson(map['floatingDashboardSettings'])
+          ? FloatingDashboardSettingsDTO.fromJson(
+              map['floatingDashboardSettings'])
           : Settings.defaultSettings().floatingDashboardSettings!,
       //CONNECTIONS SETTINGS
       isObsConnected: map['isObsConnected'] != null

@@ -79,7 +79,7 @@ class Dashboard extends GetView {
     return Container(
       margin: EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color:  Theme.of(Get.context!).colorScheme.tertiaryContainer,
+        color: Theme.of(Get.context!).colorScheme.tertiaryContainer,
         borderRadius: BorderRadius.all(
           Radius.circular(8),
         ),
@@ -107,7 +107,7 @@ class Dashboard extends GetView {
     return Container(
       margin: EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color:  Theme.of(Get.context!).colorScheme.tertiaryContainer,
+        color: Theme.of(Get.context!).colorScheme.tertiaryContainer,
         borderRadius: BorderRadius.all(
           Radius.circular(8),
         ),
@@ -132,7 +132,7 @@ class Dashboard extends GetView {
     return Container(
       margin: EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color:  Theme.of(Get.context!).colorScheme.tertiaryContainer,
+        color: Theme.of(Get.context!).colorScheme.tertiaryContainer,
         borderRadius: BorderRadius.all(
           Radius.circular(8),
         ),

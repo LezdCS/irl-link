@@ -157,19 +157,19 @@ class HomeEvents {
   }
 
   Future<void> banUser(
-      String accessToken,
-      String broadcasterId,
-      TwitchChatMessage message,
-      int? duration,
-      ) {
+    String accessToken,
+    String broadcasterId,
+    TwitchChatMessage message,
+    int? duration,
+  ) {
     return twitchUseCase.banUser(accessToken, broadcasterId, message, duration);
   }
 
   Future<void> deleteMessage(
-      String accessToken,
-      String broadcasterId,
-      TwitchChatMessage message,
-      ) {
+    String accessToken,
+    String broadcasterId,
+    TwitchChatMessage message,
+  ) {
     return twitchUseCase.deleteMessage(accessToken, broadcasterId, message);
   }
 }
