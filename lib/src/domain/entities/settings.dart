@@ -17,6 +17,7 @@ class Settings extends Equatable {
   //GENERAL SETTINGS
   final bool? isDarkMode;
   final bool? keepSpeakerOn;
+  final bool? displayViewerCount;
   final Map? appLanguage;
   final FloatingDashboardSettings? floatingDashboardSettings;
 
@@ -56,6 +57,7 @@ class Settings extends Equatable {
     required this.isDarkMode,
     required this.keepSpeakerOn,
     required this.appLanguage,
+    required this.displayViewerCount,
     required this.floatingDashboardSettings,
 
     //CONNECTIONS SETTINGS
@@ -101,6 +103,7 @@ class Settings extends Equatable {
     //GENERAL SETTINGS
     this.isDarkMode = true,
     this.keepSpeakerOn = true,
+    this.displayViewerCount = true,
     this.appLanguage = const {"languageCode": "en", "countryCode": "US"},
     this.floatingDashboardSettings = const FloatingDashboardSettings(
       userEvents: [],
@@ -149,6 +152,7 @@ class Settings extends Equatable {
         //GENERAL
         'isDarkMode': isDarkMode,
         'keepSpeakerOn': keepSpeakerOn,
+        'displayViewerCount': displayViewerCount,
         'appLanguage': appLanguage,
         'floatingDashboardSettings': floatingDashboardSettings?.toJson(),
         //CONNECTIONS
@@ -187,6 +191,7 @@ class Settings extends Equatable {
       //GENERAL
       isDarkMode,
       keepSpeakerOn,
+      displayViewerCount,
       appLanguage,
       floatingDashboardSettings,
       //CONNECTIONS
@@ -227,6 +232,7 @@ class Settings extends Equatable {
     //GENERAL
     bool? isDarkMode,
     bool? keepSpeakerOn,
+    bool? displayViewerCount,
     Map<String, String>? appLanguage,
     FloatingDashboardSettings? floatingDashboardSettings,
     //CONNECTIONS
@@ -262,6 +268,7 @@ class Settings extends Equatable {
         //GENERAL
         isDarkMode: isDarkMode ?? this.isDarkMode,
         keepSpeakerOn: keepSpeakerOn ?? this.keepSpeakerOn,
+        displayViewerCount: displayViewerCount ?? this.displayViewerCount,
         appLanguage: appLanguage ?? this.appLanguage,
         floatingDashboardSettings:
             floatingDashboardSettings ?? this.floatingDashboardSettings,

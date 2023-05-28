@@ -568,38 +568,67 @@ class SettingsView extends GetView<SettingsViewController> {
                     ],
                   ),
                 ),
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          "prevent_speaker".tr,
-                          style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyLarge!.color,
-                            fontSize: 18,
-                          ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        "prevent_speaker".tr,
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyLarge!.color,
+                          fontSize: 18,
                         ),
                       ),
-                      Container(
-                        child: Switch(
-                          onChanged: (value) {
-                            controller.homeViewController.settings.value =
-                                controller.homeViewController.settings.value
-                                    .copyWith(keepSpeakerOn: value);
-                            controller.saveSettings();
-                          },
-                          value: controller
-                              .homeViewController.settings.value.keepSpeakerOn!,
-                          activeTrackColor:
-                              Theme.of(context).colorScheme.tertiary,
-                          activeColor: Colors.white,
-                          inactiveTrackColor:
-                              Theme.of(context).colorScheme.tertiaryContainer,
+                    ),
+                    Container(
+                      child: Switch(
+                        onChanged: (value) {
+                          controller.homeViewController.settings.value =
+                              controller.homeViewController.settings.value
+                                  .copyWith(keepSpeakerOn: value);
+                          controller.saveSettings();
+                        },
+                        value: controller
+                            .homeViewController.settings.value.keepSpeakerOn!,
+                        activeTrackColor:
+                            Theme.of(context).colorScheme.tertiary,
+                        activeColor: Colors.white,
+                        inactiveTrackColor:
+                            Theme.of(context).colorScheme.tertiaryContainer,
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        "Display viewer counts",
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyLarge!.color,
+                          fontSize: 18,
                         ),
-                      )
-                    ],
-                  ),
+                      ),
+                    ),
+                    Container(
+                      child: Switch(
+                        onChanged: (value) {
+                          controller.homeViewController.settings.value =
+                              controller.homeViewController.settings.value
+                                  .copyWith(displayViewerCount: value);
+                          controller.saveSettings();
+                        },
+                        value: controller
+                            .homeViewController.settings.value.displayViewerCount!,
+                        activeTrackColor:
+                        Theme.of(context).colorScheme.tertiary,
+                        activeColor: Colors.white,
+                        inactiveTrackColor:
+                        Theme.of(context).colorScheme.tertiaryContainer,
+                      ),
+                    )
+                  ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -21,6 +21,7 @@ class SettingsDTO extends Settings {
     //GENERAL SETTINGS
     required bool isDarkMode,
     required bool keepSpeakerOn,
+    required bool displayViewerCount,
     required Map appLanguage,
     required FloatingDashboardSettings floatingDashboardSettings,
     //CONNECTIONS SETTINGS
@@ -55,6 +56,7 @@ class SettingsDTO extends Settings {
           //GENERAL SETTINGS
           isDarkMode: isDarkMode,
           keepSpeakerOn: keepSpeakerOn,
+          displayViewerCount: displayViewerCount,
           appLanguage: appLanguage,
           floatingDashboardSettings: floatingDashboardSettings,
           //CONNECTIONS SETTINGS
@@ -91,6 +93,7 @@ class SettingsDTO extends Settings {
         //GENERAL
         'isDarkMode': isDarkMode,
         'keepSpeakerOn': keepSpeakerOn,
+        'displayViewerCount': displayViewerCount,
         'appLanguage': appLanguage,
         'floatingDashboardSettings': floatingDashboardSettings?.toJson(),
         //CONNECTIONS
@@ -148,6 +151,9 @@ class SettingsDTO extends Settings {
       keepSpeakerOn: map['keepSpeakerOn'] != null
           ? map['keepSpeakerOn'] as bool
           : Settings.defaultSettings().keepSpeakerOn!,
+      displayViewerCount: map['displayViewerCount'] != null
+          ? map['displayViewerCount'] as bool
+          : Settings.defaultSettings().displayViewerCount!,
         appLanguage: map['appLanguage'] != null
           ? map['appLanguage'] as Map
           : Settings.defaultSettings().appLanguage!,

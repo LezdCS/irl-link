@@ -77,30 +77,33 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                             .substring(0, 7)),
                       ),
                     ),
-                    Row(
-                      children: [
-                        Icon(Icons.person_outline, color: Colors.red),
-                        SizedBox(
-                          width: 2,
-                        ),
-                        Text(
-                          controller.twitchStreamInfos.value.viewerCount
-                              .toString(),
-                          style: TextStyle(color: Colors.red),
-                        ),
-                        SizedBox(
-                          width: 6,
-                        ),
-                        Text(
-                          "viewers".tr,
-                          style: TextStyle(
-                            color: Theme.of(Get.context!)
-                                .textTheme
-                                .bodyLarge!
-                                .color,
+                    Visibility(
+                      visible: controller.homeViewController.settings.value.displayViewerCount!,
+                      child: Row(
+                        children: [
+                          Icon(Icons.person_outline, color: Colors.red),
+                          SizedBox(
+                            width: 2,
                           ),
-                        ),
-                      ],
+                          Text(
+                            controller.twitchStreamInfos.value.viewerCount
+                                .toString(),
+                            style: TextStyle(color: Colors.red),
+                          ),
+                          SizedBox(
+                            width: 6,
+                          ),
+                          Text(
+                            "viewers".tr,
+                            style: TextStyle(
+                              color: Theme.of(Get.context!)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .color,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
