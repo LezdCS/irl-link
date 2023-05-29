@@ -23,7 +23,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
                       height: 40,
                       child: ListView(
                         shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
+                        scrollDirection: Axis.horizontal,
                         children: [
                           InkWell(
                             onTap: () {

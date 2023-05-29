@@ -105,7 +105,8 @@ class ModerationBottomSheet extends StatelessWidget {
               onTap: () =>
                   controller.hideUser(controller.selectedMessage.value!),
               child: (controller.selectedMessage.value != null &&
-                      controller.homeViewController.settings.value.hiddenUsersIds!
+                      controller
+                              .homeViewController.settings.value.hiddenUsersIds!
                               .firstWhereOrNull((userId) =>
                                   controller.selectedMessage.value!.authorId ==
                                   userId) !=

@@ -306,7 +306,8 @@ class SettingsView extends GetView<SettingsViewController> {
                                     controller.alternateChannelChatController,
                                 onChanged: (value) {
                                   controller.homeViewController.settings.value =
-                                      controller.homeViewController.settings.value
+                                      controller
+                                          .homeViewController.settings.value
                                           .copyWith(
                                               alternateChannelName: controller
                                                   .alternateChannelChatController
@@ -332,7 +333,8 @@ class SettingsView extends GetView<SettingsViewController> {
                                   labelText: 'Twitch username',
                                   filled: false,
                                   labelStyle: TextStyle(
-                                    color: Theme.of(context).colorScheme.tertiary,
+                                    color:
+                                        Theme.of(context).colorScheme.tertiary,
                                   ),
                                   suffixIconConstraints: BoxConstraints(
                                     minWidth: 2,
@@ -355,8 +357,8 @@ class SettingsView extends GetView<SettingsViewController> {
                                             controller
                                                 .alternateChannelChatController
                                                 .clear();
-                                            controller.homeViewController.settings
-                                                    .value =
+                                            controller.homeViewController
+                                                    .settings.value =
                                                 controller.homeViewController
                                                     .settings.value
                                                     .copyWith(
@@ -625,13 +627,13 @@ class SettingsView extends GetView<SettingsViewController> {
                                   .copyWith(displayViewerCount: value);
                           controller.saveSettings();
                         },
-                        value: controller
-                            .homeViewController.settings.value.displayViewerCount!,
+                        value: controller.homeViewController.settings.value
+                            .displayViewerCount!,
                         activeTrackColor:
-                        Theme.of(context).colorScheme.tertiary,
+                            Theme.of(context).colorScheme.tertiary,
                         activeColor: Colors.white,
                         inactiveTrackColor:
-                        Theme.of(context).colorScheme.tertiaryContainer,
+                            Theme.of(context).colorScheme.tertiaryContainer,
                       ),
                     )
                   ],

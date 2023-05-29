@@ -17,8 +17,8 @@ class FloatingDashboardSettings extends Equatable {
   }
 
   Map toJson() => {
-    'userEvents': userEvents,
-  };
+        'userEvents': userEvents,
+      };
 
   @override
   bool get stringify => true;

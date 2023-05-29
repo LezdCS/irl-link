@@ -25,19 +25,19 @@ class IncomingRaidEvent extends TwitchChatMessage {
     required this.viewerCount,
     required this.raidingChannelName,
   }) : super(
-    messageId: messageId,
-    badges: badges,
-    color: color,
-    authorName: authorName,
-    authorId: authorId,
-    emotes: emotes,
-    message: message,
-    messageWidgetsBuild: messageWidgetsBuild,
-    timestamp: timestamp,
-    highlightType: highlightType,
-    isAction: isAction,
-    isDeleted: isDeleted,
-  );
+          messageId: messageId,
+          badges: badges,
+          color: color,
+          authorName: authorName,
+          authorId: authorId,
+          emotes: emotes,
+          message: message,
+          messageWidgetsBuild: messageWidgetsBuild,
+          timestamp: timestamp,
+          highlightType: highlightType,
+          isAction: isAction,
+          isDeleted: isDeleted,
+        );
 
   factory IncomingRaidEvent.fromString({
     required List<TwitchBadge> twitchBadges,

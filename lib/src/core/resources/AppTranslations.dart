@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 const List<Map<String, String>> supportedLanguages = [
-  {"name":"English","languageCode":"en", "countryCode":"US"},
-  {"name":"Français ","languageCode":"fr", "countryCode":"FR"},
+  {"name": "English", "languageCode": "en", "countryCode": "US"},
+  {"name": "Français ", "languageCode": "fr", "countryCode": "FR"},
 ];
 
 class AppTranslations extends Translations {

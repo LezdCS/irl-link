@@ -19,8 +19,7 @@ class AuthorName extends StatelessWidget {
       text: TextSpan(
         text: authorName,
         style: TextStyle(
-          color:
-          Color(int.parse(color.replaceAll('#', '0xff'))),
+          color: Color(int.parse(color.replaceAll('#', '0xff'))),
           fontSize: textSize,
           fontWeight: FontWeight.bold,
         ),

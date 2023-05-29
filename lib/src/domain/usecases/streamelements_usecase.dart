@@ -16,8 +16,7 @@ class StreamelementsUseCase {
     return streamelementsRepository.disconnect();
   }
 
-  Future<void> replayActivity(String token, SeActivity activity){
+  Future<void> replayActivity(String token, SeActivity activity) {
     return streamelementsRepository.replayActivity(token, activity);
   }
-
 }

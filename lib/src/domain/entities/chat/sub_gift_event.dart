@@ -27,19 +27,19 @@ class SubGiftEvent extends TwitchChatMessage {
     required this.giftedName,
     required this.systemMessage,
   }) : super(
-    messageId: messageId,
-    badges: badges,
-    color: color,
-    authorName: authorName,
-    authorId: authorId,
-    emotes: emotes,
-    message: message,
-    messageWidgetsBuild: messageWidgetsBuild,
-    timestamp: timestamp,
-    highlightType: highlightType,
-    isAction: isAction,
-    isDeleted: isDeleted,
-  );
+          messageId: messageId,
+          badges: badges,
+          color: color,
+          authorName: authorName,
+          authorId: authorId,
+          emotes: emotes,
+          message: message,
+          messageWidgetsBuild: messageWidgetsBuild,
+          timestamp: timestamp,
+          highlightType: highlightType,
+          isAction: isAction,
+          isDeleted: isDeleted,
+        );
 
   factory SubGiftEvent.fromString({
     required List<TwitchBadge> twitchBadges,
@@ -56,10 +56,11 @@ class SubGiftEvent extends TwitchChatMessage {
       messageMapped[elementSplited[0]] = elementSplited[1];
     });
 
-    String color = TwitchChatMessage.randomUsernameColor(messageMapped['display-name']!);
+    String color =
+        TwitchChatMessage.randomUsernameColor(messageMapped['display-name']!);
 
     Map<String, List<List<String>>> emotesIdsPositions =
-    TwitchChatMessage.parseEmotes(messageMapped);
+        TwitchChatMessage.parseEmotes(messageMapped);
 
     List messageList = messageSplited.last.split(':').sublist(2);
     String messageString = messageList.join(':');
@@ -77,7 +78,8 @@ class SubGiftEvent extends TwitchChatMessage {
 
     return SubGiftEvent(
       messageId: messageMapped['id'] as String,
-      badges: TwitchChatMessage.getBadges(messageMapped['badges'].toString(), twitchBadges),
+      badges: TwitchChatMessage.getBadges(
+          messageMapped['badges'].toString(), twitchBadges),
       color: color,
       authorName: messageMapped['display-name'] as String,
       authorId: messageMapped['user-id'] as String,

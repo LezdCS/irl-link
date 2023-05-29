@@ -113,7 +113,9 @@ class HomeViewController extends GetxController
           (element) => element.productID == "irl_premium_subscription",
         ) !=
         null;
-    if (isSubscribed && settings.value.streamElementsAccessToken != null && settings.value.streamElementsAccessToken!.isNotEmpty) {
+    if (isSubscribed &&
+        settings.value.streamElementsAccessToken != null &&
+        settings.value.streamElementsAccessToken!.isNotEmpty) {
       streamelementsViewController = Get.find<StreamelementsViewController>();
       StreamelementsTabView streamelementsPage = StreamelementsTabView();
       tabElements.add(streamelementsPage);
