@@ -39,7 +39,9 @@ class StreamelementsViewController extends GetxController
     activitiesScrollController = ScrollController();
     songRequestScrollController = ScrollController();
 
-    homeViewController.homeEvents.getSettings().then((value) => applySettings());
+    homeViewController.homeEvents
+        .getSettings()
+        .then((value) => applySettings());
 
     super.onInit();
   }

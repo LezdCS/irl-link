@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class TwitchEmote extends StatelessWidget {
-
   final MapEntry emote;
 
   const TwitchEmote({required this.emote});

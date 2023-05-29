@@ -113,7 +113,8 @@ class ObsTabViewController extends GetxController {
       alertMessage.value = "Connected.";
       isConnected.value = true;
 
-      List obsConnectionsHistory = homeViewController.settings.value.obsConnectionsHistory!;
+      List obsConnectionsHistory =
+          homeViewController.settings.value.obsConnectionsHistory!;
       if (obsConnectionsHistory.firstWhereOrNull(
             (element) =>
                 element['url'] == url && element['password'] == password,
@@ -202,9 +203,9 @@ class ObsTabViewController extends GetxController {
     sourcesList.value = sources;
     sourcesVolumesMap.clear();
     sources.forEach((source) async {
-      var response = await obsWebSocket!.send("GetInputVolume",
-          {"inputName": source.sourceName}).catchError((e) {
-            return null;
+      var response = await obsWebSocket!.send(
+          "GetInputVolume", {"inputName": source.sourceName}).catchError((e) {
+        return null;
       });
       if (response?.requestStatus.code == 100) {
         sourcesVolumesMap[source.sourceName] =

@@ -65,16 +65,24 @@ class ChatView extends GetView<ChatViewController> {
                                   selectedMessage:
                                       controller.selectedMessage.value,
                                   displayTimestamp: controller
-                                      .homeViewController.settings.value.displayTimestamp!,
-                                  textSize: controller.homeViewController.settings.value.textSize!,
+                                      .homeViewController
+                                      .settings
+                                      .value
+                                      .displayTimestamp!,
+                                  textSize: controller.homeViewController
+                                      .settings.value.textSize!,
                                 )
                               : MessageContainer(
                                   selectedMessage:
                                       controller.selectedMessage.value,
                                   message: message,
                                   displayTimestamp: controller
-                                      .homeViewController.settings.value.displayTimestamp!,
-                                  textSize: controller.homeViewController.settings.value.textSize!,
+                                      .homeViewController
+                                      .settings
+                                      .value
+                                      .displayTimestamp!,
+                                  textSize: controller.homeViewController
+                                      .settings.value.textSize!,
                                 ),
                         ),
                       );

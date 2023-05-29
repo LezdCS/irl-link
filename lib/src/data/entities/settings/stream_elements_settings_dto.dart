@@ -33,11 +33,17 @@ class StreamElementsSettingsDTO extends StreamElementsSettings {
   factory StreamElementsSettingsDTO.fromJson(Map<String, dynamic> map) {
     return StreamElementsSettingsDTO(
       showFollowerActivity: map['showFollowerActivity'] ??
-          Settings.defaultSettings().streamElementsSettings!.showFollowerActivity,
+          Settings.defaultSettings()
+              .streamElementsSettings!
+              .showFollowerActivity,
       showSubscriberActivity: map['showSubscriberActivity'] ??
-          Settings.defaultSettings().streamElementsSettings!.showSubscriberActivity,
+          Settings.defaultSettings()
+              .streamElementsSettings!
+              .showSubscriberActivity,
       showDonationActivity: map['showDonationActivity'] ??
-          Settings.defaultSettings().streamElementsSettings!.showDonationActivity,
+          Settings.defaultSettings()
+              .streamElementsSettings!
+              .showDonationActivity,
       showCheerActivity: map['showCheerActivity'] ??
           Settings.defaultSettings().streamElementsSettings!.showCheerActivity,
       showRaidActivity: map['showRaidActivity'] ??

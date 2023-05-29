@@ -23,19 +23,19 @@ class BitDonationEvent extends TwitchChatMessage {
     required isDeleted,
     required this.totalBits,
   }) : super(
-    messageId: messageId,
-    badges: badges,
-    color: color,
-    authorName: authorName,
-    authorId: authorId,
-    emotes: emotes,
-    message: message,
-    messageWidgetsBuild: messageWidgetsBuild,
-    timestamp: timestamp,
-    highlightType: highlightType,
-    isAction: isAction,
-    isDeleted: isDeleted,
-  );
+          messageId: messageId,
+          badges: badges,
+          color: color,
+          authorName: authorName,
+          authorId: authorId,
+          emotes: emotes,
+          message: message,
+          messageWidgetsBuild: messageWidgetsBuild,
+          timestamp: timestamp,
+          highlightType: highlightType,
+          isAction: isAction,
+          isDeleted: isDeleted,
+        );
 
   factory BitDonationEvent.fromString({
     required List<TwitchBadge> twitchBadges,
@@ -53,10 +53,10 @@ class BitDonationEvent extends TwitchChatMessage {
     });
 
     String color =
-    TwitchChatMessage.randomUsernameColor(messageMapped['display-name']!);
+        TwitchChatMessage.randomUsernameColor(messageMapped['display-name']!);
 
     Map<String, List<List<String>>> emotesIdsPositions =
-    TwitchChatMessage.parseEmotes(messageMapped);
+        TwitchChatMessage.parseEmotes(messageMapped);
 
     List messageList = messageSplited.last.split(':').sublist(2);
     String messageString = messageList.join(':');
@@ -86,7 +86,8 @@ class BitDonationEvent extends TwitchChatMessage {
       highlightType: HighlightType.bitDonation,
       isAction: false,
       isDeleted: false,
-      totalBits:  messageMapped['bits'] == null ? 0 : int.parse(messageMapped['bits']!),
+      totalBits:
+          messageMapped['bits'] == null ? 0 : int.parse(messageMapped['bits']!),
     );
   }
 
@@ -107,11 +108,11 @@ class BitDonationEvent extends TwitchChatMessage {
         setId: 'sub-gifter',
         versionId: '1',
         imageUrl1x:
-        'https://static-cdn.jtvnw.net/badges/v1/a5ef6c17-2e5b-4d8f-9b80-2779fd722414/1',
+            'https://static-cdn.jtvnw.net/badges/v1/a5ef6c17-2e5b-4d8f-9b80-2779fd722414/1',
         imageUrl2x:
-        'https://static-cdn.jtvnw.net/badges/v1/a5ef6c17-2e5b-4d8f-9b80-2779fd722414/2',
+            'https://static-cdn.jtvnw.net/badges/v1/a5ef6c17-2e5b-4d8f-9b80-2779fd722414/2',
         imageUrl4x:
-        'https://static-cdn.jtvnw.net/badges/v1/a5ef6c17-2e5b-4d8f-9b80-2779fd722414/3',
+            'https://static-cdn.jtvnw.net/badges/v1/a5ef6c17-2e5b-4d8f-9b80-2779fd722414/3',
       ),
     ];
     return BitDonationEvent(

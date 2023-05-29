@@ -9,10 +9,14 @@ class Subscription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? price = controller.homeViewController.products.firstWhereOrNull(
+    String? price = controller.homeViewController.products
+            .firstWhereOrNull(
               (element) => element.id == "irl_premium_subscription",
-            )?.price ?? "";
-    bool isSubscribed = controller.homeViewController.purchases.firstWhereOrNull(
+            )
+            ?.price ??
+        "";
+    bool isSubscribed =
+        controller.homeViewController.purchases.firstWhereOrNull(
               (element) => element.productID == "irl_premium_subscription",
             ) !=
             null;

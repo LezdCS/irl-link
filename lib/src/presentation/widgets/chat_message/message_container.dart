@@ -19,18 +19,18 @@ class MessageContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Container(
-        padding: EdgeInsets.only(top: 2, bottom: 2, left: 5),
-        decoration: BoxDecoration(
-          color: selectedMessage != null && selectedMessage == message
-              ? Theme.of(Get.context!).colorScheme.secondary
-              : Theme.of(Get.context!).colorScheme.background,
-        ),
-        child: MessageRow(
-          message: message,
-          displayTimestamp: displayTimestamp,
-          textSize: textSize,
-        ),
+    return Container(
+      padding: EdgeInsets.only(top: 2, bottom: 2, left: 5),
+      decoration: BoxDecoration(
+        color: selectedMessage != null && selectedMessage == message
+            ? Theme.of(Get.context!).colorScheme.secondary
+            : Theme.of(Get.context!).colorScheme.background,
+      ),
+      child: MessageRow(
+        message: message,
+        displayTimestamp: displayTimestamp,
+        textSize: textSize,
+      ),
     );
   }
 }
