@@ -212,12 +212,26 @@ class ChatViewController extends GetxController
 
   /// Delete [message] by his id
   void deleteMessageInstruction(ChatMessage message) {
+    TwitchApi.deleteMessage(
+      twitchData!.accessToken,
+      twitchChat?.channelId,
+      message,
+      kTwitchAuthClientId,
+    );
+
     if (twitchData == null) message.isDeleted = true;
     selectedMessage.value = null;
   }
 
   /// Ban user for specific [duration] based on the author name in the [message]
   void timeoutMessageInstruction(ChatMessage message, int duration) {
+    TwitchApi.banUser(
+      twitchData!.accessToken,
+      twitchChat?.channelId,
+      message,
+      duration,
+      kTwitchAuthClientId,
+    );
     Get.back();
     selectedMessage.value = null;
   }
