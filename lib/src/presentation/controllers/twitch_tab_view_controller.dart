@@ -31,7 +31,7 @@ class TwitchTabViewController extends GetxController {
 
   Timer? refreshDataTimer;
   Timer? refreshDataTimerProgressBar;
-  Rx<Duration> myDuration = Duration(seconds: 15).obs;
+  Rx<Duration> myDuration = const Duration(seconds: 15).obs;
 
   @override
   void onInit() {
@@ -47,18 +47,18 @@ class TwitchTabViewController extends GetxController {
   void onReady() async {
     if (homeViewController.twitchData != null) {
       refreshData();
-      refreshDataTimer = Timer.periodic(Duration(seconds: 15), (timer) {
+      refreshDataTimer = Timer.periodic(const Duration(seconds: 15), (timer) {
         refreshData();
       });
     } else {
       isDemo.value = true;
     }
 
-    refreshDataTimerProgressBar = Timer.periodic(Duration(seconds: 1), (timer) {
+    refreshDataTimerProgressBar = Timer.periodic(const Duration(seconds: 1), (timer) {
       final reduceSecondsBy = 1;
       final seconds = myDuration.value.inSeconds - reduceSecondsBy;
       if (seconds < 0) {
-        myDuration.value = Duration(seconds: 15);
+        myDuration.value = const Duration(seconds: 15);
       } else {
         myDuration.value = Duration(seconds: seconds);
       }
@@ -75,7 +75,7 @@ class TwitchTabViewController extends GetxController {
   }
 
   void refreshData() {
-    myDuration.value = Duration(seconds: 15);
+    myDuration.value = const Duration(seconds: 15);
     if (homeViewController.twitchData == null) return;
     getStreamInfos();
     getPoll();

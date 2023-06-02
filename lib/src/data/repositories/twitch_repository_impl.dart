@@ -58,7 +58,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
         profilePicture: decodedToken['picture'] ?? "",
       );
 
-      TwitchUserDTO twitchUser = TwitchUserDTO(
+      TwitchUserDTO twitchUser = const TwitchUserDTO(
         profileImageUrl: '',
         id: '',
         broadcasterType: '',
@@ -87,7 +87,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(twitchData);
     } catch (e) {
-      return DataFailed("Unable to retrieve Twitch Data from Auth");
+      return const DataFailed("Unable to retrieve Twitch Data from Auth");
     }
   }
 
@@ -119,7 +119,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       return DataSuccess(newTwitchData);
     } on DioError catch (e) {
       debugPrint(e.toString());
-      return DataFailed("Refresh encountered issues");
+      return const DataFailed("Refresh encountered issues");
     }
   }
 
@@ -154,7 +154,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
     } on DioError catch (e) {
       debugPrint(e.toString());
     }
-    return DataSuccess('Logged out successfuly');
+    return const DataSuccess('Logged out successfuly');
   }
 
   @override
@@ -167,7 +167,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       TwitchCredentials twitchData =
           TwitchCredentialsDTO.fromJson(twitchDataJson);
 
-      TwitchAuthParams params = TwitchAuthParams();
+      TwitchAuthParams params = const TwitchAuthParams();
 
       List paramsScopesList = params.scopes.split(' ');
       paramsScopesList.sort((a, b) {
@@ -182,7 +182,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       String savedScopesOrdered = savedScopesList.join(' ');
 
       if (savedScopesOrdered != paramsScopesOrdered) {
-        return DataFailed("Scopes have been updated, please login again");
+        return const DataFailed("Scopes have been updated, please login again");
       }
 
       //refresh the access token to be sure the token is going to be valid after starting the app
@@ -192,7 +192,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(twitchData);
     } else {
-      return DataFailed("No Twitch Data in local storage");
+      return const DataFailed("No Twitch Data in local storage");
     }
   }
 
@@ -230,7 +230,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       return DataSuccess(twitchUser);
     } on DioError catch (e) {
       debugPrint(e.toString());
-      return DataFailed("Error retrieving user infos");
+      return const DataFailed("Error retrieving user infos");
     }
   }
 
@@ -264,7 +264,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       return DataSuccess(twitchUsers);
     } on DioError catch (e) {
       debugPrint(e.toString());
-      return DataFailed("Error retrieving users infos");
+      return const DataFailed("Error retrieving users infos");
     }
   }
 
@@ -297,7 +297,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       return DataSuccess(twitchStreamInfosDto);
     } on DioError catch (e) {
       debugPrint(e.toString());
-      return DataFailed("Error Getting Stream Infos");
+      return const DataFailed("Error Getting Stream Infos");
     }
   }
 
@@ -330,7 +330,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       return DataSuccess(response);
     } on DioError catch (e) {
       debugPrint(e.toString());
-      return DataFailed("Error editing Stream chat settings");
+      return const DataFailed("Error editing Stream chat settings");
     }
   }
 
@@ -348,10 +348,10 @@ class TwitchRepositoryImpl extends TwitchRepository {
             'moderator_id': broadcasterId
           },
           data: jsonEncode(titleMap));
-      return DataSuccess("");
+      return const DataSuccess("");
     } on DioError catch (e) {
       debugPrint(e.toString());
-      return DataFailed("Error editing Stream chat settings");
+      return const DataFailed("Error editing Stream chat settings");
     }
   }
 
@@ -368,7 +368,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
           'https://api.twitch.tv/helix/polls?broadcaster_id=$broadcasterId');
 
       if (response.data['data'] == null || response.data['data'].isEmpty) {
-        return DataFailed("There is no poll");
+        return const DataFailed("There is no poll");
       } else {
         poll = TwitchPollDTO.fromJson(response.data['data'][0]);
         if (poll.status == PollStatus.ACTIVE ||
@@ -376,11 +376,11 @@ class TwitchRepositoryImpl extends TwitchRepository {
             poll.status == PollStatus.TERMINATED) {
           return DataSuccess(poll);
         }
-        return DataFailed("No poll to show");
+        return const DataFailed("No poll to show");
       }
     } on DioError catch (e) {
       print(e.response);
-      return DataFailed("Error retrieving Twitch Poll");
+      return const DataFailed("Error retrieving Twitch Poll");
     }
   }
 
@@ -411,7 +411,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       return DataSuccess(poll);
     } on DioError catch (e) {
       print(e.response);
-      return DataFailed("Error ending poll");
+      return const DataFailed("Error ending poll");
     }
   }
 
@@ -428,7 +428,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
           'https://api.twitch.tv/helix/predictions?broadcaster_id=$broadcasterId');
 
       if (response.data['data'] == null || response.data['data'].isEmpty) {
-        return DataFailed("There is no prediction");
+        return const DataFailed("There is no prediction");
       } else {
         prediction = TwitchPredictionDTO.fromJson(response.data['data'][0]);
         if (prediction.status == PredictionStatus.RESOLVED ||
@@ -436,11 +436,11 @@ class TwitchRepositoryImpl extends TwitchRepository {
             prediction.status == PredictionStatus.LOCKED) {
           return DataSuccess(prediction);
         }
-        return DataFailed("No prediction to show");
+        return const DataFailed("No prediction to show");
       }
     } on DioError catch (e) {
       print(e.response);
-      return DataFailed("Error retrieving Twitch Prediction");
+      return const DataFailed("Error retrieving Twitch Prediction");
     }
   }
 
@@ -459,7 +459,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       return DataSuccess(newPoll);
     } on DioError catch (e) {
       print(e.response);
-      return DataFailed("Error retrieving Twitch Prediction");
+      return const DataFailed("Error retrieving Twitch Prediction");
     }
   }
 

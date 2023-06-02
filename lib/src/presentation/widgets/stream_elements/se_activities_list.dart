@@ -15,7 +15,7 @@ class SeActivitiesList extends GetView {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 20, right: 20, top: 0),
+      margin: const EdgeInsets.only(left: 20, right: 20, top: 0),
       child: Column(
         children: [
           Row(
@@ -52,9 +52,9 @@ class SeActivitiesList extends GetView {
 
   Widget _activitiesSettings() {
     return PopupMenuButton(
-      offset: Offset(30, 10),
+      offset: const Offset(30, 10),
       color: Theme.of(Get.context!).colorScheme.secondary,
-      child: Icon(Icons.settings),
+      child: const Icon(Icons.settings),
       itemBuilder: (context) => [
         PopupMenuItem(
           child: Obx(
@@ -227,19 +227,19 @@ Widget _activityCollapsed(
     StreamelementsViewController controller, SeActivity activity) {
   return ExpandableButton(
     child: Container(
-      padding: EdgeInsets.only(left: 3, right: 3, top: 5, bottom: 5),
+      padding: const EdgeInsets.only(left: 3, right: 3, top: 5, bottom: 5),
       decoration: BoxDecoration(
         color: activity.colorsForEnum()[1],
-        borderRadius: BorderRadius.all(
+        borderRadius: const BorderRadius.all(
           Radius.circular(5),
         ),
       ),
-      margin: EdgeInsets.only(top: 8),
+      margin: const EdgeInsets.only(top: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           activity.getIcon(),
-          SizedBox(width: 4),
+          const SizedBox(width: 4),
           Expanded(
             child: RichText(
               overflow: TextOverflow.ellipsis,
@@ -252,10 +252,10 @@ Widget _activityCollapsed(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  WidgetSpan(child: SizedBox(width: 4)),
+                  const WidgetSpan(child: SizedBox(width: 4)),
                   TextSpan(
                     text: activity.username,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   TextSpan(
                     text: activity.message != null
@@ -270,7 +270,7 @@ Widget _activityCollapsed(
             onTap: () {
               controller.replayEvent(activity);
             },
-            child: Icon(Icons.restart_alt),
+            child: const Icon(Icons.restart_alt),
           ),
         ],
       ),
@@ -282,14 +282,14 @@ Widget _activityExpanded(
     StreamelementsViewController controller, SeActivity activity) {
   return ExpandableButton(
     child: Container(
-      padding: EdgeInsets.only(left: 3, right: 3, top: 5, bottom: 20),
+      padding: const EdgeInsets.only(left: 3, right: 3, top: 5, bottom: 20),
       decoration: BoxDecoration(
         color: activity.colorsForEnum()[1],
-        borderRadius: BorderRadius.all(
+        borderRadius: const BorderRadius.all(
           Radius.circular(5),
         ),
       ),
-      margin: EdgeInsets.only(top: 8),
+      margin: const EdgeInsets.only(top: 8),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -298,7 +298,7 @@ Widget _activityExpanded(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               activity.getIcon(),
-              SizedBox(width: 4),
+              const SizedBox(width: 4),
               Expanded(
                 child: RichText(
                   text: TextSpan(children: [
@@ -309,10 +309,10 @@ Widget _activityExpanded(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    WidgetSpan(child: SizedBox(width: 4)),
+                    const WidgetSpan(child: SizedBox(width: 4)),
                     TextSpan(
                       text: activity.username,
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ]),
                 ),
@@ -321,12 +321,12 @@ Widget _activityExpanded(
                 onTap: () {
                   controller.replayEvent(activity);
                 },
-                child: Icon(Icons.restart_alt),
+                child: const Icon(Icons.restart_alt),
               ),
             ],
           ),
           Container(
-            padding: EdgeInsets.only(left: 3, right: 3, top: 10),
+            padding: const EdgeInsets.only(left: 3, right: 3, top: 10),
             child: Text(
               activity.message != null ? ' "' + activity.message! + '"' : "",
             ),

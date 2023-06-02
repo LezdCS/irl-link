@@ -44,7 +44,7 @@ class ManageListBrowserTabs extends GetView {
                             .length <=
                         0
                     ? Container(
-                        padding: EdgeInsets.only(top: 20),
+                        padding: const EdgeInsets.only(top: 20),
                         child: Text(
                           "Nothing in the list!",
                           style: TextStyle(
@@ -54,7 +54,7 @@ class ManageListBrowserTabs extends GetView {
                       )
                     : ReorderableListView.builder(
                         shrinkWrap: true,
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                             top: 8, left: 18, right: 18, bottom: 8),
                         itemCount: controller.homeViewController.settings.value
                             .browserTabs!.length,
@@ -79,9 +79,9 @@ class ManageListBrowserTabs extends GetView {
                                   .browserTabs![index],
                             ),
                             color: Theme.of(context).colorScheme.secondary,
-                            padding: EdgeInsets.only(
+                            padding: const EdgeInsets.only(
                                 left: 20, right: 20, bottom: 10, top: 10),
-                            margin: EdgeInsets.only(bottom: 5, top: 5),
+                            margin: const EdgeInsets.only(bottom: 5, top: 5),
                             child: InkWell(
                               onTap: () {
                                 Get.defaultDialog(
@@ -98,8 +98,8 @@ class ManageListBrowserTabs extends GetView {
                                   ),
                                   backgroundColor:
                                       Theme.of(context).colorScheme.background,
-                                  buttonColor: Color(0xFF9147ff),
-                                  cancelTextColor: Color(0xFF9147ff),
+                                  buttonColor: const Color(0xFF9147ff),
+                                  cancelTextColor: const Color(0xFF9147ff),
                                   confirmTextColor: Colors.white,
                                   radius: 10,
                                   onConfirm: () {
@@ -127,7 +127,7 @@ class ManageListBrowserTabs extends GetView {
                                       onTap: () {
                                         controller.removeBrowserTab(elem);
                                       },
-                                      child: Icon(
+                                      child: const Icon(
                                         Icons.close,
                                         color: Colors.red,
                                         size: 30,
@@ -142,19 +142,19 @@ class ManageListBrowserTabs extends GetView {
                       ),
               ),
               Container(
-                padding: EdgeInsets.only(bottom: 20),
+                padding: const EdgeInsets.only(bottom: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
                       width: 120,
-                      padding: EdgeInsets.only(
+                      padding: const EdgeInsets.only(
                         top: 10,
                         bottom: 10,
                         left: 5,
                         right: 5,
                       ),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.green,
                         borderRadius: BorderRadius.all(
                           Radius.circular(2),
@@ -173,8 +173,8 @@ class ManageListBrowserTabs extends GetView {
                             ),
                             backgroundColor:
                                 Theme.of(context).colorScheme.background,
-                            buttonColor: Color(0xFF9147ff),
-                            cancelTextColor: Color(0xFF9147ff),
+                            buttonColor: const Color(0xFF9147ff),
+                            cancelTextColor: const Color(0xFF9147ff),
                             confirmTextColor: Colors.white,
                             radius: 10,
                             onConfirm: () {
@@ -222,7 +222,7 @@ Widget _addDialog(context, controller) {
           },
           decoration: InputDecoration(
             isDense: true,
-            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
             enabledBorder: Theme.of(context).inputDecorationTheme.border,
             hintStyle: TextStyle(
                 color: Theme.of(context).textTheme.bodyLarge!.color,
@@ -235,7 +235,7 @@ Widget _addDialog(context, controller) {
           ),
         ),
       ),
-      SizedBox(
+      const SizedBox(
         height: 10,
       ),
       Form(
@@ -256,7 +256,7 @@ Widget _addDialog(context, controller) {
           },
           decoration: InputDecoration(
             isDense: true,
-            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
             enabledBorder: Theme.of(context).inputDecorationTheme.border,
             hintStyle: TextStyle(
                 color: Theme.of(context).textTheme.bodyLarge!.color,
@@ -294,7 +294,7 @@ Widget _editDialog(context, controller, elem) {
           },
           decoration: InputDecoration(
             isDense: true,
-            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
             enabledBorder: Theme.of(context).inputDecorationTheme.border,
             hintStyle: TextStyle(
                 color: Theme.of(context).textTheme.bodyLarge!.color,
@@ -307,7 +307,7 @@ Widget _editDialog(context, controller, elem) {
           ),
         ),
       ),
-      SizedBox(
+      const SizedBox(
         height: 10,
       ),
       Form(
@@ -326,7 +326,7 @@ Widget _editDialog(context, controller, elem) {
           },
           decoration: InputDecoration(
             isDense: true,
-            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
             enabledBorder: Theme.of(context).inputDecorationTheme.border,
             hintStyle: TextStyle(
                 color: Theme.of(context).textTheme.bodyLarge!.color,

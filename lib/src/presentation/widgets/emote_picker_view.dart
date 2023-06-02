@@ -14,7 +14,7 @@ class EmotePickerView extends GetView {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(
+        borderRadius: const BorderRadius.all(
           Radius.circular(8),
         ),
         boxShadow: [
@@ -22,14 +22,14 @@ class EmotePickerView extends GetView {
             color: Colors.black.withOpacity(0.5),
             spreadRadius: 5,
             blurRadius: 7,
-            offset: Offset(0, 3), // changes position of shadow
+            offset: const Offset(0, 3), // changes position of shadow
           ),
         ],
       ),
       child: Column(
         children: [
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Color(0xFF282828),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(8),
@@ -37,10 +37,10 @@ class EmotePickerView extends GetView {
               ),
             ),
             child: TextField(
-              style: TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.white),
               textAlignVertical: TextAlignVertical.center,
               onChanged: (value) => homeViewController.searchEmote(value),
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 prefixIcon: Icon(
                   Icons.search,
                   size: 20,
@@ -56,11 +56,11 @@ class EmotePickerView extends GetView {
           Expanded(
             flex: 4,
             child: Container(
-              padding: EdgeInsets.only(left: 5, right: 5),
-              color: Color(0xFF121212),
+              padding: const EdgeInsets.only(left: 5, right: 5),
+              color: const Color(0xFF121212),
               child: Obx(
                 () => GridView.builder(
-                  padding: EdgeInsets.only(top: 5),
+                  padding: const EdgeInsets.only(top: 5),
                   itemCount: homeViewController.twitchEmotes.length,
                   itemBuilder: (context, i) {
                     return InkWell(
@@ -81,7 +81,7 @@ class EmotePickerView extends GetView {
                       ),
                     );
                   },
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 5,
                   ),
                 ),

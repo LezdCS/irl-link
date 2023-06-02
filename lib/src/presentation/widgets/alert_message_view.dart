@@ -15,15 +15,15 @@ class AlertMessageView extends GetView {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      padding: EdgeInsets.only(bottom: 5, top: 5),
+      padding: const EdgeInsets.only(bottom: 5, top: 5),
       color: color,
-      duration: Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 400),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             message,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -32,10 +32,10 @@ class AlertMessageView extends GetView {
           Visibility(
             visible: isProgress,
             child: Container(
-              margin: EdgeInsets.only(left: 8),
+              margin: const EdgeInsets.only(left: 8),
               width: 20,
               height: 20,
-              child: CircularProgressIndicator(color: Colors.white),
+              child: const CircularProgressIndicator(color: Colors.white),
             ),
           ),
         ],

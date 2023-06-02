@@ -35,7 +35,7 @@ class _WebPageViewState extends State<WebPageView>
         mediaTypesRequiringUserAction: Set(),
       );
     } else {
-      params = PlatformWebViewControllerCreationParams();
+      params = const PlatformWebViewControllerCreationParams();
     }
 
     //create an Uri based on an url that can have a scheme or not

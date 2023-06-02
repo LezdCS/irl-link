@@ -34,7 +34,7 @@ class HomeView extends GetView<HomeViewController> {
           resizeToAvoidBottomInset: true,
           body: Obx(
             () => FloatingDraggableWidget(
-              floatingWidget: InkWell(
+              floatingWidget: const InkWell(
                 // onTap: () {
                   // controller.displayDashboard.value =
                   //     !controller.displayDashboard.value;
@@ -59,7 +59,7 @@ class HomeView extends GetView<HomeViewController> {
                   FocusScope.of(context).unfocus(),
                 },
                 child: Container(
-                  constraints: BoxConstraints.expand(),
+                  constraints: const BoxConstraints.expand(),
                   decoration: BoxDecoration(
                     color: context.theme.colorScheme.background,
                   ),
@@ -82,19 +82,19 @@ class HomeView extends GetView<HomeViewController> {
                               viewMode: context.isPortrait
                                   ? SplitViewMode.Vertical
                                   : SplitViewMode.Horizontal,
-                              color: Color(0xFF464444),
+                              color: const Color(0xFF464444),
                             ),
                             activeIndicator: SplitIndicator(
-                              color: Color(0xFF464444),
+                              color: const Color(0xFF464444),
                               viewMode: context.isPortrait
                                   ? SplitViewMode.Vertical
                                   : SplitViewMode.Horizontal,
                               isActive: true,
                             ),
                             children: [
-                              controller.tabElements.length >= 1
+                              controller.tabElements.isNotEmpty
                                   ? _top(context, height, width)
-                                  : Text(
+                                  : const Text(
                                       "No tabs",
                                       textAlign: TextAlign.center,
                                     ),
@@ -172,7 +172,7 @@ class HomeView extends GetView<HomeViewController> {
         labelColor: Theme.of(context).colorScheme.tertiary,
         unselectedLabelColor: Theme.of(context).textTheme.bodyLarge!.color,
         indicatorColor: Theme.of(context).colorScheme.tertiary,
-        labelPadding: EdgeInsets.symmetric(horizontal: 30),
+        labelPadding: const EdgeInsets.symmetric(horizontal: 30),
         indicatorSize: TabBarIndicatorSize.tab,
         indicatorWeight: 2,
         dividerColor: Colors.transparent,
@@ -199,7 +199,7 @@ class HomeView extends GetView<HomeViewController> {
 
   Widget _bottomNavBar(double height, double width, BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 10),
+      padding: const EdgeInsets.only(left: 10),
       height: height * 0.06,
       child: Row(
         children: [
@@ -216,12 +216,12 @@ class HomeView extends GetView<HomeViewController> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.only(left: 5, right: 5),
+                  padding: const EdgeInsets.only(left: 5, right: 5),
                   child: Row(
                     children: [
                       InkWell(
                         onTap: () => controller.getEmotes(),
-                        child: Image(
+                        child: const Image(
                           image: AssetImage("lib/assets/twitchSmileEmoji.png"),
                           width: 30,
                         ),
@@ -253,7 +253,7 @@ class HomeView extends GetView<HomeViewController> {
                             isDense: true,
                             enabledBorder: InputBorder.none,
                             focusedBorder: InputBorder.none,
-                            contentPadding: EdgeInsets.only(left: 5),
+                            contentPadding: const EdgeInsets.only(left: 5),
                           ),
                         ),
                       ),
@@ -307,7 +307,7 @@ class HomeView extends GetView<HomeViewController> {
       child: Container(
         color: Theme.of(context).colorScheme.background,
         child: TabBarView(
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           controller: controller.tabController,
           children: List<Widget>.generate(
             controller.tabElements.length,

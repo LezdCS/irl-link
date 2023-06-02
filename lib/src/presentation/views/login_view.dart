@@ -30,12 +30,12 @@ class LoginView extends GetView<LoginViewController> {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.only(left: 10, right: 10),
+          padding: const EdgeInsets.only(left: 10, right: 10),
           child: InkWell(
             onTap: () {
               controller.login();
             },
-            child: Image(
+            child: const Image(
               image: AssetImage("lib/assets/login.png"),
             ),
           ),
@@ -45,8 +45,8 @@ class LoginView extends GetView<LoginViewController> {
             controller.homeWitoutLogin();
           },
           child: Container(
-            padding: EdgeInsets.only(top: 10),
-            child: Text(
+            padding: const EdgeInsets.only(top: 10),
+            child: const Text(
               "Maybe later",
               style: TextStyle(
                 fontSize: 13,
@@ -62,9 +62,9 @@ class LoginView extends GetView<LoginViewController> {
   Widget _loadingCircle(context) {
     return Column(
       children: [
-        CircularProgressIndicator(),
+        const CircularProgressIndicator(),
         Container(
-          padding: EdgeInsets.only(top: 10),
+          padding: const EdgeInsets.only(top: 10),
           child: Obx(
             () => Text(
               controller.loadingMessage.value,
@@ -80,7 +80,7 @@ class LoginView extends GetView<LoginViewController> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        Text(
+        const Text(
           "IRL LINK",
           style: TextStyle(
             fontSize: 34,
@@ -92,8 +92,8 @@ class LoginView extends GetView<LoginViewController> {
         Container(),
         Column(
           children: [
-            Text("Open Source Project by @LezdCS"),
-            SizedBox(
+            const Text("Open Source Project by @LezdCS"),
+            const SizedBox(
               height: 10,
             ),
             Row(
@@ -117,7 +117,7 @@ class LoginView extends GetView<LoginViewController> {
                     height: 25,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 InkWell(
@@ -140,7 +140,7 @@ class LoginView extends GetView<LoginViewController> {
                 ),
               ],
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text("Version: ${Globals.version}")
           ],
         ),

@@ -32,7 +32,7 @@ class Tts extends StatelessWidget {
         ),
         body: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.only(top: 8, left: 10, right: 10, bottom: 8),
+            padding: const EdgeInsets.only(top: 8, left: 10, right: 10, bottom: 8),
             color: Theme.of(context).colorScheme.background,
             child: Column(
               children: [
@@ -214,7 +214,7 @@ class Tts extends StatelessWidget {
                     )
                   ],
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -241,7 +241,7 @@ class Tts extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 InkWell(
                   onTap: () {
                     _ttsDialog(
@@ -323,7 +323,7 @@ class Tts extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 InkWell(
                   onTap: () {
                     _ttsDialog(
@@ -405,7 +405,7 @@ class Tts extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 InkWell(
                   onTap: () {
                     _ttsDialog(
@@ -502,10 +502,10 @@ class Tts extends StatelessWidget {
   }) {
     Get.defaultDialog(
       title: title,
-      titleStyle: TextStyle(color: Colors.white),
-      backgroundColor: Color(0xFF0e0e10),
-      buttonColor: Color(0xFF9147ff),
-      cancelTextColor: Color(0xFF9147ff),
+      titleStyle: const TextStyle(color: Colors.white),
+      backgroundColor: const Color(0xFF0e0e10),
+      buttonColor: const Color(0xFF9147ff),
+      cancelTextColor: const Color(0xFF9147ff),
       textCancel: "Back",
       radius: 10,
       content: Obx(
@@ -517,7 +517,7 @@ class Tts extends StatelessWidget {
                   TextStyle(color: controller.nothingJustToRefreshDialog.value),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             ListView.builder(
               shrinkWrap: true,
               itemCount: list.length,
@@ -539,7 +539,7 @@ class Tts extends StatelessWidget {
                     decoration: InputDecoration(
                       isDense: true,
                       contentPadding:
-                          EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                          const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                       hintText: textFieldHint,
                       labelText: textFieldHint,
                       labelStyle: TextStyle(
@@ -551,7 +551,7 @@ class Tts extends StatelessWidget {
                 Expanded(
                   flex: 3,
                   child: Container(
-                    margin: EdgeInsets.only(left: 10),
+                    margin: const EdgeInsets.only(left: 10),
                     child: TextButton(
                       style: TextButton.styleFrom(
                         backgroundColor:
