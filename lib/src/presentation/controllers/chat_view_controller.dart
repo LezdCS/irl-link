@@ -82,6 +82,7 @@ class ChatViewController extends GetxController
           twitchChat!.connect();
         },
         onError: () {},
+        params: TwitchChatParameters(addFirstMessages: true)
       );
 
       twitchChat!.isConnected.addListener(() {
