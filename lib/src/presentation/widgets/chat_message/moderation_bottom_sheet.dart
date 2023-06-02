@@ -17,11 +17,11 @@ class ModerationBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
+      padding: const EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
       decoration: BoxDecoration(
-        border: Border.all(color: Color(0xFFa970ff)),
-        color: Color(0xFF18181b),
-        borderRadius: BorderRadius.only(
+        border: Border.all(color: const Color(0xFFa970ff)),
+        color: const Color(0xFF18181b),
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(8),
           topRight: Radius.circular(8),
         ),
@@ -34,7 +34,7 @@ class ModerationBottomSheet extends StatelessWidget {
             children: [
               Text(
                 controller.selectedMessage.value?.authorName ?? "",
-                style: TextStyle(
+                style: const TextStyle(
                     color: Colors.white,
                     fontSize: 20,
                     fontWeight: FontWeight.bold),
@@ -50,15 +50,15 @@ class ModerationBottomSheet extends StatelessWidget {
                       ),
                       mode: LaunchMode.externalApplication,
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.open_in_browser,
                       color: Colors.white,
                     ),
                   ),
-                  SizedBox(width: 5),
+                  const SizedBox(width: 5),
                   InkWell(
                     onTap: () => controller.selectedMessage.value = null,
-                    child: Icon(
+                    child: const Icon(
                       Icons.close,
                       color: Colors.white,
                     ),
@@ -67,7 +67,7 @@ class ModerationBottomSheet extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           GestureDetector(
             onLongPress: () {
               Clipboard.setData(ClipboardData(
@@ -76,7 +76,7 @@ class ModerationBottomSheet extends StatelessWidget {
             },
             child: Text(
               controller.selectedMessage.value?.message ?? "",
-              style: TextStyle(
+              style: const TextStyle(
                 color: Color(0xFF575757),
                 fontStyle: FontStyle.italic,
                 fontSize: 14,
@@ -88,19 +88,19 @@ class ModerationBottomSheet extends StatelessWidget {
                 .deleteMessageInstruction(controller.selectedMessage.value!),
             child: moderationViewButton(null, "Delete message"),
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           Row(children: [
             InkWell(
               onTap: () => controller
                   .banMessageInstruction(controller.selectedMessage.value!),
               child: moderationViewButton(Icons.stop, "Ban"),
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             InkWell(
               onTap: () => timeoutDialog(),
               child: moderationViewButton(Icons.timer, "Timeout"),
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             InkWell(
               onTap: () =>
                   controller.hideUser(controller.selectedMessage.value!),
@@ -122,9 +122,9 @@ class ModerationBottomSheet extends StatelessWidget {
 
   Widget moderationViewButton(IconData? icon, String message) {
     return Container(
-      margin: EdgeInsets.only(left: 10),
-      padding: EdgeInsets.only(top: 5, left: 5, right: 5, bottom: 5),
-      decoration: BoxDecoration(
+      margin: const EdgeInsets.only(left: 10),
+      padding: const EdgeInsets.only(top: 5, left: 5, right: 5, bottom: 5),
+      decoration: const BoxDecoration(
         color: Color(0xFF0e0e10),
         borderRadius: BorderRadius.all(Radius.circular(5)),
       ),
@@ -140,7 +140,7 @@ class ModerationBottomSheet extends StatelessWidget {
             ),
           Text(
             message,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 14,
             ),
@@ -160,10 +160,10 @@ class ModerationBottomSheet extends StatelessWidget {
 
     Get.defaultDialog(
       title: "Timeout",
-      titleStyle: TextStyle(color: Colors.white),
-      backgroundColor: Color(0xFF0e0e10),
-      buttonColor: Color(0xFF9147ff),
-      cancelTextColor: Color(0xFF9147ff),
+      titleStyle: const TextStyle(color: Colors.white),
+      backgroundColor: const Color(0xFF0e0e10),
+      buttonColor: const Color(0xFF9147ff),
+      cancelTextColor: const Color(0xFF9147ff),
       textCancel: "cancel".tr,
       radius: 10,
       content: Column(
@@ -176,16 +176,16 @@ class ModerationBottomSheet extends StatelessWidget {
                     controller.selectedMessage.value!,
                     timeoutValues[index].values.first),
                 child: Container(
-                  margin: EdgeInsets.only(right: 10),
-                  padding:
-                      EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
-                  decoration: BoxDecoration(
+                  margin: const EdgeInsets.only(right: 10),
+                  padding: const EdgeInsets.only(
+                      left: 5, right: 5, top: 5, bottom: 5),
+                  decoration: const BoxDecoration(
                     color: Color(0xFF121212),
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                   ),
                   child: Text(
                     timeoutValues[index].keys.first,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                     ),
                   ),
@@ -193,7 +193,7 @@ class ModerationBottomSheet extends StatelessWidget {
               );
             }),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -201,8 +201,8 @@ class ModerationBottomSheet extends StatelessWidget {
               Expanded(
                 flex: 6,
                 child: Container(
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
+                  padding: const EdgeInsets.all(5),
+                  decoration: const BoxDecoration(
                     color: Color(0xFF121212),
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                   ),
@@ -217,9 +217,9 @@ class ModerationBottomSheet extends StatelessWidget {
                             int.parse(value));
                       }
                     },
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                     maxLines: 1,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       enabledBorder: InputBorder.none,
                       focusedBorder: InputBorder.none,
                       hintStyle: TextStyle(color: Colors.grey, fontSize: 16),
@@ -243,11 +243,9 @@ class ModerationBottomSheet extends StatelessWidget {
                               controller.banDurationInputController.text));
                     }
                   },
-                  child: Container(
-                    child: Icon(
-                      Icons.send,
-                      color: Colors.white,
-                    ),
+                  child: const Icon(
+                    Icons.send,
+                    color: Colors.white,
                   ),
                 ),
               ),

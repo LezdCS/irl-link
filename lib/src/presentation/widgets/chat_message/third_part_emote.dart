@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:irllink/src/domain/entities/emote.dart';
+import 'package:twitch_chat/twitch_chat.dart';
 
 class ThirdPartEmote extends StatelessWidget {
   final Emote emote;

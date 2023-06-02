@@ -7,15 +7,10 @@ import 'package:get_storage/get_storage.dart';
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/utils/constants.dart';
-import 'package:irllink/src/data/entities/emote_dto.dart';
-import 'package:irllink/src/data/entities/twitch_badge_dto.dart';
 import 'package:irllink/src/data/entities/twitch_credentials_dto.dart';
 import 'package:irllink/src/data/entities/twitch_decoded_idtoken_dto.dart';
 import 'package:irllink/src/data/entities/twitch_stream_infos_dto.dart';
 import 'package:irllink/src/data/entities/twitch_user_dto.dart';
-import 'package:irllink/src/domain/entities/chat/twitch_chat_message.dart';
-import 'package:irllink/src/domain/entities/emote.dart';
-import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
 import 'package:irllink/src/domain/entities/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch_prediction.dart';
@@ -23,6 +18,7 @@ import 'package:irllink/src/domain/entities/twitch_stream_infos.dart';
 import 'package:irllink/src/domain/repositories/twitch_repository.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:quiver/iterables.dart';
+import 'package:twitch_chat/twitch_chat.dart';
 
 import '../entities/twitch_poll_dto.dart';
 import '../entities/twitch_prediction_dto.dart';
@@ -273,297 +269,6 @@ class TwitchRepositoryImpl extends TwitchRepository {
   }
 
   @override
-  Future<DataState<List<TwitchBadge>>> getTwitchGlobalBadges(
-      String accessToken) async {
-    Response response;
-    var dio = Dio();
-    List<TwitchBadge> badges = <TwitchBadge>[];
-    try {
-      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dio.options.headers["authorization"] = "Bearer $accessToken";
-      response =
-          await dio.get('https://api.twitch.tv/helix/chat/badges/global');
-
-      response.data['data'].forEach(
-        (set) => set['versions'].forEach((version) =>
-            badges.add(TwitchBadgeDTO.fromJson(set['set_id'], version))),
-      );
-
-      return DataSuccess(badges);
-    } on DioError catch (e) {
-      debugPrint(e.toString());
-      return DataFailed("Error retrieving Twitch global badges");
-    }
-  }
-
-  @override
-  Future<DataState<List<TwitchBadge>>> getTwitchChannelBadges(
-      String accessToken, String broadcasterId) async {
-    Response response;
-    var dio = Dio();
-    List<TwitchBadge> badges = <TwitchBadge>[];
-    try {
-      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dio.options.headers["authorization"] = "Bearer $accessToken";
-      response = await dio.get(
-          'https://api.twitch.tv/helix/chat/badges?broadcaster_id=$broadcasterId');
-
-      response.data['data'].forEach(
-        (set) => set['versions'].forEach((version) =>
-            badges.add(TwitchBadgeDTO.fromJson(set['set_id'], version))),
-      );
-
-      return DataSuccess(badges);
-    } on DioError catch (e) {
-      debugPrint(e.toString());
-      return DataFailed("Error retrieving Twitch broadcaster channel badges");
-    }
-  }
-
-  @override
-  Future<DataState<List<Emote>>> getTwitchEmotes(String accessToken) async {
-    Response response;
-    var dio = Dio();
-    List<Emote> emotes = <Emote>[];
-    try {
-      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dio.options.headers["authorization"] = "Bearer $accessToken";
-      response =
-          await dio.get('https://api.twitch.tv/helix/chat/emotes/global');
-
-      response.data['data'].forEach(
-        (emote) => emotes.add(
-          EmoteDTO.fromJson(emote),
-        ),
-      );
-
-      return DataSuccess(emotes);
-    } on DioError catch (e) {
-      debugPrint(e.toString());
-      return DataFailed("Error retrieving global emotes");
-    }
-  }
-
-  @override
-  Future<DataState<List<Emote>>> getTwitchChannelEmotes(
-    String accessToken,
-    String broadcasterId,
-  ) async {
-    Response response;
-    var dio = Dio();
-    List<Emote> emotes = <Emote>[];
-    try {
-      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dio.options.headers["authorization"] = "Bearer $accessToken";
-      response = await dio.get(
-        'https://api.twitch.tv/helix/chat/emotes',
-        queryParameters: {'broadcaster_id': broadcasterId},
-      );
-
-      response.data['data'].forEach(
-        (emote) => emotes.add(
-          EmoteDTO.fromJson(emote),
-        ),
-      );
-
-      return DataSuccess(emotes);
-    } on DioError catch (e) {
-      debugPrint(e.toString());
-      return DataFailed("Error retrieving channel emotes");
-    }
-  }
-
-  @override
-  Future<DataState<List<Emote>>> getTwitchSetsEmotes(
-    String accessToken,
-    List<String> setId,
-  ) async {
-    Response response;
-    var dio = Dio();
-    List<Emote> emotes = <Emote>[];
-
-    try {
-      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dio.options.headers["authorization"] = "Bearer $accessToken";
-
-      var chunks = partition(setId, 25);
-
-      for (var chunk in chunks) {
-        await Future.delayed(const Duration(seconds: 5), () async {
-          response = await dio.get(
-            "https://api.twitch.tv/helix/chat/emotes/set",
-            queryParameters: {'emote_set_id': chunk},
-          );
-          response.data['data'].forEach(
-            (emote) => emotes.add(
-              EmoteDTO.fromJson(emote),
-            ),
-          );
-        });
-      }
-
-      return DataSuccess(emotes);
-    } on DioError catch (e) {
-      debugPrint(e.toString());
-      return DataFailed("Error retrieving sets emotes");
-    }
-  }
-
-  @override
-  Future<DataState<List<Emote>>> getTwitchCheerEmotes(
-      String accessToken, String broadcasterId) async {
-    Response response;
-    var dio = Dio();
-    List<Emote> emotes = <Emote>[];
-    try {
-      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dio.options.headers["authorization"] = "Bearer $accessToken";
-      response = await dio.get(
-        'https://api.twitch.tv/helix/bits/cheermotes',
-        queryParameters: {'broadcaster_id': broadcasterId},
-      );
-
-      response.data['data'].forEach(
-        (prefix) => prefix['tiers'].forEach(
-          (emote) => emotes.add(
-            EmoteDTO.fromJsonCheerEmotes(emote, prefix['prefix']),
-          ),
-        ),
-      );
-
-      return DataSuccess(emotes);
-    } on DioError catch (e) {
-      debugPrint(e.toString());
-      return DataFailed("Error retrieving channel cheer emotes");
-    }
-  }
-
-  @override
-  Future<DataState<List<Emote>>> getFrankerfacezEmotes(
-      String broadcasterId) async {
-    Response response;
-    var dio = Dio();
-    List<Emote> emotes = <Emote>[];
-    try {
-      response = await dio.get(
-        'https://api.frankerfacez.com/v1/room/id/$broadcasterId',
-      );
-
-      response.data['sets'][response.data['sets'].keys.toList()[0]]['emoticons']
-          .forEach((emote) => {
-                emotes.add(
-                  EmoteDTO.fromJsonFrankerfacez(emote),
-                ),
-              });
-
-      return DataSuccess(emotes);
-    } on DioError catch (e) {
-      debugPrint(e.toString());
-      return DataFailed("Error retrieving FFZ global emotes");
-    }
-  }
-
-  @override
-  Future<DataState<List<Emote>>> getBttvChannelEmotes(
-      String broadcasterId) async {
-    Response response;
-    var dio = Dio();
-    List<Emote> emotes = <Emote>[];
-    try {
-      response = await dio.get(
-        'https://api.betterttv.net/3/cached/users/twitch/$broadcasterId',
-      );
-
-      response.data['channelEmotes'].forEach(
-        (emote) => emotes.add(
-          EmoteDTO.fromJsonBttv(emote),
-        ),
-      );
-
-      response.data['sharedEmotes'].forEach(
-        (emote) => emotes.add(
-          EmoteDTO.fromJsonBttv(emote),
-        ),
-      );
-
-      return DataSuccess(emotes);
-    } on DioError catch (e) {
-      debugPrint(e.toString());
-      return DataFailed("Error retrieving FFZ channel emotes");
-    }
-  }
-
-  @override
-  Future<DataState<List<Emote>>> get7TvGlobalEmotes() async {
-    Response response;
-    var dio = Dio();
-    List<Emote> emotes = <Emote>[];
-    try {
-      response = await dio.get(
-        'https://api.7tv.app/v2/emotes/global',
-      );
-
-      response.data.forEach(
-        (emote) => emotes.add(
-          EmoteDTO.fromJson7Tv(emote),
-        ),
-      );
-
-      return DataSuccess(emotes);
-    } on DioError catch (e) {
-      debugPrint(e.toString());
-      return DataFailed("Error retrieving 7Tv global emotes");
-    }
-  }
-
-  @override
-  Future<DataState<List<Emote>>> get7TvChannelEmotes(
-      String broadcasterId) async {
-    Response response;
-    var dio = Dio();
-    List<Emote> emotes = <Emote>[];
-    try {
-      response = await dio.get(
-        'https://api.7tv.app/v2/users/$broadcasterId/emotes',
-      );
-
-      response.data.forEach(
-        (emote) => emotes.add(
-          EmoteDTO.fromJson7Tv(emote),
-        ),
-      );
-
-      return DataSuccess(emotes);
-    } on DioError catch (e) {
-      debugPrint(e.toString());
-      return DataFailed("Error retrieving 7Tv channel emotes");
-    }
-  }
-
-  @override
-  Future<DataState<List<Emote>>> getBttvGlobalEmotes() async {
-    Response response;
-    var dio = Dio();
-    List<Emote> emotes = <Emote>[];
-    try {
-      response = await dio.get(
-        'https://api.betterttv.net/3/cached/emotes/global',
-      );
-
-      response.data.forEach(
-        (emote) => emotes.add(
-          EmoteDTO.fromJsonBttv(emote),
-        ),
-      );
-
-      return DataSuccess(emotes);
-    } on DioError catch (e) {
-      debugPrint(e.toString());
-      return DataFailed("Error retrieving BTTV Global emotes");
-    }
-  }
-
-  @override
   Future<DataState<TwitchStreamInfos>> getStreamInfo(
       String accessToken, String broadcasterId) async {
     Response response;
@@ -762,7 +467,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
   Future<void> banUser(
     String accessToken,
     String broadcasterId,
-    TwitchChatMessage message,
+    ChatMessage message,
     int? duration,
   ) async {
     var dio = Dio();
@@ -795,7 +500,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
   Future<void> deleteMessage(
     String accessToken,
     String broadcasterId,
-    TwitchChatMessage message,
+    ChatMessage message,
   ) async {
     var dio = Dio();
     try {
@@ -806,7 +511,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
         queryParameters: {
           'broadcaster_id': broadcasterId,
           'moderator_id': broadcasterId,
-          'message_id': message.messageId,
+          'message_id': message.id,
         },
       );
     } on DioError catch (e) {

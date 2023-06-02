@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:irllink/src/domain/entities/chat/announcement_event.dart';
-import 'package:irllink/src/domain/entities/chat/bit_donation_event.dart';
-import 'package:irllink/src/domain/entities/chat/incoming_raid_event.dart';
-import 'package:irllink/src/domain/entities/chat/reward_redemption_event.dart';
-import 'package:irllink/src/domain/entities/chat/subscription_event.dart';
-import 'package:irllink/src/domain/entities/chat/twitch_chat_message.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/presentation/widgets/chat_message/event_container.dart';
+import 'package:twitch_chat/twitch_chat.dart';
 
 class ChatEvents extends StatelessWidget {
   final SettingsViewController controller;
@@ -27,7 +22,7 @@ class ChatEvents extends StatelessWidget {
             ),
             onPressed: () => Get.back(),
           ),
-          actions: [],
+          actions: const [],
           backgroundColor: Theme.of(context).colorScheme.secondary,
           title: Text(
             "Chat events",
@@ -39,14 +34,14 @@ class ChatEvents extends StatelessWidget {
         ),
         body: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.only(top: 8, left: 10, right: 10, bottom: 8),
+            padding: const EdgeInsets.only(top: 8, left: 10, right: 10, bottom: 8),
             color: Theme.of(context).colorScheme.background,
             child: Column(
               children: [
                 Column(
                   children: [
                     EventContainer(
-                      message: TwitchChatMessage.randomGeneration(
+                      message: ChatMessage.randomGeneration(
                         HighlightType.firstTimeChatter,
                         "Hey guys, I'm new here!",
                         "Lezd",
@@ -100,7 +95,7 @@ class ChatEvents extends StatelessWidget {
                 Column(
                   children: [
                     EventContainer(
-                      message: SubscriptionEvent.randomGeneration(),
+                      message: Subscription.randomGeneration(),
                       selectedMessage: null,
                       displayTimestamp: false,
                       textSize: 16,
@@ -150,7 +145,7 @@ class ChatEvents extends StatelessWidget {
                 Column(
                   children: [
                     EventContainer(
-                      message: BitDonationEvent.randomGeneration(),
+                      message: BitDonation.randomGeneration(),
                       selectedMessage: null,
                       displayTimestamp: false,
                       textSize: 16,
@@ -200,7 +195,7 @@ class ChatEvents extends StatelessWidget {
                 Column(
                   children: [
                     EventContainer(
-                      message: AnnouncementEvent.randomGeneration(),
+                      message: Announcement.randomGeneration(),
                       selectedMessage: null,
                       displayTimestamp: false,
                       textSize: 16,
@@ -250,7 +245,7 @@ class ChatEvents extends StatelessWidget {
                 Column(
                   children: [
                     EventContainer(
-                      message: IncomingRaidEvent.randomGeneration(),
+                      message: IncomingRaid.randomGeneration(),
                       selectedMessage: null,
                       displayTimestamp: false,
                       textSize: 16,
@@ -300,7 +295,7 @@ class ChatEvents extends StatelessWidget {
                 Column(
                   children: [
                     EventContainer(
-                      message: RewardRedemptionEvent.randomGeneration(),
+                      message: RewardRedemption.randomGeneration(),
                       selectedMessage: null,
                       displayTimestamp: false,
                       textSize: 16,
