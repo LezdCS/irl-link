@@ -51,73 +51,81 @@ class ChatViewController extends GetxController
     scrollController = ScrollController();
     banDurationInputController = TextEditingController();
     if (Get.arguments != null) {
-      twitchData = Get.arguments[0];
+      await homeEvents.getSettings().then((settings) async {
+        twitchData = Get.arguments[0];
 
-      twitchChat = TwitchChat(
-        twitchData!.twitchUser.login,
-        twitchData!.twitchUser.login,
-        twitchData!.accessToken,
-        clientId: kTwitchAuthClientId,
-        onConnected: () {
-          chatMessages.clear();
-        },
-        onClearChat: () {
-          chatMessages.clear();
-        },
-        onDeletedMessageByUserId: (String? userId) {
-          for (var message in chatMessages) {
-            if (message.authorId == userId) {
-              message.isDeleted = true;
+        String channelToJoin = twitchData!.twitchUser.login;
+        if (settings.data!.alternateChannel! &&
+            settings.data!.alternateChannelName! != '') {
+          channelToJoin = settings.data!.alternateChannelName!;
+        }
+
+        twitchChat = TwitchChat(
+          channelToJoin,
+          twitchData!.twitchUser.login,
+          twitchData!.accessToken,
+          clientId: kTwitchAuthClientId,
+          onConnected: () {
+            chatMessages.clear();
+          },
+          onClearChat: () {
+            chatMessages.clear();
+          },
+          onDeletedMessageByUserId: (String? userId) {
+            for (var message in chatMessages) {
+              if (message.authorId == userId) {
+                message.isDeleted = true;
+              }
             }
+            chatMessages.refresh();
+          },
+          onDeletedMessageByMessageId: (String? messageId) {
+            chatMessages
+                .firstWhereOrNull((message) => message.id == messageId)!
+                .isDeleted = true;
+            chatMessages.refresh();
+          },
+          onDone: () {
+            twitchChat!.connect();
+          },
+          onError: () {},
+          params: TwitchChatParameters(addFirstMessages: true),
+        );
+
+        twitchChat!.isConnected.addListener(() {
+          if (twitchChat!.isConnected.value) {
+            isChatConnected.value = true;
+            isAlertProgress.value = false;
+            alertMessage.value = "CONNECTED";
+            alertColor.value = const Color(0xFF1DBF1D);
+          } else {
+            isChatConnected.value = false;
           }
-          chatMessages.refresh();
-        },
-        onDeletedMessageByMessageId: (String? messageId) {
-          chatMessages
-              .firstWhereOrNull((message) => message.id == messageId)!
-              .isDeleted = true;
-          chatMessages.refresh();
-        },
-        onDone: () {
-          twitchChat!.connect();
-        },
-        onError: () {},
-        params: TwitchChatParameters(addFirstMessages: true)
-      );
+        });
 
-      twitchChat!.isConnected.addListener(() {
-        if (twitchChat!.isConnected.value) {
-          isChatConnected.value = true;
-          isAlertProgress.value = false;
-          alertMessage.value = "CONNECTED";
-          alertColor.value = const Color(0xFF1DBF1D);
-        } else {
-          isChatConnected.value = false;
-        }
+        twitchChat!.chatStream.listen((message) {
+          if (homeViewController.settings.value.hiddenUsersIds!
+              .contains(message.authorId)) {
+            return;
+          }
+          if (homeViewController.settings.value.ttsEnabled!) {
+            readTts(message);
+          }
+          chatMessages.add(message);
+
+          if (scrollController.hasClients && isAutoScrolldown.value) {
+            Timer(const Duration(milliseconds: 100), () {
+              if (isAutoScrolldown.value) {
+                scrollController.jumpTo(
+                  scrollController.position.maxScrollExtent,
+                );
+              }
+            });
+          }
+        });
+
+        await applySettings();
       });
-
-      twitchChat!.chatStream.listen((message) {
-        if (homeViewController.settings.value.hiddenUsersIds!
-            .contains(message.authorId)) {
-          return;
-        }
-        if (homeViewController.settings.value.ttsEnabled!) {
-          readTts(message);
-        }
-        chatMessages.add(message);
-
-        if (scrollController.hasClients && isAutoScrolldown.value) {
-          Timer(const Duration(milliseconds: 100), () {
-            if (isAutoScrolldown.value) {
-              scrollController.jumpTo(
-                scrollController.position.maxScrollExtent,
-              );
-            }
-          });
-        }
-      });
-
-      await applySettings();
     } else {
       chatDemoTimer = Timer.periodic(
         const Duration(seconds: 3),
