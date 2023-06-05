@@ -32,8 +32,8 @@ class SettingsView extends GetView<SettingsViewController> {
           ),
           actions: [
             Container(
-              margin: EdgeInsets.only(right: 6, top: 10, bottom: 10),
-              padding: EdgeInsets.only(left: 8, right: 8),
+              margin: const EdgeInsets.only(right: 6, top: 10, bottom: 10),
+              padding: const EdgeInsets.only(left: 8, right: 8),
               child: TextButton(
                 onPressed: () {
                   if (controller.homeViewController.twitchData != null) {
@@ -43,7 +43,7 @@ class SettingsView extends GetView<SettingsViewController> {
                   }
                 },
                 style: TextButton.styleFrom(
-                  textStyle: TextStyle(fontSize: 12),
+                  textStyle: const TextStyle(fontSize: 12),
                   backgroundColor:
                       controller.homeViewController.twitchData != null
                           ? Colors.red
@@ -53,7 +53,7 @@ class SettingsView extends GetView<SettingsViewController> {
                   controller.homeViewController.twitchData != null
                       ? "Logout"
                       : "Login",
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                 ),
               ),
             ),
@@ -72,7 +72,8 @@ class SettingsView extends GetView<SettingsViewController> {
             color: Theme.of(context).colorScheme.background,
           ),
           child: ListView(
-            padding: EdgeInsets.only(top: 8, left: 10, right: 10, bottom: 8),
+            padding:
+                const EdgeInsets.only(top: 8, left: 10, right: 10, bottom: 8),
             children: [
               Subscription(controller: controller),
               Divider(
@@ -108,7 +109,7 @@ class SettingsView extends GetView<SettingsViewController> {
               ),
               contactSettings(context, width),
               Container(
-                padding: EdgeInsets.only(left: 4, right: 4, top: 6),
+                padding: const EdgeInsets.only(left: 4, right: 4, top: 6),
                 child: Text("Version: ${Globals.version}"),
               ),
             ],
@@ -124,261 +125,226 @@ class SettingsView extends GetView<SettingsViewController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            child: Text(
-              "Chat",
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.tertiary, fontSize: 20),
-            ),
+          Text(
+            "Chat",
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.tertiary, fontSize: 20),
           ),
           Container(
-            padding: EdgeInsets.only(left: 4, right: 4),
+            padding: const EdgeInsets.only(left: 4, right: 4),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        child: Text(
-                          "FFZ, BTTV & 7TV emotes",
-                          style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyLarge!.color,
-                            fontSize: 18,
-                          ),
-                        ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "FFZ, BTTV & 7TV emotes",
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyLarge!.color,
+                        fontSize: 18,
                       ),
-                      Container(
-                        child: Switch(
-                          onChanged: (value) {
-                            controller.homeViewController.settings.value =
-                                controller.homeViewController.settings.value
-                                    .copyWith(isEmotes: value);
-                            controller.saveSettings();
-                          },
-                          value: controller
-                              .homeViewController.settings.value.isEmotes!,
-                          inactiveTrackColor:
-                              Theme.of(context).colorScheme.tertiaryContainer,
-                          activeTrackColor:
-                              Theme.of(context).colorScheme.tertiary,
-                          activeColor: Colors.white,
-                        ),
-                      )
-                    ],
-                  ),
+                    ),
+                    Switch(
+                      onChanged: (value) {
+                        controller.homeViewController.settings.value =
+                            controller.homeViewController.settings.value
+                                .copyWith(isEmotes: value);
+                        controller.saveSettings();
+                      },
+                      value: controller
+                          .homeViewController.settings.value.isEmotes!,
+                      inactiveTrackColor:
+                          Theme.of(context).colorScheme.tertiaryContainer,
+                      activeTrackColor: Theme.of(context).colorScheme.tertiary,
+                      activeColor: Colors.white,
+                    )
+                  ],
                 ),
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "text_size".tr,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "text_size".tr,
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyLarge!.color,
+                          fontSize: 18),
+                    ),
+                    Text(
+                        controller.homeViewController.settings.value.textSize!
+                            .ceil()
+                            .toString(),
                         style: TextStyle(
                             color: Theme.of(context).textTheme.bodyLarge!.color,
-                            fontSize: 18),
-                      ),
-                      Text(
-                          controller.homeViewController.settings.value.textSize!
-                              .ceil()
-                              .toString(),
-                          style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                              fontSize: 18)),
-                      Container(
-                        child: Slider(
-                          onChanged: (value) {
-                            controller.homeViewController.settings.value =
-                                controller.homeViewController.settings.value
-                                    .copyWith(textSize: value);
-                            controller.saveSettings();
-                          },
-                          value: controller
-                              .homeViewController.settings.value.textSize!,
-                          min: 0.0,
-                          max: 50.0,
-                          divisions: 100,
-                          activeColor: Theme.of(context).colorScheme.tertiary,
-                          inactiveColor:
-                              Theme.of(context).colorScheme.tertiaryContainer,
-                          label:
-                              "${controller.homeViewController.settings.value.textSize}",
-                        ),
-                      )
-                    ],
-                  ),
+                            fontSize: 18)),
+                    Slider(
+                      onChanged: (value) {
+                        controller.homeViewController.settings.value =
+                            controller.homeViewController.settings.value
+                                .copyWith(textSize: value);
+                        controller.saveSettings();
+                      },
+                      value: controller
+                          .homeViewController.settings.value.textSize!,
+                      min: 0.0,
+                      max: 50.0,
+                      divisions: 100,
+                      activeColor: Theme.of(context).colorScheme.tertiary,
+                      inactiveColor:
+                          Theme.of(context).colorScheme.tertiaryContainer,
+                      label:
+                          "${controller.homeViewController.settings.value.textSize}",
+                    )
+                  ],
                 ),
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        child: Text(
-                          "show_timestamp".tr,
-                          style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                              fontSize: 18),
-                        ),
-                      ),
-                      Container(
-                        child: Switch(
-                          onChanged: (value) {
-                            controller.homeViewController.settings.value =
-                                controller.homeViewController.settings.value
-                                    .copyWith(displayTimestamp: value);
-                            controller.saveSettings();
-                          },
-                          value: controller.homeViewController.settings.value
-                              .displayTimestamp!,
-                          inactiveTrackColor:
-                              Theme.of(context).colorScheme.tertiaryContainer,
-                          activeTrackColor:
-                              Theme.of(context).colorScheme.tertiary,
-                          activeColor: Colors.white,
-                        ),
-                      )
-                    ],
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "show_timestamp".tr,
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyLarge!.color,
+                          fontSize: 18),
+                    ),
+                    Switch(
+                      onChanged: (value) {
+                        controller.homeViewController.settings.value =
+                            controller.homeViewController.settings.value
+                                .copyWith(displayTimestamp: value);
+                        controller.saveSettings();
+                      },
+                      value: controller
+                          .homeViewController.settings.value.displayTimestamp!,
+                      inactiveTrackColor:
+                          Theme.of(context).colorScheme.tertiaryContainer,
+                      activeTrackColor: Theme.of(context).colorScheme.tertiary,
+                      activeColor: Colors.white,
+                    )
+                  ],
                 ),
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        child: Text(
-                          "join_another_chat".tr,
-                          style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                              fontSize: 18),
-                        ),
-                      ),
-                      Container(
-                        child: Switch(
-                          onChanged: (value) {
-                            controller.homeViewController.settings.value =
-                                controller.homeViewController.settings.value
-                                    .copyWith(alternateChannel: value);
-                            if (!value) {
-                              controller.homeViewController.settings.value =
-                                  controller.homeViewController.settings.value
-                                      .copyWith(alternateChannelName: '');
-                              controller.alternateChannelChatController.text =
-                                  '';
-                            }
-                            controller.saveSettings();
-                          },
-                          value: controller.homeViewController.settings.value
-                              .alternateChannel!,
-                          inactiveTrackColor:
-                              Theme.of(context).colorScheme.tertiaryContainer,
-                          activeTrackColor:
-                              Theme.of(context).colorScheme.tertiary,
-                          activeColor: Colors.white,
-                        ),
-                      )
-                    ],
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "join_another_chat".tr,
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyLarge!.color,
+                          fontSize: 18),
+                    ),
+                    Switch(
+                      onChanged: (value) {
+                        controller.homeViewController.settings.value =
+                            controller.homeViewController.settings.value
+                                .copyWith(alternateChannel: value);
+                        if (!value) {
+                          controller.homeViewController.settings.value =
+                              controller.homeViewController.settings.value
+                                  .copyWith(alternateChannelName: '');
+                          controller.alternateChannelChatController.text = '';
+                        }
+                        controller.saveSettings();
+                      },
+                      value: controller
+                          .homeViewController.settings.value.alternateChannel!,
+                      inactiveTrackColor:
+                          Theme.of(context).colorScheme.tertiaryContainer,
+                      activeTrackColor: Theme.of(context).colorScheme.tertiary,
+                      activeColor: Colors.white,
+                    )
+                  ],
                 ),
                 Visibility(
                   visible: controller
                       .homeViewController.settings.value.alternateChannel!,
-                  child: Container(
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 7,
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 10.0),
-                            child: Container(
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(8),
-                                ),
-                                color: Theme.of(context).colorScheme.secondary,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 7,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 10.0),
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(8),
                               ),
-                              child: TextFormField(
-                                controller:
-                                    controller.alternateChannelChatController,
-                                onChanged: (value) {
-                                  controller.homeViewController.settings.value =
-                                      controller
-                                          .homeViewController.settings.value
-                                          .copyWith(
-                                              alternateChannelName: controller
-                                                  .alternateChannelChatController
-                                                  .text
-                                                  .toLowerCase()
-                                                  .trim());
-                                  controller.saveSettings();
-                                },
-                                style: TextStyle(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .color,
-                                ),
-                                decoration: InputDecoration(
-                                  isDense: true,
-                                  contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 12),
-                                  enabledBorder: Theme.of(context)
-                                      .inputDecorationTheme
-                                      .border,
-                                  hintText: 'Nickname',
-                                  labelText: 'Twitch username',
-                                  filled: false,
-                                  labelStyle: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.tertiary,
-                                  ),
-                                  suffixIconConstraints: BoxConstraints(
-                                    minWidth: 2,
-                                    minHeight: 2,
-                                  ),
-                                  suffixIcon: controller
-                                          .alternateChannelChatController
-                                          .text
-                                          .isNotEmpty
-                                      ? IconButton(
-                                          iconSize: 20,
-                                          icon: Icon(
-                                            Icons.clear,
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge!
-                                                .color,
-                                          ),
-                                          onPressed: () {
-                                            controller
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                            child: TextFormField(
+                              controller:
+                                  controller.alternateChannelChatController,
+                              onChanged: (value) {
+                                controller.homeViewController.settings.value =
+                                    controller.homeViewController.settings.value
+                                        .copyWith(
+                                            alternateChannelName: controller
                                                 .alternateChannelChatController
-                                                .clear();
-                                            controller.homeViewController
-                                                    .settings.value =
-                                                controller.homeViewController
-                                                    .settings.value
-                                                    .copyWith(
-                                                        alternateChannelName:
-                                                            controller
-                                                                .alternateChannelChatController
-                                                                .text
-                                                                .toLowerCase()
-                                                                .trim());
-                                            controller.saveSettings();
-                                          },
-                                        )
-                                      : null,
+                                                .text
+                                                .toLowerCase()
+                                                .trim());
+                                controller.saveSettings();
+                              },
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .color,
+                              ),
+                              decoration: InputDecoration(
+                                isDense: true,
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 12),
+                                enabledBorder: Theme.of(context)
+                                    .inputDecorationTheme
+                                    .border,
+                                hintText: 'Nickname',
+                                labelText: 'Twitch username',
+                                filled: false,
+                                labelStyle: TextStyle(
+                                  color: Theme.of(context).colorScheme.tertiary,
                                 ),
+                                suffixIconConstraints: const BoxConstraints(
+                                  minWidth: 2,
+                                  minHeight: 2,
+                                ),
+                                suffixIcon: controller
+                                        .alternateChannelChatController
+                                        .text
+                                        .isNotEmpty
+                                    ? IconButton(
+                                        iconSize: 20,
+                                        icon: Icon(
+                                          Icons.clear,
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge!
+                                              .color,
+                                        ),
+                                        onPressed: () {
+                                          controller
+                                              .alternateChannelChatController
+                                              .clear();
+                                          controller.homeViewController.settings
+                                                  .value =
+                                              controller.homeViewController
+                                                  .settings.value
+                                                  .copyWith(
+                                                      alternateChannelName:
+                                                          controller
+                                                              .alternateChannelChatController
+                                                              .text
+                                                              .toLowerCase()
+                                                              .trim());
+                                          controller.saveSettings();
+                                        },
+                                      )
+                                    : null,
                               ),
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
                 InkWell(
@@ -393,7 +359,7 @@ class SettingsView extends GetView<SettingsViewController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        padding: EdgeInsets.only(top: 10, bottom: 10),
+                        padding: const EdgeInsets.only(top: 10, bottom: 10),
                         child: Row(
                           children: [
                             Icon(
@@ -402,7 +368,7 @@ class SettingsView extends GetView<SettingsViewController> {
                               size: 22,
                             ),
                             Container(
-                              padding: EdgeInsets.only(left: 10),
+                              padding: const EdgeInsets.only(left: 10),
                               child: Text(
                                 "Chat events",
                                 style: TextStyle(
@@ -437,7 +403,7 @@ class SettingsView extends GetView<SettingsViewController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        padding: EdgeInsets.only(top: 10, bottom: 10),
+                        padding: const EdgeInsets.only(top: 10, bottom: 10),
                         child: Row(
                           children: [
                             Icon(
@@ -446,7 +412,7 @@ class SettingsView extends GetView<SettingsViewController> {
                               size: 22,
                             ),
                             Container(
-                              padding: EdgeInsets.only(left: 10),
+                              padding: const EdgeInsets.only(left: 10),
                               child: Text(
                                 "manage_hidden_users".tr,
                                 style: TextStyle(
@@ -481,7 +447,7 @@ class SettingsView extends GetView<SettingsViewController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        padding: EdgeInsets.only(top: 10, bottom: 10),
+                        padding: const EdgeInsets.only(top: 10, bottom: 10),
                         child: Row(
                           children: [
                             Icon(
@@ -490,7 +456,7 @@ class SettingsView extends GetView<SettingsViewController> {
                               size: 22,
                             ),
                             Container(
-                              padding: EdgeInsets.only(left: 10),
+                              padding: const EdgeInsets.only(left: 10),
                               child: Text(
                                 "text_to_speech".tr,
                                 style: TextStyle(
@@ -527,54 +493,45 @@ class SettingsView extends GetView<SettingsViewController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            child: Text(
-              "General",
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.tertiary, fontSize: 20),
-            ),
+          Text(
+            "General",
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.tertiary, fontSize: 20),
           ),
           Container(
-            padding: EdgeInsets.only(left: 4, right: 4),
+            padding: const EdgeInsets.only(left: 4, right: 4),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 //Themes
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        child: Text(
-                          "dark_mode".tr,
-                          style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyLarge!.color,
-                            fontSize: 18,
-                          ),
-                        ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "dark_mode".tr,
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyLarge!.color,
+                        fontSize: 18,
                       ),
-                      Container(
-                        child: Switch(
-                          onChanged: (value) {
-                            value
-                                ? Get.changeThemeMode(ThemeMode.dark)
-                                : Get.changeThemeMode(ThemeMode.light);
-                            controller.homeViewController.settings.value =
-                                controller.homeViewController.settings.value
-                                    .copyWith(isDarkMode: value);
-                            controller.saveSettings();
-                          },
-                          value: controller
-                              .homeViewController.settings.value.isDarkMode!,
-                          activeTrackColor:
-                              Theme.of(context).colorScheme.tertiary,
-                          activeColor: Colors.white,
-                          inactiveTrackColor:
-                              Theme.of(context).colorScheme.tertiaryContainer,
-                        ),
-                      )
-                    ],
-                  ),
+                    ),
+                    Switch(
+                      onChanged: (value) {
+                        value
+                            ? Get.changeThemeMode(ThemeMode.dark)
+                            : Get.changeThemeMode(ThemeMode.light);
+                        controller.homeViewController.settings.value =
+                            controller.homeViewController.settings.value
+                                .copyWith(isDarkMode: value);
+                        controller.saveSettings();
+                      },
+                      value: controller
+                          .homeViewController.settings.value.isDarkMode!,
+                      activeTrackColor: Theme.of(context).colorScheme.tertiary,
+                      activeColor: Colors.white,
+                      inactiveTrackColor:
+                          Theme.of(context).colorScheme.tertiaryContainer,
+                    )
+                  ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -588,22 +545,19 @@ class SettingsView extends GetView<SettingsViewController> {
                         ),
                       ),
                     ),
-                    Container(
-                      child: Switch(
-                        onChanged: (value) {
-                          controller.homeViewController.settings.value =
-                              controller.homeViewController.settings.value
-                                  .copyWith(keepSpeakerOn: value);
-                          controller.saveSettings();
-                        },
-                        value: controller
-                            .homeViewController.settings.value.keepSpeakerOn!,
-                        activeTrackColor:
-                            Theme.of(context).colorScheme.tertiary,
-                        activeColor: Colors.white,
-                        inactiveTrackColor:
-                            Theme.of(context).colorScheme.tertiaryContainer,
-                      ),
+                    Switch(
+                      onChanged: (value) {
+                        controller.homeViewController.settings.value =
+                            controller.homeViewController.settings.value
+                                .copyWith(keepSpeakerOn: value);
+                        controller.saveSettings();
+                      },
+                      value: controller
+                          .homeViewController.settings.value.keepSpeakerOn!,
+                      activeTrackColor: Theme.of(context).colorScheme.tertiary,
+                      activeColor: Colors.white,
+                      inactiveTrackColor:
+                          Theme.of(context).colorScheme.tertiaryContainer,
                     )
                   ],
                 ),
@@ -619,22 +573,19 @@ class SettingsView extends GetView<SettingsViewController> {
                         ),
                       ),
                     ),
-                    Container(
-                      child: Switch(
-                        onChanged: (value) {
-                          controller.homeViewController.settings.value =
-                              controller.homeViewController.settings.value
-                                  .copyWith(displayViewerCount: value);
-                          controller.saveSettings();
-                        },
-                        value: controller.homeViewController.settings.value
-                            .displayViewerCount!,
-                        activeTrackColor:
-                            Theme.of(context).colorScheme.tertiary,
-                        activeColor: Colors.white,
-                        inactiveTrackColor:
-                            Theme.of(context).colorScheme.tertiaryContainer,
-                      ),
+                    Switch(
+                      onChanged: (value) {
+                        controller.homeViewController.settings.value =
+                            controller.homeViewController.settings.value
+                                .copyWith(displayViewerCount: value);
+                        controller.saveSettings();
+                      },
+                      value: controller.homeViewController.settings.value
+                          .displayViewerCount!,
+                      activeTrackColor: Theme.of(context).colorScheme.tertiary,
+                      activeColor: Colors.white,
+                      inactiveTrackColor:
+                          Theme.of(context).colorScheme.tertiaryContainer,
                     )
                   ],
                 ),
@@ -661,7 +612,7 @@ class SettingsView extends GetView<SettingsViewController> {
                           ),
                         ),
                         onChanged: (value) {
-                          Locale locale = new Locale(
+                          Locale locale = Locale(
                               value!['languageCode']!, value['countryCode']!);
                           Get.updateLocale(locale);
                           controller.homeViewController.settings.value =
@@ -688,15 +639,13 @@ class SettingsView extends GetView<SettingsViewController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            child: Text(
-              "connections_tabs".tr,
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.tertiary, fontSize: 20),
-            ),
+          Text(
+            "connections_tabs".tr,
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.tertiary, fontSize: 20),
           ),
           Container(
-            padding: EdgeInsets.only(left: 4, right: 4),
+            padding: const EdgeInsets.only(left: 4, right: 4),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -712,7 +661,7 @@ class SettingsView extends GetView<SettingsViewController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        padding: EdgeInsets.only(top: 10),
+                        padding: const EdgeInsets.only(top: 10),
                         child: Row(
                           children: [
                             Icon(
@@ -721,7 +670,7 @@ class SettingsView extends GetView<SettingsViewController> {
                               size: 22,
                             ),
                             Container(
-                              padding: EdgeInsets.only(left: 10),
+                              padding: const EdgeInsets.only(left: 10),
                               child: Text(
                                 "manage_browser_tabs".tr,
                                 style: TextStyle(
@@ -754,22 +703,19 @@ class SettingsView extends GetView<SettingsViewController> {
                         fontSize: 18,
                       ),
                     ),
-                    Container(
-                      child: Switch(
-                        onChanged: (value) {
-                          controller.homeViewController.settings.value =
-                              controller.homeViewController.settings.value
-                                  .copyWith(isObsConnected: value);
-                          controller.saveSettings();
-                        },
-                        value: controller
-                            .homeViewController.settings.value.isObsConnected!,
-                        inactiveTrackColor:
-                            Theme.of(context).colorScheme.tertiaryContainer,
-                        activeTrackColor:
-                            Theme.of(context).colorScheme.tertiary,
-                        activeColor: Colors.white,
-                      ),
+                    Switch(
+                      onChanged: (value) {
+                        controller.homeViewController.settings.value =
+                            controller.homeViewController.settings.value
+                                .copyWith(isObsConnected: value);
+                        controller.saveSettings();
+                      },
+                      value: controller
+                          .homeViewController.settings.value.isObsConnected!,
+                      inactiveTrackColor:
+                          Theme.of(context).colorScheme.tertiaryContainer,
+                      activeTrackColor: Theme.of(context).colorScheme.tertiary,
+                      activeColor: Colors.white,
                     ),
                   ],
                 ),
@@ -780,7 +726,7 @@ class SettingsView extends GetView<SettingsViewController> {
                     controller: controller,
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 StreamElements(controller: controller),
               ],
             ),
@@ -796,15 +742,13 @@ class SettingsView extends GetView<SettingsViewController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            child: Text(
-              "Contact",
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.tertiary, fontSize: 20),
-            ),
+          Text(
+            "Contact",
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.tertiary, fontSize: 20),
           ),
           Container(
-            padding: EdgeInsets.only(left: 4, right: 4, top: 10),
+            padding: const EdgeInsets.only(left: 4, right: 4, top: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -840,7 +784,7 @@ class SettingsView extends GetView<SettingsViewController> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -863,7 +807,7 @@ class SettingsView extends GetView<SettingsViewController> {
                         height: 25,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     InkWell(

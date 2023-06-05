@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:irllink/src/domain/entities/emote.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
@@ -13,10 +11,10 @@ import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:irllink/src/presentation/widgets/tabs/obs_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/tabs/twitch_tab_view.dart';
 import 'package:split_view/split_view.dart';
-import 'package:web_socket_channel/io.dart';
-import 'package:web_socket_channel/status.dart' as status;
+import 'package:twitch_chat/twitch_chat.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import '../../../routes/app_routes.dart';
+import '../../core/utils/constants.dart';
 import '../widgets/tabs/streamelements_tab_view.dart';
 import '../widgets/web_page_view.dart';
 import 'chat_view_controller.dart';
@@ -72,7 +70,7 @@ class HomeViewController extends GetxController
       twitchData = Get.arguments[0];
 
       timerRefreshToken = Timer.periodic(
-        Duration(seconds: 13000),
+        const Duration(seconds: 13000),
         (Timer t) => homeEvents
             .refreshAccessToken(twitchData: twitchData!)
             .then((value) => {
@@ -80,8 +78,8 @@ class HomeViewController extends GetxController
                 }),
       );
     }
-    await this.getSettings();
-    await this.getStoreProducts();
+    await getSettings();
+    await getStoreProducts();
 
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
@@ -127,10 +125,10 @@ class HomeViewController extends GetxController
       tabElements.add(obsPage);
     }
 
-    settings.value.browserTabs!.forEach((element) {
+    for (var element in settings.value.browserTabs!) {
       WebPageView page = WebPageView(element['title'], element['url']);
       tabElements.add(page);
-    });
+    }
 
     tabController = TabController(length: tabElements.length, vsync: this);
   }
@@ -138,27 +136,23 @@ class HomeViewController extends GetxController
   void sendChatMessage(String message) {
     if (twitchData == null) return;
 
-    String token = twitchData!.accessToken;
-    String nick = twitchData!.twitchUser.login;
-    WebSocket.connect("wss://irc-ws.chat.twitch.tv:443").then((ws) {
-      IOWebSocketChannel channel = IOWebSocketChannel(ws);
-      channel.sink.add('PASS oauth:' + token);
-      channel.sink.add('NICK ' + nick);
-      channel.sink.add('JOIN #${chatViewController.ircChannelJoined}');
-      channel.sink
-          .add('PRIVMSG #${chatViewController.ircChannelJoined} :$message\r\n');
-      channel.sink.add('PART #${chatViewController.ircChannelJoined}');
-      channel.sink.close(status.goingAway);
-      ws.close();
-    });
+    TwitchChat twitchChat = TwitchChat(
+      chatViewController.twitchChat!.channel,
+      twitchData!.twitchUser.login,
+      twitchData!.accessToken,
+      clientId: kTwitchAuthClientId,
+    );
+    twitchChat.connect();
+    twitchChat.sendMessage(message);
+
     chatInputController.text = '';
     chatViewController.selectedMessage.value = null;
     isPickingEmote.value = false;
   }
 
   void getEmotes() {
-    List<Emote> emotes = List.from(chatViewController.twitchEmotes)
-      ..addAll(chatViewController.thirdPartEmotes);
+    List<Emote> emotes = List.from(chatViewController.twitchChat?.emotes)
+      ..addAll(chatViewController.twitchChat?.thirdPartEmotes);
     twitchEmotes
       ..clear()
       ..addAll(emotes);
@@ -166,8 +160,8 @@ class HomeViewController extends GetxController
   }
 
   void searchEmote(String input) {
-    List<Emote> emotes = List.from(chatViewController.twitchEmotes)
-      ..addAll(chatViewController.thirdPartEmotes);
+    List<Emote> emotes = List.from(chatViewController.twitchChat?.emotes)
+      ..addAll(chatViewController.twitchChat?.thirdPartEmotes);
     emotes = emotes
         .where(
           (emote) => emote.name.toLowerCase().contains(input.toLowerCase()),
@@ -199,13 +193,13 @@ class HomeViewController extends GetxController
       if (settings.value.keepSpeakerOn!) {
         const path = "../lib/assets/blank.mp3";
         timerKeepSpeakerOn = Timer.periodic(
-          Duration(minutes: 5),
+          const Duration(minutes: 5),
           (Timer t) async => await audioPlayer.play(AssetSource(path)),
         );
       } else {
         timerKeepSpeakerOn?.cancel();
       }
-      Locale locale = new Locale(settings.value.appLanguage!["languageCode"],
+      Locale locale = Locale(settings.value.appLanguage!["languageCode"],
           settings.value.appLanguage!["countryCode"]);
       Get.updateLocale(locale);
     }
@@ -242,7 +236,7 @@ class HomeViewController extends GetxController
             "Error",
             purchaseDetails.error!.message,
             snackPosition: SnackPosition.TOP,
-            icon: Icon(Icons.error_outline, color: Colors.red),
+            icon: const Icon(Icons.error_outline, color: Colors.red),
             borderWidth: 1,
             borderColor: Colors.red,
           );
@@ -256,7 +250,7 @@ class HomeViewController extends GetxController
               "Error",
               "Invalid purchase",
               snackPosition: SnackPosition.BOTTOM,
-              icon: Icon(Icons.error_outline, color: Colors.red),
+              icon: const Icon(Icons.error_outline, color: Colors.red),
               borderWidth: 1,
               borderColor: Colors.red,
             );
@@ -287,7 +281,7 @@ class HomeViewController extends GetxController
         "Success",
         "Thanks for your purchase, enjoy your premium subscription!",
         snackPosition: SnackPosition.BOTTOM,
-        icon: Icon(Icons.check, color: Colors.green),
+        icon: const Icon(Icons.check, color: Colors.green),
         borderWidth: 1,
         borderColor: Colors.green,
       );
@@ -295,9 +289,9 @@ class HomeViewController extends GetxController
   }
 
   Future<void> getStoreProducts() async {
-    const Set<String> _kIds = <String>{'irl_premium_subscription'};
+    const Set<String> kIds = <String>{'irl_premium_subscription'};
     final ProductDetailsResponse response =
-        await InAppPurchase.instance.queryProductDetails(_kIds);
+        await InAppPurchase.instance.queryProductDetails(kIds);
     if (response.notFoundIDs.isNotEmpty) {
       // Handle the error.
     }

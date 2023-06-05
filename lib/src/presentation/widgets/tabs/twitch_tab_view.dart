@@ -12,12 +12,12 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
     return RefreshIndicator(
       onRefresh: () async {
         controller.refreshData();
-        return Future.delayed(Duration(seconds: 1));
+        return Future.delayed(const Duration(seconds: 1));
       },
       child: SingleChildScrollView(
         child: Obx(
           () => Container(
-            padding: EdgeInsets.only(left: 20.0, top: 12.0, right: 20.0),
+            padding: const EdgeInsets.only(left: 20.0, top: 12.0, right: 20.0),
             color: Theme.of(context).colorScheme.background,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -25,18 +25,18 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                 Visibility(
                   visible: controller.isDemo.value,
                   child: AlertMessageView(
-                    color: Color(0xFF196DEE),
+                    color: const Color(0xFF196DEE),
                     message: "DEMO",
                     isProgress: false,
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 8.0),
+                  padding: const EdgeInsets.only(bottom: 8.0),
                   child: LinearPercentIndicator(
                     animation: true,
                     animateFromLastPercent: true,
-                    barRadius: Radius.circular(8),
-                    padding: EdgeInsets.symmetric(horizontal: 0.0),
+                    barRadius: const Radius.circular(8),
+                    padding: const EdgeInsets.symmetric(horizontal: 0.0),
                     lineHeight: 3.0,
                     percent: controller.myDuration.value.inSeconds / 15,
                     backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -54,7 +54,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                               ? Colors.red
                               : Theme.of(context).colorScheme.tertiaryContainer,
                         ),
-                        Padding(padding: EdgeInsets.only(right: 6.0)),
+                        const Padding(padding: EdgeInsets.only(right: 6.0)),
                         Text(
                           controller.twitchStreamInfos.value.isOnline!
                               ? "live".tr
@@ -82,16 +82,16 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                           .displayViewerCount!,
                       child: Row(
                         children: [
-                          Icon(Icons.person_outline, color: Colors.red),
-                          SizedBox(
+                          const Icon(Icons.person_outline, color: Colors.red),
+                          const SizedBox(
                             width: 2,
                           ),
                           Text(
                             controller.twitchStreamInfos.value.viewerCount
                                 .toString(),
-                            style: TextStyle(color: Colors.red),
+                            style: const TextStyle(color: Colors.red),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 6,
                           ),
                           Text(
@@ -113,13 +113,13 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                   children: [
                     Expanded(
                       child: Container(
-                        padding: EdgeInsets.only(top: 12, right: 10),
+                        padding: const EdgeInsets.only(top: 12, right: 10),
                         child: TextFormField(
                           controller: controller.titleFormController,
                           focusNode: controller.focus,
                           style: Theme.of(Get.context!).textTheme.bodyLarge,
                           decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
+                            contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 7),
                             hintText: 'Your stream\'s title',
                             labelText: 'stream_title'.tr,
@@ -132,9 +132,9 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
-                        textStyle: TextStyle(fontSize: 11),
+                        textStyle: const TextStyle(fontSize: 11),
                         backgroundColor: Colors.deepPurpleAccent,
-                        fixedSize: Size(50, 20),
+                        fixedSize: const Size(50, 20),
                       ),
                       onPressed: () {
                         controller.setStreamTitle();
@@ -142,7 +142,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                       },
                       child: Text(
                         'change'.tr,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
                         ),
                       ),
@@ -167,7 +167,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                 GridView.count(
                   shrinkWrap: true,
                   primary: false,
-                  padding: EdgeInsets.only(top: 10),
+                  padding: const EdgeInsets.only(top: 10),
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
                   crossAxisCount: 2,
@@ -247,17 +247,17 @@ Widget prediction(
           fontWeight: FontWeight.bold,
         ),
       ),
-      SizedBox(height: 8),
+      const SizedBox(height: 8),
       controller.prediction != null
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(controller.prediction!.value.title),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Container(
                   child: ListView.builder(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: controller.prediction!.value.outcomes.length,
                     itemBuilder: (context, index) {
                       final outcome =
@@ -292,12 +292,12 @@ Widget prediction(
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              SizedBox(height: 3),
+                              const SizedBox(height: 3),
                               LinearPercentIndicator(
                                 animation: true,
                                 animateFromLastPercent: true,
-                                barRadius: Radius.circular(8),
-                                padding: EdgeInsets.symmetric(horizontal: 0.0),
+                                barRadius: const Radius.circular(8),
+                                padding: const EdgeInsets.symmetric(horizontal: 0.0),
                                 lineHeight: 20.0,
                                 percent: percentage,
                                 backgroundColor:
@@ -307,7 +307,7 @@ Widget prediction(
                                     (percentage * 100).toStringAsFixed(2) +
                                         " %"),
                               ),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                             ],
                           ),
                         ),
@@ -323,7 +323,7 @@ Widget prediction(
                     children: [
                       TextButton(
                         style: TextButton.styleFrom(
-                          textStyle: TextStyle(fontSize: 12),
+                          textStyle: const TextStyle(fontSize: 12),
                           backgroundColor:
                               Theme.of(context).colorScheme.tertiaryContainer,
                         ),
@@ -332,14 +332,14 @@ Widget prediction(
                         },
                         child: Text(
                           "cancel".tr,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                           ),
                         ),
                       ),
                       TextButton(
                         style: TextButton.styleFrom(
-                          textStyle: TextStyle(fontSize: 12),
+                          textStyle: const TextStyle(fontSize: 12),
                           backgroundColor: Colors.green,
                         ),
                         onPressed: () {
@@ -357,7 +357,7 @@ Widget prediction(
                                   PredictionStatus.ACTIVE
                               ? 'Lock'
                               : 'End',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                           ),
                         ),
@@ -379,11 +379,11 @@ Widget prediction(
                 ),
                 TextButton(
                   style: TextButton.styleFrom(
-                    textStyle: TextStyle(fontSize: 12),
+                    textStyle: const TextStyle(fontSize: 12),
                     backgroundColor: Colors.deepPurpleAccent,
                   ),
                   onPressed: () {},
-                  child: Text(
+                  child: const Text(
                     'Create one',
                     style: TextStyle(
                       color: Colors.white,
@@ -411,63 +411,59 @@ Widget poll(
           fontWeight: FontWeight.bold,
         ),
       ),
-      SizedBox(height: 8),
+      const SizedBox(height: 8),
       controller.poll != null
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(controller.poll!.value.title),
-                SizedBox(height: 10),
-                Container(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: controller.poll!.value.choices.length,
-                    itemBuilder: (context, index) {
-                      final choice = controller.poll!.value.choices[index];
-                      final percentage =
-                          choice.votes / controller.poll!.value.totalVotes;
-                      return Container(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              choice.title,
-                              style: TextStyle(
-                                color: Theme.of(Get.context!)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .color,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 3),
-                            LinearPercentIndicator(
-                              animation: true,
-                              animateFromLastPercent: true,
-                              barRadius: Radius.circular(8),
-                              padding: EdgeInsets.symmetric(horizontal: 0.0),
-                              lineHeight: 20.0,
-                              percent: percentage,
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.secondary,
-                              progressColor: ((controller.poll!.value.status ==
-                                              PollStatus.COMPLETED ||
-                                          controller.poll!.value.status ==
-                                              PollStatus.TERMINATED) &&
-                                      percentage > 0.5)
-                                  ? Colors.green
-                                  : Theme.of(context).colorScheme.background,
-                              center: Text(
-                                  (percentage * 100).toStringAsFixed(2) + " %"),
-                            ),
-                            SizedBox(height: 10),
-                          ],
+                const SizedBox(height: 10),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: controller.poll!.value.choices.length,
+                  itemBuilder: (context, index) {
+                    final choice = controller.poll!.value.choices[index];
+                    final percentage =
+                        choice.votes / controller.poll!.value.totalVotes;
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          choice.title,
+                          style: TextStyle(
+                            color: Theme.of(Get.context!)
+                                .textTheme
+                                .bodyLarge!
+                                .color,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      );
-                    },
-                  ),
+                        const SizedBox(height: 3),
+                        LinearPercentIndicator(
+                          animation: true,
+                          animateFromLastPercent: true,
+                          barRadius: const Radius.circular(8),
+                          padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                          lineHeight: 20.0,
+                          percent: percentage,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary,
+                          progressColor: ((controller.poll!.value.status ==
+                                          PollStatus.COMPLETED ||
+                                      controller.poll!.value.status ==
+                                          PollStatus.TERMINATED) &&
+                                  percentage > 0.5)
+                              ? Colors.green
+                              : Theme.of(context).colorScheme.background,
+                          center: Text(
+                              (percentage * 100).toStringAsFixed(2) + " %"),
+                        ),
+                        const SizedBox(height: 10),
+                      ],
+                    );
+                  },
                 ),
                 Visibility(
                   visible: controller.poll!.value.status == PollStatus.ACTIVE,
@@ -476,7 +472,7 @@ Widget poll(
                     children: [
                       TextButton(
                         style: TextButton.styleFrom(
-                          textStyle: TextStyle(fontSize: 12),
+                          textStyle: const TextStyle(fontSize: 12),
                           backgroundColor:
                               Theme.of(context).colorScheme.tertiaryContainer,
                         ),
@@ -485,20 +481,20 @@ Widget poll(
                         },
                         child: Text(
                           "cancel".tr,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                           ),
                         ),
                       ),
                       TextButton(
                         style: TextButton.styleFrom(
-                          textStyle: TextStyle(fontSize: 12),
+                          textStyle: const TextStyle(fontSize: 12),
                           backgroundColor: Colors.green,
                         ),
                         onPressed: () {
                           controller.endPoll("TERMINATED");
                         },
-                        child: Text(
+                        child: const Text(
                           'End',
                           style: TextStyle(
                             color: Colors.white,
@@ -522,11 +518,11 @@ Widget poll(
                 ),
                 TextButton(
                   style: TextButton.styleFrom(
-                    textStyle: TextStyle(fontSize: 12),
+                    textStyle: const TextStyle(fontSize: 12),
                     backgroundColor: Colors.deepPurpleAccent,
                   ),
                   onPressed: () {},
-                  child: Text(
+                  child: const Text(
                     'Create one',
                     style: TextStyle(
                       color: Colors.white,
@@ -535,7 +531,7 @@ Widget poll(
                 ),
               ],
             ),
-      SizedBox(
+      const SizedBox(
         height: 10,
       ),
     ],
@@ -554,8 +550,8 @@ Widget _shortcutButton(
           color: isOn
               ? Theme.of(context).colorScheme.tertiary
               : Theme.of(context).colorScheme.tertiaryContainer,
-          borderRadius: BorderRadius.all(Radius.circular(8))),
-      padding: EdgeInsets.all(8),
+          borderRadius: const BorderRadius.all(Radius.circular(8))),
+      padding: const EdgeInsets.all(8),
       child: Text(
         text,
         textAlign: TextAlign.center,
@@ -568,10 +564,10 @@ void pickWinnerDialog(BuildContext context, TwitchPrediction prediction,
     Function endPrediction, TwitchTabViewController controller) {
   Get.defaultDialog(
     title: prediction.title,
-    titleStyle: TextStyle(color: Colors.white),
-    backgroundColor: Color(0xFF282828),
-    buttonColor: Color(0xFF9147ff),
-    cancelTextColor: Color(0xFF9147ff),
+    titleStyle: const TextStyle(color: Colors.white),
+    backgroundColor: const Color(0xFF282828),
+    buttonColor: const Color(0xFF9147ff),
+    cancelTextColor: const Color(0xFF9147ff),
     confirmTextColor: Colors.white,
     textCancel: "Back",
     textConfirm: "Confirm",

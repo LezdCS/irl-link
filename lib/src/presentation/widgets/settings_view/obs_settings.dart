@@ -14,9 +14,9 @@ class ObsSettings extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(
+          borderRadius: const BorderRadius.all(
             Radius.circular(8),
           ),
           color: Theme.of(context).colorScheme.secondary,
@@ -43,7 +43,7 @@ class ObsSettings extends StatelessWidget {
                     decoration: InputDecoration(
                       isDense: true,
                       contentPadding:
-                          EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+                          const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
                       enabledBorder:
                           Theme.of(context).inputDecorationTheme.border,
                       hintText: 'url',
@@ -66,7 +66,7 @@ class ObsSettings extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -86,7 +86,7 @@ class ObsSettings extends StatelessWidget {
                     decoration: InputDecoration(
                       isDense: true,
                       contentPadding:
-                          EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+                          const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
                       enabledBorder:
                           Theme.of(context).inputDecorationTheme.border,
                       hintText: 'password',
@@ -109,15 +109,15 @@ class ObsSettings extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 6),
+            const SizedBox(height: 6),
             Row(
               children: [
                 Expanded(
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 12),
+                      textStyle: const TextStyle(fontSize: 12),
                       backgroundColor: Theme.of(context).colorScheme.tertiary,
-                      fixedSize: Size(50, 20),
+                      fixedSize: const Size(50, 20),
                     ),
                     onPressed: () {
                       MobileScannerController cameraController =
@@ -133,24 +133,24 @@ class ObsSettings extends StatelessWidget {
                       children: [
                         Text(
                           'scan_qr'.tr,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                           ),
                         ),
-                        SizedBox(width: 5),
-                        Icon(Icons.qr_code, color: Colors.white),
+                        const SizedBox(width: 5),
+                        const Icon(Icons.qr_code, color: Colors.white),
                       ],
                     ),
                   ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Expanded(
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 12),
+                      textStyle: const TextStyle(fontSize: 12),
                       backgroundColor:
                           Theme.of(context).colorScheme.tertiaryContainer,
-                      fixedSize: Size(50, 20),
+                      fixedSize: const Size(50, 20),
                     ),
                     onPressed: () {
                       Get.defaultDialog(
@@ -169,19 +169,19 @@ class ObsSettings extends StatelessWidget {
                       children: [
                         Text(
                           'history'.tr,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                           ),
                         ),
-                        SizedBox(width: 10),
-                        Icon(Icons.history, color: Colors.white),
+                        const SizedBox(width: 10),
+                        const Icon(Icons.history, color: Colors.white),
                       ],
                     ),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             InkWell(
               onTap: () {
                 launchUrlString(
@@ -192,11 +192,11 @@ class ObsSettings extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.open_in_browser,
                     size: 18,
                   ),
-                  SizedBox(width: 5),
+                  const SizedBox(width: 5),
                   Text(
                     "how_can_i".tr,
                     style: TextStyle(
@@ -267,7 +267,7 @@ class ObsSettings extends StatelessWidget {
                   },
                   child: Text(
                     "close".tr,
-                    style: TextStyle(fontSize: 18, color: Colors.white),
+                    style: const TextStyle(fontSize: 18, color: Colors.white),
                   ),
                 ),
               ),
@@ -277,7 +277,7 @@ class ObsSettings extends StatelessWidget {
         Positioned(
           width: MediaQuery.of(context).size.width,
           top: 100,
-          child: Row(
+          child: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(

@@ -8,9 +8,8 @@ class TwitchEmote extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Image(
-      image: NetworkImage("https://static-cdn.jtvnw.net/emoticons/v2/" +
-          emote.key +
-          "/default/dark/1.0"),
+      image: NetworkImage(
+          "https://static-cdn.jtvnw.net/emoticons/v2/${emote.key}/default/dark/1.0"),
     );
   }
 }

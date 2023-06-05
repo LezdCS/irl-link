@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/domain/entities/chat/twitch_chat_message.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/chat_message/event_container.dart';
 import 'package:irllink/src/presentation/widgets/chat_message/message_container.dart';
 import 'package:irllink/src/presentation/widgets/chat_message/moderation_bottom_sheet.dart';
+import 'package:twitch_chat/twitch_chat.dart';
 
 import 'alert_message_view.dart';
 
@@ -29,12 +29,12 @@ class ChatView extends GetView<ChatViewController> {
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.background,
             ),
-            child: controller.chatMessages.length == 0
+            child: controller.chatMessages.isEmpty
                 ? Container(
-                    padding: EdgeInsets.only(left: 5),
+                    padding: const EdgeInsets.only(left: 5),
                     child: Text(
-                      "Welcome on ${controller.ircChannelJoined} 's chat room !",
-                      style: TextStyle(
+                      "Welcome on ${controller.twitchChat?.channel} 's chat room !",
+                      style: const TextStyle(
                         color: Color(0xFF878585),
                       ),
                     ),
@@ -43,10 +43,9 @@ class ChatView extends GetView<ChatViewController> {
                     controller: controller.scrollController,
                     itemCount: controller.chatMessages.length,
                     itemBuilder: (BuildContext context, int index) {
-                      TwitchChatMessage message =
-                          controller.chatMessages[index];
+                      ChatMessage message = controller.chatMessages[index];
                       return Container(
-                        padding: EdgeInsets.only(top: 1, bottom: 1),
+                        padding: const EdgeInsets.only(top: 1, bottom: 1),
                         child: InkWell(
                           onTap: () {
                             if (FocusScope.of(context).isFirstFocus) {
@@ -55,9 +54,7 @@ class ChatView extends GetView<ChatViewController> {
                             controller.selectedMessage.value = null;
                           },
                           onLongPress: () {
-                            if (controller.selectedMessage.value == null) {
-                              controller.selectedMessage.value = message;
-                            }
+                            controller.selectedMessage.value ??= message;
                           },
                           child: message.highlightType != null
                               ? EventContainer(
@@ -71,6 +68,7 @@ class ChatView extends GetView<ChatViewController> {
                                       .displayTimestamp!,
                                   textSize: controller.homeViewController
                                       .settings.value.textSize!,
+                                  twitchChat: controller.twitchChat!,
                                 )
                               : MessageContainer(
                                   selectedMessage:
@@ -83,6 +81,7 @@ class ChatView extends GetView<ChatViewController> {
                                       .displayTimestamp!,
                                   textSize: controller.homeViewController
                                       .settings.value.textSize!,
+                                  twitchChat: controller.twitchChat!,
                                 ),
                         ),
                       );
@@ -104,9 +103,9 @@ class ChatView extends GetView<ChatViewController> {
                     controller.scrollToBottom();
                   },
                   child: Container(
-                    padding: EdgeInsets.only(left: 20, right: 20),
+                    padding: const EdgeInsets.only(left: 20, right: 20),
                     color: Colors.white.withOpacity(0.8),
-                    child: Icon(
+                    child: const Icon(
                       Icons.keyboard_arrow_down,
                       color: Colors.black,
                       size: 30,
@@ -124,8 +123,8 @@ class ChatView extends GetView<ChatViewController> {
           child: AnimatedSlide(
             offset: controller.selectedMessage.value != null
                 ? Offset.zero
-                : Offset(0, 1),
-            duration: Duration(milliseconds: 200),
+                : const Offset(0, 1),
+            duration: const Duration(milliseconds: 200),
             child: Visibility(
               visible: controller.selectedMessage.value != null,
               child:
@@ -135,7 +134,7 @@ class ChatView extends GetView<ChatViewController> {
         ),
         AnimatedOpacity(
           opacity: controller.isChatConnected.value ? 0.0 : 1.0,
-          duration: Duration(milliseconds: 1000),
+          duration: const Duration(milliseconds: 1000),
           child: AlertMessageView(
             color: controller.alertColor.value,
             message: controller.alertMessage.value,

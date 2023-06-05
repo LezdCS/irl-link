@@ -53,42 +53,42 @@ class SeActivity extends Equatable {
 
   List<Color> colorsForEnum() {
     List<Color> colors = <Color>[];
-    switch (this.activityType) {
+    switch (activityType) {
       case ActivityType.follow:
         //background color
-        colors.add(Color(0xFF1B98E0));
+        colors.add(const Color(0xFF1B98E0));
         //circle color
-        colors.add(Color(0xFF13293D));
+        colors.add(const Color(0xFF13293D));
         break;
       case ActivityType.subscription:
         //background color
-        colors.add(Color(0xFFA47CED));
+        colors.add(const Color(0xFFA47CED));
         //circle color
-        colors.add(Color(0xFF341D5B));
+        colors.add(const Color(0xFF341D5B));
         break;
       case ActivityType.cheer:
         //background color
-        colors.add(Color(0xFF8B52F3));
+        colors.add(const Color(0xFF8B52F3));
         //circle color
-        colors.add(Color(0xFF230D4C));
+        colors.add(const Color(0xFF230D4C));
         break;
       case ActivityType.tip:
         //background color
-        colors.add(Color(0xFF13C50F));
+        colors.add(const Color(0xFF13C50F));
         //circle color
-        colors.add(Color(0xFF0C250A));
+        colors.add(const Color(0xFF0C250A));
         break;
       case ActivityType.raid:
         //background color
-        colors.add(Color(0xFFCE1260));
+        colors.add(const Color(0xFFCE1260));
         //circle color
-        colors.add(Color(0xFF2E0219));
+        colors.add(const Color(0xFF2E0219));
         break;
       case ActivityType.host:
         //background color
-        colors.add(Color(0xFFCE1260));
+        colors.add(const Color(0xFFCE1260));
         //circle color
-        colors.add(Color(0xFF2E0219));
+        colors.add(const Color(0xFF2E0219));
         break;
     }
     return colors;
@@ -96,70 +96,70 @@ class SeActivity extends Equatable {
 
   String textFromEnum() {
     String s = '';
-    switch (this.activityType) {
+    switch (activityType) {
       case ActivityType.follow:
         s = "Follow";
         break;
       case ActivityType.subscription:
-        bool isPrime = this.tier == "prime";
-        bool isGift = this.gifted == true;
+        bool isPrime = tier == "prime";
+        bool isGift = gifted == true;
         if (isGift) {
-          s = 'Got gifted a sub by ${this.sender}';
+          s = 'Got gifted a sub by $sender';
         } else {
           s = 'Subscribed${isPrime ? " with prime" : ""}';
         }
         break;
       case ActivityType.cheer:
-        s = 'Cheered ${this.amount} bits!';
+        s = 'Cheered $amount bits!';
         break;
       case ActivityType.tip:
-        s = 'Donated ${this.amount}\$!';
+        s = 'Donated $amount\$!';
         break;
       case ActivityType.raid:
-        s = '${this.amount} Raiders';
+        s = '$amount Raiders';
         break;
       case ActivityType.host:
-        s = '${this.amount} Hosted viewers';
+        s = '$amount Hosted viewers';
         break;
     }
     return s;
   }
 
   Icon getIcon() {
-    Icon icon = Icon(Icons.person);
-    switch (this.activityType) {
+    Icon icon = const Icon(Icons.person);
+    switch (activityType) {
       case ActivityType.follow:
-        icon = Icon(
+        icon = const Icon(
           Icons.person_add,
           size: 18,
         );
         break;
       case ActivityType.subscription:
-        icon = Icon(
+        icon = const Icon(
           Icons.star,
           size: 18,
         );
         break;
       case ActivityType.cheer:
-        icon = Icon(
+        icon = const Icon(
           Icons.toll,
           size: 18,
         );
         break;
       case ActivityType.tip:
-        icon = Icon(
+        icon = const Icon(
           Icons.attach_money,
           size: 18,
         );
         break;
       case ActivityType.raid:
-        icon = Icon(
+        icon = const Icon(
           Icons.diversity_3,
           size: 18,
         );
         break;
       case ActivityType.host:
-        icon = Icon(
+        icon = const Icon(
           Icons.diversity_3,
           size: 18,
         );

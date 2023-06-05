@@ -15,11 +15,11 @@ class ObsTabView extends GetView<ObsTabViewController> {
       child: Obx(
         () => controller.isConnected.value
             ? Container(
-                padding: EdgeInsets.only(left: 8, top: 10, right: 8),
+                padding: const EdgeInsets.only(left: 8, top: 10, right: 8),
                 color: context.theme.colorScheme.background,
                 child: Column(
                   children: [
-                    Container(
+                    SizedBox(
                       height: 40,
                       child: ListView(
                         shrinkWrap: true,
@@ -32,7 +32,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
                                   : controller.startStream();
                             },
                             child: Container(
-                              constraints: BoxConstraints(
+                              constraints: const BoxConstraints(
                                 minWidth: 80.0,
                               ),
                               alignment: Alignment.center,
@@ -43,9 +43,9 @@ class ObsTabView extends GetView<ObsTabViewController> {
                                         .colorScheme
                                         .tertiaryContainer,
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(8)),
+                                    const BorderRadius.all(Radius.circular(8)),
                               ),
-                              padding: EdgeInsets.all(8),
+                              padding: const EdgeInsets.all(8),
                               child: Text(
                                 controller.isStreaming.value
                                     ? "stop_stream".tr
@@ -54,13 +54,13 @@ class ObsTabView extends GetView<ObsTabViewController> {
                               ),
                             ),
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           InkWell(
                             onTap: () {
                               controller.startStopRecording();
                             },
                             child: Container(
-                              constraints: BoxConstraints(
+                              constraints: const BoxConstraints(
                                 minWidth: 80.0,
                               ),
                               alignment: Alignment.center,
@@ -70,11 +70,11 @@ class ObsTabView extends GetView<ObsTabViewController> {
                                     : Theme.of(context)
                                         .colorScheme
                                         .tertiaryContainer,
-                                borderRadius: BorderRadius.all(
+                                borderRadius: const BorderRadius.all(
                                   Radius.circular(8),
                                 ),
                               ),
-                              padding: EdgeInsets.all(8),
+                              padding: const EdgeInsets.all(8),
                               child: Text(
                                 controller.isRecording.value
                                     ? "stop_recording".tr
@@ -83,15 +83,15 @@ class ObsTabView extends GetView<ObsTabViewController> {
                               ),
                             ),
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           InkWell(
                             onTap: () {
                               Get.defaultDialog(
                                 title: "preview_obs".tr,
-                                titleStyle: TextStyle(color: Colors.white),
-                                backgroundColor: Color(0xFF0e0e10),
-                                buttonColor: Color(0xFF9147ff),
-                                cancelTextColor: Color(0xFF9147ff),
+                                titleStyle: const TextStyle(color: Colors.white),
+                                backgroundColor: const Color(0xFF0e0e10),
+                                buttonColor: const Color(0xFF9147ff),
+                                cancelTextColor: const Color(0xFF9147ff),
                                 textCancel: "return".tr,
                                 radius: 10,
                                 content: Column(
@@ -113,7 +113,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
                                   controller.currentScene.value);
                             },
                             child: Container(
-                              constraints: BoxConstraints(
+                              constraints: const BoxConstraints(
                                 minWidth: 80.0,
                               ),
                               alignment: Alignment.center,
@@ -121,12 +121,12 @@ class ObsTabView extends GetView<ObsTabViewController> {
                                 color: Theme.of(context)
                                     .colorScheme
                                     .tertiaryContainer,
-                                borderRadius: BorderRadius.all(
+                                borderRadius: const BorderRadius.all(
                                   Radius.circular(8),
                                 ),
                               ),
-                              padding: EdgeInsets.all(8),
-                              child: Text(
+                              padding: const EdgeInsets.all(8),
+                              child: const Text(
                                 "Preview scene",
                                 textAlign: TextAlign.center,
                               ),
@@ -168,10 +168,10 @@ class ObsTabView extends GetView<ObsTabViewController> {
                     Wrap(children: [
                       Text(
                         "scenes".tr,
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 10),
+                        margin: const EdgeInsets.only(top: 10),
                         height: 40,
                         width: width,
                         child: getScenes(),
@@ -187,10 +187,10 @@ class ObsTabView extends GetView<ObsTabViewController> {
                     Wrap(children: [
                       Text(
                         "sources".tr,
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 10),
+                        margin: const EdgeInsets.only(top: 10),
                         width: width,
                         child: getSources(context),
                       ),
@@ -226,15 +226,15 @@ class ObsTabView extends GetView<ObsTabViewController> {
                         controller.applySettings();
                       },
                       child: Container(
-                        margin: EdgeInsets.only(right: 10, top: 10, bottom: 10),
-                        padding: EdgeInsets.all(8),
+                        margin: const EdgeInsets.only(right: 10, top: 10, bottom: 10),
+                        padding: const EdgeInsets.all(8),
                         alignment: Alignment.center,
                         width: width * 0.4,
                         decoration: BoxDecoration(
                           color: Theme.of(context).colorScheme.tertiary,
                           borderRadius: BorderRadius.circular(6),
                         ),
-                        child: Text(
+                        child: const Text(
                           "Retry connection",
                           style: TextStyle(color: Colors.white),
                         ),
@@ -252,7 +252,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
       shrinkWrap: true,
       itemCount: controller.scenesList.length,
       scrollDirection: Axis.horizontal,
-      separatorBuilder: (context, index) => SizedBox(
+      separatorBuilder: (context, index) => const SizedBox(
         width: 10,
       ),
       itemBuilder: (BuildContext context, int index) {
@@ -262,7 +262,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
             controller.setCurrentScene(elementAt);
           },
           child: Container(
-            constraints: BoxConstraints(
+            constraints: const BoxConstraints(
               minWidth: 80.0,
               maxWidth: 120,
             ),
@@ -271,9 +271,9 @@ class ObsTabView extends GetView<ObsTabViewController> {
               color: controller.currentScene == elementAt
                   ? Theme.of(context).colorScheme.tertiary
                   : Theme.of(context).colorScheme.tertiaryContainer,
-              borderRadius: BorderRadius.all(Radius.circular(8)),
+              borderRadius: const BorderRadius.all(Radius.circular(8)),
             ),
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             child: Tooltip(
               message: elementAt,
               child: Text(
@@ -293,9 +293,9 @@ class ObsTabView extends GetView<ObsTabViewController> {
     return GridView.builder(
       shrinkWrap: true,
       scrollDirection: Axis.vertical,
-      physics: ScrollPhysics(),
+      physics: const ScrollPhysics(),
       primary: true,
-      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: 100,
         crossAxisSpacing: 16,
         mainAxisSpacing: 0,
@@ -312,10 +312,10 @@ class ObsTabView extends GetView<ObsTabViewController> {
           onLongPress: () {
             Get.defaultDialog(
               title: source.sourceName,
-              titleStyle: TextStyle(color: Colors.white),
-              backgroundColor: Color(0xFF0e0e10),
-              buttonColor: Color(0xFF9147ff),
-              cancelTextColor: Color(0xFF9147ff),
+              titleStyle: const TextStyle(color: Colors.white),
+              backgroundColor: const Color(0xFF0e0e10),
+              buttonColor: const Color(0xFF9147ff),
+              cancelTextColor: const Color(0xFF9147ff),
               textCancel: "return".tr,
               radius: 10,
               content: Column(
@@ -351,12 +351,12 @@ class ObsTabView extends GetView<ObsTabViewController> {
             disabledColor: Theme.of(context).colorScheme.tertiaryContainer,
             selectedColor: Theme.of(context).colorScheme.tertiary,
             avatar: sourceVolume != null
-                ? Icon(
+                ? const Icon(
                     Icons.volume_up,
                     size: 18,
                   )
                 : null,
-            label: Container(
+            label: SizedBox(
               width: 100,
               height: 17,
               child: source.sourceName.length > 12
@@ -366,8 +366,8 @@ class ObsTabView extends GetView<ObsTabViewController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       blankSpace: 10.0,
                       velocity: 30.0,
-                      startAfter: Duration(seconds: 2),
-                      pauseAfterRound: Duration(seconds: 2),
+                      startAfter: const Duration(seconds: 2),
+                      pauseAfterRound: const Duration(seconds: 2),
                     )
                   : Text(
                       source.sourceName,
@@ -375,7 +375,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
                       textAlign: TextAlign.center,
                     ),
             ),
-            labelStyle: TextStyle(color: Colors.white),
+            labelStyle: const TextStyle(color: Colors.white),
             selected: source.sceneItemEnabled,
           ),
         );

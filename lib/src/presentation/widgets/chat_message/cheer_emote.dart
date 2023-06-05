@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:irllink/src/domain/entities/emote.dart';
+import 'package:twitch_chat/twitch_chat.dart';
 
 class CheerEmote extends StatelessWidget {
   final Emote cheerEmote;
@@ -18,7 +18,7 @@ class CheerEmote extends StatelessWidget {
           image: NetworkImage(cheerEmote.url1x),
         ),
         Text(
-          cheerEmote.id + ' ',
+          '${cheerEmote.id} ',
           style: TextStyle(
             color: Color(int.parse(cheerEmote.color!.replaceAll('#', '0xff'))),
             fontSize: textSize,

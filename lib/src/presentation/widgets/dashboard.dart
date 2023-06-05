@@ -40,10 +40,10 @@ class Dashboard extends GetView {
       child: Container(
         width: 300,
         height: 234,
-        padding: EdgeInsets.all(4),
+        padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(
           color: context.theme.colorScheme.secondary,
-          borderRadius: BorderRadius.all(
+          borderRadius: const BorderRadius.all(
             Radius.circular(8),
           ),
           border: Border.all(
@@ -53,7 +53,7 @@ class Dashboard extends GetView {
         ),
         child: GridView.builder(
           itemCount: events.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             childAspectRatio: 3 / 2.3,
           ),
@@ -77,24 +77,24 @@ class Dashboard extends GetView {
 
   Widget _eventButton(FloatingEvent event) {
     return Container(
-      margin: EdgeInsets.all(4),
+      margin: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: Theme.of(Get.context!).colorScheme.tertiaryContainer,
-        borderRadius: BorderRadius.all(
+        borderRadius: const BorderRadius.all(
           Radius.circular(8),
         ),
       ),
       alignment: Alignment.center,
       child: TextButton(
         style: TextButton.styleFrom(
-          textStyle: TextStyle(fontSize: 12),
+          textStyle: const TextStyle(fontSize: 12),
           backgroundColor: event.color,
         ),
         onPressed: () {},
         child: Text(
           event.title ?? "",
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 13,
           ),
@@ -105,10 +105,10 @@ class Dashboard extends GetView {
 
   Widget _eventSlider(FloatingEvent event) {
     return Container(
-      margin: EdgeInsets.all(4),
+      margin: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: Theme.of(Get.context!).colorScheme.tertiaryContainer,
-        borderRadius: BorderRadius.all(
+        borderRadius: const BorderRadius.all(
           Radius.circular(8),
         ),
       ),
@@ -130,10 +130,10 @@ class Dashboard extends GetView {
 
   Widget _eventToggle(FloatingEvent event) {
     return Container(
-      margin: EdgeInsets.all(4),
+      margin: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: Theme.of(Get.context!).colorScheme.tertiaryContainer,
-        borderRadius: BorderRadius.all(
+        borderRadius: const BorderRadius.all(
           Radius.circular(8),
         ),
       ),

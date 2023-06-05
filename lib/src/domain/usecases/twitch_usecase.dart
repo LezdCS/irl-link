@@ -1,15 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
-import 'package:irllink/src/domain/entities/emote.dart';
-import 'package:irllink/src/domain/entities/twitch_badge.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
 import 'package:irllink/src/domain/entities/twitch_prediction.dart';
 import 'package:irllink/src/domain/entities/twitch_stream_infos.dart';
 import 'package:irllink/src/domain/entities/twitch_user.dart';
 import 'package:irllink/src/domain/repositories/twitch_repository.dart';
+import 'package:twitch_chat/twitch_chat.dart';
 
-import '../entities/chat/twitch_chat_message.dart';
 import '../entities/twitch_poll.dart';
 
 class TwitchUseCase {
@@ -48,66 +46,6 @@ class TwitchUseCase {
 
   Future<DataState<String>> logout({required String accessToken}) {
     return twitchRepository.logout(accessToken);
-  }
-
-  Future<DataState<List<TwitchBadge>>> getTwitchGlobalBadges(
-      {required String accessToken}) {
-    return twitchRepository.getTwitchGlobalBadges(accessToken);
-  }
-
-  Future<DataState<List<TwitchBadge>>> getTwitchChannelBadges(
-      {required String accessToken, required String broadcasterId}) {
-    return twitchRepository.getTwitchChannelBadges(accessToken, broadcasterId);
-  }
-
-  Future<DataState<List<Emote>>> getTwitchEmotes(
-      {required String accessToken}) {
-    return twitchRepository.getTwitchEmotes(accessToken);
-  }
-
-  Future<DataState<List<Emote>>> getTwitchChannelEmotes(
-      {required String accessToken, required String broadcasterId}) {
-    return twitchRepository.getTwitchChannelEmotes(accessToken, broadcasterId);
-  }
-
-  Future<DataState<List<Emote>>> getTwitchSetsEmotes({
-    required String accessToken,
-    required List<String> setId,
-  }) {
-    return twitchRepository.getTwitchSetsEmotes(accessToken, setId);
-  }
-
-  Future<DataState<List<Emote>>> getTwitchCheerEmotes({
-    required String accessToken,
-    required String broadcasterId,
-  }) {
-    return twitchRepository.getTwitchCheerEmotes(accessToken, broadcasterId);
-  }
-
-  Future<DataState<List<Emote>>> getFrankerfacezEmotes({
-    required String broadcasterId,
-  }) {
-    return twitchRepository.getFrankerfacezEmotes(broadcasterId);
-  }
-
-  Future<DataState<List<Emote>>> getBttvChannelEmotes({
-    required String broadcasterId,
-  }) {
-    return twitchRepository.getBttvChannelEmotes(broadcasterId);
-  }
-
-  Future<DataState<List<Emote>>> get7TvChannelEmotes({
-    required String broadcasterId,
-  }) {
-    return twitchRepository.get7TvChannelEmotes(broadcasterId);
-  }
-
-  Future<DataState<List<Emote>>> get7TvGlobalEmotes() {
-    return twitchRepository.get7TvGlobalEmotes();
-  }
-
-  Future<DataState<List<Emote>>> getBttvGlobalEmotes() {
-    return twitchRepository.getBttvGlobalEmotes();
   }
 
   Future<DataState<TwitchStreamInfos>> getStreamInfo(
@@ -149,7 +87,7 @@ class TwitchUseCase {
   Future<void> banUser(
     String accessToken,
     String broadcasterId,
-    TwitchChatMessage message,
+    ChatMessage message,
     int? duration,
   ) {
     return twitchRepository.banUser(
@@ -159,7 +97,7 @@ class TwitchUseCase {
   Future<void> deleteMessage(
     String accessToken,
     String broadcasterId,
-    TwitchChatMessage message,
+    ChatMessage message,
   ) {
     return twitchRepository.deleteMessage(accessToken, broadcasterId, message);
   }

@@ -58,6 +58,10 @@ dependencies:
   upgrader: ^7.0.1
   in_app_purchase: ^3.1.7
   floating_draggable_widget: ^2.1.2
+  collection:
+  twitch_chat:
+    git:
+      url: https://github.com/LezdCS/twitch_chat.git
 
 dependency_overrides:
   # Can be removed when
