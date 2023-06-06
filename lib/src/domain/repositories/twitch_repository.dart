@@ -83,7 +83,7 @@ abstract class TwitchRepository {
   Future<void> banUser(
     String accessToken,
     String broadcasterId,
-      ChatMessage message,
+    ChatMessage message,
     int? duration,
   );
 

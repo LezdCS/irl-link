@@ -297,7 +297,8 @@ Widget prediction(
                                 animation: true,
                                 animateFromLastPercent: true,
                                 barRadius: const Radius.circular(8),
-                                padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 0.0),
                                 lineHeight: 20.0,
                                 percent: percentage,
                                 backgroundColor:

@@ -34,7 +34,8 @@ class ChatEvents extends StatelessWidget {
         ),
         body: SingleChildScrollView(
           child: Container(
-            padding: const EdgeInsets.only(top: 8, left: 10, right: 10, bottom: 8),
+            padding:
+                const EdgeInsets.only(top: 8, left: 10, right: 10, bottom: 8),
             color: Theme.of(context).colorScheme.background,
             child: Column(
               children: [

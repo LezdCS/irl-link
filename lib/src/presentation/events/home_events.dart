@@ -11,7 +11,6 @@ import 'package:irllink/src/domain/usecases/settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch_usecase.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 
-
 class HomeEvents {
   final TwitchUseCase twitchUseCase;
   final SettingsUseCase settingsUseCase;

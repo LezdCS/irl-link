@@ -42,8 +42,8 @@ class ObsSettings extends StatelessWidget {
                     ),
                     decoration: InputDecoration(
                       isDense: true,
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 7),
                       enabledBorder:
                           Theme.of(context).inputDecorationTheme.border,
                       hintText: 'url',
@@ -85,8 +85,8 @@ class ObsSettings extends StatelessWidget {
                     ),
                     decoration: InputDecoration(
                       isDense: true,
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 7),
                       enabledBorder:
                           Theme.of(context).inputDecorationTheme.border,
                       hintText: 'password',
