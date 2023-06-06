@@ -54,7 +54,8 @@ class TwitchTabViewController extends GetxController {
       isDemo.value = true;
     }
 
-    refreshDataTimerProgressBar = Timer.periodic(const Duration(seconds: 1), (timer) {
+    refreshDataTimerProgressBar =
+        Timer.periodic(const Duration(seconds: 1), (timer) {
       final reduceSecondsBy = 1;
       final seconds = myDuration.value.inSeconds - reduceSecondsBy;
       if (seconds < 0) {

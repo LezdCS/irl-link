@@ -32,7 +32,8 @@ class Tts extends StatelessWidget {
         ),
         body: SingleChildScrollView(
           child: Container(
-            padding: const EdgeInsets.only(top: 8, left: 10, right: 10, bottom: 8),
+            padding:
+                const EdgeInsets.only(top: 8, left: 10, right: 10, bottom: 8),
             color: Theme.of(context).colorScheme.background,
             child: Column(
               children: [
@@ -538,8 +539,8 @@ class Tts extends StatelessWidget {
                     controller: textFieldController,
                     decoration: InputDecoration(
                       isDense: true,
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 16),
                       hintText: textFieldHint,
                       labelText: textFieldHint,
                       labelStyle: TextStyle(

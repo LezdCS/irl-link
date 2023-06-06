@@ -222,7 +222,8 @@ Widget _addDialog(context, controller) {
           },
           decoration: InputDecoration(
             isDense: true,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
             enabledBorder: Theme.of(context).inputDecorationTheme.border,
             hintStyle: TextStyle(
                 color: Theme.of(context).textTheme.bodyLarge!.color,
@@ -256,7 +257,8 @@ Widget _addDialog(context, controller) {
           },
           decoration: InputDecoration(
             isDense: true,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
             enabledBorder: Theme.of(context).inputDecorationTheme.border,
             hintStyle: TextStyle(
                 color: Theme.of(context).textTheme.bodyLarge!.color,
@@ -294,7 +296,8 @@ Widget _editDialog(context, controller, elem) {
           },
           decoration: InputDecoration(
             isDense: true,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
             enabledBorder: Theme.of(context).inputDecorationTheme.border,
             hintStyle: TextStyle(
                 color: Theme.of(context).textTheme.bodyLarge!.color,
@@ -326,7 +329,8 @@ Widget _editDialog(context, controller, elem) {
           },
           decoration: InputDecoration(
             isDense: true,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
             enabledBorder: Theme.of(context).inputDecorationTheme.border,
             hintStyle: TextStyle(
                 color: Theme.of(context).textTheme.bodyLarge!.color,

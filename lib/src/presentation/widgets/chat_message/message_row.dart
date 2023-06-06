@@ -84,7 +84,8 @@ class MessageRow extends StatelessWidget {
       String word = message.message.trim().split(' ')[i];
 
       MapEntry? emote = message.emotes.entries.firstWhereOrNull((element) =>
-          element.value
+          element
+              .value
               .where((position) =>
                   message.message.substring(
                       int.parse(position[0]), int.parse(position[1]) + 1) ==

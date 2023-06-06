@@ -88,7 +88,8 @@ class ObsTabView extends GetView<ObsTabViewController> {
                             onTap: () {
                               Get.defaultDialog(
                                 title: "preview_obs".tr,
-                                titleStyle: const TextStyle(color: Colors.white),
+                                titleStyle:
+                                    const TextStyle(color: Colors.white),
                                 backgroundColor: const Color(0xFF0e0e10),
                                 buttonColor: const Color(0xFF9147ff),
                                 cancelTextColor: const Color(0xFF9147ff),
@@ -226,7 +227,8 @@ class ObsTabView extends GetView<ObsTabViewController> {
                         controller.applySettings();
                       },
                       child: Container(
-                        margin: const EdgeInsets.only(right: 10, top: 10, bottom: 10),
+                        margin: const EdgeInsets.only(
+                            right: 10, top: 10, bottom: 10),
                         padding: const EdgeInsets.all(8),
                         alignment: Alignment.center,
                         width: width * 0.4,
