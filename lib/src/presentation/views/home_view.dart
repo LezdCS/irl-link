@@ -293,12 +293,16 @@ class HomeView extends GetView<HomeViewController> {
                 await controller.getSettings();
                 if (controller.twitchData != null) {
                   for (var chan in controller.channels) {
-                    ChatViewController c = Get.find<ChatViewController>(tag: chan.channel);
+                    ChatViewController c =
+                        Get.find<ChatViewController>(tag: chan.channel);
                     c.applySettings();
                   }
                 }
                 controller.obsTabViewController?.applySettings();
                 controller.streamelementsViewController?.applySettings();
+                if(controller.selectedChatIndex != null){
+                  controller.chatTabsController.animateTo(controller.selectedChatIndex!);
+                }
               },
               child: Icon(
                 Icons.settings,
@@ -342,7 +346,8 @@ class HomeView extends GetView<HomeViewController> {
       onTap: (int i) {
         ChatViewController c =
             Get.find<ChatViewController>(tag: controller.channels[i].channel);
-        controller.selectedChat.value = c.twitchChat;
+        controller.selectedChat = c.twitchChat;
+        controller.selectedChatIndex = i;
         controller.selectedMessage.value = null;
         c.scrollToBottom();
       },

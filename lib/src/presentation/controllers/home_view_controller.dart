@@ -58,7 +58,9 @@ class HomeViewController extends GetxController
   RxBool displayDashboard = false.obs;
 
   RxList<ChatView> channels = <ChatView>[].obs;
-  Rxn<TwitchChat> selectedChat = Rxn<TwitchChat>();
+  TwitchChat? selectedChat;
+  int? selectedChatIndex;
+
   late TabController chatTabsController;
   Rxn<ChatMessage> selectedMessage = Rxn<ChatMessage>();
 
@@ -173,13 +175,18 @@ class HomeViewController extends GetxController
     }
 
     chatTabsController = TabController(length: channels.length, vsync: this);
+
+    if(channels.isEmpty){
+      selectedChatIndex = null;
+      selectedChat = null;
+    }
   }
 
   void sendChatMessage(String message) {
     if (twitchData == null) return;
 
     TwitchChat twitchChat = TwitchChat(
-      selectedChat.value?.channel,
+      selectedChat?.channel,
       twitchData!.twitchUser.login,
       twitchData!.accessToken,
       clientId: kTwitchAuthClientId,
@@ -193,8 +200,8 @@ class HomeViewController extends GetxController
   }
 
   void getEmotes() {
-    List<Emote> emotes = List.from(selectedChat.value?.emotes)
-      ..addAll(selectedChat.value?.thirdPartEmotes);
+    List<Emote> emotes = List.from(selectedChat?.emotes)
+      ..addAll(selectedChat?.thirdPartEmotes);
     twitchEmotes
       ..clear()
       ..addAll(emotes);
@@ -202,8 +209,8 @@ class HomeViewController extends GetxController
   }
 
   void searchEmote(String input) {
-    List<Emote> emotes = List.from(selectedChat.value?.emotes)
-      ..addAll(selectedChat.value?.thirdPartEmotes);
+    List<Emote> emotes = List.from(selectedChat?.emotes)
+      ..addAll(selectedChat?.thirdPartEmotes);
     emotes = emotes
         .where(
           (emote) => emote.name.toLowerCase().contains(input.toLowerCase()),
