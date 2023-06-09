@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
+import 'package:irllink/src/presentation/widgets/chat_view.dart';
 import 'package:irllink/src/presentation/widgets/dashboard.dart';
 import 'package:irllink/src/presentation/widgets/emote_picker_view.dart';
 import 'package:irllink/src/presentation/widgets/tabs/obs_tab_view.dart';
@@ -345,6 +346,7 @@ class HomeView extends GetView<HomeViewController> {
       tabs: List<Tab>.generate(
         controller.channels.length,
         (int index) => Tab(
+          height: 30,
           child: Text(controller.channels[index].channel),
         ),
       ),
@@ -360,10 +362,30 @@ class HomeView extends GetView<HomeViewController> {
           controller: controller.chatTabsController,
           children: List<Widget>.generate(
             controller.channels.length,
-            (int index) => controller.channels[index],
+            (int index) => KeepAlive(chat: controller.channels[index]),
           ),
         ),
       ),
     );
+  }
+}
+
+class KeepAlive extends StatefulWidget {
+  KeepAlive({required this.chat});
+
+  final ChatView chat;
+
+  @override
+  State<KeepAlive> createState() => _KeepAlive();
+}
+
+class _KeepAlive extends State<KeepAlive> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return widget.chat;
   }
 }

@@ -14,7 +14,7 @@ import 'package:twitch_chat/twitch_chat.dart';
 import 'home_view_controller.dart';
 
 class ChatViewController extends GetxController
-    with GetTickerProviderStateMixin {
+    with GetTickerProviderStateMixin  {
   ChatViewController({required this.homeEvents, required this.channel});
 
   final HomeEvents homeEvents;
@@ -280,9 +280,11 @@ class ChatViewController extends GetxController
   /// Scroll to bottom of the chat
   void scrollToBottom() {
     isAutoScrolldown.value = true;
-    scrollController.jumpTo(
-      scrollController.position.maxScrollExtent,
-    );
+    if (scrollController.hasClients){
+      scrollController.jumpTo(
+        scrollController.position.maxScrollExtent,
+      );
+    }
   }
 
   void saveSettings() {

@@ -24,15 +24,16 @@ class ChatView extends StatelessWidget {
   Widget build(BuildContext context) {
     final ChatViewController controller = Get.put<ChatViewController>(
       ChatViewController(
-          homeEvents: HomeEvents(
-            twitchUseCase: TwitchUseCase(
-              twitchRepository: TwitchRepositoryImpl(),
-            ),
-            settingsUseCase: SettingsUseCase(
-              settingsRepository: SettingsRepositoryImpl(),
-            ),
+        homeEvents: HomeEvents(
+          twitchUseCase: TwitchUseCase(
+            twitchRepository: TwitchRepositoryImpl(),
           ),
-          channel: channel),
+          settingsUseCase: SettingsUseCase(
+            settingsRepository: SettingsRepositoryImpl(),
+          ),
+        ),
+        channel: channel,
+      ),
       tag: channel,
     );
 
@@ -76,16 +77,18 @@ class ChatView extends StatelessWidget {
                             if (FocusScope.of(context).isFirstFocus) {
                               FocusScope.of(context).unfocus();
                             }
-                            controller.homeViewController.selectedMessage.value = null;
+                            controller.homeViewController.selectedMessage
+                                .value = null;
                           },
                           onLongPress: () {
-                            controller.homeViewController.selectedMessage.value ??= message;
+                            controller.homeViewController.selectedMessage
+                                .value ??= message;
                           },
                           child: message.highlightType != null
                               ? EventContainer(
                                   message: message,
-                                  selectedMessage:
-                                      controller.homeViewController.selectedMessage.value,
+                                  selectedMessage: controller
+                                      .homeViewController.selectedMessage.value,
                                   displayTimestamp: controller
                                       .homeViewController
                                       .settings
@@ -96,8 +99,8 @@ class ChatView extends StatelessWidget {
                                   twitchChat: controller.twitchChat!,
                                 )
                               : MessageContainer(
-                                  selectedMessage:
-                                      controller.homeViewController.selectedMessage.value,
+                                  selectedMessage: controller
+                                      .homeViewController.selectedMessage.value,
                                   message: message,
                                   displayTimestamp: controller
                                       .homeViewController
@@ -151,7 +154,8 @@ class ChatView extends StatelessWidget {
                 : const Offset(0, 1),
             duration: const Duration(milliseconds: 200),
             child: Visibility(
-              visible: controller.homeViewController.selectedMessage.value != null,
+              visible:
+                  controller.homeViewController.selectedMessage.value != null,
               child:
                   ModerationBottomSheet(controller: controller, width: width),
             ),
