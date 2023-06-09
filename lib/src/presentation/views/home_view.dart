@@ -292,7 +292,10 @@ class HomeView extends GetView<HomeViewController> {
                 );
                 await controller.getSettings();
                 if (controller.twitchData != null) {
-                  // controller.chatViewController.applySettings();
+                  for (var chan in controller.channels) {
+                    ChatViewController c = Get.find<ChatViewController>(tag: chan.channel);
+                    c.applySettings();
+                  }
                 }
                 controller.obsTabViewController?.applySettings();
                 controller.streamelementsViewController?.applySettings();

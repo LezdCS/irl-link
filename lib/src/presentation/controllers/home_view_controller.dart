@@ -57,7 +57,6 @@ class HomeViewController extends GetxController
 
   RxBool displayDashboard = false.obs;
 
-  List chatViewControllers = [];
   RxList<ChatView> channels = <ChatView>[].obs;
   Rxn<TwitchChat> selectedChat = Rxn<TwitchChat>();
   late TabController chatTabsController;
