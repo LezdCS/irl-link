@@ -1,7 +1,9 @@
 import 'package:irllink/src/data/entities/settings/chat_events_settings_dto.dart';
+import 'package:irllink/src/data/entities/settings/chat_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/floating_dashboard_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/stream_elements_settings_dto.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
+import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 
 import '../../domain/entities/settings/chat_events_settings.dart';
 import '../../domain/entities/settings/floating_dashboard_settings.dart';
@@ -14,10 +16,9 @@ class SettingsDTO extends Settings {
     required double textSize,
     required double emotesSize,
     required bool displayTimestamp,
-    required bool alternateChannel,
-    required String alternateChannelName,
     required List hiddenUsersIds,
     required ChatEventsSettings chatEventsSettings,
+    required ChatSettings chatSettings,
     //GENERAL SETTINGS
     required bool isDarkMode,
     required bool keepSpeakerOn,
@@ -49,10 +50,9 @@ class SettingsDTO extends Settings {
           textSize: textSize,
           emotesSize: emotesSize,
           displayTimestamp: displayTimestamp,
-          alternateChannel: alternateChannel,
-          alternateChannelName: alternateChannelName,
           hiddenUsersIds: hiddenUsersIds,
           chatEventsSettings: chatEventsSettings,
+          chatSettings: chatSettings,
           //GENERAL SETTINGS
           isDarkMode: isDarkMode,
           keepSpeakerOn: keepSpeakerOn,
@@ -86,10 +86,9 @@ class SettingsDTO extends Settings {
         'textSize': textSize,
         'emotesSize': emotesSize,
         'displayTimestamp': displayTimestamp,
-        'alternateChannel': alternateChannel,
-        'alternateChannelName': alternateChannelName,
         'hiddenUsersIds': hiddenUsersIds,
         'chatEventsSettings': chatEventsSettings?.toJson(),
+        'chatSettings': chatSettings?.toJson(),
         //GENERAL
         'isDarkMode': isDarkMode,
         'keepSpeakerOn': keepSpeakerOn,
@@ -132,18 +131,15 @@ class SettingsDTO extends Settings {
       displayTimestamp: map['displayTimestamp'] != null
           ? map['displayTimestamp'] as bool
           : Settings.defaultSettings().displayTimestamp!,
-      alternateChannel: map['alternateChannel'] != null
-          ? map['alternateChannel'] as bool
-          : Settings.defaultSettings().alternateChannel!,
-      alternateChannelName: map['alternateChannelName'] != null
-          ? map['alternateChannelName'] as String
-          : Settings.defaultSettings().alternateChannelName!,
       hiddenUsersIds: map['hiddenUsersIds'] != null
           ? map['hiddenUsersIds'] as List
           : Settings.defaultSettings().hiddenUsersIds!,
       chatEventsSettings: map['chatEventsSettings'] != null
           ? ChatEventsSettingsDTO.fromJson(map['chatEventsSettings'])
           : Settings.defaultSettings().chatEventsSettings!,
+      chatSettings: map['chatSettings'] != null
+          ? ChatSettingsDTO.fromJson(map['chatSettings'])
+          : Settings.defaultSettings().chatSettings!,
       //GENERAL SETTINGS
       isDarkMode: map['isDarkMode'] != null
           ? map['isDarkMode'] as bool

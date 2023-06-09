@@ -9,6 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:irllink/src/core/utils/globals.dart' as Globals;
 
 import '../../core/resources/AppTranslations.dart';
+import '../widgets/settings_view/chats_joined.dart';
 import '../widgets/settings_view/manage_list_hidden_users.dart';
 import '../widgets/settings_view/manage_list_browser_tabs.dart';
 import '../widgets/settings_view/obs_settings.dart';
@@ -222,127 +223,44 @@ class SettingsView extends GetView<SettingsViewController> {
                     )
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "join_another_chat".tr,
-                      style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge!.color,
-                          fontSize: 18),
-                    ),
-                    Switch(
-                      onChanged: (value) {
-                        controller.homeViewController.settings.value =
-                            controller.homeViewController.settings.value
-                                .copyWith(alternateChannel: value);
-                        if (!value) {
-                          controller.homeViewController.settings.value =
-                              controller.homeViewController.settings.value
-                                  .copyWith(alternateChannelName: '');
-                          controller.alternateChannelChatController.text = '';
-                        }
-                        controller.saveSettings();
-                      },
-                      value: controller
-                          .homeViewController.settings.value.alternateChannel!,
-                      inactiveTrackColor:
-                          Theme.of(context).colorScheme.tertiaryContainer,
-                      activeTrackColor: Theme.of(context).colorScheme.tertiary,
-                      activeColor: Colors.white,
-                    )
-                  ],
-                ),
-                Visibility(
-                  visible: controller
-                      .homeViewController.settings.value.alternateChannel!,
+                InkWell(
+                  onTap: () async {
+                    Get.to(
+                      () => ChatsJoined(),
+                    );
+                  },
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(
-                        flex: 7,
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 10.0),
-                          child: Container(
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(8),
-                              ),
-                              color: Theme.of(context).colorScheme.secondary,
+                      Container(
+                        padding: const EdgeInsets.only(top: 10, bottom: 10),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.wechat_sharp,
+                              color: Theme.of(context).primaryIconTheme.color,
+                              size: 22,
                             ),
-                            child: TextFormField(
-                              controller:
-                                  controller.alternateChannelChatController,
-                              onChanged: (value) {
-                                controller.homeViewController.settings.value =
-                                    controller.homeViewController.settings.value
-                                        .copyWith(
-                                            alternateChannelName: controller
-                                                .alternateChannelChatController
-                                                .text
-                                                .toLowerCase()
-                                                .trim());
-                                controller.saveSettings();
-                              },
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .color,
-                              ),
-                              decoration: InputDecoration(
-                                isDense: true,
-                                contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 12),
-                                enabledBorder: Theme.of(context)
-                                    .inputDecorationTheme
-                                    .border,
-                                hintText: 'Nickname',
-                                labelText: 'Twitch username',
-                                filled: false,
-                                labelStyle: TextStyle(
-                                  color: Theme.of(context).colorScheme.tertiary,
+                            Container(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Text(
+                                "Chats joined",
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .color,
+                                  fontSize: 18,
                                 ),
-                                suffixIconConstraints: const BoxConstraints(
-                                  minWidth: 2,
-                                  minHeight: 2,
-                                ),
-                                suffixIcon: controller
-                                        .alternateChannelChatController
-                                        .text
-                                        .isNotEmpty
-                                    ? IconButton(
-                                        iconSize: 20,
-                                        icon: Icon(
-                                          Icons.clear,
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge!
-                                              .color,
-                                        ),
-                                        onPressed: () {
-                                          controller
-                                              .alternateChannelChatController
-                                              .clear();
-                                          controller.homeViewController.settings
-                                                  .value =
-                                              controller.homeViewController
-                                                  .settings.value
-                                                  .copyWith(
-                                                      alternateChannelName:
-                                                          controller
-                                                              .alternateChannelChatController
-                                                              .text
-                                                              .toLowerCase()
-                                                              .trim());
-                                          controller.saveSettings();
-                                        },
-                                      )
-                                    : null,
                               ),
                             ),
-                          ),
+                          ],
                         ),
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: Theme.of(context).primaryIconTheme.color,
+                        size: 18,
                       ),
                     ],
                   ),

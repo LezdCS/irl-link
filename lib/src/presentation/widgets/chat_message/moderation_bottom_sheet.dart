@@ -84,15 +84,19 @@ class ModerationBottomSheet extends StatelessWidget {
             ),
           ),
           InkWell(
-            onTap: () => controller
-                .deleteMessageInstruction(controller.selectedMessage.value!),
+            onTap: () => controller.deleteMessageInstruction(
+              controller.selectedChat.value!,
+              controller.selectedMessage.value!,
+            ),
             child: moderationViewButton(null, "Delete message"),
           ),
           const SizedBox(height: 15),
           Row(children: [
             InkWell(
-              onTap: () => controller
-                  .banMessageInstruction(controller.selectedMessage.value!),
+              onTap: () => controller.banMessageInstruction(
+                controller.selectedChat.value!,
+                controller.selectedMessage.value!,
+              ),
               child: moderationViewButton(Icons.stop, "Ban"),
             ),
             const SizedBox(width: 10),
@@ -173,8 +177,10 @@ class ModerationBottomSheet extends StatelessWidget {
             children: List.generate(timeoutValues.length, (index) {
               return InkWell(
                 onTap: () => controller.timeoutMessageInstruction(
-                    controller.selectedMessage.value!,
-                    timeoutValues[index].values.first),
+                  controller.selectedChat.value!,
+                  controller.selectedMessage.value!,
+                  timeoutValues[index].values.first,
+                ),
                 child: Container(
                   margin: const EdgeInsets.only(right: 10),
                   padding: const EdgeInsets.only(
@@ -213,8 +219,10 @@ class ModerationBottomSheet extends StatelessWidget {
                     onSubmitted: (String value) {
                       if (int.tryParse(value) != null) {
                         controller.timeoutMessageInstruction(
-                            controller.selectedMessage.value!,
-                            int.parse(value));
+                          controller.selectedChat.value!,
+                          controller.selectedMessage.value!,
+                          int.parse(value),
+                        );
                       }
                     },
                     style: const TextStyle(color: Colors.white),
@@ -238,9 +246,10 @@ class ModerationBottomSheet extends StatelessWidget {
                             controller.banDurationInputController.text) !=
                         null) {
                       controller.timeoutMessageInstruction(
-                          controller.selectedMessage.value!,
-                          int.parse(
-                              controller.banDurationInputController.text));
+                        controller.selectedChat.value!,
+                        controller.selectedMessage.value!,
+                        int.parse(controller.banDurationInputController.text),
+                      );
                     }
                   },
                   child: const Icon(

@@ -44,7 +44,6 @@ class SettingsViewController extends GetxController {
   void onInit() {
     homeViewController = Get.find<HomeViewController>();
 
-    alternateChannelChatController = TextEditingController();
     obsWebsocketUrlFieldController = TextEditingController();
     streamElementsFieldController = TextEditingController();
     obsWebsocketPasswordFieldController = TextEditingController();
@@ -64,8 +63,6 @@ class SettingsViewController extends GetxController {
   @override
   void onReady() {
     if (homeViewController.twitchData != null) {
-      alternateChannelChatController.text =
-          homeViewController.settings.value.alternateChannelName!;
       obsWebsocketUrlFieldController.text =
           homeViewController.settings.value.obsWebsocketUrl!;
       obsWebsocketPasswordFieldController.text =
@@ -101,6 +98,27 @@ class SettingsViewController extends GetxController {
     hiddenUsersIds.remove(userId);
     homeViewController.settings.value = homeViewController.settings.value
         .copyWith(hiddenUsersIds: hiddenUsersIds);
+    saveSettings();
+    homeViewController.settings.refresh();
+  }
+
+  void removeChatJoined(channel) {
+    List channels =
+        homeViewController.settings.value.chatSettings!.chatsJoined;
+    channels.remove(channel);
+    homeViewController.settings.value = homeViewController.settings.value
+        .copyWith(
+            chatSettings: homeViewController.settings.value.chatSettings
+                ?.copyWith(chatsJoined: channels));
+    saveSettings();
+    homeViewController.settings.refresh();
+  }
+
+  void hideMyself(bool value) {
+    homeViewController.settings.value = homeViewController.settings.value
+        .copyWith(
+            chatSettings: homeViewController.settings.value.chatSettings
+                ?.copyWith(joinMyself: value));
     saveSettings();
     homeViewController.settings.refresh();
   }
