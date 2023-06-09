@@ -118,6 +118,8 @@ class ChatViewController extends GetxController
           }
         });
 
+        homeViewController.selectedChat.value = twitchChat;
+
         await applySettings();
       });
     } else {
