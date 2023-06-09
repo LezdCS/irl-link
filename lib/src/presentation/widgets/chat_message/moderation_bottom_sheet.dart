@@ -113,15 +113,13 @@ class ModerationBottomSheet extends StatelessWidget {
             InkWell(
               onTap: () => controller.hideUser(
                   controller.homeViewController.selectedMessage.value!),
-              child: (controller.homeViewController.selectedMessage.value! !=
-                          null &&
-                      controller
-                              .homeViewController.settings.value.hiddenUsersIds!
-                              .firstWhereOrNull((userId) =>
-                                  controller.homeViewController.selectedMessage
-                                      .value!.authorId ==
-                                  userId) !=
-                          null)
+              child: (controller
+                          .homeViewController.settings.value.hiddenUsersIds!
+                          .firstWhereOrNull((userId) =>
+                              controller.homeViewController.selectedMessage
+                                  .value!.authorId ==
+                              userId) !=
+                      null)
                   ? moderationViewButton(Icons.visibility, "Unhide user")
                   : moderationViewButton(Icons.visibility_off, "Hide user"),
             ),

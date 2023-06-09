@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
@@ -31,8 +30,7 @@ class ChatTab extends GetView<ChatViewController> {
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.background,
             ),
-            child: controller.chatMessages == null ||
-                    controller.chatMessages.isEmpty
+            child: controller.chatMessages.isEmpty
                 ? Container(
                     padding: const EdgeInsets.only(left: 5),
                     child: Text(
@@ -54,16 +52,18 @@ class ChatTab extends GetView<ChatViewController> {
                             if (FocusScope.of(context).isFirstFocus) {
                               FocusScope.of(context).unfocus();
                             }
-                            controller.homeViewController.selectedMessage.value = null;
+                            controller.homeViewController.selectedMessage
+                                .value = null;
                           },
                           onLongPress: () {
-                            controller.homeViewController.selectedMessage.value ??= message;
+                            controller.homeViewController.selectedMessage
+                                .value ??= message;
                           },
                           child: message.highlightType != null
                               ? EventContainer(
                                   message: message,
-                                  selectedMessage:
-                                      controller.homeViewController.selectedMessage.value,
+                                  selectedMessage: controller
+                                      .homeViewController.selectedMessage.value,
                                   displayTimestamp: controller
                                       .homeViewController
                                       .settings
@@ -74,8 +74,8 @@ class ChatTab extends GetView<ChatViewController> {
                                   twitchChat: chat,
                                 )
                               : MessageContainer(
-                                  selectedMessage:
-                                      controller.homeViewController.selectedMessage.value,
+                                  selectedMessage: controller
+                                      .homeViewController.selectedMessage.value,
                                   message: message,
                                   displayTimestamp: controller
                                       .homeViewController

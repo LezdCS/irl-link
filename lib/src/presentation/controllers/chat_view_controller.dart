@@ -190,6 +190,7 @@ class ChatViewController extends GetxController
 
   @override
   void onClose() {
+    flutterTts.stop();
     chatDemoTimer?.cancel();
     super.onClose();
   }

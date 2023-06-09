@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
+import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
@@ -138,6 +139,13 @@ class HomeViewController extends GetxController
   }
 
   void generateChats() {
+    for (int i = 0; i <= channels.length-1; i++) {
+      String channel = channels[i];
+      if (!settings.value.chatSettings!.chatsJoined.contains(channel)) {
+        Get.delete<ChatViewController>(tag: channel);
+      }
+    }
+
     channels.value = [...?settings.value.chatSettings?.chatsJoined];
     bool joinSelfChannel = settings.value.chatSettings!.joinMyself;
 

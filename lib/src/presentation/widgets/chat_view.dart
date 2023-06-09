@@ -18,7 +18,7 @@ class ChatView extends StatelessWidget {
     required this.channel,
   });
 
-  String channel;
+  final String channel;
 
   @override
   Widget build(BuildContext context) {

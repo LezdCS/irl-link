@@ -176,7 +176,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
                                   ? []
                                   : controller.homeViewController.settings.value
                                       .chatSettings!.chatsJoined;
-                              channels.add(channelTextController.text);
+                              channels.add(channelTextController.text.trim());
                               controller.homeViewController.settings.value =
                                   controller.homeViewController.settings.value
                                       .copyWith(
