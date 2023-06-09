@@ -58,11 +58,18 @@ class ChatsJoined extends GetView<SettingsViewController> {
                       ),
                       InkWell(
                         onTap: () {
-                          controller.hideMyself(true);
+                          controller.hideMyself(!controller.homeViewController
+                              .settings.value.chatSettings!.joinMyself);
                         },
-                        child: const Icon(
-                          Icons.visibility,
-                          color: Colors.green,
+                        child: Icon(
+                          controller.homeViewController.settings.value
+                                  .chatSettings!.joinMyself
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: controller.homeViewController.settings.value
+                                  .chatSettings!.joinMyself
+                              ? Colors.green
+                              : Colors.red,
                           size: 30,
                         ),
                       ),
@@ -151,50 +158,54 @@ class ChatsJoined extends GetView<SettingsViewController> {
                       child: InkWell(
                         onTap: () {
                           Get.defaultDialog(
-                            content: _addDialog(context, channelTextController),
-                            title: "add".tr,
-                            textCancel: "cancel".tr,
-                            textConfirm: "add".tr,
-                            titleStyle: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                            ),
-                            backgroundColor:
-                                Theme.of(context).colorScheme.background,
-                            buttonColor: const Color(0xFF9147ff),
-                            cancelTextColor: const Color(0xFF9147ff),
-                            confirmTextColor: Colors.white,
-                            radius: 10,
-                            onConfirm: () {
-                              List channels = controller
-                                          .homeViewController
-                                          .settings
-                                          .value
-                                          .chatSettings!
-                                          .chatsJoined ==
-                                      const []
-                                  ? []
-                                  : controller.homeViewController.settings.value
-                                      .chatSettings!.chatsJoined;
-                              channels.add(channelTextController.text.trim());
-                              controller.homeViewController.settings.value =
-                                  controller.homeViewController.settings.value
-                                      .copyWith(
-                                          chatSettings: controller
-                                              .homeViewController
-                                              .settings
-                                              .value
-                                              .chatSettings!
-                                              .copyWith(chatsJoined: channels));
-                              controller.saveSettings();
-                              controller.homeViewController.settings.refresh();
-                              channelTextController.text = '';
-                              Get.back();
-                            },
-                            onCancel: (){
-                              channelTextController.text = '';
-                            }
-                          );
+                              content:
+                                  _addDialog(context, channelTextController),
+                              title: "add".tr,
+                              textCancel: "cancel".tr,
+                              textConfirm: "add".tr,
+                              titleStyle: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .color,
+                              ),
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.background,
+                              buttonColor: const Color(0xFF9147ff),
+                              cancelTextColor: const Color(0xFF9147ff),
+                              confirmTextColor: Colors.white,
+                              radius: 10,
+                              onConfirm: () {
+                                List channels = controller
+                                            .homeViewController
+                                            .settings
+                                            .value
+                                            .chatSettings!
+                                            .chatsJoined ==
+                                        const []
+                                    ? []
+                                    : controller.homeViewController.settings
+                                        .value.chatSettings!.chatsJoined;
+                                channels.add(channelTextController.text.trim());
+                                controller.homeViewController.settings.value =
+                                    controller.homeViewController.settings.value
+                                        .copyWith(
+                                            chatSettings: controller
+                                                .homeViewController
+                                                .settings
+                                                .value
+                                                .chatSettings!
+                                                .copyWith(
+                                                    chatsJoined: channels));
+                                controller.saveSettings();
+                                controller.homeViewController.settings
+                                    .refresh();
+                                channelTextController.text = '';
+                                Get.back();
+                              },
+                              onCancel: () {
+                                channelTextController.text = '';
+                              });
                         },
                         child: Text(
                           "add".tr,

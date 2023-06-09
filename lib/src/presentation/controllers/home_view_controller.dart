@@ -154,9 +154,11 @@ class HomeViewController extends GetxController
     for (String chat in settings.value.chatSettings!.chatsJoined) {
       if (channels.firstWhereOrNull((channel) => channel.channel == chat) ==
           null) {
-        channels.add(ChatView(
-          channel: chat,
-        ));
+        channels.add(
+          ChatView(
+            channel: chat,
+          ),
+        );
       }
     }
 
