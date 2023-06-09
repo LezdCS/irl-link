@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
-import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
@@ -16,8 +15,10 @@ import 'package:twitch_chat/twitch_chat.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import '../../../routes/app_routes.dart';
 import '../../core/utils/constants.dart';
+import '../widgets/chat_view.dart';
 import '../widgets/tabs/streamelements_tab_view.dart';
 import '../widgets/web_page_view.dart';
+import 'chat_view_controller.dart';
 
 class HomeViewController extends GetxController
     with GetTickerProviderStateMixin {
@@ -57,7 +58,7 @@ class HomeViewController extends GetxController
   RxBool displayDashboard = false.obs;
 
   List chatViewControllers = [];
-  RxList<String> channels = <String>[].obs;
+  RxList<ChatView> channels = <ChatView>[].obs;
   Rxn<TwitchChat> selectedChat = Rxn<TwitchChat>();
   late TabController chatTabsController;
   Rxn<ChatMessage> selectedMessage = Rxn<ChatMessage>();
@@ -139,18 +140,35 @@ class HomeViewController extends GetxController
   }
 
   void generateChats() {
-    for (int i = 0; i <= channels.length-1; i++) {
-      String channel = channels[i];
-      if (!settings.value.chatSettings!.chatsJoined.contains(channel)) {
+    String self = twitchData!.twitchUser.login;
+
+    for (int i = 0; i <= channels.length - 1; i++) {
+      String channel = channels[i].channel;
+      if (!settings.value.chatSettings!.chatsJoined.contains(channel) &&
+          channel != self) {
+        channels.remove(channels[i]);
         Get.delete<ChatViewController>(tag: channel);
       }
     }
 
-    channels.value = [...?settings.value.chatSettings?.chatsJoined];
+    for (String chat in settings.value.chatSettings!.chatsJoined) {
+      if (channels.firstWhereOrNull((channel) => channel.channel == chat) ==
+          null) {
+        channels.add(ChatView(
+          channel: chat,
+        ));
+      }
+    }
+
     bool joinSelfChannel = settings.value.chatSettings!.joinMyself;
 
     if (joinSelfChannel) {
-      channels.insert(0, twitchData!.twitchUser.login);
+      if (channels.firstWhereOrNull((channel) => channel.channel == self) ==
+          null) {
+        channels.insert(0, ChatView(channel: self));
+      }
+    } else {
+      channels.remove(channels.firstWhereOrNull((c) => c.channel == self));
     }
 
     chatTabsController = TabController(length: channels.length, vsync: this);

@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
-import 'package:irllink/src/presentation/widgets/chat_view.dart';
 import 'package:irllink/src/presentation/widgets/dashboard.dart';
 import 'package:irllink/src/presentation/widgets/emote_picker_view.dart';
 import 'package:irllink/src/presentation/widgets/tabs/obs_tab_view.dart';
@@ -334,18 +333,19 @@ class HomeView extends GetView<HomeViewController> {
       indicatorColor: Theme.of(context).colorScheme.tertiary,
       labelPadding: const EdgeInsets.symmetric(horizontal: 30),
       indicatorSize: TabBarIndicatorSize.tab,
-      indicatorWeight: 2,
+      indicatorWeight: 0.01,
       dividerColor: Colors.transparent,
       onTap: (int i) {
         ChatViewController c =
-            Get.find<ChatViewController>(tag: controller.channels[i]);
+            Get.find<ChatViewController>(tag: controller.channels[i].channel);
         controller.selectedChat.value = c.twitchChat;
         controller.selectedMessage.value = null;
+        c.scrollToBottom();
       },
       tabs: List<Tab>.generate(
         controller.channels.length,
         (int index) => Tab(
-          child: Text(controller.channels[index]),
+          child: Text(controller.channels[index].channel),
         ),
       ),
     );
@@ -360,9 +360,7 @@ class HomeView extends GetView<HomeViewController> {
           controller: controller.chatTabsController,
           children: List<Widget>.generate(
             controller.channels.length,
-            (int index) => ChatView(
-              channel: controller.channels[index],
-            ),
+            (int index) => controller.channels[index],
           ),
         ),
       ),
