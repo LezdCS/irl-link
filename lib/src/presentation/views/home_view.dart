@@ -143,7 +143,12 @@ class HomeView extends GetView<HomeViewController> {
           onPointerUp: (_) => {
             controller.isPickingEmote.value = false,
           },
-          child: ChatView(),
+          child: Column(
+            children: [
+              _tabBarChats(context),
+              _chats(context),
+            ],
+          ),
         ),
         Visibility(
           visible: controller.isPickingEmote.value,
@@ -209,12 +214,10 @@ class HomeView extends GetView<HomeViewController> {
             child: Stack(
               alignment: AlignmentDirectional.center,
               children: [
-                Container(
-                  child: SvgPicture.asset(
-                    './lib/assets/chatinput.svg',
-                    semanticsLabel: 'chat input',
-                    fit: BoxFit.fitWidth,
-                  ),
+                SvgPicture.asset(
+                  './lib/assets/chatinput.svg',
+                  semanticsLabel: 'chat input',
+                  fit: BoxFit.fitWidth,
                 ),
                 Container(
                   padding: const EdgeInsets.only(left: 5, right: 5),
@@ -235,7 +238,7 @@ class HomeView extends GetView<HomeViewController> {
                             FocusScope.of(context).unfocus();
                           },
                           onTap: () {
-                            controller.chatViewController.selectedMessage
+                            controller.selectedMessage
                                 .value = null;
                             controller.isPickingEmote.value = false;
                           },
@@ -286,7 +289,7 @@ class HomeView extends GetView<HomeViewController> {
                 );
                 await controller.getSettings();
                 if (controller.twitchData != null) {
-                  controller.chatViewController.applySettings();
+                  // controller.chatViewController.applySettings();
                 }
                 controller.obsTabViewController?.applySettings();
                 controller.streamelementsViewController?.applySettings();
@@ -313,6 +316,46 @@ class HomeView extends GetView<HomeViewController> {
           children: List<Widget>.generate(
             controller.tabElements.length,
             (int index) => controller.tabElements[index],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _tabBarChats(BuildContext context) {
+    return TabBar(
+      controller: controller.chatTabsController,
+      isScrollable: true,
+      labelColor: Theme.of(context).colorScheme.tertiary,
+      unselectedLabelColor: Theme.of(context).textTheme.bodyLarge!.color,
+      indicatorColor: Theme.of(context).colorScheme.tertiary,
+      labelPadding: const EdgeInsets.symmetric(horizontal: 30),
+      indicatorSize: TabBarIndicatorSize.tab,
+      indicatorWeight: 2,
+      dividerColor: Colors.transparent,
+      tabs: List<Tab>.generate(
+        controller.channels.length,
+        (int index) => Tab(
+          child:
+              Text(controller.channels[index]),
+        ),
+      ),
+    );
+  }
+
+  Widget _chats(BuildContext context) {
+    return Expanded(
+      child: Container(
+        color: Theme.of(context).colorScheme.background,
+        child: TabBarView(
+          physics: const NeverScrollableScrollPhysics(),
+          controller: controller.chatTabsController,
+          children: List<Widget>.generate(
+            controller.channels.length,
+            (int index) => ChatView(
+              channel:
+                  controller.channels[index],
+            ),
           ),
         ),
       ),

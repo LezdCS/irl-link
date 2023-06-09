@@ -17,7 +17,6 @@ import '../../../routes/app_routes.dart';
 import '../../core/utils/constants.dart';
 import '../widgets/tabs/streamelements_tab_view.dart';
 import '../widgets/web_page_view.dart';
-import 'chat_view_controller.dart';
 
 class HomeViewController extends GetxController
     with GetTickerProviderStateMixin {
@@ -40,7 +39,6 @@ class HomeViewController extends GetxController
 
   //emote picker
   RxBool isPickingEmote = false.obs;
-  late ChatViewController chatViewController;
   ObsTabViewController? obsTabViewController;
   StreamelementsViewController? streamelementsViewController;
 
@@ -57,9 +55,16 @@ class HomeViewController extends GetxController
 
   RxBool displayDashboard = false.obs;
 
+  List chatViewControllers = [];
+  RxList<String> channels = <String>[].obs;
+  Rxn<TwitchChat> selectedChat = Rxn<TwitchChat>();
+  late TabController chatTabsController;
+  Rxn<ChatMessage> selectedMessage = Rxn<ChatMessage>();
+
   @override
   void onInit() async {
     chatInputController = TextEditingController();
+    chatTabsController = TabController(length: 0, vsync: this);
 
     if (Get.arguments != null) {
       TwitchTabView twitchPage = TwitchTabView();
@@ -90,7 +95,6 @@ class HomeViewController extends GetxController
 
   @override
   void onReady() {
-    chatViewController = Get.find<ChatViewController>();
     super.onReady();
   }
 
@@ -133,11 +137,22 @@ class HomeViewController extends GetxController
     tabController = TabController(length: tabElements.length, vsync: this);
   }
 
+  void generateChats() {
+    channels.value = [...?settings.value.chatSettings?.chatsJoined];
+    bool joinSelfChannel = settings.value.chatSettings!.joinMyself;
+
+    if (joinSelfChannel) {
+      channels.insert(0, twitchData!.twitchUser.login);
+    }
+
+    chatTabsController = TabController(length: channels.length, vsync: this);
+  }
+
   void sendChatMessage(String message) {
     if (twitchData == null) return;
 
     TwitchChat twitchChat = TwitchChat(
-      chatViewController.selectedChat.value?.channel,
+      selectedChat.value?.channel,
       twitchData!.twitchUser.login,
       twitchData!.accessToken,
       clientId: kTwitchAuthClientId,
@@ -146,14 +161,13 @@ class HomeViewController extends GetxController
     twitchChat.sendMessage(message);
 
     chatInputController.text = '';
-    chatViewController.selectedMessage.value = null;
+    selectedMessage.value = null;
     isPickingEmote.value = false;
   }
 
   void getEmotes() {
-    List<Emote> emotes =
-        List.from(chatViewController.selectedChat.value?.emotes)
-          ..addAll(chatViewController.selectedChat.value?.thirdPartEmotes);
+    List<Emote> emotes = List.from(selectedChat.value?.emotes)
+      ..addAll(selectedChat.value?.thirdPartEmotes);
     twitchEmotes
       ..clear()
       ..addAll(emotes);
@@ -161,9 +175,8 @@ class HomeViewController extends GetxController
   }
 
   void searchEmote(String input) {
-    List<Emote> emotes =
-        List.from(chatViewController.selectedChat.value?.emotes)
-          ..addAll(chatViewController.selectedChat.value?.thirdPartEmotes);
+    List<Emote> emotes = List.from(selectedChat.value?.emotes)
+      ..addAll(selectedChat.value?.thirdPartEmotes);
     emotes = emotes
         .where(
           (emote) => emote.name.toLowerCase().contains(input.toLowerCase()),
@@ -189,6 +202,7 @@ class HomeViewController extends GetxController
       if (value.error != null) return;
       settings.value = value.data!;
       await generateTabs();
+      generateChats();
       if (!settings.value.isDarkMode!) {
         Get.changeThemeMode(ThemeMode.light);
       }

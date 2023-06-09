@@ -56,20 +56,6 @@ class HomeBindings extends Bindings {
       ),
     );
 
-    Get.lazyPut<ChatViewController>(
-      () => ChatViewController(
-        homeEvents: HomeEvents(
-          twitchUseCase: TwitchUseCase(
-            twitchRepository: TwitchRepositoryImpl(),
-          ),
-          settingsUseCase: SettingsUseCase(
-            settingsRepository: SettingsRepositoryImpl(),
-          ),
-        ),
-      ),
-    );
-    Get.find<ChatViewController>();
-
     Get.lazyPut<TwitchTabViewController>(() => TwitchTabViewController(
           homeEvents: HomeEvents(
             twitchUseCase: TwitchUseCase(

@@ -14,10 +14,11 @@ import 'package:twitch_chat/twitch_chat.dart';
 import 'home_view_controller.dart';
 
 class ChatViewController extends GetxController
-    with GetSingleTickerProviderStateMixin {
-  ChatViewController({required this.homeEvents});
+    with GetTickerProviderStateMixin {
+  ChatViewController({required this.homeEvents, required this.channel});
 
   final HomeEvents homeEvents;
+  final String channel;
 
   //CHAT
   late ScrollController scrollController;
@@ -30,7 +31,6 @@ class ChatViewController extends GetxController
   TwitchCredentials? twitchData;
   RxList<ChatMessage> chatMessages = <ChatMessage>[].obs;
 
-  Rxn<ChatMessage> selectedMessage = Rxn<ChatMessage>();
   late TextEditingController banDurationInputController;
 
   Timer? chatDemoTimer;
@@ -54,14 +54,8 @@ class ChatViewController extends GetxController
       await homeEvents.getSettings().then((settings) async {
         twitchData = Get.arguments[0];
 
-        String channelToJoin = twitchData!.twitchUser.login;
-        if (settings.data!.alternateChannel! &&
-            settings.data!.alternateChannelName! != '') {
-          channelToJoin = settings.data!.alternateChannelName!;
-        }
-
         twitchChat = TwitchChat(
-          channelToJoin,
+          channel,
           twitchData!.twitchUser.login,
           twitchData!.accessToken,
           clientId: kTwitchAuthClientId,
@@ -229,7 +223,7 @@ class ChatViewController extends GetxController
     );
 
     if (twitchData == null) message.isDeleted = true;
-    selectedMessage.value = null;
+    homeViewController.selectedMessage.value = null;
   }
 
   /// Ban user for specific [duration] based on the author name in the [message]
@@ -242,7 +236,7 @@ class ChatViewController extends GetxController
       kTwitchAuthClientId,
     );
     Get.back();
-    selectedMessage.value = null;
+    homeViewController.selectedMessage.value = null;
   }
 
   /// Ban user based on the author name in the [message]
@@ -254,7 +248,7 @@ class ChatViewController extends GetxController
       null,
       kTwitchAuthClientId,
     );
-    selectedMessage.value = null;
+    homeViewController.selectedMessage.value = null;
   }
 
   /// Hide every future messages from an user (only on this application, not on Twitch)
@@ -279,7 +273,7 @@ class ChatViewController extends GetxController
           .copyWith(hiddenUsersIds: hiddenUsersIds);
     }
     saveSettings();
-    selectedMessage.refresh();
+    homeViewController.selectedMessage.refresh();
   }
 
   /// Scroll to bottom of the chat
@@ -295,25 +289,18 @@ class ChatViewController extends GetxController
   }
 
   Future applySettings() async {
-    String newChannel = "";
-    if (homeViewController.settings.value.alternateChannel! &&
-        homeViewController.settings.value.alternateChannelName! != '') {
-      newChannel = homeViewController.settings.value.alternateChannelName!;
-    } else {
-      newChannel = twitchData!.twitchUser.login;
-    }
 
     isAutoScrolldown.value = true;
-
-    if (twitchChat?.channel != newChannel) {
-      twitchChat?.changeChannel(newChannel);
-    }
 
     if (twitchChat != null && !twitchChat!.isConnected.value) {
       twitchChat?.connect();
     }
 
     initTts(homeViewController.settings.value);
+  }
+
+  void changeChannel(String channel){
+    twitchChat?.changeChannel(channel);
   }
 
   void initTts(Settings settings) async {

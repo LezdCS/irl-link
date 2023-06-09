@@ -20,9 +20,6 @@ class ChatTab extends GetView<ChatViewController> {
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
-    List<ChatMessage>? messages = controller.chatsMessages.entries
-        .firstWhereOrNull((element) => element.key.channel == chat.channel)
-        ?.value;
 
     return Obx(
       () => Stack(
@@ -34,7 +31,8 @@ class ChatTab extends GetView<ChatViewController> {
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.background,
             ),
-            child: messages == null || messages.isEmpty
+            child: controller.chatMessages == null ||
+                    controller.chatMessages.isEmpty
                 ? Container(
                     padding: const EdgeInsets.only(left: 5),
                     child: Text(
@@ -46,9 +44,9 @@ class ChatTab extends GetView<ChatViewController> {
                   )
                 : ListView.builder(
                     controller: controller.scrollController,
-                    itemCount: messages.length,
+                    itemCount: controller.chatMessages.length,
                     itemBuilder: (BuildContext context, int index) {
-                      ChatMessage message = messages[index];
+                      ChatMessage message = controller.chatMessages[index];
                       return Container(
                         padding: const EdgeInsets.only(top: 1, bottom: 1),
                         child: InkWell(
@@ -56,16 +54,16 @@ class ChatTab extends GetView<ChatViewController> {
                             if (FocusScope.of(context).isFirstFocus) {
                               FocusScope.of(context).unfocus();
                             }
-                            controller.selectedMessage.value = null;
+                            controller.homeViewController.selectedMessage.value = null;
                           },
                           onLongPress: () {
-                            controller.selectedMessage.value ??= message;
+                            controller.homeViewController.selectedMessage.value ??= message;
                           },
                           child: message.highlightType != null
                               ? EventContainer(
                                   message: message,
                                   selectedMessage:
-                                      controller.selectedMessage.value,
+                                      controller.homeViewController.selectedMessage.value,
                                   displayTimestamp: controller
                                       .homeViewController
                                       .settings
@@ -77,7 +75,7 @@ class ChatTab extends GetView<ChatViewController> {
                                 )
                               : MessageContainer(
                                   selectedMessage:
-                                      controller.selectedMessage.value,
+                                      controller.homeViewController.selectedMessage.value,
                                   message: message,
                                   displayTimestamp: controller
                                       .homeViewController

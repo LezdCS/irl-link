@@ -6,19 +6,44 @@ import 'package:irllink/src/presentation/widgets/chat_message/message_container.
 import 'package:irllink/src/presentation/widgets/chat_message/moderation_bottom_sheet.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 
+import '../../data/repositories/settings_repository_impl.dart';
+import '../../data/repositories/twitch_repository_impl.dart';
+import '../../domain/usecases/settings_usecase.dart';
+import '../../domain/usecases/twitch_usecase.dart';
+import '../events/home_events.dart';
 import 'alert_message_view.dart';
 
-class ChatView extends GetView<ChatViewController> {
+class ChatView extends StatelessWidget {
+  ChatView({
+    required this.channel,
+  });
+
+  String channel;
+
   @override
   Widget build(BuildContext context) {
+    final ChatViewController controller = Get.put<ChatViewController>(
+      ChatViewController(
+          homeEvents: HomeEvents(
+            twitchUseCase: TwitchUseCase(
+              twitchRepository: TwitchRepositoryImpl(),
+            ),
+            settingsUseCase: SettingsUseCase(
+              settingsRepository: SettingsRepositoryImpl(),
+            ),
+          ),
+          channel: channel),
+      tag: channel,
+    );
+
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
     return Obx(
       () => Stack(children: [
         GestureDetector(
           onTap: () {
-            if (controller.selectedMessage.value != null) {
-              controller.selectedMessage.value = null;
+            if (controller.homeViewController.selectedMessage.value != null) {
+              controller.homeViewController.selectedMessage.value = null;
             }
             FocusScope.of(context).unfocus();
           },
@@ -51,16 +76,16 @@ class ChatView extends GetView<ChatViewController> {
                             if (FocusScope.of(context).isFirstFocus) {
                               FocusScope.of(context).unfocus();
                             }
-                            controller.selectedMessage.value = null;
+                            controller.homeViewController.selectedMessage.value = null;
                           },
                           onLongPress: () {
-                            controller.selectedMessage.value ??= message;
+                            controller.homeViewController.selectedMessage.value ??= message;
                           },
                           child: message.highlightType != null
                               ? EventContainer(
                                   message: message,
                                   selectedMessage:
-                                      controller.selectedMessage.value,
+                                      controller.homeViewController.selectedMessage.value,
                                   displayTimestamp: controller
                                       .homeViewController
                                       .settings
@@ -72,7 +97,7 @@ class ChatView extends GetView<ChatViewController> {
                                 )
                               : MessageContainer(
                                   selectedMessage:
-                                      controller.selectedMessage.value,
+                                      controller.homeViewController.selectedMessage.value,
                                   message: message,
                                   displayTimestamp: controller
                                       .homeViewController
@@ -121,12 +146,12 @@ class ChatView extends GetView<ChatViewController> {
           left: 0,
           right: 0,
           child: AnimatedSlide(
-            offset: controller.selectedMessage.value != null
+            offset: controller.homeViewController.selectedMessage.value != null
                 ? Offset.zero
                 : const Offset(0, 1),
             duration: const Duration(milliseconds: 200),
             child: Visibility(
-              visible: controller.selectedMessage.value != null,
+              visible: controller.homeViewController.selectedMessage.value != null,
               child:
                   ModerationBottomSheet(controller: controller, width: width),
             ),
