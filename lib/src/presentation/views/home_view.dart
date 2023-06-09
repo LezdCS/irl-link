@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
+import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/chat_view.dart';
 import 'package:irllink/src/presentation/widgets/dashboard.dart';
@@ -145,7 +146,10 @@ class HomeView extends GetView<HomeViewController> {
           },
           child: Column(
             children: [
-              _tabBarChats(context),
+              Visibility(
+                visible: controller.channels.length > 1,
+                child: _tabBarChats(context),
+              ),
               _chats(context),
             ],
           ),
@@ -238,8 +242,7 @@ class HomeView extends GetView<HomeViewController> {
                             FocusScope.of(context).unfocus();
                           },
                           onTap: () {
-                            controller.selectedMessage
-                                .value = null;
+                            controller.selectedMessage.value = null;
                             controller.isPickingEmote.value = false;
                           },
                           textInputAction: TextInputAction.send,
@@ -333,11 +336,16 @@ class HomeView extends GetView<HomeViewController> {
       indicatorSize: TabBarIndicatorSize.tab,
       indicatorWeight: 2,
       dividerColor: Colors.transparent,
+      onTap: (int i) {
+        ChatViewController c =
+            Get.find<ChatViewController>(tag: controller.channels[i]);
+        controller.selectedChat.value = c.twitchChat;
+        controller.selectedMessage.value = null;
+      },
       tabs: List<Tab>.generate(
         controller.channels.length,
         (int index) => Tab(
-          child:
-              Text(controller.channels[index]),
+          child: Text(controller.channels[index]),
         ),
       ),
     );
@@ -353,8 +361,7 @@ class HomeView extends GetView<HomeViewController> {
           children: List<Widget>.generate(
             controller.channels.length,
             (int index) => ChatView(
-              channel:
-                  controller.channels[index],
+              channel: controller.channels[index],
             ),
           ),
         ),
