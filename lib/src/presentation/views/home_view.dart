@@ -344,12 +344,14 @@ class HomeView extends GetView<HomeViewController> {
       indicatorWeight: 0.01,
       dividerColor: Colors.transparent,
       onTap: (int i) {
-        ChatViewController c =
-            Get.find<ChatViewController>(tag: controller.channels[i].channel);
-        controller.selectedChat = c.twitchChat;
-        controller.selectedChatIndex = i;
-        controller.selectedMessage.value = null;
-        c.scrollToBottom();
+        if(Get.isRegistered<ChatViewController>(tag:controller.channels[i].channel)){
+          ChatViewController c =
+          Get.find<ChatViewController>(tag: controller.channels[i].channel);
+          controller.selectedChat = c.twitchChat;
+          controller.selectedChatIndex = i;
+          controller.selectedMessage.value = null;
+          c.scrollToBottom();
+        }
       },
       tabs: List<Tab>.generate(
         controller.channels.length,

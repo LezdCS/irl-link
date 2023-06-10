@@ -14,7 +14,7 @@ import 'package:twitch_chat/twitch_chat.dart';
 import 'home_view_controller.dart';
 
 class ChatViewController extends GetxController
-    with GetTickerProviderStateMixin  {
+    with GetTickerProviderStateMixin {
   ChatViewController({required this.homeEvents, required this.channel});
 
   final HomeEvents homeEvents;
@@ -35,8 +35,6 @@ class ChatViewController extends GetxController
 
   Timer? chatDemoTimer;
 
-  late FlutterTts flutterTts;
-
   late HomeViewController homeViewController;
 
   TwitchChat? twitchChat;
@@ -44,9 +42,6 @@ class ChatViewController extends GetxController
   @override
   void onInit() async {
     homeViewController = Get.find<HomeViewController>();
-
-    flutterTts = FlutterTts();
-    flutterTts.setEngine(flutterTts.getDefaultEngine.toString());
 
     scrollController = ScrollController();
     banDurationInputController = TextEditingController();
@@ -192,7 +187,7 @@ class ChatViewController extends GetxController
 
   @override
   void onClose() {
-    flutterTts.stop();
+    homeViewController.flutterTts.stop();
     chatDemoTimer?.cancel();
     super.onClose();
   }
@@ -282,7 +277,7 @@ class ChatViewController extends GetxController
   /// Scroll to bottom of the chat
   void scrollToBottom() {
     isAutoScrolldown.value = true;
-    if (scrollController.hasClients){
+    if (scrollController.hasClients) {
       scrollController.jumpTo(
         scrollController.position.maxScrollExtent,
       );
@@ -294,46 +289,15 @@ class ChatViewController extends GetxController
   }
 
   Future applySettings() async {
-
     isAutoScrolldown.value = true;
 
     if (twitchChat != null && !twitchChat!.isConnected.value) {
       twitchChat?.connect();
     }
-
-    initTts(homeViewController.settings.value);
   }
 
-  void changeChannel(String channel){
+  void changeChannel(String channel) {
     twitchChat?.changeChannel(channel);
-  }
-
-  void initTts(Settings settings) async {
-    //  The following setup allows background music and in-app audio session to continue simultaneously:
-    await flutterTts.setIosAudioCategory(
-        IosTextToSpeechAudioCategory.ambient,
-        [
-          IosTextToSpeechAudioCategoryOptions.allowBluetooth,
-          IosTextToSpeechAudioCategoryOptions.allowBluetoothA2DP,
-          IosTextToSpeechAudioCategoryOptions.mixWithOthers
-        ],
-        IosTextToSpeechAudioMode.voicePrompt);
-
-    await flutterTts.awaitSpeakCompletion(true);
-    await flutterTts.setLanguage(settings.language!);
-    await flutterTts.setSpeechRate(settings.rate!);
-    await flutterTts.setVolume(settings.volume!);
-    await flutterTts.setPitch(settings.pitch!);
-    await flutterTts.setVoice(settings.voice!);
-
-    if (Platform.isAndroid) {
-      await flutterTts.setQueueMode(1);
-    }
-
-    if (!settings.ttsEnabled!) {
-      //prevent the queue to continue if we come back from settings and turn off TTS
-      flutterTts.stop();
-    }
   }
 
   void readTts(ChatMessage message) {
@@ -363,6 +327,6 @@ class ChatViewController extends GetxController
     if (homeViewController.settings.value.ttsMuteViewerName!) {
       text = message.message;
     }
-    flutterTts.speak(text);
+    homeViewController.flutterTts.speak(text);
   }
 }

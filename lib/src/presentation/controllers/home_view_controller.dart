@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
@@ -64,10 +66,15 @@ class HomeViewController extends GetxController
   late TabController chatTabsController;
   Rxn<ChatMessage> selectedMessage = Rxn<ChatMessage>();
 
+  late FlutterTts flutterTts;
+
   @override
   void onInit() async {
     chatInputController = TextEditingController();
     chatTabsController = TabController(length: 0, vsync: this);
+
+    flutterTts = FlutterTts();
+    flutterTts.setEngine(flutterTts.getDefaultEngine.toString());
 
     if (Get.arguments != null) {
       TwitchTabView twitchPage = TwitchTabView();
@@ -176,7 +183,7 @@ class HomeViewController extends GetxController
 
     chatTabsController = TabController(length: channels.length, vsync: this);
 
-    if(channels.isEmpty){
+    if (channels.isEmpty) {
       selectedChatIndex = null;
       selectedChat = null;
     }
@@ -237,6 +244,7 @@ class HomeViewController extends GetxController
       settings.value = value.data!;
       await generateTabs();
       generateChats();
+      initTts(settings.value);
       if (!settings.value.isDarkMode!) {
         Get.changeThemeMode(ThemeMode.light);
       }
@@ -252,6 +260,34 @@ class HomeViewController extends GetxController
       Locale locale = Locale(settings.value.appLanguage!["languageCode"],
           settings.value.appLanguage!["countryCode"]);
       Get.updateLocale(locale);
+    }
+  }
+
+  void initTts(Settings settings) async {
+    //  The following setup allows background music and in-app audio session to continue simultaneously:
+    await flutterTts.setIosAudioCategory(
+        IosTextToSpeechAudioCategory.ambient,
+        [
+          IosTextToSpeechAudioCategoryOptions.allowBluetooth,
+          IosTextToSpeechAudioCategoryOptions.allowBluetoothA2DP,
+          IosTextToSpeechAudioCategoryOptions.mixWithOthers
+        ],
+        IosTextToSpeechAudioMode.voicePrompt);
+
+    await flutterTts.awaitSpeakCompletion(true);
+    await flutterTts.setLanguage(settings.language!);
+    await flutterTts.setSpeechRate(settings.rate!);
+    await flutterTts.setVolume(settings.volume!);
+    await flutterTts.setPitch(settings.pitch!);
+    await flutterTts.setVoice(settings.voice!);
+
+    if (Platform.isAndroid) {
+      await flutterTts.setQueueMode(1);
+    }
+
+    if (!settings.ttsEnabled!) {
+      //prevent the queue to continue if we come back from settings and turn off TTS
+      flutterTts.stop();
     }
   }
 
