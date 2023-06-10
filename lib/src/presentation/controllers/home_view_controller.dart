@@ -152,11 +152,20 @@ class HomeViewController extends GetxController
 
     for (int i = 0; i <= channels.length - 1; i++) {
       String channel = channels[i].channel;
-      if (!settings.value.chatSettings!.chatsJoined.contains(channel) &&
-          channel != self) {
-        channels.remove(channels[i]);
-        Get.delete<ChatViewController>(tag: channel);
+      if (channel == self) continue;
+      if (settings.value.chatSettings!.chatsJoined.contains(channel)) {
+        continue;
       }
+
+      if (selectedChat?.channel == channels[i].channel) {
+        selectedChat = channels.isNotEmpty
+            ? Get.find<ChatViewController>(tag: channels[0].channel).twitchChat
+            : null;
+        selectedChatIndex = channels.isNotEmpty ? 0 : null;
+      }
+
+      channels.remove(channels[i]);
+      Get.delete<ChatViewController>(tag: channel);
     }
 
     for (String chat in settings.value.chatSettings!.chatsJoined) {
@@ -179,6 +188,12 @@ class HomeViewController extends GetxController
       }
     } else {
       channels.remove(channels.firstWhereOrNull((c) => c.channel == self));
+      if (selectedChat?.channel == self) {
+        selectedChat = channels.isNotEmpty
+            ? Get.find<ChatViewController>(tag: channels[0].channel).twitchChat
+            : null;
+        selectedChatIndex = channels.isNotEmpty ? 0 : null;
+      }
     }
 
     chatTabsController = TabController(length: channels.length, vsync: this);
