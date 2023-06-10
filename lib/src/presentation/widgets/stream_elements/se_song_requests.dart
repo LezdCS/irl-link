@@ -15,7 +15,7 @@ class SeSongRequests extends GetView {
   Widget build(BuildContext context) {
     return Obx(
       () => Container(
-        margin: EdgeInsets.only(left: 20, right: 20, top: 20),
+        margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
         child: Column(
           children: [
             Row(
@@ -23,13 +23,13 @@ class SeSongRequests extends GetView {
               children: [
                 Wrap(
                   children: [
-                    Icon(Icons.skip_previous),
-                    Icon(Icons.pause), //Icon(Icons.play_arrow_outlined),
+                    const Icon(Icons.skip_previous),
+                    const Icon(Icons.pause), //Icon(Icons.play_arrow_outlined),
                     InkWell(
                       onTap: () {
                         controller.nextSong();
                       },
-                      child: Icon(Icons.skip_next),
+                      child: const Icon(Icons.skip_next),
                     ),
                   ],
                 ),
@@ -37,11 +37,11 @@ class SeSongRequests extends GetView {
                   onTap: () {
                     controller.resetQueue();
                   },
-                  child: Icon(Icons.delete),
+                  child: const Icon(Icons.delete),
                 ),
               ],
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.only(top: 10),
             ),
             Text(
@@ -51,10 +51,10 @@ class SeSongRequests extends GetView {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            controller.songRequestQueue.length > 0
+            controller.songRequestQueue.isNotEmpty
                 ? _songRow(context, controller.songRequestQueue.first)
-                : Text("No song request in queue."),
-            Padding(
+                : const Text("No song request in queue."),
+            const Padding(
               padding: EdgeInsets.only(bottom: 15),
             ),
             RichText(
@@ -96,14 +96,14 @@ class SeSongRequests extends GetView {
 
   Widget _songRow(BuildContext context, SeSong song) {
     return Container(
-      padding: EdgeInsets.only(left: 8, right: 8, top: 5, bottom: 5),
+      padding: const EdgeInsets.only(left: 8, right: 8, top: 5, bottom: 5),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.secondary,
-        borderRadius: BorderRadius.all(
+        borderRadius: const BorderRadius.all(
           Radius.circular(5),
         ),
       ),
-      margin: EdgeInsets.only(top: 8),
+      margin: const EdgeInsets.only(top: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -162,7 +162,7 @@ class SeSongRequests extends GetView {
             onTap: () {
               controller.removeSong(song);
             },
-            child: Icon(
+            child: const Icon(
               Icons.close,
               color: Colors.red,
             ),

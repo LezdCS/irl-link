@@ -103,8 +103,7 @@ class SettingsViewController extends GetxController {
   }
 
   void removeChatJoined(channel) {
-    List channels =
-        homeViewController.settings.value.chatSettings!.chatsJoined;
+    List channels = homeViewController.settings.value.chatSettings!.chatsJoined;
     channels.remove(channel);
     homeViewController.settings.value = homeViewController.settings.value
         .copyWith(
@@ -191,7 +190,9 @@ class SettingsViewController extends GetxController {
             accessToken: homeViewController.twitchData!.accessToken)
         .then((value) => users = value.data!);
 
-    users.forEach((user) => usernamesHiddenUsers.add(user.displayName));
+    for (var user in users) {
+      usernamesHiddenUsers.add(user.displayName);
+    }
   }
 
   void getTtsLanguages() {

@@ -48,7 +48,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       final refreshToken = Uri.parse(result).queryParameters['refresh_token'];
       final expiresIn = Uri.parse(result).queryParameters['expires_in'];
 
-      dynamic tokenInfos = await this.validateToken(accessToken!);
+      dynamic tokenInfos = await validateToken(accessToken!);
       final String scopes = tokenInfos['scopes'].join(' ');
 
       Map<String, dynamic> decodedToken = JwtDecoder.decode(idToken!);
@@ -68,8 +68,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
         displayName: '',
       );
 
-      await this
-          .getTwitchUser(null, accessToken)
+      await getTwitchUser(null, accessToken)
           .then((value) => twitchUser = value.data!);
 
       final twitchData = TwitchCredentialsDTO(
@@ -83,7 +82,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       );
 
       //save the twitch credentials on the smartphone
-      this.setTwitchOnLocal(twitchData);
+      setTwitchOnLocal(twitchData);
 
       return DataSuccess(twitchData);
     } catch (e) {
@@ -112,9 +111,9 @@ class TwitchRepositoryImpl extends TwitchRepository {
         twitchUser: twitchData.twitchUser,
         scopes: twitchData.scopes,
       );
-      this.setTwitchOnLocal(newTwitchData);
+      setTwitchOnLocal(newTwitchData);
 
-      await this.validateToken(newTwitchData.accessToken);
+      await validateToken(newTwitchData.accessToken);
 
       return DataSuccess(newTwitchData);
     } on DioError catch (e) {
@@ -131,7 +130,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       response = await dio.get('https://id.twitch.tv/oauth2/validate');
       return response.data;
     } on DioError catch (e) {
-      print(e.response);
+      debugPrint(e.response.toString());
       return "error";
     }
   }
@@ -186,8 +185,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       }
 
       //refresh the access token to be sure the token is going to be valid after starting the app
-      await this
-          .refreshAccessToken(twitchData)
+      await refreshAccessToken(twitchData)
           .then((value) => twitchData = value.data!);
 
       return DataSuccess(twitchData);
@@ -379,7 +377,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
         return const DataFailed("No poll to show");
       }
     } on DioError catch (e) {
-      print(e.response);
+      debugPrint(e.response.toString());
       return const DataFailed("Error retrieving Twitch Poll");
     }
   }
@@ -410,7 +408,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(poll);
     } on DioError catch (e) {
-      print(e.response);
+      debugPrint(e.response.toString());
       return const DataFailed("Error ending poll");
     }
   }
@@ -439,7 +437,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
         return const DataFailed("No prediction to show");
       }
     } on DioError catch (e) {
-      print(e.response);
+      debugPrint(e.response.toString());
       return const DataFailed("Error retrieving Twitch Prediction");
     }
   }
@@ -458,7 +456,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(newPoll);
     } on DioError catch (e) {
-      print(e.response);
+      debugPrint(e.response.toString());
       return const DataFailed("Error retrieving Twitch Prediction");
     }
   }

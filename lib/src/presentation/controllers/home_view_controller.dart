@@ -208,6 +208,7 @@ class HomeViewController extends GetxController
 
   void getEmotes() {
     List<Emote> emotes = List.from(selectedChat?.emotes)
+      ..addAll(selectedChat?.emotesFromSets)
       ..addAll(selectedChat?.thirdPartEmotes);
     twitchEmotes
       ..clear()
@@ -217,6 +218,7 @@ class HomeViewController extends GetxController
 
   void searchEmote(String input) {
     List<Emote> emotes = List.from(selectedChat?.emotes)
+      ..addAll(selectedChat?.emotesFromSets)
       ..addAll(selectedChat?.thirdPartEmotes);
     emotes = emotes
         .where(

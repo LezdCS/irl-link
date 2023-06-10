@@ -22,7 +22,7 @@ class ManageListHiddenUsers extends GetView {
             ),
             onPressed: () => Get.back(),
           ),
-          actions: [],
+          actions: const [],
           backgroundColor: Theme.of(context).colorScheme.secondary,
           title: Text(
             "Manage hidden users",
@@ -44,7 +44,7 @@ class ManageListHiddenUsers extends GetView {
                             .hiddenUsersIds!.length <=
                         0
                     ? Container(
-                        padding: EdgeInsets.only(top: 20),
+                        padding: const EdgeInsets.only(top: 20),
                         child: Text(
                           "Nothing in the list!",
                           style: TextStyle(
@@ -56,11 +56,11 @@ class ManageListHiddenUsers extends GetView {
                             controller.homeViewController.settings.value
                                 .hiddenUsersIds!.length
                         ? Container(
-                            padding: EdgeInsets.only(top: 20),
+                            padding: const EdgeInsets.only(top: 20),
                             child: Column(
                               children: [
-                                CircularProgressIndicator(),
-                                SizedBox(
+                                const CircularProgressIndicator(),
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 Text(
@@ -77,7 +77,7 @@ class ManageListHiddenUsers extends GetView {
                           )
                         : ReorderableListView.builder(
                             shrinkWrap: true,
-                            padding: EdgeInsets.only(
+                            padding: const EdgeInsets.only(
                                 top: 8, left: 18, right: 18, bottom: 8),
                             itemCount: controller.usernamesHiddenUsers.length,
                             onReorder: (int oldIndex, int newIndex) {
@@ -100,9 +100,9 @@ class ManageListHiddenUsers extends GetView {
                                   elem,
                                 ),
                                 color: Theme.of(context).colorScheme.secondary,
-                                padding: EdgeInsets.only(
+                                padding: const EdgeInsets.only(
                                     left: 20, right: 20, bottom: 10, top: 10),
-                                margin: EdgeInsets.only(bottom: 5, top: 5),
+                                margin: const EdgeInsets.only(bottom: 5, top: 5),
                                 child: InkWell(
                                   onTap: () {},
                                   child: Row(
@@ -128,7 +128,7 @@ class ManageListHiddenUsers extends GetView {
                                                 .removeAt(index);
                                             controller.removeHiddenUser(elem);
                                           },
-                                          child: Icon(
+                                          child: const Icon(
                                             Icons.close,
                                             color: Colors.red,
                                             size: 30,

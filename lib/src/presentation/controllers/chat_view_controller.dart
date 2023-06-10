@@ -1,12 +1,9 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/utils/constants.dart';
-import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:twitch_chat/twitch_chat.dart';

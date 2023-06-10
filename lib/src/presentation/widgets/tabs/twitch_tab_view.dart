@@ -70,12 +70,10 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                     ),
                     Visibility(
                       visible: controller.twitchStreamInfos.value.isOnline!,
-                      child: Container(
-                        child: Text(controller
-                            .twitchStreamInfos.value.startedAtDuration
-                            .toString()
-                            .substring(0, 7)),
-                      ),
+                      child: Text(controller
+                          .twitchStreamInfos.value.startedAtDuration
+                          .toString()
+                          .substring(0, 7)),
                     ),
                     Visibility(
                       visible: controller.homeViewController.settings.value
@@ -254,67 +252,63 @@ Widget prediction(
               children: [
                 Text(controller.prediction!.value.title),
                 const SizedBox(height: 10),
-                Container(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: controller.prediction!.value.outcomes.length,
-                    itemBuilder: (context, index) {
-                      final outcome =
-                          controller.prediction!.value.outcomes[index];
-                      final percentage = outcome.users /
-                          controller.prediction!.value.totalUsers;
-                      return Visibility(
-                        visible: (controller.prediction!.value.status ==
-                                PredictionStatus.ACTIVE ||
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: controller.prediction!.value.outcomes.length,
+                  itemBuilder: (context, index) {
+                    final outcome =
+                        controller.prediction!.value.outcomes[index];
+                    final percentage = outcome.users /
+                        controller.prediction!.value.totalUsers;
+                    return Visibility(
+                      visible: (controller.prediction!.value.status ==
+                              PredictionStatus.ACTIVE ||
+                          controller.prediction!.value.status ==
+                              PredictionStatus.LOCKED ||
+                          (controller.prediction!.value.status ==
+                                  PredictionStatus.RESOLVED &&
+                              outcome.id ==
+                                  controller
+                                      .prediction!.value.winningOutcomeId)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
                             controller.prediction!.value.status ==
-                                PredictionStatus.LOCKED ||
-                            (controller.prediction!.value.status ==
-                                    PredictionStatus.RESOLVED &&
-                                outcome.id ==
-                                    controller
-                                        .prediction!.value.winningOutcomeId)),
-                        child: Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                controller.prediction!.value.status ==
-                                        PredictionStatus.RESOLVED
-                                    ? "Winner: " + outcome.title
-                                    : outcome.title,
-                                style: TextStyle(
-                                  color: Theme.of(Get.context!)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .color,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 3),
-                              LinearPercentIndicator(
-                                animation: true,
-                                animateFromLastPercent: true,
-                                barRadius: const Radius.circular(8),
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 0.0),
-                                lineHeight: 20.0,
-                                percent: percentage,
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.secondary,
-                                progressColor: outcome.color,
-                                center: Text(
-                                    (percentage * 100).toStringAsFixed(2) +
-                                        " %"),
-                              ),
-                              const SizedBox(height: 10),
-                            ],
+                                    PredictionStatus.RESOLVED
+                                ? "Winner: ${outcome.title}"
+                                : outcome.title,
+                            style: TextStyle(
+                              color: Theme.of(Get.context!)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .color,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
+                          const SizedBox(height: 3),
+                          LinearPercentIndicator(
+                            animation: true,
+                            animateFromLastPercent: true,
+                            barRadius: const Radius.circular(8),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 0.0),
+                            lineHeight: 20.0,
+                            percent: percentage,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.secondary,
+                            progressColor: outcome.color,
+                            center: Text(
+                                (percentage * 100).toStringAsFixed(2) +
+                                    " %"),
+                          ),
+                          const SizedBox(height: 10),
+                        ],
+                      ),
+                    );
+                  },
                 ),
                 Visibility(
                   visible: controller.prediction!.value.status !=

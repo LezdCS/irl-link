@@ -67,13 +67,11 @@ class EmotePickerView extends GetView {
                       onTap: () {
                         String text =
                             homeViewController.chatInputController.text;
-                        bool isLastCharSpace = text.length > 0
+                        bool isLastCharSpace = text.isNotEmpty
                             ? text[text.length - 1] == " "
                             : false;
-                        homeViewController.chatInputController.text = text +
-                            (isLastCharSpace ? "" : " ") +
-                            homeViewController.twitchEmotes[i].name +
-                            " ";
+                        homeViewController.chatInputController.text =
+                            "$text${isLastCharSpace ? "" : " "}${homeViewController.twitchEmotes[i].name} ";
                       },
                       child: FadeInImage.memoryNetwork(
                         image: homeViewController.twitchEmotes[i].url1x,

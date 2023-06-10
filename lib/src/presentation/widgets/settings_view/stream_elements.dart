@@ -32,8 +32,8 @@ class StreamElements extends GetView {
                 ),
               ),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                margin: EdgeInsets.only(left: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                margin: const EdgeInsets.only(left: 4),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.tertiary,
                   borderRadius: BorderRadius.circular(20),
@@ -47,7 +47,7 @@ class StreamElements extends GetView {
                         fontSize: 12,
                       ),
                     ),
-                    Icon(
+                    const Icon(
                       CupertinoIcons.sparkles,
                       size: 12,
                       color: Colors.yellow,
@@ -57,11 +57,11 @@ class StreamElements extends GetView {
               ),
             ],
           ),
-          SizedBox(height: 6),
+          const SizedBox(height: 6),
           Container(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
+              borderRadius: const BorderRadius.all(
                 Radius.circular(8),
               ),
               color: Theme.of(context).colorScheme.secondary,
@@ -86,7 +86,7 @@ class StreamElements extends GetView {
                       ),
                     ),
                     contentPadding:
-                        EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
                     hintText: 'StreamElements Access Token',
                     labelText: isSubscribed
                         ? 'StreamElements Access Token'
@@ -106,7 +106,7 @@ class StreamElements extends GetView {
                     ),
                   ),
                 ),
-                SizedBox(height: 6),
+                const SizedBox(height: 6),
                 RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
