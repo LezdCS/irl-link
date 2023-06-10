@@ -150,21 +150,23 @@ class HomeViewController extends GetxController
   void generateChats() {
     String self = twitchData!.twitchUser.login;
 
-    for (int i = 0; i <= channels.length - 1; i++) {
-      String channel = channels[i].channel;
+    RxList<ChatView> tempChannels = RxList<ChatView>.from(channels);
+    for (var temp in tempChannels) {
+      ChatView view = channels.firstWhere((element) => element.channel == temp.channel);
+      String channel = view.channel;
       if (channel == self) continue;
       if (settings.value.chatSettings!.chatsJoined.contains(channel)) {
         continue;
       }
 
-      if (selectedChat?.channel == channels[i].channel) {
+      if (selectedChat?.channel == channel) {
         selectedChat = channels.isNotEmpty
             ? Get.find<ChatViewController>(tag: channels[0].channel).twitchChat
             : null;
         selectedChatIndex = channels.isNotEmpty ? 0 : null;
       }
 
-      channels.remove(channels[i]);
+      channels.remove(view);
       Get.delete<ChatViewController>(tag: channel);
     }
 
