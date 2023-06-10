@@ -22,7 +22,7 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
                     indicatorColor: Theme.of(context).colorScheme.tertiary,
                     indicatorWeight: 0.000001,
                     dividerColor: Colors.transparent,
-                    tabs: [
+                    tabs: const [
                       Text("Activities"),
                       // Text("Song Requests"),
                     ],
@@ -48,11 +48,9 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
                 ),
               ],
             )
-          : Container(
-              child: Center(
-                child: Text("Not connected to StreamElements"),
-              ),
-            ),
+          : const Center(
+            child: Text("Not connected to StreamElements"),
+          ),
     );
   }
 }

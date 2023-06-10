@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
+import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/chat_view.dart';
 import 'package:irllink/src/presentation/widgets/dashboard.dart';
@@ -143,7 +144,15 @@ class HomeView extends GetView<HomeViewController> {
           onPointerUp: (_) => {
             controller.isPickingEmote.value = false,
           },
-          child: ChatView(),
+          child: Column(
+            children: [
+              Visibility(
+                visible: controller.channels.length > 1,
+                child: _tabBarChats(context),
+              ),
+              _chats(context),
+            ],
+          ),
         ),
         Visibility(
           visible: controller.isPickingEmote.value,
@@ -209,12 +218,10 @@ class HomeView extends GetView<HomeViewController> {
             child: Stack(
               alignment: AlignmentDirectional.center,
               children: [
-                Container(
-                  child: SvgPicture.asset(
-                    './lib/assets/chatinput.svg',
-                    semanticsLabel: 'chat input',
-                    fit: BoxFit.fitWidth,
-                  ),
+                SvgPicture.asset(
+                  './lib/assets/chatinput.svg',
+                  semanticsLabel: 'chat input',
+                  fit: BoxFit.fitWidth,
                 ),
                 Container(
                   padding: const EdgeInsets.only(left: 5, right: 5),
@@ -235,8 +242,7 @@ class HomeView extends GetView<HomeViewController> {
                             FocusScope.of(context).unfocus();
                           },
                           onTap: () {
-                            controller.chatViewController.selectedMessage
-                                .value = null;
+                            controller.selectedMessage.value = null;
                             controller.isPickingEmote.value = false;
                           },
                           textInputAction: TextInputAction.send,
@@ -286,10 +292,19 @@ class HomeView extends GetView<HomeViewController> {
                 );
                 await controller.getSettings();
                 if (controller.twitchData != null) {
-                  controller.chatViewController.applySettings();
+                  for (var chan in controller.channels) {
+                    if(Get.isRegistered<ChatViewController>(tag: chan.channel)){
+                      ChatViewController c =
+                      Get.find<ChatViewController>(tag: chan.channel);
+                      c.applySettings();
+                    }
+                  }
                 }
                 controller.obsTabViewController?.applySettings();
                 controller.streamelementsViewController?.applySettings();
+                if(controller.selectedChatIndex != null){
+                  controller.chatTabsController.animateTo(controller.selectedChatIndex!);
+                }
               },
               child: Icon(
                 Icons.settings,
@@ -317,5 +332,71 @@ class HomeView extends GetView<HomeViewController> {
         ),
       ),
     );
+  }
+
+  Widget _tabBarChats(BuildContext context) {
+    return TabBar(
+      controller: controller.chatTabsController,
+      isScrollable: true,
+      labelColor: Theme.of(context).colorScheme.tertiary,
+      unselectedLabelColor: Theme.of(context).textTheme.bodyLarge!.color,
+      indicatorColor: Theme.of(context).colorScheme.tertiary,
+      labelPadding: const EdgeInsets.symmetric(horizontal: 30),
+      indicatorSize: TabBarIndicatorSize.tab,
+      indicatorWeight: 0.01,
+      dividerColor: Colors.transparent,
+      onTap: (int i) {
+        if(Get.isRegistered<ChatViewController>(tag:controller.channels[i].channel)){
+          ChatViewController c =
+          Get.find<ChatViewController>(tag: controller.channels[i].channel);
+          c.scrollToBottom();
+        }
+        controller.selectedMessage.value = null;
+        controller.selectedChatIndex = i;
+      },
+      tabs: List<Tab>.generate(
+        controller.channels.length,
+        (int index) => Tab(
+          height: 30,
+          child: Text(controller.channels[index].channel),
+        ),
+      ),
+    );
+  }
+
+  Widget _chats(BuildContext context) {
+    return Expanded(
+      child: Container(
+        color: Theme.of(context).colorScheme.background,
+        child: TabBarView(
+          physics: const NeverScrollableScrollPhysics(),
+          controller: controller.chatTabsController,
+          children: List<Widget>.generate(
+            controller.channels.length,
+            (int index) => KeepAlive(chat: controller.channels[index]),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class KeepAlive extends StatefulWidget {
+  KeepAlive({required this.chat});
+
+  final ChatView chat;
+
+  @override
+  State<KeepAlive> createState() => _KeepAlive();
+}
+
+class _KeepAlive extends State<KeepAlive> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return widget.chat;
   }
 }

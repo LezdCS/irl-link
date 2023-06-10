@@ -256,7 +256,7 @@ class ObsSettings extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
+              SizedBox(
                 width: 100,
                 child: TextButton(
                   style: TextButton.styleFrom(
@@ -295,32 +295,30 @@ class ObsSettings extends StatelessWidget {
   }
 
   Widget _obsHistory(SettingsViewController controller) {
-    return Container(
-      child: Container(
-        height: 200,
-        child: ListView.builder(
-          itemCount: controller
-              .homeViewController.settings.value.obsConnectionsHistory!.length,
-          itemBuilder: (context, index) {
-            String url = controller.homeViewController.settings.value
-                .obsConnectionsHistory![index]['url']!;
-            String password = controller.homeViewController.settings.value
-                .obsConnectionsHistory![index]['password']!;
+    return SizedBox(
+      height: 200,
+      child: ListView.builder(
+        itemCount: controller
+            .homeViewController.settings.value.obsConnectionsHistory!.length,
+        itemBuilder: (context, index) {
+          String url = controller.homeViewController.settings.value
+              .obsConnectionsHistory![index]['url']!;
+          String password = controller.homeViewController.settings.value
+              .obsConnectionsHistory![index]['password']!;
 
-            return ListTile(
-              title: Text(url),
-              onTap: () {
-                controller.obsWebsocketUrlFieldController.text = url;
-                controller.obsWebsocketPasswordFieldController.text = password;
-                controller.homeViewController.settings.value =
-                    controller.homeViewController.settings.value.copyWith(
-                        obsWebsocketUrl: url, obsWebsocketPassword: password);
-                controller.saveSettings();
-                Get.back();
-              },
-            );
-          },
-        ),
+          return ListTile(
+            title: Text(url),
+            onTap: () {
+              controller.obsWebsocketUrlFieldController.text = url;
+              controller.obsWebsocketPasswordFieldController.text = password;
+              controller.homeViewController.settings.value =
+                  controller.homeViewController.settings.value.copyWith(
+                      obsWebsocketUrl: url, obsWebsocketPassword: password);
+              controller.saveSettings();
+              Get.back();
+            },
+          );
+        },
       ),
     );
   }

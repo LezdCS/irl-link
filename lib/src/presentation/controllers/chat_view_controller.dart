@@ -1,12 +1,9 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/utils/constants.dart';
-import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:twitch_chat/twitch_chat.dart';
@@ -14,10 +11,11 @@ import 'package:twitch_chat/twitch_chat.dart';
 import 'home_view_controller.dart';
 
 class ChatViewController extends GetxController
-    with GetSingleTickerProviderStateMixin {
-  ChatViewController({required this.homeEvents});
+    with GetTickerProviderStateMixin {
+  ChatViewController({required this.homeEvents, required this.channel});
 
   final HomeEvents homeEvents;
+  final String channel;
 
   //CHAT
   late ScrollController scrollController;
@@ -30,12 +28,9 @@ class ChatViewController extends GetxController
   TwitchCredentials? twitchData;
   RxList<ChatMessage> chatMessages = <ChatMessage>[].obs;
 
-  Rxn<ChatMessage> selectedMessage = Rxn<ChatMessage>();
   late TextEditingController banDurationInputController;
 
   Timer? chatDemoTimer;
-
-  late FlutterTts flutterTts;
 
   late HomeViewController homeViewController;
 
@@ -45,23 +40,14 @@ class ChatViewController extends GetxController
   void onInit() async {
     homeViewController = Get.find<HomeViewController>();
 
-    flutterTts = FlutterTts();
-    flutterTts.setEngine(flutterTts.getDefaultEngine.toString());
-
     scrollController = ScrollController();
     banDurationInputController = TextEditingController();
     if (Get.arguments != null) {
       await homeEvents.getSettings().then((settings) async {
         twitchData = Get.arguments[0];
 
-        String channelToJoin = twitchData!.twitchUser.login;
-        if (settings.data!.alternateChannel! &&
-            settings.data!.alternateChannelName! != '') {
-          channelToJoin = settings.data!.alternateChannelName!;
-        }
-
         twitchChat = TwitchChat(
-          channelToJoin,
+          channel,
           twitchData!.twitchUser.login,
           twitchData!.accessToken,
           clientId: kTwitchAuthClientId,
@@ -123,6 +109,8 @@ class ChatViewController extends GetxController
             });
           }
         });
+
+        homeViewController.selectedChat = twitchChat;
 
         await applySettings();
       });
@@ -196,6 +184,7 @@ class ChatViewController extends GetxController
 
   @override
   void onClose() {
+    homeViewController.flutterTts.stop();
     chatDemoTimer?.cancel();
     super.onClose();
   }
@@ -229,7 +218,7 @@ class ChatViewController extends GetxController
     );
 
     if (twitchData == null) message.isDeleted = true;
-    selectedMessage.value = null;
+    homeViewController.selectedMessage.value = null;
   }
 
   /// Ban user for specific [duration] based on the author name in the [message]
@@ -242,7 +231,7 @@ class ChatViewController extends GetxController
       kTwitchAuthClientId,
     );
     Get.back();
-    selectedMessage.value = null;
+    homeViewController.selectedMessage.value = null;
   }
 
   /// Ban user based on the author name in the [message]
@@ -254,7 +243,7 @@ class ChatViewController extends GetxController
       null,
       kTwitchAuthClientId,
     );
-    selectedMessage.value = null;
+    homeViewController.selectedMessage.value = null;
   }
 
   /// Hide every future messages from an user (only on this application, not on Twitch)
@@ -279,15 +268,17 @@ class ChatViewController extends GetxController
           .copyWith(hiddenUsersIds: hiddenUsersIds);
     }
     saveSettings();
-    selectedMessage.refresh();
+    homeViewController.selectedMessage.refresh();
   }
 
   /// Scroll to bottom of the chat
   void scrollToBottom() {
     isAutoScrolldown.value = true;
-    scrollController.jumpTo(
-      scrollController.position.maxScrollExtent,
-    );
+    if (scrollController.hasClients) {
+      scrollController.jumpTo(
+        scrollController.position.maxScrollExtent,
+      );
+    }
   }
 
   void saveSettings() {
@@ -295,53 +286,15 @@ class ChatViewController extends GetxController
   }
 
   Future applySettings() async {
-    String newChannel = "";
-    if (homeViewController.settings.value.alternateChannel! &&
-        homeViewController.settings.value.alternateChannelName! != '') {
-      newChannel = homeViewController.settings.value.alternateChannelName!;
-    } else {
-      newChannel = twitchData!.twitchUser.login;
-    }
-
     isAutoScrolldown.value = true;
-
-    if (twitchChat?.channel != newChannel) {
-      twitchChat?.changeChannel(newChannel);
-    }
 
     if (twitchChat != null && !twitchChat!.isConnected.value) {
       twitchChat?.connect();
     }
-
-    initTts(homeViewController.settings.value);
   }
 
-  void initTts(Settings settings) async {
-    //  The following setup allows background music and in-app audio session to continue simultaneously:
-    await flutterTts.setIosAudioCategory(
-        IosTextToSpeechAudioCategory.ambient,
-        [
-          IosTextToSpeechAudioCategoryOptions.allowBluetooth,
-          IosTextToSpeechAudioCategoryOptions.allowBluetoothA2DP,
-          IosTextToSpeechAudioCategoryOptions.mixWithOthers
-        ],
-        IosTextToSpeechAudioMode.voicePrompt);
-
-    await flutterTts.awaitSpeakCompletion(true);
-    await flutterTts.setLanguage(settings.language!);
-    await flutterTts.setSpeechRate(settings.rate!);
-    await flutterTts.setVolume(settings.volume!);
-    await flutterTts.setPitch(settings.pitch!);
-    await flutterTts.setVoice(settings.voice!);
-
-    if (Platform.isAndroid) {
-      await flutterTts.setQueueMode(1);
-    }
-
-    if (!settings.ttsEnabled!) {
-      //prevent the queue to continue if we come back from settings and turn off TTS
-      flutterTts.stop();
-    }
+  void changeChannel(String channel) {
+    twitchChat?.changeChannel(channel);
   }
 
   void readTts(ChatMessage message) {
@@ -371,6 +324,6 @@ class ChatViewController extends GetxController
     if (homeViewController.settings.value.ttsMuteViewerName!) {
       text = message.message;
     }
-    flutterTts.speak(text);
+    homeViewController.flutterTts.speak(text);
   }
 }

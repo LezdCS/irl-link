@@ -13,22 +13,22 @@ class Dashboard extends GetView {
   @override
   Widget build(BuildContext context) {
     List<FloatingEvent> events = [
-      new FloatingEvent(
+      const FloatingEvent(
         dashboardActionsType: DashboardActionsTypes.button,
         color: Colors.green,
         title: "Start stream",
       ),
-      new FloatingEvent(
+      const FloatingEvent(
         dashboardActionsType: DashboardActionsTypes.button,
         color: Colors.orange,
         title: "Clear TTS queue",
       ),
-      new FloatingEvent(
+      const FloatingEvent(
         dashboardActionsType: DashboardActionsTypes.slider,
         color: Colors.pink,
         title: "TTS volume",
       ),
-      new FloatingEvent(
+      const FloatingEvent(
         dashboardActionsType: DashboardActionsTypes.toggle,
         color: Colors.blueAccent,
         title: "TTS enabled",

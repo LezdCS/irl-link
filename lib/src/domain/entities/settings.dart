@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:irllink/src/domain/entities/settings/chat_events_settings.dart';
+import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/settings/floating_dashboard_settings.dart';
 import 'package:irllink/src/domain/entities/settings/stream_elements_settings.dart';
 
@@ -9,10 +10,9 @@ class Settings extends Equatable {
   final double? textSize;
   final double? emotesSize;
   final bool? displayTimestamp;
-  final bool? alternateChannel;
-  final String? alternateChannelName;
   final List? hiddenUsersIds;
   final ChatEventsSettings? chatEventsSettings;
+  final ChatSettings? chatSettings;
 
   //GENERAL SETTINGS
   final bool? isDarkMode;
@@ -48,10 +48,9 @@ class Settings extends Equatable {
     required this.textSize,
     required this.emotesSize,
     required this.displayTimestamp,
-    required this.alternateChannel,
-    required this.alternateChannelName,
     required this.hiddenUsersIds,
     required this.chatEventsSettings,
+    required this.chatSettings,
 
     //GENERAL SETTINGS
     required this.isDarkMode,
@@ -88,8 +87,6 @@ class Settings extends Equatable {
     this.textSize = 19,
     this.emotesSize = 20,
     this.displayTimestamp = false,
-    this.alternateChannel = false,
-    this.alternateChannelName = "",
     this.hiddenUsersIds = const [],
     this.chatEventsSettings = const ChatEventsSettings(
       firstsMessages: true,
@@ -98,6 +95,10 @@ class Settings extends Equatable {
       announcements: true,
       incomingRaids: true,
       redemptions: true,
+    ),
+    this.chatSettings = const ChatSettings(
+      chatsJoined: [],
+      joinMyself: true,
     ),
 
     //GENERAL SETTINGS
@@ -145,10 +146,9 @@ class Settings extends Equatable {
         'textSize': textSize,
         'emotesSize': emotesSize,
         'displayTimestamp': displayTimestamp,
-        'alternateChannel': alternateChannel,
-        'alternateChannelName': alternateChannelName,
         'hiddenUsersIds': hiddenUsersIds,
         'chatEventsSettings': chatEventsSettings?.toJson(),
+        'chatSettings': chatSettings?.toJson(),
         //GENERAL
         'isDarkMode': isDarkMode,
         'keepSpeakerOn': keepSpeakerOn,
@@ -184,10 +184,9 @@ class Settings extends Equatable {
       textSize,
       emotesSize,
       displayTimestamp,
-      alternateChannel,
-      alternateChannelName,
       hiddenUsersIds,
       chatEventsSettings,
+      chatSettings,
       //GENERAL
       isDarkMode,
       keepSpeakerOn,
@@ -229,6 +228,7 @@ class Settings extends Equatable {
     String? alternateChannelName,
     List? hiddenUsersIds,
     ChatEventsSettings? chatEventsSettings,
+    ChatSettings? chatSettings,
     //GENERAL
     bool? isDarkMode,
     bool? keepSpeakerOn,
@@ -261,10 +261,9 @@ class Settings extends Equatable {
         textSize: textSize ?? this.textSize,
         emotesSize: emotesSize ?? this.emotesSize,
         displayTimestamp: displayTimestamp ?? this.displayTimestamp,
-        alternateChannel: alternateChannel ?? this.alternateChannel,
-        alternateChannelName: alternateChannelName ?? this.alternateChannelName,
         hiddenUsersIds: hiddenUsersIds ?? this.hiddenUsersIds,
         chatEventsSettings: chatEventsSettings ?? this.chatEventsSettings,
+        chatSettings: chatSettings ?? this.chatSettings,
         //GENERAL
         isDarkMode: isDarkMode ?? this.isDarkMode,
         keepSpeakerOn: keepSpeakerOn ?? this.keepSpeakerOn,

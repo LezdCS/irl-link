@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
@@ -15,6 +17,7 @@ import 'package:twitch_chat/twitch_chat.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import '../../../routes/app_routes.dart';
 import '../../core/utils/constants.dart';
+import '../widgets/chat_view.dart';
 import '../widgets/tabs/streamelements_tab_view.dart';
 import '../widgets/web_page_view.dart';
 import 'chat_view_controller.dart';
@@ -40,7 +43,6 @@ class HomeViewController extends GetxController
 
   //emote picker
   RxBool isPickingEmote = false.obs;
-  late ChatViewController chatViewController;
   ObsTabViewController? obsTabViewController;
   StreamelementsViewController? streamelementsViewController;
 
@@ -57,9 +59,22 @@ class HomeViewController extends GetxController
 
   RxBool displayDashboard = false.obs;
 
+  RxList<ChatView> channels = <ChatView>[].obs;
+  TwitchChat? selectedChat;
+  int? selectedChatIndex;
+
+  late TabController chatTabsController;
+  Rxn<ChatMessage> selectedMessage = Rxn<ChatMessage>();
+
+  late FlutterTts flutterTts;
+
   @override
   void onInit() async {
     chatInputController = TextEditingController();
+    chatTabsController = TabController(length: 0, vsync: this);
+
+    flutterTts = FlutterTts();
+    flutterTts.setEngine(flutterTts.getDefaultEngine.toString());
 
     if (Get.arguments != null) {
       TwitchTabView twitchPage = TwitchTabView();
@@ -90,7 +105,6 @@ class HomeViewController extends GetxController
 
   @override
   void onReady() {
-    chatViewController = Get.find<ChatViewController>();
     super.onReady();
   }
 
@@ -133,11 +147,70 @@ class HomeViewController extends GetxController
     tabController = TabController(length: tabElements.length, vsync: this);
   }
 
+  void generateChats() {
+    String self = twitchData!.twitchUser.login;
+
+    RxList<ChatView> tempChannels = RxList<ChatView>.from(channels);
+    for (var temp in tempChannels) {
+      ChatView view = channels.firstWhere((element) => element.channel == temp.channel);
+      String channel = view.channel;
+      if (channel == self) continue;
+      if (settings.value.chatSettings!.chatsJoined.contains(channel)) {
+        continue;
+      }
+
+      if (selectedChat?.channel == channel) {
+        selectedChat = channels.isNotEmpty
+            ? Get.find<ChatViewController>(tag: channels[0].channel).twitchChat
+            : null;
+        selectedChatIndex = channels.isNotEmpty ? 0 : null;
+      }
+
+      channels.remove(view);
+      Get.delete<ChatViewController>(tag: channel);
+    }
+
+    for (String chat in settings.value.chatSettings!.chatsJoined) {
+      if (channels.firstWhereOrNull((channel) => channel.channel == chat) ==
+          null) {
+        channels.add(
+          ChatView(
+            channel: chat,
+          ),
+        );
+      }
+    }
+
+    bool joinSelfChannel = settings.value.chatSettings!.joinMyself;
+
+    if (joinSelfChannel) {
+      if (channels.firstWhereOrNull((channel) => channel.channel == self) ==
+          null) {
+        channels.insert(0, ChatView(channel: self));
+      }
+    } else {
+      channels.remove(channels.firstWhereOrNull((c) => c.channel == self));
+      if (selectedChat?.channel == self) {
+        selectedChat = channels.isNotEmpty
+            ? Get.find<ChatViewController>(tag: channels[0].channel).twitchChat
+            : null;
+        selectedChatIndex = channels.isNotEmpty ? 0 : null;
+      }
+    }
+
+    chatTabsController = TabController(length: channels.length, vsync: this);
+
+    if (channels.isEmpty) {
+      selectedChatIndex = null;
+      selectedChat = null;
+    }
+  }
+
   void sendChatMessage(String message) {
     if (twitchData == null) return;
 
     TwitchChat twitchChat = TwitchChat(
-      chatViewController.twitchChat!.channel,
+      selectedChat?.channel,
       twitchData!.twitchUser.login,
       twitchData!.accessToken,
       clientId: kTwitchAuthClientId,
@@ -146,13 +219,14 @@ class HomeViewController extends GetxController
     twitchChat.sendMessage(message);
 
     chatInputController.text = '';
-    chatViewController.selectedMessage.value = null;
+    selectedMessage.value = null;
     isPickingEmote.value = false;
   }
 
   void getEmotes() {
-    List<Emote> emotes = List.from(chatViewController.twitchChat?.emotes)
-      ..addAll(chatViewController.twitchChat?.thirdPartEmotes);
+    List<Emote> emotes = List.from(selectedChat?.emotes)
+      ..addAll(selectedChat?.emotesFromSets)
+      ..addAll(selectedChat?.thirdPartEmotes);
     twitchEmotes
       ..clear()
       ..addAll(emotes);
@@ -160,8 +234,9 @@ class HomeViewController extends GetxController
   }
 
   void searchEmote(String input) {
-    List<Emote> emotes = List.from(chatViewController.twitchChat?.emotes)
-      ..addAll(chatViewController.twitchChat?.thirdPartEmotes);
+    List<Emote> emotes = List.from(selectedChat?.emotes)
+      ..addAll(selectedChat?.emotesFromSets)
+      ..addAll(selectedChat?.thirdPartEmotes);
     emotes = emotes
         .where(
           (emote) => emote.name.toLowerCase().contains(input.toLowerCase()),
@@ -187,6 +262,8 @@ class HomeViewController extends GetxController
       if (value.error != null) return;
       settings.value = value.data!;
       await generateTabs();
+      generateChats();
+      initTts(settings.value);
       if (!settings.value.isDarkMode!) {
         Get.changeThemeMode(ThemeMode.light);
       }
@@ -202,6 +279,34 @@ class HomeViewController extends GetxController
       Locale locale = Locale(settings.value.appLanguage!["languageCode"],
           settings.value.appLanguage!["countryCode"]);
       Get.updateLocale(locale);
+    }
+  }
+
+  void initTts(Settings settings) async {
+    //  The following setup allows background music and in-app audio session to continue simultaneously:
+    await flutterTts.setIosAudioCategory(
+        IosTextToSpeechAudioCategory.ambient,
+        [
+          IosTextToSpeechAudioCategoryOptions.allowBluetooth,
+          IosTextToSpeechAudioCategoryOptions.allowBluetoothA2DP,
+          IosTextToSpeechAudioCategoryOptions.mixWithOthers
+        ],
+        IosTextToSpeechAudioMode.voicePrompt);
+
+    await flutterTts.awaitSpeakCompletion(true);
+    await flutterTts.setLanguage(settings.language!);
+    await flutterTts.setSpeechRate(settings.rate!);
+    await flutterTts.setVolume(settings.volume!);
+    await flutterTts.setPitch(settings.pitch!);
+    await flutterTts.setVoice(settings.voice!);
+
+    if (Platform.isAndroid) {
+      await flutterTts.setQueueMode(1);
+    }
+
+    if (!settings.ttsEnabled!) {
+      //prevent the queue to continue if we come back from settings and turn off TTS
+      flutterTts.stop();
     }
   }
 

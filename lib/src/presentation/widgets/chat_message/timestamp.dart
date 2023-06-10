@@ -11,9 +11,9 @@ class Timestamp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      '${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(timestamp))}',
+      DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(timestamp)),
       textAlign: TextAlign.end,
-      style: TextStyle(
+      style: const TextStyle(
           color: Colors.grey, fontSize: 14, fontWeight: FontWeight.w400),
     );
   }

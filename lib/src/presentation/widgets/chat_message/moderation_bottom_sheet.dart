@@ -33,7 +33,9 @@ class ModerationBottomSheet extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                controller.selectedMessage.value?.authorName ?? "",
+                controller
+                        .homeViewController.selectedMessage.value?.authorName ??
+                    "",
                 style: const TextStyle(
                     color: Colors.white,
                     fontSize: 20,
@@ -46,7 +48,8 @@ class ModerationBottomSheet extends StatelessWidget {
                       Uri(
                         scheme: "https",
                         host: "twitch.tv",
-                        path: controller.selectedMessage.value!.authorName,
+                        path: controller.homeViewController.selectedMessage
+                            .value?.authorName,
                       ),
                       mode: LaunchMode.externalApplication,
                     ),
@@ -57,7 +60,8 @@ class ModerationBottomSheet extends StatelessWidget {
                   ),
                   const SizedBox(width: 5),
                   InkWell(
-                    onTap: () => controller.selectedMessage.value = null,
+                    onTap: () => controller
+                        .homeViewController.selectedMessage.value = null,
                     child: const Icon(
                       Icons.close,
                       color: Colors.white,
@@ -71,11 +75,14 @@ class ModerationBottomSheet extends StatelessWidget {
           GestureDetector(
             onLongPress: () {
               Clipboard.setData(ClipboardData(
-                  text: controller.selectedMessage.value?.message ?? ""));
+                  text: controller
+                          .homeViewController.selectedMessage.value?.message ??
+                      ""));
               Get.snackbar("Copied", "Message copied to clipboard");
             },
             child: Text(
-              controller.selectedMessage.value?.message ?? "",
+              controller.homeViewController.selectedMessage.value?.message ??
+                  "",
               style: const TextStyle(
                 color: Color(0xFF575757),
                 fontStyle: FontStyle.italic,
@@ -84,15 +91,17 @@ class ModerationBottomSheet extends StatelessWidget {
             ),
           ),
           InkWell(
-            onTap: () => controller
-                .deleteMessageInstruction(controller.selectedMessage.value!),
+            onTap: () => controller.deleteMessageInstruction(
+              controller.homeViewController.selectedMessage.value!,
+            ),
             child: moderationViewButton(null, "Delete message"),
           ),
           const SizedBox(height: 15),
           Row(children: [
             InkWell(
-              onTap: () => controller
-                  .banMessageInstruction(controller.selectedMessage.value!),
+              onTap: () => controller.banMessageInstruction(
+                controller.homeViewController.selectedMessage.value!,
+              ),
               child: moderationViewButton(Icons.stop, "Ban"),
             ),
             const SizedBox(width: 10),
@@ -102,15 +111,15 @@ class ModerationBottomSheet extends StatelessWidget {
             ),
             const SizedBox(width: 10),
             InkWell(
-              onTap: () =>
-                  controller.hideUser(controller.selectedMessage.value!),
-              child: (controller.selectedMessage.value != null &&
-                      controller
-                              .homeViewController.settings.value.hiddenUsersIds!
-                              .firstWhereOrNull((userId) =>
-                                  controller.selectedMessage.value!.authorId ==
-                                  userId) !=
-                          null)
+              onTap: () => controller.hideUser(
+                  controller.homeViewController.selectedMessage.value!),
+              child: (controller
+                          .homeViewController.settings.value.hiddenUsersIds!
+                          .firstWhereOrNull((userId) =>
+                              controller.homeViewController.selectedMessage
+                                  .value!.authorId ==
+                              userId) !=
+                      null)
                   ? moderationViewButton(Icons.visibility, "Unhide user")
                   : moderationViewButton(Icons.visibility_off, "Hide user"),
             ),
@@ -173,8 +182,9 @@ class ModerationBottomSheet extends StatelessWidget {
             children: List.generate(timeoutValues.length, (index) {
               return InkWell(
                 onTap: () => controller.timeoutMessageInstruction(
-                    controller.selectedMessage.value!,
-                    timeoutValues[index].values.first),
+                  controller.homeViewController.selectedMessage.value!,
+                  timeoutValues[index].values.first,
+                ),
                 child: Container(
                   margin: const EdgeInsets.only(right: 10),
                   padding: const EdgeInsets.only(
@@ -213,8 +223,9 @@ class ModerationBottomSheet extends StatelessWidget {
                     onSubmitted: (String value) {
                       if (int.tryParse(value) != null) {
                         controller.timeoutMessageInstruction(
-                            controller.selectedMessage.value!,
-                            int.parse(value));
+                          controller.homeViewController.selectedMessage.value!,
+                          int.parse(value),
+                        );
                       }
                     },
                     style: const TextStyle(color: Colors.white),
@@ -238,9 +249,9 @@ class ModerationBottomSheet extends StatelessWidget {
                             controller.banDurationInputController.text) !=
                         null) {
                       controller.timeoutMessageInstruction(
-                          controller.selectedMessage.value!,
-                          int.parse(
-                              controller.banDurationInputController.text));
+                        controller.homeViewController.selectedMessage.value!,
+                        int.parse(controller.banDurationInputController.text),
+                      );
                     }
                   },
                   child: const Icon(

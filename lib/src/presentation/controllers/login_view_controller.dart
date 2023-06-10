@@ -46,7 +46,7 @@ class LoginViewController extends GetxController {
 
   Future<void> login() async {
     isLoading.value = true;
-    TwitchAuthParams params = TwitchAuthParams();
+    TwitchAuthParams params = const TwitchAuthParams();
     await loginEvents.getTwitchOauth(params: params).then((value) {
       if (value.error == null) {
         Get.offAllNamed(Routes.HOME, arguments: [value.data]);
