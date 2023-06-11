@@ -10,7 +10,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:wakelock/wakelock.dart';
 import 'firebase_options.dart';
-import 'src/core/resources/Apptranslations.dart';
+import 'src/core/resources/app_translations.dart';
 import 'src/core/utils/globals.dart' as globals;
 
 void main() async {
