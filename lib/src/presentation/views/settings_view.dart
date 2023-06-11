@@ -8,7 +8,7 @@ import 'package:irllink/src/presentation/widgets/settings_view/tts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:irllink/src/core/utils/globals.dart' as globals;
 
-import '../../core/resources/apptranslations.dart';
+import '../../core/resources/Apptranslations.dart';
 import '../widgets/settings_view/chats_joined.dart';
 import '../widgets/settings_view/manage_list_hidden_users.dart';
 import '../widgets/settings_view/manage_list_browser_tabs.dart';
