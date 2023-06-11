@@ -47,11 +47,6 @@ class StreamelementsViewController extends GetxController
   }
 
   @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
   void onClose() {
     socket?.close();
     super.onClose();

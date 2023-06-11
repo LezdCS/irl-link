@@ -10,6 +10,7 @@ class Word extends StatelessWidget {
   final String color;
 
   const Word({
+    super.key,
     required this.word,
     required this.isAction,
     required this.textSize,
@@ -21,7 +22,7 @@ class Word extends StatelessWidget {
     bool isWordLink = Uri.tryParse(word)?.hasAbsolutePath ?? false;
     return !isWordLink
         ? Text(
-            word + " ",
+            "$word ",
             style: TextStyle(
               color: isAction
                   ? Color(int.parse(color.replaceAll('#', '0xff')))
@@ -32,7 +33,7 @@ class Word extends StatelessWidget {
           )
         : RichText(
             text: TextSpan(
-              text: word + " ",
+              text: "$word ",
               style: TextStyle(
                 color: Colors.lightBlue,
                 decoration: TextDecoration.underline,

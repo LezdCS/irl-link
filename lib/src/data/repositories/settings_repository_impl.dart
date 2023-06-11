@@ -15,7 +15,7 @@ class SettingsRepositoryImpl extends SettingsRepository {
       SettingsDTO settings = SettingsDTO.fromJson(settingsJson);
       return DataSuccess(settings);
     }
-    return DataSuccess(Settings.defaultSettings());
+    return const DataSuccess(Settings.defaultSettings());
   }
 
   @override

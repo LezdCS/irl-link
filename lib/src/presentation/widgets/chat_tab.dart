@@ -11,7 +11,8 @@ import 'chat_message/message_container.dart';
 class ChatTab extends GetView<ChatViewController> {
   final TwitchChat chat;
 
-  ChatTab({
+  const ChatTab({
+    super.key,
     required this.chat,
   });
 

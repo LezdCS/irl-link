@@ -8,6 +8,8 @@ import 'package:obs_websocket/obs_websocket.dart';
 import '../alert_message_view.dart';
 
 class ObsTabView extends GetView<ObsTabViewController> {
+  const ObsTabView({super.key});
+
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
@@ -335,9 +337,8 @@ class ObsTabView extends GetView<ObsTabViewController> {
                         },
                         min: -100,
                         max: 0,
-                        label: controller.sourcesVolumesMap[source.sourceName]!
-                                .toStringAsFixed(2) +
-                            " dB",
+                        label:
+                            "${controller.sourcesVolumesMap[source.sourceName]!.toStringAsFixed(2)} dB",
                         divisions: 400,
                         activeColor: Theme.of(context).colorScheme.tertiary,
                         inactiveColor:

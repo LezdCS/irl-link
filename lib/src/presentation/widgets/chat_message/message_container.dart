@@ -12,6 +12,7 @@ class MessageContainer extends StatelessWidget {
   final TwitchChat twitchChat;
 
   const MessageContainer({
+    super.key,
     required this.selectedMessage,
     required this.message,
     required this.displayTimestamp,

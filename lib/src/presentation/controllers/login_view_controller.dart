@@ -16,7 +16,7 @@ class LoginViewController extends GetxController {
 
   @override
   Future<void> onInit() async {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
     ));
 
@@ -25,12 +25,12 @@ class LoginViewController extends GetxController {
 
   @override
   Future<void> onReady() async {
-    await Future.doWhile(
-        () => Future.delayed(Duration(seconds: 2)).then((_) => hasNoNetwork()));
+    await Future.doWhile(() =>
+        Future.delayed(const Duration(seconds: 2)).then((_) => hasNoNetwork()));
 
     await loginEvents.getTwitchFromLocal().then((value) {
       if (value.error == null) {
-        Get.offAllNamed(Routes.HOME, arguments: [value.data]);
+        Get.offAllNamed(Routes.home, arguments: [value.data]);
       }
     }).catchError((e) {});
 
@@ -39,17 +39,12 @@ class LoginViewController extends GetxController {
     super.onReady();
   }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
   Future<void> login() async {
     isLoading.value = true;
     TwitchAuthParams params = const TwitchAuthParams();
     await loginEvents.getTwitchOauth(params: params).then((value) {
       if (value.error == null) {
-        Get.offAllNamed(Routes.HOME, arguments: [value.data]);
+        Get.offAllNamed(Routes.home, arguments: [value.data]);
       }
     });
     isLoading.value = false;
@@ -66,6 +61,6 @@ class LoginViewController extends GetxController {
   }
 
   void homeWitoutLogin() {
-    Get.offAllNamed(Routes.HOME);
+    Get.offAllNamed(Routes.home);
   }
 }

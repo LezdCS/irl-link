@@ -18,9 +18,9 @@ class ChatSettings extends Equatable {
   }
 
   Map toJson() => {
-    'chatsJoined': chatsJoined,
-    'joinMyself': joinMyself,
-  };
+        'chatsJoined': chatsJoined,
+        'joinMyself': joinMyself,
+      };
 
   @override
   bool get stringify => true;

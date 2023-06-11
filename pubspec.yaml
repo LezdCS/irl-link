@@ -48,7 +48,7 @@ dependencies:
   firebase_crashlytics: ^3.3.1
   firebase_core: ^2.13.0
   percent_indicator: ^4.2.3
-  fl_chart: ^0.62.0
+  fl_chart: ^0.63.0
   marquee: ^2.2.3
   faker: ^2.1.0
   mobile_scanner: ^3.2.0
@@ -59,6 +59,8 @@ dependencies:
   in_app_purchase: ^3.1.7
   floating_draggable_widget: ^2.1.2
   collection:
+  webview_flutter_android:
+  webview_flutter_wkwebview:
   twitch_chat:
     git:
       url: https://github.com/LezdCS/twitch_chat.git

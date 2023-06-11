@@ -17,6 +17,8 @@ import 'package:move_to_background/move_to_background.dart';
 import 'package:split_view/split_view.dart';
 
 class HomeView extends GetView<HomeViewController> {
+  const HomeView({super.key});
+
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
@@ -288,22 +290,24 @@ class HomeView extends GetView<HomeViewController> {
             child: InkWell(
               onTap: () async {
                 await Get.toNamed(
-                  Routes.SETTINGS,
+                  Routes.settings,
                 );
                 await controller.getSettings();
                 if (controller.twitchData != null) {
                   for (var chan in controller.channels) {
-                    if(Get.isRegistered<ChatViewController>(tag: chan.channel)){
+                    if (Get.isRegistered<ChatViewController>(
+                        tag: chan.channel)) {
                       ChatViewController c =
-                      Get.find<ChatViewController>(tag: chan.channel);
+                          Get.find<ChatViewController>(tag: chan.channel);
                       c.applySettings();
                     }
                   }
                 }
                 controller.obsTabViewController?.applySettings();
                 controller.streamelementsViewController?.applySettings();
-                if(controller.selectedChatIndex != null){
-                  controller.chatTabsController.animateTo(controller.selectedChatIndex!);
+                if (controller.selectedChatIndex != null) {
+                  controller.chatTabsController
+                      .animateTo(controller.selectedChatIndex!);
                 }
               },
               child: Icon(
@@ -346,9 +350,10 @@ class HomeView extends GetView<HomeViewController> {
       indicatorWeight: 0.01,
       dividerColor: Colors.transparent,
       onTap: (int i) {
-        if(Get.isRegistered<ChatViewController>(tag:controller.channels[i].channel)){
+        if (Get.isRegistered<ChatViewController>(
+            tag: controller.channels[i].channel)) {
           ChatViewController c =
-          Get.find<ChatViewController>(tag: controller.channels[i].channel);
+              Get.find<ChatViewController>(tag: controller.channels[i].channel);
           c.scrollToBottom();
         }
         controller.selectedMessage.value = null;
@@ -382,7 +387,7 @@ class HomeView extends GetView<HomeViewController> {
 }
 
 class KeepAlive extends StatefulWidget {
-  KeepAlive({required this.chat});
+  const KeepAlive({super.key, required this.chat});
 
   final ChatView chat;
 

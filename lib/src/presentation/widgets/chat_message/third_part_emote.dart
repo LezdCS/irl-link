@@ -4,7 +4,7 @@ import 'package:twitch_chat/twitch_chat.dart';
 class ThirdPartEmote extends StatelessWidget {
   final Emote emote;
 
-  const ThirdPartEmote({required this.emote});
+  const ThirdPartEmote({super.key, required this.emote});
 
   @override
   Widget build(BuildContext context) {

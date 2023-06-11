@@ -46,7 +46,7 @@ class HomeViewController extends GetxController
   ObsTabViewController? obsTabViewController;
   StreamelementsViewController? streamelementsViewController;
 
-  late Rx<Settings> settings = Settings.defaultSettings().obs;
+  late Rx<Settings> settings = const Settings.defaultSettings().obs;
 
   Timer? timerRefreshToken;
   Timer? timerKeepSpeakerOn;
@@ -77,7 +77,7 @@ class HomeViewController extends GetxController
     flutterTts.setEngine(flutterTts.getDefaultEngine.toString());
 
     if (Get.arguments != null) {
-      TwitchTabView twitchPage = TwitchTabView();
+      TwitchTabView twitchPage = const TwitchTabView();
       tabElements.add(twitchPage);
 
       tabController = TabController(length: tabElements.length, vsync: this);
@@ -104,11 +104,6 @@ class HomeViewController extends GetxController
   }
 
   @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
   void onClose() {
     timerRefreshToken?.cancel();
     timerKeepSpeakerOn?.cancel();
@@ -118,7 +113,7 @@ class HomeViewController extends GetxController
   Future generateTabs() async {
     tabElements.clear();
 
-    TwitchTabView twitchPage = TwitchTabView();
+    TwitchTabView twitchPage = const TwitchTabView();
     tabElements.add(twitchPage);
 
     bool isSubscribed = purchases.firstWhereOrNull(
@@ -129,13 +124,13 @@ class HomeViewController extends GetxController
         settings.value.streamElementsAccessToken != null &&
         settings.value.streamElementsAccessToken!.isNotEmpty) {
       streamelementsViewController = Get.find<StreamelementsViewController>();
-      StreamelementsTabView streamelementsPage = StreamelementsTabView();
+      StreamelementsTabView streamelementsPage = const StreamelementsTabView();
       tabElements.add(streamelementsPage);
     }
 
     if (settings.value.isObsConnected! || twitchData == null) {
       obsTabViewController = Get.find<ObsTabViewController>();
-      ObsTabView obsPage = ObsTabView();
+      ObsTabView obsPage = const ObsTabView();
       tabElements.add(obsPage);
     }
 
@@ -152,7 +147,8 @@ class HomeViewController extends GetxController
 
     RxList<ChatView> tempChannels = RxList<ChatView>.from(channels);
     for (var temp in tempChannels) {
-      ChatView view = channels.firstWhere((element) => element.channel == temp.channel);
+      ChatView view =
+          channels.firstWhere((element) => element.channel == temp.channel);
       String channel = view.channel;
       if (channel == self) continue;
       if (settings.value.chatSettings!.chatsJoined.contains(channel)) {
@@ -248,7 +244,7 @@ class HomeViewController extends GetxController
   }
 
   void login() {
-    Get.offAllNamed(Routes.LOGIN);
+    Get.offAllNamed(Routes.login);
   }
 
   Future getSettings() async {

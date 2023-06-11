@@ -10,6 +10,7 @@ class ModerationBottomSheet extends StatelessWidget {
   final double width;
 
   const ModerationBottomSheet({
+    super.key,
     required this.controller,
     required this.width,
   });

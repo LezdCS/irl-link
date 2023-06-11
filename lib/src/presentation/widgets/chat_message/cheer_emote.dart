@@ -6,6 +6,7 @@ class CheerEmote extends StatelessWidget {
   final double textSize;
 
   const CheerEmote({
+    super.key,
     required this.cheerEmote,
     required this.textSize,
   });

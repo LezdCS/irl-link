@@ -18,6 +18,7 @@ class ChatEventsSettingsDTO extends ChatEventsSettings {
           redemptions: redemptions,
         );
 
+  @override
   Map toJson() => {
         'firstsMessages': firstsMessages,
         'subscriptions': subscriptions,
@@ -30,17 +31,17 @@ class ChatEventsSettingsDTO extends ChatEventsSettings {
   factory ChatEventsSettingsDTO.fromJson(Map<String, dynamic> map) {
     return ChatEventsSettingsDTO(
       firstsMessages: map['firstsMessages'] ??
-          Settings.defaultSettings().chatEventsSettings!.firstsMessages,
+          const Settings.defaultSettings().chatEventsSettings!.firstsMessages,
       subscriptions: map['subscriptions'] ??
-          Settings.defaultSettings().chatEventsSettings!.subscriptions,
+          const Settings.defaultSettings().chatEventsSettings!.subscriptions,
       bitsDonations: map['bitsDonations'] ??
-          Settings.defaultSettings().chatEventsSettings!.bitsDonations,
+          const Settings.defaultSettings().chatEventsSettings!.bitsDonations,
       announcements: map['announcements'] ??
-          Settings.defaultSettings().chatEventsSettings!.announcements,
+          const Settings.defaultSettings().chatEventsSettings!.announcements,
       incomingRaids: map['incomingRaids'] ??
-          Settings.defaultSettings().chatEventsSettings!.incomingRaids,
+          const Settings.defaultSettings().chatEventsSettings!.incomingRaids,
       redemptions: map['redemptions'] ??
-          Settings.defaultSettings().chatEventsSettings!.redemptions,
+          const Settings.defaultSettings().chatEventsSettings!.redemptions,
     );
   }
 }

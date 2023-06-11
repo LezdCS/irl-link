@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 class Tts extends StatelessWidget {
   final SettingsViewController controller;
 
-  const Tts({required this.controller});
+  const Tts({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class Tts extends StatelessWidget {
             ),
             onPressed: () => Get.back(),
           ),
-          actions: [],
+          actions: const [],
           backgroundColor: Theme.of(context).colorScheme.secondary,
           title: Text(
             "text_to_speech".tr,

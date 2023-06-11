@@ -29,9 +29,9 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       // final refreshToken = Uri.parse(result).queryParameters['refresh_token'];
       // final expiresIn = Uri.parse(result).queryParameters['expires_in'];
 
-      return DataSuccess('');
+      return const DataSuccess('');
     } catch (e) {
-      return DataFailed("Unable to retrieve StreamElements token");
+      return const DataFailed("Unable to retrieve StreamElements token");
     }
   }
 
@@ -49,7 +49,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       await dio.post(
         'https://api.streamelements.com/kappa/v2/activities/${activity.channel}/${activity.id}/replay',
       );
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       debugPrint(e.toString());
     }
   }
@@ -64,7 +64,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       await dio
           .post('https://api.streamelements.com/kappa/v2/activities/$channel');
       return DataSuccess(activities);
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       debugPrint(e.toString());
       return DataFailed(e.toString());
     }

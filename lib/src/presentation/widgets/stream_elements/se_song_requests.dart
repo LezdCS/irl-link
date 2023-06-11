@@ -5,9 +5,11 @@ import 'package:irllink/src/presentation/controllers/streamelements_view_control
 import '../../../domain/entities/se_song.dart';
 
 class SeSongRequests extends GetView {
+  @override
   final StreamelementsViewController controller;
 
-  SeSongRequests({
+  const SeSongRequests({
+    super.key,
     required this.controller,
   });
 
@@ -68,9 +70,7 @@ class SeSongRequests extends GetView {
                   ),
                 ),
                 TextSpan(
-                  text: "(" +
-                      controller.songRequestQueue.length.toString() +
-                      " videos)",
+                  text: "(${controller.songRequestQueue.length} videos)",
                   style: TextStyle(
                     color: Theme.of(context).textTheme.bodyLarge!.color,
                   ),

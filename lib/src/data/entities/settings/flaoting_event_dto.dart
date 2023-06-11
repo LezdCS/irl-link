@@ -12,6 +12,7 @@ class FloatingEventDTO extends FloatingEvent {
           color: color,
         );
 
+  @override
   Map toJson() => {
         'title': title,
         'dashboardActionsType': dashboardActionsType,
