@@ -15,6 +15,7 @@ class TwitchPollDTO extends TwitchPoll {
           status: status,
         );
 
+  @override
   Map toJson() => {
         'id': id,
         'title': title,
@@ -26,7 +27,7 @@ class TwitchPollDTO extends TwitchPoll {
   factory TwitchPollDTO.fromJson(Map<String, dynamic> map) {
     List<Choice> choices = [];
     int totalVotes = 0;
-    PollStatus status = PollStatus.ACTIVE;
+    PollStatus status = PollStatus.active;
 
     Choice c;
     map['choices'].forEach((choice) => {
@@ -37,22 +38,22 @@ class TwitchPollDTO extends TwitchPoll {
 
     switch (map["status"]) {
       case "ACTIVE":
-        status = PollStatus.ACTIVE;
+        status = PollStatus.active;
         break;
       case "COMPLETED":
-        status = PollStatus.COMPLETED;
+        status = PollStatus.completed;
         break;
       case "TERMINATED":
-        status = PollStatus.TERMINATED;
+        status = PollStatus.terminated;
         break;
       case "ARCHIVED":
-        status = PollStatus.ARCHIVED;
+        status = PollStatus.archived;
         break;
       case "MODERATED":
-        status = PollStatus.MODERATED;
+        status = PollStatus.moderated;
         break;
       case "INVALID":
-        status = PollStatus.INVALID;
+        status = PollStatus.invalid;
         break;
     }
     return TwitchPollDTO(
@@ -72,6 +73,7 @@ class ChoiceDTO extends Choice {
     required int votes,
   }) : super(id: id, title: title, votes: votes);
 
+  @override
   Map toJson() => {
         'id': id,
         'title': title,

@@ -21,7 +21,7 @@ class TwitchStreamInfos extends Equatable {
     required this.isSubscriberMode,
   });
 
-  TwitchStreamInfos.defaultInfos({
+  const TwitchStreamInfos.defaultInfos({
     this.title = "",
     this.viewerCount = 0,
     this.isOnline = false,

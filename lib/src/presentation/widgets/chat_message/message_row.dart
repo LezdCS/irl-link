@@ -16,6 +16,7 @@ class MessageRow extends StatelessWidget {
   final TwitchChat? twitchChat;
 
   const MessageRow({
+    super.key,
     required this.message,
     required this.displayTimestamp,
     required this.textSize,
@@ -59,7 +60,7 @@ class MessageRow extends StatelessWidget {
             ),
           )
         else
-          for (Widget i in MessageContent(
+          for (Widget i in messageContent(
             twitchChat?.cheerEmotes ?? List.empty(),
             twitchChat?.thirdPartEmotes ?? List.empty(),
             message,
@@ -71,7 +72,7 @@ class MessageRow extends StatelessWidget {
     );
   }
 
-  List<Widget> MessageContent(
+  List<Widget> messageContent(
     final List<Emote> cheerEmotes,
     final List<Emote> thirdPartEmotes,
     final ChatMessage message,

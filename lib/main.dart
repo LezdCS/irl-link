@@ -10,8 +10,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:wakelock/wakelock.dart';
 import 'firebase_options.dart';
-import 'src/core/resources/AppTranslations.dart';
-import 'src/core/utils/globals.dart' as Globals;
+import 'src/core/resources/apptranslations.dart';
+import 'src/core/utils/globals.dart' as globals;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,10 +21,10 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
-  Globals.version = packageInfo.version;
-  Globals.buildNumber = packageInfo.buildNumber;
-  Globals.appName = packageInfo.appName;
-  Globals.packageName = packageInfo.packageName;
+  globals.version = packageInfo.version;
+  globals.buildNumber = packageInfo.buildNumber;
+  globals.appName = packageInfo.appName;
+  globals.packageName = packageInfo.packageName;
   AppTranslations.initLanguages();
   runApp(const Main());
 }
@@ -42,7 +42,7 @@ class Main extends StatelessWidget {
       theme: Themes().lightTheme,
       darkTheme: Themes().darkTheme,
       themeMode: ThemeMode.dark,
-      initialRoute: AppPages.INITIAL,
+      initialRoute: AppPages.initial,
       initialBinding: LoginBindings(),
       getPages: AppPages.routes,
       debugShowCheckedModeBanner: false,

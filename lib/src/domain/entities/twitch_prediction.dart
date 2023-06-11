@@ -3,10 +3,10 @@ import 'dart:ui';
 import 'package:equatable/equatable.dart';
 
 enum PredictionStatus {
-  RESOLVED,
-  ACTIVE,
-  CANCELED,
-  LOCKED,
+  resolved,
+  active,
+  canceled,
+  locked,
 }
 
 class TwitchPrediction extends Equatable {

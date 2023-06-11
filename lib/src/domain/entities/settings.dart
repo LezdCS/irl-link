@@ -81,7 +81,7 @@ class Settings extends Equatable {
     required this.ttsMuteViewerName,
   });
 
-  Settings.defaultSettings({
+  const Settings.defaultSettings({
     //CHAT SETTINGS
     this.isEmotes = true,
     this.textSize = 19,

@@ -5,6 +5,8 @@ import 'package:irllink/src/presentation/controllers/streamelements_view_control
 import '../stream_elements/se_activities_list.dart';
 
 class StreamelementsTabView extends GetView<StreamelementsViewController> {
+  const StreamelementsTabView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Obx(

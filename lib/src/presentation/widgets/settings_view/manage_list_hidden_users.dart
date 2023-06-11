@@ -4,10 +4,12 @@ import 'package:get/get.dart';
 import '../../controllers/settings_view_controller.dart';
 
 class ManageListHiddenUsers extends GetView {
-  ManageListHiddenUsers({
+  const ManageListHiddenUsers({
+    super.key,
     required this.controller,
   });
 
+  @override
   final SettingsViewController controller;
 
   @override
@@ -41,8 +43,7 @@ class ManageListHiddenUsers extends GetView {
             children: [
               Container(
                 child: controller.homeViewController.settings.value
-                            .hiddenUsersIds!.length <=
-                        0
+                        .hiddenUsersIds!.isEmpty
                     ? Container(
                         padding: const EdgeInsets.only(top: 20),
                         child: Text(
@@ -102,7 +103,8 @@ class ManageListHiddenUsers extends GetView {
                                 color: Theme.of(context).colorScheme.secondary,
                                 padding: const EdgeInsets.only(
                                     left: 20, right: 20, bottom: 10, top: 10),
-                                margin: const EdgeInsets.only(bottom: 5, top: 5),
+                                margin:
+                                    const EdgeInsets.only(bottom: 5, top: 5),
                                 child: InkWell(
                                   onTap: () {},
                                   child: Row(
@@ -121,18 +123,16 @@ class ManageListHiddenUsers extends GetView {
                                           fontSize: 20,
                                         ),
                                       ),
-                                      Container(
-                                        child: InkWell(
-                                          onTap: () {
-                                            controller.usernamesHiddenUsers
-                                                .removeAt(index);
-                                            controller.removeHiddenUser(elem);
-                                          },
-                                          child: const Icon(
-                                            Icons.close,
-                                            color: Colors.red,
-                                            size: 30,
-                                          ),
+                                      InkWell(
+                                        onTap: () {
+                                          controller.usernamesHiddenUsers
+                                              .removeAt(index);
+                                          controller.removeHiddenUser(elem);
+                                        },
+                                        child: const Icon(
+                                          Icons.close,
+                                          color: Colors.red,
+                                          size: 30,
                                         ),
                                       ),
                                     ],

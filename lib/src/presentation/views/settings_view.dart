@@ -6,9 +6,9 @@ import 'package:irllink/src/presentation/widgets/settings_view/chat_events.dart'
 import 'package:irllink/src/presentation/widgets/settings_view/stream_elements.dart';
 import 'package:irllink/src/presentation/widgets/settings_view/tts.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:irllink/src/core/utils/globals.dart' as Globals;
+import 'package:irllink/src/core/utils/globals.dart' as globals;
 
-import '../../core/resources/AppTranslations.dart';
+import '../../core/resources/apptranslations.dart';
 import '../widgets/settings_view/chats_joined.dart';
 import '../widgets/settings_view/manage_list_hidden_users.dart';
 import '../widgets/settings_view/manage_list_browser_tabs.dart';
@@ -16,7 +16,10 @@ import '../widgets/settings_view/obs_settings.dart';
 import '../widgets/settings_view/subscription.dart';
 
 class SettingsView extends GetView<SettingsViewController> {
+  @override
   final SettingsViewController controller = Get.find<SettingsViewController>();
+
+  SettingsView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +114,7 @@ class SettingsView extends GetView<SettingsViewController> {
               contactSettings(context, width),
               Container(
                 padding: const EdgeInsets.only(left: 4, right: 4, top: 6),
-                child: Text("Version: ${Globals.version}"),
+                child: Text("Version: ${globals.version}"),
               ),
             ],
           ),
@@ -226,7 +229,7 @@ class SettingsView extends GetView<SettingsViewController> {
                 InkWell(
                   onTap: () async {
                     Get.to(
-                      () => ChatsJoined(),
+                      () => const ChatsJoined(),
                     );
                   },
                   child: Row(

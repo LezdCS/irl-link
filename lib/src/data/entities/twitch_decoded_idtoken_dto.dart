@@ -9,6 +9,7 @@ class TwitchDecodedIdTokenDTO extends TwitchDecodedIdToken {
           profilePicture: profilePicture,
         );
 
+  @override
   Map toJson() => {
         'preferredUsername': preferredUsername,
         'profilePicture': profilePicture,

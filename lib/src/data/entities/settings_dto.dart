@@ -80,6 +80,7 @@ class SettingsDTO extends Settings {
           ttsMuteViewerName: ttsMuteViewerName,
         );
 
+  @override
   Map toJson() => {
         //CHAT
         'isEmotes': isEmotes,
@@ -121,95 +122,95 @@ class SettingsDTO extends Settings {
       //CHAT SETTINGS
       isEmotes: map['isEmotes'] != null
           ? map['isEmotes'] as bool
-          : Settings.defaultSettings().isEmotes!,
+          : const Settings.defaultSettings().isEmotes!,
       textSize: map['textSize'] != null
           ? map['textSize'] as double
-          : Settings.defaultSettings().textSize!,
+          : const Settings.defaultSettings().textSize!,
       emotesSize: map['emotesSize'] != null
           ? map['emotesSize'] as double
-          : Settings.defaultSettings().emotesSize!,
+          : const Settings.defaultSettings().emotesSize!,
       displayTimestamp: map['displayTimestamp'] != null
           ? map['displayTimestamp'] as bool
-          : Settings.defaultSettings().displayTimestamp!,
+          : const Settings.defaultSettings().displayTimestamp!,
       hiddenUsersIds: map['hiddenUsersIds'] != null
           ? map['hiddenUsersIds'] as List
-          : Settings.defaultSettings().hiddenUsersIds!,
+          : const Settings.defaultSettings().hiddenUsersIds!,
       chatEventsSettings: map['chatEventsSettings'] != null
           ? ChatEventsSettingsDTO.fromJson(map['chatEventsSettings'])
-          : Settings.defaultSettings().chatEventsSettings!,
+          : const Settings.defaultSettings().chatEventsSettings!,
       chatSettings: map['chatSettings'] != null
           ? ChatSettingsDTO.fromJson(map['chatSettings'])
-          : Settings.defaultSettings().chatSettings!,
+          : const Settings.defaultSettings().chatSettings!,
       //GENERAL SETTINGS
       isDarkMode: map['isDarkMode'] != null
           ? map['isDarkMode'] as bool
-          : Settings.defaultSettings().isDarkMode!,
+          : const Settings.defaultSettings().isDarkMode!,
       keepSpeakerOn: map['keepSpeakerOn'] != null
           ? map['keepSpeakerOn'] as bool
-          : Settings.defaultSettings().keepSpeakerOn!,
+          : const Settings.defaultSettings().keepSpeakerOn!,
       displayViewerCount: map['displayViewerCount'] != null
           ? map['displayViewerCount'] as bool
-          : Settings.defaultSettings().displayViewerCount!,
+          : const Settings.defaultSettings().displayViewerCount!,
       appLanguage: map['appLanguage'] != null
           ? map['appLanguage'] as Map
-          : Settings.defaultSettings().appLanguage!,
+          : const Settings.defaultSettings().appLanguage!,
       floatingDashboardSettings: map['floatingDashboardSettings'] != null
           ? FloatingDashboardSettingsDTO.fromJson(
               map['floatingDashboardSettings'])
-          : Settings.defaultSettings().floatingDashboardSettings!,
+          : const Settings.defaultSettings().floatingDashboardSettings!,
       //CONNECTIONS SETTINGS
       isObsConnected: map['isObsConnected'] != null
           ? map['isObsConnected'] as bool
-          : Settings.defaultSettings().isObsConnected!,
+          : const Settings.defaultSettings().isObsConnected!,
       obsWebsocketUrl: map['obsWebsocketUrl'] != null
           ? map['obsWebsocketUrl'] as String
-          : Settings.defaultSettings().obsWebsocketUrl!,
+          : const Settings.defaultSettings().obsWebsocketUrl!,
       obsWebsocketPassword: map['obsWebsocketPassword'] != null
           ? map['obsWebsocketPassword'] as String
-          : Settings.defaultSettings().obsWebsocketPassword!,
+          : const Settings.defaultSettings().obsWebsocketPassword!,
       streamElementsAccessToken: map['streamElementsAccessToken'] != null
           ? map['streamElementsAccessToken'] as String
-          : Settings.defaultSettings().streamElementsAccessToken!,
+          : const Settings.defaultSettings().streamElementsAccessToken!,
       browserTabs: map['browserTabs'] != null
           ? map['browserTabs'] as List
-          : Settings.defaultSettings().browserTabs!,
+          : const Settings.defaultSettings().browserTabs!,
       obsConnectionsHistory: map['obsConnectionsHistory'] != null
           ? map['obsConnectionsHistory'] as List
-          : Settings.defaultSettings().obsConnectionsHistory!,
+          : const Settings.defaultSettings().obsConnectionsHistory!,
       streamElementsSettings: map['streamElementsSettings'] != null
           ? StreamElementsSettingsDTO.fromJson(map['streamElementsSettings'])
-          : Settings.defaultSettings().streamElementsSettings!,
+          : const Settings.defaultSettings().streamElementsSettings!,
       //TTS SETTINGS
       ttsEnabled: map['ttsEnabled'] != null
           ? map['ttsEnabled'] as bool
-          : Settings.defaultSettings().ttsEnabled!,
+          : const Settings.defaultSettings().ttsEnabled!,
       language: map['language'] != null
           ? map['language'] as String
-          : Settings.defaultSettings().language!,
+          : const Settings.defaultSettings().language!,
       prefixsToIgnore: map['prefixsToIgnore'] != null
           ? map['prefixsToIgnore'] as List
-          : Settings.defaultSettings().prefixsToIgnore!,
+          : const Settings.defaultSettings().prefixsToIgnore!,
       prefixsToUseTtsOnly: map['prefixsToUseTtsOnly'] != null
           ? map['prefixsToUseTtsOnly'] as List
-          : Settings.defaultSettings().prefixsToUseTtsOnly!,
+          : const Settings.defaultSettings().prefixsToUseTtsOnly!,
       volume: map['volume'] != null
           ? map['volume'] as double
-          : Settings.defaultSettings().volume!,
+          : const Settings.defaultSettings().volume!,
       pitch: map['pitch'] != null
           ? map['pitch'] as double
-          : Settings.defaultSettings().pitch!,
+          : const Settings.defaultSettings().pitch!,
       rate: map['rate'] != null
           ? map['rate'] as double
-          : Settings.defaultSettings().rate!,
+          : const Settings.defaultSettings().rate!,
       voice: map['voice'] != null
           ? {"name": map["voice"]["name"], "locale": map["voice"]["locale"]}
-          : Settings.defaultSettings().voice!,
+          : const Settings.defaultSettings().voice!,
       ttsUsersToIgnore: map['ttsUsersToIgnore'] != null
           ? map['ttsUsersToIgnore'] as List
-          : Settings.defaultSettings().ttsUsersToIgnore!,
+          : const Settings.defaultSettings().ttsUsersToIgnore!,
       ttsMuteViewerName: map['ttsMuteViewerName'] != null
           ? map['ttsMuteViewerName'] as bool
-          : Settings.defaultSettings().ttsMuteViewerName!,
+          : const Settings.defaultSettings().ttsMuteViewerName!,
     );
   }
 }

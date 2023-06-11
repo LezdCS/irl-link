@@ -9,21 +9,21 @@ import 'package:irllink/src/presentation/views/settings_view.dart';
 import 'app_routes.dart';
 
 class AppPages {
-  static const INITIAL = Routes.LOGIN;
+  static const initial = Routes.login;
 
   static final routes = [
     GetPage(
-      name: Routes.LOGIN,
-      page: () => LoginView(),
+      name: Routes.login,
+      page: () => const LoginView(),
       binding: LoginBindings(),
     ),
     GetPage(
-      name: Routes.HOME,
-      page: () => HomeView(),
+      name: Routes.home,
+      page: () => const HomeView(),
       binding: HomeBindings(),
     ),
     GetPage(
-      name: Routes.SETTINGS,
+      name: Routes.settings,
       page: () => SettingsView(),
       binding: SettingsBindings(),
     ),

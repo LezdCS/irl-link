@@ -7,6 +7,8 @@ import 'package:irllink/src/presentation/widgets/alert_message_view.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class TwitchTabView extends GetView<TwitchTabViewController> {
+  const TwitchTabView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -24,8 +26,8 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
               children: [
                 Visibility(
                   visible: controller.isDemo.value,
-                  child: AlertMessageView(
-                    color: const Color(0xFF196DEE),
+                  child: const AlertMessageView(
+                    color: Color(0xFF196DEE),
                     message: "DEMO",
                     isProgress: false,
                   ),
@@ -259,15 +261,15 @@ Widget prediction(
                   itemBuilder: (context, index) {
                     final outcome =
                         controller.prediction!.value.outcomes[index];
-                    final percentage = outcome.users /
-                        controller.prediction!.value.totalUsers;
+                    final percentage =
+                        outcome.users / controller.prediction!.value.totalUsers;
                     return Visibility(
                       visible: (controller.prediction!.value.status ==
-                              PredictionStatus.ACTIVE ||
+                              PredictionStatus.active ||
                           controller.prediction!.value.status ==
-                              PredictionStatus.LOCKED ||
+                              PredictionStatus.locked ||
                           (controller.prediction!.value.status ==
-                                  PredictionStatus.RESOLVED &&
+                                  PredictionStatus.resolved &&
                               outcome.id ==
                                   controller
                                       .prediction!.value.winningOutcomeId)),
@@ -276,7 +278,7 @@ Widget prediction(
                         children: [
                           Text(
                             controller.prediction!.value.status ==
-                                    PredictionStatus.RESOLVED
+                                    PredictionStatus.resolved
                                 ? "Winner: ${outcome.title}"
                                 : outcome.title,
                             style: TextStyle(
@@ -301,8 +303,7 @@ Widget prediction(
                                 Theme.of(context).colorScheme.secondary,
                             progressColor: outcome.color,
                             center: Text(
-                                (percentage * 100).toStringAsFixed(2) +
-                                    " %"),
+                                "${(percentage * 100).toStringAsFixed(2)} %"),
                           ),
                           const SizedBox(height: 10),
                         ],
@@ -312,7 +313,7 @@ Widget prediction(
                 ),
                 Visibility(
                   visible: controller.prediction!.value.status !=
-                      PredictionStatus.CANCELED,
+                      PredictionStatus.canceled,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -339,7 +340,7 @@ Widget prediction(
                         ),
                         onPressed: () {
                           controller.prediction!.value.status ==
-                                  PredictionStatus.ACTIVE
+                                  PredictionStatus.active
                               ? controller.endPrediction("LOCKED", null)
                               : pickWinnerDialog(
                                   context,
@@ -349,7 +350,7 @@ Widget prediction(
                         },
                         child: Text(
                           controller.prediction!.value.status ==
-                                  PredictionStatus.ACTIVE
+                                  PredictionStatus.active
                               ? 'Lock'
                               : 'End',
                           style: const TextStyle(
@@ -446,14 +447,14 @@ Widget poll(
                           backgroundColor:
                               Theme.of(context).colorScheme.secondary,
                           progressColor: ((controller.poll!.value.status ==
-                                          PollStatus.COMPLETED ||
+                                          PollStatus.completed ||
                                       controller.poll!.value.status ==
-                                          PollStatus.TERMINATED) &&
+                                          PollStatus.terminated) &&
                                   percentage > 0.5)
                               ? Colors.green
                               : Theme.of(context).colorScheme.background,
                           center: Text(
-                              (percentage * 100).toStringAsFixed(2) + " %"),
+                              "${(percentage * 100).toStringAsFixed(2)} %"),
                         ),
                         const SizedBox(height: 10),
                       ],
@@ -461,7 +462,7 @@ Widget poll(
                   },
                 ),
                 Visibility(
-                  visible: controller.poll!.value.status == PollStatus.ACTIVE,
+                  visible: controller.poll!.value.status == PollStatus.active,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

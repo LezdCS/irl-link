@@ -11,13 +11,14 @@ class FloatingDashboardSettingsDTO extends FloatingDashboardSettings {
           userEvents: userEvents,
         );
 
+  @override
   Map toJson() => {
         'userEvents': jsonEncode(userEvents),
       };
 
   factory FloatingDashboardSettingsDTO.fromJson(Map<String, dynamic> map) {
     List<FloatingEventDTO> userEvents = [];
-    if (!(map['userEvents'] is String)) {
+    if (map['userEvents'] is! String) {
       map['userEvents'].forEach((element) {
         userEvents.add(FloatingEventDTO.fromJson(element));
       });

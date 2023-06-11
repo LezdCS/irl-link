@@ -22,7 +22,7 @@ class TwitchTabViewController extends GetxController {
   RxBool isDemo = false.obs;
 
   Rx<TwitchStreamInfos> twitchStreamInfos =
-      TwitchStreamInfos.defaultInfos().obs;
+      const TwitchStreamInfos.defaultInfos().obs;
 
   late Rx<TwitchPrediction>? prediction;
   RxString selectedOutcomeId = "-1".obs;
@@ -149,7 +149,7 @@ class TwitchTabViewController extends GetxController {
         id: "",
         title: "",
         choices: choices,
-        status: PollStatus.ACTIVE,
+        status: PollStatus.active,
         totalVotes: 0);
     homeEvents.createPoll(homeViewController.twitchData!.accessToken,
         homeViewController.twitchData!.twitchUser.id, newPoll);

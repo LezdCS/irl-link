@@ -5,10 +5,11 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../controllers/settings_view_controller.dart';
 
 class StreamElements extends GetView {
-  StreamElements({
+  const StreamElements({super.key, 
     required this.controller,
   });
 
+  @override
   final SettingsViewController controller;
 
   @override

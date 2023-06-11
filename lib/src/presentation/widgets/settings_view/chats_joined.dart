@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import '../../controllers/settings_view_controller.dart';
 
 class ChatsJoined extends GetView<SettingsViewController> {
-  ChatsJoined();
+  const ChatsJoined({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -18,6 +18,7 @@ class TwitchPredictionDTO extends TwitchPrediction {
           status: status,
         );
 
+  @override
   Map toJson() => {
         'id': id,
         'title': title,
@@ -30,7 +31,7 @@ class TwitchPredictionDTO extends TwitchPrediction {
   factory TwitchPredictionDTO.fromJson(Map<String, dynamic> map) {
     List<Outcome> outcomes = [];
     int totalUsers = 0;
-    PredictionStatus status = PredictionStatus.ACTIVE;
+    PredictionStatus status = PredictionStatus.active;
 
     Outcome o;
     map['outcomes'].forEach((outcome) => {
@@ -41,16 +42,16 @@ class TwitchPredictionDTO extends TwitchPrediction {
 
     switch (map["status"]) {
       case "RESOLVED":
-        status = PredictionStatus.RESOLVED;
+        status = PredictionStatus.resolved;
         break;
       case "ACTIVE":
-        status = PredictionStatus.ACTIVE;
+        status = PredictionStatus.active;
         break;
       case "CANCELED":
-        status = PredictionStatus.CANCELED;
+        status = PredictionStatus.canceled;
         break;
       case "LOCKED":
-        status = PredictionStatus.LOCKED;
+        status = PredictionStatus.locked;
         break;
     }
     return TwitchPredictionDTO(
@@ -78,6 +79,7 @@ class OutcomeDTO extends Outcome {
             channelPoints: channelPoints,
             color: color);
 
+  @override
   Map toJson() => {
         'id': id,
         'title': title,

@@ -4,10 +4,12 @@ import 'package:get/get.dart';
 import '../../controllers/settings_view_controller.dart';
 
 class ManageListBrowserTabs extends GetView {
-  ManageListBrowserTabs({
+  const ManageListBrowserTabs({
+    super.key,
     required this.controller,
   });
 
+  @override
   final SettingsViewController controller;
 
   @override
@@ -22,7 +24,7 @@ class ManageListBrowserTabs extends GetView {
             ),
             onPressed: () => Get.back(),
           ),
-          actions: [],
+          actions: const [],
           backgroundColor: Theme.of(context).colorScheme.secondary,
           title: Text(
             "Manage browser tabs",
@@ -40,9 +42,8 @@ class ManageListBrowserTabs extends GetView {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                child: controller.homeViewController.settings.value.browserTabs!
-                            .length <=
-                        0
+                child: controller
+                        .homeViewController.settings.value.browserTabs!.isEmpty
                     ? Container(
                         padding: const EdgeInsets.only(top: 20),
                         child: Text(
@@ -122,16 +123,14 @@ class ManageListBrowserTabs extends GetView {
                                       fontSize: 20,
                                     ),
                                   ),
-                                  Container(
-                                    child: InkWell(
-                                      onTap: () {
-                                        controller.removeBrowserTab(elem);
-                                      },
-                                      child: const Icon(
-                                        Icons.close,
-                                        color: Colors.red,
-                                        size: 30,
-                                      ),
+                                  InkWell(
+                                    onTap: () {
+                                      controller.removeBrowserTab(elem);
+                                    },
+                                    child: const Icon(
+                                      Icons.close,
+                                      color: Colors.red,
+                                      size: 30,
                                     ),
                                   ),
                                 ],

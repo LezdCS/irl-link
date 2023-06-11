@@ -6,9 +6,10 @@ import 'package:irllink/src/presentation/controllers/streamelements_view_control
 import '../../../domain/entities/se_activity.dart';
 
 class SeActivitiesList extends GetView {
+  @override
   final StreamelementsViewController controller;
 
-  SeActivitiesList({
+  const SeActivitiesList({super.key, 
     required this.controller,
   });
 
@@ -259,7 +260,7 @@ Widget _activityCollapsed(
                   ),
                   TextSpan(
                     text: activity.message != null
-                        ? ' "' + activity.message! + '"'
+                        ? ' "${activity.message!}"'
                         : "",
                   ),
                 ],
@@ -328,7 +329,7 @@ Widget _activityExpanded(
           Container(
             padding: const EdgeInsets.only(left: 3, right: 3, top: 10),
             child: Text(
-              activity.message != null ? ' "' + activity.message! + '"' : "",
+              activity.message != null ? ' "${activity.message!}"' : "",
             ),
           ),
         ],

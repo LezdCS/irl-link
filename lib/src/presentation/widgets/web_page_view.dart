@@ -11,13 +11,13 @@ import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
 class WebPageView extends StatefulWidget {
-  WebPageView(this.title, this.url);
+  const WebPageView(this.title, this.url, {super.key});
 
   final String title;
   final String url;
 
   @override
-  _WebPageViewState createState() => _WebPageViewState();
+  State<WebPageView> createState() => _WebPageViewState();
 }
 
 class _WebPageViewState extends State<WebPageView>

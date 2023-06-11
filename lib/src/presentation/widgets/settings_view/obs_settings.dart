@@ -8,7 +8,7 @@ import '../../controllers/settings_view_controller.dart';
 class ObsSettings extends StatelessWidget {
   final SettingsViewController controller;
 
-  const ObsSettings({required this.controller});
+  const ObsSettings({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {

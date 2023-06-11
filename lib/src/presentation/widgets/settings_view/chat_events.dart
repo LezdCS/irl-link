@@ -7,7 +7,7 @@ import 'package:twitch_chat/twitch_chat.dart';
 class ChatEvents extends StatelessWidget {
   final SettingsViewController controller;
 
-  const ChatEvents({required this.controller});
+  const ChatEvents({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {

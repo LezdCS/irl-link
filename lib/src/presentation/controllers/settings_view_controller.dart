@@ -76,21 +76,16 @@ class SettingsViewController extends GetxController {
     super.onReady();
   }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
   void logout() {
     settingsEvents
         .logout(accessToken: homeViewController.twitchData!.accessToken)
         .then(
-          (value) => Get.offAllNamed(Routes.LOGIN),
+          (value) => Get.offAllNamed(Routes.login),
         );
   }
 
   void login() {
-    Get.offAllNamed(Routes.LOGIN);
+    Get.offAllNamed(Routes.login);
   }
 
   void removeHiddenUser(userId) {

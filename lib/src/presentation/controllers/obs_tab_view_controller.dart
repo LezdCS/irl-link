@@ -23,7 +23,7 @@ class ObsTabViewController extends GetxController {
   RxList<SceneItemDetail> sourcesList = RxList();
   RxMap<String, double> sourcesVolumesMap = RxMap();
 
-  Rx<Uint8List> sceneScreenshot = Base64Decoder().convert("").obs;
+  Rx<Uint8List> sceneScreenshot = const Base64Decoder().convert("").obs;
 
   RxBool isStreaming = false.obs;
   RxBool isRecording = false.obs;
@@ -46,10 +46,6 @@ class ObsTabViewController extends GetxController {
     super.onReady();
   }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
   /// Connect to the OBS websocket at [url] with optional [password]
   void connectWs(String url, String password) async {
@@ -58,7 +54,7 @@ class ObsTabViewController extends GetxController {
         'ws://$url',
         password: password,
         onDone: connectionLost,
-        timeout: Duration(seconds: 30),
+        timeout: const Duration(seconds: 30),
       );
 
       await obsWebSocket!.listen(EventSubscription.all.code);
@@ -242,7 +238,7 @@ class ObsTabViewController extends GetxController {
         {"sourceName": sourceName, "imageFormat": "png"});
 
     String imageBase64 = response?.responseData?['imageData'].split(",").last;
-    sceneScreenshot.value = Base64Decoder().convert(imageBase64);
+    sceneScreenshot.value = const Base64Decoder().convert(imageBase64);
   }
 
   Future applySettings() async {
@@ -250,7 +246,7 @@ class ObsTabViewController extends GetxController {
       obsWebSocket!.close();
     }
     if (homeViewController.settings.value.isObsConnected!) {
-      this.connectWs(homeViewController.settings.value.obsWebsocketUrl!,
+      connectWs(homeViewController.settings.value.obsWebsocketUrl!,
           homeViewController.settings.value.obsWebsocketPassword!);
     }
   }

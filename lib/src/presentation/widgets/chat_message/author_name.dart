@@ -6,7 +6,7 @@ class AuthorName extends StatelessWidget {
   final String color;
   final double textSize;
 
-  AuthorName({
+  const AuthorName({super.key, 
     required this.isAction,
     required this.authorName,
     required this.color,

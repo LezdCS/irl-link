@@ -4,9 +4,10 @@ import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import '../../domain/entities/settings/floating_event.dart';
 
 class Dashboard extends GetView {
+  @override
   final HomeViewController controller;
 
-  Dashboard({
+  const Dashboard({super.key, 
     required this.controller,
   });
 

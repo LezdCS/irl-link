@@ -11,6 +11,7 @@ class ChatSettingsDTO extends ChatSettings {
     joinMyself: joinMyself,
   );
 
+  @override
   Map toJson() => {
     'chatsJoined': chatsJoined,
     'joinMyself': joinMyself,
@@ -19,9 +20,9 @@ class ChatSettingsDTO extends ChatSettings {
   factory ChatSettingsDTO.fromJson(Map<String, dynamic> map) {
     return ChatSettingsDTO(
       chatsJoined: map['chatsJoined'] ??
-          Settings.defaultSettings().chatSettings!.chatsJoined,
+          const Settings.defaultSettings().chatSettings!.chatsJoined,
       joinMyself: map['joinMyself'] ??
-          Settings.defaultSettings().chatSettings!.joinMyself,
+          const Settings.defaultSettings().chatSettings!.joinMyself,
     );
   }
 }
