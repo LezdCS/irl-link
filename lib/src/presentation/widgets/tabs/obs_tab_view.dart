@@ -337,8 +337,8 @@ class ObsTabView extends GetView<ObsTabViewController> {
                         },
                         min: -100,
                         max: 0,
-                        label: "${controller.sourcesVolumesMap[source.sourceName]!
-                                .toStringAsFixed(2)} dB",
+                        label:
+                            "${controller.sourcesVolumesMap[source.sourceName]!.toStringAsFixed(2)} dB",
                         divisions: 400,
                         activeColor: Theme.of(context).colorScheme.tertiary,
                         inactiveColor:

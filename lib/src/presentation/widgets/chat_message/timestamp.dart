@@ -4,7 +4,8 @@ import 'package:intl/intl.dart';
 class Timestamp extends StatelessWidget {
   final int timestamp;
 
-  const Timestamp({super.key, 
+  const Timestamp({
+    super.key,
     required this.timestamp,
   });
 

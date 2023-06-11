@@ -46,13 +46,21 @@ class StreamElementsSettingsDTO extends StreamElementsSettings {
               .streamElementsSettings!
               .showDonationActivity,
       showCheerActivity: map['showCheerActivity'] ??
-          const Settings.defaultSettings().streamElementsSettings!.showCheerActivity,
+          const Settings.defaultSettings()
+              .streamElementsSettings!
+              .showCheerActivity,
       showRaidActivity: map['showRaidActivity'] ??
-          const Settings.defaultSettings().streamElementsSettings!.showRaidActivity,
+          const Settings.defaultSettings()
+              .streamElementsSettings!
+              .showRaidActivity,
       showHostActivity: map['showHostActivity'] ??
-          const Settings.defaultSettings().streamElementsSettings!.showHostActivity,
+          const Settings.defaultSettings()
+              .streamElementsSettings!
+              .showHostActivity,
       showMerchActivity: map['showMerchActivity'] ??
-          const Settings.defaultSettings().streamElementsSettings!.showMerchActivity,
+          const Settings.defaultSettings()
+              .streamElementsSettings!
+              .showMerchActivity,
     );
   }
 }

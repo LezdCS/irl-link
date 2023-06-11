@@ -14,7 +14,8 @@ import '../events/home_events.dart';
 import 'alert_message_view.dart';
 
 class ChatView extends StatelessWidget {
-  const ChatView({super.key, 
+  const ChatView({
+    super.key,
     required this.channel,
   });
 

@@ -5,7 +5,8 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../controllers/settings_view_controller.dart';
 
 class StreamElements extends GetView {
-  const StreamElements({super.key, 
+  const StreamElements({
+    super.key,
     required this.controller,
   });
 

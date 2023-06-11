@@ -9,7 +9,8 @@ class Word extends StatelessWidget {
   final double textSize;
   final String color;
 
-  const Word({super.key, 
+  const Word({
+    super.key,
     required this.word,
     required this.isAction,
     required this.textSize,

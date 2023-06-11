@@ -51,8 +51,8 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
               ],
             )
           : const Center(
-            child: Text("Not connected to StreamElements"),
-          ),
+              child: Text("Not connected to StreamElements"),
+            ),
     );
   }
 }

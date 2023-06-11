@@ -6,7 +6,8 @@ import 'package:transparent_image/transparent_image.dart';
 class EmotePickerView extends GetView {
   final HomeViewController homeViewController;
 
-  const EmotePickerView({super.key, 
+  const EmotePickerView({
+    super.key,
     required this.homeViewController,
   });
 

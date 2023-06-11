@@ -8,7 +8,8 @@ class SeSongRequests extends GetView {
   @override
   final StreamelementsViewController controller;
 
-  const SeSongRequests({super.key, 
+  const SeSongRequests({
+    super.key,
     required this.controller,
   });
 

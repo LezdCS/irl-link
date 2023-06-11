@@ -7,7 +7,8 @@ class Dashboard extends GetView {
   @override
   final HomeViewController controller;
 
-  const Dashboard({super.key, 
+  const Dashboard({
+    super.key,
     required this.controller,
   });
 

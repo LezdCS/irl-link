@@ -7,15 +7,15 @@ class ChatSettingsDTO extends ChatSettings {
     required List chatsJoined,
     required bool joinMyself,
   }) : super(
-    chatsJoined: chatsJoined,
-    joinMyself: joinMyself,
-  );
+          chatsJoined: chatsJoined,
+          joinMyself: joinMyself,
+        );
 
   @override
   Map toJson() => {
-    'chatsJoined': chatsJoined,
-    'joinMyself': joinMyself,
-  };
+        'chatsJoined': chatsJoined,
+        'joinMyself': joinMyself,
+      };
 
   factory ChatSettingsDTO.fromJson(Map<String, dynamic> map) {
     return ChatSettingsDTO(

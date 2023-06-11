@@ -9,7 +9,8 @@ class ModerationBottomSheet extends StatelessWidget {
   final ChatViewController controller;
   final double width;
 
-  const ModerationBottomSheet({super.key, 
+  const ModerationBottomSheet({
+    super.key,
     required this.controller,
     required this.width,
   });

@@ -6,7 +6,8 @@ class AlertMessageView extends GetView {
   final String message;
   final bool isProgress;
 
-  const AlertMessageView({super.key, 
+  const AlertMessageView({
+    super.key,
     required this.color,
     required this.message,
     required this.isProgress,

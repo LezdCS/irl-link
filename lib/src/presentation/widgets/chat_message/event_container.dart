@@ -11,7 +11,8 @@ class EventContainer extends StatelessWidget {
   final double textSize;
   final TwitchChat? twitchChat;
 
-  const EventContainer({super.key, 
+  const EventContainer({
+    super.key,
     required this.message,
     required this.selectedMessage,
     required this.displayTimestamp,

@@ -9,7 +9,8 @@ class SeActivitiesList extends GetView {
   @override
   final StreamelementsViewController controller;
 
-  const SeActivitiesList({super.key, 
+  const SeActivitiesList({
+    super.key,
     required this.controller,
   });
 
