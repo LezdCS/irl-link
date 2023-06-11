@@ -26,16 +26,18 @@ void main() async {
   Globals.appName = packageInfo.appName;
   Globals.packageName = packageInfo.packageName;
   AppTranslations.initLanguages();
-  runApp(Main());
+  runApp(const Main());
 }
 
 class Main extends StatelessWidget {
+  const Main({super.key});
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       home: UpgradeAlert(
         upgrader: Upgrader(shouldPopScope: () => true),
-        child: LoginView(),
+        child: const LoginView(),
       ),
       theme: Themes().lightTheme,
       darkTheme: Themes().darkTheme,
