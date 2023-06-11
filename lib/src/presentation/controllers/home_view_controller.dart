@@ -186,6 +186,7 @@ class HomeViewController extends GetxController
       }
     } else {
       channels.remove(channels.firstWhereOrNull((c) => c.channel == self));
+      Get.delete<ChatViewController>(tag: self);
       if (selectedChat?.channel == self) {
         selectedChat = channels.isNotEmpty
             ? Get.find<ChatViewController>(tag: channels[0].channel).twitchChat
