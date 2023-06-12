@@ -8,7 +8,7 @@ IRL Link is a mobile application to monitor your IRL Stream.
 [![GitHub](https://img.shields.io/github/license/lezdcs/irl_link?color=%238442f5)](https://choosealicense.com/licenses/gpl-3.0/)
 
 ## Download
-<a href="https://play.google.com/store/apps/details?id=dev.lezd.www.irllink" target="_blank"><img src="https://user-images.githubusercontent.com/63884731/234376359-3144ac32-af56-4d8a-ac67-9d87c67b5c7f.png" height="50"></a>
+<a href='https://play.google.com/store/apps/details?id=dev.lezd.www.irllink&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
 
 Also available in the [Releases](https://github.com/LezdCS/irl_link/releases).
 <br />
