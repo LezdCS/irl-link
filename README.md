@@ -14,6 +14,27 @@ Also available in the [Releases](https://github.com/LezdCS/irl_link/releases).
 <br />
 Soon to be released on the iOS App Store!
 
+## Features
+
+- [x] Twitch
+  - [x] Chat
+    - [x] Events (sub, follow, first message...)
+    - [x] Modereation (TO, ban, delete message)
+  - [x] Viewer count
+  - [x] Change stream title
+  - [ ] Polls & predictions
+- [x] OBS
+  - [x] Start & stop streaming/recording
+  - [x] Switch scenes
+  - [x] On/Off sources
+  - [x] Manage sources volume
+  - [ ] Display OBS statistics
+- [x] StreamElements
+  - [x] Display activities (subs, follows, tips...)
+  - [x] Replay activities
+  - [ ] Song request managment
+- [x] Text To Speech
+
 ## Screenshots
 <div>
 <img src="https://user-images.githubusercontent.com/63884731/234930179-d560bf12-fe8a-4940-9608-dfa7ca974b16.png" width="200">
