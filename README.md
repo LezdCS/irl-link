@@ -20,6 +20,7 @@ Soon to be released on the iOS App Store!
   - [x] Chat
     - [x] Events (sub, follow, first message...)
     - [x] Modereation (TO, ban, delete message)
+    - [x] Text To Speech
   - [x] Viewer count
   - [x] Change stream title
   - [ ] Polls & predictions
@@ -33,7 +34,6 @@ Soon to be released on the iOS App Store!
   - [x] Display activities (subs, follows, tips...)
   - [x] Replay activities
   - [ ] Song request managment
-- [x] Text To Speech
 
 ## Screenshots
 <div>
