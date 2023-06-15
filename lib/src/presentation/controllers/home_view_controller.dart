@@ -17,6 +17,10 @@ import 'package:twitch_chat/twitch_chat.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import '../../../routes/app_routes.dart';
 import '../../core/utils/constants.dart';
+import '../../data/repositories/settings_repository_impl.dart';
+import '../../data/repositories/twitch_repository_impl.dart';
+import '../../domain/usecases/settings_usecase.dart';
+import '../../domain/usecases/twitch_usecase.dart';
 import '../widgets/chat_view.dart';
 import '../widgets/tabs/streamelements_tab_view.dart';
 import '../widgets/web_page_view.dart';
@@ -169,6 +173,20 @@ class HomeViewController extends GetxController
     for (String chat in settings.value.chatSettings!.chatsJoined) {
       if (channels.firstWhereOrNull((channel) => channel.channel == chat) ==
           null) {
+        Get.lazyPut(
+              () => ChatViewController(
+            homeEvents: HomeEvents(
+              twitchUseCase: TwitchUseCase(
+                twitchRepository: TwitchRepositoryImpl(),
+              ),
+              settingsUseCase: SettingsUseCase(
+                settingsRepository: SettingsRepositoryImpl(),
+              ),
+            ),
+            channel: chat,
+          ),
+          tag: chat,
+        );
         channels.add(
           ChatView(
             channel: chat,
@@ -182,6 +200,20 @@ class HomeViewController extends GetxController
     if (joinSelfChannel) {
       if (channels.firstWhereOrNull((channel) => channel.channel == self) ==
           null) {
+        Get.lazyPut(
+          () => ChatViewController(
+            homeEvents: HomeEvents(
+              twitchUseCase: TwitchUseCase(
+                twitchRepository: TwitchRepositoryImpl(),
+              ),
+              settingsUseCase: SettingsUseCase(
+                settingsRepository: SettingsRepositoryImpl(),
+              ),
+            ),
+            channel: self,
+          ),
+          tag: self,
+        );
         channels.insert(0, ChatView(channel: self));
       }
     } else {
