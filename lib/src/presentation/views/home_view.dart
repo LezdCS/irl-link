@@ -357,6 +357,7 @@ class HomeView extends GetView<HomeViewController> {
           ChatViewController c =
               Get.find<ChatViewController>(tag: controller.channels[i].channel);
           c.scrollToBottom();
+          controller.selectedChat = c.twitchChat;
         }
         controller.selectedMessage.value = null;
         controller.selectedChatIndex = i;
