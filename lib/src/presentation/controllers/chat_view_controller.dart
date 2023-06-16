@@ -186,6 +186,7 @@ class ChatViewController extends GetxController
   void onClose() {
     homeViewController.flutterTts.stop();
     chatDemoTimer?.cancel();
+    super.onDelete;
     super.onClose();
   }
 

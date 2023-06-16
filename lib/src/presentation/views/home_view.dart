@@ -146,15 +146,17 @@ class HomeView extends GetView<HomeViewController> {
           onPointerUp: (_) => {
             controller.isPickingEmote.value = false,
           },
-          child: Column(
-            children: [
-              Visibility(
-                visible: controller.channels.length > 1,
-                child: _tabBarChats(context),
-              ),
-              _chats(context),
-            ],
-          ),
+          child: controller.channels.isNotEmpty
+              ? Column(
+                  children: [
+                    Visibility(
+                      visible: controller.channels.length > 1,
+                      child: _tabBarChats(context),
+                    ),
+                    _chats(context),
+                  ],
+                )
+              : Container(),
         ),
         Visibility(
           visible: controller.isPickingEmote.value,
@@ -355,6 +357,7 @@ class HomeView extends GetView<HomeViewController> {
           ChatViewController c =
               Get.find<ChatViewController>(tag: controller.channels[i].channel);
           c.scrollToBottom();
+          controller.selectedChat = c.twitchChat;
         }
         controller.selectedMessage.value = null;
         controller.selectedChatIndex = i;
@@ -378,7 +381,10 @@ class HomeView extends GetView<HomeViewController> {
           controller: controller.chatTabsController,
           children: List<Widget>.generate(
             controller.channels.length,
-            (int index) => KeepAlive(chat: controller.channels[index]),
+            (int index) => KeepAlive(
+              chat: controller.channels[index],
+              key: ValueKey(controller.channels[index]),
+            ),
           ),
         ),
       ),

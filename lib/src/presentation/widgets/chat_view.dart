@@ -5,12 +5,6 @@ import 'package:irllink/src/presentation/widgets/chat_message/event_container.da
 import 'package:irllink/src/presentation/widgets/chat_message/message_container.dart';
 import 'package:irllink/src/presentation/widgets/chat_message/moderation_bottom_sheet.dart';
 import 'package:twitch_chat/twitch_chat.dart';
-
-import '../../data/repositories/settings_repository_impl.dart';
-import '../../data/repositories/twitch_repository_impl.dart';
-import '../../domain/usecases/settings_usecase.dart';
-import '../../domain/usecases/twitch_usecase.dart';
-import '../events/home_events.dart';
 import 'alert_message_view.dart';
 
 class ChatView extends StatelessWidget {
@@ -23,29 +17,22 @@ class ChatView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ChatViewController controller = Get.put<ChatViewController>(
-      ChatViewController(
-        homeEvents: HomeEvents(
-          twitchUseCase: TwitchUseCase(
-            twitchRepository: TwitchRepositoryImpl(),
-          ),
-          settingsUseCase: SettingsUseCase(
-            settingsRepository: SettingsRepositoryImpl(),
-          ),
-        ),
-        channel: channel,
-      ),
-      tag: channel,
-    );
+    ChatViewController? controller;
+    if (Get.isRegistered<ChatViewController>(tag: channel)) {
+      controller = Get.find<ChatViewController>(tag: channel);
+    }
 
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
+    if (controller == null) {
+      return Container();
+    }
     return Obx(
       () => Stack(children: [
         GestureDetector(
           onTap: () {
-            if (controller.homeViewController.selectedMessage.value != null) {
-              controller.homeViewController.selectedMessage.value = null;
+            if (controller?.homeViewController.selectedMessage.value != null) {
+              controller?.homeViewController.selectedMessage.value = null;
             }
             FocusScope.of(context).unfocus();
           },
@@ -56,7 +43,7 @@ class ChatView extends StatelessWidget {
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.background,
             ),
-            child: controller.chatMessages.isEmpty
+            child: controller!.chatMessages.isEmpty
                 ? Container(
                     padding: const EdgeInsets.only(left: 5),
                     child: Text(
@@ -70,7 +57,7 @@ class ChatView extends StatelessWidget {
                     controller: controller.scrollController,
                     itemCount: controller.chatMessages.length,
                     itemBuilder: (BuildContext context, int index) {
-                      ChatMessage message = controller.chatMessages[index];
+                      ChatMessage message = controller!.chatMessages[index];
                       return Container(
                         padding: const EdgeInsets.only(top: 1, bottom: 1),
                         child: InkWell(
@@ -78,11 +65,11 @@ class ChatView extends StatelessWidget {
                             if (FocusScope.of(context).isFirstFocus) {
                               FocusScope.of(context).unfocus();
                             }
-                            controller.homeViewController.selectedMessage
+                            controller!.homeViewController.selectedMessage
                                 .value = null;
                           },
                           onLongPress: () {
-                            controller.homeViewController.selectedMessage
+                            controller!.homeViewController.selectedMessage
                                 .value ??= message;
                           },
                           child: message.highlightType != null
@@ -129,7 +116,7 @@ class ChatView extends StatelessWidget {
               children: [
                 InkWell(
                   onTap: () {
-                    controller.scrollToBottom();
+                    controller!.scrollToBottom();
                   },
                   child: Container(
                     padding: const EdgeInsets.only(left: 20, right: 20),
