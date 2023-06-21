@@ -73,6 +73,12 @@ class ChatTab extends GetView<ChatViewController> {
                                   textSize: controller.homeViewController
                                       .settings.value.textSize!,
                                   twitchChat: chat,
+                                  hideDeletedMessages: controller
+                                      .homeViewController
+                                      .settings
+                                      .value
+                                      .chatSettings!
+                                      .hideDeletedMessages,
                                 )
                               : MessageContainer(
                                   selectedMessage: controller
@@ -86,6 +92,12 @@ class ChatTab extends GetView<ChatViewController> {
                                   textSize: controller.homeViewController
                                       .settings.value.textSize!,
                                   twitchChat: chat,
+                                  hideDeletedMessages: controller
+                                      .homeViewController
+                                      .settings
+                                      .value
+                                      .chatSettings!
+                                      .hideDeletedMessages,
                                 ),
                         ),
                       );

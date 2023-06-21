@@ -58,9 +58,6 @@ class ChatView extends StatelessWidget {
                     itemCount: controller.chatMessages.length,
                     itemBuilder: (BuildContext context, int index) {
                       ChatMessage message = controller!.chatMessages[index];
-                      if (message.isDeleted && controller.homeViewController.settings.value.chatSettings!.hideDeletedMessages){
-                        return const SizedBox(width: 0,height: 0,);
-                      }
                       return Container(
                         padding: const EdgeInsets.only(top: 1, bottom: 1),
                         child: InkWell(
@@ -88,6 +85,12 @@ class ChatView extends StatelessWidget {
                                   textSize: controller.homeViewController
                                       .settings.value.textSize!,
                                   twitchChat: controller.twitchChat!,
+                                  hideDeletedMessages: controller
+                                      .homeViewController
+                                      .settings
+                                      .value
+                                      .chatSettings!
+                                      .hideDeletedMessages,
                                 )
                               : MessageContainer(
                                   selectedMessage: controller
@@ -101,6 +104,12 @@ class ChatView extends StatelessWidget {
                                   textSize: controller.homeViewController
                                       .settings.value.textSize!,
                                   twitchChat: controller.twitchChat!,
+                                  hideDeletedMessages: controller
+                                      .homeViewController
+                                      .settings
+                                      .value
+                                      .chatSettings!
+                                      .hideDeletedMessages,
                                 ),
                         ),
                       );
