@@ -52,11 +52,11 @@ class MessageRow extends StatelessWidget {
           textSize: textSize,
         ),
         if (message.isDeleted)
-          const Text(
+          Text(
             "<message deleted>",
             style: TextStyle(
               color: Colors.grey,
-              fontSize: 19,
+              fontSize: textSize,
             ),
           )
         else
