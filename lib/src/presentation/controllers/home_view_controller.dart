@@ -174,7 +174,7 @@ class HomeViewController extends GetxController
       if (channels.firstWhereOrNull((channel) => channel.channel == chat) ==
           null) {
         Get.lazyPut(
-              () => ChatViewController(
+          () => ChatViewController(
             homeEvents: HomeEvents(
               twitchUseCase: TwitchUseCase(
                 twitchRepository: TwitchRepositoryImpl(),

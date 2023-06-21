@@ -226,6 +226,35 @@ class SettingsView extends GetView<SettingsViewController> {
                     )
                   ],
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Hide deleted messages",
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyLarge!.color,
+                          fontSize: 18),
+                    ),
+                    Switch(
+                      onChanged: (value) {
+                        controller.homeViewController.settings.value =
+                            controller.homeViewController.settings.value
+                                .copyWith(
+                                    chatSettings: controller.homeViewController
+                                        .settings.value.chatSettings
+                                        ?.copyWith(hideDeletedMessages: value));
+
+                        controller.saveSettings();
+                      },
+                      value: controller.homeViewController.settings.value
+                          .chatSettings!.hideDeletedMessages,
+                      inactiveTrackColor:
+                          Theme.of(context).colorScheme.tertiaryContainer,
+                      activeTrackColor: Theme.of(context).colorScheme.tertiary,
+                      activeColor: Colors.white,
+                    )
+                  ],
+                ),
                 InkWell(
                   onTap: () async {
                     Get.to(
