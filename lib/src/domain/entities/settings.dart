@@ -99,7 +99,7 @@ class Settings extends Equatable {
     this.chatSettings = const ChatSettings(
       chatsJoined: [],
       joinMyself: true,
-      hideDeletedMessages: false,
+      hideDeletedMessages: true,
     ),
 
     //GENERAL SETTINGS
