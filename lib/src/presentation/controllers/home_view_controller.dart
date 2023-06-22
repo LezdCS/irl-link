@@ -37,6 +37,7 @@ class HomeViewController extends GetxController
 
   //TABS
   late TabController tabController;
+  Rx<int> tabIndex = 0.obs;
   RxList<Widget> tabElements = <Widget>[].obs;
 
   TwitchCredentials? twitchData;

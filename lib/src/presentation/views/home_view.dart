@@ -201,6 +201,7 @@ class HomeView extends GetView<HomeViewController> {
         indicatorSize: TabBarIndicatorSize.tab,
         indicatorWeight: 2,
         dividerColor: Colors.transparent,
+        onTap: (index){ controller.tabIndex.value = index; },
         tabs: List<Tab>.generate(
           controller.tabElements.length,
           (int index) => Tab(
@@ -339,9 +340,8 @@ class HomeView extends GetView<HomeViewController> {
     return Expanded(
       child: Container(
         color: Theme.of(context).colorScheme.background,
-        child: TabBarView(
-          physics: const NeverScrollableScrollPhysics(),
-          controller: controller.tabController,
+        child: IndexedStack (
+          index: controller.tabIndex.value,
           children: List<Widget>.generate(
             controller.tabElements.length,
             (int index) => controller.tabElements[index],
