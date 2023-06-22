@@ -474,8 +474,8 @@ class SettingsView extends GetView<SettingsViewController> {
                                 .copyWith(isDarkMode: value);
                         controller.saveSettings();
                       },
-                      value: controller
-                          .homeViewController.settings.value.isDarkMode!,
+                      value: controller.homeViewController.settings.value
+                          .generalSettings!.isDarkMode,
                       activeTrackColor: Theme.of(context).colorScheme.tertiary,
                       activeColor: Colors.white,
                       inactiveTrackColor:
@@ -502,8 +502,8 @@ class SettingsView extends GetView<SettingsViewController> {
                                 .copyWith(keepSpeakerOn: value);
                         controller.saveSettings();
                       },
-                      value: controller
-                          .homeViewController.settings.value.keepSpeakerOn!,
+                      value: controller.homeViewController.settings.value
+                          .generalSettings!.keepSpeakerOn,
                       activeTrackColor: Theme.of(context).colorScheme.tertiary,
                       activeColor: Colors.white,
                       inactiveTrackColor:
@@ -531,7 +531,7 @@ class SettingsView extends GetView<SettingsViewController> {
                         controller.saveSettings();
                       },
                       value: controller.homeViewController.settings.value
-                          .displayViewerCount!,
+                          .generalSettings!.displayViewerCount,
                       activeTrackColor: Theme.of(context).colorScheme.tertiary,
                       activeColor: Colors.white,
                       inactiveTrackColor:

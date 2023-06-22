@@ -95,6 +95,17 @@ class HomeView extends GetView<HomeViewController> {
                                   : SplitViewMode.Horizontal,
                               isActive: true,
                             ),
+                            onWeightChanged: (weight) {
+                              controller.settings.value =
+                                  controller.settings.value.copyWith(
+                                generalSettings: controller
+                                    .settings.value.generalSettings
+                                    ?.copyWith(
+                                  splitViewWeights: [weight[0]!, weight[1]!],
+                                ),
+                              );
+                              controller.saveSettings();
+                            },
                             children: [
                               controller.tabElements.isNotEmpty
                                   ? _top(context, height, width)

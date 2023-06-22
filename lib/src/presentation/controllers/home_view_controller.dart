@@ -280,6 +280,10 @@ class HomeViewController extends GetxController
     Get.offAllNamed(Routes.login);
   }
 
+  void saveSettings() {
+    homeEvents.setSettings(settings: settings.value);
+  }
+
   Future getSettings() async {
     await homeEvents
         .getSettings()
@@ -293,10 +297,10 @@ class HomeViewController extends GetxController
       await generateTabs();
       generateChats();
       initTts(settings.value);
-      if (!settings.value.isDarkMode!) {
+      if (!settings.value.generalSettings!.isDarkMode) {
         Get.changeThemeMode(ThemeMode.light);
       }
-      if (settings.value.keepSpeakerOn!) {
+      if (settings.value.generalSettings!.keepSpeakerOn) {
         const path = "../lib/assets/blank.mp3";
         timerKeepSpeakerOn = Timer.periodic(
           const Duration(minutes: 5),
@@ -305,9 +309,12 @@ class HomeViewController extends GetxController
       } else {
         timerKeepSpeakerOn?.cancel();
       }
-      Locale locale = Locale(settings.value.appLanguage!["languageCode"],
-          settings.value.appLanguage!["countryCode"]);
+      Locale locale = Locale(
+          settings.value.generalSettings!.appLanguage["languageCode"],
+          settings.value.generalSettings!.appLanguage["countryCode"]);
       Get.updateLocale(locale);
+      splitViewController?.weights =
+          settings.value.generalSettings!.splitViewWeights;
     }
   }
 
@@ -323,17 +330,17 @@ class HomeViewController extends GetxController
         IosTextToSpeechAudioMode.voicePrompt);
 
     await flutterTts.awaitSpeakCompletion(true);
-    await flutterTts.setLanguage(settings.language!);
-    await flutterTts.setSpeechRate(settings.rate!);
-    await flutterTts.setVolume(settings.volume!);
-    await flutterTts.setPitch(settings.pitch!);
-    await flutterTts.setVoice(settings.voice!);
+    await flutterTts.setLanguage(settings.ttsSettings!.language);
+    await flutterTts.setSpeechRate(settings.ttsSettings!.rate);
+    await flutterTts.setVolume(settings.ttsSettings!.volume);
+    await flutterTts.setPitch(settings.ttsSettings!.pitch);
+    await flutterTts.setVoice(settings.ttsSettings!.voice);
 
     if (Platform.isAndroid) {
       await flutterTts.setQueueMode(1);
     }
 
-    if (!settings.ttsEnabled!) {
+    if (!settings.ttsSettings!.ttsEnabled) {
       //prevent the queue to continue if we come back from settings and turn off TTS
       flutterTts.stop();
     }
