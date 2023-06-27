@@ -191,10 +191,6 @@ class Settings extends Equatable {
     ChatSettings? chatSettings,
     //GENERAL
     GeneralSettings? generalSettings,
-    bool? isDarkMode,
-    bool? keepSpeakerOn,
-    bool? displayViewerCount,
-    Map<String, String>? appLanguage,
     FloatingDashboardSettings? floatingDashboardSettings,
     //CONNECTIONS
     bool? isObsConnected,

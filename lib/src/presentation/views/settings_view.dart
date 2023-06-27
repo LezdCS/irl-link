@@ -471,7 +471,11 @@ class SettingsView extends GetView<SettingsViewController> {
                             : Get.changeThemeMode(ThemeMode.light);
                         controller.homeViewController.settings.value =
                             controller.homeViewController.settings.value
-                                .copyWith(isDarkMode: value);
+                                .copyWith(
+                          generalSettings: controller
+                              .homeViewController.settings.value.generalSettings
+                              ?.copyWith(isDarkMode: value),
+                        );
                         controller.saveSettings();
                       },
                       value: controller.homeViewController.settings.value
@@ -499,7 +503,11 @@ class SettingsView extends GetView<SettingsViewController> {
                       onChanged: (value) {
                         controller.homeViewController.settings.value =
                             controller.homeViewController.settings.value
-                                .copyWith(keepSpeakerOn: value);
+                                .copyWith(
+                          generalSettings: controller
+                              .homeViewController.settings.value.generalSettings
+                              ?.copyWith(keepSpeakerOn: value),
+                        );
                         controller.saveSettings();
                       },
                       value: controller.homeViewController.settings.value
@@ -527,7 +535,11 @@ class SettingsView extends GetView<SettingsViewController> {
                       onChanged: (value) {
                         controller.homeViewController.settings.value =
                             controller.homeViewController.settings.value
-                                .copyWith(displayViewerCount: value);
+                                .copyWith(
+                          generalSettings: controller
+                              .homeViewController.settings.value.generalSettings
+                              ?.copyWith(displayViewerCount: value),
+                        );
                         controller.saveSettings();
                       },
                       value: controller.homeViewController.settings.value
@@ -565,12 +577,17 @@ class SettingsView extends GetView<SettingsViewController> {
                           Locale locale = Locale(
                               value!['languageCode']!, value['countryCode']!);
                           Get.updateLocale(locale);
+
                           controller.homeViewController.settings.value =
                               controller.homeViewController.settings.value
-                                  .copyWith(appLanguage: {
-                            "languageCode": value['languageCode']!,
-                            "countryCode": value['countryCode']!
-                          });
+                                  .copyWith(
+                            generalSettings: controller.homeViewController
+                                .settings.value.generalSettings
+                                ?.copyWith(appLanguage: {
+                              "languageCode": value['languageCode']!,
+                              "countryCode": value['countryCode']!
+                            }),
+                          );
                           controller.saveSettings();
                         }),
                   ],
