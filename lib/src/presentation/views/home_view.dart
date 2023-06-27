@@ -95,6 +95,17 @@ class HomeView extends GetView<HomeViewController> {
                                   : SplitViewMode.Horizontal,
                               isActive: true,
                             ),
+                            onWeightChanged: (weight) {
+                              controller.settings.value =
+                                  controller.settings.value.copyWith(
+                                generalSettings: controller
+                                    .settings.value.generalSettings
+                                    ?.copyWith(
+                                  splitViewWeights: [weight[0]!, weight[1]!],
+                                ),
+                              );
+                              controller.saveSettings();
+                            },
                             children: [
                               controller.tabElements.isNotEmpty
                                   ? _top(context, height, width)
@@ -190,6 +201,7 @@ class HomeView extends GetView<HomeViewController> {
         indicatorSize: TabBarIndicatorSize.tab,
         indicatorWeight: 2,
         dividerColor: Colors.transparent,
+        onTap: (index){ controller.tabIndex.value = index; },
         tabs: List<Tab>.generate(
           controller.tabElements.length,
           (int index) => Tab(
@@ -328,9 +340,8 @@ class HomeView extends GetView<HomeViewController> {
     return Expanded(
       child: Container(
         color: Theme.of(context).colorScheme.background,
-        child: TabBarView(
-          physics: const NeverScrollableScrollPhysics(),
-          controller: controller.tabController,
+        child: IndexedStack (
+          index: controller.tabIndex.value,
           children: List<Widget>.generate(
             controller.tabElements.length,
             (int index) => controller.tabElements[index],

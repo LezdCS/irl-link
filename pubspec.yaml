@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.5.0+17
+version: 1.5.1+18
 
 environment:
   sdk: '>=2.19.0-0 <4.0.0'
@@ -66,13 +66,11 @@ dependencies:
       url: https://github.com/LezdCS/twitch_chat.git
 
 dependency_overrides:
-  # Can be removed when
-  # https://github.com/creativecreatorormaybenot/wakelock/pull/203 is merged.
   wakelock_windows:
     git:
-      url: https://github.com/timsneath/wakelock
-      ref: win32-v5
-      path: wakelock_windows
+      url: https://github.com/chandrabezzo/wakelock.git # repository
+      ref: main # branch
+      path: wakelock_windows/ # folder
 
 dev_dependencies:
   flutter_lints: ^2.0.1

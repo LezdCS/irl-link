@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -61,12 +60,68 @@ class _WebPageViewState extends State<WebPageView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return WebViewWidget(
-      controller: controller,
-      gestureRecognizers: Set()
-        ..add(
-          Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer()),
+    return Column(
+      children: [
+        controlPanel(),
+        Expanded(
+          child: WebViewWidget(
+            controller: controller,
+            gestureRecognizers: Set()
+              ..add(
+                Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer()),
+              ),
+          ),
         ),
+      ],
+    );
+  }
+
+  Widget controlPanel() {
+    return Container(
+      color: Colors.black12,
+      height: 30,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: 35.0,
+            child: IconButton(
+              onPressed: () {
+                controller.goBack();
+              },
+              icon: const Icon(
+                Icons.arrow_back,
+                size: 20,
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 35.0,
+            child: IconButton(
+              onPressed: () {
+                controller.reload();
+              },
+              icon: const Icon(
+                Icons.refresh,
+                size: 20,
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 35.0,
+            child: IconButton(
+              onPressed: () {
+                controller.goForward();
+              },
+              icon: const Icon(
+                Icons.arrow_forward,
+                size: 20,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

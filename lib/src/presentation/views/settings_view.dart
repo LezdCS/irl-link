@@ -226,6 +226,35 @@ class SettingsView extends GetView<SettingsViewController> {
                     )
                   ],
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Hide deleted messages",
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyLarge!.color,
+                          fontSize: 18),
+                    ),
+                    Switch(
+                      onChanged: (value) {
+                        controller.homeViewController.settings.value =
+                            controller.homeViewController.settings.value
+                                .copyWith(
+                                    chatSettings: controller.homeViewController
+                                        .settings.value.chatSettings
+                                        ?.copyWith(hideDeletedMessages: value));
+
+                        controller.saveSettings();
+                      },
+                      value: controller.homeViewController.settings.value
+                          .chatSettings!.hideDeletedMessages,
+                      inactiveTrackColor:
+                          Theme.of(context).colorScheme.tertiaryContainer,
+                      activeTrackColor: Theme.of(context).colorScheme.tertiary,
+                      activeColor: Colors.white,
+                    )
+                  ],
+                ),
                 InkWell(
                   onTap: () async {
                     Get.to(
@@ -442,11 +471,15 @@ class SettingsView extends GetView<SettingsViewController> {
                             : Get.changeThemeMode(ThemeMode.light);
                         controller.homeViewController.settings.value =
                             controller.homeViewController.settings.value
-                                .copyWith(isDarkMode: value);
+                                .copyWith(
+                          generalSettings: controller
+                              .homeViewController.settings.value.generalSettings
+                              ?.copyWith(isDarkMode: value),
+                        );
                         controller.saveSettings();
                       },
-                      value: controller
-                          .homeViewController.settings.value.isDarkMode!,
+                      value: controller.homeViewController.settings.value
+                          .generalSettings!.isDarkMode,
                       activeTrackColor: Theme.of(context).colorScheme.tertiary,
                       activeColor: Colors.white,
                       inactiveTrackColor:
@@ -470,11 +503,15 @@ class SettingsView extends GetView<SettingsViewController> {
                       onChanged: (value) {
                         controller.homeViewController.settings.value =
                             controller.homeViewController.settings.value
-                                .copyWith(keepSpeakerOn: value);
+                                .copyWith(
+                          generalSettings: controller
+                              .homeViewController.settings.value.generalSettings
+                              ?.copyWith(keepSpeakerOn: value),
+                        );
                         controller.saveSettings();
                       },
-                      value: controller
-                          .homeViewController.settings.value.keepSpeakerOn!,
+                      value: controller.homeViewController.settings.value
+                          .generalSettings!.keepSpeakerOn,
                       activeTrackColor: Theme.of(context).colorScheme.tertiary,
                       activeColor: Colors.white,
                       inactiveTrackColor:
@@ -498,11 +535,15 @@ class SettingsView extends GetView<SettingsViewController> {
                       onChanged: (value) {
                         controller.homeViewController.settings.value =
                             controller.homeViewController.settings.value
-                                .copyWith(displayViewerCount: value);
+                                .copyWith(
+                          generalSettings: controller
+                              .homeViewController.settings.value.generalSettings
+                              ?.copyWith(displayViewerCount: value),
+                        );
                         controller.saveSettings();
                       },
                       value: controller.homeViewController.settings.value
-                          .displayViewerCount!,
+                          .generalSettings!.displayViewerCount,
                       activeTrackColor: Theme.of(context).colorScheme.tertiary,
                       activeColor: Colors.white,
                       inactiveTrackColor:
@@ -536,12 +577,17 @@ class SettingsView extends GetView<SettingsViewController> {
                           Locale locale = Locale(
                               value!['languageCode']!, value['countryCode']!);
                           Get.updateLocale(locale);
+
                           controller.homeViewController.settings.value =
                               controller.homeViewController.settings.value
-                                  .copyWith(appLanguage: {
-                            "languageCode": value['languageCode']!,
-                            "countryCode": value['countryCode']!
-                          });
+                                  .copyWith(
+                            generalSettings: controller.homeViewController
+                                .settings.value.generalSettings
+                                ?.copyWith(appLanguage: {
+                              "languageCode": value['languageCode']!,
+                              "countryCode": value['countryCode']!
+                            }),
+                          );
                           controller.saveSettings();
                         }),
                   ],

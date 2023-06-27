@@ -50,6 +50,7 @@ class ChatEvents extends StatelessWidget {
                       selectedMessage: null,
                       displayTimestamp: false,
                       textSize: 16,
+                      hideDeletedMessages: false,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -100,6 +101,7 @@ class ChatEvents extends StatelessWidget {
                       selectedMessage: null,
                       displayTimestamp: false,
                       textSize: 16,
+                      hideDeletedMessages: false,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -150,6 +152,7 @@ class ChatEvents extends StatelessWidget {
                       selectedMessage: null,
                       displayTimestamp: false,
                       textSize: 16,
+                      hideDeletedMessages: false,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -200,6 +203,7 @@ class ChatEvents extends StatelessWidget {
                       selectedMessage: null,
                       displayTimestamp: false,
                       textSize: 16,
+                      hideDeletedMessages: false,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -250,6 +254,7 @@ class ChatEvents extends StatelessWidget {
                       selectedMessage: null,
                       displayTimestamp: false,
                       textSize: 16,
+                      hideDeletedMessages: false,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -300,6 +305,7 @@ class ChatEvents extends StatelessWidget {
                       selectedMessage: null,
                       displayTimestamp: false,
                       textSize: 16,
+                      hideDeletedMessages: false,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

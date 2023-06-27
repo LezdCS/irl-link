@@ -94,7 +94,7 @@ class ChatViewController extends GetxController
               .contains(message.authorId)) {
             return;
           }
-          if (homeViewController.settings.value.ttsEnabled!) {
+          if (homeViewController.settings.value.ttsSettings!.ttsEnabled) {
             readTts(message);
           }
           chatMessages.add(message);
@@ -300,20 +300,21 @@ class ChatViewController extends GetxController
 
   void readTts(ChatMessage message) {
     //check if user is ignored
-    if (homeViewController.settings.value.ttsUsersToIgnore!
-        .contains(message.authorName)) {
+    if (homeViewController.settings.value.ttsSettings!.ttsUsersToIgnore.contains(message.authorName)) {
       return;
     }
     //check if message start with ignored prefix
-    for (String prefix in homeViewController.settings.value.prefixsToIgnore!) {
+    for (String prefix
+        in homeViewController.settings.value.ttsSettings!.prefixsToIgnore) {
       if (message.message.startsWith(prefix)) {
         return;
       }
     }
     //check if message start with allowed prefix
-    if (homeViewController.settings.value.prefixsToUseTtsOnly!.isNotEmpty) {
-      for (String prefix
-          in homeViewController.settings.value.prefixsToUseTtsOnly!) {
+    if (homeViewController
+        .settings.value.ttsSettings!.prefixsToUseTtsOnly.isNotEmpty) {
+      for (String prefix in homeViewController
+          .settings.value.ttsSettings!.prefixsToUseTtsOnly) {
         if (message.message.startsWith(prefix) == false) {
           return;
         }
@@ -322,7 +323,7 @@ class ChatViewController extends GetxController
     String text = "user_said_message".trParams(
       {'authorName': message.authorName, 'message': message.message},
     );
-    if (homeViewController.settings.value.ttsMuteViewerName!) {
+    if (homeViewController.settings.value.ttsSettings!.ttsMuteViewerName) {
       text = message.message;
     }
     homeViewController.flutterTts.speak(text);

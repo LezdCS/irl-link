@@ -79,7 +79,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                     ),
                     Visibility(
                       visible: controller.homeViewController.settings.value
-                          .displayViewerCount!,
+                          .generalSettings!.displayViewerCount,
                       child: Row(
                         children: [
                           const Icon(Icons.person_outline, color: Colors.red),

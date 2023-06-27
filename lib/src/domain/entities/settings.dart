@@ -2,7 +2,9 @@ import 'package:equatable/equatable.dart';
 import 'package:irllink/src/domain/entities/settings/chat_events_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/settings/floating_dashboard_settings.dart';
+import 'package:irllink/src/domain/entities/settings/general_settings.dart';
 import 'package:irllink/src/domain/entities/settings/stream_elements_settings.dart';
+import 'package:irllink/src/domain/entities/settings/tts_settings.dart';
 
 class Settings extends Equatable {
   //CHAT SETTINGS
@@ -15,10 +17,7 @@ class Settings extends Equatable {
   final ChatSettings? chatSettings;
 
   //GENERAL SETTINGS
-  final bool? isDarkMode;
-  final bool? keepSpeakerOn;
-  final bool? displayViewerCount;
-  final Map? appLanguage;
+  final GeneralSettings? generalSettings;
   final FloatingDashboardSettings? floatingDashboardSettings;
 
   //CONNECTIONS SETTINGS
@@ -31,16 +30,7 @@ class Settings extends Equatable {
   final StreamElementsSettings? streamElementsSettings;
 
   //TTS SETTIGS
-  final bool? ttsEnabled;
-  final String? language;
-  final List? prefixsToIgnore;
-  final List? prefixsToUseTtsOnly;
-  final double? volume;
-  final double? pitch;
-  final double? rate;
-  final Map<String, String>? voice;
-  final List? ttsUsersToIgnore;
-  final bool? ttsMuteViewerName;
+  final TtsSettings? ttsSettings;
 
   const Settings({
     //CHAT SETTINGS
@@ -53,10 +43,7 @@ class Settings extends Equatable {
     required this.chatSettings,
 
     //GENERAL SETTINGS
-    required this.isDarkMode,
-    required this.keepSpeakerOn,
-    required this.appLanguage,
-    required this.displayViewerCount,
+    required this.generalSettings,
     required this.floatingDashboardSettings,
 
     //CONNECTIONS SETTINGS
@@ -69,16 +56,7 @@ class Settings extends Equatable {
     required this.streamElementsSettings,
 
     //TTS SETTIGS
-    required this.ttsEnabled,
-    required this.language,
-    required this.prefixsToIgnore,
-    required this.prefixsToUseTtsOnly,
-    required this.volume,
-    required this.pitch,
-    required this.rate,
-    required this.voice,
-    required this.ttsUsersToIgnore,
-    required this.ttsMuteViewerName,
+    required this.ttsSettings,
   });
 
   const Settings.defaultSettings({
@@ -99,13 +77,17 @@ class Settings extends Equatable {
     this.chatSettings = const ChatSettings(
       chatsJoined: [],
       joinMyself: true,
+      hideDeletedMessages: true,
     ),
 
     //GENERAL SETTINGS
-    this.isDarkMode = true,
-    this.keepSpeakerOn = true,
-    this.displayViewerCount = true,
-    this.appLanguage = const {"languageCode": "en", "countryCode": "US"},
+    this.generalSettings = const GeneralSettings(
+      isDarkMode: true,
+      keepSpeakerOn: true,
+      displayViewerCount: true,
+      appLanguage: {"languageCode": "en", "countryCode": "US"},
+      splitViewWeights: [0.5, 0.5],
+    ),
     this.floatingDashboardSettings = const FloatingDashboardSettings(
       userEvents: [],
     ),
@@ -128,16 +110,18 @@ class Settings extends Equatable {
     ),
 
     //TTS SETTINGS
-    this.ttsEnabled = false,
-    this.language = "en-US",
-    this.prefixsToIgnore = const [],
-    this.prefixsToUseTtsOnly = const [],
-    this.volume = 1.0,
-    this.pitch = 1.0,
-    this.rate = 0.5,
-    this.voice = const {"name": "en-us-x-sfg-local", "locale": "en-US"},
-    this.ttsUsersToIgnore = const [],
-    this.ttsMuteViewerName = false,
+    this.ttsSettings = const TtsSettings(
+      ttsEnabled: false,
+      language: "en-US",
+      prefixsToIgnore: [],
+      prefixsToUseTtsOnly: [],
+      volume: 1.0,
+      pitch: 1.0,
+      rate: 0.5,
+      voice: {"name": "en-us-x-sfg-local", "locale": "en-US"},
+      ttsUsersToIgnore: [],
+      ttsMuteViewerName: false,
+    ),
   });
 
   Map toJson() => {
@@ -150,10 +134,7 @@ class Settings extends Equatable {
         'chatEventsSettings': chatEventsSettings?.toJson(),
         'chatSettings': chatSettings?.toJson(),
         //GENERAL
-        'isDarkMode': isDarkMode,
-        'keepSpeakerOn': keepSpeakerOn,
-        'displayViewerCount': displayViewerCount,
-        'appLanguage': appLanguage,
+        'generalSettings': generalSettings?.toJson(),
         'floatingDashboardSettings': floatingDashboardSettings?.toJson(),
         //CONNECTIONS
         'isObsConnected': isObsConnected,
@@ -164,16 +145,7 @@ class Settings extends Equatable {
         'obsConnectionsHistory': obsConnectionsHistory,
         'streamElementsSettings': streamElementsSettings?.toJson(),
         //TTS
-        'ttsEnabled': ttsEnabled,
-        'language': language,
-        'prefixsToIgnore': prefixsToIgnore,
-        'prefixsToUseTtsOnly': prefixsToUseTtsOnly,
-        'volume': volume,
-        'pitch': pitch,
-        'rate': rate,
-        'voice': voice,
-        'ttsUsersToIgnore': ttsUsersToIgnore,
-        'ttsMuteViewerName': ttsMuteViewerName,
+        'ttsSettings': ttsSettings?.toJson(),
       };
 
   @override
@@ -188,10 +160,7 @@ class Settings extends Equatable {
       chatEventsSettings,
       chatSettings,
       //GENERAL
-      isDarkMode,
-      keepSpeakerOn,
-      displayViewerCount,
-      appLanguage,
+      generalSettings,
       floatingDashboardSettings,
       //CONNECTIONS
       isObsConnected,
@@ -202,16 +171,7 @@ class Settings extends Equatable {
       obsConnectionsHistory,
       streamElementsSettings,
       //TTS
-      ttsEnabled,
-      language,
-      prefixsToIgnore,
-      prefixsToUseTtsOnly,
-      volume,
-      pitch,
-      rate,
-      voice,
-      ttsUsersToIgnore,
-      ttsMuteViewerName,
+      ttsSettings
     ];
   }
 
@@ -230,10 +190,7 @@ class Settings extends Equatable {
     ChatEventsSettings? chatEventsSettings,
     ChatSettings? chatSettings,
     //GENERAL
-    bool? isDarkMode,
-    bool? keepSpeakerOn,
-    bool? displayViewerCount,
-    Map<String, String>? appLanguage,
+    GeneralSettings? generalSettings,
     FloatingDashboardSettings? floatingDashboardSettings,
     //CONNECTIONS
     bool? isObsConnected,
@@ -244,16 +201,7 @@ class Settings extends Equatable {
     List? obsConnectionsHistory,
     StreamElementsSettings? streamElementsSettings,
     //TTS
-    bool? ttsEnabled,
-    String? language,
-    List? prefixsToIgnore,
-    List? prefixsToUseTtsOnly,
-    double? volume,
-    double? pitch,
-    double? rate,
-    Map<String, String>? voice,
-    List? ttsUsersToIgnore,
-    bool? ttsMuteViewerName,
+    TtsSettings? ttsSettings
   }) =>
       Settings(
         //CHAT
@@ -265,10 +213,7 @@ class Settings extends Equatable {
         chatEventsSettings: chatEventsSettings ?? this.chatEventsSettings,
         chatSettings: chatSettings ?? this.chatSettings,
         //GENERAL
-        isDarkMode: isDarkMode ?? this.isDarkMode,
-        keepSpeakerOn: keepSpeakerOn ?? this.keepSpeakerOn,
-        displayViewerCount: displayViewerCount ?? this.displayViewerCount,
-        appLanguage: appLanguage ?? this.appLanguage,
+        generalSettings: generalSettings ?? this.generalSettings,
         floatingDashboardSettings:
             floatingDashboardSettings ?? this.floatingDashboardSettings,
         //CONNECTIONS
@@ -283,15 +228,6 @@ class Settings extends Equatable {
         streamElementsSettings:
             streamElementsSettings ?? this.streamElementsSettings,
         //TTS
-        ttsEnabled: ttsEnabled ?? this.ttsEnabled,
-        language: language ?? this.language,
-        prefixsToIgnore: prefixsToIgnore ?? this.prefixsToIgnore,
-        prefixsToUseTtsOnly: prefixsToUseTtsOnly ?? this.prefixsToUseTtsOnly,
-        volume: volume ?? this.volume,
-        pitch: pitch ?? this.pitch,
-        rate: rate ?? this.rate,
-        voice: voice ?? this.voice,
-        ttsUsersToIgnore: ttsUsersToIgnore ?? this.ttsUsersToIgnore,
-        ttsMuteViewerName: ttsMuteViewerName ?? this.ttsMuteViewerName,
+        ttsSettings: ttsSettings ?? this.ttsSettings,
       );
 }

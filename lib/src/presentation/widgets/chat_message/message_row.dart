@@ -14,6 +14,7 @@ class MessageRow extends StatelessWidget {
   final bool displayTimestamp;
   final double textSize;
   final TwitchChat? twitchChat;
+  final bool hideDeletedMessages;
 
   const MessageRow({
     super.key,
@@ -21,54 +22,58 @@ class MessageRow extends StatelessWidget {
     required this.displayTimestamp,
     required this.textSize,
     this.twitchChat,
+    required this.hideDeletedMessages,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      crossAxisAlignment: WrapCrossAlignment.center,
-      children: [
-        Visibility(
-          visible: displayTimestamp,
-          child: Container(
-            padding: const EdgeInsets.only(right: 5),
-            child: Timestamp(
-              timestamp: message.timestamp,
+    return Opacity(
+      opacity: message.isDeleted && !hideDeletedMessages ? 0.5 : 1,
+      child: Wrap(
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: [
+          Visibility(
+            visible: displayTimestamp,
+            child: Container(
+              padding: const EdgeInsets.only(right: 5),
+              child: Timestamp(
+                timestamp: message.timestamp,
+              ),
             ),
           ),
-        ),
-        for (TwitchBadge badge in message.badges)
-          Container(
-            padding: const EdgeInsets.only(right: 4, top: 3),
-            child: Image(
-              image: NetworkImage(badge.imageUrl1x),
-              filterQuality: FilterQuality.high,
+          for (TwitchBadge badge in message.badges)
+            Container(
+              padding: const EdgeInsets.only(right: 4, top: 3),
+              child: Image(
+                image: NetworkImage(badge.imageUrl1x),
+                filterQuality: FilterQuality.high,
+              ),
             ),
+          AuthorName(
+            isAction: message.isAction,
+            authorName: message.authorName,
+            color: message.color,
+            textSize: textSize,
           ),
-        AuthorName(
-          isAction: message.isAction,
-          authorName: message.authorName,
-          color: message.color,
-          textSize: textSize,
-        ),
-        if (message.isDeleted)
-          const Text(
-            "<message deleted>",
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 19,
-            ),
-          )
-        else
-          for (Widget i in messageContent(
-            twitchChat?.cheerEmotes ?? List.empty(),
-            twitchChat?.thirdPartEmotes ?? List.empty(),
-            message,
-            null,
-            textSize,
-          ))
-            i,
-      ],
+          if (message.isDeleted && hideDeletedMessages)
+            Text(
+              "<message deleted>",
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: textSize,
+              ),
+            )
+          else
+            for (Widget i in messageContent(
+              twitchChat?.cheerEmotes ?? List.empty(),
+              twitchChat?.thirdPartEmotes ?? List.empty(),
+              message,
+              null,
+              textSize,
+            ))
+              i,
+        ],
+      ),
     );
   }
 

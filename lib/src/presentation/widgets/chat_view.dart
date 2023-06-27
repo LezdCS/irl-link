@@ -85,6 +85,12 @@ class ChatView extends StatelessWidget {
                                   textSize: controller.homeViewController
                                       .settings.value.textSize!,
                                   twitchChat: controller.twitchChat!,
+                                  hideDeletedMessages: controller
+                                      .homeViewController
+                                      .settings
+                                      .value
+                                      .chatSettings!
+                                      .hideDeletedMessages,
                                 )
                               : MessageContainer(
                                   selectedMessage: controller
@@ -98,6 +104,12 @@ class ChatView extends StatelessWidget {
                                   textSize: controller.homeViewController
                                       .settings.value.textSize!,
                                   twitchChat: controller.twitchChat!,
+                                  hideDeletedMessages: controller
+                                      .homeViewController
+                                      .settings
+                                      .value
+                                      .chatSettings!
+                                      .hideDeletedMessages,
                                 ),
                         ),
                       );

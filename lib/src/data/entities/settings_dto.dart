@@ -1,9 +1,13 @@
 import 'package:irllink/src/data/entities/settings/chat_events_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/chat_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/floating_dashboard_settings_dto.dart';
+import 'package:irllink/src/data/entities/settings/general_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/stream_elements_settings_dto.dart';
+import 'package:irllink/src/data/entities/settings/tts_settings_dto.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
+import 'package:irllink/src/domain/entities/settings/general_settings.dart';
+import 'package:irllink/src/domain/entities/settings/tts_settings.dart';
 
 import '../../domain/entities/settings/chat_events_settings.dart';
 import '../../domain/entities/settings/floating_dashboard_settings.dart';
@@ -20,10 +24,7 @@ class SettingsDTO extends Settings {
     required ChatEventsSettings chatEventsSettings,
     required ChatSettings chatSettings,
     //GENERAL SETTINGS
-    required bool isDarkMode,
-    required bool keepSpeakerOn,
-    required bool displayViewerCount,
-    required Map appLanguage,
+    required GeneralSettings generalSettings,
     required FloatingDashboardSettings floatingDashboardSettings,
     //CONNECTIONS SETTINGS
     required bool isObsConnected,
@@ -34,16 +35,7 @@ class SettingsDTO extends Settings {
     required List obsConnectionsHistory,
     required StreamElementsSettings streamElementsSettings,
     //TTS SETTINGS
-    required bool ttsEnabled,
-    required String language,
-    required List prefixsToIgnore,
-    required List prefixsToUseTtsOnly,
-    required double volume,
-    required double pitch,
-    required double rate,
-    required Map<String, String> voice,
-    required List ttsUsersToIgnore,
-    required bool ttsMuteViewerName,
+    required TtsSettings ttsSettings,
   }) : super(
           //CHAT SETTINGS
           isEmotes: isEmotes,
@@ -54,10 +46,7 @@ class SettingsDTO extends Settings {
           chatEventsSettings: chatEventsSettings,
           chatSettings: chatSettings,
           //GENERAL SETTINGS
-          isDarkMode: isDarkMode,
-          keepSpeakerOn: keepSpeakerOn,
-          displayViewerCount: displayViewerCount,
-          appLanguage: appLanguage,
+          generalSettings: generalSettings,
           floatingDashboardSettings: floatingDashboardSettings,
           //CONNECTIONS SETTINGS
           obsWebsocketUrl: obsWebsocketUrl,
@@ -68,16 +57,7 @@ class SettingsDTO extends Settings {
           obsConnectionsHistory: obsConnectionsHistory,
           streamElementsSettings: streamElementsSettings,
           //TTS SETTINGS
-          ttsEnabled: ttsEnabled,
-          language: language,
-          prefixsToIgnore: prefixsToIgnore,
-          prefixsToUseTtsOnly: prefixsToUseTtsOnly,
-          volume: volume,
-          pitch: pitch,
-          rate: rate,
-          voice: voice,
-          ttsUsersToIgnore: ttsUsersToIgnore,
-          ttsMuteViewerName: ttsMuteViewerName,
+          ttsSettings: ttsSettings
         );
 
   @override
@@ -91,10 +71,7 @@ class SettingsDTO extends Settings {
         'chatEventsSettings': chatEventsSettings?.toJson(),
         'chatSettings': chatSettings?.toJson(),
         //GENERAL
-        'isDarkMode': isDarkMode,
-        'keepSpeakerOn': keepSpeakerOn,
-        'displayViewerCount': displayViewerCount,
-        'appLanguage': appLanguage,
+        'generalSettings': generalSettings?.toJson(),
         'floatingDashboardSettings': floatingDashboardSettings?.toJson(),
         //CONNECTIONS
         'isObsConnected': isObsConnected,
@@ -105,16 +82,7 @@ class SettingsDTO extends Settings {
         'obsConnectionsHistory': obsConnectionsHistory,
         'streamElementsSettings': streamElementsSettings?.toJson(),
         //TTS
-        'ttsEnabled': ttsEnabled,
-        'language': language,
-        'prefixsToIgnore': prefixsToIgnore,
-        'prefixsToUseTtsOnly': prefixsToUseTtsOnly,
-        'volume': volume,
-        'pitch': pitch,
-        'rate': rate,
-        'voice': voice,
-        'ttsUsersToIgnore': ttsUsersToIgnore,
-        'ttsMuteViewerName': ttsMuteViewerName,
+        'ttsSettings': ttsSettings?.toJson(),
       };
 
   factory SettingsDTO.fromJson(Map<String, dynamic> map) {
@@ -142,18 +110,9 @@ class SettingsDTO extends Settings {
           ? ChatSettingsDTO.fromJson(map['chatSettings'])
           : const Settings.defaultSettings().chatSettings!,
       //GENERAL SETTINGS
-      isDarkMode: map['isDarkMode'] != null
-          ? map['isDarkMode'] as bool
-          : const Settings.defaultSettings().isDarkMode!,
-      keepSpeakerOn: map['keepSpeakerOn'] != null
-          ? map['keepSpeakerOn'] as bool
-          : const Settings.defaultSettings().keepSpeakerOn!,
-      displayViewerCount: map['displayViewerCount'] != null
-          ? map['displayViewerCount'] as bool
-          : const Settings.defaultSettings().displayViewerCount!,
-      appLanguage: map['appLanguage'] != null
-          ? map['appLanguage'] as Map
-          : const Settings.defaultSettings().appLanguage!,
+      generalSettings: map['generalSettings'] != null
+          ? GeneralSettingsDTO.fromJson(map['generalSettings'])
+          : const Settings.defaultSettings().generalSettings!,
       floatingDashboardSettings: map['floatingDashboardSettings'] != null
           ? FloatingDashboardSettingsDTO.fromJson(
               map['floatingDashboardSettings'])
@@ -181,36 +140,9 @@ class SettingsDTO extends Settings {
           ? StreamElementsSettingsDTO.fromJson(map['streamElementsSettings'])
           : const Settings.defaultSettings().streamElementsSettings!,
       //TTS SETTINGS
-      ttsEnabled: map['ttsEnabled'] != null
-          ? map['ttsEnabled'] as bool
-          : const Settings.defaultSettings().ttsEnabled!,
-      language: map['language'] != null
-          ? map['language'] as String
-          : const Settings.defaultSettings().language!,
-      prefixsToIgnore: map['prefixsToIgnore'] != null
-          ? map['prefixsToIgnore'] as List
-          : const Settings.defaultSettings().prefixsToIgnore!,
-      prefixsToUseTtsOnly: map['prefixsToUseTtsOnly'] != null
-          ? map['prefixsToUseTtsOnly'] as List
-          : const Settings.defaultSettings().prefixsToUseTtsOnly!,
-      volume: map['volume'] != null
-          ? map['volume'] as double
-          : const Settings.defaultSettings().volume!,
-      pitch: map['pitch'] != null
-          ? map['pitch'] as double
-          : const Settings.defaultSettings().pitch!,
-      rate: map['rate'] != null
-          ? map['rate'] as double
-          : const Settings.defaultSettings().rate!,
-      voice: map['voice'] != null
-          ? {"name": map["voice"]["name"], "locale": map["voice"]["locale"]}
-          : const Settings.defaultSettings().voice!,
-      ttsUsersToIgnore: map['ttsUsersToIgnore'] != null
-          ? map['ttsUsersToIgnore'] as List
-          : const Settings.defaultSettings().ttsUsersToIgnore!,
-      ttsMuteViewerName: map['ttsMuteViewerName'] != null
-          ? map['ttsMuteViewerName'] as bool
-          : const Settings.defaultSettings().ttsMuteViewerName!,
+      ttsSettings: map['ttsSettings'] != null
+          ? TtsSettingsDTO.fromJson(map['ttsSettings'])
+          : const Settings.defaultSettings().ttsSettings!,
     );
   }
 }

@@ -10,6 +10,7 @@ class EventContainer extends StatelessWidget {
   final bool displayTimestamp;
   final double textSize;
   final TwitchChat? twitchChat;
+  final bool hideDeletedMessages;
 
   const EventContainer({
     super.key,
@@ -18,6 +19,7 @@ class EventContainer extends StatelessWidget {
     required this.displayTimestamp,
     required this.textSize,
     this.twitchChat,
+    required this.hideDeletedMessages,
   });
 
   @override
@@ -60,6 +62,7 @@ class EventContainer extends StatelessWidget {
             displayTimestamp: displayTimestamp,
             textSize: textSize,
             twitchChat: twitchChat,
+            hideDeletedMessages: hideDeletedMessages,
           )
         ],
       ),

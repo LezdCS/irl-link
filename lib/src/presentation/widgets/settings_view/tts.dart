@@ -48,12 +48,16 @@ class Tts extends StatelessWidget {
                       ),
                     ),
                     Switch(
-                      value: controller
-                          .homeViewController.settings.value.ttsEnabled!,
+                      value: controller.homeViewController.settings.value
+                          .ttsSettings!.ttsEnabled,
                       onChanged: (value) {
                         controller.homeViewController.settings.value =
                             controller.homeViewController.settings.value
-                                .copyWith(ttsEnabled: value);
+                                .copyWith(
+                          ttsSettings: controller
+                              .homeViewController.settings.value.ttsSettings
+                              ?.copyWith(ttsEnabled: value),
+                        );
                         controller.saveSettings();
                       },
                       inactiveTrackColor:
@@ -77,13 +81,17 @@ class Tts extends StatelessWidget {
                       value: controller.ttsLanguages.firstWhere(
                         (element) =>
                             element ==
-                            controller
-                                .homeViewController.settings.value.language,
+                            controller.homeViewController.settings.value
+                                .ttsSettings!.language,
                       ),
                       onChanged: (value) {
                         controller.homeViewController.settings.value =
                             controller.homeViewController.settings.value
-                                .copyWith(language: value.toString());
+                                .copyWith(
+                          ttsSettings: controller
+                              .homeViewController.settings.value.ttsSettings
+                              ?.copyWith(language: value.toString()),
+                        );
                         controller.saveSettings();
                       },
                       items: List.generate(
@@ -113,7 +121,7 @@ class Tts extends StatelessWidget {
                         (element) =>
                             element["name"] ==
                             controller.homeViewController.settings.value
-                                .voice!["name"],
+                                .ttsSettings!.voice["name"],
                       ),
                       onChanged: (Object? value) {
                         Map<String, String> voice = {
@@ -122,7 +130,11 @@ class Tts extends StatelessWidget {
                         };
                         controller.homeViewController.settings.value =
                             controller.homeViewController.settings.value
-                                .copyWith(voice: voice);
+                                .copyWith(
+                          ttsSettings: controller
+                              .homeViewController.settings.value.ttsSettings
+                              ?.copyWith(voice: voice),
+                        );
                         controller.saveSettings();
                       },
                       items: List.generate(
@@ -146,12 +158,16 @@ class Tts extends StatelessWidget {
                       ),
                     ),
                     Slider(
-                      value:
-                          controller.homeViewController.settings.value.volume!,
+                      value: controller.homeViewController.settings.value
+                          .ttsSettings!.volume,
                       onChanged: (value) {
                         controller.homeViewController.settings.value =
                             controller.homeViewController.settings.value
-                                .copyWith(volume: value);
+                                .copyWith(
+                          ttsSettings: controller
+                              .homeViewController.settings.value.ttsSettings
+                              ?.copyWith(volume: value),
+                        );
                         controller.saveSettings();
                       },
                       max: 1,
@@ -173,11 +189,16 @@ class Tts extends StatelessWidget {
                       ),
                     ),
                     Slider(
-                      value: controller.homeViewController.settings.value.rate!,
+                      value: controller
+                          .homeViewController.settings.value.ttsSettings!.rate,
                       onChanged: (value) {
                         controller.homeViewController.settings.value =
                             controller.homeViewController.settings.value
-                                .copyWith(rate: value);
+                                .copyWith(
+                          ttsSettings: controller
+                              .homeViewController.settings.value.ttsSettings
+                              ?.copyWith(rate: value),
+                        );
                         controller.saveSettings();
                       },
                       max: 1,
@@ -199,12 +220,16 @@ class Tts extends StatelessWidget {
                       ),
                     ),
                     Slider(
-                      value:
-                          controller.homeViewController.settings.value.pitch!,
+                      value: controller.homeViewController.settings.value
+                          .ttsSettings!.pitch,
                       onChanged: (value) {
                         controller.homeViewController.settings.value =
                             controller.homeViewController.settings.value
-                                .copyWith(pitch: value);
+                                .copyWith(
+                          ttsSettings: controller
+                              .homeViewController.settings.value.ttsSettings
+                              ?.copyWith(pitch: value),
+                        );
                         controller.saveSettings();
                       },
                       max: 1,
@@ -227,12 +252,16 @@ class Tts extends StatelessWidget {
                       ),
                     ),
                     Switch(
-                      value: controller
-                          .homeViewController.settings.value.ttsMuteViewerName!,
+                      value: controller.homeViewController.settings.value
+                          .ttsSettings!.ttsMuteViewerName,
                       onChanged: (value) {
                         controller.homeViewController.settings.value =
                             controller.homeViewController.settings.value
-                                .copyWith(ttsMuteViewerName: value);
+                                .copyWith(
+                          ttsSettings: controller
+                              .homeViewController.settings.value.ttsSettings
+                              ?.copyWith(ttsMuteViewerName: value),
+                        );
                         controller.saveSettings();
                       },
                       inactiveTrackColor:
@@ -250,20 +279,24 @@ class Tts extends StatelessWidget {
                       description:
                           'Message starting with these prefixs will not be read aloud.',
                       textFieldHint: 'Prefix',
-                      list: controller
-                          .homeViewController.settings.value.prefixsToIgnore!,
+                      list: controller.homeViewController.settings.value
+                          .ttsSettings!.prefixsToIgnore,
                       onDeleted: (index) {
-                        controller
-                            .homeViewController.settings.value.prefixsToIgnore!
-                            .removeAt(index);
+                        controller.homeViewController.settings.value
+                            .ttsSettings!.prefixsToIgnore.removeAt(index);
                         controller.homeViewController.settings.value =
                             controller.homeViewController.settings.value
                                 .copyWith(
-                                    prefixsToIgnore: controller
-                                        .homeViewController
-                                        .settings
-                                        .value
-                                        .prefixsToIgnore!);
+                          ttsSettings: controller
+                              .homeViewController.settings.value.ttsSettings
+                              ?.copyWith(
+                                  prefixsToIgnore: controller
+                                      .homeViewController
+                                      .settings
+                                      .value
+                                      .ttsSettings!
+                                      .prefixsToIgnore),
+                        );
                         controller.saveSettings();
                         controller.nothingJustToRefreshDialog.refresh();
                       },
@@ -271,18 +304,22 @@ class Tts extends StatelessWidget {
                       textFieldController:
                           controller.addTtsIgnoredPrefixsController,
                       onAdd: () {
-                        controller
-                            .homeViewController.settings.value.prefixsToIgnore!
-                            .add(controller.addTtsIgnoredPrefixsController.text
+                        controller.homeViewController.settings.value
+                            .ttsSettings!.prefixsToIgnore.add(controller.addTtsIgnoredPrefixsController.text
                                 .trim());
                         controller.homeViewController.settings.value =
                             controller.homeViewController.settings.value
                                 .copyWith(
-                                    prefixsToIgnore: controller
-                                        .homeViewController
-                                        .settings
-                                        .value
-                                        .prefixsToIgnore!);
+                          ttsSettings: controller
+                              .homeViewController.settings.value.ttsSettings
+                              ?.copyWith(
+                                  prefixsToIgnore: controller
+                                      .homeViewController
+                                      .settings
+                                      .value
+                                      .ttsSettings!
+                                      .prefixsToIgnore),
+                        );
                         controller.addTtsIgnoredPrefixsController.clear();
                         controller.saveSettings();
                         controller.nothingJustToRefreshDialog.refresh();
@@ -333,19 +370,23 @@ class Tts extends StatelessWidget {
                           'Only messages starting with these prefixs will be read aloud.',
                       textFieldHint: 'Prefix',
                       list: controller.homeViewController.settings.value
-                          .prefixsToUseTtsOnly!,
+                          .ttsSettings!.prefixsToUseTtsOnly,
                       onDeleted: (index) {
                         controller.homeViewController.settings.value
-                            .prefixsToUseTtsOnly!
-                            .removeAt(index);
+                            .ttsSettings!.prefixsToUseTtsOnly.removeAt(index);
                         controller.homeViewController.settings.value =
                             controller.homeViewController.settings.value
                                 .copyWith(
-                                    prefixsToUseTtsOnly: controller
-                                        .homeViewController
-                                        .settings
-                                        .value
-                                        .prefixsToUseTtsOnly!);
+                          ttsSettings: controller
+                              .homeViewController.settings.value.ttsSettings
+                              ?.copyWith(
+                                  prefixsToUseTtsOnly: controller
+                                      .homeViewController
+                                      .settings
+                                      .value
+                                      .ttsSettings!
+                                      .prefixsToUseTtsOnly),
+                        );
                         controller.nothingJustToRefreshDialog.refresh();
                         controller.saveSettings();
                       },
@@ -354,17 +395,21 @@ class Tts extends StatelessWidget {
                           controller.addTtsAllowedPrefixsController,
                       onAdd: () {
                         controller.homeViewController.settings.value
-                            .prefixsToUseTtsOnly!
-                            .add(controller.addTtsAllowedPrefixsController.text
+                            .ttsSettings!.prefixsToUseTtsOnly.add(controller.addTtsAllowedPrefixsController.text
                                 .trim());
                         controller.homeViewController.settings.value =
                             controller.homeViewController.settings.value
                                 .copyWith(
-                                    prefixsToUseTtsOnly: controller
-                                        .homeViewController
-                                        .settings
-                                        .value
-                                        .prefixsToUseTtsOnly!);
+                          ttsSettings: controller
+                              .homeViewController.settings.value.ttsSettings
+                              ?.copyWith(
+                                  prefixsToUseTtsOnly: controller
+                                      .homeViewController
+                                      .settings
+                                      .value
+                                      .ttsSettings!
+                                      .prefixsToUseTtsOnly),
+                        );
                         controller.nothingJustToRefreshDialog.refresh();
                         controller.addTtsAllowedPrefixsController.clear();
                         controller.saveSettings();
@@ -413,20 +458,24 @@ class Tts extends StatelessWidget {
                       title: 'Ignored users',
                       description: 'Users that will not be read aloud.',
                       textFieldHint: 'Username',
-                      list: controller
-                          .homeViewController.settings.value.ttsUsersToIgnore!,
+                      list: controller.homeViewController.settings.value
+                          .ttsSettings!.ttsUsersToIgnore,
                       onDeleted: (index) {
-                        controller
-                            .homeViewController.settings.value.ttsUsersToIgnore!
-                            .removeAt(index);
+                        controller.homeViewController.settings.value
+                            .ttsSettings!.ttsUsersToIgnore.removeAt(index);
                         controller.homeViewController.settings.value =
                             controller.homeViewController.settings.value
                                 .copyWith(
-                                    ttsUsersToIgnore: controller
-                                        .homeViewController
-                                        .settings
-                                        .value
-                                        .ttsUsersToIgnore!);
+                          ttsSettings: controller
+                              .homeViewController.settings.value.ttsSettings
+                              ?.copyWith(
+                                  ttsUsersToIgnore: controller
+                                      .homeViewController
+                                      .settings
+                                      .value
+                                      .ttsSettings!
+                                      .ttsUsersToIgnore),
+                        );
                         controller.saveSettings();
                         controller.nothingJustToRefreshDialog.refresh();
                       },
@@ -434,18 +483,22 @@ class Tts extends StatelessWidget {
                       textFieldController:
                           controller.addTtsIgnoredUsersController,
                       onAdd: () {
-                        controller
-                            .homeViewController.settings.value.ttsUsersToIgnore!
-                            .add(controller.addTtsIgnoredUsersController.text
+                        controller.homeViewController.settings.value
+                            .ttsSettings!.ttsUsersToIgnore.add(controller.addTtsIgnoredUsersController.text
                                 .trim());
                         controller.homeViewController.settings.value =
                             controller.homeViewController.settings.value
                                 .copyWith(
-                                    ttsUsersToIgnore: controller
-                                        .homeViewController
-                                        .settings
-                                        .value
-                                        .ttsUsersToIgnore!);
+                          ttsSettings: controller
+                              .homeViewController.settings.value.ttsSettings
+                              ?.copyWith(
+                                  ttsUsersToIgnore: controller
+                                      .homeViewController
+                                      .settings
+                                      .value
+                                      .ttsSettings!
+                                      .ttsUsersToIgnore),
+                        );
                         controller.addTtsIgnoredUsersController.clear();
                         controller.saveSettings();
                         controller.nothingJustToRefreshDialog.refresh();
