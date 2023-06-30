@@ -10,7 +10,6 @@ class Settings extends Equatable {
   //CHAT SETTINGS
   final bool? isEmotes;
   final double? textSize;
-  final double? emotesSize;
   final bool? displayTimestamp;
   final List? hiddenUsersIds;
   final ChatEventsSettings? chatEventsSettings;
@@ -36,7 +35,6 @@ class Settings extends Equatable {
     //CHAT SETTINGS
     required this.isEmotes,
     required this.textSize,
-    required this.emotesSize,
     required this.displayTimestamp,
     required this.hiddenUsersIds,
     required this.chatEventsSettings,
@@ -63,7 +61,6 @@ class Settings extends Equatable {
     //CHAT SETTINGS
     this.isEmotes = true,
     this.textSize = 19,
-    this.emotesSize = 20,
     this.displayTimestamp = false,
     this.hiddenUsersIds = const [],
     this.chatEventsSettings = const ChatEventsSettings(
@@ -128,7 +125,6 @@ class Settings extends Equatable {
         //CHAT
         'isEmotes': isEmotes,
         'textSize': textSize,
-        'emotesSize': emotesSize,
         'displayTimestamp': displayTimestamp,
         'hiddenUsersIds': hiddenUsersIds,
         'chatEventsSettings': chatEventsSettings?.toJson(),
@@ -154,7 +150,6 @@ class Settings extends Equatable {
       //CHAT
       isEmotes,
       textSize,
-      emotesSize,
       displayTimestamp,
       hiddenUsersIds,
       chatEventsSettings,
@@ -182,7 +177,6 @@ class Settings extends Equatable {
     //CHAT
     bool? isEmotes,
     double? textSize,
-    double? emotesSize,
     bool? displayTimestamp,
     bool? alternateChannel,
     String? alternateChannelName,
@@ -207,7 +201,6 @@ class Settings extends Equatable {
         //CHAT
         isEmotes: isEmotes ?? this.isEmotes,
         textSize: textSize ?? this.textSize,
-        emotesSize: emotesSize ?? this.emotesSize,
         displayTimestamp: displayTimestamp ?? this.displayTimestamp,
         hiddenUsersIds: hiddenUsersIds ?? this.hiddenUsersIds,
         chatEventsSettings: chatEventsSettings ?? this.chatEventsSettings,

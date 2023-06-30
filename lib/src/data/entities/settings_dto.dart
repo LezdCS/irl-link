@@ -18,7 +18,6 @@ class SettingsDTO extends Settings {
     //CHAT SETTINGS
     required bool isEmotes,
     required double textSize,
-    required double emotesSize,
     required bool displayTimestamp,
     required List hiddenUsersIds,
     required ChatEventsSettings chatEventsSettings,
@@ -40,7 +39,6 @@ class SettingsDTO extends Settings {
           //CHAT SETTINGS
           isEmotes: isEmotes,
           textSize: textSize,
-          emotesSize: emotesSize,
           displayTimestamp: displayTimestamp,
           hiddenUsersIds: hiddenUsersIds,
           chatEventsSettings: chatEventsSettings,
@@ -65,7 +63,6 @@ class SettingsDTO extends Settings {
         //CHAT
         'isEmotes': isEmotes,
         'textSize': textSize,
-        'emotesSize': emotesSize,
         'displayTimestamp': displayTimestamp,
         'hiddenUsersIds': hiddenUsersIds,
         'chatEventsSettings': chatEventsSettings?.toJson(),
@@ -94,9 +91,6 @@ class SettingsDTO extends Settings {
       textSize: map['textSize'] != null
           ? map['textSize'] as double
           : const Settings.defaultSettings().textSize!,
-      emotesSize: map['emotesSize'] != null
-          ? map['emotesSize'] as double
-          : const Settings.defaultSettings().emotesSize!,
       displayTimestamp: map['displayTimestamp'] != null
           ? map['displayTimestamp'] as bool
           : const Settings.defaultSettings().displayTimestamp!,
