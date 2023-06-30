@@ -1,6 +1,10 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // Import for Android features.
@@ -23,6 +27,8 @@ class _WebPageViewState extends State<WebPageView>
     with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   late final PlatformWebViewControllerCreationParams params;
   late WebViewController controller;
+  RxBool showControls = false.obs;
+  Timer? controlsTimer;
 
   @override
   void initState() {
@@ -62,13 +68,35 @@ class _WebPageViewState extends State<WebPageView>
     super.build(context);
     return Column(
       children: [
-        controlPanel(),
+        Obx(
+          () => Visibility(
+            visible: showControls.value,
+            child: controlPanel(),
+          ),
+        ),
         Expanded(
           child: WebViewWidget(
             controller: controller,
             gestureRecognizers: Set()
               ..add(
                 Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer()),
+              )
+              ..add(
+                Factory<VerticalDragGestureRecognizer>(
+                  () => VerticalDragGestureRecognizer()
+                    ..onDown = (down) {
+                      showControls.value = true;
+                      controlsTimer?.cancel();
+                    }
+                    ..onCancel = () async {
+                      controlsTimer = Timer.periodic(
+                        const Duration(seconds: 4),
+                            (Timer t) => {
+                            showControls.value = false
+                        },
+                      );
+                    },
+                ),
               ),
           ),
         ),
