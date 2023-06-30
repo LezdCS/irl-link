@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -91,9 +90,7 @@ class _WebPageViewState extends State<WebPageView>
                     ..onCancel = () async {
                       controlsTimer = Timer.periodic(
                         const Duration(seconds: 4),
-                            (Timer t) => {
-                            showControls.value = false
-                        },
+                        (Timer t) => showControls.value = false,
                       );
                     },
                 ),
