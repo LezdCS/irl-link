@@ -300,7 +300,8 @@ class ChatViewController extends GetxController
 
   void readTts(ChatMessage message) {
     //check if user is ignored
-    if (homeViewController.settings.value.ttsSettings!.ttsUsersToIgnore.contains(message.authorName)) {
+    if (homeViewController.settings.value.ttsSettings!.ttsUsersToIgnore
+        .contains(message.authorName)) {
       return;
     }
     //check if message start with ignored prefix

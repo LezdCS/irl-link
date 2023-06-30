@@ -173,30 +173,30 @@ class Settings extends Equatable {
   @override
   bool get stringify => true;
 
-  Settings copyWith({
-    //CHAT
-    bool? isEmotes,
-    double? textSize,
-    bool? displayTimestamp,
-    bool? alternateChannel,
-    String? alternateChannelName,
-    List? hiddenUsersIds,
-    ChatEventsSettings? chatEventsSettings,
-    ChatSettings? chatSettings,
-    //GENERAL
-    GeneralSettings? generalSettings,
-    FloatingDashboardSettings? floatingDashboardSettings,
-    //CONNECTIONS
-    bool? isObsConnected,
-    String? obsWebsocketUrl,
-    String? obsWebsocketPassword,
-    String? streamElementsAccessToken,
-    List? browserTabs,
-    List? obsConnectionsHistory,
-    StreamElementsSettings? streamElementsSettings,
-    //TTS
-    TtsSettings? ttsSettings
-  }) =>
+  Settings copyWith(
+          {
+          //CHAT
+          bool? isEmotes,
+          double? textSize,
+          bool? displayTimestamp,
+          bool? alternateChannel,
+          String? alternateChannelName,
+          List? hiddenUsersIds,
+          ChatEventsSettings? chatEventsSettings,
+          ChatSettings? chatSettings,
+          //GENERAL
+          GeneralSettings? generalSettings,
+          FloatingDashboardSettings? floatingDashboardSettings,
+          //CONNECTIONS
+          bool? isObsConnected,
+          String? obsWebsocketUrl,
+          String? obsWebsocketPassword,
+          String? streamElementsAccessToken,
+          List? browserTabs,
+          List? obsConnectionsHistory,
+          StreamElementsSettings? streamElementsSettings,
+          //TTS
+          TtsSettings? ttsSettings}) =>
       Settings(
         //CHAT
         isEmotes: isEmotes ?? this.isEmotes,

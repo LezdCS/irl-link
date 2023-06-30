@@ -36,27 +36,26 @@ class SettingsDTO extends Settings {
     //TTS SETTINGS
     required TtsSettings ttsSettings,
   }) : super(
-          //CHAT SETTINGS
-          isEmotes: isEmotes,
-          textSize: textSize,
-          displayTimestamp: displayTimestamp,
-          hiddenUsersIds: hiddenUsersIds,
-          chatEventsSettings: chatEventsSettings,
-          chatSettings: chatSettings,
-          //GENERAL SETTINGS
-          generalSettings: generalSettings,
-          floatingDashboardSettings: floatingDashboardSettings,
-          //CONNECTIONS SETTINGS
-          obsWebsocketUrl: obsWebsocketUrl,
-          obsWebsocketPassword: obsWebsocketPassword,
-          isObsConnected: isObsConnected,
-          streamElementsAccessToken: streamElementsAccessToken,
-          browserTabs: browserTabs,
-          obsConnectionsHistory: obsConnectionsHistory,
-          streamElementsSettings: streamElementsSettings,
-          //TTS SETTINGS
-          ttsSettings: ttsSettings
-        );
+            //CHAT SETTINGS
+            isEmotes: isEmotes,
+            textSize: textSize,
+            displayTimestamp: displayTimestamp,
+            hiddenUsersIds: hiddenUsersIds,
+            chatEventsSettings: chatEventsSettings,
+            chatSettings: chatSettings,
+            //GENERAL SETTINGS
+            generalSettings: generalSettings,
+            floatingDashboardSettings: floatingDashboardSettings,
+            //CONNECTIONS SETTINGS
+            obsWebsocketUrl: obsWebsocketUrl,
+            obsWebsocketPassword: obsWebsocketPassword,
+            isObsConnected: isObsConnected,
+            streamElementsAccessToken: streamElementsAccessToken,
+            browserTabs: browserTabs,
+            obsConnectionsHistory: obsConnectionsHistory,
+            streamElementsSettings: streamElementsSettings,
+            //TTS SETTINGS
+            ttsSettings: ttsSettings);
 
   @override
   Map toJson() => {
