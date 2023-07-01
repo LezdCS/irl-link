@@ -42,17 +42,17 @@ class TtsSettings extends Equatable {
   }
 
   Map toJson() => {
-    'ttsEnabled': ttsEnabled,
-    'language': language,
-    'prefixsToIgnore': prefixsToIgnore,
-    'prefixsToUseTtsOnly': prefixsToUseTtsOnly,
-    'volume': volume,
-    'pitch': pitch,
-    'rate': rate,
-    'voice': voice,
-    'ttsUsersToIgnore': ttsUsersToIgnore,
-    'ttsMuteViewerName': ttsMuteViewerName,
-  };
+        'ttsEnabled': ttsEnabled,
+        'language': language,
+        'prefixsToIgnore': prefixsToIgnore,
+        'prefixsToUseTtsOnly': prefixsToUseTtsOnly,
+        'volume': volume,
+        'pitch': pitch,
+        'rate': rate,
+        'voice': voice,
+        'ttsUsersToIgnore': ttsUsersToIgnore,
+        'ttsMuteViewerName': ttsMuteViewerName,
+      };
 
   @override
   bool get stringify => true;

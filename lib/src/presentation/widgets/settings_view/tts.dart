@@ -220,8 +220,8 @@ class Tts extends StatelessWidget {
                       ),
                     ),
                     Slider(
-                      value: controller.homeViewController.settings.value
-                          .ttsSettings!.pitch,
+                      value: controller
+                          .homeViewController.settings.value.ttsSettings!.pitch,
                       onChanged: (value) {
                         controller.homeViewController.settings.value =
                             controller.homeViewController.settings.value
@@ -283,7 +283,8 @@ class Tts extends StatelessWidget {
                           .ttsSettings!.prefixsToIgnore,
                       onDeleted: (index) {
                         controller.homeViewController.settings.value
-                            .ttsSettings!.prefixsToIgnore.removeAt(index);
+                            .ttsSettings!.prefixsToIgnore
+                            .removeAt(index);
                         controller.homeViewController.settings.value =
                             controller.homeViewController.settings.value
                                 .copyWith(
@@ -305,7 +306,8 @@ class Tts extends StatelessWidget {
                           controller.addTtsIgnoredPrefixsController,
                       onAdd: () {
                         controller.homeViewController.settings.value
-                            .ttsSettings!.prefixsToIgnore.add(controller.addTtsIgnoredPrefixsController.text
+                            .ttsSettings!.prefixsToIgnore
+                            .add(controller.addTtsIgnoredPrefixsController.text
                                 .trim());
                         controller.homeViewController.settings.value =
                             controller.homeViewController.settings.value
@@ -373,7 +375,8 @@ class Tts extends StatelessWidget {
                           .ttsSettings!.prefixsToUseTtsOnly,
                       onDeleted: (index) {
                         controller.homeViewController.settings.value
-                            .ttsSettings!.prefixsToUseTtsOnly.removeAt(index);
+                            .ttsSettings!.prefixsToUseTtsOnly
+                            .removeAt(index);
                         controller.homeViewController.settings.value =
                             controller.homeViewController.settings.value
                                 .copyWith(
@@ -395,7 +398,8 @@ class Tts extends StatelessWidget {
                           controller.addTtsAllowedPrefixsController,
                       onAdd: () {
                         controller.homeViewController.settings.value
-                            .ttsSettings!.prefixsToUseTtsOnly.add(controller.addTtsAllowedPrefixsController.text
+                            .ttsSettings!.prefixsToUseTtsOnly
+                            .add(controller.addTtsAllowedPrefixsController.text
                                 .trim());
                         controller.homeViewController.settings.value =
                             controller.homeViewController.settings.value
@@ -462,7 +466,8 @@ class Tts extends StatelessWidget {
                           .ttsSettings!.ttsUsersToIgnore,
                       onDeleted: (index) {
                         controller.homeViewController.settings.value
-                            .ttsSettings!.ttsUsersToIgnore.removeAt(index);
+                            .ttsSettings!.ttsUsersToIgnore
+                            .removeAt(index);
                         controller.homeViewController.settings.value =
                             controller.homeViewController.settings.value
                                 .copyWith(
@@ -484,7 +489,8 @@ class Tts extends StatelessWidget {
                           controller.addTtsIgnoredUsersController,
                       onAdd: () {
                         controller.homeViewController.settings.value
-                            .ttsSettings!.ttsUsersToIgnore.add(controller.addTtsIgnoredUsersController.text
+                            .ttsSettings!.ttsUsersToIgnore
+                            .add(controller.addTtsIgnoredUsersController.text
                                 .trim());
                         controller.homeViewController.settings.value =
                             controller.homeViewController.settings.value

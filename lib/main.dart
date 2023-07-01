@@ -44,8 +44,7 @@ Future<void> initializeService() async {
   const AndroidNotificationChannel channel = AndroidNotificationChannel(
     notificationChannelId, // id
     'IRL Link', // title
-    description:
-        'The app is running in the background.', // description
+    description: 'The app is running in the background.', // description
     importance: Importance.low, // importance must be at low or higher level
   );
 
