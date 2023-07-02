@@ -198,9 +198,10 @@ class ManageListBrowserTabs extends GetView {
   }
 }
 
-Widget _addDialog(context, controller) {
+Widget _addDialog(context, SettingsViewController controller) {
   controller.addBrowserUrlController.text = '';
   controller.addBrowserTitleController.text = '';
+  controller.addBrowserToggled.value = true;
   return Column(
     mainAxisSize: MainAxisSize.min,
     children: [
@@ -269,14 +270,39 @@ Widget _addDialog(context, controller) {
             labelText: 'URL',
           ),
         ),
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "Enabled",
+            style: TextStyle(
+              color: Theme.of(context).textTheme.bodyLarge!.color,
+              fontSize: 18,
+            ),
+          ),
+          Obx(
+                () => Switch(
+              value: controller.addBrowserToggled.value,
+              onChanged: (value) {
+                controller.addBrowserToggled.value = value;
+              },
+              inactiveTrackColor:
+              Theme.of(context).colorScheme.tertiaryContainer,
+              activeTrackColor: Theme.of(context).colorScheme.tertiary,
+              activeColor: Colors.white,
+            ),
+          ),
+        ],
       ),
     ],
   );
 }
 
-Widget _editDialog(context, controller, elem) {
+Widget _editDialog(context, SettingsViewController controller, elem) {
   controller.addBrowserUrlController.text = elem['url'];
   controller.addBrowserTitleController.text = elem['title'];
+  controller.addBrowserToggled.value = elem['toggled'] ?? true;
   return Column(
     mainAxisSize: MainAxisSize.min,
     children: [
@@ -341,6 +367,30 @@ Widget _editDialog(context, controller, elem) {
             ),
           ),
         ),
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "Enabled",
+            style: TextStyle(
+              color: Theme.of(context).textTheme.bodyLarge!.color,
+              fontSize: 18,
+            ),
+          ),
+          Obx(
+            () => Switch(
+              value: controller.addBrowserToggled.value,
+              onChanged: (value) {
+                controller.addBrowserToggled.value = value;
+              },
+              inactiveTrackColor:
+                  Theme.of(context).colorScheme.tertiaryContainer,
+              activeTrackColor: Theme.of(context).colorScheme.tertiary,
+              activeColor: Colors.white,
+            ),
+          ),
+        ],
       ),
     ],
   );

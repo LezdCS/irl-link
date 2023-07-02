@@ -140,8 +140,10 @@ class HomeViewController extends GetxController
     }
 
     for (var element in settings.value.browserTabs!) {
-      WebPageView page = WebPageView(element['title'], element['url']);
-      tabElements.add(page);
+      if(element['toggled'] == null || element['toggled']){
+        WebPageView page = WebPageView(element['title'], element['url']);
+        tabElements.add(page);
+      }
     }
 
     tabController = TabController(length: tabElements.length, vsync: this);
