@@ -51,9 +51,7 @@ class ChatViewController extends GetxController
           twitchData!.twitchUser.login,
           twitchData!.accessToken,
           clientId: kTwitchAuthClientId,
-          onConnected: () {
-            chatMessages.clear();
-          },
+          onConnected: () {},
           onClearChat: () {
             chatMessages.clear();
           },
