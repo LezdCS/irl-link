@@ -368,7 +368,11 @@ class HomeViewController extends GetxController
       // handle error here.
     }) as StreamSubscription<List<PurchaseDetails>>;
 
-    await InAppPurchase.instance.restorePurchases();
+    try{
+      await InAppPurchase.instance.restorePurchases();
+    }catch(error){
+      debugPrint('not logged to any store');
+    }
   }
 
   void listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
