@@ -25,7 +25,7 @@ class SettingsViewController extends GetxController {
 
   final addBrowserUrlKey = GlobalKey<FormState>();
   final addBrowserTitleKey = GlobalKey<FormState>();
-  final addHiddenUserKey = GlobalKey<FormState>();
+  RxList browserTabsSelected = [].obs;
 
   late RxList<String> usernamesHiddenUsers;
 
