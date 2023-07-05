@@ -95,6 +95,7 @@ class ManageListBrowserTabs extends GetView {
                             color: controller.browserTabsSelected.contains(elem)
                                 ? Colors.red[800]
                                 : Theme.of(context).colorScheme.secondary,
+                                margin: const EdgeInsets.only(bottom: 8),
                             child: ListTile(
                               title: Text(elem['title']),
                               trailing:
@@ -107,7 +108,7 @@ class ManageListBrowserTabs extends GetView {
                                       : null,
                               selected: false,
                               iconColor: Colors.red[800],
-                              onLongPress: () => {
+                              onTap: () => {
                                 if (controller.browserTabsSelected
                                     .contains(elem))
                                   {controller.browserTabsSelected.remove(elem)}
