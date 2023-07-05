@@ -217,16 +217,10 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                 ),
                 _shortcutButton(
                   onTap: () {
-                    Get.defaultDialog(
-                      title:
-                          "${controller.homeViewController.twitchData?.twitchUser.login}",
-                      titleStyle: const TextStyle(color: Colors.white),
-                      backgroundColor: const Color(0xFF0e0e10),
-                      buttonColor: const Color(0xFF9147ff),
-                      cancelTextColor: const Color(0xFF9147ff),
-                      radius: 10,
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
+                    Get.dialog(
+                      Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           QrImageView(
                             data:
