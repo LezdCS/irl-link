@@ -79,7 +79,9 @@ class HomeViewController extends GetxController
     chatTabsController = TabController(length: 0, vsync: this);
 
     flutterTts = FlutterTts();
-    flutterTts.setEngine(flutterTts.getDefaultEngine.toString());
+    if(Platform.isAndroid){
+      flutterTts.setEngine(flutterTts.getDefaultEngine.toString());
+    }
 
     if (Get.arguments != null) {
       TwitchTabView twitchPage = const TwitchTabView();
@@ -140,8 +142,10 @@ class HomeViewController extends GetxController
     }
 
     for (var element in settings.value.browserTabs!) {
-      WebPageView page = WebPageView(element['title'], element['url']);
-      tabElements.add(page);
+      if(element['toggled'] == null || element['toggled']){
+        WebPageView page = WebPageView(element['title'], element['url']);
+        tabElements.add(page);
+      }
     }
 
     tabController = TabController(length: tabElements.length, vsync: this);
@@ -364,7 +368,11 @@ class HomeViewController extends GetxController
       // handle error here.
     }) as StreamSubscription<List<PurchaseDetails>>;
 
-    await InAppPurchase.instance.restorePurchases();
+    try{
+      await InAppPurchase.instance.restorePurchases();
+    }catch(error){
+      debugPrint('not logged to any store');
+    }
   }
 
   void listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {

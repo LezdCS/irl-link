@@ -20,10 +20,12 @@ class SettingsViewController extends GetxController {
   late TextEditingController addBrowserTitleController;
   late TextEditingController addBrowserUrlController;
   late TextEditingController addHiddenUsernameController;
+  late RxBool addBrowserToggled = true.obs;
+
 
   final addBrowserUrlKey = GlobalKey<FormState>();
   final addBrowserTitleKey = GlobalKey<FormState>();
-  final addHiddenUserKey = GlobalKey<FormState>();
+  RxList browserTabsSelected = [].obs;
 
   late RxList<String> usernamesHiddenUsers;
 
@@ -127,7 +129,8 @@ class SettingsViewController extends GetxController {
 
     String title = addBrowserTitleController.text;
     String url = addBrowserUrlController.text;
-    Map<String, String> tab = {'title': title, 'url': url};
+    bool toggled = addBrowserToggled.value;
+    Map<String, dynamic> tab = {'title': title, 'url': url, 'toggled': toggled};
     List browserTabs =
         homeViewController.settings.value.browserTabs! == const []
             ? []
@@ -150,8 +153,10 @@ class SettingsViewController extends GetxController {
 
     String title = addBrowserTitleController.text;
     String url = addBrowserUrlController.text;
+    bool toggled = addBrowserToggled.value;
     elem["title"] = title;
     elem["url"] = url;
+    elem["toggled"] = toggled;
     List browserTabs =
         homeViewController.settings.value.browserTabs! == const []
             ? []

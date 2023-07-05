@@ -36,7 +36,7 @@ class _WebPageViewState extends State<WebPageView>
     if (WebViewPlatform.instance is WebKitWebViewPlatform) {
       params = WebKitWebViewControllerCreationParams(
         allowsInlineMediaPlayback: true,
-        mediaTypesRequiringUserAction: Set(),
+        mediaTypesRequiringUserAction: const <PlaybackMediaTypes>{},
       );
     } else {
       params = const PlatformWebViewControllerCreationParams();
@@ -65,36 +65,34 @@ class _WebPageViewState extends State<WebPageView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Column(
+    return Stack(
       children: [
+        WebViewWidget(
+          controller: controller,
+          gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{}
+            ..add(
+              Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer()),
+            )
+            ..add(
+              Factory<VerticalDragGestureRecognizer>(
+                () => VerticalDragGestureRecognizer()
+                  ..onDown = (down) {
+                    showControls.value = true;
+                    controlsTimer?.cancel();
+                  }
+                  ..onCancel = () async {
+                    controlsTimer = Timer.periodic(
+                      const Duration(seconds: 4),
+                      (Timer t) => showControls.value = false,
+                    );
+                  },
+              ),
+            ),
+        ),
         Obx(
           () => Visibility(
             visible: showControls.value,
             child: controlPanel(),
-          ),
-        ),
-        Expanded(
-          child: WebViewWidget(
-            controller: controller,
-            gestureRecognizers: Set()
-              ..add(
-                Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer()),
-              )
-              ..add(
-                Factory<VerticalDragGestureRecognizer>(
-                  () => VerticalDragGestureRecognizer()
-                    ..onDown = (down) {
-                      showControls.value = true;
-                      controlsTimer?.cancel();
-                    }
-                    ..onCancel = () async {
-                      controlsTimer = Timer.periodic(
-                        const Duration(seconds: 4),
-                        (Timer t) => showControls.value = false,
-                      );
-                    },
-                ),
-              ),
           ),
         ),
       ],
@@ -103,10 +101,12 @@ class _WebPageViewState extends State<WebPageView>
 
   Widget controlPanel() {
     return Container(
-      color: Colors.black12,
+      color: context.theme.colorScheme.secondary,
       height: 30,
+      width: double.infinity,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(

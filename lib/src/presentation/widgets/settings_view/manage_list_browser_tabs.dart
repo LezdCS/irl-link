@@ -24,7 +24,22 @@ class ManageListBrowserTabs extends GetView {
             ),
             onPressed: () => Get.back(),
           ),
-          actions: const [],
+          actions: controller.browserTabsSelected.isNotEmpty
+              ? [
+                  IconButton(
+                    icon: const Icon(
+                      Icons.delete,
+                      color: Colors.red,
+                    ),
+                    onPressed: () {
+                      for (var tab in controller.browserTabsSelected) {
+                        controller.removeBrowserTab(tab);
+                      }
+                      controller.browserTabsSelected.value = [];
+                    },
+                  )
+                ]
+              : const [],
           backgroundColor: Theme.of(context).colorScheme.secondary,
           title: Text(
             "Manage browser tabs",
@@ -75,66 +90,31 @@ class ManageListBrowserTabs extends GetView {
                           var elem = controller.homeViewController.settings
                               .value.browserTabs![index];
                           return Container(
-                            key: ValueKey(
-                              controller.homeViewController.settings.value
-                                  .browserTabs![index],
-                            ),
-                            color: Theme.of(context).colorScheme.secondary,
-                            padding: const EdgeInsets.only(
-                                left: 20, right: 20, bottom: 10, top: 10),
-                            margin: const EdgeInsets.only(bottom: 5, top: 5),
-                            child: InkWell(
-                              onTap: () {
-                                Get.defaultDialog(
-                                  content:
-                                      _editDialog(context, controller, elem),
-                                  title: "Edit",
-                                  textCancel: "cancel".tr,
-                                  textConfirm: "Confirm",
-                                  titleStyle: TextStyle(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge!
-                                        .color,
-                                  ),
-                                  backgroundColor:
-                                      Theme.of(context).colorScheme.background,
-                                  buttonColor: const Color(0xFF9147ff),
-                                  cancelTextColor: const Color(0xFF9147ff),
-                                  confirmTextColor: Colors.white,
-                                  radius: 10,
-                                  onConfirm: () {
-                                    controller.editBrowserTab(elem);
-                                  },
-                                );
+                            key: ValueKey(controller.homeViewController.settings
+                                .value.browserTabs![index]),
+                            color: controller.browserTabsSelected.contains(elem)
+                                ? Colors.red[800]
+                                : Theme.of(context).colorScheme.secondary,
+                                margin: const EdgeInsets.only(bottom: 8),
+                            child: ListTile(
+                              title: Text(elem['title']),
+                              trailing:
+                                  !controller.browserTabsSelected.contains(elem)
+                                      ? InkWell(
+                                          onTap: () =>
+                                              controller.removeBrowserTab(elem),
+                                          child: const Icon(Icons.close),
+                                        )
+                                      : null,
+                              selected: false,
+                              iconColor: Colors.red[800],
+                              onTap: () => {
+                                if (controller.browserTabsSelected
+                                    .contains(elem))
+                                  {controller.browserTabsSelected.remove(elem)}
+                                else
+                                  {controller.browserTabsSelected.add(elem)}
                               },
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    elem['title'],
-                                    style: TextStyle(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge!
-                                          .color,
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      controller.removeBrowserTab(elem);
-                                    },
-                                    child: const Icon(
-                                      Icons.close,
-                                      color: Colors.red,
-                                      size: 30,
-                                    ),
-                                  ),
-                                ],
-                              ),
                             ),
                           );
                         },
@@ -198,9 +178,10 @@ class ManageListBrowserTabs extends GetView {
   }
 }
 
-Widget _addDialog(context, controller) {
+Widget _addDialog(context, SettingsViewController controller) {
   controller.addBrowserUrlController.text = '';
   controller.addBrowserTitleController.text = '';
+  controller.addBrowserToggled.value = true;
   return Column(
     mainAxisSize: MainAxisSize.min,
     children: [
@@ -269,14 +250,39 @@ Widget _addDialog(context, controller) {
             labelText: 'URL',
           ),
         ),
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "Enabled",
+            style: TextStyle(
+              color: Theme.of(context).textTheme.bodyLarge!.color,
+              fontSize: 18,
+            ),
+          ),
+          Obx(
+            () => Switch(
+              value: controller.addBrowserToggled.value,
+              onChanged: (value) {
+                controller.addBrowserToggled.value = value;
+              },
+              inactiveTrackColor:
+                  Theme.of(context).colorScheme.tertiaryContainer,
+              activeTrackColor: Theme.of(context).colorScheme.tertiary,
+              activeColor: Colors.white,
+            ),
+          ),
+        ],
       ),
     ],
   );
 }
 
-Widget _editDialog(context, controller, elem) {
+Widget _editDialog(context, SettingsViewController controller, elem) {
   controller.addBrowserUrlController.text = elem['url'];
   controller.addBrowserTitleController.text = elem['title'];
+  controller.addBrowserToggled.value = elem['toggled'] ?? true;
   return Column(
     mainAxisSize: MainAxisSize.min,
     children: [
@@ -341,6 +347,30 @@ Widget _editDialog(context, controller, elem) {
             ),
           ),
         ),
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "Enabled",
+            style: TextStyle(
+              color: Theme.of(context).textTheme.bodyLarge!.color,
+              fontSize: 18,
+            ),
+          ),
+          Obx(
+            () => Switch(
+              value: controller.addBrowserToggled.value,
+              onChanged: (value) {
+                controller.addBrowserToggled.value = value;
+              },
+              inactiveTrackColor:
+                  Theme.of(context).colorScheme.tertiaryContainer,
+              activeTrackColor: Theme.of(context).colorScheme.tertiary,
+              activeColor: Colors.white,
+            ),
+          ),
+        ],
       ),
     ],
   );

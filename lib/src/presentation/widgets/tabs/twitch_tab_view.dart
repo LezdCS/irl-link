@@ -5,6 +5,7 @@ import 'package:irllink/src/domain/entities/twitch_prediction.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/alert_message_view.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class TwitchTabView extends GetView<TwitchTabViewController> {
   const TwitchTabView({super.key});
@@ -174,38 +175,67 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                   childAspectRatio: 4,
                   children: [
                     _shortcutButton(
-                      context,
-                      'follower_only'.tr,
-                      () => {
+                      context: context,
+                      text: 'follower_only'.tr,
+                      onTap: () => {
                         controller.toggleFollowerOnly(),
                       },
-                      controller.twitchStreamInfos.value.isFollowerMode!,
+                      isOn: controller.twitchStreamInfos.value.isFollowerMode!,
                     ),
                     _shortcutButton(
-                      context,
-                      'subscriber_only'.tr,
-                      () => {
+                      context: context,
+                      text: 'subscriber_only'.tr,
+                      onTap: () => {
                         controller.toggleSubOnly(),
                       },
-                      controller.twitchStreamInfos.value.isSubscriberMode!,
+                      isOn: controller.twitchStreamInfos.value.isSubscriberMode!,
                     ),
                     _shortcutButton(
-                      context,
-                      'emote_only'.tr,
-                      () => {
+                      context: context,
+                      text: 'emote_only'.tr,
+                      onTap: () => {
                         controller.toggleEmoteOnly(),
                       },
-                      controller.twitchStreamInfos.value.isEmoteMode!,
+                      isOn: controller.twitchStreamInfos.value.isEmoteMode!,
                     ),
                     _shortcutButton(
-                      context,
-                      'slow_mode'.tr,
-                      () => {
+                      context: context,
+                      text: 'slow_mode'.tr,
+                      onTap: () => {
                         controller.toggleSlowMode(),
                       },
-                      controller.twitchStreamInfos.value.isSlowMode!,
+                      isOn: controller.twitchStreamInfos.value.isSlowMode!,
                     ),
                   ],
+                ),
+                Divider(
+                  height: 40,
+                  thickness: 4,
+                  indent: 0,
+                  endIndent: 0,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                _shortcutButton(
+                  onTap: () {
+                    Get.dialog(
+                      Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          QrImageView(
+                            data:
+                                'https://www.twitch.tv/${controller.homeViewController.twitchData?.twitchUser.login}',
+                            version: QrVersions.auto,
+                            backgroundColor: Colors.white,
+                            size: 200.0,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  text: "Channel QR Code",
+                  context: context,
+                  isOn: false,
                 ),
                 // Divider(
                 //   height: 40,
@@ -534,8 +564,12 @@ Widget poll(
   );
 }
 
-Widget _shortcutButton(
-    BuildContext context, String text, Function onTap, bool isOn) {
+Widget _shortcutButton({
+  required BuildContext context,
+  required String text,
+  required Function onTap,
+  required bool isOn,
+}) {
   return InkWell(
     onTap: () {
       onTap();

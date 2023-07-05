@@ -64,6 +64,7 @@ dependencies:
   webview_flutter_android:
   webview_flutter_wkwebview:
   twitch_chat: ^0.0.2
+  qr_flutter: ^4.1.0
 
 dependency_overrides:
   wakelock_windows:
