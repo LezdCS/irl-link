@@ -67,29 +67,27 @@ class _WebPageViewState extends State<WebPageView>
     super.build(context);
     return Stack(
       children: [
-        Expanded(
-          child: WebViewWidget(
-            controller: controller,
-            gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{}
-              ..add(
-                Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer()),
-              )
-              ..add(
-                Factory<VerticalDragGestureRecognizer>(
-                  () => VerticalDragGestureRecognizer()
-                    ..onDown = (down) {
-                      showControls.value = true;
-                      controlsTimer?.cancel();
-                    }
-                    ..onCancel = () async {
-                      controlsTimer = Timer.periodic(
-                        const Duration(seconds: 4),
-                        (Timer t) => showControls.value = false,
-                      );
-                    },
-                ),
+        WebViewWidget(
+          controller: controller,
+          gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{}
+            ..add(
+              Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer()),
+            )
+            ..add(
+              Factory<VerticalDragGestureRecognizer>(
+                () => VerticalDragGestureRecognizer()
+                  ..onDown = (down) {
+                    showControls.value = true;
+                    controlsTimer?.cancel();
+                  }
+                  ..onCancel = () async {
+                    controlsTimer = Timer.periodic(
+                      const Duration(seconds: 4),
+                      (Timer t) => showControls.value = false,
+                    );
+                  },
               ),
-          ),
+            ),
         ),
         Obx(
           () => Visibility(
