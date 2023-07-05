@@ -79,7 +79,9 @@ class HomeViewController extends GetxController
     chatTabsController = TabController(length: 0, vsync: this);
 
     flutterTts = FlutterTts();
-    flutterTts.setEngine(flutterTts.getDefaultEngine.toString());
+    if(Platform.isAndroid){
+      flutterTts.setEngine(flutterTts.getDefaultEngine.toString());
+    }
 
     if (Get.arguments != null) {
       TwitchTabView twitchPage = const TwitchTabView();
