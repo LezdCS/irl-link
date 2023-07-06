@@ -22,7 +22,6 @@ class SettingsViewController extends GetxController {
   late TextEditingController addHiddenUsernameController;
   late RxBool addBrowserToggled = true.obs;
 
-
   final addBrowserUrlKey = GlobalKey<FormState>();
   final addBrowserTitleKey = GlobalKey<FormState>();
   RxList browserTabsSelected = [].obs;

@@ -188,7 +188,8 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                       onTap: () => {
                         controller.toggleSubOnly(),
                       },
-                      isOn: controller.twitchStreamInfos.value.isSubscriberMode!,
+                      isOn:
+                          controller.twitchStreamInfos.value.isSubscriberMode!,
                     ),
                     _shortcutButton(
                       context: context,
