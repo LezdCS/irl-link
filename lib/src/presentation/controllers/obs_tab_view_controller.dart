@@ -197,7 +197,7 @@ class ObsTabViewController extends GetxController {
         await obsWebSocket!.sceneItems.getSceneItemList(currentSceneName);
     sourcesList.value = sources;
     sourcesVolumesMap.clear();
-    sources.forEach((source) async {
+    for (var source in sources) {
       var response = await obsWebSocket!.send(
           "GetInputVolume", {"inputName": source.sourceName}).catchError((e) {
         return null;
@@ -206,7 +206,7 @@ class ObsTabViewController extends GetxController {
         sourcesVolumesMap[source.sourceName] =
             response?.responseData?['inputVolumeDb'];
       }
-    });
+    }
   }
 
   /// Switch to the scene named [sceneName]
