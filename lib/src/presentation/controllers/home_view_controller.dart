@@ -79,7 +79,7 @@ class HomeViewController extends GetxController
     chatTabsController = TabController(length: 0, vsync: this);
 
     flutterTts = FlutterTts();
-    if(Platform.isAndroid){
+    if (Platform.isAndroid) {
       flutterTts.setEngine(flutterTts.getDefaultEngine.toString());
     }
 
@@ -142,7 +142,7 @@ class HomeViewController extends GetxController
     }
 
     for (var element in settings.value.browserTabs!) {
-      if(element['toggled'] == null || element['toggled']){
+      if (element['toggled'] == null || element['toggled']) {
         WebPageView page = WebPageView(element['title'], element['url']);
         tabElements.add(page);
       }
@@ -368,9 +368,9 @@ class HomeViewController extends GetxController
       // handle error here.
     }) as StreamSubscription<List<PurchaseDetails>>;
 
-    try{
+    try {
       await InAppPurchase.instance.restorePurchases();
-    }catch(error){
+    } catch (error) {
       debugPrint('not logged to any store');
     }
   }
