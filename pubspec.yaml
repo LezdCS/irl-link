@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.6.0+19
+version: 1.6.1+20
 
 environment:
   sdk: '>=2.19.0-0 <4.0.0'
@@ -63,7 +63,7 @@ dependencies:
   collection:
   webview_flutter_android:
   webview_flutter_wkwebview:
-  twitch_chat: ^0.0.2
+  twitch_chat: ^0.0.3
   qr_flutter: ^4.1.0
 
 dependency_overrides:

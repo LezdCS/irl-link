@@ -961,10 +961,10 @@ packages:
     dependency: "direct main"
     description:
       name: twitch_chat
-      sha256: "00c14817ee92a57723d1be578b0d43510cf1492b4cecffb3ec058fc48ca3e0cd"
+      sha256: f3e9fd9bc2680e28fcd0f1e5903fd724242e77bf3e4108f3198ebd190bba1b24
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.2"
+    version: "0.0.3"
   typed_data:
     dependency: transitive
     description:
