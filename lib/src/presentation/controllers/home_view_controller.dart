@@ -375,8 +375,9 @@ class HomeViewController extends GetxController
     }
   }
 
-  void listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
-    purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
+  void listenToPurchaseUpdated(
+      List<PurchaseDetails> purchaseDetailsList) async {
+    for (var purchaseDetails in purchaseDetailsList) {
       if (purchaseDetails.status == PurchaseStatus.pending) {
         purchasePending.value = true;
       } else {
@@ -411,7 +412,7 @@ class HomeViewController extends GetxController
           await InAppPurchase.instance.completePurchase(purchaseDetails);
         }
       }
-    });
+    }
   }
 
   Future<bool> verifyPurchase(PurchaseDetails purchaseDetails) {
