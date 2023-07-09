@@ -149,6 +149,10 @@ class HomeViewController extends GetxController
     }
 
     tabController = TabController(length: tabElements.length, vsync: this);
+    if (tabIndex.value > tabElements.length - 1) {
+      tabIndex.value = 0;
+      tabController.animateTo(tabIndex.value);
+    }
   }
 
   void generateChats() {

@@ -325,7 +325,6 @@ class HomeView extends GetView<HomeViewController> {
                   controller.chatTabsController
                       .animateTo(controller.selectedChatIndex!);
                 }
-                controller.tabController.animateTo(controller.tabIndex.value);
               },
               child: Icon(
                 Icons.settings,
