@@ -174,6 +174,7 @@ class SettingsViewController extends GetxController {
         homeViewController.settings.value.copyWith(browserTabs: tabs);
     saveSettings();
     homeViewController.settings.refresh();
+    Get.back();
   }
 
   void saveSettings() {
