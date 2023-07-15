@@ -63,7 +63,9 @@ dependencies:
   collection:
   webview_flutter_android:
   webview_flutter_wkwebview:
-  twitch_chat: ^0.0.3
+  twitch_chat:
+    git:
+        url: https://github.com/LezdCS/twitch_chat.git
   qr_flutter: ^4.1.0
 
 dependency_overrides:

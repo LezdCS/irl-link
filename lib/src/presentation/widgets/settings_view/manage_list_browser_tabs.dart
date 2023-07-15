@@ -100,11 +100,63 @@ class ManageListBrowserTabs extends GetView {
                               title: Text(elem['title']),
                               trailing:
                                   !controller.browserTabsSelected.contains(elem)
-                                      ? InkWell(
-                                          onTap: () =>
-                                              controller.removeBrowserTab(elem),
-                                          child: const Icon(Icons.close),
-                                        )
+                                      ? Wrap(
+                                        children: [
+                                          InkWell(
+                                            child: const Icon(
+                                              Icons.edit,
+                                              color: Colors.orange,
+                                              size: 22,
+                                            ),
+                                            onTap: () {
+                                              Get.defaultDialog(
+                                                content: _editDialog(context, controller,elem),
+                                                title: 'Edit',
+                                                textCancel: "cancel".tr,
+                                                textConfirm: "confirm".tr,
+                                                titleStyle: TextStyle(
+                                                  color:
+                                                      Theme.of(context).textTheme.bodyLarge!.color,
+                                                ),
+                                                backgroundColor:
+                                                    Theme.of(context).colorScheme.background,
+                                                buttonColor: const Color(0xFF9147ff),
+                                                cancelTextColor: const Color(0xFF9147ff),
+                                                confirmTextColor: Colors.white,
+                                                radius: 10,
+                                                onConfirm: () {
+                                                  controller.editBrowserTab(elem);
+                                                },
+                                              );
+                                            },
+                                          ),
+                                          const SizedBox(width: 10,),
+                                          InkWell(
+                                              onTap: () => {
+                                                Get.defaultDialog(
+                                                  content: Container(),
+                                                  title: 'Delete',
+                                                  textCancel: "cancel".tr,
+                                                  textConfirm: "confirm".tr,
+                                                  titleStyle: TextStyle(
+                                                    color:
+                                                        Theme.of(context).textTheme.bodyLarge!.color,
+                                                  ),
+                                                  backgroundColor:
+                                                      Theme.of(context).colorScheme.background,
+                                                  buttonColor: const Color(0xFF9147ff),
+                                                  cancelTextColor: const Color(0xFF9147ff),
+                                                  confirmTextColor: Colors.white,
+                                                  radius: 10,
+                                                  onConfirm: () {
+                                                    controller.removeBrowserTab(elem);
+                                                  },
+                                                )
+                                              },
+                                              child: const Icon(Icons.close),
+                                            ),
+                                        ],
+                                      )
                                       : null,
                               selected: false,
                               iconColor: Colors.red[800],

@@ -960,10 +960,11 @@ packages:
   twitch_chat:
     dependency: "direct main"
     description:
-      name: twitch_chat
-      sha256: f3e9fd9bc2680e28fcd0f1e5903fd724242e77bf3e4108f3198ebd190bba1b24
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "04ab8aa017276cac04caa3cc8eb14bf0f119ad52"
+      url: "https://github.com/LezdCS/twitch_chat.git"
+    source: git
     version: "0.0.3"
   typed_data:
     dependency: transitive
