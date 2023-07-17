@@ -60,9 +60,9 @@ dependencies:
   floating_draggable_widget: ^2.1.2
   flutter_background_service: ^3.0.1
   flutter_local_notifications: ^14.1.2
-  collection:
-  webview_flutter_android:
-  webview_flutter_wkwebview:
+  collection: ^1.17.1
+  webview_flutter_android: ^3.9.1
+  webview_flutter_wkwebview: ^3.7.0
   twitch_chat:
     git:
         url: https://github.com/LezdCS/twitch_chat.git
