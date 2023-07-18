@@ -299,7 +299,7 @@ class ChatViewController extends GetxController
   void readTts(ChatMessage message) {
     //check if user is ignored
     if (homeViewController.settings.value.ttsSettings!.ttsUsersToIgnore
-        .contains(message.authorName)) {
+        .contains(message.displayName)) {
       return;
     }
     //check if message start with ignored prefix
@@ -320,7 +320,7 @@ class ChatViewController extends GetxController
       }
     }
     String text = "user_said_message".trParams(
-      {'authorName': message.authorName, 'message': message.message},
+      {'authorName': message.displayName, 'message': message.message},
     );
     if (homeViewController.settings.value.ttsSettings!.ttsMuteViewerName) {
       text = message.message;

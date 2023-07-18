@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class AuthorName extends StatelessWidget {
   final bool isAction;
-  final String authorName;
+  final String displayName;
   final String color;
   final double textSize;
 
   const AuthorName({
     super.key,
     required this.isAction,
-    required this.authorName,
+    required this.displayName,
     required this.color,
     required this.textSize,
   });
@@ -18,7 +18,7 @@ class AuthorName extends StatelessWidget {
   Widget build(BuildContext context) {
     return RichText(
       text: TextSpan(
-        text: authorName,
+        text: displayName,
         style: TextStyle(
           color: Color(int.parse(color.replaceAll('#', '0xff'))),
           fontSize: textSize,

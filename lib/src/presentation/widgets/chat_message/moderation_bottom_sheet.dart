@@ -35,7 +35,7 @@ class ModerationBottomSheet extends StatelessWidget {
             children: [
               Text(
                 controller
-                        .homeViewController.selectedMessage.value?.authorName ??
+                        .homeViewController.selectedMessage.value?.displayName ??
                     "",
                 style: const TextStyle(
                     color: Colors.white,
@@ -50,7 +50,7 @@ class ModerationBottomSheet extends StatelessWidget {
                         scheme: "https",
                         host: "twitch.tv",
                         path: controller.homeViewController.selectedMessage
-                            .value?.authorName,
+                            .value?.displayName,
                       ),
                       mode: LaunchMode.externalApplication,
                     ),
