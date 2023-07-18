@@ -34,8 +34,8 @@ class ModerationBottomSheet extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                controller
-                        .homeViewController.selectedMessage.value?.displayName ??
+                controller.homeViewController.selectedMessage.value
+                        ?.displayName ??
                     "",
                 style: const TextStyle(
                     color: Colors.white,
