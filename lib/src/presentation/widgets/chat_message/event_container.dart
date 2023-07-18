@@ -57,13 +57,15 @@ class EventContainer extends StatelessWidget {
               ),
             ],
           ),
-          MessageRow(
+          message.message != ''
+          ? MessageRow(
             message: message,
             displayTimestamp: displayTimestamp,
             textSize: textSize,
             twitchChat: twitchChat,
             hideDeletedMessages: hideDeletedMessages,
-          )
+          ) 
+          : Container(),
         ],
       ),
     );
@@ -81,12 +83,12 @@ class EventContainer extends StatelessWidget {
       case HighlightType.subscription:
         Subscription msg = message as Subscription;
         bool isPrime = msg.tier == "Prime";
-        return "${message.authorName} subscribed${isPrime ? " with prime" : ""}. They've subscribed for ${msg.months} months.";
+        return "${message.displayName} subscribed${isPrime ? " with prime" : ""}. They've subscribed for ${msg.months} months.";
       case HighlightType.announcement:
         return "Announcement";
       case HighlightType.subscriptionGifted:
         SubGift msg = message as SubGift;
-        return "${message.authorName} gifted a subscription to ${msg.giftedName}!";
+        return "${message.displayName} gifted a subscription to ${msg.giftedName}!";
       case HighlightType.incomingRaid:
         IncomingRaid raid = message as IncomingRaid;
         return "${raid.viewerCount} raiders from ${raid.raidingChannelName} have joined!";
