@@ -58,14 +58,14 @@ class EventContainer extends StatelessWidget {
             ],
           ),
           message.message != ''
-          ? MessageRow(
-            message: message,
-            displayTimestamp: displayTimestamp,
-            textSize: textSize,
-            twitchChat: twitchChat,
-            hideDeletedMessages: hideDeletedMessages,
-          ) 
-          : Container(),
+              ? MessageRow(
+                  message: message,
+                  displayTimestamp: displayTimestamp,
+                  textSize: textSize,
+                  twitchChat: twitchChat,
+                  hideDeletedMessages: hideDeletedMessages,
+                )
+              : Container(),
         ],
       ),
     );
