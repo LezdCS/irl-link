@@ -156,6 +156,10 @@ class HomeViewController extends GetxController
   }
 
   void generateChats() {
+    if (twitchData == null) {
+      return;
+    }
+
     String self = twitchData!.twitchUser.login;
 
     RxList<ChatView> tempChannels = RxList<ChatView>.from(channels);
