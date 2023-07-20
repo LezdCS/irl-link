@@ -562,10 +562,10 @@ class SettingsView extends GetView<SettingsViewController> {
                       ),
                     ),
                     DropdownButton(
-                        value: supportedLanguages.firstWhere((element) =>
+                        value: supportedLanguages.firstWhereOrNull((element) =>
                             element['languageCode'] ==
                                 Get.locale!.languageCode &&
-                            element['countryCode'] == Get.locale!.countryCode),
+                            element['countryCode'] == Get.locale!.countryCode) ?? supportedLanguages[0],
                         items: List.generate(
                           supportedLanguages.length,
                           (index) => DropdownMenuItem(
