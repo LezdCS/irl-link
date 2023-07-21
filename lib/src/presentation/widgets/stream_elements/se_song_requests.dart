@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/domain/entities/stream_elements/se_song.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 
-import '../../../domain/entities/se_song.dart';
 
 class SeSongRequests extends GetView {
   @override

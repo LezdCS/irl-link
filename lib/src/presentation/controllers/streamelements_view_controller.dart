@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
-import 'package:irllink/src/domain/entities/se_activity.dart';
-import 'package:irllink/src/domain/entities/se_song.dart';
+import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
+import 'package:irllink/src/domain/entities/stream_elements/se_song.dart';
 import 'package:irllink/src/presentation/events/streamelements_events.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -62,6 +62,12 @@ class StreamelementsViewController extends GetxController
       socket = null;
       activities.clear();
       jwt = homeViewController.settings.value.streamElementsAccessToken!;
+      streamelementsEvents.getMe(jwt).then((value) => {
+            streamelementsEvents
+                .getOverlays(jwt, value.data!.id)
+                .then((value) => debugPrint(value.data.toString()))
+          });
+
       connectWebsocket();
     }
   }

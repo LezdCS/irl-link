@@ -3,7 +3,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
-import 'package:irllink/src/domain/entities/se_activity.dart';
+import 'package:irllink/src/data/entities/stream_elements/se_me_dto.dart';
+import 'package:irllink/src/data/entities/stream_elements/se_overlay_dto.dart';
+import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
+import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
+import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
 // import 'package:irllink/src/core/utils/constants.dart';
 
 import 'package:irllink/src/domain/repositories/streamelements_repository.dart';
@@ -64,6 +68,48 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       await dio
           .post('https://api.streamelements.com/kappa/v2/activities/$channel');
       return DataSuccess(activities);
+    } on DioException catch (e) {
+      debugPrint(e.toString());
+      return DataFailed(e.toString());
+    }
+  }
+
+  @override
+  Future<DataState<List<SeOverlay>>> getOverlays(
+      String token, String channel) async {
+    var dio = Dio();
+    List<SeOverlay> overlays = [];
+    try {
+      dio.options.headers["Authorization"] = "Bearer $token";
+      Response response = await dio.get(
+        'https://api.streamelements.com/kappa/v2/overlays/$channel',
+        queryParameters: {'search': ' ', 'type': 'regular'},
+      );
+      response.data['docs'].forEach(
+        (overlay) => {
+          overlays.add(SeOverlayDTO.fromJson(overlay)),
+        },
+      );
+      return DataSuccess(overlays);
+    } on DioException catch (e) {
+      debugPrint(e.toString());
+      return DataFailed(e.toString());
+    }
+  }
+
+  @override
+  Future<DataState<SeMe>> getMe(String token) async {
+    var dio = Dio();
+    late SeMe me;
+    try {
+      dio.options.headers["Authorization"] = "Bearer $token";
+      Response response = await dio.get(
+        'https://api.streamelements.com/kappa/v2/channels/me',
+      );
+
+      me = SeMeDTO.fromJson(response.data);
+
+      return DataSuccess(me);
     } on DioException catch (e) {
       debugPrint(e.toString());
       return DataFailed(e.toString());
