@@ -75,7 +75,6 @@ class StreamelementsViewController extends GetxController
     }
   }
 
-
   Future<void> login() async {
     StreamelementsAuthParams params = const StreamelementsAuthParams();
     await streamelementsEvents.login(params: params);

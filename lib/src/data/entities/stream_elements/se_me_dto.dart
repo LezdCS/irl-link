@@ -1,4 +1,3 @@
-
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 
 class SeMeDTO extends SeMe {
