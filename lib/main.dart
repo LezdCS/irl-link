@@ -130,7 +130,6 @@ void onStart(ServiceInstance service) async {
             android: AndroidNotificationDetails(
                 notificationChannelId, 'IRL Link',
                 icon: 'ic_bg_service_small',
-                ongoing: true,
                 actions: [
                   AndroidNotificationAction('id1', 'Close app'),
                 ]),
@@ -157,6 +156,8 @@ void onStart(ServiceInstance service) async {
 @pragma('vm:entry-point')
 void notificationTapBackground(NotificationResponse notificationResponse) {
   if( Platform.isAndroid){
+    final service = FlutterBackgroundService();
+    service.invoke("stopService");
     exit(0);
   }
 }
