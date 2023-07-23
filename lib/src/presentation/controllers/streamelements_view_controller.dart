@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
+import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_song.dart';
 import 'package:irllink/src/presentation/events/streamelements_events.dart';
 import 'package:socket_io_client/socket_io_client.dart';
@@ -23,6 +24,8 @@ class StreamelementsViewController extends GetxController
 
   RxList<SeSong> songRequestQueue = <SeSong>[].obs;
   late ScrollController songRequestScrollController;
+
+  RxList<SeOverlay> overlays = <SeOverlay>[].obs;
 
   Socket? socket;
   late String jwt = "";
@@ -65,12 +68,13 @@ class StreamelementsViewController extends GetxController
       streamelementsEvents.getMe(jwt).then((value) => {
             streamelementsEvents
                 .getOverlays(jwt, value.data!.id)
-                .then((value) => debugPrint(value.data.toString()))
+                .then((value) => overlays.value = value.data!)
           });
 
       connectWebsocket();
     }
   }
+
 
   Future<void> login() async {
     StreamelementsAuthParams params = const StreamelementsAuthParams();
