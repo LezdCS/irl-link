@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -35,10 +37,10 @@ void main() async {
   runApp(const Main());
 }
 
-Future<void> initializeService() async {
-  const notificationChannelId = 'irllink_foreground';
-  const notificationId = 888;
+const notificationChannelId = 'irllink_foreground';
+const notificationId = 888;
 
+Future<void> initializeService() async {
   final service = FlutterBackgroundService();
 
   const AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -50,6 +52,31 @@ Future<void> initializeService() async {
 
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
+
+  // final DarwinInitializationSettings initializationSettingsDarwin =
+  //     const DarwinInitializationSettings(notificationCategories: [
+  //   DarwinNotificationCategory(
+  //     'categoryIos',
+  //     actions: <DarwinNotificationAction>[
+  //       DarwinNotificationAction.plain('id_1', 'Action 1'),
+  //     ],
+  //     options: <DarwinNotificationCategoryOption>{
+  //       DarwinNotificationCategoryOption.hiddenPreviewShowTitle,
+  //     },
+  //   )
+  // ]);
+
+  const InitializationSettings initializationSettings = InitializationSettings(
+    android: AndroidInitializationSettings('ic_bg_service_small'),
+    // iOS: initializationSettingsDarwin,
+  );
+
+  // flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+    onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
+  );
 
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
@@ -90,6 +117,28 @@ Future<void> initializeService() async {
 void onStart(ServiceInstance service) async {
   DartPluginRegistrant.ensureInitialized();
 
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  if (service is AndroidServiceInstance) {
+    if (await service.isForegroundService()) {
+      flutterLocalNotificationsPlugin.show(
+        notificationId,
+        'IRL Link',
+        'The app is running in the background.',
+        const NotificationDetails(
+            android: AndroidNotificationDetails(
+                notificationChannelId, 'IRL Link',
+                icon: 'ic_bg_service_small',
+                ongoing: true,
+                actions: [
+                  AndroidNotificationAction('id1', 'Close app'),
+                ]),
+            iOS: DarwinNotificationDetails()),
+      );
+    }
+  }
+
   if (service is AndroidServiceInstance) {
     service.on('setAsForeground').listen((event) {
       service.setAsForegroundService();
@@ -103,6 +152,13 @@ void onStart(ServiceInstance service) async {
   service.on('stopService').listen((event) {
     service.stopSelf();
   });
+}
+
+@pragma('vm:entry-point')
+void notificationTapBackground(NotificationResponse notificationResponse) {
+  if( Platform.isAndroid){
+    exit(0);
+  }
 }
 
 class Main extends StatelessWidget {
