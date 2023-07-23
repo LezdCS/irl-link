@@ -343,7 +343,7 @@ packages:
     source: hosted
     version: "3.0.1"
   flutter_background_service_android:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_background_service_android
       sha256: "16fd887d5acb8096126072f192e9cce1a359a8c28af1cee63122b1e12ffd5693"
@@ -351,7 +351,7 @@ packages:
     source: hosted
     version: "4.0.1"
   flutter_background_service_ios:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_background_service_ios
       sha256: "980a8eba58ad1d8c52ab3b3dc9cebd129caa2ee0ef3d37e7efb2dcb2466a65bb"
@@ -1179,10 +1179,10 @@ packages:
     dependency: "direct main"
     description:
       name: webview_flutter_wkwebview
-      sha256: "369fdf6160944a7db660ff15fa048c2bd681b09557907beaef1f95e8557d21dc"
+      sha256: "3e36a8f564809cb7c257ff4278502b185e2191349df0ddee98837f91805c74b8"
       url: "https://pub.dev"
     source: hosted
-    version: "3.7.0"
+    version: "3.7.1"
   win32:
     dependency: transitive
     description:

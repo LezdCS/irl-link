@@ -59,6 +59,8 @@ dependencies:
   in_app_purchase: ^3.1.7
   floating_draggable_widget: ^2.1.3
   flutter_background_service: ^3.0.1
+  flutter_background_service_android: ^4.0.1
+  flutter_background_service_ios: ^3.0.0
   flutter_local_notifications: ^14.1.2
   collection: ^1.17.1
   webview_flutter_android: ^3.9.1
