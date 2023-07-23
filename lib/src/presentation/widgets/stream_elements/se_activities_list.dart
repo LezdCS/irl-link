@@ -1,9 +1,9 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
+// import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
-
-import '../../../domain/entities/se_activity.dart';
 
 class SeActivitiesList extends GetView {
   @override
@@ -26,6 +26,23 @@ class SeActivitiesList extends GetView {
               _activitiesSettings(),
             ],
           ),
+          // Expanded(
+          //   child: Obx(
+          //     () => ListView.builder(
+          //       shrinkWrap: true,
+          //       itemCount: controller.overlays.length,
+          //       scrollDirection: Axis.horizontal,
+          //       itemBuilder: (BuildContext context, int index) {
+          //         SeOverlay overlay = controller
+          //             .overlays[controller.overlays.length - 1 - index];
+          //         return TextButton(
+          //           child: Text(overlay.name),
+          //           onPressed: () => {},
+          //         );
+          //       },
+          //     ),
+          //   ),
+          // ),
           Expanded(
             child: Obx(
               () => ListView.builder(
