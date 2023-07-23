@@ -117,6 +117,8 @@ Future<void> initializeService() async {
 void onStart(ServiceInstance service) async {
   DartPluginRegistrant.ensureInitialized();
 
+  debugPrint('YOOOOOOOOOOOOOOOOOOOOOOOO');
+
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
@@ -131,7 +133,7 @@ void onStart(ServiceInstance service) async {
                 notificationChannelId, 'IRL Link',
                 icon: 'ic_bg_service_small',
                 actions: [
-                  AndroidNotificationAction('id1', 'Close app'),
+                  AndroidNotificationAction('id1', 'Stop running service'),
                 ]),
             iOS: DarwinNotificationDetails()),
       );
@@ -158,7 +160,6 @@ void notificationTapBackground(NotificationResponse notificationResponse) {
   if( Platform.isAndroid){
     final service = FlutterBackgroundService();
     service.invoke("stopService");
-    exit(0);
   }
 }
 

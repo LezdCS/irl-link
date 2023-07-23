@@ -2,7 +2,7 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
-import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
+// import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 
 class SeActivitiesList extends GetView {
