@@ -39,6 +39,7 @@ void main() async {
 
 const notificationChannelId = 'irllink_foreground';
 const notificationId = 888;
+const String iosNotificationCategoryPlain = 'irllink_ios_cat';
 
 Future<void> initializeService() async {
   final service = FlutterBackgroundService();
@@ -53,22 +54,24 @@ Future<void> initializeService() async {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  // final DarwinInitializationSettings initializationSettingsDarwin =
-  //     const DarwinInitializationSettings(notificationCategories: [
-  //   DarwinNotificationCategory(
-  //     'categoryIos',
-  //     actions: <DarwinNotificationAction>[
-  //       DarwinNotificationAction.plain('id_1', 'Action 1'),
-  //     ],
-  //     options: <DarwinNotificationCategoryOption>{
-  //       DarwinNotificationCategoryOption.hiddenPreviewShowTitle,
-  //     },
-  //   )
-  // ]);
+  final DarwinInitializationSettings initializationSettingsDarwin =
+      DarwinInitializationSettings(
+    notificationCategories: [
+      DarwinNotificationCategory(
+        iosNotificationCategoryPlain,
+        actions: <DarwinNotificationAction>[
+          DarwinNotificationAction.plain('id1', 'Stop running service'),
+        ],
+        options: <DarwinNotificationCategoryOption>{
+          DarwinNotificationCategoryOption.hiddenPreviewShowTitle,
+        },
+      )
+    ],
+  );
 
-  const InitializationSettings initializationSettings = InitializationSettings(
-    android: AndroidInitializationSettings('ic_bg_service_small'),
-    // iOS: initializationSettingsDarwin,
+  final InitializationSettings initializationSettings = InitializationSettings(
+    android: const AndroidInitializationSettings('ic_bg_service_small'),
+    iOS: initializationSettingsDarwin,
   );
 
   // flutterLocalNotificationsPlugin.initialize(initializationSettings);
@@ -117,8 +120,6 @@ Future<void> initializeService() async {
 void onStart(ServiceInstance service) async {
   DartPluginRegistrant.ensureInitialized();
 
-  debugPrint('YOOOOOOOOOOOOOOOOOOOOOOOO');
-
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
@@ -129,13 +130,18 @@ void onStart(ServiceInstance service) async {
         'IRL Link',
         'The app is running in the background.',
         const NotificationDetails(
-            android: AndroidNotificationDetails(
-                notificationChannelId, 'IRL Link',
-                icon: 'ic_bg_service_small',
-                actions: [
-                  AndroidNotificationAction('id1', 'Stop running service'),
-                ]),
-            iOS: DarwinNotificationDetails()),
+          android: AndroidNotificationDetails(
+            notificationChannelId,
+            'IRL Link',
+            icon: 'ic_bg_service_small',
+            actions: [
+              AndroidNotificationAction('id1', 'Stop running service'),
+            ],
+          ),
+          iOS: DarwinNotificationDetails(
+            categoryIdentifier: iosNotificationCategoryPlain,
+          ),
+        ),
       );
     }
   }
@@ -157,7 +163,7 @@ void onStart(ServiceInstance service) async {
 
 @pragma('vm:entry-point')
 void notificationTapBackground(NotificationResponse notificationResponse) {
-  if( Platform.isAndroid){
+  if (Platform.isAndroid) {
     final service = FlutterBackgroundService();
     service.invoke("stopService");
   }
