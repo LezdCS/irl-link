@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:get/get.dart';
@@ -106,47 +108,51 @@ class Tts extends StatelessWidget {
                     ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "voice".tr,
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge!.color,
-                        fontSize: 18,
-                      ),
-                    ),
-                    DropdownButton(
-                      value: controller.ttsVoices.firstWhere(
-                        (element) =>
-                            element["name"] ==
-                            controller.homeViewController.settings.value
-                                .ttsSettings!.voice["name"],
-                      ),
-                      onChanged: (Object? value) {
-                        Map<String, String> voice = {
-                          "name": (value as Map)["name"],
-                          "locale": (value)["locale"],
-                        };
-                        controller.homeViewController.settings.value =
-                            controller.homeViewController.settings.value
-                                .copyWith(
-                          ttsSettings: controller
-                              .homeViewController.settings.value.ttsSettings
-                              ?.copyWith(voice: voice),
-                        );
-                        controller.saveSettings();
-                      },
-                      items: List.generate(
-                        controller.ttsVoices.length,
-                        (index) => DropdownMenuItem(
-                          value: controller.ttsVoices[index],
-                          child: Text(controller.ttsVoices[index]["name"]),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                Platform.isAndroid
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "voice".tr,
+                            style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyLarge!.color,
+                              fontSize: 18,
+                            ),
+                          ),
+                          DropdownButton(
+                            value: controller.ttsVoices.firstWhere(
+                              (element) =>
+                                  element["name"] ==
+                                  controller.homeViewController.settings.value
+                                      .ttsSettings!.voice["name"],
+                            ),
+                            onChanged: (Object? value) {
+                              Map<String, String> voice = {
+                                "name": (value as Map)["name"],
+                                "locale": (value)["locale"],
+                              };
+                              controller.homeViewController.settings.value =
+                                  controller.homeViewController.settings.value
+                                      .copyWith(
+                                ttsSettings: controller.homeViewController
+                                    .settings.value.ttsSettings
+                                    ?.copyWith(voice: voice),
+                              );
+                              controller.saveSettings();
+                            },
+                            items: List.generate(
+                              controller.ttsVoices.length,
+                              (index) => DropdownMenuItem(
+                                value: controller.ttsVoices[index],
+                                child:
+                                    Text(controller.ttsVoices[index]["name"]),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : Container(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
