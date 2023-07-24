@@ -1,4 +1,3 @@
-
 import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
 
 class SeOverlayDTO extends SeOverlay {

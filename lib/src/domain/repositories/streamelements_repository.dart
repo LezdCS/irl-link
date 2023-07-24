@@ -17,5 +17,4 @@ abstract class StreamelementsRepository {
   Future<DataState<List<SeOverlay>>> getOverlays(String token, String channel);
 
   Future<DataState<SeMe>> getMe(String token);
-
 }
