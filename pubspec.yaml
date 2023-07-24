@@ -23,52 +23,52 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.5
-  webview_flutter: ^4.2.2
-  get: ^4.6.5
-  get_storage: ^2.1.1
-  split_view: ^3.2.1
-  flutter_svg: ^2.0.7
-  flutter_web_auth: ^0.5.0
-  url_launcher: ^6.1.12
-  web_socket_channel: ^2.4.0
-  http: ^0.13.6
-  jwt_decoder: ^2.0.1
-  equatable: ^2.0.5
-  dio: ^5.2.1+1
-  wakelock: ^0.6.2
-  connectivity_plus: ^4.0.1
-  move_to_background: ^1.0.2
-  obs_websocket: ^5.1.0+2
-  intl: ^0.18.1
-  expandable: ^5.0.1
   audioplayers: ^4.1.0
-  quiver: ^3.2.1
-  socket_io_client: ^2.0.2
-  firebase_crashlytics: ^3.3.4
-  firebase_core: ^2.15.0
-  percent_indicator: ^4.2.3
-  fl_chart: ^0.63.0
-  marquee: ^2.2.3
+  collection: ^1.17.1
+  connectivity_plus: ^4.0.1
+  cupertino_icons: ^1.0.5
+  dio: ^5.2.1+1
+  equatable: ^2.0.5
+  expandable: ^5.0.1
   faker: ^2.1.0
-  mobile_scanner: ^3.2.0
-  transparent_image: ^2.0.1
-  flutter_tts: ^3.7.0
-  package_info_plus: ^4.0.2
-  upgrader: ^8.0.0
-  in_app_purchase: ^3.1.7
+  firebase_core: ^2.15.0
+  firebase_crashlytics: ^3.3.4
+  fl_chart: ^0.63.0
   floating_draggable_widget: ^2.1.3
   flutter_background_service: ^3.0.1
   flutter_background_service_android: ^4.0.1
   flutter_background_service_ios: ^3.0.0
   flutter_local_notifications: ^14.1.2
-  collection: ^1.17.1
-  webview_flutter_android: ^3.9.1
-  webview_flutter_wkwebview: ^3.7.1
+  flutter_svg: ^2.0.7
+  flutter_tts: ^3.7.0
+  flutter_web_auth: ^0.5.0
+  get: ^4.6.5
+  get_storage: ^2.1.1
+  http: ^0.13.6
+  in_app_purchase: ^3.1.7
+  intl: ^0.18.1
+  jwt_decoder: ^2.0.1
+  marquee: ^2.2.3
+  mobile_scanner: ^3.3.0
+  move_to_background: ^1.0.2
+  obs_websocket: ^5.1.0+2
+  package_info_plus: ^4.0.2
+  percent_indicator: ^4.2.3
+  qr_flutter: ^4.1.0
+  quiver: ^3.2.1
+  socket_io_client: ^2.0.2
+  split_view: ^3.2.1
+  transparent_image: ^2.0.1
   twitch_chat:
     git:
         url: https://github.com/LezdCS/twitch_chat.git
-  qr_flutter: ^4.1.0
+  upgrader: ^8.0.0
+  url_launcher: ^6.1.12
+  wakelock: ^0.6.2
+  web_socket_channel: ^2.4.0
+  webview_flutter: ^4.2.2
+  webview_flutter_android: ^3.9.1
+  webview_flutter_wkwebview: ^3.7.1
 
 dependency_overrides:
   wakelock_windows:
@@ -78,7 +78,7 @@ dependency_overrides:
       path: wakelock_windows/ # folder
 
 dev_dependencies:
-  flutter_lints: ^2.0.1
+  flutter_lints: ^2.0.2
   flutter_test:
     sdk: flutter
 
