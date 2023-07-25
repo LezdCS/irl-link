@@ -79,13 +79,19 @@ class SettingsView extends GetView<SettingsViewController> {
             padding:
                 const EdgeInsets.only(top: 8, left: 10, right: 10, bottom: 8),
             children: [
-              Subscription(controller: controller),
-              Divider(
-                height: 20,
-                thickness: 2,
-                indent: 0,
-                endIndent: 0,
-                color: Theme.of(context).colorScheme.secondary,
+              Visibility(
+                visible: controller.homeViewController.storeFound.value,
+                child: Subscription(controller: controller),
+              ),
+              Visibility(
+                visible: controller.homeViewController.storeFound.value,
+                child: Divider(
+                  height: 20,
+                  thickness: 2,
+                  indent: 0,
+                  endIndent: 0,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
               ),
               chatSettings(context, width),
               Divider(
@@ -696,7 +702,10 @@ class SettingsView extends GetView<SettingsViewController> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                StreamElements(controller: controller),
+                Visibility(
+                  visible: controller.homeViewController.storeFound.value,
+                  child: StreamElements(controller: controller),
+                ),
               ],
             ),
           ),

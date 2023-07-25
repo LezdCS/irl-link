@@ -61,6 +61,7 @@ class HomeViewController extends GetxController
   List<ProductDetails> products = [];
   RxBool purchasePending = false.obs;
   RxList<PurchaseDetails> purchases = <PurchaseDetails>[].obs;
+  RxBool storeFound = false.obs;
 
   RxBool displayDashboard = false.obs;
 
@@ -72,6 +73,7 @@ class HomeViewController extends GetxController
   Rxn<ChatMessage> selectedMessage = Rxn<ChatMessage>();
 
   late FlutterTts flutterTts;
+
 
   @override
   void onInit() async {
@@ -100,6 +102,7 @@ class HomeViewController extends GetxController
                 }),
       );
     }
+    await getStore();
     await getSettings();
     await getStoreProducts();
 
@@ -359,10 +362,10 @@ class HomeViewController extends GetxController
     }
   }
 
-  void getStore() async {
+  Future<void> getStore() async {
     final bool available = await InAppPurchase.instance.isAvailable();
-    if (!available) {
-      // The store cannot be reached or accessed. Update the UI accordingly.
+    if (available) {
+      storeFound.value = true;
     }
   }
 
