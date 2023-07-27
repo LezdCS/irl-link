@@ -74,7 +74,6 @@ class HomeViewController extends GetxController
 
   late FlutterTts flutterTts;
 
-
   @override
   void onInit() async {
     chatInputController = TextEditingController();
