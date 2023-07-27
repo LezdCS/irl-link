@@ -2,7 +2,6 @@ import 'package:irllink/src/core/utils/constants.dart';
 
 class TwitchAuthParams {
   final String clientId;
-  final String redirectUri;
   final String responseType;
   final String scopes;
   final String forceVerify;
@@ -10,7 +9,6 @@ class TwitchAuthParams {
 
   const TwitchAuthParams({
     this.clientId = kTwitchAuthClientId,
-    this.redirectUri = 'https://irllink.com/twitch/app/auth',
     this.responseType = 'code',
     this.scopes = 'openid '
         'channel_editor channel:moderate '

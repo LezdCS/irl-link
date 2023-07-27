@@ -80,11 +80,11 @@ class SettingsView extends GetView<SettingsViewController> {
                 const EdgeInsets.only(top: 8, left: 10, right: 10, bottom: 8),
             children: [
               Visibility(
-                visible: controller.homeViewController.storeFound.value,
+                visible: controller.homeViewController.storeFound.value && controller.homeViewController.products.isNotEmpty,
                 child: Subscription(controller: controller),
               ),
               Visibility(
-                visible: controller.homeViewController.storeFound.value,
+                visible: controller.homeViewController.storeFound.value  && controller.homeViewController.products.isNotEmpty,
                 child: Divider(
                   height: 20,
                   thickness: 2,
@@ -703,7 +703,7 @@ class SettingsView extends GetView<SettingsViewController> {
                 ),
                 const SizedBox(height: 10),
                 Visibility(
-                  visible: controller.homeViewController.storeFound.value,
+                  visible: controller.homeViewController.storeFound.value && controller.homeViewController.products.isNotEmpty,
                   child: StreamElements(controller: controller),
                 ),
               ],
