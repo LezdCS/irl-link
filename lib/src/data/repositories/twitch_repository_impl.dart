@@ -29,7 +29,6 @@ class TwitchRepositoryImpl extends TwitchRepository {
   Future<DataState<TwitchCredentials>> getTwitchOauth(
       TwitchAuthParams params) async {
     try {
-
       final remoteConfig = FirebaseRemoteConfig.instance;
       await remoteConfig.fetchAndActivate();
       String redirectUri = remoteConfig.getString('irllink_auth_url');
@@ -105,7 +104,8 @@ class TwitchRepositoryImpl extends TwitchRepository {
     try {
       final remoteConfig = FirebaseRemoteConfig.instance;
       await remoteConfig.fetchAndActivate();
-      String apiRefreshTokenUrl = remoteConfig.getString('irllink_refresh_token_url');
+      String apiRefreshTokenUrl =
+          remoteConfig.getString('irllink_refresh_token_url');
 
       response = await dio.get(
         apiRefreshTokenUrl,
