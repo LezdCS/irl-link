@@ -325,6 +325,12 @@ class HomeView extends GetView<HomeViewController> {
                   controller.chatTabsController
                       .animateTo(controller.selectedChatIndex!);
                 }
+                if (controller.tabIndex.value > controller.tabElements.length - 1) {
+                  controller.tabIndex.value = 0;
+                  controller.tabController.animateTo(controller.tabIndex.value);
+                } else {
+                  controller.tabController.animateTo(controller.tabIndex.value);
+                }
               },
               child: Icon(
                 Icons.settings,
@@ -339,6 +345,7 @@ class HomeView extends GetView<HomeViewController> {
   }
 
   Widget _tabs(BuildContext context) {
+    debugPrint('regen tabs');
     return Expanded(
       child: Container(
         color: Theme.of(context).colorScheme.background,
