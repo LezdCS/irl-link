@@ -345,7 +345,6 @@ class HomeView extends GetView<HomeViewController> {
   }
 
   Widget _tabs(BuildContext context) {
-    debugPrint('regen tabs');
     return Expanded(
       child: Container(
         color: Theme.of(context).colorScheme.background,
