@@ -20,14 +20,15 @@ class TwitchEventSub {
   StreamSubscription? _streamSubscription;
   String? _broadcatserId;
 
+  TwitchPoll? currentPoll;
+  TwitchPrediction? currentPrediction;
+
   TwitchEventSub(
     this.channelName,
     this.accessToken,
   );
 
   void connect() async {
-    debugPrint('connect');
-
     _broadcatserId = await _getChannelId();
 
     _webSocketChannel =
@@ -38,10 +39,6 @@ class TwitchEventSub {
       onDone: _onDone,
       onError: _onError,
     );
-  }
-
-   void quit() {
-    debugPrint('quit');
   }
 
   void close() {
@@ -79,27 +76,35 @@ class TwitchEventSub {
       switch (msgMapped['metadata']['subscription']['type']) {
         //POLLS
         case 'channel.poll.begin':
-          TwitchPoll poll = TwitchPollDTO.fromJson(msgMapped['event']);
+          currentPoll = TwitchPollDTO.fromJson(msgMapped['event']);
           break;
         case 'channel.poll.progress':
-          TwitchPoll poll = TwitchPollDTO.fromJson(msgMapped['event']);
+          currentPoll = TwitchPollDTO.fromJson(msgMapped['event']);
           break;
         case 'channel.poll.end':
-          TwitchPoll poll = TwitchPollDTO.fromJson(msgMapped['event']);
+          currentPoll = TwitchPollDTO.fromJson(msgMapped['event']);
           break;
 
         //PREDICTIONS
         case 'channel.prediction.begin':
-          TwitchPrediction prediction = TwitchPredictionDTO.fromJson(msgMapped['event']);
+          currentPrediction = TwitchPredictionDTO.fromJson(msgMapped['event']);
           break;
         case 'channel.prediction.progress':
-          TwitchPrediction prediction = TwitchPredictionDTO.fromJson(msgMapped['event']);
+          currentPrediction = TwitchPredictionDTO.fromJson(msgMapped['event']);
           break;
         case 'channel.prediction.lock':
-          TwitchPrediction prediction = TwitchPredictionDTO.fromJson(msgMapped['event']);
+          currentPrediction = TwitchPredictionDTO.fromJson(msgMapped['event']);
           break;
         case 'channel.prediction.end':
-          TwitchPrediction prediction = TwitchPredictionDTO.fromJson(msgMapped['event']);
+          currentPrediction = TwitchPredictionDTO.fromJson(msgMapped['event']);
+          break;
+
+        //HYPE TRAIN
+        case 'channel.hype_train.begin':
+          break;
+        case 'channel.hype_train.progress':
+          break;
+        case 'channel.hype_train.end':
           break;
         default:
       }
@@ -129,12 +134,12 @@ class TwitchEventSub {
       await dio.post(
         'https://api.twitch.tv/helix/eventsub/subscriptions',
         data: {
-          "type":type,
-          "version":version,
-          "condition":condition,
-          "transport":{
-            "method":"websocket",
-            "session_id":sessionId
+          "type": type,
+          "version": version,
+          "condition": condition,
+          "transport": {
+            "method": "websocket",
+            "session_id": sessionId
           }
         }
       );
