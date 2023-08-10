@@ -79,8 +79,6 @@ class TwitchTabViewController extends GetxController {
     myDuration.value = const Duration(seconds: 15);
     if (homeViewController.twitchData == null) return;
     getStreamInfos();
-    getPoll();
-    getPrediction();
   }
 
   void toggleFollowerOnly() {
@@ -121,55 +119,16 @@ class TwitchTabViewController extends GetxController {
         homeViewController.twitchData!.twitchUser.id, titleFormController.text);
   }
 
-  void getPoll() {
-    homeEvents
-        .getPoll(homeViewController.twitchData!.accessToken,
-            homeViewController.twitchData!.twitchUser.id)
-        .then((value) => {
-              if (value.error != null)
-                {
-                  poll = null,
-                }
-              else
-                {
-                  if (poll == null)
-                    {
-                      poll = value.data!.obs,
-                    }
-                  else
-                    {
-                      poll!.value = value.data!,
-                    }
-                }
-            });
-  }
-
   void createPoll(String question, List<Choice> choices) {
     TwitchPoll newPoll = TwitchPoll(
         id: "",
         title: "",
         choices: choices,
         status: PollStatus.active,
-        totalVotes: 0);
+        totalVotes: 0,
+    );
     homeEvents.createPoll(homeViewController.twitchData!.accessToken,
         homeViewController.twitchData!.twitchUser.id, newPoll);
-    // .then((value) => {
-    //       if (value.error != null)
-    //         {
-    //           poll = null,
-    //         }
-    //       else
-    //         {
-    //           if (poll == null)
-    //             {
-    //               poll = value.data!.obs,
-    //             }
-    //           else
-    //             {
-    //               poll!.value = value.data!,
-    //             }
-    //         }
-    //     });
   }
 
   // status is either TERMINATED to end poll and display the result to viewer
@@ -189,29 +148,6 @@ class TwitchTabViewController extends GetxController {
               else
                 {
                   poll = null,
-                }
-            });
-  }
-
-  void getPrediction() {
-    homeEvents
-        .getPrediction(homeViewController.twitchData!.accessToken,
-            homeViewController.twitchData!.twitchUser.id)
-        .then((value) => {
-              if (value.error != null)
-                {
-                  prediction = null,
-                }
-              else
-                {
-                  if (prediction == null)
-                    {
-                      prediction = value.data!.obs,
-                    }
-                  else
-                    {
-                      prediction!.value = value.data!,
-                    }
                 }
             });
   }

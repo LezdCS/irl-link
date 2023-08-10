@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:irllink/src/core/utils/twitch_event_sub.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
@@ -91,6 +92,11 @@ class HomeViewController extends GetxController
       tabController = TabController(length: tabElements.length, vsync: this);
 
       twitchData = Get.arguments[0];
+      TwitchEventSub t = TwitchEventSub(
+        twitchData!.twitchUser.login,
+        twitchData!.accessToken,
+      );
+      t.connect();
 
       timerRefreshToken = Timer.periodic(
         const Duration(seconds: 13000),

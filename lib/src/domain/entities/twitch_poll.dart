@@ -3,10 +3,6 @@ import 'package:equatable/equatable.dart';
 enum PollStatus {
   active,
   completed,
-  terminated,
-  archived,
-  moderated,
-  invalid,
 }
 
 class TwitchPoll extends Equatable {

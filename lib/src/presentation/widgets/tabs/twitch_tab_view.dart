@@ -478,9 +478,7 @@ Widget poll(
                           backgroundColor:
                               Theme.of(context).colorScheme.secondary,
                           progressColor: ((controller.poll!.value.status ==
-                                          PollStatus.completed ||
-                                      controller.poll!.value.status ==
-                                          PollStatus.terminated) &&
+                                          PollStatus.completed) &&
                                   percentage > 0.5)
                               ? Colors.green
                               : Theme.of(context).colorScheme.background,

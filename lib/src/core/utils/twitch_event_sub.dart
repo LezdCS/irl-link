@@ -3,6 +3,10 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:irllink/src/data/entities/twitch_poll_dto.dart';
+import 'package:irllink/src/data/entities/twitch_prediction_dto.dart';
+import 'package:irllink/src/domain/entities/twitch_poll.dart';
+import 'package:irllink/src/domain/entities/twitch_prediction.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 import 'package:web_socket_channel/io.dart';
 
@@ -69,6 +73,36 @@ class TwitchEventSub {
       subscribeToEvent('channel.hype_train.begin', '1', sessionId, {"broadcaster_user_id": _broadcatserId ?? ''});
       subscribeToEvent('channel.hype_train.progress', '1', sessionId, {"broadcaster_user_id": _broadcatserId ?? ''});
       subscribeToEvent('channel.hype_train.end', '1', sessionId, {"broadcaster_user_id": _broadcatserId ?? ''});
+    }
+
+    if(msgMapped['metadata']['subscription'] != null){
+      switch (msgMapped['metadata']['subscription']['type']) {
+        //POLLS
+        case 'channel.poll.begin':
+          TwitchPoll poll = TwitchPollDTO.fromJson(msgMapped['event']);
+          break;
+        case 'channel.poll.progress':
+          TwitchPoll poll = TwitchPollDTO.fromJson(msgMapped['event']);
+          break;
+        case 'channel.poll.end':
+          TwitchPoll poll = TwitchPollDTO.fromJson(msgMapped['event']);
+          break;
+
+        //PREDICTIONS
+        case 'channel.prediction.begin':
+          TwitchPrediction prediction = TwitchPredictionDTO.fromJson(msgMapped['event']);
+          break;
+        case 'channel.prediction.progress':
+          TwitchPrediction prediction = TwitchPredictionDTO.fromJson(msgMapped['event']);
+          break;
+        case 'channel.prediction.lock':
+          TwitchPrediction prediction = TwitchPredictionDTO.fromJson(msgMapped['event']);
+          break;
+        case 'channel.prediction.end':
+          TwitchPrediction prediction = TwitchPredictionDTO.fromJson(msgMapped['event']);
+          break;
+        default:
+      }
     }
   }
 

@@ -380,8 +380,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       } else {
         poll = TwitchPollDTO.fromJson(response.data['data'][0]);
         if (poll.status == PollStatus.active ||
-            poll.status == PollStatus.completed ||
-            poll.status == PollStatus.terminated) {
+            poll.status == PollStatus.completed) {
           return DataSuccess(poll);
         }
         return const DataFailed("No poll to show");

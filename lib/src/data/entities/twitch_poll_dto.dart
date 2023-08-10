@@ -37,24 +37,11 @@ class TwitchPollDTO extends TwitchPoll {
         });
 
     switch (map["status"]) {
-      case "ACTIVE":
-        status = PollStatus.active;
-        break;
-      case "COMPLETED":
+      case "completed":
         status = PollStatus.completed;
         break;
-      case "TERMINATED":
-        status = PollStatus.terminated;
-        break;
-      case "ARCHIVED":
-        status = PollStatus.archived;
-        break;
-      case "MODERATED":
-        status = PollStatus.moderated;
-        break;
-      case "INVALID":
-        status = PollStatus.invalid;
-        break;
+      default:
+        status = PollStatus.active;
     }
     return TwitchPollDTO(
       id: map['id'],
