@@ -18,7 +18,8 @@ class TwitchAuthParams {
         'moderator:manage:chat_messages '
         'channel:manage:broadcast '
         'channel:read:polls channel:manage:polls '
-        'channel:read:predictions channel:manage:predictions',
+        'channel:read:predictions channel:manage:predictions '
+        'channel:read:hype_train',
     this.forceVerify = 'true',
     this.claims = '{"userinfo":{"picture":null, "preferred_username":null}}',
   });
