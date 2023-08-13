@@ -19,7 +19,7 @@ class TwitchEventSub {
   String channelName;
   IOWebSocketChannel? _webSocketChannel;
   StreamSubscription? _streamSubscription;
-  String? _broadcatserId;
+  String? _broadcasterId;
 
   TwitchPoll? currentPoll;
   TwitchPrediction? currentPrediction;
@@ -31,7 +31,7 @@ class TwitchEventSub {
   );
 
   void connect() async {
-    _broadcatserId = await _getChannelId();
+    _broadcasterId = await _getChannelId();
 
     _webSocketChannel =
         IOWebSocketChannel.connect("wss://eventsub.wss.twitch.tv/ws");
@@ -59,29 +59,29 @@ class TwitchEventSub {
 
       //SUBSCRIBE TO POLLS BEGIN, PROGRESS, END
       subscribeToEvent('channel.poll.begin', '1', sessionId,
-          {"broadcaster_user_id": _broadcatserId ?? ''});
+          {"broadcaster_user_id": _broadcasterId ?? ''});
       subscribeToEvent('channel.poll.progress', '1', sessionId,
-          {"broadcaster_user_id": _broadcatserId ?? ''});
+          {"broadcaster_user_id": _broadcasterId ?? ''});
       subscribeToEvent('channel.poll.end', '1', sessionId,
-          {"broadcaster_user_id": _broadcatserId ?? ''});
+          {"broadcaster_user_id": _broadcasterId ?? ''});
 
       //SUBSCRIBE TO PREDICTIONS BEGIN, PROGRESS, END
       subscribeToEvent('channel.prediction.begin', '1', sessionId,
-          {"broadcaster_user_id": _broadcatserId ?? ''});
+          {"broadcaster_user_id": _broadcasterId ?? ''});
       subscribeToEvent('channel.prediction.progress', '1', sessionId,
-          {"broadcaster_user_id": _broadcatserId ?? ''});
+          {"broadcaster_user_id": _broadcasterId ?? ''});
       subscribeToEvent('channel.prediction.lock', '1', sessionId,
-          {"broadcaster_user_id": _broadcatserId ?? ''});
+          {"broadcaster_user_id": _broadcasterId ?? ''});
       subscribeToEvent('channel.prediction.end', '1', sessionId,
-          {"broadcaster_user_id": _broadcatserId ?? ''});
+          {"broadcaster_user_id": _broadcasterId ?? ''});
 
       //SUBSCRIBE TO HYPE TRAINS
       subscribeToEvent('channel.hype_train.begin', '1', sessionId,
-          {"broadcaster_user_id": _broadcatserId ?? ''});
+          {"broadcaster_user_id": _broadcasterId ?? ''});
       subscribeToEvent('channel.hype_train.progress', '1', sessionId,
-          {"broadcaster_user_id": _broadcatserId ?? ''});
+          {"broadcaster_user_id": _broadcasterId ?? ''});
       subscribeToEvent('channel.hype_train.end', '1', sessionId,
-          {"broadcaster_user_id": _broadcatserId ?? ''});
+          {"broadcaster_user_id": _broadcasterId ?? ''});
     }
 
     if (msgMapped['metadata']['subscription'] != null) {
