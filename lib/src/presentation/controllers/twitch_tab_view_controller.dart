@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/twitch_stream_infos.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 
+import '../../core/utils/twitch_event_sub.dart';
 import '../../domain/entities/twitch_poll.dart';
-import '../../domain/entities/twitch_prediction.dart';
 import 'home_view_controller.dart';
 
 class TwitchTabViewController extends GetxController {
@@ -24,22 +24,18 @@ class TwitchTabViewController extends GetxController {
   Rx<TwitchStreamInfos> twitchStreamInfos =
       const TwitchStreamInfos.defaultInfos().obs;
 
-  late Rx<TwitchPrediction>? prediction;
   RxString selectedOutcomeId = "-1".obs;
-
-  late Rx<TwitchPoll>? poll;
 
   Timer? refreshDataTimer;
   Timer? refreshDataTimerProgressBar;
   Rx<Duration> myDuration = const Duration(seconds: 15).obs;
 
+  late TwitchEventSub twitchEventSub;
+
   @override
   void onInit() {
     homeViewController = Get.find<HomeViewController>();
     titleFormController = TextEditingController();
-    prediction = null;
-    poll = null;
-
     super.onInit();
   }
 
@@ -50,6 +46,11 @@ class TwitchTabViewController extends GetxController {
       refreshDataTimer = Timer.periodic(const Duration(seconds: 15), (timer) {
         refreshData();
       });
+      twitchEventSub = TwitchEventSub(
+        homeViewController.twitchData!.twitchUser.login,
+        homeViewController.twitchData!.accessToken,
+      );
+      twitchEventSub.connect();
     } else {
       isDemo.value = true;
     }
@@ -138,18 +139,8 @@ class TwitchTabViewController extends GetxController {
         .endPoll(
             homeViewController.twitchData!.accessToken,
             homeViewController.twitchData!.twitchUser.id,
-            poll!.value.id,
-            status)
-        .then((value) => {
-              if (value.data != null)
-                {
-                  poll!.value = value.data!,
-                }
-              else
-                {
-                  poll = null,
-                }
-            });
+        twitchEventSub.currentPoll.value!.id,
+            status);
   }
 
   // status is either RESOLVED to end prediction with a winner (should provide winning_outcome_id)
