@@ -5,15 +5,16 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:irllink/src/data/entities/twitch_poll_dto.dart';
 import 'package:irllink/src/data/entities/twitch_prediction_dto.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_hype_train.dart';
 import 'package:irllink/src/domain/entities/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch_prediction.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 import 'package:web_socket_channel/io.dart';
 
+import '../../data/entities/twitch/twitch_hype_train_dto.dart';
 import 'constants.dart';
 
 class TwitchEventSub {
-
   String accessToken;
   String channelName;
   IOWebSocketChannel? _webSocketChannel;
@@ -22,6 +23,7 @@ class TwitchEventSub {
 
   TwitchPoll? currentPoll;
   TwitchPrediction? currentPrediction;
+  TwitchHypeTrain? currentHypeTrain;
 
   TwitchEventSub(
     this.channelName,
@@ -48,31 +50,41 @@ class TwitchEventSub {
     _streamSubscription = null;
   }
 
-  void _eventListener(String data){
+  void _eventListener(String data) {
     debugPrint("Sub event: $data");
     Map msgMapped = jsonDecode(data);
-    
-    if(msgMapped['metadata']['message_type'] == 'session_welcome'){
+
+    if (msgMapped['metadata']['message_type'] == 'session_welcome') {
       String sessionId = msgMapped['payload']['session']['id'];
 
-      //SUBSCRIBE TO POLLS BEGIN, PROGRESS, END 
-      subscribeToEvent('channel.poll.begin', '1', sessionId, {"broadcaster_user_id": _broadcatserId ?? ''});
-      subscribeToEvent('channel.poll.progress', '1', sessionId, {"broadcaster_user_id": _broadcatserId ?? ''});
-      subscribeToEvent('channel.poll.end', '1', sessionId, {"broadcaster_user_id": _broadcatserId ?? ''});
+      //SUBSCRIBE TO POLLS BEGIN, PROGRESS, END
+      subscribeToEvent('channel.poll.begin', '1', sessionId,
+          {"broadcaster_user_id": _broadcatserId ?? ''});
+      subscribeToEvent('channel.poll.progress', '1', sessionId,
+          {"broadcaster_user_id": _broadcatserId ?? ''});
+      subscribeToEvent('channel.poll.end', '1', sessionId,
+          {"broadcaster_user_id": _broadcatserId ?? ''});
 
-      //SUBSCRIBE TO PREDICTIONS BEGIN, PROGRESS, END 
-      subscribeToEvent('channel.prediction.begin', '1', sessionId, {"broadcaster_user_id": _broadcatserId ?? ''});
-      subscribeToEvent('channel.prediction.progress', '1', sessionId, {"broadcaster_user_id": _broadcatserId ?? ''});
-      subscribeToEvent('channel.prediction.lock', '1', sessionId, {"broadcaster_user_id": _broadcatserId ?? ''});
-      subscribeToEvent('channel.prediction.end', '1', sessionId, {"broadcaster_user_id": _broadcatserId ?? ''});
+      //SUBSCRIBE TO PREDICTIONS BEGIN, PROGRESS, END
+      subscribeToEvent('channel.prediction.begin', '1', sessionId,
+          {"broadcaster_user_id": _broadcatserId ?? ''});
+      subscribeToEvent('channel.prediction.progress', '1', sessionId,
+          {"broadcaster_user_id": _broadcatserId ?? ''});
+      subscribeToEvent('channel.prediction.lock', '1', sessionId,
+          {"broadcaster_user_id": _broadcatserId ?? ''});
+      subscribeToEvent('channel.prediction.end', '1', sessionId,
+          {"broadcaster_user_id": _broadcatserId ?? ''});
 
       //SUBSCRIBE TO HYPE TRAINS
-      subscribeToEvent('channel.hype_train.begin', '1', sessionId, {"broadcaster_user_id": _broadcatserId ?? ''});
-      subscribeToEvent('channel.hype_train.progress', '1', sessionId, {"broadcaster_user_id": _broadcatserId ?? ''});
-      subscribeToEvent('channel.hype_train.end', '1', sessionId, {"broadcaster_user_id": _broadcatserId ?? ''});
+      subscribeToEvent('channel.hype_train.begin', '1', sessionId,
+          {"broadcaster_user_id": _broadcatserId ?? ''});
+      subscribeToEvent('channel.hype_train.progress', '1', sessionId,
+          {"broadcaster_user_id": _broadcatserId ?? ''});
+      subscribeToEvent('channel.hype_train.end', '1', sessionId,
+          {"broadcaster_user_id": _broadcatserId ?? ''});
     }
 
-    if(msgMapped['metadata']['subscription'] != null){
+    if (msgMapped['metadata']['subscription'] != null) {
       switch (msgMapped['metadata']['subscription']['type']) {
         //POLLS
         case 'channel.poll.begin':
@@ -101,10 +113,13 @@ class TwitchEventSub {
 
         //HYPE TRAIN
         case 'channel.hype_train.begin':
+          currentHypeTrain = TwitchHypeTrainDTO.fromJson(msgMapped['event']);
           break;
         case 'channel.hype_train.progress':
+          currentHypeTrain = TwitchHypeTrainDTO.fromJson(msgMapped['event']);
           break;
         case 'channel.hype_train.end':
+          currentHypeTrain = TwitchHypeTrainDTO.fromJson(msgMapped['event']);
           break;
         default:
       }
@@ -122,27 +137,24 @@ class TwitchEventSub {
   }
 
   Future<String> _getChannelId() async {
-    String? response = await TwitchApi.getTwitchUserChannelId(channelName, accessToken, kTwitchAuthClientId);
+    String? response = await TwitchApi.getTwitchUserChannelId(
+        channelName, accessToken, kTwitchAuthClientId);
     return response ?? '';
   }
 
-  void subscribeToEvent(String type, String version, String sessionId, Map<String, String> condition) async {
+  void subscribeToEvent(String type, String version, String sessionId,
+      Map<String, String> condition) async {
     var dio = Dio();
     try {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
       dio.options.headers["authorization"] = "Bearer $accessToken";
-      await dio.post(
-        'https://api.twitch.tv/helix/eventsub/subscriptions',
-        data: {
-          "type": type,
-          "version": version,
-          "condition": condition,
-          "transport": {
-            "method": "websocket",
-            "session_id": sessionId
-          }
-        }
-      );
+      await dio
+          .post('https://api.twitch.tv/helix/eventsub/subscriptions', data: {
+        "type": type,
+        "version": version,
+        "condition": condition,
+        "transport": {"method": "websocket", "session_id": sessionId}
+      });
     } on DioException catch (e) {
       debugPrint(e.response.toString());
     }
