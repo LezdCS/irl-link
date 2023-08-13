@@ -8,6 +8,7 @@ class TwitchStreamInfos extends Equatable {
   final bool? isEmoteMode;
   final bool? isFollowerMode;
   final bool? isSlowMode;
+  final int? slowModeWaitTime;
   final bool? isSubscriberMode;
 
   const TwitchStreamInfos({
@@ -18,6 +19,7 @@ class TwitchStreamInfos extends Equatable {
     required this.isEmoteMode,
     required this.isFollowerMode,
     required this.isSlowMode,
+    required this.slowModeWaitTime,
     required this.isSubscriberMode,
   });
 
@@ -29,6 +31,7 @@ class TwitchStreamInfos extends Equatable {
     this.isEmoteMode = false,
     this.isFollowerMode = false,
     this.isSlowMode = false,
+    this.slowModeWaitTime = 30,
     this.isSubscriberMode = false,
   });
 
@@ -39,6 +42,7 @@ class TwitchStreamInfos extends Equatable {
         'isEmoteMode': isEmoteMode,
         'isFollowerMode': isFollowerMode,
         'isSlowMode': isSlowMode,
+        'slowModeWaitTime': slowModeWaitTime,
         'isSubscriberMode': isSubscriberMode,
       };
 
@@ -52,6 +56,7 @@ class TwitchStreamInfos extends Equatable {
       isEmoteMode,
       isFollowerMode,
       isSlowMode,
+      slowModeWaitTime,
       isSubscriberMode
     ];
   }
@@ -64,6 +69,7 @@ class TwitchStreamInfos extends Equatable {
     bool? isEmoteMode,
     bool? isFollowerMode,
     bool? isSlowMode,
+    int? slowModeWaitTime,
     bool? isSubscriberMode,
   }) =>
       TwitchStreamInfos(
@@ -75,6 +81,7 @@ class TwitchStreamInfos extends Equatable {
         isFollowerMode: isFollowerMode ?? this.isFollowerMode,
         isSubscriberMode: isSubscriberMode ?? this.isSubscriberMode,
         isSlowMode: isSlowMode ?? this.isSlowMode,
+        slowModeWaitTime: slowModeWaitTime ?? this.slowModeWaitTime,
       );
 
   @override

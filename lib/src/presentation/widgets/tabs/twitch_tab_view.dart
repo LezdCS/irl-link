@@ -4,6 +4,7 @@ import 'package:irllink/src/domain/entities/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch_prediction.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/alert_message_view.dart';
+import 'package:irllink/src/presentation/widgets/tabs/dialogs/slow_mode_dialog.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -203,7 +204,10 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                       context: context,
                       text: 'slow_mode'.tr,
                       onTap: () => {
-                        controller.toggleSlowMode(),
+                        if (controller.twitchStreamInfos.value.isSlowMode!)
+                          {controller.toggleSlowMode(0)}
+                        else
+                          {Get.dialog(slowModeDialog(context, controller))}
                       },
                       isOn: controller.twitchStreamInfos.value.isSlowMode!,
                     ),

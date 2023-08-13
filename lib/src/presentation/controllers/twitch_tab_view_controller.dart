@@ -100,9 +100,11 @@ class TwitchTabViewController extends GetxController {
     changeChatSettings();
   }
 
-  void toggleSlowMode() {
-    twitchStreamInfos.value = twitchStreamInfos.value
-        .copyWith(isSlowMode: !twitchStreamInfos.value.isSlowMode!);
+  void toggleSlowMode(int? time) {
+    twitchStreamInfos.value = twitchStreamInfos.value.copyWith(
+      isSlowMode: !twitchStreamInfos.value.isSlowMode!,
+      slowModeWaitTime: time,
+    );
     changeChatSettings();
   }
 
@@ -122,11 +124,11 @@ class TwitchTabViewController extends GetxController {
 
   void createPoll(String question, List<Choice> choices) {
     TwitchPoll newPoll = TwitchPoll(
-        id: "",
-        title: "",
-        choices: choices,
-        status: PollStatus.active,
-        totalVotes: 0,
+      id: "",
+      title: "",
+      choices: choices,
+      status: PollStatus.active,
+      totalVotes: 0,
     );
     homeEvents.createPoll(homeViewController.twitchData!.accessToken,
         homeViewController.twitchData!.twitchUser.id, newPoll);
@@ -135,12 +137,11 @@ class TwitchTabViewController extends GetxController {
   // status is either TERMINATED to end poll and display the result to viewer
   // or ARCHIVED to end the poll and hide it
   void endPoll(String status) {
-    homeEvents
-        .endPoll(
-            homeViewController.twitchData!.accessToken,
-            homeViewController.twitchData!.twitchUser.id,
+    homeEvents.endPoll(
+        homeViewController.twitchData!.accessToken,
+        homeViewController.twitchData!.twitchUser.id,
         twitchEventSub.currentPoll.value!.id,
-            status);
+        status);
   }
 
   // status is either RESOLVED to end prediction with a winner (should provide winning_outcome_id)
