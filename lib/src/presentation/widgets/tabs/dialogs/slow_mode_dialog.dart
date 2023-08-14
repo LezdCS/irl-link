@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../controllers/twitch_tab_view_controller.dart';
 
@@ -14,33 +15,51 @@ Widget slowModeDialog(
     {"2m": 120},
   ];
 
-  return Column(
-    children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: List.generate(slowModeValues.length, (index) {
-          return InkWell(
-            onTap: () => controller.toggleSlowMode(
-              slowModeValues[index].values.first,
+  return AlertDialog(
+    contentPadding: EdgeInsets.zero,
+    content: Wrap(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.background,
+            borderRadius: const BorderRadius.all(
+              Radius.circular(8),
             ),
-            child: Container(
-              margin: const EdgeInsets.only(right: 10),
-              padding: const EdgeInsets.only(
-                  left: 5, right: 5, top: 5, bottom: 5),
-              decoration: const BoxDecoration(
-                color: Color(0xFF121212),
-                borderRadius: BorderRadius.all(Radius.circular(5)),
+          ),
+          child: Column(
+            children: [
+              const Text('Select a time', style: TextStyle(fontSize: 18),),
+              const SizedBox(height: 14,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(slowModeValues.length, (index) {
+                  return InkWell(
+                    onTap: () => {
+                      controller.toggleSlowMode(slowModeValues[index].values.first),
+                      Get.back(),
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(right: 14),
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.tertiaryContainer,
+                        borderRadius: const BorderRadius.all(Radius.circular(5)),
+                      ),
+                      child: Text(
+                        slowModeValues[index].keys.first,
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  );
+                }),
               ),
-              child: Text(
-                slowModeValues[index].keys.first,
-                style: const TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          );
-        }),
-      ),
-    ],
+            ],
+          ),
+        ),
+      ],
+    ),
   );
 }
