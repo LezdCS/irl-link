@@ -19,7 +19,6 @@ class TwitchTabViewController extends GetxController {
   FocusNode focus = FocusNode();
 
   late HomeViewController homeViewController;
-  RxBool isDemo = false.obs;
 
   Rx<TwitchStreamInfos> twitchStreamInfos =
       const TwitchStreamInfos.defaultInfos().obs;
@@ -46,13 +45,11 @@ class TwitchTabViewController extends GetxController {
       refreshDataTimer = Timer.periodic(const Duration(seconds: 15), (timer) {
         refreshData();
       });
-      twitchEventSub = TwitchEventSub(
-        homeViewController.twitchData!.twitchUser.login,
-        homeViewController.twitchData!.accessToken,
-      );
-      twitchEventSub.connect();
-    } else {
-      isDemo.value = true;
+      // twitchEventSub = TwitchEventSub(
+      //   homeViewController.twitchData!.twitchUser.login,
+      //   homeViewController.twitchData!.accessToken,
+      // );
+      // twitchEventSub.connect();
     }
 
     refreshDataTimerProgressBar =
