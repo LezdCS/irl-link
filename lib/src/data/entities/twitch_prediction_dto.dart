@@ -41,17 +41,11 @@ class TwitchPredictionDTO extends TwitchPrediction {
         });
 
     switch (map["status"]) {
-      case "RESOLVED":
+      case "resolved":
         status = PredictionStatus.resolved;
         break;
-      case "ACTIVE":
-        status = PredictionStatus.active;
-        break;
-      case "CANCELED":
+      case "canceled":
         status = PredictionStatus.canceled;
-        break;
-      case "LOCKED":
-        status = PredictionStatus.locked;
         break;
     }
     return TwitchPredictionDTO(
@@ -90,7 +84,7 @@ class OutcomeDTO extends Outcome {
 
   factory OutcomeDTO.fromJson(Map<String, dynamic> map) {
     Color color;
-    if (map['color'] == "PINK") {
+    if (map['color'] == "pink") {
       color = Colors.pink;
     } else {
       color = Colors.blue;
@@ -99,7 +93,7 @@ class OutcomeDTO extends Outcome {
       id: map['id'],
       title: map['title'],
       users: int.parse(map['users']),
-      channelPoints: int.parse(map['channelPoints']),
+      channelPoints: int.parse(map['channel_points']),
       color: color,
     );
   }

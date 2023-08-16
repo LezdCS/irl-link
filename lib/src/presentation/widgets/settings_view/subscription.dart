@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
+import 'package:irllink/src/presentation/widgets/settings_view/dialogs/in_app_purchase_dialog.dart';
 
 class Subscription extends StatelessWidget {
   final SettingsViewController controller;
@@ -38,17 +39,16 @@ class Subscription extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    isSubscribed
-                        ? Text(
-                            "You are subscribed.",
-                            style: TextStyle(
-                                color: Colors.green[400], fontSize: 16),
-                          )
-                        : Text(
-                            "You are not subscribed.",
-                            style:
-                                TextStyle(color: Colors.red[400], fontSize: 16),
-                          ),
+                    Text(
+                      isSubscribed
+                          ? "You are subscribed."
+                          : "You are not subscribed.",
+                      style: TextStyle(
+                        color:
+                            isSubscribed ? Colors.green[400] : Colors.red[400],
+                        fontSize: 16,
+                      ),
+                    ),
                     isSubscribed
                         ? const Text(
                             "You can access every features of IRL Link!")
@@ -66,7 +66,7 @@ class Subscription extends StatelessWidget {
                   flex: 3,
                   child: TextButton(
                     onPressed: () {
-                      controller.purchase();
+                      Get.dialog(inAppPurchaseDialog(context, controller));
                     },
                     style: TextButton.styleFrom(
                       textStyle: const TextStyle(fontSize: 12),

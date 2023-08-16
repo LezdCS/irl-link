@@ -751,25 +751,32 @@ class SettingsView extends GetView<SettingsViewController> {
                     ),
                   ),
                 ),
-                InkWell(
-                  onTap: () {
-                    launchUrl(
-                      Uri(scheme: "mailto", path: "support@irllink.com"),
-                    );
-                  },
-                  child: Text(
-                    'support@irllink.com',
-                    style: TextStyle(
-                      color: Colors.blue[900],
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
                 const SizedBox(
                   height: 10,
                 ),
                 Row(
                   children: [
+                    InkWell(
+                      onTap: () {
+                        launchUrl(
+                          Uri(
+                            scheme: "https",
+                            host: "discord.gg",
+                            path: "/irltools",
+                          ),
+                          mode: LaunchMode.externalApplication,
+                        );
+                      },
+                      child: SvgPicture.asset(
+                        './lib/assets/discord-mark-blue.svg',
+                        semanticsLabel: 'discord icon',
+                        width: 25,
+                        height: 25,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
                     InkWell(
                       onTap: () {
                         launchUrl(

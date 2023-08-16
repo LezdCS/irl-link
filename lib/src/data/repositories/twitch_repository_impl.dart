@@ -313,7 +313,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
   Future<DataState<Response<dynamic>>> setChatSettings(String accessToken,
       String broadcasterId, TwitchStreamInfos? twitchStreamInfos) async {
     Response response;
-    Map<String, bool> settings = {};
+    Map<String, dynamic> settings = {};
     var dio = Dio();
     try {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
@@ -326,14 +326,22 @@ class TwitchRepositoryImpl extends TwitchRepository {
           'slow_mode': twitchStreamInfos.isSlowMode!,
           'subscriber_mode': twitchStreamInfos.isSubscriberMode!,
         };
+
+        if (twitchStreamInfos.isSlowMode!) {
+          // minimum 3, maximum 120
+          settings['slow_mode_wait_time'] =
+              twitchStreamInfos.slowModeWaitTime ?? 30;
+        }
       }
 
-      response = await dio.patch('https://api.twitch.tv/helix/chat/settings',
-          queryParameters: {
-            'broadcaster_id': broadcasterId,
-            'moderator_id': broadcasterId
-          },
-          data: jsonEncode(settings));
+      response = await dio.patch(
+        'https://api.twitch.tv/helix/chat/settings',
+        queryParameters: {
+          'broadcaster_id': broadcasterId,
+          'moderator_id': broadcasterId
+        },
+        data: jsonEncode(settings),
+      );
 
       return DataSuccess(response);
     } on DioException catch (e) {
@@ -350,12 +358,14 @@ class TwitchRepositoryImpl extends TwitchRepository {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
       dio.options.headers["authorization"] = "Bearer $accessToken";
       Map titleMap = {"title": title};
-      await dio.patch('https://api.twitch.tv/helix/channels',
-          queryParameters: {
-            'broadcaster_id': broadcasterId,
-            'moderator_id': broadcasterId
-          },
-          data: jsonEncode(titleMap));
+      await dio.patch(
+        'https://api.twitch.tv/helix/channels',
+        queryParameters: {
+          'broadcaster_id': broadcasterId,
+          'moderator_id': broadcasterId
+        },
+        data: jsonEncode(titleMap),
+      );
       return const DataSuccess("");
     } on DioException catch (e) {
       debugPrint(e.toString());
@@ -380,8 +390,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       } else {
         poll = TwitchPollDTO.fromJson(response.data['data'][0]);
         if (poll.status == PollStatus.active ||
-            poll.status == PollStatus.completed ||
-            poll.status == PollStatus.terminated) {
+            poll.status == PollStatus.completed) {
           return DataSuccess(poll);
         }
         return const DataFailed("No poll to show");

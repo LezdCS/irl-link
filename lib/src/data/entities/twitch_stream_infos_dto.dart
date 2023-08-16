@@ -10,6 +10,7 @@ class TwitchStreamInfosDto extends TwitchStreamInfos {
     required bool isEmoteMode,
     required bool isFollowerMode,
     required bool isSlowMode,
+    required int slowModeWaitTime,
     required bool isSubscriberMode,
   }) : super(
           title: title,
@@ -19,6 +20,7 @@ class TwitchStreamInfosDto extends TwitchStreamInfos {
           isEmoteMode: isEmoteMode,
           isFollowerMode: isFollowerMode,
           isSlowMode: isSlowMode,
+          slowModeWaitTime: slowModeWaitTime,
           isSubscriberMode: isSubscriberMode,
         );
 
@@ -31,6 +33,7 @@ class TwitchStreamInfosDto extends TwitchStreamInfos {
         'isEmoteMode': isEmoteMode,
         'isFollowerMode': isFollowerMode,
         'isSlowMode': isSlowMode,
+        'slowModeWaitTime': slowModeWaitTime,
         'isSubscriberMode': isSubscriberMode,
       };
 
@@ -56,6 +59,7 @@ class TwitchStreamInfosDto extends TwitchStreamInfos {
       isEmoteMode: map3['emote_mode'],
       isFollowerMode: map3['follower_mode'],
       isSlowMode: map3['slow_mode'],
+      slowModeWaitTime: map3['slow_mode_wait_time'] ?? 30,
       isSubscriberMode: map3['subscriber_mode'],
     );
   }
