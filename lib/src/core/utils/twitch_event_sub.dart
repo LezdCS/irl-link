@@ -54,7 +54,7 @@ class TwitchEventSub {
     debugPrint("Sub event: $data");
     Map msgMapped = jsonDecode(data);
 
-    if (msgMapped['metadata']['message_type'] == 'session_welcome') {
+    if (msgMapped['metadata'] != null && msgMapped['metadata']['message_type'] == 'session_welcome') {
       String sessionId = msgMapped['payload']['session']['id'];
 
       //SUBSCRIBE TO POLLS BEGIN, PROGRESS, END
@@ -86,8 +86,8 @@ class TwitchEventSub {
       fakeData();
     }
 
-    if (msgMapped['metadata']['subscription'] != null) {
-      switch (msgMapped['metadata']['subscription']['type']) {
+    if (msgMapped['subscription'] != null) {
+      switch (msgMapped['subscription']['type']) {
         //POLLS
         case 'channel.poll.begin':
           currentPoll.value = TwitchPollDTO.fromJson(msgMapped['event']);
@@ -162,7 +162,403 @@ class TwitchEventSub {
     }
   }
 
-  void fakeData(){
+  void fakeData() async {
+    // // PREDICTIONS
+    // _eventListener(predictionBeginJson);
+    // await Future.delayed(const Duration(seconds: 10));
+    // _eventListener(predictionProgressJson);
+    // await Future.delayed(const Duration(seconds: 10));
+    // _eventListener(predictionLockJson);
+    // await Future.delayed(const Duration(seconds: 10));
+    // _eventListener(predictionEndJson);
 
+    // // POLLS
+    // _eventListener(pollBeginJson);
+    // await Future.delayed(const Duration(seconds: 10));
+    // _eventListener(pollProgressJson);
+    // await Future.delayed(const Duration(seconds: 10));
+    // _eventListener(pollEndJson);
+
+    // // HYPE TRAIN
+    // _eventListener(hypeBeginJson);
+    // await Future.delayed(const Duration(seconds: 10));
+    // _eventListener(hypeProgressJson);
+    // await Future.delayed(const Duration(seconds: 10));
+    // _eventListener(hypeEndJson);
   }
 }
+
+const String predictionBeginJson = '''
+  {
+    "subscription": {
+        "id": "f1c2a387-161a-49f9-a165-0f21d7a4e1c4",
+        "type": "channel.prediction.begin",
+        "version": "1",
+        "status": "enabled",
+        "cost": 0,
+        "condition": {
+            "broadcaster_user_id": "1337"
+        },
+         "transport": {
+            "method": "webhook",
+            "callback": "https://example.com/webhooks/callback"
+        },
+        "created_at": "2019-11-16T10:11:12.634234626Z"
+    },
+    "event": {
+        "id": "1243456",
+        "broadcaster_user_id": "1337",
+        "broadcaster_user_login": "cool_user",
+        "broadcaster_user_name": "Cool_User",
+        "title": "Aren’t shoes just really hard socks?",
+        "outcomes": [
+            {"id": "1243456", "title": "Yeah!", "color": "blue"},
+            {"id": "2243456", "title": "No!", "color": "pink"}
+        ],
+        "started_at": "2020-07-15T17:16:03.17106713Z",
+        "locks_at": "2020-07-15T17:21:03.17106713Z"
+    }
+}
+''';
+
+const String predictionProgressJson = '''
+{
+    "subscription": {
+        "id": "f1c2a387-161a-49f9-a165-0f21d7a4e1c4",
+        "type": "channel.prediction.progress",
+        "version": "1",
+        "status": "enabled",
+        "cost": 0,
+        "condition": {
+            "broadcaster_user_id": "1337"
+        },
+         "transport": {
+            "method": "webhook",
+            "callback": "https://example.com/webhooks/callback"
+        },
+        "created_at": "2019-11-16T10:11:12.634234626Z"
+    },
+    "event": {
+        "id": "1243456",
+        "broadcaster_user_id": "1337",
+        "broadcaster_user_login": "cool_user",
+        "broadcaster_user_name": "Cool_User",
+        "title": "Aren’t shoes just really hard socks?",
+        "outcomes": [
+            {
+                "id": "1243456",
+                "title": "Yeah!",
+                "color": "blue",
+                "users": 10,
+                "channel_points": 15000,
+                "top_predictors": [
+                    {
+                        "user_name": "Cool_User",
+                        "user_login": "cool_user",
+                        "user_id": "1234",
+                        "channel_points_won": null,
+                        "channel_points_used": 500
+                    },
+                    {
+                        "user_name": "Coolest_User",
+                        "user_login": "coolest_user",
+                        "user_id": "1236",
+                        "channel_points_won": null,
+                        "channel_points_used": 200
+                    }
+                ]
+            },
+            {
+                "id": "2243456",
+                "title": "No!",
+                "color": "pink",
+                "top_predictors": [
+                    {
+                        "user_name": "Cooler_User",
+                        "user_login": "cooler_user",
+                        "user_id": 12345,
+                        "channel_points_won": null,
+                        "channel_points_used": 5000
+                    }
+                ]
+            }
+        ],
+        "started_at": "2020-07-15T17:16:03.17106713Z",
+        "locks_at": "2020-07-15T17:21:03.17106713Z"
+    }
+}
+''';
+
+const String predictionLockJson = '''
+{
+    "subscription": {
+        "id": "f1c2a387-161a-49f9-a165-0f21d7a4e1c4",
+        "type": "channel.prediction.lock",
+        "version": "1",
+        "status": "enabled",
+        "cost": 0,
+        "condition": {
+            "broadcaster_user_id": "1337"
+        },
+         "transport": {
+            "method": "webhook",
+            "callback": "https://example.com/webhooks/callback"
+        },
+        "created_at": "2019-11-16T10:11:12.634234626Z"
+    },
+    "event": {
+        "id": "1243456",
+        "broadcaster_user_id": "1337",
+        "broadcaster_user_login": "cool_user",
+        "broadcaster_user_name": "Cool_User",
+        "title": "Aren’t shoes just really hard socks?",
+        "outcomes": [
+            {
+                "id": "1243456",
+                "title": "Yeah!",
+                "color": "blue",
+                "users": 10,
+                "channel_points": 15000,
+                "top_predictors": [
+                    {
+                        "user_name": "Cool_User",
+                        "user_login": "cool_user",
+                        "user_id": "1234",
+                        "channel_points_won": null,
+                        "channel_points_used": 500
+                    },
+                    {
+                        "user_name": "Coolest_User",
+                        "user_login": "coolest_user",
+                        "user_id": "1236",
+                        "channel_points_won": null,
+                        "channel_points_used": 200
+                    }
+                ]
+            },
+            {
+                "id": "2243456",
+                "title": "No!",
+                "color": "pink",
+                "top_predictors": [
+                    {
+                        "user_name": "Cooler_User",
+                        "user_login": "cooler_user",
+                        "user_id": 12345,
+                        "channel_points_won": null,
+                        "channel_points_used": 5000
+                    }
+                ]
+            }
+        ],
+        "started_at": "2020-07-15T17:16:03.17106713Z",
+        "locked_at": "2020-07-15T17:21:03.17106713Z"
+    }
+}
+''';
+
+const String predictionEndJson = '''
+{
+    "subscription": {
+        "id": "f1c2a387-161a-49f9-a165-0f21d7a4e1c4",
+        "type": "channel.prediction.end",
+        "version": "1",
+        "status": "enabled",
+        "cost": 0,
+        "condition": {
+            "broadcaster_user_id": "1337"
+        },
+         "transport": {
+            "method": "webhook",
+            "callback": "https://example.com/webhooks/callback"
+        },
+        "created_at": "2019-11-16T10:11:12.634234626Z"
+    },
+    "event": {
+        "id": "1243456",
+        "broadcaster_user_id": "1337",
+        "broadcaster_user_login": "cool_user",
+        "broadcaster_user_name": "Cool_User",
+        "title": "Aren’t shoes just really hard socks?",
+        "winning_outcome_id": "12345",
+        "outcomes": [
+            {
+                "id": "12345",
+                "title": "Yeah!",
+                "color": "blue",
+                "users": 2,
+                "channel_points": 15000,
+                "top_predictors": [
+                    {
+                        "user_name": "Cool_User",
+                        "user_login": "cool_user",
+                        "user_id": "1234",
+                        "channel_points_won": 10000,
+                        "channel_points_used": 500
+                    },
+                    {
+                        "user_name": "Coolest_User",
+                        "user_login": "coolest_user",
+                        "user_id": "1236",
+                        "channel_points_won": 5000,
+                        "channel_points_used": 100
+                    }
+                ]
+            },
+            {
+                "id": "22435",
+                "title": "No!",
+                "users": 2,
+                "channel_points": 200,
+                "color": "pink",
+                "top_predictors": [
+                    {
+                        "user_name": "Cooler_User",
+                        "user_login": "cooler_user",
+                        "user_id": 12345,
+                        "channel_points_won": null,
+                        "channel_points_used": 100
+                    },
+                    {
+                        "user_name": "Elite_User",
+                        "user_login": "elite_user",
+                        "user_id": 1337,
+                        "channel_points_won": null,
+                        "channel_points_used": 100
+                    }
+                ]
+            }
+        ],
+        "status": "resolved",
+        "started_at": "2020-07-15T17:16:03.17106713Z",
+        "ended_at": "2020-07-15T17:16:11.17106713Z"
+    }
+}
+''';
+
+const String pollBeginJson = '''
+{
+    "subscription": {
+        "id": "f1c2a387-161a-49f9-a165-0f21d7a4e1c4",
+        "type": "channel.poll.begin",
+        "version": "1",
+        "status": "enabled",
+        "cost": 0,
+        "condition": {
+            "broadcaster_user_id": "1337"
+        },
+         "transport": {
+            "method": "webhook",
+            "callback": "https://example.com/webhooks/callback"
+        },
+        "created_at": "2019-11-16T10:11:12.634234626Z"
+    },
+    "event": {
+        "id": "1243456",
+        "broadcaster_user_id": "1337",
+        "broadcaster_user_login": "cool_user",
+        "broadcaster_user_name": "Cool_User",
+        "title": "Aren’t shoes just really hard socks?",
+        "choices": [
+            {"id": "123", "title": "Yeah!"},
+            {"id": "124", "title": "No!"},
+            {"id": "125", "title": "Maybe!"}
+        ],
+        "bits_voting": {
+            "is_enabled": true,
+            "amount_per_vote": 10
+        },
+        "channel_points_voting": {
+            "is_enabled": true,
+            "amount_per_vote": 10
+        },
+        "started_at": "2020-07-15T17:16:03.17106713Z",
+        "ends_at": "2020-07-15T17:16:08.17106713Z"
+    }
+}
+''';
+
+const String pollProgressJson = '''
+{
+    "subscription": {
+        "id": "f1c2a387-161a-49f9-a165-0f21d7a4e1c4",
+        "type": "channel.poll.progress",
+        "version": "1",
+        "status": "enabled",
+        "cost": 0,
+        "condition": {
+            "broadcaster_user_id": "1337"
+        },
+         "transport": {
+            "method": "webhook",
+            "callback": "https://example.com/webhooks/callback"
+        },
+        "created_at": "2019-11-16T10:11:12.634234626Z"
+    },
+    "event": {
+        "id": "1243456",
+        "broadcaster_user_id": "1337",
+        "broadcaster_user_login": "cool_user",
+        "broadcaster_user_name": "Cool_User",
+        "title": "Aren’t shoes just really hard socks?",
+        "choices": [
+            {"id": "123", "title": "Yeah!", "bits_votes": 5, "channel_points_votes": 7, "votes": 12},
+            {"id": "124", "title": "No!", "bits_votes": 10, "channel_points_votes": 4, "votes": 14},
+            {"id": "125", "title": "Maybe!", "bits_votes": 0, "channel_points_votes": 7, "votes": 7}
+        ],
+        "bits_voting": {
+            "is_enabled": true,
+            "amount_per_vote": 10
+        },
+        "channel_points_voting": {
+            "is_enabled": true,
+            "amount_per_vote": 10
+        },
+        "started_at": "2020-07-15T17:16:03.17106713Z",
+        "ends_at": "2020-07-15T17:16:08.17106713Z"
+    }
+}
+''';
+
+const String pollEndJson = '''
+{
+    "subscription": {
+        "id": "f1c2a387-161a-49f9-a165-0f21d7a4e1c4",
+        "type": "channel.poll.end",
+        "version": "1",
+        "status": "enabled",
+        "cost": 0,
+        "condition": {
+            "broadcaster_user_id": "1337"
+        },
+         "transport": {
+            "method": "webhook",
+            "callback": "https://example.com/webhooks/callback"
+        },
+        "created_at": "2019-11-16T10:11:12.634234626Z"
+    },
+    "event": {
+        "id": "1243456",
+        "broadcaster_user_id": "1337",
+        "broadcaster_user_login": "cool_user",
+        "broadcaster_user_name": "Cool_User",
+        "title": "Aren’t shoes just really hard socks?",
+        "choices": [
+            {"id": "123", "title": "Blue", "bits_votes": 50, "channel_points_votes": 70, "votes": 120},
+            {"id": "124", "title": "Yellow", "bits_votes": 100, "channel_points_votes": 40, "votes": 140},
+            {"id": "125", "title": "Green", "bits_votes": 10, "channel_points_votes": 70, "votes": 80}
+        ],
+        "bits_voting": {
+            "is_enabled": true,
+            "amount_per_vote": 10
+        },
+        "channel_points_voting": {
+            "is_enabled": true,
+            "amount_per_vote": 10
+        },
+        "status": "completed",
+        "started_at": "2020-07-15T17:16:03.17106713Z",
+        "ended_at": "2020-07-15T17:16:11.17106713Z"
+    }
+}
+''';
