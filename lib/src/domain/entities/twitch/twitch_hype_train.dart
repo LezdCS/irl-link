@@ -7,7 +7,8 @@ class TwitchHypeTrain extends Equatable {
   final int goal;
   final int level;
   final List<Contribution> topContributions;
-  final Contribution lastContribution;
+  final Contribution? lastContribution;
+  final Duration endsAt;
 
   const TwitchHypeTrain({
     required this.id,
@@ -17,6 +18,7 @@ class TwitchHypeTrain extends Equatable {
     required this.level,
     required this.topContributions,
     required this.lastContribution,
+    required this.endsAt,
   });
 
   Map toJson() => {
@@ -27,6 +29,7 @@ class TwitchHypeTrain extends Equatable {
     'level': level,
     'topContributions': topContributions,
     'lastContribution': lastContribution,
+    'endsAt': endsAt,
   };
 
   @override
@@ -39,6 +42,7 @@ class TwitchHypeTrain extends Equatable {
       level,
       topContributions,
       lastContribution,
+      endsAt,
     ];
   }
 

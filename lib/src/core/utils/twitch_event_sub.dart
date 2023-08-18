@@ -51,7 +51,7 @@ class TwitchEventSub {
   }
 
   void _eventListener(String data) {
-    debugPrint("Sub event: $data");
+    // debugPrint("Sub event: $data");
     Map msgMapped = jsonDecode(data);
 
     if (msgMapped['metadata'] != null && msgMapped['metadata']['message_type'] == 'session_welcome') {
@@ -179,11 +179,11 @@ class TwitchEventSub {
     // await Future.delayed(const Duration(seconds: 10));
     // _eventListener(pollEndJson);
 
-    // // HYPE TRAIN
+    // HYPE TRAIN
     // _eventListener(hypeBeginJson);
-    // await Future.delayed(const Duration(seconds: 10));
+    // await Future.delayed(const Duration(seconds: 4));
     // _eventListener(hypeProgressJson);
-    // await Future.delayed(const Duration(seconds: 10));
+    // await Future.delayed(const Duration(seconds: 4));
     // _eventListener(hypeEndJson);
   }
 }
@@ -284,7 +284,7 @@ const String predictionProgressJson = '''
             }
         ],
         "started_at": "2020-07-15T17:16:03.17106713Z",
-        "locks_at": "2020-07-15T17:21:03.17106713Z"
+        "locks_at": "2023-08-18T19:21:03.17106713Z"
     }
 }
 ''';
@@ -559,6 +559,115 @@ const String pollEndJson = '''
         "status": "completed",
         "started_at": "2020-07-15T17:16:03.17106713Z",
         "ended_at": "2020-07-15T17:16:11.17106713Z"
+    }
+}
+''';
+
+const String hypeBeginJson = '''
+{
+    "subscription": {
+        "id": "f1c2a387-161a-49f9-a165-0f21d7a4e1c4",
+        "type": "channel.hype_train.begin",
+        "version": "1",
+        "status": "enabled",
+        "cost": 0,
+        "condition": {
+            "broadcaster_user_id": "1337"
+        },
+         "transport": {
+            "method": "webhook",
+            "callback": "https://example.com/webhooks/callback"
+        },
+        "created_at": "2019-11-16T10:11:12.634234626Z"
+    },
+    "event": {
+        "id": "1b0AsbInCHZW2SQFQkCzqN07Ib2",
+        "broadcaster_user_id": "1337",
+        "broadcaster_user_login": "cool_user",
+        "broadcaster_user_name": "Cool_User",
+        "total": 137,
+        "progress": 137,
+        "goal": 500,
+        "top_contributions": [
+            { "user_id": "123", "user_login": "pogchamp", "user_name": "PogChamp", "type": "bits", "total": 50 },
+            { "user_id": "456", "user_login": "kappa", "user_name": "Kappa", "type": "subscription", "total": 45 }
+        ],
+        "last_contribution": { "user_id": "123", "user_login": "pogchamp", "user_name": "PogChamp", "type": "bits", "total": 50 },
+        "level": 2,
+        "started_at": "2020-07-15T17:16:03.17106713Z",
+        "expires_at": "2023-08-18T06:21:03.17106713Z"
+    }
+}
+''';
+
+const String hypeProgressJson = '''
+{
+    "subscription": {
+        "id": "f1c2a387-161a-49f9-a165-0f21d7a4e1c4",
+        "type": "channel.hype_train.progress",
+        "version": "1",
+        "status": "enabled",
+        "cost": 0,
+        "condition": {
+            "broadcaster_user_id": "1337"
+        },
+         "transport": {
+            "method": "webhook",
+            "callback": "https://example.com/webhooks/callback"
+        },
+        "created_at": "2019-11-16T10:11:12.634234626Z"
+    },
+    "event": {
+        "id": "1b0AsbInCHZW2SQFQkCzqN07Ib2",
+        "broadcaster_user_id": "1337",
+        "broadcaster_user_login": "cool_user",
+        "broadcaster_user_name": "Cool_User",
+        "level": 2,
+        "total": 700,
+        "progress": 200,
+        "goal": 1000,
+        "top_contributions": [
+            { "user_id": "123", "user_login": "pogchamp", "user_name": "PogChamp", "type": "bits", "total": 50 },
+            { "user_id": "456", "user_login": "kappa", "user_name": "Kappa", "type": "subscription", "total": 45 }
+        ],
+        "last_contribution": { "user_id": "123", "user_login": "pogchamp", "user_name": "PogChamp", "type": "bits", "total": 50 },
+        "started_at": "2020-07-15T17:16:03.17106713Z",
+        "expires_at": "2023-08-18T06:21:03.17106713Z"
+    }
+}
+''';
+
+const String hypeEndJson = '''
+{
+    "subscription": {
+        "id": "f1c2a387-161a-49f9-a165-0f21d7a4e1c4",
+        "type": "channel.hype_train.end",
+        "version": "1",
+        "status": "enabled",
+        "cost": 0,
+        "condition": {
+            "broadcaster_user_id": "1337"
+        },
+         "transport": {
+            "method": "webhook",
+            "callback": "https://example.com/webhooks/callback"
+        },
+        "created_at": "2019-11-16T10:11:12.634234626Z"
+    },
+    "event": {
+        "id": "1b0AsbInCHZW2SQFQkCzqN07Ib2",
+        "broadcaster_user_id": "1337",
+        "broadcaster_user_login": "cool_user",
+        "broadcaster_user_name": "Cool_User",
+        "level": 2,
+        "total": 137,
+        "top_contributions": [
+            { "user_id": "123", "user_login": "pogchamp", "user_name": "PogChamp", "type": "bits", "total": 50 },
+            { "user_id": "456", "user_login": "kappa", "user_name": "Kappa", "type": "subscription", "total": 45 }
+        ],
+        "started_at": "2020-07-15T17:16:03.17106713Z",
+        "ended_at": "2023-08-18T04:35:03.17106713Z",
+        "cooldown_ends_at": "2020-07-15T18:16:11.17106713Z"
     }
 }
 ''';
