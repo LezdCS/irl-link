@@ -21,7 +21,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
       child: SingleChildScrollView(
         child: Obx(
           () => Container(
-            padding: const EdgeInsets.only(left: 20.0, top: 12.0, right: 20.0),
+            padding: const EdgeInsets.only(left: 20.0, top: 12.0, right: 20.0, bottom: 12.0),
             color: Theme.of(context).colorScheme.background,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -249,14 +249,6 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                   endIndent: 0,
                   color: Theme.of(context).colorScheme.secondary,
                 ),
-                hypeTrain(context, controller),
-                Divider(
-                  height: 40,
-                  thickness: 4,
-                  indent: 0,
-                  endIndent: 0,
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
                 prediction(context, controller),
                 Divider(
                   height: 40,
@@ -273,57 +265,6 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
       ),
     );
   }
-}
-
-Widget hypeTrain(
-  BuildContext context,
-  TwitchTabViewController controller,
-) {
-  return controller.twitchEventSub?.currentHypeTrain.value != null
-      ? ValueListenableBuilder(
-          valueListenable: controller.twitchEventSub!.currentHypeTrain,
-          builder: (context, hypetrain, child) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.only(
-                          left: 8, right: 8, top: 2, bottom: 2),
-                      decoration: const BoxDecoration(
-                        color: Colors.deepPurple,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8),
-                        ),
-                      ),
-                      child: Text('LVL ${hypetrain!.level}'),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    const Text('Hype Train'),
-                  ],
-                ),
-                Text('${hypetrain.progress}%'),
-                Text(_printDuration(hypetrain.endsAt))
-              ],
-            );
-          },
-        )
-      : Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "No hype train",
-              style: TextStyle(
-                color: Theme.of(context).textTheme.bodyLarge!.color,
-              ),
-            ),
-          ],
-        );
 }
 
 Widget prediction(
@@ -710,11 +651,4 @@ void pickWinnerDialog(BuildContext context, TwitchPrediction prediction,
       ),
     ),
   );
-}
-
-String _printDuration(Duration duration) {
-  String twoDigits(int n) => n.toString().padLeft(2, "0");
-  String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-  String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-  return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
 }

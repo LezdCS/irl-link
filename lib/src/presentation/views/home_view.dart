@@ -6,9 +6,11 @@ import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/chat_view.dart';
 import 'package:irllink/src/presentation/widgets/dashboard.dart';
 import 'package:irllink/src/presentation/widgets/emote_picker_view.dart';
+import 'package:irllink/src/presentation/widgets/hype_train.dart';
 import 'package:irllink/src/presentation/widgets/tabs/obs_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/tabs/streamelements_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/tabs/twitch_tab_view.dart';
@@ -160,6 +162,10 @@ class HomeView extends GetView<HomeViewController> {
           child: controller.channels.isNotEmpty
               ? Column(
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 0),
+                      child: hypeTrain(context, Get.find<TwitchTabViewController>()),
+                    ),
                     Visibility(
                       visible: controller.channels.length > 1,
                       child: _tabBarChats(context),
