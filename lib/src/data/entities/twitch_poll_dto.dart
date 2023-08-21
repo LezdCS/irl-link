@@ -71,7 +71,7 @@ class ChoiceDTO extends Choice {
     return ChoiceDTO(
       id: map['id'],
       title: map['title'],
-      votes: map['votes'],
+      votes: map['votes'] ?? 0,
     );
   }
 }

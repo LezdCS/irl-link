@@ -29,7 +29,7 @@ class TwitchTabViewController extends GetxController {
   Timer? refreshDataTimerProgressBar;
   Rx<Duration> myDuration = const Duration(seconds: 15).obs;
 
-  late TwitchEventSub twitchEventSub;
+  TwitchEventSub? twitchEventSub;
 
   @override
   void onInit() {
@@ -45,11 +45,11 @@ class TwitchTabViewController extends GetxController {
       refreshDataTimer = Timer.periodic(const Duration(seconds: 15), (timer) {
         refreshData();
       });
-      // twitchEventSub = TwitchEventSub(
-      //   homeViewController.twitchData!.twitchUser.login,
-      //   homeViewController.twitchData!.accessToken,
-      // );
-      // twitchEventSub.connect();
+      twitchEventSub = TwitchEventSub(
+        homeViewController.twitchData!.twitchUser.login,
+        homeViewController.twitchData!.accessToken,
+      );
+      twitchEventSub!.connect();
     }
 
     refreshDataTimerProgressBar =
@@ -137,7 +137,7 @@ class TwitchTabViewController extends GetxController {
     homeEvents.endPoll(
         homeViewController.twitchData!.accessToken,
         homeViewController.twitchData!.twitchUser.id,
-        twitchEventSub.currentPoll.value!.id,
+        twitchEventSub!.currentPoll.value!.id,
         status);
   }
 

@@ -40,6 +40,10 @@ class TwitchPredictionDTO extends TwitchPrediction {
           totalUsers += o.users,
         });
 
+    if(map['locked_at'] != null){
+        status = PredictionStatus.locked;
+    }
+
     switch (map["status"]) {
       case "resolved":
         status = PredictionStatus.resolved;
@@ -92,8 +96,8 @@ class OutcomeDTO extends Outcome {
     return OutcomeDTO(
       id: map['id'],
       title: map['title'],
-      users: int.parse(map['users']),
-      channelPoints: int.parse(map['channel_points']),
+      users: map['users'] ?? 0,
+      channelPoints: map['channel_points'] ?? 0,
       color: color,
     );
   }
