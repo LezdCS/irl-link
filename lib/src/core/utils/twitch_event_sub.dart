@@ -83,7 +83,7 @@ class TwitchEventSub {
       subscribeToEvent('channel.hype_train.end', '1', sessionId,
           {"broadcaster_user_id": _broadcasterId ?? ''});
 
-      fakeData();
+      // fakeData();
     }
 
     if (msgMapped['subscription'] != null) {
@@ -97,6 +97,9 @@ class TwitchEventSub {
           break;
         case 'channel.poll.end':
           currentPoll.value = TwitchPollDTO.fromJson(msgMapped['event']);
+          Future.delayed(const Duration(seconds: 20)).then((value) => 
+            currentPoll.value = null
+          );
           break;
 
         //PREDICTIONS
@@ -111,6 +114,9 @@ class TwitchEventSub {
           break;
         case 'channel.prediction.end':
           currentPrediction.value = TwitchPredictionDTO.fromJson(msgMapped['event']);
+          Future.delayed(const Duration(seconds: 20)).then((value) => 
+            currentPrediction.value = null
+          );
           break;
 
         //HYPE TRAIN
@@ -122,6 +128,9 @@ class TwitchEventSub {
           break;
         case 'channel.hype_train.end':
           currentHypeTrain.value = TwitchHypeTrainDTO.fromJson(msgMapped['event']);
+          Future.delayed(const Duration(seconds: 20)).then((value) => 
+            currentHypeTrain.value = null
+          );
           break;
         default:
       }
@@ -163,28 +172,28 @@ class TwitchEventSub {
   }
 
   void fakeData() async {
-    // // PREDICTIONS
-    // _eventListener(predictionBeginJson);
-    // await Future.delayed(const Duration(seconds: 10));
-    // _eventListener(predictionProgressJson);
-    // await Future.delayed(const Duration(seconds: 10));
-    // _eventListener(predictionLockJson);
-    // await Future.delayed(const Duration(seconds: 10));
-    // _eventListener(predictionEndJson);
+    // PREDICTIONS
+    _eventListener(predictionBeginJson);
+    await Future.delayed(const Duration(seconds: 10));
+    _eventListener(predictionProgressJson);
+    await Future.delayed(const Duration(seconds: 10));
+    _eventListener(predictionLockJson);
+    await Future.delayed(const Duration(seconds: 10));
+    _eventListener(predictionEndJson);
 
-    // // POLLS
-    // _eventListener(pollBeginJson);
-    // await Future.delayed(const Duration(seconds: 10));
-    // _eventListener(pollProgressJson);
-    // await Future.delayed(const Duration(seconds: 10));
-    // _eventListener(pollEndJson);
+    // POLLS
+    _eventListener(pollBeginJson);
+    await Future.delayed(const Duration(seconds: 10));
+    _eventListener(pollProgressJson);
+    await Future.delayed(const Duration(seconds: 10));
+    _eventListener(pollEndJson);
 
     // HYPE TRAIN
-    // _eventListener(hypeBeginJson);
-    // await Future.delayed(const Duration(seconds: 4));
-    // _eventListener(hypeProgressJson);
-    // await Future.delayed(const Duration(seconds: 4));
-    // _eventListener(hypeEndJson);
+    _eventListener(hypeBeginJson);
+    await Future.delayed(const Duration(seconds: 4));
+    _eventListener(hypeProgressJson);
+    await Future.delayed(const Duration(seconds: 4));
+    _eventListener(hypeEndJson);
   }
 }
 
