@@ -163,8 +163,10 @@ class HomeView extends GetView<HomeViewController> {
               ? Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 0),
-                      child: hypeTrain(context, Get.find<TwitchTabViewController>()),
+                      padding: const EdgeInsets.only(
+                          left: 8, right: 8, top: 4, bottom: 0),
+                      child: hypeTrain(
+                          context, Get.find<TwitchTabViewController>()),
                     ),
                     Visibility(
                       visible: controller.channels.length > 1,
@@ -278,9 +280,12 @@ class HomeView extends GetView<HomeViewController> {
                                 color: Theme.of(context)
                                     .textTheme
                                     .bodyLarge!
-                                    .color,
+                                    .backgroundColor,
                                 fontSize: 16),
-                            hintText: 'send_message'.tr,
+                            hintText: controller.settings.value.generalSettings!
+                                    .displayViewerCount
+                                ? '${Get.find<TwitchTabViewController>().twitchStreamInfos.value.viewerCount} viewers'
+                                : 'send_message'.tr,
                             isDense: true,
                             enabledBorder: InputBorder.none,
                             focusedBorder: InputBorder.none,
@@ -331,7 +336,8 @@ class HomeView extends GetView<HomeViewController> {
                   controller.chatTabsController
                       .animateTo(controller.selectedChatIndex!);
                 }
-                if (controller.tabIndex.value > controller.tabElements.length - 1) {
+                if (controller.tabIndex.value >
+                    controller.tabElements.length - 1) {
                   controller.tabIndex.value = 0;
                   controller.tabController.animateTo(controller.tabIndex.value);
                 } else {
