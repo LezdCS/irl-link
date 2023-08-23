@@ -129,9 +129,10 @@ class HomeViewController extends GetxController
           (element) => element.productID == "irl_premium_subscription",
         ) !=
         null;
-    if ((twitchData == null && isSubscribed) || isSubscribed &&
-        settings.value.streamElementsAccessToken != null &&
-        settings.value.streamElementsAccessToken!.isNotEmpty) {
+    if ((twitchData == null && isSubscribed) ||
+        isSubscribed &&
+            settings.value.streamElementsAccessToken != null &&
+            settings.value.streamElementsAccessToken!.isNotEmpty) {
       streamelementsViewController = Get.find<StreamelementsViewController>();
       StreamelementsTabView streamelementsPage = const StreamelementsTabView();
       tabElements.add(streamelementsPage);

@@ -40,8 +40,8 @@ class TwitchPredictionDTO extends TwitchPrediction {
           totalUsers += o.users,
         });
 
-    if(map['locked_at'] != null){
-        status = PredictionStatus.locked;
+    if (map['locked_at'] != null) {
+      status = PredictionStatus.locked;
     }
 
     switch (map["status"]) {

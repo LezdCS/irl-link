@@ -7,7 +7,6 @@ Widget slowModeDialog(
   BuildContext context,
   TwitchTabViewController controller,
 ) {
-
   final List<Map<String, int>> slowModeValues = [
     {"3s": 3},
     {"30s": 30},
@@ -29,14 +28,20 @@ Widget slowModeDialog(
           ),
           child: Column(
             children: [
-              const Text('Select a time', style: TextStyle(fontSize: 18),),
-              const SizedBox(height: 14,),
+              const Text(
+                'Select a time',
+                style: TextStyle(fontSize: 18),
+              ),
+              const SizedBox(
+                height: 14,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(slowModeValues.length, (index) {
                   return InkWell(
                     onTap: () => {
-                      controller.toggleSlowMode(slowModeValues[index].values.first),
+                      controller
+                          .toggleSlowMode(slowModeValues[index].values.first),
                       Get.back(),
                     },
                     child: Container(
@@ -44,7 +49,8 @@ Widget slowModeDialog(
                       padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.tertiaryContainer,
-                        borderRadius: const BorderRadius.all(Radius.circular(5)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(5)),
                       ),
                       child: Text(
                         slowModeValues[index].keys.first,

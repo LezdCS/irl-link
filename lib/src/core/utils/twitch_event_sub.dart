@@ -22,8 +22,10 @@ class TwitchEventSub {
   String? _broadcasterId;
 
   ValueNotifier<TwitchPoll?> currentPoll = ValueNotifier<TwitchPoll?>(null);
-  ValueNotifier<TwitchPrediction?> currentPrediction = ValueNotifier<TwitchPrediction?>(null);
-  ValueNotifier<TwitchHypeTrain?> currentHypeTrain = ValueNotifier<TwitchHypeTrain?>(null);
+  ValueNotifier<TwitchPrediction?> currentPrediction =
+      ValueNotifier<TwitchPrediction?>(null);
+  ValueNotifier<TwitchHypeTrain?> currentHypeTrain =
+      ValueNotifier<TwitchHypeTrain?>(null);
 
   TwitchEventSub(
     this.channelName,
@@ -54,7 +56,8 @@ class TwitchEventSub {
     // debugPrint("Sub event: $data");
     Map msgMapped = jsonDecode(data);
 
-    if (msgMapped['metadata'] != null && msgMapped['metadata']['message_type'] == 'session_welcome') {
+    if (msgMapped['metadata'] != null &&
+        msgMapped['metadata']['message_type'] == 'session_welcome') {
       String sessionId = msgMapped['payload']['session']['id'];
 
       //SUBSCRIBE TO POLLS BEGIN, PROGRESS, END
@@ -97,40 +100,44 @@ class TwitchEventSub {
           break;
         case 'channel.poll.end':
           currentPoll.value = TwitchPollDTO.fromJson(msgMapped['event']);
-          Future.delayed(const Duration(seconds: 20)).then((value) => 
-            currentPoll.value = null
-          );
+          Future.delayed(const Duration(seconds: 20))
+              .then((value) => currentPoll.value = null);
           break;
 
         //PREDICTIONS
         case 'channel.prediction.begin':
-          currentPrediction.value = TwitchPredictionDTO.fromJson(msgMapped['event']);
+          currentPrediction.value =
+              TwitchPredictionDTO.fromJson(msgMapped['event']);
           break;
         case 'channel.prediction.progress':
-          currentPrediction.value = TwitchPredictionDTO.fromJson(msgMapped['event']);
+          currentPrediction.value =
+              TwitchPredictionDTO.fromJson(msgMapped['event']);
           break;
         case 'channel.prediction.lock':
-          currentPrediction.value = TwitchPredictionDTO.fromJson(msgMapped['event']);
+          currentPrediction.value =
+              TwitchPredictionDTO.fromJson(msgMapped['event']);
           break;
         case 'channel.prediction.end':
-          currentPrediction.value = TwitchPredictionDTO.fromJson(msgMapped['event']);
-          Future.delayed(const Duration(seconds: 20)).then((value) => 
-            currentPrediction.value = null
-          );
+          currentPrediction.value =
+              TwitchPredictionDTO.fromJson(msgMapped['event']);
+          Future.delayed(const Duration(seconds: 20))
+              .then((value) => currentPrediction.value = null);
           break;
 
         //HYPE TRAIN
         case 'channel.hype_train.begin':
-          currentHypeTrain.value = TwitchHypeTrainDTO.fromJson(msgMapped['event']);
+          currentHypeTrain.value =
+              TwitchHypeTrainDTO.fromJson(msgMapped['event']);
           break;
         case 'channel.hype_train.progress':
-          currentHypeTrain.value = TwitchHypeTrainDTO.fromJson(msgMapped['event']);
+          currentHypeTrain.value =
+              TwitchHypeTrainDTO.fromJson(msgMapped['event']);
           break;
         case 'channel.hype_train.end':
-          currentHypeTrain.value = TwitchHypeTrainDTO.fromJson(msgMapped['event']);
-          Future.delayed(const Duration(seconds: 20)).then((value) => 
-            currentHypeTrain.value = null
-          );
+          currentHypeTrain.value =
+              TwitchHypeTrainDTO.fromJson(msgMapped['event']);
+          Future.delayed(const Duration(seconds: 20))
+              .then((value) => currentHypeTrain.value = null);
           break;
         default:
       }
