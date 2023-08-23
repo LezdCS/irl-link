@@ -71,6 +71,12 @@ class HomeView extends GetView<HomeViewController> {
                   child: SafeArea(
                     child: Stack(
                       children: [
+                        Stack(
+                          children: List<Widget>.generate(
+                            controller.iOSAudioSources.length,
+                            (int index) => controller.iOSAudioSources[index],
+                          ),
+                        ),
                         Listener(
                           onPointerUp: (_) => {
                             controller.displayDashboard.value = false,
@@ -144,56 +150,62 @@ class HomeView extends GetView<HomeViewController> {
   }
 
   Widget _top(BuildContext context, double height, double width) {
-    return Column(
-      children: [
-        _tabBar(context, height, width),
-        _tabs(context),
-      ],
+    return Container(
+      color: Theme.of(context).colorScheme.background,
+      child: Column(
+        children: [
+          _tabBar(context, height, width),
+          _tabs(context),
+        ],
+      ),
     );
   }
 
   Widget _bottom(BuildContext context, double height, double width) {
-    return Stack(
-      children: [
-        Listener(
-          onPointerUp: (_) => {
-            controller.isPickingEmote.value = false,
-          },
-          child: controller.channels.isNotEmpty
-              ? Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 8, right: 8, top: 4, bottom: 0),
-                      child: hypeTrain(
-                          context, Get.find<TwitchTabViewController>()),
-                    ),
-                    Visibility(
-                      visible: controller.channels.length > 1,
-                      child: _tabBarChats(context),
-                    ),
-                    _chats(context),
-                  ],
-                )
-              : Container(),
-        ),
-        Visibility(
-          visible: controller.isPickingEmote.value,
-          child: Positioned(
-            bottom: 50,
-            top: 50,
-            left: 10,
-            right: 150,
-            child: EmotePickerView(homeViewController: controller),
+    return Container(
+      color: Theme.of(context).colorScheme.background,
+      child: Stack(
+        children: [
+          Listener(
+            onPointerUp: (_) => {
+              controller.isPickingEmote.value = false,
+            },
+            child: controller.channels.isNotEmpty
+                ? Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 8, right: 8, top: 4, bottom: 0),
+                        child: hypeTrain(
+                            context, Get.find<TwitchTabViewController>()),
+                      ),
+                      Visibility(
+                        visible: controller.channels.length > 1,
+                        child: _tabBarChats(context),
+                      ),
+                      _chats(context),
+                    ],
+                  )
+                : Container(),
           ),
-        ),
-        Positioned(
-          bottom: 0.0,
-          left: 0.0,
-          right: 0.0,
-          child: _bottomNavBar(height, width, context),
-        ),
-      ],
+          Visibility(
+            visible: controller.isPickingEmote.value,
+            child: Positioned(
+              bottom: 50,
+              top: 50,
+              left: 10,
+              right: 150,
+              child: EmotePickerView(homeViewController: controller),
+            ),
+          ),
+          Positioned(
+            bottom: 0.0,
+            left: 0.0,
+            right: 0.0,
+            child: _bottomNavBar(height, width, context),
+          ),
+        ],
+      ),
     );
   }
 

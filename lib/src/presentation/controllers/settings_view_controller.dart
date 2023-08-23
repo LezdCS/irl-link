@@ -21,6 +21,7 @@ class SettingsViewController extends GetxController {
   late TextEditingController addBrowserUrlController;
   late TextEditingController addHiddenUsernameController;
   late RxBool addBrowserToggled = true.obs;
+  late RxBool addBrowserAudioSourceToggled = false.obs;
 
   final addBrowserUrlKey = GlobalKey<FormState>();
   final addBrowserTitleKey = GlobalKey<FormState>();
@@ -129,7 +130,13 @@ class SettingsViewController extends GetxController {
     String title = addBrowserTitleController.text;
     String url = addBrowserUrlController.text;
     bool toggled = addBrowserToggled.value;
-    Map<String, dynamic> tab = {'title': title, 'url': url, 'toggled': toggled};
+    bool audioSourceToggled = addBrowserAudioSourceToggled.value;
+    Map<String, dynamic> tab = {
+      'title': title,
+      'url': url,
+      'toggled': toggled,
+      'iOSAudioSource': audioSourceToggled
+    };
     List browserTabs =
         homeViewController.settings.value.browserTabs! == const []
             ? []
@@ -153,9 +160,11 @@ class SettingsViewController extends GetxController {
     String title = addBrowserTitleController.text;
     String url = addBrowserUrlController.text;
     bool toggled = addBrowserToggled.value;
+    bool audioSourceToggled = addBrowserAudioSourceToggled.value;
     elem["title"] = title;
     elem["url"] = url;
     elem["toggled"] = toggled;
+    elem["iOSAudioSource"] = audioSourceToggled;
     List browserTabs =
         homeViewController.settings.value.browserTabs! == const []
             ? []

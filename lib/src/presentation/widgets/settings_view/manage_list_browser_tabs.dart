@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'dart:io';
 
 import '../../controllers/settings_view_controller.dart';
 
@@ -97,7 +98,15 @@ class ManageListBrowserTabs extends GetView {
                                 : Theme.of(context).colorScheme.secondary,
                             margin: const EdgeInsets.only(bottom: 8),
                             child: ListTile(
-                              title: Text(elem['title']),
+                              title: Text(
+                                elem['title'],
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .color,
+                                ),
+                              ),
                               trailing: !controller.browserTabsSelected
                                       .contains(elem)
                                   ? Wrap(
@@ -248,6 +257,7 @@ Widget _addDialog(context, SettingsViewController controller) {
   controller.addBrowserUrlController.text = '';
   controller.addBrowserTitleController.text = '';
   controller.addBrowserToggled.value = true;
+  controller.addBrowserAudioSourceToggled.value = false;
   return Column(
     mainAxisSize: MainAxisSize.min,
     children: [
@@ -340,6 +350,33 @@ Widget _addDialog(context, SettingsViewController controller) {
             ),
           ),
         ],
+      ),
+      Visibility(
+        visible: Platform.isIOS,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Is an audio source",
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyLarge!.color,
+                fontSize: 18,
+              ),
+            ),
+            Obx(
+              () => Switch(
+                value: controller.addBrowserAudioSourceToggled.value,
+                onChanged: (value) {
+                  controller.addBrowserAudioSourceToggled.value = value;
+                },
+                inactiveTrackColor:
+                    Theme.of(context).colorScheme.tertiaryContainer,
+                activeTrackColor: Theme.of(context).colorScheme.tertiary,
+                activeColor: Colors.white,
+              ),
+            ),
+          ],
+        ),
       ),
     ],
   );
@@ -349,6 +386,8 @@ Widget _editDialog(context, SettingsViewController controller, elem) {
   controller.addBrowserUrlController.text = elem['url'];
   controller.addBrowserTitleController.text = elem['title'];
   controller.addBrowserToggled.value = elem['toggled'] ?? true;
+  controller.addBrowserAudioSourceToggled.value =
+      elem['iOSAudioSource'] ?? false;
   return Column(
     mainAxisSize: MainAxisSize.min,
     children: [
@@ -437,6 +476,33 @@ Widget _editDialog(context, SettingsViewController controller, elem) {
             ),
           ),
         ],
+      ),
+      Visibility(
+        visible: Platform.isIOS,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Is an audio source",
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyLarge!.color,
+                fontSize: 18,
+              ),
+            ),
+            Obx(
+              () => Switch(
+                value: controller.addBrowserAudioSourceToggled.value,
+                onChanged: (value) {
+                  controller.addBrowserAudioSourceToggled.value = value;
+                },
+                inactiveTrackColor:
+                    Theme.of(context).colorScheme.tertiaryContainer,
+                activeTrackColor: Theme.of(context).colorScheme.tertiary,
+                activeColor: Colors.white,
+              ),
+            ),
+          ],
+        ),
       ),
     ],
   );
