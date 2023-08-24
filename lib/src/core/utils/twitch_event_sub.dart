@@ -83,7 +83,7 @@ class TwitchEventSub {
       subscribeToEvent('channel.hype_train.end', '1', sessionId,
           {"broadcaster_user_id": _broadcasterId ?? ''});
 
-      fakeData();
+      // fakeData();
     }
 
     if (msgMapped['subscription'] != null) {
