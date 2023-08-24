@@ -9,6 +9,9 @@ Widget hypeTrain(
       ? ValueListenableBuilder(
           valueListenable: controller.twitchEventSub!.currentHypeTrain,
           builder: (context, hypetrain, child) {
+            if(hypetrain == null){
+              return Container();
+            }
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -24,7 +27,7 @@ Widget hypeTrain(
                           Radius.circular(8),
                         ),
                       ),
-                      child: Text('LVL ${hypetrain!.level}'),
+                      child: Text('LVL ${hypetrain.level}'),
                     ),
                     const SizedBox(
                       width: 10,
