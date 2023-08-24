@@ -21,16 +21,29 @@ class TwitchHypeTrain extends Equatable {
     required this.endsAt,
   });
 
+  factory TwitchHypeTrain.empty() {
+    return const TwitchHypeTrain(
+      id: '',
+      total: 0,
+      progress: 0,
+      goal: 0,
+      level: 0,
+      topContributions: [],
+      endsAt: Duration(seconds: 0),
+      lastContribution: null,
+    );
+  }
+
   Map toJson() => {
-    'id': id,
-    'total': total,
-    'progress': progress,
-    'goal': goal,
-    'level': level,
-    'topContributions': topContributions,
-    'lastContribution': lastContribution,
-    'endsAt': endsAt,
-  };
+        'id': id,
+        'total': total,
+        'progress': progress,
+        'goal': goal,
+        'level': level,
+        'topContributions': topContributions,
+        'lastContribution': lastContribution,
+        'endsAt': endsAt,
+      };
 
   @override
   List<Object?> get props {
@@ -66,12 +79,12 @@ class Contribution extends Equatable {
   });
 
   Map toJson() => {
-    'userId': userId,
-    'userLogin': userLogin,
-    'userName': userName,
-    'type': type,
-    'total': total,
-  };
+        'userId': userId,
+        'userLogin': userLogin,
+        'userName': userName,
+        'type': type,
+        'total': total,
+      };
 
   @override
   List<Object?> get props {

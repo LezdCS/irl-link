@@ -5,43 +5,41 @@ Widget hypeTrain(
   BuildContext context,
   TwitchTabViewController controller,
 ) {
-  return controller.twitchEventSub?.currentHypeTrain.value != null
-      ? ValueListenableBuilder(
-          valueListenable: controller.twitchEventSub!.currentHypeTrain,
-          builder: (context, hypetrain, child) {
-            if(hypetrain == null){
-              return Container();
-            }
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.only(
-                          left: 8, right: 8, top: 2, bottom: 2),
-                      decoration: const BoxDecoration(
-                        color: Colors.deepPurple,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8),
-                        ),
-                      ),
-                      child: Text('LVL ${hypetrain.level}'),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    const Text('Hype Train'),
-                  ],
+  return ValueListenableBuilder(
+    valueListenable: controller.twitchEventSub!.currentHypeTrain,
+    builder: (context, hypetrain, child) {
+      if (hypetrain.id == '') {
+        return Container();
+      }
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              Container(
+                padding:
+                    const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
+                decoration: const BoxDecoration(
+                  color: Colors.deepPurple,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(8),
+                  ),
                 ),
-                Text('${hypetrain.progress}%'),
-                Text(_printDuration(hypetrain.endsAt))
-              ],
-            );
-          },
-        )
-      : Container();
+                child: Text('LVL ${hypetrain.level}'),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              const Text('Hype Train'),
+            ],
+          ),
+          Text('${hypetrain.progress}%'),
+          Text(_printDuration(hypetrain.endsAt))
+        ],
+      );
+    },
+  );
 }
 
 String _printDuration(Duration duration) {
