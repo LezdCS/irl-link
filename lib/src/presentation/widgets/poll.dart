@@ -1,0 +1,157 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:irllink/src/domain/entities/twitch_poll.dart';
+import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
+
+Widget poll(
+  BuildContext context,
+  TwitchTabViewController controller,
+) {
+  return controller.twitchEventSub?.currentPoll.value != null
+      ? ValueListenableBuilder(
+          valueListenable: controller.twitchEventSub!.currentPoll,
+          builder: (context, poll, child) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Poll",
+                  style: TextStyle(
+                    color: Theme.of(Get.context!).textTheme.bodyLarge!.color,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                poll != null
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(poll.title),
+                          const SizedBox(height: 10),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: poll.choices.length,
+                            itemBuilder: (context, index) {
+                              final choice = poll.choices[index];
+                              final percentage = poll.totalVotes > 0
+                                  ? choice.votes / poll.totalVotes
+                                  : 0.0;
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    choice.title,
+                                    style: TextStyle(
+                                      color: Theme.of(Get.context!)
+                                          .textTheme
+                                          .bodyLarge!
+                                          .color,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 3),
+                                  LinearPercentIndicator(
+                                    animation: true,
+                                    animateFromLastPercent: true,
+                                    barRadius: const Radius.circular(8),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 0.0),
+                                    lineHeight: 20.0,
+                                    percent: percentage,
+                                    backgroundColor:
+                                        Theme.of(context).colorScheme.secondary,
+                                    progressColor: ((poll.status ==
+                                                PollStatus.completed) &&
+                                            percentage > 0.5)
+                                        ? Colors.green
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .tertiaryContainer,
+                                    center: Text(
+                                        "${(percentage * 100).toStringAsFixed(2)} %"),
+                                  ),
+                                  const SizedBox(height: 10),
+                                ],
+                              );
+                            },
+                          ),
+                          Visibility(
+                            visible: poll.status == PollStatus.active,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                TextButton(
+                                  style: TextButton.styleFrom(
+                                    textStyle: const TextStyle(fontSize: 12),
+                                    backgroundColor: Theme.of(context)
+                                        .colorScheme
+                                        .tertiaryContainer,
+                                  ),
+                                  onPressed: () {
+                                    controller.endPoll("ARCHIVED");
+                                  },
+                                  child: Text(
+                                    "cancel".tr,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                TextButton(
+                                  style: TextButton.styleFrom(
+                                    textStyle: const TextStyle(fontSize: 12),
+                                    backgroundColor: Colors.green,
+                                  ),
+                                  onPressed: () {
+                                    controller.endPoll("TERMINATED");
+                                  },
+                                  child: const Text(
+                                    'End',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
+                    : Container(),
+                const SizedBox(
+                  height: 10,
+                ),
+              ],
+            );
+          },
+        )
+      : Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "No poll running",
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyLarge!.color,
+              ),
+            ),
+            // TextButton(
+            //   style: TextButton.styleFrom(
+            //     textStyle: const TextStyle(fontSize: 12),
+            //     backgroundColor: Colors.deepPurpleAccent,
+            //   ),
+            //   onPressed: () {},
+            //   child: const Text(
+            //     'Create one',
+            //     style: TextStyle(
+            //       color: Colors.white,
+            //     ),
+            //   ),
+            // ),
+          ],
+        );
+}

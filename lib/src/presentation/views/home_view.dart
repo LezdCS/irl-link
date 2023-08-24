@@ -11,6 +11,8 @@ import 'package:irllink/src/presentation/widgets/chat_view.dart';
 import 'package:irllink/src/presentation/widgets/dashboard.dart';
 import 'package:irllink/src/presentation/widgets/emote_picker_view.dart';
 import 'package:irllink/src/presentation/widgets/hype_train.dart';
+import 'package:irllink/src/presentation/widgets/poll.dart';
+import 'package:irllink/src/presentation/widgets/prediction.dart';
 import 'package:irllink/src/presentation/widgets/tabs/obs_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/tabs/streamelements_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/tabs/twitch_tab_view.dart';
@@ -322,6 +324,75 @@ class HomeView extends GetView<HomeViewController> {
                   ),
                 ),
               ],
+            ),
+          ),
+          Visibility(
+            visible:  Get.find<TwitchTabViewController>().twitchEventSub?.currentPrediction.value != null,
+            child: Expanded(
+              flex: 1,
+              child: InkWell(
+                onTap: () async {
+                  Get.dialog(
+                    AlertDialog(
+                      backgroundColor: Theme.of(context).colorScheme.background,
+                      surfaceTintColor: Theme.of(context).colorScheme.background,
+                      content: Container(
+                        width: width,
+                        color: Theme.of(context).colorScheme.background,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            poll(
+                              context,
+                              Get.find<TwitchTabViewController>(),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                child: Icon(
+                  Icons.poll_outlined,
+                  color: Theme.of(context).primaryIconTheme.color,
+                  size: 22,
+                ),
+              ),
+            ),
+          ),
+          Visibility(
+            visible:  Get.find<TwitchTabViewController>().twitchEventSub?.currentPrediction.value != null,
+            child: Expanded(
+              flex: 1,
+              child: InkWell(
+                onTap: () async {
+                  Get.dialog(
+                    AlertDialog(
+                      backgroundColor: Theme.of(context).colorScheme.background,
+                      surfaceTintColor: Theme.of(context).colorScheme.background,
+                      content: Container(
+                        width: width,
+                        color: Theme.of(context).colorScheme.background,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            prediction(
+                              context,
+                              Get.find<TwitchTabViewController>(),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                child: SvgPicture.asset(
+                  './lib/assets/twitch/prediction.svg',
+                  semanticsLabel: 'prediction icon',
+                  width: 22,
+                  height: 22,
+                ),
+              ),
             ),
           ),
           Expanded(
