@@ -137,7 +137,7 @@ class TwitchTabViewController extends GetxController {
     homeEvents.endPoll(
         homeViewController.twitchData!.accessToken,
         homeViewController.twitchData!.twitchUser.id,
-        twitchEventSub!.currentPoll.value!.id,
+        twitchEventSub!.currentPoll.value.id,
         status);
   }
 
