@@ -30,9 +30,12 @@ Widget inAppPurchaseDialog(
           const Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('IRL Link Premium', style: TextStyle(fontSize: 18),),
               Text(
-                'Please consider subscribing only as a support method as most features are still on development!', 
+                'IRL Link Premium',
+                style: TextStyle(fontSize: 18),
+              ),
+              Text(
+                'Please consider subscribing only as a support method as most features are still on development!',
                 style: TextStyle(fontSize: 13, color: Colors.grey),
                 textAlign: TextAlign.center,
               ),
@@ -40,8 +43,13 @@ Widget inAppPurchaseDialog(
           ),
           Column(
             children: [
-              const Text('Features', style: TextStyle(fontSize: 16),),
-              const SizedBox(height: 6,),
+              const Text(
+                'Features',
+                style: TextStyle(fontSize: 16),
+              ),
+              const SizedBox(
+                height: 6,
+              ),
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
@@ -55,11 +63,21 @@ Widget inAppPurchaseDialog(
                     Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
-                        const Icon(Icons.check_circle_outline_rounded, size: 18, color: Colors.green,),
-                        const SizedBox(width: 4,),
-                        Text('StreamElements events view', style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyLarge!.color,
-                            fontSize: 13),)
+                        const Icon(
+                          Icons.check_circle_outline_rounded,
+                          size: 18,
+                          color: Colors.green,
+                        ),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        Text(
+                          'StreamElements events view',
+                          style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyLarge!.color,
+                              fontSize: 13),
+                        )
                         // todo: preview button show feature screen
                       ],
                     ),
@@ -77,7 +95,8 @@ Widget inAppPurchaseDialog(
                 },
                 style: TextButton.styleFrom(
                   textStyle: const TextStyle(fontSize: 12),
-                  backgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
+                  backgroundColor:
+                      Theme.of(context).colorScheme.tertiaryContainer,
                 ),
                 child: Text(
                   "Cancel",

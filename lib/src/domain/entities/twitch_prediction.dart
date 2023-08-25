@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:equatable/equatable.dart';
 
 enum PredictionStatus {
+  empty,
   resolved,
   active,
   canceled,
@@ -25,6 +26,16 @@ class TwitchPrediction extends Equatable {
     required this.outcomes,
     required this.status,
   });
+
+  factory TwitchPrediction.empty() {
+    return const TwitchPrediction(
+        id: '',
+        title: '',
+        winningOutcomeId: '',
+        totalUsers: 0,
+        outcomes: [],
+        status: PredictionStatus.empty);
+  }
 
   Map toJson() => {
         'id': id,

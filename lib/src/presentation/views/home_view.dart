@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
+import 'package:irllink/src/domain/entities/twitch_poll.dart';
+import 'package:irllink/src/domain/entities/twitch_prediction.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
@@ -11,6 +13,8 @@ import 'package:irllink/src/presentation/widgets/chat_view.dart';
 import 'package:irllink/src/presentation/widgets/dashboard.dart';
 import 'package:irllink/src/presentation/widgets/emote_picker_view.dart';
 import 'package:irllink/src/presentation/widgets/hype_train.dart';
+import 'package:irllink/src/presentation/widgets/poll.dart';
+import 'package:irllink/src/presentation/widgets/prediction.dart';
 import 'package:irllink/src/presentation/widgets/tabs/obs_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/tabs/streamelements_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/tabs/twitch_tab_view.dart';
@@ -71,6 +75,12 @@ class HomeView extends GetView<HomeViewController> {
                   child: SafeArea(
                     child: Stack(
                       children: [
+                        Stack(
+                          children: List<Widget>.generate(
+                            controller.iOSAudioSources.length,
+                            (int index) => controller.iOSAudioSources[index],
+                          ),
+                        ),
                         Listener(
                           onPointerUp: (_) => {
                             controller.displayDashboard.value = false,
@@ -144,56 +154,67 @@ class HomeView extends GetView<HomeViewController> {
   }
 
   Widget _top(BuildContext context, double height, double width) {
-    return Column(
-      children: [
-        _tabBar(context, height, width),
-        _tabs(context),
-      ],
+    return Container(
+      color: Theme.of(context).colorScheme.background,
+      child: Column(
+        children: [
+          _tabBar(context, height, width),
+          _tabs(context),
+        ],
+      ),
     );
   }
 
   Widget _bottom(BuildContext context, double height, double width) {
-    return Stack(
-      children: [
-        Listener(
-          onPointerUp: (_) => {
-            controller.isPickingEmote.value = false,
-          },
-          child: controller.channels.isNotEmpty
-              ? Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 8, right: 8, top: 4, bottom: 0),
-                      child: hypeTrain(
-                          context, Get.find<TwitchTabViewController>()),
-                    ),
-                    Visibility(
-                      visible: controller.channels.length > 1,
-                      child: _tabBarChats(context),
-                    ),
-                    _chats(context),
-                  ],
-                )
-              : Container(),
-        ),
-        Visibility(
-          visible: controller.isPickingEmote.value,
-          child: Positioned(
-            bottom: 50,
-            top: 50,
-            left: 10,
-            right: 150,
-            child: EmotePickerView(homeViewController: controller),
+    return Container(
+      color: Theme.of(context).colorScheme.background,
+      child: Stack(
+        children: [
+          Listener(
+            onPointerUp: (_) => {
+              controller.isPickingEmote.value = false,
+            },
+            child: controller.channels.isNotEmpty
+                ? Column(
+                    children: [
+                      Visibility(
+                        visible: Get.find<TwitchTabViewController>()
+                                .twitchEventSub !=
+                            null,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 8, right: 8, top: 4, bottom: 0),
+                          child: hypeTrain(
+                              context, Get.find<TwitchTabViewController>()),
+                        ),
+                      ),
+                      Visibility(
+                        visible: controller.channels.length > 1,
+                        child: _tabBarChats(context),
+                      ),
+                      _chats(context),
+                    ],
+                  )
+                : Container(),
           ),
-        ),
-        Positioned(
-          bottom: 0.0,
-          left: 0.0,
-          right: 0.0,
-          child: _bottomNavBar(height, width, context),
-        ),
-      ],
+          Visibility(
+            visible: controller.isPickingEmote.value,
+            child: Positioned(
+              bottom: 50,
+              top: 50,
+              left: 10,
+              right: 150,
+              child: EmotePickerView(homeViewController: controller),
+            ),
+          ),
+          Positioned(
+            bottom: 0.0,
+            left: 0.0,
+            right: 0.0,
+            child: _bottomNavBar(height, width, context),
+          ),
+        ],
+      ),
     );
   }
 
@@ -312,6 +333,95 @@ class HomeView extends GetView<HomeViewController> {
               ],
             ),
           ),
+          Get.find<TwitchTabViewController>().twitchEventSub != null
+              ? ValueListenableBuilder(
+                  valueListenable: Get.find<TwitchTabViewController>()
+                      .twitchEventSub!
+                      .currentPoll,
+                  builder: (context, p, child) {
+                    if (p.status == PollStatus.empty) return Container();
+                    return Expanded(
+                      flex: 1,
+                      child: InkWell(
+                        onTap: () async {
+                          Get.dialog(
+                            AlertDialog(
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.background,
+                              surfaceTintColor:
+                                  Theme.of(context).colorScheme.background,
+                              content: Container(
+                                width: width,
+                                color: Theme.of(context).colorScheme.background,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    poll(
+                                      context,
+                                      Get.find<TwitchTabViewController>(),
+                                      p,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        child: Icon(
+                          Icons.poll_outlined,
+                          color: Theme.of(context).primaryIconTheme.color,
+                          size: 22,
+                        ),
+                      ),
+                    );
+                  },
+                )
+              : Container(),
+          Get.find<TwitchTabViewController>().twitchEventSub != null
+              ? ValueListenableBuilder(
+                  valueListenable: Get.find<TwitchTabViewController>()
+                      .twitchEventSub!
+                      .currentPrediction,
+                  builder: (context, p, child) {
+                    if (p.status == PredictionStatus.empty) return Container();
+                    return Expanded(
+                      flex: 1,
+                      child: InkWell(
+                        onTap: () async {
+                          Get.dialog(
+                            AlertDialog(
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.background,
+                              surfaceTintColor:
+                                  Theme.of(context).colorScheme.background,
+                              content: Container(
+                                width: width,
+                                color: Theme.of(context).colorScheme.background,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    prediction(
+                                      context,
+                                      Get.find<TwitchTabViewController>(),
+                                      p,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        child: SvgPicture.asset(
+                          './lib/assets/twitch/prediction.svg',
+                          semanticsLabel: 'prediction icon',
+                          width: 22,
+                          height: 22,
+                        ),
+                      ),
+                    );
+                  },
+                )
+              : Container(),
           Expanded(
             flex: 1,
             child: InkWell(

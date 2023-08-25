@@ -39,6 +39,7 @@ class HomeViewController extends GetxController
   late TabController tabController;
   Rx<int> tabIndex = 0.obs;
   RxList<Widget> tabElements = <Widget>[].obs;
+  RxList<WebPageView> iOSAudioSources = <WebPageView>[].obs;
 
   TwitchCredentials? twitchData;
 
@@ -129,9 +130,10 @@ class HomeViewController extends GetxController
           (element) => element.productID == "irl_premium_subscription",
         ) !=
         null;
-    if ((twitchData == null && isSubscribed) || isSubscribed &&
-        settings.value.streamElementsAccessToken != null &&
-        settings.value.streamElementsAccessToken!.isNotEmpty) {
+    if ((twitchData == null && isSubscribed) ||
+        isSubscribed &&
+            settings.value.streamElementsAccessToken != null &&
+            settings.value.streamElementsAccessToken!.isNotEmpty) {
       streamelementsViewController = Get.find<StreamelementsViewController>();
       StreamelementsTabView streamelementsPage = const StreamelementsTabView();
       tabElements.add(streamelementsPage);
@@ -143,10 +145,19 @@ class HomeViewController extends GetxController
       tabElements.add(obsPage);
     }
 
-    for (var element in settings.value.browserTabs!) {
+    for (var element in settings.value.browserTabs!.where(
+        (tab) => tab['iOSAudioSource'] == null || !tab['iOSAudioSource'])) {
       if (element['toggled'] == null || element['toggled']) {
         WebPageView page = WebPageView(element['title'], element['url']);
         tabElements.add(page);
+      }
+    }
+
+    for (var element in settings.value.browserTabs!.where(
+        (tab) => tab['iOSAudioSource'] != null && tab['iOSAudioSource'])) {
+      if (element['toggled'] == null || element['toggled']) {
+        WebPageView page = WebPageView(element['title'], element['url']);
+        iOSAudioSources.add(page);
       }
     }
 

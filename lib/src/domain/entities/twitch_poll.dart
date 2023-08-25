@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 enum PollStatus {
+  empty,
   active,
   completed,
 }
@@ -19,6 +20,16 @@ class TwitchPoll extends Equatable {
     required this.totalVotes,
     required this.status,
   });
+
+  factory TwitchPoll.empty() {
+    return const TwitchPoll(
+      id: '',
+      title: '',
+      choices: [],
+      totalVotes: 0,
+      status: PollStatus.empty,
+    );
+  }
 
   Map toJson() => {
         'id': id,

@@ -21,9 +21,9 @@ class TwitchEventSub {
   StreamSubscription? _streamSubscription;
   String? _broadcasterId;
 
-  ValueNotifier<TwitchPoll?> currentPoll = ValueNotifier<TwitchPoll?>(null);
-  ValueNotifier<TwitchPrediction?> currentPrediction = ValueNotifier<TwitchPrediction?>(null);
-  ValueNotifier<TwitchHypeTrain?> currentHypeTrain = ValueNotifier<TwitchHypeTrain?>(null);
+  ValueNotifier<TwitchPoll> currentPoll = ValueNotifier<TwitchPoll>(TwitchPoll.empty());
+  ValueNotifier<TwitchPrediction> currentPrediction = ValueNotifier<TwitchPrediction>(TwitchPrediction.empty());
+  ValueNotifier<TwitchHypeTrain> currentHypeTrain = ValueNotifier<TwitchHypeTrain>(TwitchHypeTrain.empty());
 
   TwitchEventSub(
     this.channelName,
@@ -98,7 +98,7 @@ class TwitchEventSub {
         case 'channel.poll.end':
           currentPoll.value = TwitchPollDTO.fromJson(msgMapped['event']);
           Future.delayed(const Duration(seconds: 20)).then((value) => 
-            currentPoll.value = null
+            currentPoll.value = TwitchPoll.empty()
           );
           break;
 
@@ -115,7 +115,7 @@ class TwitchEventSub {
         case 'channel.prediction.end':
           currentPrediction.value = TwitchPredictionDTO.fromJson(msgMapped['event']);
           Future.delayed(const Duration(seconds: 20)).then((value) => 
-            currentPrediction.value = null
+            currentPrediction.value = TwitchPrediction.empty()
           );
           break;
 
@@ -129,7 +129,7 @@ class TwitchEventSub {
         case 'channel.hype_train.end':
           currentHypeTrain.value = TwitchHypeTrainDTO.fromJson(msgMapped['event']);
           Future.delayed(const Duration(seconds: 20)).then((value) => 
-            currentHypeTrain.value = null
+            currentHypeTrain.value = TwitchHypeTrain.empty()
           );
           break;
         default:
