@@ -33,6 +33,10 @@ class StreamelementsEvents {
     return streamelementsUseCase.getOverlays(token, channel);
   }
 
+  Future<DataState<List<SeActivity>>> getLastActivities(String token, String channel) {
+    return streamelementsUseCase.getLastActivities(token, channel);
+  }
+
   Future<DataState<SeMe>> getMe(String token) {
     return streamelementsUseCase.getMe(token);
   }
