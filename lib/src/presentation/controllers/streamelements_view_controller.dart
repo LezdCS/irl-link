@@ -68,9 +68,11 @@ class StreamelementsViewController extends GetxController
       streamelementsEvents.getMe(jwt).then((value) => {
             streamelementsEvents
                 .getOverlays(jwt, value.data!.id)
-                .then((value) => overlays.value = value.data!)
+                .then((value) => overlays.value = value.data!),
+            streamelementsEvents
+                .getLastActivities(jwt, value.data!.id)
+                .then((value) => activities.value = value.data!)
           });
-
       connectWebsocket();
     }
   }
@@ -246,13 +248,14 @@ class StreamelementsViewController extends GetxController
     dynamic event = data[0];
     String type = event["type"];
     switch (type) {
-      case "follow":
+      case "follower":
+        debugPrint(event.toString());
         if (!homeViewController.settings.value.streamElementsSettings!
             .showFollowerActivity) return;
         SeActivity activity = SeActivity(
           id: event["_id"],
           channel: event["channel"],
-          username: event["data"]["displayName"],
+          username: event["data"]["username"],
           activityType: ActivityType.follow,
         );
         activities.add(activity);
@@ -263,7 +266,7 @@ class StreamelementsViewController extends GetxController
         SeActivity activity = SeActivity(
           id: event["_id"],
           channel: event["channel"],
-          username: event["data"]["displayName"],
+          username: event["data"]["username"],
           message: event["data"]["message"],
           amount: event["data"]["amount"].toString(),
           tier: event["data"]["tier"],
@@ -276,10 +279,11 @@ class StreamelementsViewController extends GetxController
       case "tip":
         if (!homeViewController.settings.value.streamElementsSettings!
             .showDonationActivity) return;
+            debugPrint(event.toString());
         SeActivity activity = SeActivity(
           id: event["_id"],
           channel: event["channel"],
-          username: event["data"]["displayName"],
+          username: event["data"]["username"],
           amount: event["data"]["amount"].toString(),
           currency: event["data"]["currency"],
           activityType: ActivityType.tip,
@@ -292,7 +296,7 @@ class StreamelementsViewController extends GetxController
         SeActivity activity = SeActivity(
           id: event["_id"],
           channel: event["channel"],
-          username: event["data"]["displayName"],
+          username: event["data"]["username"],
           message: event["data"]["message"],
           amount: event["data"]["amount"].toString(),
           activityType: ActivityType.cheer,
@@ -305,7 +309,7 @@ class StreamelementsViewController extends GetxController
         SeActivity activity = SeActivity(
           id: event["_id"],
           channel: event["channel"],
-          username: event["data"]["displayName"],
+          username: event["data"]["username"],
           amount: event["data"]["amount"].toString(),
           activityType: ActivityType.host,
         );
@@ -317,7 +321,7 @@ class StreamelementsViewController extends GetxController
         SeActivity activity = SeActivity(
           id: event["_id"],
           channel: event["channel"],
-          username: event["data"]["displayName"],
+          username: event["data"]["username"],
           amount: event["data"]["amount"].toString(),
           activityType: ActivityType.raid,
         );

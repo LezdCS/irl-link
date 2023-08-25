@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:irllink/src/data/entities/stream_elements/se_activity_dto.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_me_dto.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_overlay_dto.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
@@ -62,14 +63,35 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
   Future<DataState<List<SeActivity>>> getLastActivities(
       String token, String channel) async {
     var dio = Dio();
+    Response response;
     List<SeActivity> activities = [];
     try {
       dio.options.headers["Authorization"] = "Bearer $token";
-      await dio
-          .post('https://api.streamelements.com/kappa/v2/activities/$channel');
+      response = await dio.get(
+        'https://api.streamelements.com/kappa/v2/activities/$channel',
+        queryParameters: {
+          'after': DateTime.now().subtract(const Duration(days: 365)),
+          'before': DateTime.now(),
+          'limit': 50,
+          'mincheer': 0,
+          'minhost': 0,
+          'minsub': 0,
+          'mintip': 0,
+          'origin': 'twitch',
+          'types': ['follow', 'tip', 'host', 'raid', 'subscriber', 'cheer']
+        },
+      );
+      response.data.reversed.forEach(
+        (activity) => {
+          activities.add(SeActivityDTO.fromJson(activity)),
+        },
+      );
       return DataSuccess(activities);
     } on DioException catch (e) {
       debugPrint(e.toString());
+      debugPrint(e.response.toString());
+      debugPrint(e.error.toString());
+
       return DataFailed(e.toString());
     }
   }

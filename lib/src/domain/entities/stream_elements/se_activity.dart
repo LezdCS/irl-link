@@ -8,6 +8,7 @@ enum ActivityType {
   tip,
   raid,
   host,
+  unsupported,
 }
 
 class SeActivity extends Equatable {
