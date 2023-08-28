@@ -91,6 +91,12 @@ class SeActivity extends Equatable {
         //circle color
         colors.add(const Color(0xFF2E0219));
         break;
+      case ActivityType.unsupported:
+       //background color
+        colors.add(const Color(0xFFA47CED));
+        //circle color
+        colors.add(const Color(0xFF341D5B));
+        break;
     }
     return colors;
   }
@@ -121,6 +127,9 @@ class SeActivity extends Equatable {
         break;
       case ActivityType.host:
         s = '$amount Hosted viewers';
+        break;
+      case ActivityType.unsupported:
+       s = 'Unsupported event';
         break;
     }
     return s;
@@ -162,6 +171,12 @@ class SeActivity extends Equatable {
       case ActivityType.host:
         icon = const Icon(
           Icons.diversity_3,
+          size: 18,
+        );
+        break;
+      case ActivityType.unsupported:
+        icon = const Icon(
+          Icons.block,
           size: 18,
         );
         break;
