@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
 import '../../domain/entities/settings/floating_event.dart';
 
 class Dashboard extends GetView {
   @override
-  final HomeViewController controller;
+  final DashboardController controller;
 
   const Dashboard({
     super.key,
@@ -14,53 +14,27 @@ class Dashboard extends GetView {
 
   @override
   Widget build(BuildContext context) {
-    List<FloatingEvent> events = [
-      const FloatingEvent(
-        dashboardActionsType: DashboardActionsTypes.button,
-        color: Colors.green,
-        title: "Start stream",
-      ),
-      const FloatingEvent(
-        dashboardActionsType: DashboardActionsTypes.button,
-        color: Colors.orange,
-        title: "Clear TTS queue",
-      ),
-      const FloatingEvent(
-        dashboardActionsType: DashboardActionsTypes.slider,
-        color: Colors.pink,
-        title: "TTS volume",
-      ),
-      const FloatingEvent(
-        dashboardActionsType: DashboardActionsTypes.toggle,
-        color: Colors.blueAccent,
-        title: "TTS enabled",
-      ),
-    ];
     return Positioned(
-      top: MediaQuery.of(context).size.height / 2 - 120,
+      top: MediaQuery.of(context).size.height / 2 - 250,
       left: MediaQuery.of(context).size.width / 2 - 150,
       child: Container(
         width: 300,
-        height: 234,
+        height: 500,
         padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(
           color: context.theme.colorScheme.secondary,
           borderRadius: const BorderRadius.all(
             Radius.circular(8),
           ),
-          border: Border.all(
-            color: context.theme.colorScheme.tertiary,
-            width: 1,
-          ),
         ),
         child: GridView.builder(
-          itemCount: events.length,
+          itemCount: controller.userEvents.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            childAspectRatio: 3 / 2.3,
+            childAspectRatio: 3 / 1.8,
           ),
           itemBuilder: (BuildContext context, int index) {
-            FloatingEvent event = events[index];
+            FloatingEvent event = controller.userEvents[index];
             switch (event.dashboardActionsType) {
               case DashboardActionsTypes.button:
                 return _eventButton(event);
@@ -92,9 +66,11 @@ class Dashboard extends GetView {
           textStyle: const TextStyle(fontSize: 12),
           backgroundColor: event.color,
         ),
-        onPressed: () {},
+        onPressed: () {
+          event.action!(null);
+        },
         child: Text(
-          event.title ?? "",
+          event.title,
           textAlign: TextAlign.center,
           style: const TextStyle(
             color: Colors.white,
@@ -118,12 +94,14 @@ class Dashboard extends GetView {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(event.title ?? ""),
+          Text(event.title),
           Slider(
             value: 0.5,
             inactiveColor: event.color.withOpacity(0.5),
             activeColor: event.color,
-            onChanged: (double value) {},
+            onChanged: (double value) {
+              event.action!(value);
+            },
           ),
         ],
       ),
@@ -143,10 +121,12 @@ class Dashboard extends GetView {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(event.title ?? ""),
+          Text(event.title),
           Switch(
             value: true,
-            onChanged: (bool value) {},
+            onChanged: (bool value) {
+              event.action!(value);
+            },
             activeColor: event.color,
           ),
         ],

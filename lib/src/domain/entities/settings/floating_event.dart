@@ -2,65 +2,52 @@ import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
 
-enum DashboardActions {
-  noAction,
-
-  //obs
-  obsStartStream,
-  obsStopStream,
-  obsStartRecording,
-  obsStopRecording,
-  obsToggleStream,
-  obsToggleRecording,
-  obsSourceMediaVolume,
-  obsSwitchScene,
-  // obsRefreshBrowserSource,
-  // obsTriggerHotkey,
-  // obsSwitchProfile,
-
-  //twitch
-  twitchChatOnlyFollow,
-  twitchChatOnlySub,
-  // twitchAddStreamMarker,
-  // twitchCreateMoment,
-  twitchChatSendMessage,
-
-  //tts
-  ttsEnabled,
-  ttsVolume,
-  ttsClearQueue
-}
-
 enum DashboardActionsTypes {
   toggle,
   button,
   slider,
 }
 
-class FloatingEvent extends Equatable {
-  final String? title;
-  final DashboardActionsTypes dashboardActionsType;
-  final Color color;
+enum DashboardActionsProvider {
+  custom,
+  twitch,
+  obs,
+  streamElements,
+}
 
-  const FloatingEvent({
-    this.title,
-    required this.dashboardActionsType,
+// ignore: must_be_immutable
+class FloatingEvent extends Equatable {
+  final String title;
+  final Color color;
+  final DashboardActionsTypes dashboardActionsType;
+  final DashboardActionsProvider dashboardActionsProvider;
+  Function(dynamic v)? action;
+
+  FloatingEvent({
+    required this.title,
     required this.color,
+    required this.dashboardActionsType,
+    required this.dashboardActionsProvider,
+    this.action,
   });
 
   @override
   List<Object?> get props {
     return [
       title,
-      dashboardActionsType,
       color,
+      dashboardActionsType,
+      dashboardActionsProvider,
+      action,
     ];
   }
 
   Map toJson() => {
         'title': title,
-        'dashboardActionsType': dashboardActionsType,
         'color': color,
+        'dashboardActionsType': dashboardActionsType,
+        'dashboardActionsProvider': dashboardActionsProvider,
+        'action': action,
       };
 
   @override
@@ -68,13 +55,17 @@ class FloatingEvent extends Equatable {
 
   FloatingEvent copyWith({
     String? title,
-    DashboardActionsTypes? dashboardActionsType,
     Color? color,
+    DashboardActionsTypes? dashboardActionsType,
+    DashboardActionsProvider? dashboardActionsProvider,
+    Function(dynamic v)? action,
   }) {
     return FloatingEvent(
       title: title ?? this.title,
-      dashboardActionsType: dashboardActionsType ?? this.dashboardActionsType,
       color: color ?? this.color,
+      dashboardActionsType: dashboardActionsType ?? this.dashboardActionsType,
+      dashboardActionsProvider: dashboardActionsProvider ?? this.dashboardActionsProvider,
+      action: action ?? this.action,
     );
   }
 }

@@ -21,9 +21,12 @@ class TwitchEventSub {
   StreamSubscription? _streamSubscription;
   String? _broadcasterId;
 
-  ValueNotifier<TwitchPoll> currentPoll = ValueNotifier<TwitchPoll>(TwitchPoll.empty());
-  ValueNotifier<TwitchPrediction> currentPrediction = ValueNotifier<TwitchPrediction>(TwitchPrediction.empty());
-  ValueNotifier<TwitchHypeTrain> currentHypeTrain = ValueNotifier<TwitchHypeTrain>(TwitchHypeTrain.empty());
+  ValueNotifier<TwitchPoll> currentPoll =
+      ValueNotifier<TwitchPoll>(TwitchPoll.empty());
+  ValueNotifier<TwitchPrediction> currentPrediction =
+      ValueNotifier<TwitchPrediction>(TwitchPrediction.empty());
+  ValueNotifier<TwitchHypeTrain> currentHypeTrain =
+      ValueNotifier<TwitchHypeTrain>(TwitchHypeTrain.empty());
 
   TwitchEventSub(
     this.channelName,
@@ -35,6 +38,8 @@ class TwitchEventSub {
 
     _webSocketChannel =
         IOWebSocketChannel.connect("wss://eventsub.wss.twitch.tv/ws");
+    // _webSocketChannel = IOWebSocketChannel.connect("ws://localhost:8080/ws");
+
 
     _streamSubscription = _webSocketChannel?.stream.listen(
       (data) => _eventListener(data),
@@ -54,7 +59,8 @@ class TwitchEventSub {
     // debugPrint("Sub event: $data");
     Map msgMapped = jsonDecode(data);
 
-    if (msgMapped['metadata'] != null && msgMapped['metadata']['message_type'] == 'session_welcome') {
+    if (msgMapped['metadata'] != null &&
+        msgMapped['metadata']['message_type'] == 'session_welcome') {
       String sessionId = msgMapped['payload']['session']['id'];
 
       //SUBSCRIBE TO POLLS BEGIN, PROGRESS, END
@@ -86,51 +92,58 @@ class TwitchEventSub {
       // fakeData();
     }
 
-    if (msgMapped['subscription'] != null) {
-      switch (msgMapped['subscription']['type']) {
+    if (msgMapped['metadata']['subscription_type'] != null) {
+      switch (msgMapped['metadata']['subscription_type']) {
         //POLLS
         case 'channel.poll.begin':
-          currentPoll.value = TwitchPollDTO.fromJson(msgMapped['event']);
+          currentPoll.value =
+              TwitchPollDTO.fromJson(msgMapped['payload']['event']);
           break;
         case 'channel.poll.progress':
-          currentPoll.value = TwitchPollDTO.fromJson(msgMapped['event']);
+          currentPoll.value =
+              TwitchPollDTO.fromJson(msgMapped['payload']['event']);
           break;
         case 'channel.poll.end':
-          currentPoll.value = TwitchPollDTO.fromJson(msgMapped['event']);
-          Future.delayed(const Duration(seconds: 20)).then((value) => 
-            currentPoll.value = TwitchPoll.empty()
-          );
+          currentPoll.value =
+              TwitchPollDTO.fromJson(msgMapped['payload']['event']);
+          Future.delayed(const Duration(seconds: 20))
+              .then((value) => currentPoll.value = TwitchPoll.empty());
           break;
 
         //PREDICTIONS
         case 'channel.prediction.begin':
-          currentPrediction.value = TwitchPredictionDTO.fromJson(msgMapped['event']);
+          currentPrediction.value =
+              TwitchPredictionDTO.fromJson(msgMapped['payload']['event']);
           break;
         case 'channel.prediction.progress':
-          currentPrediction.value = TwitchPredictionDTO.fromJson(msgMapped['event']);
+          currentPrediction.value =
+              TwitchPredictionDTO.fromJson(msgMapped['payload']['event']);
           break;
         case 'channel.prediction.lock':
-          currentPrediction.value = TwitchPredictionDTO.fromJson(msgMapped['event']);
+          currentPrediction.value =
+              TwitchPredictionDTO.fromJson(msgMapped['payload']['event']);
           break;
         case 'channel.prediction.end':
-          currentPrediction.value = TwitchPredictionDTO.fromJson(msgMapped['event']);
-          Future.delayed(const Duration(seconds: 20)).then((value) => 
-            currentPrediction.value = TwitchPrediction.empty()
-          );
+          currentPrediction.value =
+              TwitchPredictionDTO.fromJson(msgMapped['payload']['event']);
+          Future.delayed(const Duration(seconds: 20)).then(
+              (value) => currentPrediction.value = TwitchPrediction.empty());
           break;
 
         //HYPE TRAIN
         case 'channel.hype_train.begin':
-          currentHypeTrain.value = TwitchHypeTrainDTO.fromJson(msgMapped['event']);
+          currentHypeTrain.value =
+              TwitchHypeTrainDTO.fromJson(msgMapped['payload']['event']);
           break;
         case 'channel.hype_train.progress':
-          currentHypeTrain.value = TwitchHypeTrainDTO.fromJson(msgMapped['event']);
+          currentHypeTrain.value =
+              TwitchHypeTrainDTO.fromJson(msgMapped['payload']['event']);
           break;
         case 'channel.hype_train.end':
-          currentHypeTrain.value = TwitchHypeTrainDTO.fromJson(msgMapped['event']);
-          Future.delayed(const Duration(seconds: 20)).then((value) => 
-            currentHypeTrain.value = TwitchHypeTrain.empty()
-          );
+          currentHypeTrain.value =
+              TwitchHypeTrainDTO.fromJson(msgMapped['payload']['event']);
+          Future.delayed(const Duration(seconds: 20)).then(
+              (value) => currentHypeTrain.value = TwitchHypeTrain.empty());
           break;
         default:
       }
@@ -159,6 +172,7 @@ class TwitchEventSub {
     try {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
       dio.options.headers["authorization"] = "Bearer $accessToken";
+      // await dio.post('http://localhost:8080/eventsub/subscriptions', data: {
       await dio
           .post('https://api.twitch.tv/helix/eventsub/subscriptions', data: {
         "type": type,
