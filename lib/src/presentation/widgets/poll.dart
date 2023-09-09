@@ -39,6 +39,7 @@ Widget poll(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(poll.title),
+          Text('Votes: ${poll.totalVotes}'),
           const SizedBox(height: 10),
           ListView.builder(
             shrinkWrap: true,
@@ -72,13 +73,15 @@ Widget poll(
                             percentage > 0.5)
                         ? Colors.green
                         : Theme.of(context).colorScheme.tertiaryContainer,
-                    center: Text("${(percentage * 100).toStringAsFixed(2)} %"),
+                    center: Text("${(percentage * 100).toStringAsFixed(2)} % (${choice.votes})"),
                   ),
                   const SizedBox(height: 10),
                 ],
               );
             },
           ),
+          Text('Ends in ${_printDuration(poll.remainingTime)}'),
+
           Visibility(
             visible: poll.status == PollStatus.active,
             child: Row(
@@ -125,4 +128,11 @@ Widget poll(
       ),
     ],
   );
+}
+
+String _printDuration(Duration duration) {
+  String twoDigits(int n) => n.toString().padLeft(2, "0");
+  String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+  String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+  return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
 }

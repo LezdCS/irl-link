@@ -99,7 +99,7 @@ Widget prediction(
                       backgroundColor: Theme.of(context).colorScheme.secondary,
                       progressColor: outcome.color,
                       center:
-                          Text("${(percentage * 100).toStringAsFixed(2)} %"),
+                          Text("${(percentage * 100).toStringAsFixed(2)} % (${outcome.channelPoints} points)"),
                     ),
                     const SizedBox(height: 10),
                   ],
@@ -107,6 +107,7 @@ Widget prediction(
               );
             },
           ),
+          Text('${prediction.status == PredictionStatus.active ? 'Locks' : 'Ends'} in ${_printDuration(prediction.remainingTime)}'),
           Visibility(
             visible: prediction.status != PredictionStatus.resolved &&
                 prediction.status != PredictionStatus.canceled,
@@ -137,8 +138,12 @@ Widget prediction(
                   onPressed: () {
                     prediction.status == PredictionStatus.active
                         ? controller.endPrediction("LOCKED", null)
-                        : pickWinnerDialog(context, prediction,
-                            controller.endPrediction, controller,);
+                        : pickWinnerDialog(
+                            context,
+                            prediction,
+                            controller.endPrediction,
+                            controller,
+                          );
                   },
                   child: Text(
                     prediction.status == PredictionStatus.active
@@ -200,4 +205,11 @@ void pickWinnerDialog(
       ),
     ),
   );
+}
+
+String _printDuration(Duration duration) {
+  String twoDigits(int n) => n.toString().padLeft(2, "0");
+  String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+  String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+  return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
 }

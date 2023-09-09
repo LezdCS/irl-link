@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../domain/entities/twitch_prediction.dart';
 
 class TwitchPredictionDTO extends TwitchPrediction {
@@ -9,6 +10,7 @@ class TwitchPredictionDTO extends TwitchPrediction {
     required int totalUsers,
     required List<Outcome> outcomes,
     required PredictionStatus status,
+    required Duration remainingTime,
   }) : super(
           id: id,
           title: title,
@@ -16,6 +18,7 @@ class TwitchPredictionDTO extends TwitchPrediction {
           totalUsers: totalUsers,
           outcomes: outcomes,
           status: status,
+          remainingTime: remainingTime,
         );
 
   @override
@@ -26,6 +29,7 @@ class TwitchPredictionDTO extends TwitchPrediction {
         'totalUsers': totalUsers,
         'outcomes': outcomes,
         'status': status,
+        'remainingTime': remainingTime,
       };
 
   factory TwitchPredictionDTO.fromJson(Map<String, dynamic> map) {
@@ -40,8 +44,8 @@ class TwitchPredictionDTO extends TwitchPrediction {
           totalUsers += o.users,
         });
 
-    if(map['locked_at'] != null){
-        status = PredictionStatus.locked;
+    if (map['locked_at'] != null) {
+      status = PredictionStatus.locked;
     }
 
     switch (map["status"]) {
@@ -52,6 +56,13 @@ class TwitchPredictionDTO extends TwitchPrediction {
         status = PredictionStatus.canceled;
         break;
     }
+
+    DateFormat df = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    DateTime endsAt =
+        df.parse(map['locks_at'] ?? map['locked_at'] ?? map['ended_at']);
+    DateTime now = df.parse(df.format(DateTime.now().toUtc()));
+    Duration remainingTime = endsAt.difference(now);
+
     return TwitchPredictionDTO(
       id: map['id'],
       title: map['title'],
@@ -59,6 +70,7 @@ class TwitchPredictionDTO extends TwitchPrediction {
       totalUsers: totalUsers,
       winningOutcomeId: map["winning_outcome_id"] ?? '',
       status: status,
+      remainingTime: remainingTime,
     );
   }
 }

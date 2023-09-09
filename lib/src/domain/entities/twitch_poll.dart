@@ -12,6 +12,7 @@ class TwitchPoll extends Equatable {
   final List<Choice> choices;
   final int totalVotes;
   final PollStatus status;
+  final Duration remainingTime;
 
   const TwitchPoll({
     required this.id,
@@ -19,6 +20,7 @@ class TwitchPoll extends Equatable {
     required this.choices,
     required this.totalVotes,
     required this.status,
+    required this.remainingTime,
   });
 
   factory TwitchPoll.empty() {
@@ -28,6 +30,7 @@ class TwitchPoll extends Equatable {
       choices: [],
       totalVotes: 0,
       status: PollStatus.empty,
+      remainingTime: Duration(seconds: 0),
     );
   }
 
@@ -37,6 +40,7 @@ class TwitchPoll extends Equatable {
         'choices': choices,
         'totalVotes': totalVotes,
         'status': status,
+        'remainingTime': remainingTime,
       };
 
   @override
@@ -47,6 +51,7 @@ class TwitchPoll extends Equatable {
       choices,
       totalVotes,
       status,
+      remainingTime,
     ];
   }
 

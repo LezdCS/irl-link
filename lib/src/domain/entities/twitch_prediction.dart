@@ -17,6 +17,7 @@ class TwitchPrediction extends Equatable {
   final int totalUsers;
   final List<Outcome> outcomes;
   final PredictionStatus status;
+  final Duration remainingTime;
 
   const TwitchPrediction({
     required this.id,
@@ -25,16 +26,19 @@ class TwitchPrediction extends Equatable {
     required this.totalUsers,
     required this.outcomes,
     required this.status,
+    required this.remainingTime,
   });
 
   factory TwitchPrediction.empty() {
     return const TwitchPrediction(
-        id: '',
-        title: '',
-        winningOutcomeId: '',
-        totalUsers: 0,
-        outcomes: [],
-        status: PredictionStatus.empty);
+      id: '',
+      title: '',
+      winningOutcomeId: '',
+      totalUsers: 0,
+      outcomes: [],
+      status: PredictionStatus.empty,
+      remainingTime: Duration(seconds: 0),
+    );
   }
 
   Map toJson() => {
@@ -44,6 +48,7 @@ class TwitchPrediction extends Equatable {
         'totalUsers': totalUsers,
         'outcomes': outcomes,
         'status': status,
+        'remainingTime': remainingTime,
       };
 
   @override
@@ -55,6 +60,7 @@ class TwitchPrediction extends Equatable {
       totalUsers,
       outcomes,
       status,
+      remainingTime,
     ];
   }
 
