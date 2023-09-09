@@ -374,30 +374,35 @@ class TwitchRepositoryImpl extends TwitchRepository {
   }
 
   @override
-  Future<DataState<TwitchPoll>> getPoll(
-      String accessToken, String broadcasterId) async {
-    Response response;
+  Future endPrediction(
+    String accessToken,
+    String broadcasterId,
+    String predictionId,
+    String status,
+    String? winningOutcomeId,
+  ) async {
     var dio = Dio();
-    TwitchPoll? poll;
+
     try {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
       dio.options.headers["authorization"] = "Bearer $accessToken";
-      response = await dio.get(
-          'https://api.twitch.tv/helix/polls?broadcaster_id=$broadcasterId');
 
-      if (response.data['data'] == null || response.data['data'].isEmpty) {
-        return const DataFailed("There is no poll");
-      } else {
-        poll = TwitchPollDTO.fromJson(response.data['data'][0]);
-        if (poll.status == PollStatus.active ||
-            poll.status == PollStatus.completed) {
-          return DataSuccess(poll);
-        }
-        return const DataFailed("No poll to show");
-      }
+      Map body = {
+        "broadcaster_id": broadcasterId,
+        "id": predictionId,
+        "status": status,
+        "winning_outcome_id": winningOutcomeId ?? ''
+      };
+
+      await dio.patch(
+        'https://api.twitch.tv/helix/predictions',
+        data: jsonEncode(body),
+      );
+
+      return const DataSuccess("");
     } on DioException catch (e) {
       debugPrint(e.response.toString());
-      return const DataFailed("Error retrieving Twitch Poll");
+      return const DataFailed("Error ending prediction");
     }
   }
 
@@ -429,35 +434,6 @@ class TwitchRepositoryImpl extends TwitchRepository {
     } on DioException catch (e) {
       debugPrint(e.response.toString());
       return const DataFailed("Error ending poll");
-    }
-  }
-
-  @override
-  Future<DataState<TwitchPrediction>> getPrediction(
-      String accessToken, String broadcasterId) async {
-    Response response;
-    var dio = Dio();
-    TwitchPrediction? prediction;
-    try {
-      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dio.options.headers["authorization"] = "Bearer $accessToken";
-      response = await dio.get(
-          'https://api.twitch.tv/helix/predictions?broadcaster_id=$broadcasterId');
-
-      if (response.data['data'] == null || response.data['data'].isEmpty) {
-        return const DataFailed("There is no prediction");
-      } else {
-        prediction = TwitchPredictionDTO.fromJson(response.data['data'][0]);
-        if (prediction.status == PredictionStatus.resolved ||
-            prediction.status == PredictionStatus.active ||
-            prediction.status == PredictionStatus.locked) {
-          return DataSuccess(prediction);
-        }
-        return const DataFailed("No prediction to show");
-      }
-    } on DioException catch (e) {
-      debugPrint(e.response.toString());
-      return const DataFailed("Error retrieving Twitch Prediction");
     }
   }
 

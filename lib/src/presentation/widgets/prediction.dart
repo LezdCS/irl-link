@@ -138,7 +138,7 @@ Widget prediction(
                     prediction.status == PredictionStatus.active
                         ? controller.endPrediction("LOCKED", null)
                         : pickWinnerDialog(context, prediction,
-                            controller.endPrediction, controller);
+                            controller.endPrediction, controller,);
                   },
                   child: Text(
                     prediction.status == PredictionStatus.active
@@ -158,8 +158,12 @@ Widget prediction(
   );
 }
 
-void pickWinnerDialog(BuildContext context, TwitchPrediction prediction,
-    Function endPrediction, TwitchTabViewController controller) {
+void pickWinnerDialog(
+  BuildContext context,
+  TwitchPrediction prediction,
+  Function endPrediction,
+  TwitchTabViewController controller,
+) {
   Get.defaultDialog(
     title: prediction.title,
     titleStyle: const TextStyle(color: Colors.white),
@@ -174,7 +178,7 @@ void pickWinnerDialog(BuildContext context, TwitchPrediction prediction,
       controller.selectedOutcomeId.value = "-1";
     },
     onConfirm: () {
-      endPrediction('RESOLVED', 'outcome_id');
+      endPrediction('RESOLVED', controller.selectedOutcomeId.value);
       controller.selectedOutcomeId.value = "-1";
     },
     content: Obx(

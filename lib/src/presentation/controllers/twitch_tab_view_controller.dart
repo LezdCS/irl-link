@@ -135,16 +135,25 @@ class TwitchTabViewController extends GetxController {
   // or ARCHIVED to end the poll and hide it
   void endPoll(String status) {
     homeEvents.endPoll(
-        homeViewController.twitchData!.accessToken,
-        homeViewController.twitchData!.twitchUser.id,
-        twitchEventSub!.currentPoll.value.id,
-        status);
+      homeViewController.twitchData!.accessToken,
+      homeViewController.twitchData!.twitchUser.id,
+      twitchEventSub!.currentPoll.value.id,
+      status,
+    );
   }
 
   // status is either RESOLVED to end prediction with a winner (should provide winning_outcome_id)
   // or CANCELED to end the prediction and refund
   // or LOCKED to lock prediction so user can no longer make predictions
-  void endPrediction(String status, String? winningOutcomeId) {}
+  void endPrediction(String status, String? winningOutcomeId) {
+    homeEvents.endPrediction(
+      homeViewController.twitchData!.accessToken,
+      homeViewController.twitchData!.twitchUser.id,
+      twitchEventSub!.currentPrediction.value.id,
+      status,
+      winningOutcomeId,
+    );
+  }
 
   void getStreamInfos() {
     homeEvents

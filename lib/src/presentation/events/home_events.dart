@@ -66,11 +66,6 @@ class HomeEvents {
     return settingsUseCase.setSettings(settings: settings);
   }
 
-  Future<DataState<TwitchPoll>> getPoll(
-      String accessToken, String broadcasterId) {
-    return twitchUseCase.getPoll(accessToken, broadcasterId);
-  }
-
   Future<void>? createPoll(
       String accessToken, String broadcasterId, TwitchPoll newPoll) {
     return twitchUseCase.createPoll(accessToken, broadcasterId, newPoll);
@@ -81,9 +76,15 @@ class HomeEvents {
     return twitchUseCase.endPoll(accessToken, broadcasterId, pollId, status);
   }
 
-  Future<DataState<TwitchPrediction>> getPrediction(
-      String accessToken, String broadcasterId) {
-    return twitchUseCase.getPrediction(accessToken, broadcasterId);
+  Future endPrediction(
+    String accessToken,
+    String broadcasterId,
+    String predictionId,
+    String status,
+    String? winningOutcomeId,
+  ) {
+    return twitchUseCase.endPrediction(
+        accessToken, broadcasterId, predictionId, status, winningOutcomeId);
   }
 
   Future<void> banUser(

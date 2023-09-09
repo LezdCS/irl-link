@@ -55,11 +55,6 @@ abstract class TwitchRepository {
     String title,
   );
 
-  Future<DataState<TwitchPoll>> getPoll(
-    String accessToken,
-    String broadcasterId,
-  );
-
   Future<DataState<TwitchPoll>> createPoll(
     String accessToken,
     String broadcasterId,
@@ -75,9 +70,12 @@ abstract class TwitchRepository {
     String status,
   );
 
-  Future<DataState<TwitchPrediction>> getPrediction(
+  Future endPrediction(
     String accessToken,
     String broadcasterId,
+    String predictionId,
+    String status,
+    String? winningOutcomeId,
   );
 
   Future<void> banUser(
