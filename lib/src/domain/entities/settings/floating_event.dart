@@ -15,6 +15,11 @@ enum DashboardActionsProvider {
   streamElements,
 }
 
+enum SupportedEvents {
+  obsStreamStart,
+  obsStreamStop,
+}
+
 // ignore: must_be_immutable
 class FloatingEvent extends Equatable {
   final String title;

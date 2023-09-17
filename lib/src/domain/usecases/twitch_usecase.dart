@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
-import 'package:irllink/src/domain/entities/twitch_prediction.dart';
 import 'package:irllink/src/domain/entities/twitch_stream_infos.dart';
 import 'package:irllink/src/domain/entities/twitch_user.dart';
 import 'package:irllink/src/domain/repositories/twitch_repository.dart';
@@ -64,11 +63,6 @@ class TwitchUseCase {
     return twitchRepository.setStreamTitle(accessToken, broadcasterId, title);
   }
 
-  Future<DataState<TwitchPoll>> getPoll(
-      String accessToken, String broadcasterId) {
-    return twitchRepository.getPoll(accessToken, broadcasterId);
-  }
-
   Future<DataState<TwitchPoll>> createPoll(
       String accessToken, String broadcasterId, TwitchPoll newPoll) {
     return twitchRepository.createPoll(accessToken, broadcasterId, newPoll);
@@ -79,9 +73,15 @@ class TwitchUseCase {
     return twitchRepository.endPoll(accessToken, broadcasterId, pollId, status);
   }
 
-  Future<DataState<TwitchPrediction>> getPrediction(
-      String accessToken, String broadcasterId) {
-    return twitchRepository.getPrediction(accessToken, broadcasterId);
+  Future endPrediction(
+    String accessToken,
+    String broadcasterId,
+    String predictionId,
+    String status,
+    String? winningOutcomeId,
+  ) {
+    return twitchRepository.endPrediction(
+        accessToken, broadcasterId, predictionId, status, winningOutcomeId);
   }
 
   Future<void> banUser(

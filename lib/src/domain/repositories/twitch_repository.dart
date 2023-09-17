@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
-import 'package:irllink/src/domain/entities/twitch_prediction.dart';
 import 'package:irllink/src/domain/entities/twitch_stream_infos.dart';
 import 'package:irllink/src/domain/entities/twitch_user.dart';
 import 'package:twitch_chat/twitch_chat.dart';
@@ -55,11 +54,6 @@ abstract class TwitchRepository {
     String title,
   );
 
-  Future<DataState<TwitchPoll>> getPoll(
-    String accessToken,
-    String broadcasterId,
-  );
-
   Future<DataState<TwitchPoll>> createPoll(
     String accessToken,
     String broadcasterId,
@@ -75,9 +69,12 @@ abstract class TwitchRepository {
     String status,
   );
 
-  Future<DataState<TwitchPrediction>> getPrediction(
+  Future endPrediction(
     String accessToken,
     String broadcasterId,
+    String predictionId,
+    String status,
+    String? winningOutcomeId,
   );
 
   Future<void> banUser(
