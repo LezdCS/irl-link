@@ -126,7 +126,7 @@ class TwitchTabViewController extends GetxController {
       choices: choices,
       status: PollStatus.active,
       totalVotes: 0,
-      remainingTime: Duration(seconds: 0),
+      remainingTime: const Duration(seconds: 0),
     );
     homeEvents.createPoll(homeViewController.twitchData!.accessToken,
         homeViewController.twitchData!.twitchUser.id, newPoll);

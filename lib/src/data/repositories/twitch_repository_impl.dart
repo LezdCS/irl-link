@@ -14,7 +14,6 @@ import 'package:irllink/src/data/entities/twitch_stream_infos_dto.dart';
 import 'package:irllink/src/data/entities/twitch_user_dto.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
 import 'package:irllink/src/domain/entities/twitch_poll.dart';
-import 'package:irllink/src/domain/entities/twitch_prediction.dart';
 import 'package:irllink/src/domain/entities/twitch_stream_infos.dart';
 import 'package:irllink/src/domain/repositories/twitch_repository.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -22,7 +21,6 @@ import 'package:quiver/iterables.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 
 import '../entities/twitch_poll_dto.dart';
-import '../entities/twitch_prediction_dto.dart';
 
 class TwitchRepositoryImpl extends TwitchRepository {
   @override

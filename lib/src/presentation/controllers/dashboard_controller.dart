@@ -16,17 +16,19 @@ import 'package:irllink/src/domain/entities/settings/floating_event.dart';
 class DashboardController extends GetxController {
   DashboardController();
 
+  // list of the events the user chosed to have in the dashboard
   RxList<FloatingEvent> userEvents = <FloatingEvent>[].obs;
 
   @override
   void onInit() {
+    // dashboardEvents['twitch.emote-only.toggle'].action();
     super.onInit();
   }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
+  // @override
+  // void onClose() {
+  //   super.onClose();
+  // }
 
   @override
   void onReady() async {
