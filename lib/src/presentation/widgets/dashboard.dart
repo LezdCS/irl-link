@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/utils/dashboard_events.dart';
 import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
 import '../../domain/entities/settings/floating_event.dart';
 
@@ -67,7 +68,7 @@ class Dashboard extends GetView {
           backgroundColor: event.color,
         ),
         onPressed: () {
-          event.action!(null);
+          dashboardEvents[event.event].action();
         },
         child: Text(
           event.title,
@@ -100,7 +101,7 @@ class Dashboard extends GetView {
             inactiveColor: event.color.withOpacity(0.5),
             activeColor: event.color,
             onChanged: (double value) {
-              event.action!(value);
+              dashboardEvents[event.event].action(value);
             },
           ),
         ],
@@ -125,7 +126,7 @@ class Dashboard extends GetView {
           Switch(
             value: true,
             onChanged: (bool value) {
-              event.action!(value);
+              dashboardEvents[event.event].action(value);
             },
             activeColor: event.color,
           ),

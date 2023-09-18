@@ -4,7 +4,7 @@ import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dar
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 
 Map dashboardEvents = {
-  'obs.strean.start': {
+  SupportedEvents.obsStreamStart: {
     'provider': DashboardActionsProvider.obs,
     'actionsAllowed': [DashboardActionsTypes.button],
     'action': (dynamic v) {
@@ -13,7 +13,7 @@ Map dashboardEvents = {
       obsTabViewController.startStream();
     },
   },
-  'obs.strean.stop': {
+  SupportedEvents.obsStreamStop: {
     'provider': DashboardActionsProvider.obs,
     'actionsAllowed': [DashboardActionsTypes.button],
     'action': (dynamic v) {
@@ -22,7 +22,7 @@ Map dashboardEvents = {
       obsTabViewController.stopStream();
     },
   },
-  'obs.recording.toggle': {
+  SupportedEvents.obsRecordToggle: {
     'provider': DashboardActionsProvider.obs,
     'actionsAllowed': [DashboardActionsTypes.toggle],
     'value': Get.find<ObsTabViewController>().isRecording,
@@ -32,7 +32,7 @@ Map dashboardEvents = {
       obsTabViewController.startStopRecording();
     },
   },
-  'twitch.followers-only.toggle': {
+  SupportedEvents.twitchFollowerOnly: {
     'provider': DashboardActionsProvider.twitch,
     'actionsAllowed': [DashboardActionsTypes.toggle],
     'value': Get.find<TwitchTabViewController>()
@@ -45,7 +45,7 @@ Map dashboardEvents = {
       twitchTabViewController.toggleFollowerOnly();
     },
   },
-  'twitch.sub-only.toggle': {
+  SupportedEvents.twitchSubOnly: {
     'provider': DashboardActionsProvider.twitch,
     'actionsAllowed': [DashboardActionsTypes.toggle],
     'value': Get.find<TwitchTabViewController>()
@@ -58,7 +58,7 @@ Map dashboardEvents = {
       twitchTabViewController.toggleSubOnly();
     },
   },
-  'twitch.emote-only.toggle': {
+  SupportedEvents.twitchEmoteOnly: {
     'provider': DashboardActionsProvider.twitch,
     'actionsAllowed': [DashboardActionsTypes.toggle],
     'value':
@@ -69,15 +69,15 @@ Map dashboardEvents = {
       twitchTabViewController.toggleFollowerOnly();
     },
   },
-  'twitch.slow-mode.toggle': {
+  SupportedEvents.twitchSlowMode: {
     'provider': DashboardActionsProvider.twitch,
     'actionsAllowed': [DashboardActionsTypes.toggle],
     'value':
         Get.find<TwitchTabViewController>().twitchStreamInfos.value.isSlowMode,
-    'action': (dynamic v) {
+    'action': (bool v) {
       TwitchTabViewController twitchTabViewController =
           Get.find<TwitchTabViewController>();
-      twitchTabViewController.toggleSlowMode(30);
+      twitchTabViewController.toggleSlowMode(v ? 30 : 0);
     },
   },
 };

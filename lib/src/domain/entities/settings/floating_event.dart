@@ -16,8 +16,14 @@ enum DashboardActionsProvider {
 }
 
 enum SupportedEvents {
+  none,
   obsStreamStart,
   obsStreamStop,
+  obsRecordToggle,
+  twitchFollowerOnly,
+  twitchSubOnly,
+  twitchEmoteOnly,
+  twitchSlowMode,
 }
 
 // ignore: must_be_immutable
@@ -25,15 +31,13 @@ class FloatingEvent extends Equatable {
   final String title;
   final Color color;
   final DashboardActionsTypes dashboardActionsType;
-  final DashboardActionsProvider dashboardActionsProvider;
-  Function(dynamic v)? action;
+  final SupportedEvents event;
 
-  FloatingEvent({
+  const FloatingEvent({
     required this.title,
     required this.color,
     required this.dashboardActionsType,
-    required this.dashboardActionsProvider,
-    this.action,
+    required this.event,
   });
 
   @override
@@ -42,8 +46,7 @@ class FloatingEvent extends Equatable {
       title,
       color,
       dashboardActionsType,
-      dashboardActionsProvider,
-      action,
+      event,
     ];
   }
 
@@ -51,8 +54,7 @@ class FloatingEvent extends Equatable {
         'title': title,
         'color': color,
         'dashboardActionsType': dashboardActionsType,
-        'dashboardActionsProvider': dashboardActionsProvider,
-        'action': action,
+        'event': event,
       };
 
   @override
@@ -62,15 +64,13 @@ class FloatingEvent extends Equatable {
     String? title,
     Color? color,
     DashboardActionsTypes? dashboardActionsType,
-    DashboardActionsProvider? dashboardActionsProvider,
-    Function(dynamic v)? action,
+    SupportedEvents? event,
   }) {
     return FloatingEvent(
       title: title ?? this.title,
       color: color ?? this.color,
       dashboardActionsType: dashboardActionsType ?? this.dashboardActionsType,
-      dashboardActionsProvider: dashboardActionsProvider ?? this.dashboardActionsProvider,
-      action: action ?? this.action,
+      event: event ?? this.event,
     );
   }
 }

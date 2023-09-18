@@ -33,41 +33,17 @@ class DashboardController extends GetxController {
   @override
   void onReady() async {
     userEvents.addAll([
-      FloatingEvent(
+      const FloatingEvent(
         dashboardActionsType: DashboardActionsTypes.button,
         color: Colors.green,
         title: "Start stream",
-        dashboardActionsProvider: DashboardActionsProvider.obs,
-        action: (dynamic v) {
-          debugPrint('ok');
-        },
+        event: SupportedEvents.obsStreamStart,
       ),
-      FloatingEvent(
+      const FloatingEvent(
         dashboardActionsType: DashboardActionsTypes.button,
         color: Colors.orange,
-        title: "Clear TTS queue",
-        dashboardActionsProvider: DashboardActionsProvider.twitch,
-        action: (dynamic v) {
-          debugPrint('ok');
-        },
-      ),
-      FloatingEvent(
-        dashboardActionsType: DashboardActionsTypes.slider,
-        color: Colors.pink,
-        title: "TTS volume",
-        dashboardActionsProvider: DashboardActionsProvider.twitch,
-        action: (dynamic v) {
-          debugPrint('ok');
-        },
-      ),
-      FloatingEvent(
-        dashboardActionsType: DashboardActionsTypes.toggle,
-        color: Colors.blueAccent,
-        title: "TTS enabled",
-        dashboardActionsProvider: DashboardActionsProvider.twitch,
-        action: (dynamic v) {
-          debugPrint('ok');
-        },
+        title: "Stop stream",
+        event: SupportedEvents.obsStreamStop,
       ),
     ]);
     super.onReady();
