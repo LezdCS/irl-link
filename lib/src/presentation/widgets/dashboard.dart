@@ -68,7 +68,7 @@ class Dashboard extends GetView {
           backgroundColor: event.color,
         ),
         onPressed: () {
-          dashboardEvents[event.event].action();
+          dashboardEvents[event.event]['action']();
         },
         child: Text(
           event.title,
@@ -97,11 +97,11 @@ class Dashboard extends GetView {
         children: [
           Text(event.title),
           Slider(
-            value: 0.5,
+            value: dashboardEvents[event.event]['value'],
             inactiveColor: event.color.withOpacity(0.5),
             activeColor: event.color,
             onChanged: (double value) {
-              dashboardEvents[event.event].action(value);
+              dashboardEvents[event.event]['action'](value);
             },
           ),
         ],
@@ -124,9 +124,9 @@ class Dashboard extends GetView {
         children: [
           Text(event.title),
           Switch(
-            value: true,
+            value: dashboardEvents[event.event]['value'],
             onChanged: (bool value) {
-              dashboardEvents[event.event].action(value);
+              dashboardEvents[event.event]['action'](value);
             },
             activeColor: event.color,
           ),

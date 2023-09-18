@@ -44,29 +44,28 @@ class HomeView extends GetView<HomeViewController> {
           resizeToAvoidBottomInset: true,
           body: Obx(
             () => FloatingDraggableWidget(
-              floatingWidget: Container(), 
-              // InkWell(
-              //   onTap: () {
-              //     controller.displayDashboard.value =
-              //         !controller.displayDashboard.value;
-              //   },
-              //   child: Container(
-              //     decoration: BoxDecoration(
-              //       shape: BoxShape.circle,
-              //       color: context.theme.colorScheme.tertiary,
-              //     ),
-              //     child: const Icon(
-              //       Icons.dashboard_rounded,
-              //       size: 30,
-              //     ),
-              //   ),
-              // ),
-              floatingWidgetWidth: 0,
-              floatingWidgetHeight: 0,
-              // floatingWidgetWidth: 50,
-              // floatingWidgetHeight: 110,
-              dy: 0,
-              dx: 0,
+              floatingWidget: InkWell(
+                onTap: () {
+                  controller.displayDashboard.value =
+                      !controller.displayDashboard.value;
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: context.theme.colorScheme.tertiary,
+                  ),
+                  child: const Icon(
+                    Icons.dashboard_rounded,
+                    size: 30,
+                  ),
+                ),
+              ),
+              // floatingWidgetWidth: 0,
+              // floatingWidgetHeight: 0,
+              floatingWidgetWidth: 50,
+              floatingWidgetHeight: 110,
+              dy: 10,
+              dx: 10,
               mainScreenWidget: Listener(
                 onPointerUp: (_) => {
                   FocusScope.of(context).unfocus(),

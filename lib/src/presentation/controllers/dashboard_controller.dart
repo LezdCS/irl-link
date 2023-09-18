@@ -19,11 +19,10 @@ class DashboardController extends GetxController {
   // list of the events the user chosed to have in the dashboard
   RxList<FloatingEvent> userEvents = <FloatingEvent>[].obs;
 
-  @override
-  void onInit() {
-    // dashboardEvents['twitch.emote-only.toggle'].action();
-    super.onInit();
-  }
+  // @override
+  // void onInit() {
+  //   super.onInit();
+  // }
 
   // @override
   // void onClose() {
@@ -44,6 +43,12 @@ class DashboardController extends GetxController {
         color: Colors.orange,
         title: "Stop stream",
         event: SupportedEvents.obsStreamStop,
+      ),
+      const FloatingEvent(
+        dashboardActionsType: DashboardActionsTypes.toggle,
+        color: Colors.red,
+        title: "Followe only",
+        event: SupportedEvents.twitchFollowerOnly,
       ),
     ]);
     super.onReady();
