@@ -96,13 +96,15 @@ class Dashboard extends GetView {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(event.title),
-          Slider(
-            value: dashboardEvents[event.event]['value'],
-            inactiveColor: event.color.withOpacity(0.5),
-            activeColor: event.color,
-            onChanged: (double value) {
-              dashboardEvents[event.event]['action'](value);
-            },
+          Obx(
+            () => Slider(
+              value: dashboardEvents[event.event]['value'].value,
+              inactiveColor: event.color.withOpacity(0.5),
+              activeColor: event.color,
+              onChanged: (double value) {
+                dashboardEvents[event.event]['action'](value);
+              },
+            ),
           ),
         ],
       ),
@@ -123,12 +125,15 @@ class Dashboard extends GetView {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(event.title),
-          Switch(
-            value: dashboardEvents[event.event]['value'],
-            onChanged: (bool value) {
-              dashboardEvents[event.event]['action'](value);
-            },
-            activeColor: event.color,
+          Obx(
+            () => Switch(
+              value: dashboardEvents[event.event]['value'].value,
+              onChanged: (bool value) {
+                dashboardEvents[event.event]['action'](value);
+                dashboardEvents[event.event]['value'].refresh();
+              },
+              activeColor: event.color,
+            ),
           ),
         ],
       ),

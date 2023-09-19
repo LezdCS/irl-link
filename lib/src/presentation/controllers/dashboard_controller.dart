@@ -47,7 +47,7 @@ class DashboardController extends GetxController {
       const FloatingEvent(
         dashboardActionsType: DashboardActionsTypes.toggle,
         color: Colors.red,
-        title: "Followe only",
+        title: "Follower only",
         event: SupportedEvents.twitchFollowerOnly,
       ),
     ]);

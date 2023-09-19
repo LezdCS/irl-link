@@ -36,9 +36,7 @@ Map dashboardEvents = {
     'provider': DashboardActionsProvider.twitch,
     'actionsAllowed': [DashboardActionsTypes.toggle],
     'value': Get.find<TwitchTabViewController>()
-        .twitchStreamInfos
-        .value
-        .isFollowerMode,
+        .twitchStreamInfos.value.isFollowerMode,
     'action': (dynamic v) {
       TwitchTabViewController twitchTabViewController =
           Get.find<TwitchTabViewController>();

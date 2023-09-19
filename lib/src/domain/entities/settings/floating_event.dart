@@ -24,6 +24,13 @@ enum SupportedEvents {
   twitchSubOnly,
   twitchEmoteOnly,
   twitchSlowMode,
+  twitchCreatePrediction,
+  twitchLockPrediction,
+  twitchEndPrediction,
+  twitchCancelPrediction,
+  twitchCreatePoll,
+  twitchCancelPoll,
+  twitchEndPoll,
 }
 
 // ignore: must_be_immutable
