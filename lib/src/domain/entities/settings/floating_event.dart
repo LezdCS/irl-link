@@ -20,6 +20,7 @@ enum SupportedEvents {
   obsStreamStart,
   obsStreamStop,
   obsRecordToggle,
+  twitchChatMessage,
   twitchFollowerOnly,
   twitchSubOnly,
   twitchEmoteOnly,

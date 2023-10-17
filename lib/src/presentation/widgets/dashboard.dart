@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/utils/dashboard_events.dart';
 import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
+import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 import '../../domain/entities/settings/floating_event.dart';
 
 class Dashboard extends GetView {
@@ -36,6 +38,26 @@ class Dashboard extends GetView {
           ),
           itemBuilder: (BuildContext context, int index) {
             FloatingEvent event = controller.userEvents[index];
+            bool isServiceEnabled = false;
+            switch (dashboardEvents[event.event]['provider']) {
+              case DashboardActionsProvider.obs:
+                if(Get.isRegistered<ObsTabViewController>()){
+                  isServiceEnabled = true;
+                }
+                break;
+              case DashboardActionsProvider.streamElements:
+                if(Get.isRegistered<StreamelementsViewController>()){
+                  isServiceEnabled = true;
+                }
+                break;
+              case DashboardActionsProvider.twitch:
+                isServiceEnabled = true;
+                break;
+              case DashboardActionsProvider.custom:
+                isServiceEnabled = true;
+                break;
+              default:
+            }
             switch (event.dashboardActionsType) {
               case DashboardActionsTypes.button:
                 return _eventButton(event);

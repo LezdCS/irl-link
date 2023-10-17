@@ -44,12 +44,12 @@ class DashboardController extends GetxController {
         title: "Stop stream",
         event: SupportedEvents.obsStreamStop,
       ),
-      const FloatingEvent(
-        dashboardActionsType: DashboardActionsTypes.toggle,
-        color: Colors.red,
-        title: "Follower only",
-        event: SupportedEvents.twitchFollowerOnly,
-      ),
+      // const FloatingEvent(
+      //   dashboardActionsType: DashboardActionsTypes.toggle,
+      //   color: Colors.red,
+      //   title: "Follower only",
+      //   event: SupportedEvents.twitchFollowerOnly,
+      // ),
     ]);
     super.onReady();
   }
