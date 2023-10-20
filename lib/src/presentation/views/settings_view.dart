@@ -263,179 +263,47 @@ class SettingsView extends GetView<SettingsViewController> {
                     )
                   ],
                 ),
-                InkWell(
-                  onTap: () async {
+                settingsGoToRow(
+                  context,
+                  "Chats joined",
+                  () {
                     Get.to(
                       () => const ChatsJoined(),
                     );
                   },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.only(top: 10, bottom: 10),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.wechat_sharp,
-                              color: Theme.of(context).primaryIconTheme.color,
-                              size: 22,
-                            ),
-                            Container(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: Text(
-                                "Chats joined",
-                                style: TextStyle(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .color,
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        color: Theme.of(context).primaryIconTheme.color,
-                        size: 18,
-                      ),
-                    ],
-                  ),
                 ),
-                InkWell(
-                  onTap: () async {
+                settingsGoToRow(
+                  context,
+                  "Chat events",
+                  () {
                     Get.to(
                       () => ChatEvents(
                         controller: controller,
                       ),
                     );
                   },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.only(top: 10, bottom: 10),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.reviews,
-                              color: Theme.of(context).primaryIconTheme.color,
-                              size: 22,
-                            ),
-                            Container(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: Text(
-                                "Chat events",
-                                style: TextStyle(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .color,
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        color: Theme.of(context).primaryIconTheme.color,
-                        size: 18,
-                      ),
-                    ],
-                  ),
                 ),
-                InkWell(
-                  onTap: () async {
+                settingsGoToRow(
+                  context,
+                  "manage_hidden_users".tr,
+                  () {
                     Get.to(
                       () => ManageListHiddenUsers(
                         controller: controller,
                       ),
                     );
                   },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.only(top: 10, bottom: 10),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.list,
-                              color: Theme.of(context).primaryIconTheme.color,
-                              size: 22,
-                            ),
-                            Container(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: Text(
-                                "manage_hidden_users".tr,
-                                style: TextStyle(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .color,
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        color: Theme.of(context).primaryIconTheme.color,
-                        size: 18,
-                      ),
-                    ],
-                  ),
                 ),
-                InkWell(
-                  onTap: () async {
+                settingsGoToRow(
+                  context,
+                  "text_to_speech".tr,
+                  () {
                     Get.to(
                       () => Tts(
                         controller: controller,
                       ),
                     );
                   },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.only(top: 10, bottom: 10),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.spatial_audio_off_rounded,
-                              color: Theme.of(context).primaryIconTheme.color,
-                              size: 22,
-                            ),
-                            Container(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: Text(
-                                "text_to_speech".tr,
-                                style: TextStyle(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .color,
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        color: Theme.of(context).primaryIconTheme.color,
-                        size: 18,
-                      ),
-                    ],
-                  ),
                 ),
               ],
             ),
@@ -626,49 +494,16 @@ class SettingsView extends GetView<SettingsViewController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                InkWell(
-                  onTap: () {
+                settingsGoToRow(
+                  context,
+                  "manage_browser_tabs".tr,
+                  () {
                     Get.to(
                       () => ManageListBrowserTabs(
                         controller: controller,
                       ),
                     );
                   },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.list,
-                              color: Theme.of(context).primaryIconTheme.color,
-                              size: 22,
-                            ),
-                            Container(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: Text(
-                                "manage_browser_tabs".tr,
-                                style: TextStyle(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .color,
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        color: Theme.of(context).primaryIconTheme.color,
-                        size: 18,
-                      ),
-                    ],
-                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -820,6 +655,47 @@ class SettingsView extends GetView<SettingsViewController> {
                 )
               ],
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget settingsGoToRow(
+      BuildContext context, String title, Function goToFunction) {
+    return InkWell(
+      onTap: () async {
+        goToFunction();
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            padding: const EdgeInsets.only(top: 10, bottom: 10),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.wechat_sharp,
+                  color: Theme.of(context).primaryIconTheme.color,
+                  size: 22,
+                ),
+                Container(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(
+                    "Chats joined",
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyLarge!.color,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Icon(
+            Icons.arrow_forward_ios,
+            color: Theme.of(context).primaryIconTheme.color,
+            size: 18,
           ),
         ],
       ),
