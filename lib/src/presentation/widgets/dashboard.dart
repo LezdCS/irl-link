@@ -38,26 +38,7 @@ class Dashboard extends GetView {
           ),
           itemBuilder: (BuildContext context, int index) {
             FloatingEvent event = controller.userEvents[index];
-            bool isServiceEnabled = false;
-            switch (dashboardEvents[event.event]['provider']) {
-              case DashboardActionsProvider.obs:
-                if(Get.isRegistered<ObsTabViewController>()){
-                  isServiceEnabled = true;
-                }
-                break;
-              case DashboardActionsProvider.streamElements:
-                if(Get.isRegistered<StreamelementsViewController>()){
-                  isServiceEnabled = true;
-                }
-                break;
-              case DashboardActionsProvider.twitch:
-                isServiceEnabled = true;
-                break;
-              case DashboardActionsProvider.custom:
-                isServiceEnabled = true;
-                break;
-              default:
-            }
+            bool isServiceEnabled = isDashboardServiceEnabled(event);
             switch (event.dashboardActionsType) {
               case DashboardActionsTypes.button:
                 return _eventButton(event);
@@ -160,5 +141,26 @@ class Dashboard extends GetView {
         ],
       ),
     );
+  }
+
+  bool isDashboardServiceEnabled(FloatingEvent event) {
+    switch (dashboardEvents[event.event]['provider']) {
+      case DashboardActionsProvider.obs:
+        if (Get.isRegistered<ObsTabViewController>()) {
+          return true;
+        }
+        break;
+      case DashboardActionsProvider.streamElements:
+        if (Get.isRegistered<StreamelementsViewController>()) {
+          return true;
+        }
+        break;
+      case DashboardActionsProvider.twitch:
+        return true;
+
+      case DashboardActionsProvider.custom:
+        return true;
+    }
+    return false;
   }
 }

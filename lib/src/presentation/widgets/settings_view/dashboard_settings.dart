@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/utils/dashboard_events.dart';
 import 'package:irllink/src/domain/entities/settings/floating_event.dart';
+import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 
 class DashboardSettings extends GetView<SettingsViewController> {
@@ -10,6 +11,7 @@ class DashboardSettings extends GetView<SettingsViewController> {
 
   @override
   Widget build(BuildContext context) {
+    DashboardController dashboardController = Get.find<DashboardController>();
     return Obx(
       () => Scaffold(
         appBar: AppBar(
@@ -35,8 +37,36 @@ class DashboardSettings extends GetView<SettingsViewController> {
             color: Theme.of(context).colorScheme.background,
           ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: dashboardController.userEvents.length,
+                itemBuilder: (context, index) {
+                  FloatingEvent event = dashboardController.userEvents[index];
+                  dynamic eventDetails = dashboardEvents[event.event];
+                  return Container(
+                    margin: const EdgeInsets.all(4),
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: event.color,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(8),
+                      ),
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      event.title,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 13,
+                      ),
+                    ),
+                  );
+                },
+              ),
               TextButton(
                 onPressed: () {
                   Get.defaultDialog(
@@ -81,6 +111,21 @@ Widget _addDialog(context, channelTextController) {
         child: Column(
           children: [
             TextFormField(
+              decoration: InputDecoration(
+                isDense: true,
+                disabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.grey[700]!,
+                  ),
+                ),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+                hintText: 'Event title',
+                labelText: 'Event title',
+                labelStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.tertiary,
+                ),
+              ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter some text';

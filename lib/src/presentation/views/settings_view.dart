@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/settings_view/chat_events.dart';
+import 'package:irllink/src/presentation/widgets/settings_view/dashboard_settings.dart';
 import 'package:irllink/src/presentation/widgets/settings_view/stream_elements.dart';
 import 'package:irllink/src/presentation/widgets/settings_view/tts.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -266,6 +267,7 @@ class SettingsView extends GetView<SettingsViewController> {
                 settingsGoToRow(
                   context,
                   "Chats joined",
+                  Icons.wechat_sharp,
                   () {
                     Get.to(
                       () => const ChatsJoined(),
@@ -275,6 +277,7 @@ class SettingsView extends GetView<SettingsViewController> {
                 settingsGoToRow(
                   context,
                   "Chat events",
+                  Icons.reviews,
                   () {
                     Get.to(
                       () => ChatEvents(
@@ -286,6 +289,7 @@ class SettingsView extends GetView<SettingsViewController> {
                 settingsGoToRow(
                   context,
                   "manage_hidden_users".tr,
+                  Icons.list,
                   () {
                     Get.to(
                       () => ManageListHiddenUsers(
@@ -297,6 +301,7 @@ class SettingsView extends GetView<SettingsViewController> {
                 settingsGoToRow(
                   context,
                   "text_to_speech".tr,
+                  Icons.spatial_audio_off_rounded,
                   () {
                     Get.to(
                       () => Tts(
@@ -329,6 +334,16 @@ class SettingsView extends GetView<SettingsViewController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                settingsGoToRow(
+                  context,
+                  "Dashboard",
+                  Icons.dashboard,
+                  () {
+                    Get.to(
+                      () => const DashboardSettings(),
+                    );
+                  },
+                ),
                 //Themes
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -497,6 +512,7 @@ class SettingsView extends GetView<SettingsViewController> {
                 settingsGoToRow(
                   context,
                   "manage_browser_tabs".tr,
+                  Icons.list,
                   () {
                     Get.to(
                       () => ManageListBrowserTabs(
@@ -662,7 +678,7 @@ class SettingsView extends GetView<SettingsViewController> {
   }
 
   Widget settingsGoToRow(
-      BuildContext context, String title, Function goToFunction) {
+      BuildContext context, String title, IconData icon, Function goToFunction) {
     return InkWell(
       onTap: () async {
         goToFunction();
@@ -675,14 +691,14 @@ class SettingsView extends GetView<SettingsViewController> {
             child: Row(
               children: [
                 Icon(
-                  Icons.wechat_sharp,
+                  icon,
                   color: Theme.of(context).primaryIconTheme.color,
                   size: 22,
                 ),
                 Container(
                   padding: const EdgeInsets.only(left: 10),
                   child: Text(
-                    "Chats joined",
+                    title,
                     style: TextStyle(
                       color: Theme.of(context).textTheme.bodyLarge!.color,
                       fontSize: 18,
