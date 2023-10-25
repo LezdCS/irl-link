@@ -138,7 +138,9 @@ Widget _addDialog(context, SettingsViewController controller) {
               hint: const Text('Event'),
               items: dashboardEvents.entries.map((entry) {
                 return DropdownMenuItem(
-                    value: entry.key, child: Text(entry.key));
+                  value: entry.key,
+                  child: Text(entry.key),
+                );
               }).toList(),
               onChanged: (obj) {
                 selectedEvent = obj as SupportedEvents;
@@ -151,7 +153,9 @@ Widget _addDialog(context, SettingsViewController controller) {
                       (element) => element == selectedEvent)['actionsAllowed']
                   .map((type) {
                 return DropdownMenuItem(
-                    value: type.key, child: Text(type.value));
+                  value: type.key,
+                  child: Text(type.value),
+                );
               }),
               onChanged: (type) {
                 selectedType = type as DashboardActionsTypes;
