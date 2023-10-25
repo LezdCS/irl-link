@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:irllink/src/domain/entities/settings/chat_events_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
-import 'package:irllink/src/domain/entities/settings/floating_dashboard_settings.dart';
+import 'package:irllink/src/domain/entities/settings/dashboard_settings.dart';
 import 'package:irllink/src/domain/entities/settings/general_settings.dart';
 import 'package:irllink/src/domain/entities/settings/stream_elements_settings.dart';
 import 'package:irllink/src/domain/entities/settings/tts_settings.dart';
@@ -17,7 +17,7 @@ class Settings extends Equatable {
 
   //GENERAL SETTINGS
   final GeneralSettings? generalSettings;
-  final FloatingDashboardSettings? floatingDashboardSettings;
+  final DashboardSettings? dashboardSettings;
 
   //CONNECTIONS SETTINGS
   final bool? isObsConnected;
@@ -42,7 +42,7 @@ class Settings extends Equatable {
 
     //GENERAL SETTINGS
     required this.generalSettings,
-    required this.floatingDashboardSettings,
+    required this.dashboardSettings,
 
     //CONNECTIONS SETTINGS
     required this.isObsConnected,
@@ -85,7 +85,7 @@ class Settings extends Equatable {
       appLanguage: {"languageCode": "en", "countryCode": "US"},
       splitViewWeights: [0.5, 0.5],
     ),
-    this.floatingDashboardSettings = const FloatingDashboardSettings(
+    this.dashboardSettings = const DashboardSettings(
       userEvents: [],
     ),
 
@@ -131,7 +131,7 @@ class Settings extends Equatable {
         'chatSettings': chatSettings?.toJson(),
         //GENERAL
         'generalSettings': generalSettings?.toJson(),
-        'floatingDashboardSettings': floatingDashboardSettings?.toJson(),
+        'dashboardSettings': dashboardSettings?.toJson(),
         //CONNECTIONS
         'isObsConnected': isObsConnected,
         'obsWebsocketUrl': obsWebsocketUrl,
@@ -156,7 +156,7 @@ class Settings extends Equatable {
       chatSettings,
       //GENERAL
       generalSettings,
-      floatingDashboardSettings,
+      dashboardSettings,
       //CONNECTIONS
       isObsConnected,
       obsWebsocketUrl,
@@ -186,7 +186,7 @@ class Settings extends Equatable {
           ChatSettings? chatSettings,
           //GENERAL
           GeneralSettings? generalSettings,
-          FloatingDashboardSettings? floatingDashboardSettings,
+          DashboardSettings? dashboardSettings,
           //CONNECTIONS
           bool? isObsConnected,
           String? obsWebsocketUrl,
@@ -207,8 +207,8 @@ class Settings extends Equatable {
         chatSettings: chatSettings ?? this.chatSettings,
         //GENERAL
         generalSettings: generalSettings ?? this.generalSettings,
-        floatingDashboardSettings:
-            floatingDashboardSettings ?? this.floatingDashboardSettings,
+        dashboardSettings:
+            dashboardSettings ?? this.dashboardSettings,
         //CONNECTIONS
         isObsConnected: isObsConnected ?? this.isObsConnected,
         obsWebsocketUrl: obsWebsocketUrl ?? this.obsWebsocketUrl,

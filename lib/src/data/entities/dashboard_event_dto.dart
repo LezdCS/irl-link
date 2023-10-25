@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:irllink/src/domain/entities/settings/floating_event.dart';
+import 'package:irllink/src/core/utils/dashboard_events.dart';
+import 'package:irllink/src/domain/entities/dashboard_event.dart';
 
-class FloatingEventDTO extends FloatingEvent {
-  const FloatingEventDTO({
+class DashboardEventDTO extends DashboardEvent {
+  const DashboardEventDTO({
     required String title,
     required Color color,
     required DashboardActionsTypes dashboardActionsType,
     required SupportedEvents event,
+    required dynamic customValue,
   }) : super(
           title: title,
           color: color,
           dashboardActionsType: dashboardActionsType,
           event: event,
+          customValue: customValue,
         );
 
   @override
@@ -20,15 +23,17 @@ class FloatingEventDTO extends FloatingEvent {
         'color': color,
         'dashboardActionsType': dashboardActionsType,
         'event': event,
+        'customValue': customValue,
       };
 
-  factory FloatingEventDTO.fromJson(Map<String, dynamic> map) {
-    return FloatingEventDTO(
+  factory DashboardEventDTO.fromJson(Map<String, dynamic> map) {
+    return DashboardEventDTO(
       title: map['title'] ?? "None",
       color: map['color'] ?? Colors.grey,
       dashboardActionsType:
           map['dashboardActionsType'] ?? DashboardActionsTypes.button,
       event: map['event'] ?? SupportedEvents.none,
+      customValue: map['customValue'],
     );
   }
 }

@@ -1,7 +1,33 @@
 import 'package:get/get.dart';
-import 'package:irllink/src/domain/entities/settings/floating_event.dart';
+import 'package:irllink/src/domain/entities/dashboard_event.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
+
+enum DashboardActionsProvider {
+  custom,
+  twitch,
+  obs,
+  streamElements,
+}
+
+enum SupportedEvents {
+  none,
+  obsStreamStart,
+  obsStreamStop,
+  obsRecordToggle,
+  twitchChatMessage,
+  twitchFollowerOnly,
+  twitchSubOnly,
+  twitchEmoteOnly,
+  twitchSlowMode,
+  // twitchCreatePrediction,
+  // twitchLockPrediction,
+  // twitchEndPrediction,
+  // twitchCancelPrediction,
+  // twitchCreatePoll,
+  // twitchCancelPoll,
+  // twitchEndPoll,
+}
 
 Map dashboardEvents = {
   SupportedEvents.obsStreamStart: {

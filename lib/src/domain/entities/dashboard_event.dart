@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
+import 'package:irllink/src/core/utils/dashboard_events.dart';
 
 enum DashboardActionsTypes {
   toggle,
@@ -8,44 +9,20 @@ enum DashboardActionsTypes {
   slider,
 }
 
-enum DashboardActionsProvider {
-  custom,
-  twitch,
-  obs,
-  streamElements,
-}
-
-enum SupportedEvents {
-  none,
-  obsStreamStart,
-  obsStreamStop,
-  obsRecordToggle,
-  twitchChatMessage,
-  twitchFollowerOnly,
-  twitchSubOnly,
-  twitchEmoteOnly,
-  twitchSlowMode,
-  twitchCreatePrediction,
-  twitchLockPrediction,
-  twitchEndPrediction,
-  twitchCancelPrediction,
-  twitchCreatePoll,
-  twitchCancelPoll,
-  twitchEndPoll,
-}
-
 // ignore: must_be_immutable
-class FloatingEvent extends Equatable {
+class DashboardEvent extends Equatable {
   final String title;
   final Color color;
   final DashboardActionsTypes dashboardActionsType;
   final SupportedEvents event;
+  final dynamic customValue;
 
-  const FloatingEvent({
+  const DashboardEvent({
     required this.title,
     required this.color,
     required this.dashboardActionsType,
     required this.event,
+    required this.customValue,
   });
 
   @override
@@ -55,6 +32,7 @@ class FloatingEvent extends Equatable {
       color,
       dashboardActionsType,
       event,
+      customValue,
     ];
   }
 
@@ -63,22 +41,25 @@ class FloatingEvent extends Equatable {
         'color': color,
         'dashboardActionsType': dashboardActionsType,
         'event': event,
+        'customValue': customValue,
       };
 
   @override
   bool get stringify => true;
 
-  FloatingEvent copyWith({
+  DashboardEvent copyWith({
     String? title,
     Color? color,
     DashboardActionsTypes? dashboardActionsType,
     SupportedEvents? event,
+    dynamic customValue,
   }) {
-    return FloatingEvent(
+    return DashboardEvent(
       title: title ?? this.title,
       color: color ?? this.color,
       dashboardActionsType: dashboardActionsType ?? this.dashboardActionsType,
       event: event ?? this.event,
+      customValue: customValue ?? this.customValue,
     );
   }
 }

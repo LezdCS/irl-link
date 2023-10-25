@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
 
-import 'floating_event.dart';
+import '../dashboard_event.dart';
 
-class FloatingDashboardSettings extends Equatable {
-  final List<FloatingEvent> userEvents;
+class DashboardSettings extends Equatable {
+  final List<DashboardEvent> userEvents;
 
-  const FloatingDashboardSettings({
+  const DashboardSettings({
     required this.userEvents,
   });
 
@@ -23,10 +23,10 @@ class FloatingDashboardSettings extends Equatable {
   @override
   bool get stringify => true;
 
-  FloatingDashboardSettings copyWith({
-    List<FloatingEvent>? userEvents,
+  DashboardSettings copyWith({
+    List<DashboardEvent>? userEvents,
   }) {
-    return FloatingDashboardSettings(
+    return DashboardSettings(
       userEvents: userEvents ?? this.userEvents,
     );
   }

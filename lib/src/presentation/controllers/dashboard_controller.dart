@@ -11,18 +11,22 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/domain/entities/settings/floating_event.dart';
+import 'package:irllink/src/core/utils/dashboard_events.dart';
+import 'package:irllink/src/domain/entities/dashboard_event.dart';
+import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 
 class DashboardController extends GetxController {
   DashboardController();
 
-  // list of the events the user chosed to have in the dashboard
-  RxList<FloatingEvent> userEvents = <FloatingEvent>[].obs;
+  // List of the events in the user dashboard
+  RxList<DashboardEvent> userEvents = <DashboardEvent>[].obs;
 
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  // }
+  @override
+  void onInit() {
+    List<DashboardEvent> events = Get.find<HomeViewController>().settings.value.dashboardSettings!.userEvents;
+    userEvents.addAll(events);
+    super.onInit();
+  }
 
   // @override
   // void onClose() {
@@ -32,24 +36,20 @@ class DashboardController extends GetxController {
   @override
   void onReady() async {
     userEvents.addAll([
-      const FloatingEvent(
+      const DashboardEvent(
         dashboardActionsType: DashboardActionsTypes.button,
         color: Colors.green,
         title: "Start stream",
         event: SupportedEvents.obsStreamStart,
+        customValue: null,
       ),
-      const FloatingEvent(
+      const DashboardEvent(
         dashboardActionsType: DashboardActionsTypes.button,
         color: Colors.orange,
         title: "Stop stream",
         event: SupportedEvents.obsStreamStop,
+        customValue: null,
       ),
-      // const FloatingEvent(
-      //   dashboardActionsType: DashboardActionsTypes.toggle,
-      //   color: Colors.red,
-      //   title: "Follower only",
-      //   event: SupportedEvents.twitchFollowerOnly,
-      // ),
     ]);
     super.onReady();
   }

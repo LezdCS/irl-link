@@ -2,12 +2,12 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/utils/dashboard_events.dart';
-import 'package:irllink/src/domain/entities/settings/floating_event.dart';
+import 'package:irllink/src/domain/entities/dashboard_event.dart';
 import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 
-class DashboardSettings extends GetView<SettingsViewController> {
-  const DashboardSettings({super.key});
+class DashboardSettingsView extends GetView<SettingsViewController> {
+  const DashboardSettingsView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class DashboardSettings extends GetView<SettingsViewController> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: dashboardController.userEvents.length,
                 itemBuilder: (context, index) {
-                  FloatingEvent event = dashboardController.userEvents[index];
+                  DashboardEvent event = dashboardController.userEvents[index];
                   dynamic eventDetails = dashboardEvents[event.event];
                   return Container(
                     margin: const EdgeInsets.all(4),
@@ -97,11 +97,11 @@ class DashboardSettings extends GetView<SettingsViewController> {
   }
 }
 
-Widget _addDialog(context, channelTextController) {
+Widget _addDialog(context, SettingsViewController controller) {
   String title = '';
   SupportedEvents selectedEvent = SupportedEvents.none;
   DashboardActionsTypes? selectedType;
-  String customValue = '';
+  dynamic customValue = '';
   final formKey = GlobalKey<FormState>();
   return Column(
     mainAxisSize: MainAxisSize.min,
@@ -166,17 +166,22 @@ Widget _addDialog(context, channelTextController) {
                   }
                   return null;
                 },
+                onChanged: (value) {
+                  customValue = value;
+                },
               ),
             ),
             ElevatedButton(
               onPressed: () {
                 if (formKey.currentState!.validate() && selectedType != null) {
-                  FloatingEvent newEvent = FloatingEvent(
+                  DashboardEvent newEvent = DashboardEvent(
                     title: title,
                     event: selectedEvent,
                     dashboardActionsType: selectedType!,
                     color: Colors.red,
+                    customValue: customValue,
                   );
+                  controller.addDashboardEvent(newEvent);
                 }
               },
               child: const Text('Submit'),

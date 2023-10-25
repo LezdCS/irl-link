@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/utils/print_duration.dart';
 import 'package:irllink/src/domain/entities/twitch_poll.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -80,7 +81,7 @@ Widget poll(
               );
             },
           ),
-          Text('Ends in ${_printDuration(poll.remainingTime)}'),
+          Text('Ends in ${printDuration(poll.remainingTime)}'),
 
           Visibility(
             visible: poll.status == PollStatus.active,
@@ -128,11 +129,4 @@ Widget poll(
       ),
     ],
   );
-}
-
-String _printDuration(Duration duration) {
-  String twoDigits(int n) => n.toString().padLeft(2, "0");
-  String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-  String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-  return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
 }

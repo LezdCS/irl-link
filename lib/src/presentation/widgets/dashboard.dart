@@ -4,7 +4,7 @@ import 'package:irllink/src/core/utils/dashboard_events.dart';
 import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
-import '../../domain/entities/settings/floating_event.dart';
+import '../../domain/entities/dashboard_event.dart';
 
 class Dashboard extends GetView {
   @override
@@ -37,7 +37,7 @@ class Dashboard extends GetView {
             childAspectRatio: 3 / 1.8,
           ),
           itemBuilder: (BuildContext context, int index) {
-            FloatingEvent event = controller.userEvents[index];
+            DashboardEvent event = controller.userEvents[index];
             bool isServiceEnabled = isDashboardServiceEnabled(event);
             switch (event.dashboardActionsType) {
               case DashboardActionsTypes.button:
@@ -55,7 +55,7 @@ class Dashboard extends GetView {
     );
   }
 
-  Widget _eventButton(FloatingEvent event) {
+  Widget _eventButton(DashboardEvent event) {
     return Container(
       margin: const EdgeInsets.all(4),
       decoration: BoxDecoration(
@@ -71,7 +71,7 @@ class Dashboard extends GetView {
           backgroundColor: event.color,
         ),
         onPressed: () {
-          dashboardEvents[event.event]['action']();
+          dashboardEvents[event.event]['action'](event.customValue);
         },
         child: Text(
           event.title,
@@ -85,7 +85,7 @@ class Dashboard extends GetView {
     );
   }
 
-  Widget _eventSlider(FloatingEvent event) {
+  Widget _eventSlider(DashboardEvent event) {
     return Container(
       margin: const EdgeInsets.all(4),
       decoration: BoxDecoration(
@@ -114,7 +114,7 @@ class Dashboard extends GetView {
     );
   }
 
-  Widget _eventToggle(FloatingEvent event) {
+  Widget _eventToggle(DashboardEvent event) {
     return Container(
       margin: const EdgeInsets.all(4),
       decoration: BoxDecoration(
@@ -143,7 +143,7 @@ class Dashboard extends GetView {
     );
   }
 
-  bool isDashboardServiceEnabled(FloatingEvent event) {
+  bool isDashboardServiceEnabled(DashboardEvent event) {
     switch (dashboardEvents[event.event]['provider']) {
       case DashboardActionsProvider.obs:
         if (Get.isRegistered<ObsTabViewController>()) {

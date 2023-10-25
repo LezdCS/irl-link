@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:irllink/src/core/utils/print_duration.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 
 Widget hypeTrain(
@@ -35,16 +36,9 @@ Widget hypeTrain(
             ],
           ),
           Text('${hypetrain.progress}%'),
-          Text(_printDuration(hypetrain.endsAt))
+          Text(printDuration(hypetrain.endsAt))
         ],
       );
     },
   );
-}
-
-String _printDuration(Duration duration) {
-  String twoDigits(int n) => n.toString().padLeft(2, "0");
-  String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-  String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-  return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
 }
