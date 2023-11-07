@@ -39,6 +39,10 @@ class Dashboard extends GetView {
           itemBuilder: (BuildContext context, int index) {
             DashboardEvent event = controller.userEvents[index];
             bool isServiceEnabled = isDashboardServiceEnabled(event);
+            if (!isServiceEnabled) {
+              // TODO: temporary solution, next solution is to grey out the event and disable it
+              return Container();
+            }
             switch (event.dashboardActionsType) {
               case DashboardActionsTypes.button:
                 return _eventButton(event);
@@ -71,7 +75,7 @@ class Dashboard extends GetView {
           backgroundColor: event.color,
         ),
         onPressed: () {
-          dashboardEvents[event.event]['action'](event.customValue);
+          dashboardEvents[event.event]?.action(event.customValue);
         },
         child: Text(
           event.title,
@@ -101,11 +105,11 @@ class Dashboard extends GetView {
           Text(event.title),
           Obx(
             () => Slider(
-              value: dashboardEvents[event.event]['value'].value,
+              value: dashboardEvents[event.event]?.value.value,
               inactiveColor: event.color.withOpacity(0.5),
               activeColor: event.color,
               onChanged: (double value) {
-                dashboardEvents[event.event]['action'](value);
+                dashboardEvents[event.event]?.action(value);
               },
             ),
           ),
@@ -130,10 +134,10 @@ class Dashboard extends GetView {
           Text(event.title),
           Obx(
             () => Switch(
-              value: dashboardEvents[event.event]['value'].value,
+              value: dashboardEvents[event.event]?.value.value,
               onChanged: (bool value) {
-                dashboardEvents[event.event]['action'](value);
-                dashboardEvents[event.event]['value'].refresh();
+                dashboardEvents[event.event]?.action(value);
+                dashboardEvents[event.event]?.value.refresh();
               },
               activeColor: event.color,
             ),
@@ -144,7 +148,7 @@ class Dashboard extends GetView {
   }
 
   bool isDashboardServiceEnabled(DashboardEvent event) {
-    switch (dashboardEvents[event.event]['provider']) {
+    switch (dashboardEvents[event.event]?.provider) {
       case DashboardActionsProvider.obs:
         if (Get.isRegistered<ObsTabViewController>()) {
           return true;
@@ -160,6 +164,8 @@ class Dashboard extends GetView {
 
       case DashboardActionsProvider.custom:
         return true;
+      default:
+      return false;
     }
     return false;
   }

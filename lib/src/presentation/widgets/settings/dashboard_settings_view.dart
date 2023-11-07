@@ -45,7 +45,7 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
                 itemCount: dashboardController.userEvents.length,
                 itemBuilder: (context, index) {
                   DashboardEvent event = dashboardController.userEvents[index];
-                  dynamic eventDetails = dashboardEvents[event.event];
+                  ExistingDashboardEvent? eventDetails = dashboardEvents[event.event];
                   return Container(
                     margin: const EdgeInsets.all(4),
                     padding: const EdgeInsets.all(10),
@@ -56,13 +56,25 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
                       ),
                     ),
                     alignment: Alignment.center,
-                    child: Text(
-                      event.title,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 13,
-                      ),
+                    child: Column(
+                      children: [
+                        Text(
+                          event.title,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                          ),
+                        ),
+                         Text(
+                          eventDetails?.provider.toString() ?? '',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
                     ),
                   );
                 },
@@ -138,8 +150,7 @@ Widget _addDialog(context, SettingsViewController controller) {
               hint: const Text('Event'),
               items: dashboardEvents.entries.map((entry) {
                 return DropdownMenuItem(
-                  value: entry.key,
-                  child: Text(entry.key),
+                  child: Text(entry.value.toString()),
                 );
               }).toList(),
               onChanged: (obj) {
@@ -148,15 +159,15 @@ Widget _addDialog(context, SettingsViewController controller) {
             ),
             DropdownButtonFormField(
               hint: const Text('Type of input'),
-              items: dashboardEvents.keys
+              items: dashboardEvents[dashboardEvents.keys
                   .firstWhereOrNull(
-                      (element) => element == selectedEvent)['actionsAllowed']
-                  .map((type) {
+                      (element) => element == selectedEvent)]?.actionsAllowed
+                  .map((DashboardActionsTypes type) {
                 return DropdownMenuItem(
-                  value: type.key,
-                  child: Text(type.value),
+                  value: type,
+                  child: Text(type.toString()),
                 );
-              }),
+              }).toList(),
               onChanged: (type) {
                 selectedType = type as DashboardActionsTypes;
               },
