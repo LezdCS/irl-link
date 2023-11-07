@@ -33,8 +33,8 @@ dependencies:
   faker: ^2.1.0
   firebase_core: ^2.20.0
   firebase_crashlytics: ^3.4.2
-  firebase_remote_config: ^4.3.2
-  firebase_analytics: ^10.6.2
+  firebase_remote_config: ^4.3.3
+  firebase_analytics: ^10.6.3
   fl_chart: ^0.64.0
   floating_draggable_widget: ^2.1.4
   flutter_background_service: ^5.0.2
@@ -51,7 +51,7 @@ dependencies:
   intl: ^0.18.1
   jwt_decoder: ^2.0.1
   marquee: ^2.2.3
-  mobile_scanner: ^3.5.1
+  mobile_scanner: ^3.5.2
   move_to_background: ^1.0.2
   obs_websocket: ^5.1.0+2
   package_info_plus: ^4.2.0
@@ -68,9 +68,9 @@ dependencies:
   url_launcher: ^6.2.0
   wakelock: ^0.6.2
   web_socket_channel: ^2.4.0
-  webview_flutter: ^4.4.1
-  webview_flutter_android: ^3.12.0
-  webview_flutter_wkwebview: ^3.9.2
+  webview_flutter: ^4.4.2
+  webview_flutter_android: ^3.12.1
+  webview_flutter_wkwebview: ^3.9.3
 
 dependency_overrides:
   wakelock_windows:
