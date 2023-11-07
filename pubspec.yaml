@@ -65,7 +65,7 @@ dependencies:
     git:
         url: https://github.com/LezdCS/twitch_chat.git
   upgrader: ^8.2.0
-  url_launcher: ^6.2.0
+  url_launcher: ^6.2.1
   wakelock: ^0.6.2
   web_socket_channel: ^2.4.0
   webview_flutter: ^4.4.2
