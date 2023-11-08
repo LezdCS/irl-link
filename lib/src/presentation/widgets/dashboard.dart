@@ -40,8 +40,7 @@ class Dashboard extends GetView {
             DashboardEvent event = controller.userEvents[index];
             bool isServiceEnabled = isDashboardServiceEnabled(event);
             if (!isServiceEnabled) {
-              // TODO: temporary solution, next solution is to grey out the event and disable it
-              return Container();
+              return _disabledServiceEvent(event);
             }
             switch (event.dashboardActionsType) {
               case DashboardActionsTypes.button:
@@ -55,6 +54,33 @@ class Dashboard extends GetView {
             }
           },
         ),
+      ),
+    );
+  }
+
+  Widget _disabledServiceEvent(DashboardEvent event) {
+    return Container(
+      margin: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: Theme.of(Get.context!).colorScheme.tertiaryContainer,
+        borderRadius: const BorderRadius.all(
+          Radius.circular(8),
+        ),
+      ),
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(event.title),
+          const SizedBox(height: 10),
+          const Text(
+            "Service not enabled",
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 12,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -165,7 +191,7 @@ class Dashboard extends GetView {
       case DashboardActionsProvider.custom:
         return true;
       default:
-      return false;
+        return false;
     }
     return false;
   }

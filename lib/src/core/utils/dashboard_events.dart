@@ -53,7 +53,7 @@ Map<SupportedEvents, ExistingDashboardEvent> dashboardEvents = {
           Get.find<ObsTabViewController>();
       obsTabViewController.startStream();
     },
-  ),
+  ), 
   SupportedEvents.obsStreamStop: ExistingDashboardEvent(
     provider: DashboardActionsProvider.obs,
     actionsAllowed: [DashboardActionsTypes.button],
