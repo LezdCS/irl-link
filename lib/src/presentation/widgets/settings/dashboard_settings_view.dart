@@ -45,7 +45,8 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
                 itemCount: dashboardController.userEvents.length,
                 itemBuilder: (context, index) {
                   DashboardEvent event = dashboardController.userEvents[index];
-                  ExistingDashboardEvent? eventDetails = dashboardEvents[event.event];
+                  ExistingDashboardEvent? eventDetails =
+                      dashboardEvents[event.event];
                   return Container(
                     margin: const EdgeInsets.all(4),
                     padding: const EdgeInsets.all(10),
@@ -66,7 +67,7 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
                             fontSize: 13,
                           ),
                         ),
-                         Text(
+                        Text(
                           eventDetails?.provider.toString() ?? '',
                           textAlign: TextAlign.center,
                           style: const TextStyle(
@@ -83,9 +84,9 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
                 onPressed: () {
                   Get.defaultDialog(
                     content: _addDialog(context, controller),
-                    title: "add".tr,
-                    textCancel: "cancel".tr,
-                    textConfirm: "add".tr,
+                    title: "New event".tr,
+                    cancel: null,
+                    confirm: Container(),
                     titleStyle: TextStyle(
                       color: Theme.of(context).textTheme.bodyLarge!.color,
                     ),
@@ -111,7 +112,7 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
 
 Widget _addDialog(context, SettingsViewController controller) {
   String title = '';
-  SupportedEvents selectedEvent = SupportedEvents.none;
+  Rx<SupportedEvents> selectedEvent = SupportedEvents.none.obs;
   DashboardActionsTypes? selectedType;
   dynamic customValue = '';
   final formKey = GlobalKey<FormState>();
@@ -147,33 +148,52 @@ Widget _addDialog(context, SettingsViewController controller) {
               onChanged: ((value) => title = value),
             ),
             DropdownButtonFormField(
-              hint: const Text('Event'),
-              items: dashboardEvents.entries.map((entry) {
+              value: SupportedEvents.values[0],
+              items: SupportedEvents.values.map((event) {
                 return DropdownMenuItem(
-                  child: Text(entry.value.toString()),
+                  value: event,
+                  child: Text(
+                    event.toString(),
+                  ),
                 );
               }).toList(),
+              validator: (value) {
+                if (value == SupportedEvents.none) {
+                  return 'Please select an event';
+                }
+                return null;
+              },
               onChanged: (obj) {
-                selectedEvent = obj as SupportedEvents;
+                selectedEvent.value = obj as SupportedEvents;
               },
             ),
-            DropdownButtonFormField(
-              hint: const Text('Type of input'),
-              items: dashboardEvents[dashboardEvents.keys
-                  .firstWhereOrNull(
-                      (element) => element == selectedEvent)]?.actionsAllowed
-                  .map((DashboardActionsTypes type) {
-                return DropdownMenuItem(
-                  value: type,
-                  child: Text(type.toString()),
-                );
-              }).toList(),
-              onChanged: (type) {
-                selectedType = type as DashboardActionsTypes;
-              },
+            Obx(
+              () => Visibility(
+                visible: selectedEvent.value != SupportedEvents.none,
+                child: DropdownButtonFormField(
+                  hint: const Text('Type of input'),
+                  value: dashboardEvents[dashboardEvents.keys.firstWhereOrNull(
+                          (element) => element == selectedEvent.value)]
+                      ?.actionsAllowed[0],
+                  items: dashboardEvents[dashboardEvents.keys.firstWhereOrNull(
+                          (element) => element == selectedEvent.value)]
+                      ?.actionsAllowed
+                      .map((DashboardActionsTypes type) {
+                    return DropdownMenuItem(
+                      value: type,
+                      child: Text(
+                        type.toString(),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (type) {
+                    selectedType = type as DashboardActionsTypes;
+                  },
+                ),
+              ),
             ),
             Visibility(
-              visible: selectedEvent == SupportedEvents.twitchChatMessage,
+              visible: selectedEvent.value == SupportedEvents.twitchChatMessage,
               child: TextFormField(
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -191,7 +211,7 @@ Widget _addDialog(context, SettingsViewController controller) {
                 if (formKey.currentState!.validate() && selectedType != null) {
                   DashboardEvent newEvent = DashboardEvent(
                     title: title,
-                    event: selectedEvent,
+                    event: selectedEvent.value,
                     dashboardActionsType: selectedType!,
                     color: Colors.red,
                     customValue: customValue,
