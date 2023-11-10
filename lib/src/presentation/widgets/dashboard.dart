@@ -177,7 +177,9 @@ class Dashboard extends GetView {
     switch (dashboardEvents[event.event]?.provider) {
       case DashboardActionsProvider.obs:
         if (Get.isRegistered<ObsTabViewController>()) {
-          return true;
+          if(Get.find<ObsTabViewController>().isConnected.value) {
+            return true;
+          }
         }
         break;
       case DashboardActionsProvider.streamElements:

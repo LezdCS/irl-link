@@ -9,6 +9,20 @@ enum DashboardActionsTypes {
   slider,
 }
 
+// Function returning a string based on the action type
+String getDashboardActionTypeString(DashboardActionsTypes actionType) {
+  switch (actionType) {
+    case DashboardActionsTypes.toggle:
+      return 'Toggle';
+    case DashboardActionsTypes.button:
+      return 'Button';
+    case DashboardActionsTypes.slider:
+      return 'Slider';
+    default:
+      return 'Unknown';
+  }
+}
+
 // ignore: must_be_immutable
 class DashboardEvent extends Equatable {
   final String title;

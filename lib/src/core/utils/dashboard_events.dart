@@ -11,6 +11,22 @@ enum DashboardActionsProvider {
   streamElements,
 }
 
+// Function returning a string based on the provider
+String getDashboardActionProviderString(DashboardActionsProvider provider) {
+  switch (provider) {
+    case DashboardActionsProvider.custom:
+      return 'Custom';
+    case DashboardActionsProvider.twitch:
+      return 'Twitch';
+    case DashboardActionsProvider.obs:
+      return 'OBS';
+    case DashboardActionsProvider.streamElements:
+      return 'StreamElements';
+    default:
+      return 'Unknown';
+  }
+}
+
 enum SupportedEvents {
   none,
   obsStreamStart,
@@ -29,6 +45,47 @@ enum SupportedEvents {
   // twitchCancelPoll,
   // twitchEndPoll,
 }
+
+// Function returning a string based on the supported event
+String getSupportedEventString(SupportedEvents event) {
+  switch (event) {
+    case SupportedEvents.none:
+      return 'Select an event';
+    case SupportedEvents.obsStreamStart:
+      return 'OBS Stream Start';
+    case SupportedEvents.obsStreamStop:
+      return 'OBS Stream Stop';
+    case SupportedEvents.obsRecordToggle:
+      return 'OBS Record Toggle';
+    case SupportedEvents.twitchChatMessage:
+      return 'Twitch Chat Message';
+    case SupportedEvents.twitchFollowerOnly:
+      return 'Twitch Follower Only';
+    case SupportedEvents.twitchSubOnly:
+      return 'Twitch Sub Only';
+    case SupportedEvents.twitchEmoteOnly:
+      return 'Twitch Emote Only';
+    case SupportedEvents.twitchSlowMode:
+      return 'Twitch Slow Mode';
+    // case SupportedEvents.twitchCreatePrediction:
+    //   return 'Twitch Create Prediction';
+    // case SupportedEvents.twitchLockPrediction:
+    //   return 'Twitch Lock Prediction';
+    // case SupportedEvents.twitchEndPrediction:
+    //   return 'Twitch End Prediction';
+    // case SupportedEvents.twitchCancelPrediction:
+    //   return 'Twitch Cancel Prediction';
+    // case SupportedEvents.twitchCreatePoll:
+    //   return 'Twitch Create Poll';
+    // case SupportedEvents.twitchCancelPoll:
+    //   return 'Twitch Cancel Poll';
+    // case SupportedEvents.twitchEndPoll:
+    //   return 'Twitch End Poll';
+    default:
+      return 'Unknown';
+  }
+}
+
 
 class ExistingDashboardEvent {
   final DashboardActionsProvider provider;

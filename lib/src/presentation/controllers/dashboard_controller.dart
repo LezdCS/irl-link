@@ -24,6 +24,7 @@ class DashboardController extends GetxController {
   @override
   void onInit() {
     List<DashboardEvent> events = Get.find<HomeViewController>().settings.value.dashboardSettings!.userEvents;
+    debugPrint(events.toString());
     userEvents.addAll(events);
     super.onInit();
   }
@@ -45,7 +46,7 @@ class DashboardController extends GetxController {
       ),
       const DashboardEvent(
         dashboardActionsType: DashboardActionsTypes.button,
-        color: Colors.orange,
+        color: Color.fromARGB(255, 124, 20, 20),
         title: "Stop stream",
         event: SupportedEvents.obsStreamStop,
         customValue: null,

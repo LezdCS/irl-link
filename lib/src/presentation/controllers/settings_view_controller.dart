@@ -234,8 +234,22 @@ class SettingsViewController extends GetxController {
     events.add(event);
     homeViewController.settings.value =
         homeViewController.settings.value.copyWith(
-      dashboardSettings: homeViewController
-          .settings.value.dashboardSettings!
+      dashboardSettings: homeViewController.settings.value.dashboardSettings!
+          .copyWith(userEvents: events),
+    );
+    saveSettings();
+    homeViewController.settings.refresh();
+    Get.back();
+  }
+
+  //Remove dashboard event from user events
+  void removeDashboardEvent(DashboardEvent event) {
+    List<DashboardEvent> events =
+        homeViewController.settings.value.dashboardSettings!.userEvents;
+    events.remove(event);
+    homeViewController.settings.value =
+        homeViewController.settings.value.copyWith(
+      dashboardSettings: homeViewController.settings.value.dashboardSettings!
           .copyWith(userEvents: events),
     );
     saveSettings();
