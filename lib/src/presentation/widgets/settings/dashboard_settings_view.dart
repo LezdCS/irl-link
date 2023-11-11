@@ -56,10 +56,9 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
                       extentRatio: 0.25,
                       children: [
                         SlidableAction(
-                          backgroundColor: Theme.of(context).colorScheme.background,
-                          onPressed: (context) {
-                            
-                          },
+                          backgroundColor:
+                              Theme.of(context).colorScheme.background,
+                          onPressed: (context) {},
                           icon: Icons.edit,
                           label: 'Edit',
                         ),
@@ -70,7 +69,8 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
                       extentRatio: 0.25,
                       children: [
                         SlidableAction(
-                          backgroundColor: Theme.of(context).colorScheme.background,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.background,
                           onPressed: (context) {
                             controller.removeDashboardEvent(event);
                           },
@@ -101,7 +101,8 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
                             ),
                           ),
                           Text(
-                            getDashboardActionProviderString(eventDetails!.provider),
+                            getDashboardActionProviderString(
+                                eventDetails!.provider),
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               color: Colors.white,
@@ -208,6 +209,10 @@ Widget _addDialog(context, SettingsViewController controller) {
           },
           onChanged: (obj) {
             selectedEvent.value = obj as SupportedEvents;
+            selectedType = dashboardEvents[dashboardEvents.keys
+                    .firstWhereOrNull(
+                        (element) => element == selectedEvent.value)]
+                ?.actionsAllowed[0];
           },
         ),
         const SizedBox(
@@ -263,7 +268,7 @@ Widget _addDialog(context, SettingsViewController controller) {
             ),
           ),
           onPressed: () {
-            if (formKey.currentState!.validate() && selectedType != null) {
+            if (formKey.currentState!.validate()) {
               DashboardEvent newEvent = DashboardEvent(
                 title: title,
                 event: selectedEvent.value,

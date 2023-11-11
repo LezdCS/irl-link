@@ -228,9 +228,10 @@ class SettingsViewController extends GetxController {
     InAppPurchase.instance.buyNonConsumable(purchaseParam: purchaseParam);
   }
 
+  // Add a dashboard event
   void addDashboardEvent(DashboardEvent event) {
-    List<DashboardEvent> events =
-        homeViewController.settings.value.dashboardSettings!.userEvents;
+    List<DashboardEvent> events = [];
+    events.addAll(homeViewController.settings.value.dashboardSettings!.userEvents);
     events.add(event);
     homeViewController.settings.value =
         homeViewController.settings.value.copyWith(
@@ -242,7 +243,7 @@ class SettingsViewController extends GetxController {
     Get.back();
   }
 
-  //Remove dashboard event from user events
+  // Remove a dashboard event
   void removeDashboardEvent(DashboardEvent event) {
     List<DashboardEvent> events =
         homeViewController.settings.value.dashboardSettings!.userEvents;

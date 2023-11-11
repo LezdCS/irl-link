@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
@@ -52,10 +53,10 @@ class DashboardEvent extends Equatable {
 
   Map toJson() => {
         'title': title,
-        'color': color,
-        'dashboardActionsType': dashboardActionsType,
-        'event': event,
-        'customValue': customValue,
+        'color': color.value,
+        'dashboardActionsType': dashboardActionsType.name,
+        'event': event.name,
+        'customValue': jsonEncode(customValue),
       };
 
   @override

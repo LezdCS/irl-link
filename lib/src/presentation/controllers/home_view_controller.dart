@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:irllink/src/domain/entities/dashboard_event.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
+import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
@@ -321,6 +323,7 @@ class HomeViewController extends GetxController
       if (value.error != null) return;
       settings.value = value.data!;
       await generateTabs();
+      Get.find<DashboardController>();
       generateChats();
       initTts(settings.value);
       if (!settings.value.generalSettings!.isDarkMode) {

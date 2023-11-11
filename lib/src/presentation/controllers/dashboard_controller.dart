@@ -24,7 +24,6 @@ class DashboardController extends GetxController {
   @override
   void onInit() {
     List<DashboardEvent> events = Get.find<HomeViewController>().settings.value.dashboardSettings!.userEvents;
-    debugPrint(events.toString());
     userEvents.addAll(events);
     super.onInit();
   }

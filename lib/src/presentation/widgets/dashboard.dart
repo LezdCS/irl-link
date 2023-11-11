@@ -6,13 +6,11 @@ import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dar
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 import '../../domain/entities/dashboard_event.dart';
 
-class Dashboard extends GetView {
+class Dashboard extends GetView<DashboardController> {
   @override
-  final DashboardController controller;
 
   const Dashboard({
     super.key,
-    required this.controller,
   });
 
   @override
