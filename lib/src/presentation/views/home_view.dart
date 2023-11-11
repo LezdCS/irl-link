@@ -55,14 +55,12 @@ class HomeView extends GetView<HomeViewController> {
                   ),
                   child: const Icon(
                     Icons.dashboard_rounded,
-                    size: 30,
+                    size: 26,
                   ),
                 ),
               ) : Container(),
-              // floatingWidgetWidth: 0,
-              // floatingWidgetHeight: 0,
-              floatingWidgetWidth: 50,
-              floatingWidgetHeight: 110,
+              floatingWidgetWidth: 40,
+              floatingWidgetHeight: 100,
               dy: 10,
               dx: 10,
               mainScreenWidget: Listener(

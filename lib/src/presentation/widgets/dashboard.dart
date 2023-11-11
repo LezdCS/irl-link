@@ -39,9 +39,14 @@ class Dashboard extends GetView<DashboardController> {
                 itemBuilder: (BuildContext context, int index) {
                   DashboardEvent event = controller.homeViewController.settings
                       .value.dashboardSettings!.userEvents[index];
+                  // Check if the event is still supported
+                  if (event.event == SupportedEvents.none) {
+                     return _disabledServiceEvent(event, "Event not supported anymore");
+                  }
+                  // Check if the service is enabled
                   bool isServiceEnabled = isDashboardServiceEnabled(event);
                   if (!isServiceEnabled) {
-                    return _disabledServiceEvent(event);
+                    return _disabledServiceEvent(event, "Service disabled");
                   }
                   switch (event.dashboardActionsType) {
                     case DashboardActionsTypes.button:
@@ -68,7 +73,7 @@ class Dashboard extends GetView<DashboardController> {
     );
   }
 
-  Widget _disabledServiceEvent(DashboardEvent event) {
+  Widget _disabledServiceEvent(DashboardEvent event, String message) {
     return Container(
       margin: const EdgeInsets.all(4),
       decoration: BoxDecoration(
@@ -83,9 +88,10 @@ class Dashboard extends GetView<DashboardController> {
         children: [
           Text(event.title),
           const SizedBox(height: 10),
-          const Text(
-            "Service not enabled",
-            style: TextStyle(
+          Text(
+            message,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
               color: Colors.grey,
               fontSize: 12,
             ),
