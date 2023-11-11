@@ -8,7 +8,6 @@ import '../../domain/entities/dashboard_event.dart';
 
 class Dashboard extends GetView<DashboardController> {
   @override
-
   const Dashboard({
     super.key,
   });
@@ -28,30 +27,43 @@ class Dashboard extends GetView<DashboardController> {
             Radius.circular(8),
           ),
         ),
-        child: GridView.builder(
-          itemCount: controller.homeViewController.settings.value.dashboardSettings!.userEvents.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 3 / 1.8,
-          ),
-          itemBuilder: (BuildContext context, int index) {
-            DashboardEvent event = controller.homeViewController.settings.value.dashboardSettings!.userEvents[index];
-            bool isServiceEnabled = isDashboardServiceEnabled(event);
-            if (!isServiceEnabled) {
-              return _disabledServiceEvent(event);
-            }
-            switch (event.dashboardActionsType) {
-              case DashboardActionsTypes.button:
-                return _eventButton(event);
-              case DashboardActionsTypes.slider:
-                return _eventSlider(event);
-              case DashboardActionsTypes.toggle:
-                return _eventToggle(event);
-              default:
-                return _eventButton(event);
-            }
-          },
-        ),
+        child: controller.homeViewController.settings.value.dashboardSettings!
+                .userEvents.isNotEmpty
+            ? GridView.builder(
+                itemCount: controller.homeViewController.settings.value
+                    .dashboardSettings!.userEvents.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 3 / 1.8,
+                ),
+                itemBuilder: (BuildContext context, int index) {
+                  DashboardEvent event = controller.homeViewController.settings
+                      .value.dashboardSettings!.userEvents[index];
+                  bool isServiceEnabled = isDashboardServiceEnabled(event);
+                  if (!isServiceEnabled) {
+                    return _disabledServiceEvent(event);
+                  }
+                  switch (event.dashboardActionsType) {
+                    case DashboardActionsTypes.button:
+                      return _eventButton(event);
+                    case DashboardActionsTypes.slider:
+                      return _eventSlider(event);
+                    case DashboardActionsTypes.toggle:
+                      return _eventToggle(event);
+                    default:
+                      return _eventButton(event);
+                  }
+                },
+              )
+            : const Center(
+                child: Text(
+                  "No events",
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
       ),
     );
   }
@@ -175,7 +187,7 @@ class Dashboard extends GetView<DashboardController> {
     switch (dashboardEvents[event.event]?.provider) {
       case DashboardActionsProvider.obs:
         if (Get.isRegistered<ObsTabViewController>()) {
-          if(Get.find<ObsTabViewController>().isConnected.value) {
+          if (Get.find<ObsTabViewController>().isConnected.value) {
             return true;
           }
         }

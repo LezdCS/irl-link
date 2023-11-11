@@ -43,7 +43,7 @@ class HomeView extends GetView<HomeViewController> {
           resizeToAvoidBottomInset: true,
           body: Obx(
             () => FloatingDraggableWidget(
-              floatingWidget: InkWell(
+              floatingWidget: controller.settings.value.dashboardSettings!.activated ? InkWell(
                 onTap: () {
                   controller.displayDashboard.value =
                       !controller.displayDashboard.value;
@@ -58,7 +58,7 @@ class HomeView extends GetView<HomeViewController> {
                     size: 30,
                   ),
                 ),
-              ),
+              ) : Container(),
               // floatingWidgetWidth: 0,
               // floatingWidgetHeight: 0,
               floatingWidgetWidth: 50,

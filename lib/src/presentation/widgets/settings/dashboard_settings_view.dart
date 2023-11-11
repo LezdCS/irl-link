@@ -24,7 +24,27 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
             ),
             onPressed: () => Get.back(),
           ),
-          actions: const [],
+          actions: [
+            Switch(
+              activeTrackColor: Theme.of(context).colorScheme.tertiary,
+              activeColor: Colors.white,
+              inactiveTrackColor:
+                  Theme.of(context).colorScheme.tertiaryContainer,
+              value: controller.homeViewController.settings.value
+                  .dashboardSettings!.activated,
+              onChanged: (value) {
+                controller.homeViewController.settings.value =
+                    controller.homeViewController.settings.value.copyWith(
+                  dashboardSettings: controller
+                      .homeViewController.settings.value.dashboardSettings!
+                      .copyWith(
+                    activated: value,
+                  ),
+                );
+                controller.saveSettings();
+              },
+            ),
+          ],
           backgroundColor: Theme.of(context).colorScheme.secondary,
           title: Text(
             "Dashboard events",
@@ -270,6 +290,9 @@ Widget _addDialog(context, DashboardController dashboardController) {
             selectedColor.value = color;
           }),
         ),
+        const SizedBox(
+          height: 10,
+        ),
         ElevatedButton(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(
@@ -300,25 +323,27 @@ Widget _addDialog(context, DashboardController dashboardController) {
 
 Widget colorPickerPreview(Color color, Function(Color) onColorChanged) {
   return GestureDetector(
-    onTap: () {
-      Get.defaultDialog(
-        title: 'Pick a color!',
-        content: BlockPicker(
-          pickerColor: color,
-          onColorChanged: onColorChanged,
-        ),
-      );
-    },
-    // Row with circle showing currently selected color
-    child: Row(children: [
-      const Text('Background color'),
-      const SizedBox(width: 10),
-      Expanded(
-        child: Container(
-           color: color,
-          height: 20,
-        ),
-      ),
-    ],)
-  );
+      onTap: () {
+        Get.defaultDialog(
+          title: 'Pick a color!',
+          backgroundColor: Theme.of(Get.context!).colorScheme.background,
+          content: BlockPicker(
+            pickerColor: color,
+            onColorChanged: onColorChanged,
+          ),
+        );
+      },
+      // Row with circle showing currently selected color
+      child: Row(
+        children: [
+          const Text('Background color'),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Container(
+              color: color,
+              height: 20,
+            ),
+          ),
+        ],
+      ));
 }

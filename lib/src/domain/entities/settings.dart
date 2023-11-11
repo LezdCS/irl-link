@@ -87,6 +87,7 @@ class Settings extends Equatable {
     ),
     this.dashboardSettings = const DashboardSettings(
       userEvents: [],
+      activated: true,
     ),
 
     //CONNECTIONS SETTINGS
