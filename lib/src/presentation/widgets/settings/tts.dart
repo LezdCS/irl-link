@@ -584,17 +584,28 @@ class Tts extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 10),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: list.length,
-              itemBuilder: (context, index) {
-                return Chip(
-                  onDeleted: () {
-                    onDeleted(index);
+            Visibility(
+              visible: list.isNotEmpty,
+              child: SizedBox(
+                width: double.maxFinite,
+                height: 50,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: list.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: Chip(
+                        onDeleted: () {
+                          onDeleted(index);
+                        },
+                        label: Text(list[index]),
+                      ),
+                    );
                   },
-                  label: Text(list[index]),
-                );
-              },
+                ),
+              ),
             ),
             Row(
               children: [
