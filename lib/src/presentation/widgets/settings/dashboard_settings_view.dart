@@ -183,67 +183,67 @@ Widget _addDialog(context, DashboardController dashboardController) {
   dynamic customValue = '';
   Rx<Color> selectedColor = Colors.grey.obs;
   final formKey = GlobalKey<FormState>();
-  return Form(
-    key: formKey,
-    child: Column(
-      children: [
-        TextFormField(
-          decoration: InputDecoration(
-            isDense: true,
-            disabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Theme.of(context).colorScheme.tertiary,
+  return Obx(
+    () => Form(
+      key: formKey,
+      child: Column(
+        children: [
+          TextFormField(
+            decoration: InputDecoration(
+              isDense: true,
+              disabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Theme.of(context).colorScheme.tertiary,
+                ),
+              ),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+              hintText: 'Event title',
+              labelText: 'Event title',
+              labelStyle: TextStyle(
+                color: Theme.of(context).textTheme.bodyLarge!.color,
               ),
             ),
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
-            hintText: 'Event title',
-            labelText: 'Event title',
-            labelStyle: TextStyle(
-              color: Theme.of(context).textTheme.bodyLarge!.color,
-            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
+            onChanged: ((value) => title = value),
           ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter some text';
-            }
-            return null;
-          },
-          onChanged: ((value) => title = value),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        DropdownButtonFormField(
-          isExpanded: true,
-          value: SupportedEvents.values[0],
-          items: SupportedEvents.values.map((event) {
-            return DropdownMenuItem(
-              value: event,
-              child: Text(
-                getSupportedEventString(event),
-              ),
-            );
-          }).toList(),
-          validator: (value) {
-            if (value == SupportedEvents.none) {
-              return 'Please select an event';
-            }
-            return null;
-          },
-          onChanged: (obj) {
-            selectedEvent.value = obj as SupportedEvents;
-            selectedType = dashboardEvents[dashboardEvents.keys
-                    .firstWhereOrNull(
-                        (element) => element == selectedEvent.value)]
-                ?.actionsAllowed[0];
-          },
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Obx(
-          () => Visibility(
+          const SizedBox(
+            height: 10,
+          ),
+          DropdownButtonFormField(
+            isExpanded: true,
+            value: SupportedEvents.values[0],
+            items: SupportedEvents.values.map((event) {
+              return DropdownMenuItem(
+                value: event,
+                child: Text(
+                  getSupportedEventString(event),
+                ),
+              );
+            }).toList(),
+            validator: (value) {
+              if (value == SupportedEvents.none) {
+                return 'Please select an event';
+              }
+              return null;
+            },
+            onChanged: (obj) {
+              selectedEvent.value = obj as SupportedEvents;
+              selectedType = dashboardEvents[dashboardEvents.keys
+                      .firstWhereOrNull(
+                          (element) => element == selectedEvent.value)]
+                  ?.actionsAllowed[0];
+            },
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Visibility(
             visible: selectedEvent.value != SupportedEvents.none,
             child: DropdownButtonFormField(
               isExpanded: true,
@@ -267,57 +267,73 @@ Widget _addDialog(context, DashboardController dashboardController) {
               },
             ),
           ),
-        ),
-        Visibility(
-          visible: selectedEvent.value == SupportedEvents.twitchChatMessage,
-          child: TextFormField(
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter some text';
-              }
-              return null;
-            },
-            onChanged: (value) {
-              customValue = value;
-            },
+          Visibility(
+            visible: selectedEvent.value == SupportedEvents.twitchChatMessage,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 10),
+              child: TextFormField(
+                decoration: InputDecoration(
+                  isDense: true,
+                  disabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.tertiary,
+                    ),
+                  ),
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+                  hintText: 'Your message',
+                  labelText: 'Your message',
+                  labelStyle: TextStyle(
+                    color: Theme.of(context).textTheme.bodyLarge!.color,
+                  ),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
+                onChanged: (value) {
+                  customValue = value;
+                },
+              ),
+            ),
           ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Obx(
-          () => colorPickerPreview(selectedColor.value, (Color color) {
+          const SizedBox(
+            height: 10,
+          ),
+          colorPickerPreview(selectedColor.value, (Color color) {
             selectedColor.value = color;
             Get.back();
           }),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(
-              Theme.of(context).colorScheme.tertiary,
-            ),
-            foregroundColor: MaterialStateProperty.all(
-              Theme.of(context).textTheme.bodyLarge!.color,
-            ),
+          const SizedBox(
+            height: 10,
           ),
-          onPressed: () {
-            if (formKey.currentState!.validate()) {
-              DashboardEvent newEvent = DashboardEvent(
-                title: title,
-                event: selectedEvent.value,
-                dashboardActionsType: selectedType!,
-                color: selectedColor.value,
-                customValue: customValue,
-              );
-              dashboardController.addDashboardEvent(newEvent);
-            }
-          },
-          child: const Text('Submit'),
-        ),
-      ],
+          ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(
+                Theme.of(context).colorScheme.tertiary,
+              ),
+              foregroundColor: MaterialStateProperty.all(
+                Theme.of(context).textTheme.bodyLarge!.color,
+              ),
+            ),
+            onPressed: () {
+              if (formKey.currentState!.validate()) {
+                DashboardEvent newEvent = DashboardEvent(
+                  title: title,
+                  event: selectedEvent.value,
+                  dashboardActionsType: selectedType!,
+                  color: selectedColor.value,
+                  customValue: customValue,
+                );
+                dashboardController.addDashboardEvent(newEvent);
+              }
+            },
+            child: const Text('Submit'),
+          ),
+        ],
+      ),
     ),
   );
 }

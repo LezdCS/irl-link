@@ -86,7 +86,6 @@ String getSupportedEventString(SupportedEvents event) {
   }
 }
 
-
 class ExistingDashboardEvent {
   final DashboardActionsProvider provider;
   final List<DashboardActionsTypes> actionsAllowed;
@@ -110,7 +109,7 @@ Map<SupportedEvents, ExistingDashboardEvent> dashboardEvents = {
           Get.find<ObsTabViewController>();
       obsTabViewController.startStream();
     },
-  ), 
+  ),
   SupportedEvents.obsStreamStop: ExistingDashboardEvent(
     provider: DashboardActionsProvider.obs,
     actionsAllowed: [DashboardActionsTypes.button],
@@ -133,10 +132,11 @@ Map<SupportedEvents, ExistingDashboardEvent> dashboardEvents = {
   SupportedEvents.twitchChatMessage: ExistingDashboardEvent(
     provider: DashboardActionsProvider.twitch,
     actionsAllowed: [DashboardActionsTypes.button],
-    action: (dynamic v) {
-      Get.find<HomeViewController>().sendChatMessage(v);
+    action: (String v) {
+      Get.find<HomeViewController>()
+          .sendChatMessage(v.substring(1, v.length - 1));
     },
-),
+  ),
   SupportedEvents.twitchFollowerOnly: ExistingDashboardEvent(
     provider: DashboardActionsProvider.twitch,
     actionsAllowed: [DashboardActionsTypes.toggle],
