@@ -9,22 +9,17 @@
 //OR
 //we define all available functions here and we use the Get.find to get the controllers
 
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/utils/dashboard_events.dart';
 import 'package:irllink/src/domain/entities/dashboard_event.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 
 class DashboardController extends GetxController {
   DashboardController();
 
-  // List of the events in the user dashboard
-  RxList<DashboardEvent> userEvents = <DashboardEvent>[].obs;
+  HomeViewController homeViewController = Get.find<HomeViewController>();
 
   @override
   void onInit() {
-    List<DashboardEvent> events = Get.find<HomeViewController>().settings.value.dashboardSettings!.userEvents;
-    userEvents.addAll(events);
     super.onInit();
   }
 
@@ -35,22 +30,35 @@ class DashboardController extends GetxController {
 
   @override
   void onReady() async {
-    userEvents.addAll([
-      const DashboardEvent(
-        dashboardActionsType: DashboardActionsTypes.button,
-        color: Colors.green,
-        title: "Start stream",
-        event: SupportedEvents.obsStreamStart,
-        customValue: null,
-      ),
-      const DashboardEvent(
-        dashboardActionsType: DashboardActionsTypes.button,
-        color: Color.fromARGB(255, 124, 20, 20),
-        title: "Stop stream",
-        event: SupportedEvents.obsStreamStop,
-        customValue: null,
-      ),
-    ]);
     super.onReady();
+  }
+
+  // Add a dashboard event
+  void addDashboardEvent(DashboardEvent event) {
+    List<DashboardEvent> events = [];
+    events.addAll(homeViewController.settings.value.dashboardSettings!.userEvents);
+    events.add(event);
+    homeViewController.settings.value =
+        homeViewController.settings.value.copyWith(
+      dashboardSettings: homeViewController.settings.value.dashboardSettings!
+          .copyWith(userEvents: events),
+    );
+    homeViewController.saveSettings();
+    homeViewController.settings.refresh();
+    Get.back();
+  }
+
+  // Remove a dashboard event
+  void removeDashboardEvent(DashboardEvent event) {
+    List<DashboardEvent> events =
+        homeViewController.settings.value.dashboardSettings!.userEvents;
+    events.remove(event);
+    homeViewController.settings.value =
+        homeViewController.settings.value.copyWith(
+      dashboardSettings: homeViewController.settings.value.dashboardSettings!
+          .copyWith(userEvents: events),
+    );
+    homeViewController.saveSettings();
+    homeViewController.settings.refresh();
   }
 }

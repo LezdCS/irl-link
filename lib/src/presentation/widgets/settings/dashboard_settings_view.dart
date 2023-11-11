@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/utils/dashboard_events.dart';
@@ -44,26 +45,28 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: dashboardController.userEvents.length,
+                itemCount: dashboardController.homeViewController.settings.value
+                    .dashboardSettings!.userEvents.length,
                 itemBuilder: (context, index) {
-                  DashboardEvent event = dashboardController.userEvents[index];
+                  DashboardEvent event = dashboardController.homeViewController
+                      .settings.value.dashboardSettings!.userEvents[index];
                   ExistingDashboardEvent? eventDetails =
                       dashboardEvents[event.event];
                   return Slidable(
                     key: Key('${event.title}-$index'),
-                    startActionPane: ActionPane(
-                      motion: const ScrollMotion(),
-                      extentRatio: 0.25,
-                      children: [
-                        SlidableAction(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.background,
-                          onPressed: (context) {},
-                          icon: Icons.edit,
-                          label: 'Edit',
-                        ),
-                      ],
-                    ),
+                    // startActionPane: ActionPane(
+                    //   motion: const ScrollMotion(),
+                    //   extentRatio: 0.25,
+                    //   children: [
+                    //     SlidableAction(
+                    //       backgroundColor:
+                    //           Theme.of(context).colorScheme.background,
+                    //       onPressed: (context) {},
+                    //       icon: Icons.edit,
+                    //       label: 'Edit',
+                    //     ),
+                    //   ],
+                    // ),
                     endActionPane: ActionPane(
                       motion: const ScrollMotion(),
                       extentRatio: 0.25,
@@ -72,7 +75,7 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
                           backgroundColor:
                               Theme.of(context).colorScheme.background,
                           onPressed: (context) {
-                            controller.removeDashboardEvent(event);
+                            dashboardController.removeDashboardEvent(event);
                           },
                           icon: Icons.delete,
                           label: 'Delete',
@@ -126,7 +129,7 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
                 ),
                 onPressed: () {
                   Get.defaultDialog(
-                    content: _addDialog(context, controller),
+                    content: _addDialog(context, dashboardController),
                     title: "New event".tr,
                     cancel: null,
                     confirm: Container(),
@@ -153,11 +156,12 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
   }
 }
 
-Widget _addDialog(context, SettingsViewController controller) {
+Widget _addDialog(context, DashboardController dashboardController) {
   String title = '';
   Rx<SupportedEvents> selectedEvent = SupportedEvents.none.obs;
   DashboardActionsTypes? selectedType;
   dynamic customValue = '';
+  Rx<Color> selectedColor = Colors.grey.obs;
   final formKey = GlobalKey<FormState>();
   return Form(
     key: formKey,
@@ -258,6 +262,14 @@ Widget _addDialog(context, SettingsViewController controller) {
             },
           ),
         ),
+        const SizedBox(
+          height: 10,
+        ),
+        Obx(
+          () => colorPickerPreview(selectedColor.value, (Color color) {
+            selectedColor.value = color;
+          }),
+        ),
         ElevatedButton(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(
@@ -273,15 +285,40 @@ Widget _addDialog(context, SettingsViewController controller) {
                 title: title,
                 event: selectedEvent.value,
                 dashboardActionsType: selectedType!,
-                color: Colors.red,
+                color: selectedColor.value,
                 customValue: customValue,
               );
-              controller.addDashboardEvent(newEvent);
+              dashboardController.addDashboardEvent(newEvent);
             }
           },
           child: const Text('Submit'),
         ),
       ],
     ),
+  );
+}
+
+Widget colorPickerPreview(Color color, Function(Color) onColorChanged) {
+  return GestureDetector(
+    onTap: () {
+      Get.defaultDialog(
+        title: 'Pick a color!',
+        content: BlockPicker(
+          pickerColor: color,
+          onColorChanged: onColorChanged,
+        ),
+      );
+    },
+    // Row with circle showing currently selected color
+    child: Row(children: [
+      const Text('Background color'),
+      const SizedBox(width: 10),
+      Expanded(
+        child: Container(
+           color: color,
+          height: 20,
+        ),
+      ),
+    ],)
   );
 }

@@ -3,7 +3,6 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:irllink/routes/app_routes.dart';
-import 'package:irllink/src/domain/entities/dashboard_event.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/events/settings_events.dart';
 
@@ -226,35 +225,5 @@ class SettingsViewController extends GetxController {
     final PurchaseParam purchaseParam =
         PurchaseParam(productDetails: productDetails);
     InAppPurchase.instance.buyNonConsumable(purchaseParam: purchaseParam);
-  }
-
-  // Add a dashboard event
-  void addDashboardEvent(DashboardEvent event) {
-    List<DashboardEvent> events = [];
-    events.addAll(homeViewController.settings.value.dashboardSettings!.userEvents);
-    events.add(event);
-    homeViewController.settings.value =
-        homeViewController.settings.value.copyWith(
-      dashboardSettings: homeViewController.settings.value.dashboardSettings!
-          .copyWith(userEvents: events),
-    );
-    saveSettings();
-    homeViewController.settings.refresh();
-    Get.back();
-  }
-
-  // Remove a dashboard event
-  void removeDashboardEvent(DashboardEvent event) {
-    List<DashboardEvent> events =
-        homeViewController.settings.value.dashboardSettings!.userEvents;
-    events.remove(event);
-    homeViewController.settings.value =
-        homeViewController.settings.value.copyWith(
-      dashboardSettings: homeViewController.settings.value.dashboardSettings!
-          .copyWith(userEvents: events),
-    );
-    saveSettings();
-    homeViewController.settings.refresh();
-    Get.back();
   }
 }

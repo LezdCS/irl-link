@@ -29,13 +29,13 @@ class Dashboard extends GetView<DashboardController> {
           ),
         ),
         child: GridView.builder(
-          itemCount: controller.userEvents.length,
+          itemCount: controller.homeViewController.settings.value.dashboardSettings!.userEvents.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             childAspectRatio: 3 / 1.8,
           ),
           itemBuilder: (BuildContext context, int index) {
-            DashboardEvent event = controller.userEvents[index];
+            DashboardEvent event = controller.homeViewController.settings.value.dashboardSettings!.userEvents[index];
             bool isServiceEnabled = isDashboardServiceEnabled(event);
             if (!isServiceEnabled) {
               return _disabledServiceEvent(event);
