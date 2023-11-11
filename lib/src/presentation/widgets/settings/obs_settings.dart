@@ -123,8 +123,13 @@ class ObsSettings extends StatelessWidget {
                       MobileScannerController cameraController =
                           MobileScannerController();
 
-                      Get.dialog(_qrPasswordScanner(
-                          cameraController, controller, context));
+                      Get.dialog(
+                        _qrPasswordScanner(
+                          cameraController,
+                          controller,
+                          context,
+                        ),
+                      );
 
                       FocusManager.instance.primaryFocus?.unfocus();
                     },
@@ -212,8 +217,11 @@ class ObsSettings extends StatelessWidget {
     );
   }
 
-  Widget _qrPasswordScanner(MobileScannerController controllerCamera,
-      SettingsViewController controller, BuildContext context) {
+  Widget _qrPasswordScanner(
+    MobileScannerController controllerCamera,
+    SettingsViewController controller,
+    BuildContext context,
+  ) {
     final scanWindow = Rect.fromCenter(
       center: MediaQuery.of(context).size.center(Offset.zero),
       width: 250,
