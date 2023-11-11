@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
     <queries>
         <intent>
             <action android:name="android.intent.action.VIEW" />
@@ -24,6 +26,11 @@
    <application
         android:label="IRL Link"
         android:icon="@mipmap/ic_launcher">
+        <!-- <service
+          android:name=".MyMediaPlaybackService"
+          android:foregroundServiceType="mediaPlayback"
+          android:exported="false">
+      </service> -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
