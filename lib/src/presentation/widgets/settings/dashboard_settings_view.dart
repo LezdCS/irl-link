@@ -125,7 +125,8 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
                           ),
                           Text(
                             getDashboardActionProviderString(
-                                eventDetails!.provider),
+                              eventDetails?.provider,
+                            ),
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               color: Colors.white,

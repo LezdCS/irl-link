@@ -11,7 +11,7 @@ enum DashboardActionsProvider {
 }
 
 // Function returning a string based on the provider
-String getDashboardActionProviderString(DashboardActionsProvider provider) {
+String getDashboardActionProviderString(DashboardActionsProvider? provider) {
   switch (provider) {
     case DashboardActionsProvider.custom:
       return 'Custom';
@@ -22,7 +22,7 @@ String getDashboardActionProviderString(DashboardActionsProvider provider) {
     case DashboardActionsProvider.streamElements:
       return 'StreamElements';
     default:
-      return 'Unknown';
+      return 'Not supported anymore';
   }
 }
 
