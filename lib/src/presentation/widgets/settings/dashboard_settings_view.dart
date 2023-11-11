@@ -288,6 +288,7 @@ Widget _addDialog(context, DashboardController dashboardController) {
         Obx(
           () => colorPickerPreview(selectedColor.value, (Color color) {
             selectedColor.value = color;
+            Get.back();
           }),
         ),
         const SizedBox(
