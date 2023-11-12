@@ -45,7 +45,8 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         manifestPlaceholders = [
-                'appAuthRedirectScheme': 'dev.lezd.www.irllink'
+                'appAuthRedirectScheme': 'dev.lezd.www.irllink',
+                'foregroundServiceType': 'mediaPlayback'
         ]
     }
 
