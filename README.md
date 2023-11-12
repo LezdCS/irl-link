@@ -21,9 +21,11 @@ Soon to be released on the iOS App Store!
     - [x] Events (sub, follow, first message...)
     - [x] Modereation (TO, ban, delete message)
     - [x] Text To Speech
+    - [x] Third-Party emojis (BTTV, 7TV, FFZ)
   - [x] Viewer count
   - [x] Change stream title
-  - [ ] Polls & predictions
+  - [x] Polls & predictions
+  - [ ] Hype train
 - [x] OBS
   - [x] Start & stop streaming/recording
   - [x] Switch scenes

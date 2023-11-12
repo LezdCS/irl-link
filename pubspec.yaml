@@ -37,10 +37,10 @@ dependencies:
   firebase_analytics: ^10.6.3
   fl_chart: ^0.64.0
   floating_draggable_widget: ^2.1.4
-  flutter_background_service: ^5.0.2
-  flutter_background_service_android: ^6.1.0
+  flutter_background_service: ^5.0.3
+  flutter_background_service_android: ^6.2.0
   flutter_background_service_ios: ^5.0.0
-  flutter_local_notifications: ^14.1.2
+  flutter_local_notifications: ^16.1.0
   flutter_svg: ^2.0.7
   flutter_tts: ^3.8.3
   flutter_web_auth: ^0.5.0
@@ -65,12 +65,14 @@ dependencies:
     git:
         url: https://github.com/LezdCS/twitch_chat.git
   upgrader: ^8.2.0
-  url_launcher: ^6.2.0
+  url_launcher: ^6.2.1
   wakelock: ^0.6.2
   web_socket_channel: ^2.4.0
   webview_flutter: ^4.4.2
   webview_flutter_android: ^3.12.1
   webview_flutter_wkwebview: ^3.9.3
+  flutter_slidable: ^3.0.1
+  flutter_colorpicker: ^1.0.3
 
 dependency_overrides:
   wakelock_windows:

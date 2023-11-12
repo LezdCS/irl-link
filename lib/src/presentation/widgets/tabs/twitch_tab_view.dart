@@ -224,18 +224,49 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                 _shortcutButton(
                   onTap: () {
                     Get.dialog(
-                      Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          QrImageView(
-                            data:
-                                'https://www.twitch.tv/${controller.homeViewController.twitchData?.twitchUser.login}',
-                            version: QrVersions.auto,
-                            backgroundColor: Colors.white,
-                            size: 200.0,
+                      GestureDetector(
+                        onTap: () {
+                          Get.back();
+                        },
+                        child: Scaffold(
+                          backgroundColor: Colors.transparent,
+                          body: Center(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  "Channel QR Code",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                QrImageView(
+                                  data:
+                                      'https://www.twitch.tv/${controller.homeViewController.twitchData?.twitchUser.login}',
+                                  version: QrVersions.auto,
+                                  backgroundColor: Colors.white,
+                                  size: 200.0,
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  "https://www.twitch.tv/${controller.homeViewController.twitchData?.twitchUser.login}",
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
+                        ),
                       ),
                     );
                   },

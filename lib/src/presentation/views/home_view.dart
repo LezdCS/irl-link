@@ -7,7 +7,6 @@ import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/domain/entities/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch_prediction.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
-import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/chat_view.dart';
@@ -44,29 +43,26 @@ class HomeView extends GetView<HomeViewController> {
           resizeToAvoidBottomInset: true,
           body: Obx(
             () => FloatingDraggableWidget(
-              floatingWidget: Container(), 
-              // InkWell(
-              //   onTap: () {
-              //     controller.displayDashboard.value =
-              //         !controller.displayDashboard.value;
-              //   },
-              //   child: Container(
-              //     decoration: BoxDecoration(
-              //       shape: BoxShape.circle,
-              //       color: context.theme.colorScheme.tertiary,
-              //     ),
-              //     child: const Icon(
-              //       Icons.dashboard_rounded,
-              //       size: 30,
-              //     ),
-              //   ),
-              // ),
-              floatingWidgetWidth: 0,
-              floatingWidgetHeight: 0,
-              // floatingWidgetWidth: 50,
-              // floatingWidgetHeight: 110,
-              dy: 0,
-              dx: 0,
+              floatingWidget: controller.settings.value.dashboardSettings!.activated ? InkWell(
+                onTap: () {
+                  controller.displayDashboard.value =
+                      !controller.displayDashboard.value;
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: context.theme.colorScheme.tertiary,
+                  ),
+                  child: const Icon(
+                    Icons.dashboard_rounded,
+                    size: 26,
+                  ),
+                ),
+              ) : Container(),
+              floatingWidgetWidth: 40,
+              floatingWidgetHeight: 100,
+              dy: 10,
+              dx: 10,
               mainScreenWidget: Listener(
                 onPointerUp: (_) => {
                   FocusScope.of(context).unfocus(),
@@ -135,9 +131,7 @@ class HomeView extends GetView<HomeViewController> {
                         ),
                         Visibility(
                           visible: controller.displayDashboard.value,
-                          child: Dashboard(
-                            controller: Get.find<DashboardController>(),
-                          ),
+                          child: Dashboard(),
                         ),
                         Visibility(
                           visible: controller.purchasePending.value,

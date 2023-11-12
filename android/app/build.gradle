@@ -32,7 +32,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -41,11 +41,12 @@ android {
     defaultConfig {
         applicationId "dev.lezd.www.irllink"
         minSdkVersion 21
-        targetSdkVersion 33
+        targetSdkVersion 34
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         manifestPlaceholders = [
-                'appAuthRedirectScheme': 'dev.lezd.www.irllink'
+                'appAuthRedirectScheme': 'dev.lezd.www.irllink',
+                'foregroundServiceType': 'mediaPlayback'
         ]
     }
 

@@ -69,6 +69,5 @@ class HomeBindings extends Bindings {
     Get.find<TwitchTabViewController>();
 
     Get.lazyPut<DashboardController>(() => DashboardController());
-    Get.find<DashboardController>();
   }
 }

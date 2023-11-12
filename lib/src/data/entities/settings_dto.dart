@@ -1,6 +1,6 @@
 import 'package:irllink/src/data/entities/settings/chat_events_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/chat_settings_dto.dart';
-import 'package:irllink/src/data/entities/settings/floating_dashboard_settings_dto.dart';
+import 'package:irllink/src/data/entities/settings/dashboard_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/general_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/stream_elements_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/tts_settings_dto.dart';
@@ -10,7 +10,7 @@ import 'package:irllink/src/domain/entities/settings/general_settings.dart';
 import 'package:irllink/src/domain/entities/settings/tts_settings.dart';
 
 import '../../domain/entities/settings/chat_events_settings.dart';
-import '../../domain/entities/settings/floating_dashboard_settings.dart';
+import '../../domain/entities/settings/dashboard_settings.dart';
 import '../../domain/entities/settings/stream_elements_settings.dart';
 
 class SettingsDTO extends Settings {
@@ -24,7 +24,7 @@ class SettingsDTO extends Settings {
     required ChatSettings chatSettings,
     //GENERAL SETTINGS
     required GeneralSettings generalSettings,
-    required FloatingDashboardSettings floatingDashboardSettings,
+    required DashboardSettings dashboardSettings,
     //CONNECTIONS SETTINGS
     required bool isObsConnected,
     required String obsWebsocketUrl,
@@ -45,7 +45,7 @@ class SettingsDTO extends Settings {
             chatSettings: chatSettings,
             //GENERAL SETTINGS
             generalSettings: generalSettings,
-            floatingDashboardSettings: floatingDashboardSettings,
+            dashboardSettings: dashboardSettings,
             //CONNECTIONS SETTINGS
             obsWebsocketUrl: obsWebsocketUrl,
             obsWebsocketPassword: obsWebsocketPassword,
@@ -68,7 +68,7 @@ class SettingsDTO extends Settings {
         'chatSettings': chatSettings?.toJson(),
         //GENERAL
         'generalSettings': generalSettings?.toJson(),
-        'floatingDashboardSettings': floatingDashboardSettings?.toJson(),
+        'dashboardSettings': dashboardSettings?.toJson(),
         //CONNECTIONS
         'isObsConnected': isObsConnected,
         'obsWebsocketUrl': obsWebsocketUrl,
@@ -106,10 +106,10 @@ class SettingsDTO extends Settings {
       generalSettings: map['generalSettings'] != null
           ? GeneralSettingsDTO.fromJson(map['generalSettings'])
           : const Settings.defaultSettings().generalSettings!,
-      floatingDashboardSettings: map['floatingDashboardSettings'] != null
-          ? FloatingDashboardSettingsDTO.fromJson(
-              map['floatingDashboardSettings'])
-          : const Settings.defaultSettings().floatingDashboardSettings!,
+      dashboardSettings: map['dashboardSettings'] != null
+          ? DashboardSettingsDTO.fromJson(
+              map['dashboardSettings'])
+          : const Settings.defaultSettings().dashboardSettings!,
       //CONNECTIONS SETTINGS
       isObsConnected: map['isObsConnected'] != null
           ? map['isObsConnected'] as bool

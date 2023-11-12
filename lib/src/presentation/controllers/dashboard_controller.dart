@@ -9,19 +9,17 @@
 //OR
 //we define all available functions here and we use the Get.find to get the controllers
 
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/domain/entities/settings/floating_event.dart';
+import 'package:irllink/src/domain/entities/dashboard_event.dart';
+import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 
 class DashboardController extends GetxController {
   DashboardController();
 
-  // list of the events the user chosed to have in the dashboard
-  RxList<FloatingEvent> userEvents = <FloatingEvent>[].obs;
+  HomeViewController homeViewController = Get.find<HomeViewController>();
 
   @override
   void onInit() {
-    // dashboardEvents['twitch.emote-only.toggle'].action();
     super.onInit();
   }
 
@@ -32,44 +30,35 @@ class DashboardController extends GetxController {
 
   @override
   void onReady() async {
-    userEvents.addAll([
-      FloatingEvent(
-        dashboardActionsType: DashboardActionsTypes.button,
-        color: Colors.green,
-        title: "Start stream",
-        dashboardActionsProvider: DashboardActionsProvider.obs,
-        action: (dynamic v) {
-          debugPrint('ok');
-        },
-      ),
-      FloatingEvent(
-        dashboardActionsType: DashboardActionsTypes.button,
-        color: Colors.orange,
-        title: "Clear TTS queue",
-        dashboardActionsProvider: DashboardActionsProvider.twitch,
-        action: (dynamic v) {
-          debugPrint('ok');
-        },
-      ),
-      FloatingEvent(
-        dashboardActionsType: DashboardActionsTypes.slider,
-        color: Colors.pink,
-        title: "TTS volume",
-        dashboardActionsProvider: DashboardActionsProvider.twitch,
-        action: (dynamic v) {
-          debugPrint('ok');
-        },
-      ),
-      FloatingEvent(
-        dashboardActionsType: DashboardActionsTypes.toggle,
-        color: Colors.blueAccent,
-        title: "TTS enabled",
-        dashboardActionsProvider: DashboardActionsProvider.twitch,
-        action: (dynamic v) {
-          debugPrint('ok');
-        },
-      ),
-    ]);
     super.onReady();
+  }
+
+  // Add a dashboard event
+  void addDashboardEvent(DashboardEvent event) {
+    List<DashboardEvent> events = [];
+    events.addAll(homeViewController.settings.value.dashboardSettings!.userEvents);
+    events.add(event);
+    homeViewController.settings.value =
+        homeViewController.settings.value.copyWith(
+      dashboardSettings: homeViewController.settings.value.dashboardSettings!
+          .copyWith(userEvents: events),
+    );
+    homeViewController.saveSettings();
+    homeViewController.settings.refresh();
+    Get.back();
+  }
+
+  // Remove a dashboard event
+  void removeDashboardEvent(DashboardEvent event) {
+    List<DashboardEvent> events =
+        homeViewController.settings.value.dashboardSettings!.userEvents;
+    events.remove(event);
+    homeViewController.settings.value =
+        homeViewController.settings.value.copyWith(
+      dashboardSettings: homeViewController.settings.value.dashboardSettings!
+          .copyWith(userEvents: events),
+    );
+    homeViewController.saveSettings();
+    homeViewController.settings.refresh();
   }
 }
