@@ -272,8 +272,14 @@ class HomeViewController extends GetxController
       clientId: kTwitchAuthClientId,
     );
     twitchChat.connect();
-    twitchChat.sendMessage(message);
 
+    twitchChat.isConnected.addListener(() {
+      if (twitchChat.isConnected.value) {
+        twitchChat.sendMessage(message);
+      }
+    });
+
+    twitchChat.close();
     chatInputController.text = '';
     selectedMessage.value = null;
     isPickingEmote.value = false;
