@@ -51,6 +51,7 @@ class MessageRow extends StatelessWidget {
             ),
           AuthorName(
             isAction: message.isAction,
+            username: message.username,
             displayName: message.displayName,
             color: message.color,
             textSize: textSize,

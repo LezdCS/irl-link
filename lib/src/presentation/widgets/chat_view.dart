@@ -36,6 +36,27 @@ class ChatView extends StatelessWidget {
             }
             FocusScope.of(context).unfocus();
           },
+          onDoubleTap: () {
+            // Open a confirmation dialog to reconnect to the chat
+            Get.defaultDialog(
+              backgroundColor: Theme.of(context).colorScheme.background,
+              title: "Confirmation",
+              middleText: "Do you want to reconnect ?",
+              textConfirm: "Yes",
+              textCancel: "No",
+              confirmTextColor: Theme.of(context).textTheme.bodyLarge!.color,
+              cancelTextColor: Theme.of(context).textTheme.bodyLarge!.color,
+              buttonColor: Theme.of(context).colorScheme.tertiary,
+              onConfirm: () {
+                 controller?.twitchChat?.close();
+                  controller?.twitchChat?.connect();
+                Get.back();
+              },
+              onCancel: () {
+                Get.back();
+              },
+            );
+          },
           child: Container(
             width: width,
             height: double.infinity,
