@@ -276,10 +276,10 @@ class HomeViewController extends GetxController
     twitchChat.isConnected.addListener(() {
       if (twitchChat.isConnected.value) {
         twitchChat.sendMessage(message);
+        twitchChat.close();
       }
     });
 
-    twitchChat.close();
     chatInputController.text = '';
     selectedMessage.value = null;
     isPickingEmote.value = false;

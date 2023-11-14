@@ -1018,10 +1018,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "6e09f1a08ea249796b27d3b792a879e390688c54"
+      resolved-ref: ff0eb0ec9aab2af28ea6249da5c161744adffd35
       url: "https://github.com/LezdCS/twitch_chat.git"
     source: git
-    version: "0.0.3"
+    version: "0.0.4"
   typed_data:
     dependency: transitive
     description:
