@@ -17,7 +17,7 @@ class TwitchPrediction extends Equatable {
   final int totalUsers;
   final List<Outcome> outcomes;
   final PredictionStatus status;
-  final Duration remainingTime;
+  final DateTime remainingTime;
 
   const TwitchPrediction({
     required this.id,
@@ -30,14 +30,14 @@ class TwitchPrediction extends Equatable {
   });
 
   factory TwitchPrediction.empty() {
-    return const TwitchPrediction(
+    return TwitchPrediction(
       id: '',
       title: '',
       winningOutcomeId: '',
       totalUsers: 0,
       outcomes: [],
       status: PredictionStatus.empty,
-      remainingTime: Duration(seconds: 0),
+      remainingTime: DateTime.now(),
     );
   }
 

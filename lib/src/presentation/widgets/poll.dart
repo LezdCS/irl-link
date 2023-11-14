@@ -81,7 +81,7 @@ Widget poll(
               );
             },
           ),
-          Text('Ends in ${printDuration(poll.remainingTime)}'),
+          Text('Ends in ${printDuration(poll.endsAt.difference(DateTime.now()))}'),
 
           Visibility(
             visible: poll.status == PollStatus.active,

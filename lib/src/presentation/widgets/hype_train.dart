@@ -36,7 +36,7 @@ Widget hypeTrain(
             ],
           ),
           Text('${hypetrain.progress}%'),
-          Text(printDuration(hypetrain.endsAt))
+          Text(printDuration(hypetrain.endsAt.difference(DateTime.now()))),
         ],
       );
     },

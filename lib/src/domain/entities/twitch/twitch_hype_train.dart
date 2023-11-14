@@ -8,7 +8,7 @@ class TwitchHypeTrain extends Equatable {
   final int level;
   final List<Contribution> topContributions;
   final Contribution? lastContribution;
-  final Duration endsAt;
+  final DateTime endsAt;
 
   const TwitchHypeTrain({
     required this.id,
@@ -22,14 +22,14 @@ class TwitchHypeTrain extends Equatable {
   });
 
   factory TwitchHypeTrain.empty() {
-    return const TwitchHypeTrain(
+    return TwitchHypeTrain(
       id: '',
       total: 0,
       progress: 0,
       goal: 0,
       level: 0,
       topContributions: [],
-      endsAt: Duration(seconds: 0),
+      endsAt: DateTime.now(),
       lastContribution: null,
     );
   }

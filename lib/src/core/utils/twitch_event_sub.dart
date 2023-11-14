@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:irllink/src/data/entities/twitch_poll_dto.dart';
 import 'package:irllink/src/data/entities/twitch_prediction_dto.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_hype_train.dart';
@@ -37,7 +37,7 @@ class TwitchEventSub {
     _broadcasterId = await _getChannelId();
 
     _webSocketChannel =
-        IOWebSocketChannel.connect("wss://eventsub.wss.twitch.tv/ws");
+        IOWebSocketChannel.connect(kDebugMode ? "ws://localhost:8080/ws" : "wss://eventsub.wss.twitch.tv/ws");
     // _webSocketChannel = IOWebSocketChannel.connect("ws://localhost:8080/ws");
 
 

@@ -8,14 +8,14 @@ class TwitchPollDTO extends TwitchPoll {
     required List<Choice> choices,
     required int totalVotes,
     required PollStatus status,
-    required Duration remainingTime,
+    required DateTime endsAt,
   }) : super(
           id: id,
           title: title,
           choices: choices,
           totalVotes: totalVotes,
           status: status,
-          remainingTime: remainingTime,
+          endsAt: endsAt,
         );
 
   @override
@@ -25,7 +25,7 @@ class TwitchPollDTO extends TwitchPoll {
         'choices': choices,
         'totalVotes': totalVotes,
         'status': status,
-        'remainingTime': remainingTime,
+        'endsAt': endsAt,
       };
 
   factory TwitchPollDTO.fromJson(Map<String, dynamic> map) {
@@ -50,15 +50,14 @@ class TwitchPollDTO extends TwitchPoll {
 
     DateFormat df = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     DateTime endsAt = df.parse(map['ends_at'] ?? map['ended_at']);
-    DateTime now = df.parse(df.format(DateTime.now().toUtc()));
-    Duration remainingTime = endsAt.difference(now);
+    
     return TwitchPollDTO(
       id: map['id'],
       title: map['title'],
       choices: choices,
       totalVotes: totalVotes,
       status: status,
-      remainingTime: remainingTime,
+      endsAt: endsAt,
     );
   }
 }
