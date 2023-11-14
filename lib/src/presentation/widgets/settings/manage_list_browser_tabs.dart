@@ -343,10 +343,6 @@ Widget _addDialog(context, SettingsViewController controller) {
               onChanged: (value) {
                 controller.addBrowserToggled.value = value;
               },
-              inactiveTrackColor:
-                  Theme.of(context).colorScheme.tertiaryContainer,
-              activeTrackColor: Theme.of(context).colorScheme.tertiary,
-              activeColor: Colors.white,
             ),
           ),
         ],
@@ -369,10 +365,6 @@ Widget _addDialog(context, SettingsViewController controller) {
                 onChanged: (value) {
                   controller.addBrowserAudioSourceToggled.value = value;
                 },
-                inactiveTrackColor:
-                    Theme.of(context).colorScheme.tertiaryContainer,
-                activeTrackColor: Theme.of(context).colorScheme.tertiary,
-                activeColor: Colors.white,
               ),
             ),
           ],
@@ -469,10 +461,6 @@ Widget _editDialog(context, SettingsViewController controller, elem) {
               onChanged: (value) {
                 controller.addBrowserToggled.value = value;
               },
-              inactiveTrackColor:
-                  Theme.of(context).colorScheme.tertiaryContainer,
-              activeTrackColor: Theme.of(context).colorScheme.tertiary,
-              activeColor: Colors.white,
             ),
           ),
         ],
@@ -495,10 +483,6 @@ Widget _editDialog(context, SettingsViewController controller, elem) {
                 onChanged: (value) {
                   controller.addBrowserAudioSourceToggled.value = value;
                 },
-                inactiveTrackColor:
-                    Theme.of(context).colorScheme.tertiaryContainer,
-                activeTrackColor: Theme.of(context).colorScheme.tertiary,
-                activeColor: Colors.white,
               ),
             ),
           ],

@@ -25,6 +25,30 @@ class Themes {
         borderSide: BorderSide(color: Colors.deepPurpleAccent[200]!),
       ),
     ),
+    switchTheme: SwitchThemeData(
+      thumbColor: MaterialStateProperty.resolveWith(
+        (Set<MaterialState> states) {
+          if (states.contains(MaterialState.selected)) {
+            return Colors.white;
+          }
+          if (states.contains(MaterialState.disabled)) {
+            return null;
+          }
+          return Colors.white;
+        },
+      ),
+      trackColor: MaterialStateProperty.resolveWith(
+        (Set<MaterialState> states) {
+          if (states.contains(MaterialState.selected)) {
+            return Colors.deepPurpleAccent[200];
+          }
+          if (states.contains(MaterialState.disabled)) {
+            return Colors.grey[850];
+          }
+          return Colors.white;
+        },
+      ),
+    ),
   );
 
   final ThemeData lightTheme = ThemeData.light().copyWith(
@@ -43,6 +67,30 @@ class Themes {
     inputDecorationTheme: const InputDecorationTheme(
       border: OutlineInputBorder(
         borderSide: BorderSide(color: Colors.black),
+      ),
+    ),
+    switchTheme: SwitchThemeData(
+      thumbColor: MaterialStateProperty.resolveWith(
+        (Set<MaterialState> states) {
+          if (states.contains(MaterialState.selected)) {
+            return Colors.white;
+          }
+          if (states.contains(MaterialState.disabled)) {
+            return null;
+          }
+          return Colors.white;
+        },
+      ),
+      trackColor: MaterialStateProperty.resolveWith(
+        (Set<MaterialState> states) {
+          if (states.contains(MaterialState.selected)) {
+            return Colors.deepPurpleAccent[200];
+          }
+          if (states.contains(MaterialState.disabled)) {
+            return Colors.grey[850];
+          }
+          return Colors.white;
+        },
       ),
     ),
   );

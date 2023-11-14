@@ -62,10 +62,6 @@ class Tts extends StatelessWidget {
                         );
                         controller.saveSettings();
                       },
-                      inactiveTrackColor:
-                          Theme.of(context).colorScheme.tertiaryContainer,
-                      activeTrackColor: Theme.of(context).colorScheme.tertiary,
-                      activeColor: Colors.white,
                     ),
                   ],
                 ),
@@ -270,10 +266,6 @@ class Tts extends StatelessWidget {
                         );
                         controller.saveSettings();
                       },
-                      inactiveTrackColor:
-                          Theme.of(context).colorScheme.tertiaryContainer,
-                      activeTrackColor: Theme.of(context).colorScheme.tertiary,
-                      activeColor: Colors.white,
                     ),
                   ],
                 ),

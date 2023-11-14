@@ -167,10 +167,6 @@ class SettingsView extends GetView<SettingsViewController> {
                       },
                       value: controller
                           .homeViewController.settings.value.isEmotes!,
-                      inactiveTrackColor:
-                          Theme.of(context).colorScheme.tertiaryContainer,
-                      activeTrackColor: Theme.of(context).colorScheme.tertiary,
-                      activeColor: Colors.white,
                     )
                   ],
                 ),
@@ -228,10 +224,6 @@ class SettingsView extends GetView<SettingsViewController> {
                       },
                       value: controller
                           .homeViewController.settings.value.displayTimestamp!,
-                      inactiveTrackColor:
-                          Theme.of(context).colorScheme.tertiaryContainer,
-                      activeTrackColor: Theme.of(context).colorScheme.tertiary,
-                      activeColor: Colors.white,
                     )
                   ],
                 ),
@@ -257,10 +249,6 @@ class SettingsView extends GetView<SettingsViewController> {
                       },
                       value: controller.homeViewController.settings.value
                           .chatSettings!.hideDeletedMessages,
-                      inactiveTrackColor:
-                          Theme.of(context).colorScheme.tertiaryContainer,
-                      activeTrackColor: Theme.of(context).colorScheme.tertiary,
-                      activeColor: Colors.white,
                     )
                   ],
                 ),
@@ -371,10 +359,6 @@ class SettingsView extends GetView<SettingsViewController> {
                       },
                       value: controller.homeViewController.settings.value
                           .generalSettings!.isDarkMode,
-                      activeTrackColor: Theme.of(context).colorScheme.tertiary,
-                      activeColor: Colors.white,
-                      inactiveTrackColor:
-                          Theme.of(context).colorScheme.tertiaryContainer,
                     )
                   ],
                 ),
@@ -403,10 +387,6 @@ class SettingsView extends GetView<SettingsViewController> {
                       },
                       value: controller.homeViewController.settings.value
                           .generalSettings!.keepSpeakerOn,
-                      activeTrackColor: Theme.of(context).colorScheme.tertiary,
-                      activeColor: Colors.white,
-                      inactiveTrackColor:
-                          Theme.of(context).colorScheme.tertiaryContainer,
                     )
                   ],
                 ),
@@ -435,10 +415,6 @@ class SettingsView extends GetView<SettingsViewController> {
                       },
                       value: controller.homeViewController.settings.value
                           .generalSettings!.displayViewerCount,
-                      activeTrackColor: Theme.of(context).colorScheme.tertiary,
-                      activeColor: Colors.white,
-                      inactiveTrackColor:
-                          Theme.of(context).colorScheme.tertiaryContainer,
                     )
                   ],
                 ),
@@ -540,10 +516,6 @@ class SettingsView extends GetView<SettingsViewController> {
                       },
                       value: controller
                           .homeViewController.settings.value.isObsConnected!,
-                      inactiveTrackColor:
-                          Theme.of(context).colorScheme.tertiaryContainer,
-                      activeTrackColor: Theme.of(context).colorScheme.tertiary,
-                      activeColor: Colors.white,
                     ),
                   ],
                 ),
@@ -677,8 +649,8 @@ class SettingsView extends GetView<SettingsViewController> {
     );
   }
 
-  Widget settingsGoToRow(
-      BuildContext context, String title, IconData icon, Function goToFunction) {
+  Widget settingsGoToRow(BuildContext context, String title, IconData icon,
+      Function goToFunction) {
     return InkWell(
       onTap: () async {
         goToFunction();
