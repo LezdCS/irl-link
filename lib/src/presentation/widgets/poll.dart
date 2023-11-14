@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:irllink/src/core/utils/convert_to_device_timezone.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/utils/print_duration.dart';
@@ -22,6 +24,19 @@ Widget poll(
           ),
         ),
       ],
+    );
+  }
+  Rx<Duration> remainingTime = convertToDeviceTimezone(poll.endsAt).difference(DateTime.now()).obs;
+  if(remainingTime.value.inSeconds > 0) {
+    // Every 1 second, refresh remaining time
+    Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) {
+        remainingTime.value = convertToDeviceTimezone(poll.endsAt).difference(DateTime.now());
+        if (remainingTime.value.inSeconds <= 0) {
+          timer.cancel();
+        }
+      },
     );
   }
   return Column(
@@ -74,15 +89,17 @@ Widget poll(
                             percentage > 0.5)
                         ? Colors.green
                         : Theme.of(context).colorScheme.tertiaryContainer,
-                    center: Text("${(percentage * 100).toStringAsFixed(2)} % (${choice.votes})"),
+                    center: Text(
+                        "${(percentage * 100).toStringAsFixed(2)} % (${choice.votes})"),
                   ),
                   const SizedBox(height: 10),
                 ],
               );
             },
           ),
-          Text('Ends in ${printDuration(poll.endsAt.difference(DateTime.now()))}'),
-
+          Obx(
+            (() => Text('Ends in ${printDuration(remainingTime.value)}')),
+          ),
           Visibility(
             visible: poll.status == PollStatus.active,
             child: Row(

@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/utils/convert_to_device_timezone.dart';
+import 'package:irllink/src/core/utils/print_duration.dart';
 import 'package:irllink/src/domain/entities/twitch_prediction.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -24,6 +28,23 @@ Widget prediction(
       ],
     );
   }
+  Rx<Duration> remainingTime = convertToDeviceTimezone(prediction.remainingTime)
+      .difference(DateTime.now())
+      .obs;
+  if(remainingTime.value.inSeconds > 0) {
+    // Every 1 second, refresh remaining time
+    Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) {
+        remainingTime.value = convertToDeviceTimezone(prediction.remainingTime)
+            .difference(DateTime.now());
+        if (remainingTime.value.inSeconds <= 0) {
+          timer.cancel();
+        }
+      },
+    );
+  }
+
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -98,8 +119,8 @@ Widget prediction(
                       percent: percentage,
                       backgroundColor: Theme.of(context).colorScheme.secondary,
                       progressColor: outcome.color,
-                      center:
-                          Text("${(percentage * 100).toStringAsFixed(2)} % (${outcome.channelPoints} points)"),
+                      center: Text(
+                          "${(percentage * 100).toStringAsFixed(2)} % (${outcome.channelPoints} points)"),
                     ),
                     const SizedBox(height: 10),
                   ],
@@ -107,7 +128,10 @@ Widget prediction(
               );
             },
           ),
-          Text('${prediction.status == PredictionStatus.active ? 'Locks' : 'Ends'} in ${prediction.remainingTime}'),
+          Obx(
+            () => Text(
+                '${prediction.status == PredictionStatus.active ? 'Locks' : 'Ends'} in ${printDuration(remainingTime.value)}'),
+          ),
           Visibility(
             visible: prediction.status != PredictionStatus.resolved &&
                 prediction.status != PredictionStatus.canceled,
