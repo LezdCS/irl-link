@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:irllink/src/core/utils/convert_to_device_timezone.dart';
 import 'package:irllink/src/core/utils/print_duration.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 
@@ -11,6 +15,22 @@ Widget hypeTrain(
     builder: (context, hypetrain, child) {
       if (hypetrain.id == '') {
         return Container();
+      }
+      Rx<Duration> remainingTime = convertToDeviceTimezone(hypetrain.endsAt)
+          .difference(DateTime.now())
+          .obs;
+      if (remainingTime.value.inSeconds > 0) {
+        // Every 1 second, refresh remaining time
+        Timer.periodic(
+          const Duration(seconds: 1),
+          (timer) {
+            remainingTime.value = convertToDeviceTimezone(hypetrain.endsAt)
+                .difference(DateTime.now());
+            if (remainingTime.value.inSeconds <= 0) {
+              timer.cancel();
+            }
+          },
+        );
       }
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -36,7 +56,11 @@ Widget hypeTrain(
             ],
           ),
           Text('${hypetrain.progress}%'),
-          Text(printDuration(hypetrain.endsAt.difference(DateTime.now()))),
+          Obx(
+            () => Text(
+              printDuration(remainingTime.value),
+            ),
+          ),
         ],
       );
     },
