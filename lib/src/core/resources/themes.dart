@@ -49,6 +49,15 @@ class Themes {
         },
       ),
     ),
+    sliderTheme: SliderThemeData(
+      activeTrackColor: Colors.deepPurpleAccent[200],
+      inactiveTrackColor: Colors.grey[850],
+      // thumbColor: Colors.white,
+      // overlayColor: Colors.deepPurpleAccent[200],
+      // trackHeight: 2,
+      // thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
+      // overlayShape: const RoundSliderOverlayShape(overlayRadius: 16),
+    ),
   );
 
   final ThemeData lightTheme = ThemeData.light().copyWith(
@@ -92,6 +101,15 @@ class Themes {
           return Colors.white;
         },
       ),
+    ),
+    sliderTheme: SliderThemeData(
+      activeTrackColor: Colors.deepPurpleAccent[200],
+      inactiveTrackColor: Colors.grey[850],
+      // thumbColor: Colors.white,
+      // overlayColor: Colors.deepPurpleAccent[200],
+      // trackHeight: 2,
+      // thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
+      // overlayShape: const RoundSliderOverlayShape(overlayRadius: 16),
     ),
   );
 }

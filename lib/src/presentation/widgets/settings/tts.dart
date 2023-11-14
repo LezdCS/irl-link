@@ -174,9 +174,6 @@ class Tts extends StatelessWidget {
                       },
                       max: 1,
                       min: 0,
-                      activeColor: Theme.of(context).colorScheme.tertiary,
-                      inactiveColor:
-                          Theme.of(context).colorScheme.tertiaryContainer,
                     )
                   ],
                 ),
@@ -205,9 +202,6 @@ class Tts extends StatelessWidget {
                       },
                       max: 1,
                       min: 0,
-                      activeColor: Theme.of(context).colorScheme.tertiary,
-                      inactiveColor:
-                          Theme.of(context).colorScheme.tertiaryContainer,
                     )
                   ],
                 ),
@@ -236,9 +230,6 @@ class Tts extends StatelessWidget {
                       },
                       max: 1,
                       min: 0,
-                      activeColor: Theme.of(context).colorScheme.tertiary,
-                      inactiveColor:
-                          Theme.of(context).colorScheme.tertiaryContainer,
                     )
                   ],
                 ),

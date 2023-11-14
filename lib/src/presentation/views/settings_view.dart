@@ -198,9 +198,6 @@ class SettingsView extends GetView<SettingsViewController> {
                       min: 0.0,
                       max: 50.0,
                       divisions: 100,
-                      activeColor: Theme.of(context).colorScheme.tertiary,
-                      inactiveColor:
-                          Theme.of(context).colorScheme.tertiaryContainer,
                       label:
                           "${controller.homeViewController.settings.value.textSize}",
                     )
