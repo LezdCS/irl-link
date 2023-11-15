@@ -45,14 +45,14 @@ class Themes {
           if (states.contains(MaterialState.disabled)) {
             return Colors.grey[850];
           }
-          return Colors.white;
+          return Colors.grey[850];
         },
       ),
     ),
     sliderTheme: SliderThemeData(
       activeTrackColor: Colors.deepPurpleAccent[200],
       inactiveTrackColor: Colors.grey[850],
-      // thumbColor: Colors.white,
+      thumbColor: Colors.white,
       // overlayColor: Colors.deepPurpleAccent[200],
       // trackHeight: 2,
       // thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
@@ -98,14 +98,14 @@ class Themes {
           if (states.contains(MaterialState.disabled)) {
             return Colors.grey[850];
           }
-          return Colors.white;
+          return Colors.grey[850];
         },
       ),
     ),
     sliderTheme: SliderThemeData(
       activeTrackColor: Colors.deepPurpleAccent[200],
       inactiveTrackColor: Colors.grey[850],
-      // thumbColor: Colors.white,
+      thumbColor: Colors.deepPurpleAccent[400],
       // overlayColor: Colors.deepPurpleAccent[200],
       // trackHeight: 2,
       // thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
