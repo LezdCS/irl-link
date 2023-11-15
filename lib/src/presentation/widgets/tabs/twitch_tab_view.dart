@@ -282,16 +282,10 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                   color: Theme.of(context).colorScheme.secondary,
                 ),
                 Get.find<TwitchTabViewController>().twitchEventSub != null
-                    ? ValueListenableBuilder(
-                        valueListenable:
-                            controller.twitchEventSub!.currentPrediction,
-                        builder: (context, p, child) {
-                          return prediction(
-                            context,
-                            controller,
-                            p,
-                          );
-                        },
+                    ? prediction(
+                        context,
+                        controller,
+                        controller.twitchEventSub!.currentPrediction.value,
                       )
                     : Container(),
                 Divider(
@@ -302,15 +296,10 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                   color: Theme.of(context).colorScheme.secondary,
                 ),
                 Get.find<TwitchTabViewController>().twitchEventSub != null
-                    ? ValueListenableBuilder(
-                        valueListenable: controller.twitchEventSub!.currentPoll,
-                        builder: (context, p, child) {
-                          return poll(
-                            context,
-                            controller,
-                            p,
-                          );
-                        },
+                    ? poll(
+                        context,
+                        controller,
+                        controller.twitchEventSub!.currentPoll.value,
                       )
                     : Container(),
               ],

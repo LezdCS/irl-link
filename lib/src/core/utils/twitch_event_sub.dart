@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
 import 'package:irllink/src/data/entities/twitch_poll_dto.dart';
 import 'package:irllink/src/data/entities/twitch_prediction_dto.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_hype_train.dart';
@@ -21,10 +22,8 @@ class TwitchEventSub {
   StreamSubscription? _streamSubscription;
   String? _broadcasterId;
 
-  ValueNotifier<TwitchPoll> currentPoll =
-      ValueNotifier<TwitchPoll>(TwitchPoll.empty());
-  ValueNotifier<TwitchPrediction> currentPrediction =
-      ValueNotifier<TwitchPrediction>(TwitchPrediction.empty());
+  Rx<TwitchPoll> currentPoll = TwitchPoll.empty().obs;
+  Rx<TwitchPrediction> currentPrediction = TwitchPrediction.empty().obs;
   ValueNotifier<TwitchHypeTrain> currentHypeTrain =
       ValueNotifier<TwitchHypeTrain>(TwitchHypeTrain.empty());
 
@@ -38,7 +37,8 @@ class TwitchEventSub {
 
     _webSocketChannel =
         IOWebSocketChannel.connect("wss://eventsub.wss.twitch.tv/ws");
-    // _webSocketChannel = IOWebSocketChannel.connect("ws://localhost:8080/ws");
+        // _webSocketChannel =
+        //     IOWebSocketChannel.connect("ws://localhost:8080/ws");
 
     _streamSubscription = _webSocketChannel?.stream.listen(
       (data) => _eventListener(data),

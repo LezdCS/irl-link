@@ -43,22 +43,25 @@ class HomeView extends GetView<HomeViewController> {
           resizeToAvoidBottomInset: true,
           body: Obx(
             () => FloatingDraggableWidget(
-              floatingWidget: controller.settings.value.dashboardSettings!.activated ? InkWell(
-                onTap: () {
-                  controller.displayDashboard.value =
-                      !controller.displayDashboard.value;
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: context.theme.colorScheme.tertiary,
-                  ),
-                  child: const Icon(
-                    Icons.dashboard_rounded,
-                    size: 26,
-                  ),
-                ),
-              ) : Container(),
+              floatingWidget:
+                  controller.settings.value.dashboardSettings!.activated
+                      ? InkWell(
+                          onTap: () {
+                            controller.displayDashboard.value =
+                                !controller.displayDashboard.value;
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: context.theme.colorScheme.tertiary,
+                            ),
+                            child: const Icon(
+                              Icons.dashboard_rounded,
+                              size: 26,
+                            ),
+                          ),
+                        )
+                      : Container(),
               floatingWidgetWidth: 40,
               floatingWidgetHeight: 100,
               dy: 10,
@@ -332,13 +335,15 @@ class HomeView extends GetView<HomeViewController> {
             ),
           ),
           Get.find<TwitchTabViewController>().twitchEventSub != null
-              ? ValueListenableBuilder(
-                  valueListenable: Get.find<TwitchTabViewController>()
-                      .twitchEventSub!
-                      .currentPoll,
-                  builder: (context, p, child) {
-                    if (p.status == PollStatus.empty) return Container();
-                    return Expanded(
+              ? Obx(
+                  () => Visibility(
+                    visible: Get.find<TwitchTabViewController>()
+                            .twitchEventSub!
+                            .currentPoll
+                            .value
+                            .status !=
+                        PollStatus.empty,
+                    child: Expanded(
                       flex: 1,
                       child: InkWell(
                         onTap: () async {
@@ -354,10 +359,15 @@ class HomeView extends GetView<HomeViewController> {
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    poll(
-                                      context,
-                                      Get.find<TwitchTabViewController>(),
-                                      p,
+                                    Obx(
+                                      () => poll(
+                                        context,
+                                        Get.find<TwitchTabViewController>(),
+                                        Get.find<TwitchTabViewController>()
+                                            .twitchEventSub!
+                                            .currentPoll
+                                            .value,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -371,18 +381,20 @@ class HomeView extends GetView<HomeViewController> {
                           size: 22,
                         ),
                       ),
-                    );
-                  },
+                    ),
+                  ),
                 )
               : Container(),
           Get.find<TwitchTabViewController>().twitchEventSub != null
-              ? ValueListenableBuilder(
-                  valueListenable: Get.find<TwitchTabViewController>()
-                      .twitchEventSub!
-                      .currentPrediction,
-                  builder: (context, p, child) {
-                    if (p.status == PredictionStatus.empty) return Container();
-                    return Expanded(
+              ? Obx(
+                  () => Visibility(
+                    visible: Get.find<TwitchTabViewController>()
+                            .twitchEventSub!
+                            .currentPrediction
+                            .value
+                            .status !=
+                        PredictionStatus.empty,
+                    child: Expanded(
                       flex: 1,
                       child: InkWell(
                         onTap: () async {
@@ -398,10 +410,15 @@ class HomeView extends GetView<HomeViewController> {
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    prediction(
-                                      context,
-                                      Get.find<TwitchTabViewController>(),
-                                      p,
+                                    Obx(
+                                      () => prediction(
+                                        context,
+                                        Get.find<TwitchTabViewController>(),
+                                        Get.find<TwitchTabViewController>()
+                                            .twitchEventSub!
+                                            .currentPrediction
+                                            .value,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -416,8 +433,8 @@ class HomeView extends GetView<HomeViewController> {
                           height: 22,
                         ),
                       ),
-                    );
-                  },
+                    ),
+                  ),
                 )
               : Container(),
           Expanded(
