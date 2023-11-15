@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
 import 'package:irllink/src/data/entities/twitch_poll_dto.dart';
 import 'package:irllink/src/data/entities/twitch_prediction_dto.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_hype_train.dart';
@@ -21,10 +22,8 @@ class TwitchEventSub {
   StreamSubscription? _streamSubscription;
   String? _broadcasterId;
 
-  ValueNotifier<TwitchPoll> currentPoll =
-      ValueNotifier<TwitchPoll>(TwitchPoll.empty());
-  ValueNotifier<TwitchPrediction> currentPrediction =
-      ValueNotifier<TwitchPrediction>(TwitchPrediction.empty());
+  Rx<TwitchPoll> currentPoll = TwitchPoll.empty().obs;
+  Rx<TwitchPrediction> currentPrediction = TwitchPrediction.empty().obs;
   ValueNotifier<TwitchHypeTrain> currentHypeTrain =
       ValueNotifier<TwitchHypeTrain>(TwitchHypeTrain.empty());
 
@@ -38,8 +37,8 @@ class TwitchEventSub {
 
     _webSocketChannel =
         IOWebSocketChannel.connect("wss://eventsub.wss.twitch.tv/ws");
-    // _webSocketChannel = IOWebSocketChannel.connect("ws://localhost:8080/ws");
-
+        // _webSocketChannel =
+        //     IOWebSocketChannel.connect("ws://localhost:8080/ws");
 
     _streamSubscription = _webSocketChannel?.stream.listen(
       (data) => _eventListener(data),
@@ -90,60 +89,48 @@ class TwitchEventSub {
           {"broadcaster_user_id": _broadcasterId ?? ''});
     }
 
-    if (msgMapped['metadata']['subscription_type'] != null) {
-      switch (msgMapped['metadata']['subscription_type']) {
+    String? subsriptionType = msgMapped['metadata']['subscription_type'];
+    if (subsriptionType != null) {
+      Map<String, dynamic> event = msgMapped['payload']['event'];
+      switch (subsriptionType) {
         //POLLS
         case 'channel.poll.begin':
-          currentPoll.value =
-              TwitchPollDTO.fromJson(msgMapped['payload']['event']);
-          break;
         case 'channel.poll.progress':
-          currentPoll.value =
-              TwitchPollDTO.fromJson(msgMapped['payload']['event']);
+          currentPoll.value = TwitchPollDTO.fromJson(event);
           break;
         case 'channel.poll.end':
-          currentPoll.value =
-              TwitchPollDTO.fromJson(msgMapped['payload']['event']);
-          Future.delayed(const Duration(seconds: 20))
-              .then((value) => currentPoll.value = TwitchPoll.empty());
+          currentPoll.value = TwitchPollDTO.fromJson(event);
+          Future.delayed(const Duration(seconds: 20)).then(
+            (value) => currentPoll.value = TwitchPoll.empty(),
+          );
           break;
 
         //PREDICTIONS
         case 'channel.prediction.begin':
-          currentPrediction.value =
-              TwitchPredictionDTO.fromJson(msgMapped['payload']['event']);
-          break;
         case 'channel.prediction.progress':
-          currentPrediction.value =
-              TwitchPredictionDTO.fromJson(msgMapped['payload']['event']);
-          break;
         case 'channel.prediction.lock':
-          currentPrediction.value =
-              TwitchPredictionDTO.fromJson(msgMapped['payload']['event']);
+          currentPrediction.value = TwitchPredictionDTO.fromJson(event);
           break;
         case 'channel.prediction.end':
-          currentPrediction.value =
-              TwitchPredictionDTO.fromJson(msgMapped['payload']['event']);
+          currentPrediction.value = TwitchPredictionDTO.fromJson(event);
           Future.delayed(const Duration(seconds: 20)).then(
-              (value) => currentPrediction.value = TwitchPrediction.empty());
+            (value) => currentPrediction.value = TwitchPrediction.empty(),
+          );
           break;
 
         //HYPE TRAIN
         case 'channel.hype_train.begin':
-          currentHypeTrain.value =
-              TwitchHypeTrainDTO.fromJson(msgMapped['payload']['event']);
-          break;
         case 'channel.hype_train.progress':
-          currentHypeTrain.value =
-              TwitchHypeTrainDTO.fromJson(msgMapped['payload']['event']);
+          currentHypeTrain.value = TwitchHypeTrainDTO.fromJson(event);
           break;
         case 'channel.hype_train.end':
-          currentHypeTrain.value =
-              TwitchHypeTrainDTO.fromJson(msgMapped['payload']['event']);
+          currentHypeTrain.value = TwitchHypeTrainDTO.fromJson(event);
           Future.delayed(const Duration(seconds: 20)).then(
-              (value) => currentHypeTrain.value = TwitchHypeTrain.empty());
+            (value) => currentHypeTrain.value = TwitchHypeTrain.empty(),
+          );
           break;
         default:
+          break;
       }
     }
   }

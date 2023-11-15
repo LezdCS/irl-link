@@ -584,6 +584,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.6+7"
+  instant:
+    dependency: "direct main"
+    description:
+      name: instant
+      sha256: "9fc99ef29d2c82834f13e129db12324af24ed91e43949576190f57bc1b6670c2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.1"
   intl:
     dependency: "direct main"
     description:

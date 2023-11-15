@@ -10,7 +10,7 @@ class TwitchPredictionDTO extends TwitchPrediction {
     required int totalUsers,
     required List<Outcome> outcomes,
     required PredictionStatus status,
-    required Duration remainingTime,
+    required DateTime remainingTime,
   }) : super(
           id: id,
           title: title,
@@ -60,8 +60,6 @@ class TwitchPredictionDTO extends TwitchPrediction {
     DateFormat df = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     DateTime endsAt =
         df.parse(map['locks_at'] ?? map['locked_at'] ?? map['ended_at']);
-    DateTime now = df.parse(df.format(DateTime.now().toUtc()));
-    Duration remainingTime = endsAt.difference(now);
 
     return TwitchPredictionDTO(
       id: map['id'],
@@ -70,7 +68,7 @@ class TwitchPredictionDTO extends TwitchPrediction {
       totalUsers: totalUsers,
       winningOutcomeId: map["winning_outcome_id"] ?? '',
       status: status,
-      remainingTime: remainingTime,
+      remainingTime: endsAt,
     );
   }
 }

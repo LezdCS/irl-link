@@ -18,21 +18,6 @@ class DashboardController extends GetxController {
 
   HomeViewController homeViewController = Get.find<HomeViewController>();
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  // @override
-  // void onClose() {
-  //   super.onClose();
-  // }
-
-  @override
-  void onReady() async {
-    super.onReady();
-  }
-
   // Add a dashboard event
   void addDashboardEvent(DashboardEvent event) {
     List<DashboardEvent> events = [];

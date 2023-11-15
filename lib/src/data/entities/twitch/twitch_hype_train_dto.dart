@@ -11,7 +11,7 @@ class TwitchHypeTrainDTO extends TwitchHypeTrain {
     required int level,
     required List<Contribution> topContributions,
     required Contribution? lastContribution,
-    required Duration endsAt,
+    required DateTime endsAt,
   }) : super(
           id: id,
           total: total,
@@ -46,8 +46,6 @@ class TwitchHypeTrainDTO extends TwitchHypeTrain {
 
     DateFormat df = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     DateTime endsAt = df.parse(map['expires_at'] ?? map['ended_at']);
-    DateTime now = df.parse(df.format(DateTime.now().toUtc()));
-    Duration endsAtDuration = endsAt.difference(now);
 
     return TwitchHypeTrainDTO(
       id: map['id'],
@@ -59,7 +57,7 @@ class TwitchHypeTrainDTO extends TwitchHypeTrain {
       lastContribution: map['last_contribution'] != null
           ? ContributionDTO.fromJson(map['last_contribution'])
           : null,
-      endsAt: endsAtDuration,
+      endsAt: endsAt,
     );
   }
 }

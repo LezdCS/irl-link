@@ -24,6 +24,7 @@ Widget poll(
       ],
     );
   }
+
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -74,15 +75,18 @@ Widget poll(
                             percentage > 0.5)
                         ? Colors.green
                         : Theme.of(context).colorScheme.tertiaryContainer,
-                    center: Text("${(percentage * 100).toStringAsFixed(2)} % (${choice.votes})"),
+                    center: Text(
+                        "${(percentage * 100).toStringAsFixed(2)} % (${choice.votes})"),
                   ),
                   const SizedBox(height: 10),
                 ],
               );
             },
           ),
-          Text('Ends in ${printDuration(poll.remainingTime)}'),
-
+          Obx(
+            (() => Text(
+                'Ends in ${printDuration(controller.remainingTimePoll.value)}')),
+          ),
           Visibility(
             visible: poll.status == PollStatus.active,
             child: Row(

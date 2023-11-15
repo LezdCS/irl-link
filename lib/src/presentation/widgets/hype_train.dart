@@ -1,4 +1,6 @@
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:irllink/src/core/utils/print_duration.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 
@@ -12,6 +14,7 @@ Widget hypeTrain(
       if (hypetrain.id == '') {
         return Container();
       }
+
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -36,7 +39,11 @@ Widget hypeTrain(
             ],
           ),
           Text('${hypetrain.progress}%'),
-          Text(printDuration(hypetrain.endsAt))
+          Obx(
+            () => Text(
+              printDuration(controller.remainingTimeHypeTrain.value),
+            ),
+          ),
         ],
       );
     },

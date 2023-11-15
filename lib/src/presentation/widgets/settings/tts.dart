@@ -62,10 +62,6 @@ class Tts extends StatelessWidget {
                         );
                         controller.saveSettings();
                       },
-                      inactiveTrackColor:
-                          Theme.of(context).colorScheme.tertiaryContainer,
-                      activeTrackColor: Theme.of(context).colorScheme.tertiary,
-                      activeColor: Colors.white,
                     ),
                   ],
                 ),
@@ -178,9 +174,6 @@ class Tts extends StatelessWidget {
                       },
                       max: 1,
                       min: 0,
-                      activeColor: Theme.of(context).colorScheme.tertiary,
-                      inactiveColor:
-                          Theme.of(context).colorScheme.tertiaryContainer,
                     )
                   ],
                 ),
@@ -209,9 +202,6 @@ class Tts extends StatelessWidget {
                       },
                       max: 1,
                       min: 0,
-                      activeColor: Theme.of(context).colorScheme.tertiary,
-                      inactiveColor:
-                          Theme.of(context).colorScheme.tertiaryContainer,
                     )
                   ],
                 ),
@@ -240,9 +230,6 @@ class Tts extends StatelessWidget {
                       },
                       max: 1,
                       min: 0,
-                      activeColor: Theme.of(context).colorScheme.tertiary,
-                      inactiveColor:
-                          Theme.of(context).colorScheme.tertiaryContainer,
                     )
                   ],
                 ),
@@ -270,10 +257,6 @@ class Tts extends StatelessWidget {
                         );
                         controller.saveSettings();
                       },
-                      inactiveTrackColor:
-                          Theme.of(context).colorScheme.tertiaryContainer,
-                      activeTrackColor: Theme.of(context).colorScheme.tertiary,
-                      activeColor: Colors.white,
                     ),
                   ],
                 ),

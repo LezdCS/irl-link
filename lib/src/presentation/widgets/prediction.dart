@@ -99,8 +99,8 @@ Widget prediction(
                       percent: percentage,
                       backgroundColor: Theme.of(context).colorScheme.secondary,
                       progressColor: outcome.color,
-                      center:
-                          Text("${(percentage * 100).toStringAsFixed(2)} % (${outcome.channelPoints} points)"),
+                      center: Text(
+                          "${(percentage * 100).toStringAsFixed(2)} % (${outcome.channelPoints} points)"),
                     ),
                     const SizedBox(height: 10),
                   ],
@@ -108,7 +108,10 @@ Widget prediction(
               );
             },
           ),
-          Text('${prediction.status == PredictionStatus.active ? 'Locks' : 'Ends'} in ${printDuration(prediction.remainingTime)}'),
+          Obx(
+            () => Text(
+                '${prediction.status == PredictionStatus.active ? 'Locks' : 'Ends'} in ${printDuration(controller.remainingTimePrediction.value)}'),
+          ),
           Visibility(
             visible: prediction.status != PredictionStatus.resolved &&
                 prediction.status != PredictionStatus.canceled,
