@@ -1,5 +1,3 @@
-import 'dart:async';
-import 'package:irllink/src/core/utils/convert_to_device_timezone.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/utils/print_duration.dart';
@@ -26,19 +24,7 @@ Widget poll(
       ],
     );
   }
-  Rx<Duration> remainingTime = convertToDeviceTimezone(poll.endsAt).difference(DateTime.now()).obs;
-  if(remainingTime.value.inSeconds > 0) {
-    // Every 1 second, refresh remaining time
-    Timer.periodic(
-      const Duration(seconds: 1),
-      (timer) {
-        remainingTime.value = convertToDeviceTimezone(poll.endsAt).difference(DateTime.now());
-        if (remainingTime.value.inSeconds <= 0) {
-          timer.cancel();
-        }
-      },
-    );
-  }
+
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -98,7 +84,8 @@ Widget poll(
             },
           ),
           Obx(
-            (() => Text('Ends in ${printDuration(remainingTime.value)}')),
+            (() => Text(
+                'Ends in ${printDuration(controller.remainingTimePoll.value)}')),
           ),
           Visibility(
             visible: poll.status == PollStatus.active,

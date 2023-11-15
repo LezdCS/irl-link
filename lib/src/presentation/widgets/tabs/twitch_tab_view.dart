@@ -295,7 +295,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                   endIndent: 0,
                   color: Theme.of(context).colorScheme.secondary,
                 ),
-                Get.find<TwitchTabViewController>().twitchEventSub != null
+                controller.twitchEventSub != null
                     ? poll(
                         context,
                         controller,

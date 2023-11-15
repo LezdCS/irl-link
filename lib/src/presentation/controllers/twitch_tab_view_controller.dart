@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/utils/convert_to_device_timezone.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_hype_train.dart';
+import 'package:irllink/src/domain/entities/twitch_prediction.dart';
 import 'package:irllink/src/domain/entities/twitch_stream_infos.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 
@@ -30,6 +33,9 @@ class TwitchTabViewController extends GetxController {
   Rx<Duration> myDuration = const Duration(seconds: 15).obs;
 
   TwitchEventSub? twitchEventSub;
+  late Rx<Duration> remainingTimePoll;
+  late Rx<Duration> remainingTimePrediction;
+  late Rx<Duration> remainingTimeHypeTrain;
 
   @override
   void onInit() {
@@ -49,6 +55,9 @@ class TwitchTabViewController extends GetxController {
         homeViewController.twitchData!.twitchUser.login,
         homeViewController.twitchData!.accessToken,
       );
+      listenToPoll();
+      listenToPrediction();
+
       twitchEventSub!.connect();
     }
 
@@ -71,6 +80,88 @@ class TwitchTabViewController extends GetxController {
     refreshDataTimer?.cancel();
     refreshDataTimerProgressBar?.cancel();
     super.onClose();
+  }
+
+  void listenToPoll() {
+    Timer? timer;
+
+    twitchEventSub?.currentPoll.listen((poll) {
+      if (poll.status == PollStatus.active) {
+        if (timer != null) timer?.cancel();
+        remainingTimePoll =
+            convertToDeviceTimezone(twitchEventSub!.currentPoll.value.endsAt)
+                .difference(DateTime.now())
+                .obs;
+        if (remainingTimePoll.value.inSeconds > 0) {
+          // Every 1 second, refresh remaining time
+          timer = Timer.periodic(
+            const Duration(seconds: 1),
+            (timer) {
+              remainingTimePoll.value = convertToDeviceTimezone(poll.endsAt)
+                  .difference(DateTime.now());
+            },
+          );
+        }
+      } else {
+        timer?.cancel();
+      }
+    });
+  }
+
+  void listenToPrediction() {
+    Timer? timer;
+
+    twitchEventSub?.currentPrediction.listen((prediction) {
+      if (prediction.status == PredictionStatus.active) {
+        if (timer != null) timer?.cancel();
+        remainingTimePrediction =
+            convertToDeviceTimezone(prediction.remainingTime)
+                .difference(DateTime.now())
+                .obs;
+        if (remainingTimePrediction.value.inSeconds > 0) {
+          // Every 1 second, refresh remaining time
+          timer = Timer.periodic(
+            const Duration(seconds: 1),
+            (timer) {
+              remainingTimePrediction.value =
+                  convertToDeviceTimezone(prediction.remainingTime)
+                      .difference(DateTime.now());
+            },
+          );
+        }
+      } else {
+        timer?.cancel();
+      }
+    });
+  }
+
+  void listenToHypeTrain() {
+    Timer? timer;
+
+    twitchEventSub?.currentHypeTrain.addListener(() {
+      TwitchHypeTrain train =
+          twitchEventSub?.currentHypeTrain.value ?? TwitchHypeTrain.empty();
+
+      if (train.id == '') {
+        timer?.cancel();
+        return;
+      }
+
+      if (timer != null) timer?.cancel();
+
+      remainingTimeHypeTrain =
+          convertToDeviceTimezone(train.endsAt).difference(DateTime.now()).obs;
+      if (remainingTimeHypeTrain.value.inSeconds > 0) {
+        // Every 1 second, refresh remaining time
+        timer = Timer.periodic(
+          const Duration(seconds: 1),
+          (timer) {
+            remainingTimeHypeTrain.value = convertToDeviceTimezone(train.endsAt)
+                .difference(DateTime.now());
+          },
+        );
+      }
+    });
   }
 
   void refreshData() {
