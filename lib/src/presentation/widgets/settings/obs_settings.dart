@@ -164,7 +164,7 @@ class ObsSettings extends StatelessWidget {
                             Theme.of(context).textTheme.bodyLarge!.color,
                         textCancel: "cancel".tr,
                         backgroundColor:
-                            Theme.of(context).colorScheme.background,
+                            Theme.of(context).colorScheme.tertiaryContainer,
                         content: _obsHistory(controller),
                       );
                       FocusManager.instance.primaryFocus?.unfocus();

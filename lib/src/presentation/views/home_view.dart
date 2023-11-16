@@ -134,7 +134,7 @@ class HomeView extends GetView<HomeViewController> {
                         ),
                         Visibility(
                           visible: controller.displayDashboard.value,
-                          child: Dashboard(),
+                          child: const Dashboard(),
                         ),
                         Visibility(
                           visible: controller.purchasePending.value,
