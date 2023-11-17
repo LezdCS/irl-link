@@ -57,6 +57,7 @@ class TwitchTabViewController extends GetxController {
       );
       listenToPoll();
       listenToPrediction();
+      listenToHypeTrain();
 
       twitchEventSub!.connect();
     }

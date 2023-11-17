@@ -35,7 +35,7 @@ class TwitchPrediction extends Equatable {
       title: '',
       winningOutcomeId: '',
       totalUsers: 0,
-      outcomes: [],
+      outcomes: const [],
       status: PredictionStatus.empty,
       remainingTime: DateTime.now(),
     );

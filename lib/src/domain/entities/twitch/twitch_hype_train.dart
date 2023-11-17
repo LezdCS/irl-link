@@ -28,7 +28,7 @@ class TwitchHypeTrain extends Equatable {
       progress: 0,
       goal: 0,
       level: 0,
-      topContributions: [],
+      topContributions: const [],
       endsAt: DateTime.now(),
       lastContribution: null,
     );

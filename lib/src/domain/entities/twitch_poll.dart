@@ -27,7 +27,7 @@ class TwitchPoll extends Equatable {
     return TwitchPoll(
       id: '',
       title: '',
-      choices: [],
+      choices: const [],
       totalVotes: 0,
       status: PollStatus.empty,
       endsAt: DateTime.now(),
