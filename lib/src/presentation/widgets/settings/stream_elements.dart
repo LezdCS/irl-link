@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/presentation/controllers/store_controller.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../controllers/settings_view_controller.dart';
 
@@ -15,11 +16,7 @@ class StreamElements extends GetView {
 
   @override
   Widget build(BuildContext context) {
-    bool isSubscribed =
-        controller.homeViewController.purchases.firstWhereOrNull(
-              (element) => element.productID == "irl_premium_subscription",
-            ) !=
-            null;
+    bool isSubscribed = Get.find<StoreController>().isSubscribed();
     return Obx(
       () => Column(
         children: [

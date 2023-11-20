@@ -19,7 +19,7 @@ PODS:
   - Firebase/RemoteConfig (10.17.0):
     - Firebase/CoreOnly
     - FirebaseRemoteConfig (~> 10.17.0)
-  - firebase_analytics (10.6.4):
+  - firebase_analytics (10.7.0):
     - Firebase/Analytics (= 10.17.0)
     - firebase_core
     - Flutter
@@ -34,7 +34,7 @@ PODS:
     - Firebase/RemoteConfig (= 10.17.0)
     - firebase_core
     - Flutter
-  - FirebaseABTesting (10.17.0):
+  - FirebaseABTesting (10.18.0):
     - FirebaseCore (~> 10.0)
   - FirebaseAnalytics (10.17.0):
     - FirebaseAnalytics/AdIdSupport (= 10.17.0)
@@ -58,9 +58,9 @@ PODS:
     - FirebaseCoreInternal (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
     - GoogleUtilities/Logger (~> 7.8)
-  - FirebaseCoreExtension (10.17.0):
+  - FirebaseCoreExtension (10.18.0):
     - FirebaseCore (~> 10.0)
-  - FirebaseCoreInternal (10.17.0):
+  - FirebaseCoreInternal (10.18.0):
     - "GoogleUtilities/NSData+zlib (~> 7.8)"
   - FirebaseCrashlytics (10.17.0):
     - FirebaseCore (~> 10.5)
@@ -70,7 +70,7 @@ PODS:
     - GoogleUtilities/Environment (~> 7.8)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (~> 2.1)
-  - FirebaseInstallations (10.17.0):
+  - FirebaseInstallations (10.18.0):
     - FirebaseCore (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
     - GoogleUtilities/UserDefaults (~> 7.8)
@@ -82,7 +82,7 @@ PODS:
     - FirebaseSharedSwift (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
     - "GoogleUtilities/NSData+zlib (~> 7.8)"
-  - FirebaseSessions (10.17.0):
+  - FirebaseSessions (10.18.0):
     - FirebaseCore (~> 10.5)
     - FirebaseCoreExtension (~> 10.0)
     - FirebaseInstallations (~> 10.0)
@@ -90,7 +90,7 @@ PODS:
     - GoogleUtilities/Environment (~> 7.10)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesSwift (~> 2.1)
-  - FirebaseSharedSwift (10.17.0)
+  - FirebaseSharedSwift (10.18.0)
   - Flutter (1.0.0)
   - flutter_background_service_ios (0.0.3):
     - Flutter
@@ -314,20 +314,20 @@ SPEC CHECKSUMS:
   connectivity_plus: bf0076dd84a130856aa636df1c71ccaff908fa1d
   device_info_plus: c6fb39579d0f423935b0c9ce7ee2f44b71b9fce6
   Firebase: f4ac0b02927af9253ae094d23deecf0890da7374
-  firebase_analytics: 9d609f3c43a71319c9112bb01044729305192417
+  firebase_analytics: d6f520c1030d2c1215851f6e332d39a489a30bd2
   firebase_core: efc9455611b8769fa90fbdae5da182600bd6901c
   firebase_crashlytics: 6a564f58db90be49c49d9ac100bc5cc3fcbf8267
   firebase_remote_config: 100e400242117a458f445cdb79aec17d0f2b6e05
-  FirebaseABTesting: 609e15b57b5f1096c8feb984e8995d9e769858fe
+  FirebaseABTesting: d8b10ff4c6d1a9d6b11f02a08463ad5fd9fc6b1b
   FirebaseAnalytics: b9284f9fff10157a843e0422e908711f7bf3b9f2
   FirebaseCore: 534544dd98cabcf4bf8598d88ec683b02319a528
-  FirebaseCoreExtension: 47720bb330d7041047c0935a34a3a4b92f818074
-  FirebaseCoreInternal: 2cf9202e226e3f78d2bf6d56c472686b935bfb7f
+  FirebaseCoreExtension: 62b201498aa10535801cdf3448c7f4db5e24ed80
+  FirebaseCoreInternal: 8eb002e564b533bdcf1ba011f33f2b5c10e2ed4a
   FirebaseCrashlytics: d78651ad7db206ef98269e103ac38d69d569200a
-  FirebaseInstallations: 9387bf15abfc69a714f54e54f74a251264fdb79b
+  FirebaseInstallations: e842042ec6ac1fd2e37d7706363ebe7f662afea4
   FirebaseRemoteConfig: 94ab72cd7aa865b6226ee527b1fa5c4f961a4e7b
-  FirebaseSessions: 49f39e5c10e3f9fdd38d01b748329bae2a2fa8ed
-  FirebaseSharedSwift: e8fe8d63d434266a1b2c7f02807d5b64462e1851
+  FirebaseSessions: f90fe9212ee2818641eda051c0835c9c4e30d9ae
+  FirebaseSharedSwift: 62e248642c0582324d0390706cadd314687c116b
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_background_service_ios: e30e0d3ee69e4cee66272d0c78eacd48c2e94aac
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
@@ -354,10 +354,10 @@ SPEC CHECKSUMS:
   PromisesSwift: 28dca69a9c40779916ac2d6985a0192a5cb4a265
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
-  url_launcher_ios: 68d46cc9766d0c41dbdc884310529557e3cd7a86
+  url_launcher_ios: bf5ce03e0e2088bad9cc378ea97fa0ed5b49673b
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
   webview_flutter_wkwebview: 2e2d318f21a5e036e2c3f26171342e95908bd60a
 
 PODFILE CHECKSUM: a57f30d18f102dd3ce366b1d62a55ecbef2158e5
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.14.2

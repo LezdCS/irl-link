@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/store_controller.dart';
 import 'package:irllink/src/presentation/events/settings_events.dart';
 
 import '../../domain/entities/twitch_user.dart';
@@ -221,7 +222,7 @@ class SettingsViewController extends GetxController {
   }
 
   void purchase() async {
-    final ProductDetails productDetails = homeViewController.products[0];
+    final ProductDetails productDetails = Get.find<StoreController>().products[0];
     final PurchaseParam purchaseParam =
         PurchaseParam(productDetails: productDetails);
     InAppPurchase.instance.buyNonConsumable(purchaseParam: purchaseParam);

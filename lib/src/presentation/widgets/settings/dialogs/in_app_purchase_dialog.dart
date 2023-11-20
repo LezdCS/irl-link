@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/presentation/controllers/store_controller.dart';
 
 import '../../../controllers/settings_view_controller.dart';
 
@@ -7,12 +8,7 @@ Widget inAppPurchaseDialog(
   BuildContext context,
   SettingsViewController controller,
 ) {
-  String price = controller.homeViewController.products
-      .firstWhere(
-        (element) => element.id == "irl_premium_subscription",
-      )
-      .price;
-
+  String price = Get.find<StoreController>().getSubscriptionPrice();
   return AlertDialog(
     contentPadding: EdgeInsets.zero,
     content: Container(

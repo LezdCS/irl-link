@@ -4,11 +4,11 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
 import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/store_controller.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:irllink/src/presentation/widgets/tabs/obs_tab_view.dart';
@@ -59,12 +59,6 @@ class HomeViewController extends GetxController
   Timer? timerKeepSpeakerOn;
   AudioPlayer audioPlayer = AudioPlayer();
 
-  late StreamSubscription<List<PurchaseDetails>> subscription;
-  List<ProductDetails> products = [];
-  RxBool purchasePending = false.obs;
-  RxList<PurchaseDetails> purchases = <PurchaseDetails>[].obs;
-  RxBool storeFound = false.obs;
-
   RxBool displayDashboard = false.obs;
 
   RxList<ChatView> channels = <ChatView>[].obs;
@@ -103,14 +97,11 @@ class HomeViewController extends GetxController
                 }),
       );
     }
-    await getStore();
     await getSettings();
-    await getStoreProducts();
 
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
-    initListeningStorePurchase();
     super.onInit();
   }
 
@@ -127,7 +118,7 @@ class HomeViewController extends GetxController
     TwitchTabView twitchPage = const TwitchTabView();
     tabElements.add(twitchPage);
 
-    bool isSubscribed = purchases.firstWhereOrNull(
+    bool isSubscribed = Get.find<StoreController>().purchases.firstWhereOrNull(
           (element) => element.productID == "irl_premium_subscription",
         ) !=
         null;
@@ -165,8 +156,8 @@ class HomeViewController extends GetxController
     tabController = TabController(length: tabElements.length, vsync: this);
     if (tabIndex.value > tabElements.length - 1) {
       tabIndex.value = 0;
-      tabController.animateTo(tabIndex.value);
     }
+    tabController.animateTo(tabIndex.value);
   }
 
   void generateChats() {
@@ -378,103 +369,5 @@ class HomeViewController extends GetxController
       //prevent the queue to continue if we come back from settings and turn off TTS
       flutterTts.stop();
     }
-  }
-
-  Future<void> getStore() async {
-    final bool available = await InAppPurchase.instance.isAvailable();
-    if (available) {
-      storeFound.value = true;
-    }
-  }
-
-  void initListeningStorePurchase() async {
-    final Stream purchaseUpdated = InAppPurchase.instance.purchaseStream;
-    subscription = purchaseUpdated.listen((purchaseDetailsList) {
-      listenToPurchaseUpdated(purchaseDetailsList);
-    }, onDone: () {
-      subscription.cancel();
-    }, onError: (error) {
-      // handle error here.
-    }) as StreamSubscription<List<PurchaseDetails>>;
-
-    try {
-      await InAppPurchase.instance.restorePurchases();
-    } catch (error) {
-      debugPrint('not logged to any store');
-    }
-  }
-
-  void listenToPurchaseUpdated(
-      List<PurchaseDetails> purchaseDetailsList) async {
-    for (var purchaseDetails in purchaseDetailsList) {
-      if (purchaseDetails.status == PurchaseStatus.pending) {
-        purchasePending.value = true;
-      } else {
-        if (purchaseDetails.status == PurchaseStatus.error) {
-          purchasePending.value = false;
-          Get.snackbar(
-            "Error",
-            purchaseDetails.error!.message,
-            snackPosition: SnackPosition.TOP,
-            icon: const Icon(Icons.error_outline, color: Colors.red),
-            borderWidth: 1,
-            borderColor: Colors.red,
-          );
-        } else if (purchaseDetails.status == PurchaseStatus.purchased ||
-            purchaseDetails.status == PurchaseStatus.restored) {
-          bool valid = await verifyPurchase(purchaseDetails);
-          if (valid) {
-            deliverProduct(purchaseDetails);
-          } else {
-            Get.snackbar(
-              "Error",
-              "Invalid purchase",
-              snackPosition: SnackPosition.BOTTOM,
-              icon: const Icon(Icons.error_outline, color: Colors.red),
-              borderWidth: 1,
-              borderColor: Colors.red,
-            );
-            purchasePending.value = false;
-          }
-        }
-        if (purchaseDetails.pendingCompletePurchase) {
-          await InAppPurchase.instance.completePurchase(purchaseDetails);
-        }
-      }
-    }
-  }
-
-  Future<bool> verifyPurchase(PurchaseDetails purchaseDetails) {
-    // IMPORTANT!! Always verify a purchase before delivering the product.
-    // For the purpose of an example, we directly return true.
-    return Future<bool>.value(true);
-  }
-
-  Future<void> deliverProduct(PurchaseDetails purchaseDetails) async {
-    purchases.add(purchaseDetails);
-    getSettings();
-    purchasePending.value = false;
-
-    if (purchaseDetails.status == PurchaseStatus.purchased) {
-      Get.back();
-      Get.snackbar(
-        "Success",
-        "Thanks for your purchase, enjoy your premium subscription!",
-        snackPosition: SnackPosition.BOTTOM,
-        icon: const Icon(Icons.check, color: Colors.green),
-        borderWidth: 1,
-        borderColor: Colors.green,
-      );
-    }
-  }
-
-  Future<void> getStoreProducts() async {
-    const Set<String> kIds = <String>{'irl_premium_subscription'};
-    final ProductDetailsResponse response =
-        await InAppPurchase.instance.queryProductDetails(kIds);
-    if (response.notFoundIDs.isNotEmpty) {
-      // Handle the error.
-    }
-    products = response.productDetails;
   }
 }
