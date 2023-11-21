@@ -105,7 +105,7 @@ Widget inAppPurchaseDialog(
               const SizedBox(width: 10),
               TextButton(
                 onPressed: () {
-                  controller.purchase();
+                  controller.storeController.purchase();
                 },
                 style: TextButton.styleFrom(
                   textStyle: const TextStyle(fontSize: 12),

@@ -76,7 +76,7 @@ class Tts extends StatelessWidget {
                       ),
                     ),
                     DropdownButton(
-                      value: controller.ttsLanguages.firstWhere(
+                      value: controller.ttsController.ttsLanguages.firstWhere(
                         (element) =>
                             element ==
                             controller.homeViewController.settings.value
@@ -93,11 +93,11 @@ class Tts extends StatelessWidget {
                         controller.saveSettings();
                       },
                       items: List.generate(
-                        controller.ttsLanguages.length,
+                        controller.ttsController.ttsLanguages.length,
                         (index) => DropdownMenuItem(
-                          value: controller.ttsLanguages[index],
+                          value: controller.ttsController.ttsLanguages[index],
                           child: Text(
-                            controller.ttsLanguages[index],
+                            controller.ttsController.ttsLanguages[index],
                           ),
                         ),
                       ),
@@ -117,7 +117,7 @@ class Tts extends StatelessWidget {
                             ),
                           ),
                           DropdownButton(
-                            value: controller.ttsVoices.firstWhere(
+                            value: controller.ttsController.ttsVoices.firstWhere(
                               (element) =>
                                   element["name"] ==
                                   controller.homeViewController.settings.value
@@ -138,11 +138,11 @@ class Tts extends StatelessWidget {
                               controller.saveSettings();
                             },
                             items: List.generate(
-                              controller.ttsVoices.length,
+                              controller.ttsController.ttsVoices.length,
                               (index) => DropdownMenuItem(
-                                value: controller.ttsVoices[index],
+                                value: controller.ttsController.ttsVoices[index],
                                 child:
-                                    Text(controller.ttsVoices[index]["name"]),
+                                    Text(controller.ttsController.ttsVoices[index]["name"]),
                               ),
                             ),
                           ),

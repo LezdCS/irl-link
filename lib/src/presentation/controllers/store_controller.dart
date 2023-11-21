@@ -136,4 +136,11 @@ class StoreController extends GetxController {
       );
     }
   }
+
+  void purchase() async {
+    final ProductDetails productDetails = products[0];
+    final PurchaseParam purchaseParam =
+        PurchaseParam(productDetails: productDetails);
+    InAppPurchase.instance.buyNonConsumable(purchaseParam: purchaseParam);
+  }
 }

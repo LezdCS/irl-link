@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
@@ -10,6 +8,7 @@ import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/store_controller.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/tts_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:irllink/src/presentation/widgets/tabs/obs_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/tabs/twitch_tab_view.dart';
@@ -68,17 +67,10 @@ class HomeViewController extends GetxController
   late TabController chatTabsController;
   Rxn<ChatMessage> selectedMessage = Rxn<ChatMessage>();
 
-  late FlutterTts flutterTts;
-
   @override
   void onInit() async {
     chatInputController = TextEditingController();
     chatTabsController = TabController(length: 0, vsync: this);
-
-    flutterTts = FlutterTts();
-    if (Platform.isAndroid) {
-      flutterTts.setEngine(flutterTts.getDefaultEngine.toString());
-    }
 
     if (Get.arguments != null) {
       TwitchTabView twitchPage = const TwitchTabView();
@@ -112,6 +104,23 @@ class HomeViewController extends GetxController
     super.onClose();
   }
 
+  void lazyPutChat(String channel) {
+    Get.lazyPut(
+      () => ChatViewController(
+        homeEvents: HomeEvents(
+          twitchUseCase: TwitchUseCase(
+            twitchRepository: TwitchRepositoryImpl(),
+          ),
+          settingsUseCase: SettingsUseCase(
+            settingsRepository: SettingsRepositoryImpl(),
+          ),
+        ),
+        channel: channel,
+      ),
+      tag: channel,
+    );
+  }
+
   Future generateTabs() async {
     tabElements.clear();
 
@@ -119,8 +128,8 @@ class HomeViewController extends GetxController
     tabElements.add(twitchPage);
 
     bool isSubscribed = Get.find<StoreController>().purchases.firstWhereOrNull(
-          (element) => element.productID == "irl_premium_subscription",
-        ) !=
+              (element) => element.productID == "irl_premium_subscription",
+            ) !=
         null;
     if ((twitchData == null && isSubscribed) ||
         isSubscribed &&
@@ -191,20 +200,7 @@ class HomeViewController extends GetxController
     for (String chat in settings.value.chatSettings!.chatsJoined) {
       if (channels.firstWhereOrNull((channel) => channel.channel == chat) ==
           null) {
-        Get.lazyPut(
-          () => ChatViewController(
-            homeEvents: HomeEvents(
-              twitchUseCase: TwitchUseCase(
-                twitchRepository: TwitchRepositoryImpl(),
-              ),
-              settingsUseCase: SettingsUseCase(
-                settingsRepository: SettingsRepositoryImpl(),
-              ),
-            ),
-            channel: chat,
-          ),
-          tag: chat,
-        );
+        lazyPutChat(chat);
         channels.add(
           ChatView(
             channel: chat,
@@ -218,20 +214,7 @@ class HomeViewController extends GetxController
     if (joinSelfChannel) {
       if (channels.firstWhereOrNull((channel) => channel.channel == self) ==
           null) {
-        Get.lazyPut(
-          () => ChatViewController(
-            homeEvents: HomeEvents(
-              twitchUseCase: TwitchUseCase(
-                twitchRepository: TwitchRepositoryImpl(),
-              ),
-              settingsUseCase: SettingsUseCase(
-                settingsRepository: SettingsRepositoryImpl(),
-              ),
-            ),
-            channel: self,
-          ),
-          tag: self,
-        );
+        lazyPutChat(self);
         channels.insert(0, ChatView(channel: self));
       }
     } else {
@@ -321,7 +304,7 @@ class HomeViewController extends GetxController
       await generateTabs();
       Get.find<DashboardController>();
       generateChats();
-      initTts(settings.value);
+      Get.find<TtsController>().initTts(settings.value);
       if (!settings.value.generalSettings!.isDarkMode) {
         Get.changeThemeMode(ThemeMode.light);
       }
@@ -340,34 +323,6 @@ class HomeViewController extends GetxController
       Get.updateLocale(locale);
       splitViewController?.weights =
           settings.value.generalSettings!.splitViewWeights;
-    }
-  }
-
-  void initTts(Settings settings) async {
-    //  The following setup allows background music and in-app audio session to continue simultaneously:
-    await flutterTts.setIosAudioCategory(
-        IosTextToSpeechAudioCategory.ambient,
-        [
-          IosTextToSpeechAudioCategoryOptions.allowBluetooth,
-          IosTextToSpeechAudioCategoryOptions.allowBluetoothA2DP,
-          IosTextToSpeechAudioCategoryOptions.mixWithOthers
-        ],
-        IosTextToSpeechAudioMode.voicePrompt);
-
-    await flutterTts.awaitSpeakCompletion(true);
-    await flutterTts.setLanguage(settings.ttsSettings!.language);
-    await flutterTts.setSpeechRate(settings.ttsSettings!.rate);
-    await flutterTts.setVolume(settings.ttsSettings!.volume);
-    await flutterTts.setPitch(settings.ttsSettings!.pitch);
-    await flutterTts.setVoice(settings.ttsSettings!.voice);
-
-    if (Platform.isAndroid) {
-      await flutterTts.setQueueMode(1);
-    }
-
-    if (!settings.ttsSettings!.ttsEnabled) {
-      //prevent the queue to continue if we come back from settings and turn off TTS
-      flutterTts.stop();
     }
   }
 }

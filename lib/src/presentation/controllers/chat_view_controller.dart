@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/domain/entities/twitch_credentials.dart';
+import 'package:irllink/src/presentation/controllers/tts_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 
@@ -184,7 +185,7 @@ class ChatViewController extends GetxController
 
   @override
   void onClose() {
-    homeViewController.flutterTts.stop();
+    Get.find<TtsController>().flutterTts.stop();
     chatDemoTimer?.cancel();
     super.onDelete;
     super.onClose();
@@ -327,6 +328,6 @@ class ChatViewController extends GetxController
     if (homeViewController.settings.value.ttsSettings!.ttsMuteViewerName) {
       text = message.message;
     }
-    homeViewController.flutterTts.speak(text);
+    Get.find<TtsController>().flutterTts.speak(text);
   }
 }
