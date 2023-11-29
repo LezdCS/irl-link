@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/twitch_chat_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/chat_message/event_container.dart';
 import 'package:irllink/src/presentation/widgets/chat_message/message_container.dart';
 import 'package:irllink/src/presentation/widgets/chat_message/moderation_bottom_sheet.dart';

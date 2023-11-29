@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../controllers/chat_view_controller.dart';
+import '../../controllers/twitch_chat_view_controller.dart';
 
 class ModerationBottomSheet extends StatelessWidget {
   final TwitchChatViewController controller;

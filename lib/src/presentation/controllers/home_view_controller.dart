@@ -24,7 +24,7 @@ import '../../domain/usecases/twitch_usecase.dart';
 import '../widgets/twitch_chat_view.dart';
 import '../widgets/tabs/streamelements_tab_view.dart';
 import '../widgets/web_page_view.dart';
-import 'chat_view_controller.dart';
+import 'twitch_chat_view_controller.dart';
 
 class HomeViewController extends GetxController
     with GetTickerProviderStateMixin {

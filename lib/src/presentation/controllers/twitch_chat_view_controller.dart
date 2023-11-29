@@ -13,7 +13,10 @@ import 'home_view_controller.dart';
 
 class TwitchChatViewController extends GetxController
     with GetTickerProviderStateMixin {
-  TwitchChatViewController({required this.homeEvents, required this.channel});
+  TwitchChatViewController({
+    required this.homeEvents,
+    required this.channel,
+  });
 
   final HomeEvents homeEvents;
   final String channel;
