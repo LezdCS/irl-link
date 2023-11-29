@@ -8,6 +8,7 @@ import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/store_controller.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/twitch_chat_view.dart';
 import 'package:irllink/src/presentation/widgets/dashboard.dart';
@@ -137,7 +138,7 @@ class HomeView extends GetView<HomeViewController> {
                           child: const Dashboard(),
                         ),
                         Visibility(
-                          visible: controller.purchasePending.value,
+                          visible: Get.find<StoreController>().purchasePending.value,
                           child: CircularProgressIndicator(
                             color: context.theme.colorScheme.tertiary,
                           ),
@@ -460,13 +461,6 @@ class HomeView extends GetView<HomeViewController> {
                 if (controller.selectedChatIndex != null) {
                   controller.chatTabsController
                       .animateTo(controller.selectedChatIndex!);
-                }
-                if (controller.tabIndex.value >
-                    controller.tabElements.length - 1) {
-                  controller.tabIndex.value = 0;
-                  controller.tabController.animateTo(controller.tabIndex.value);
-                } else {
-                  controller.tabController.animateTo(controller.tabIndex.value);
                 }
               },
               child: Icon(

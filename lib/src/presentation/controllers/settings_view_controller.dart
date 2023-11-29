@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/store_controller.dart';
+import 'package:irllink/src/presentation/controllers/tts_controller.dart';
 import 'package:irllink/src/presentation/events/settings_events.dart';
 
 import '../../domain/entities/twitch/twitch_user.dart';
@@ -33,18 +33,20 @@ class SettingsViewController extends GetxController {
   RxBool obsWebsocketUrlShow = false.obs;
   RxBool seJwtShow = false.obs;
 
-  RxList ttsLanguages = [].obs;
-  RxList ttsVoices = [].obs;
   late TextEditingController addTtsIgnoredUsersController;
   late TextEditingController addTtsIgnoredPrefixsController;
   late TextEditingController addTtsAllowedPrefixsController;
   Rx<Color> nothingJustToRefreshDialog = Colors.grey.obs;
 
   late HomeViewController homeViewController;
+  late TtsController ttsController;
+  late StoreController storeController;
 
   @override
   void onInit() {
     homeViewController = Get.find<HomeViewController>();
+    ttsController = Get.find<TtsController>();
+    storeController = Get.find<StoreController>();
 
     obsWebsocketUrlFieldController = TextEditingController();
     streamElementsFieldController = TextEditingController();
@@ -57,8 +59,6 @@ class SettingsViewController extends GetxController {
     addTtsAllowedPrefixsController = TextEditingController();
 
     usernamesHiddenUsers = <String>[].obs;
-    getTtsLanguages();
-    getTtsVoices();
     super.onInit();
   }
 
@@ -202,28 +202,5 @@ class SettingsViewController extends GetxController {
     for (var user in users) {
       usernamesHiddenUsers.add(user.displayName);
     }
-  }
-
-  void getTtsLanguages() {
-    FlutterTts flutterTts = FlutterTts();
-    flutterTts.getLanguages.then((value) => {
-          ttsLanguages.value = value,
-          ttsLanguages.sort((a, b) => a.compareTo(b))
-        });
-  }
-
-  void getTtsVoices() {
-    FlutterTts flutterTts = FlutterTts();
-    flutterTts.getVoices.then((value) => {
-          ttsVoices.value = value,
-          ttsVoices.sort((a, b) => a['name'].compareTo(b['name']))
-        });
-  }
-
-  void purchase() async {
-    final ProductDetails productDetails = homeViewController.products[0];
-    final PurchaseParam purchaseParam =
-        PurchaseParam(productDetails: productDetails);
-    InAppPurchase.instance.buyNonConsumable(purchaseParam: purchaseParam);
   }
 }

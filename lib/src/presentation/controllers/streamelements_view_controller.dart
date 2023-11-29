@@ -42,9 +42,7 @@ class StreamelementsViewController extends GetxController
     activitiesScrollController = ScrollController();
     songRequestScrollController = ScrollController();
 
-    homeViewController.homeEvents
-        .getSettings()
-        .then((value) => applySettings());
+    streamelementsEvents.getSettings().then((value) => applySettings());
 
     super.onInit();
   }
@@ -279,7 +277,7 @@ class StreamelementsViewController extends GetxController
       case "tip":
         if (!homeViewController.settings.value.streamElementsSettings!
             .showDonationActivity) return;
-            debugPrint(event.toString());
+        debugPrint(event.toString());
         SeActivity activity = SeActivity(
           id: event["_id"],
           channel: event["channel"],
