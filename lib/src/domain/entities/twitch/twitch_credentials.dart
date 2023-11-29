@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
-import 'package:irllink/src/domain/entities/twitch_decoded_idtoken.dart';
-import 'package:irllink/src/domain/entities/twitch_user.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_decoded_idtoken.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
 
 class TwitchCredentials extends Equatable {
   final String accessToken;

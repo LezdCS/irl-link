@@ -8,19 +8,19 @@ import 'package:get_storage/get_storage.dart';
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/utils/constants.dart';
-import 'package:irllink/src/data/entities/twitch_credentials_dto.dart';
-import 'package:irllink/src/data/entities/twitch_decoded_idtoken_dto.dart';
-import 'package:irllink/src/data/entities/twitch_stream_infos_dto.dart';
-import 'package:irllink/src/data/entities/twitch_user_dto.dart';
-import 'package:irllink/src/domain/entities/twitch_credentials.dart';
-import 'package:irllink/src/domain/entities/twitch_poll.dart';
-import 'package:irllink/src/domain/entities/twitch_stream_infos.dart';
+import 'package:irllink/src/data/entities/twitch/twitch_credentials_dto.dart';
+import 'package:irllink/src/data/entities/twitch/twitch_decoded_idtoken_dto.dart';
+import 'package:irllink/src/data/entities/twitch/twitch_stream_infos_dto.dart';
+import 'package:irllink/src/data/entities/twitch/twitch_user_dto.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
 import 'package:irllink/src/domain/repositories/twitch_repository.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:quiver/iterables.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 
-import '../entities/twitch_poll_dto.dart';
+import '../entities/twitch/twitch_poll_dto.dart';
 
 class TwitchRepositoryImpl extends TwitchRepository {
   @override

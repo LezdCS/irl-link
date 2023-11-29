@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/utils/constants.dart';
-import 'package:irllink/src/domain/entities/twitch_credentials.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 
 import 'home_view_controller.dart';
 
-class ChatViewController extends GetxController
+class TwitchChatViewController extends GetxController
     with GetTickerProviderStateMixin {
-  ChatViewController({required this.homeEvents, required this.channel});
+  TwitchChatViewController({required this.homeEvents, required this.channel});
 
   final HomeEvents homeEvents;
   final String channel;

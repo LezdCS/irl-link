@@ -6,7 +6,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
-import 'package:irllink/src/domain/entities/twitch_credentials.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
@@ -22,7 +22,7 @@ import '../../data/repositories/settings_repository_impl.dart';
 import '../../data/repositories/twitch_repository_impl.dart';
 import '../../domain/usecases/settings_usecase.dart';
 import '../../domain/usecases/twitch_usecase.dart';
-import '../widgets/chat_view.dart';
+import '../widgets/twitch_chat_view.dart';
 import '../widgets/tabs/streamelements_tab_view.dart';
 import '../widgets/web_page_view.dart';
 import 'chat_view_controller.dart';
@@ -67,7 +67,7 @@ class HomeViewController extends GetxController
 
   RxBool displayDashboard = false.obs;
 
-  RxList<ChatView> channels = <ChatView>[].obs;
+  RxList<TwitchChatView> channels = <TwitchChatView>[].obs;
   TwitchChat? selectedChat;
   int? selectedChatIndex;
 
@@ -176,9 +176,9 @@ class HomeViewController extends GetxController
 
     String self = twitchData!.twitchUser.login;
 
-    RxList<ChatView> tempChannels = RxList<ChatView>.from(channels);
+    RxList<TwitchChatView> tempChannels = RxList<TwitchChatView>.from(channels);
     for (var temp in tempChannels) {
-      ChatView view =
+      TwitchChatView view =
           channels.firstWhere((element) => element.channel == temp.channel);
       String channel = view.channel;
       if (channel == self) continue;
@@ -188,20 +188,20 @@ class HomeViewController extends GetxController
 
       if (selectedChat?.channel == channel) {
         selectedChat = channels.isNotEmpty
-            ? Get.find<ChatViewController>(tag: channels[0].channel).twitchChat
+            ? Get.find<TwitchChatViewController>(tag: channels[0].channel).twitchChat
             : null;
         selectedChatIndex = channels.isNotEmpty ? 0 : null;
       }
 
       channels.remove(view);
-      Get.delete<ChatViewController>(tag: channel);
+      Get.delete<TwitchChatViewController>(tag: channel);
     }
 
     for (String chat in settings.value.chatSettings!.chatsJoined) {
       if (channels.firstWhereOrNull((channel) => channel.channel == chat) ==
           null) {
         Get.lazyPut(
-          () => ChatViewController(
+          () => TwitchChatViewController(
             homeEvents: HomeEvents(
               twitchUseCase: TwitchUseCase(
                 twitchRepository: TwitchRepositoryImpl(),
@@ -215,7 +215,7 @@ class HomeViewController extends GetxController
           tag: chat,
         );
         channels.add(
-          ChatView(
+          TwitchChatView(
             channel: chat,
           ),
         );
@@ -228,7 +228,7 @@ class HomeViewController extends GetxController
       if (channels.firstWhereOrNull((channel) => channel.channel == self) ==
           null) {
         Get.lazyPut(
-          () => ChatViewController(
+          () => TwitchChatViewController(
             homeEvents: HomeEvents(
               twitchUseCase: TwitchUseCase(
                 twitchRepository: TwitchRepositoryImpl(),
@@ -241,14 +241,14 @@ class HomeViewController extends GetxController
           ),
           tag: self,
         );
-        channels.insert(0, ChatView(channel: self));
+        channels.insert(0, TwitchChatView(channel: self));
       }
     } else {
       channels.remove(channels.firstWhereOrNull((c) => c.channel == self));
-      Get.delete<ChatViewController>(tag: self);
+      Get.delete<TwitchChatViewController>(tag: self);
       if (selectedChat?.channel == self) {
         selectedChat = channels.isNotEmpty
-            ? Get.find<ChatViewController>(tag: channels[0].channel).twitchChat
+            ? Get.find<TwitchChatViewController>(tag: channels[0].channel).twitchChat
             : null;
         selectedChatIndex = channels.isNotEmpty ? 0 : null;
       }

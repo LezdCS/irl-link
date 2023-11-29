@@ -6,7 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../controllers/chat_view_controller.dart';
 
 class ModerationBottomSheet extends StatelessWidget {
-  final ChatViewController controller;
+  final TwitchChatViewController controller;
   final double width;
 
   const ModerationBottomSheet({

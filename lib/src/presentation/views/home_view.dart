@@ -4,12 +4,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
-import 'package:irllink/src/domain/entities/twitch_poll.dart';
-import 'package:irllink/src/domain/entities/twitch_prediction.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
-import 'package:irllink/src/presentation/widgets/chat_view.dart';
+import 'package:irllink/src/presentation/widgets/twitch_chat_view.dart';
 import 'package:irllink/src/presentation/widgets/dashboard.dart';
 import 'package:irllink/src/presentation/widgets/emote_picker_view.dart';
 import 'package:irllink/src/presentation/widgets/hype_train.dart';
@@ -447,10 +447,10 @@ class HomeView extends GetView<HomeViewController> {
                 await controller.getSettings();
                 if (controller.twitchData != null) {
                   for (var chan in controller.channels) {
-                    if (Get.isRegistered<ChatViewController>(
+                    if (Get.isRegistered<TwitchChatViewController>(
                         tag: chan.channel)) {
-                      ChatViewController c =
-                          Get.find<ChatViewController>(tag: chan.channel);
+                      TwitchChatViewController c =
+                          Get.find<TwitchChatViewController>(tag: chan.channel);
                       c.applySettings();
                     }
                   }
@@ -508,10 +508,10 @@ class HomeView extends GetView<HomeViewController> {
       indicatorWeight: 0.01,
       dividerColor: Colors.transparent,
       onTap: (int i) {
-        if (Get.isRegistered<ChatViewController>(
+        if (Get.isRegistered<TwitchChatViewController>(
             tag: controller.channels[i].channel)) {
-          ChatViewController c =
-              Get.find<ChatViewController>(tag: controller.channels[i].channel);
+          TwitchChatViewController c =
+              Get.find<TwitchChatViewController>(tag: controller.channels[i].channel);
           c.scrollToBottom();
           controller.selectedChat = c.twitchChat;
         }
@@ -551,7 +551,7 @@ class HomeView extends GetView<HomeViewController> {
 class KeepAlive extends StatefulWidget {
   const KeepAlive({super.key, required this.chat});
 
-  final ChatView chat;
+  final TwitchChatView chat;
 
   @override
   State<KeepAlive> createState() => _KeepAlive();

@@ -4,11 +4,11 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/data/entities/twitch_poll_dto.dart';
-import 'package:irllink/src/data/entities/twitch_prediction_dto.dart';
+import 'package:irllink/src/data/entities/twitch/twitch_poll_dto.dart';
+import 'package:irllink/src/data/entities/twitch/twitch_prediction_dto.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_hype_train.dart';
-import 'package:irllink/src/domain/entities/twitch_poll.dart';
-import 'package:irllink/src/domain/entities/twitch_prediction.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 import 'package:web_socket_channel/io.dart';
 

@@ -7,8 +7,8 @@ import 'package:irllink/src/presentation/widgets/chat_message/moderation_bottom_
 import 'package:twitch_chat/twitch_chat.dart';
 import 'alert_message_view.dart';
 
-class ChatView extends StatelessWidget {
-  const ChatView({
+class TwitchChatView extends StatelessWidget {
+  const TwitchChatView({
     super.key,
     required this.channel,
   });
@@ -17,9 +17,9 @@ class ChatView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ChatViewController? controller;
-    if (Get.isRegistered<ChatViewController>(tag: channel)) {
-      controller = Get.find<ChatViewController>(tag: channel);
+    TwitchChatViewController? controller;
+    if (Get.isRegistered<TwitchChatViewController>(tag: channel)) {
+      controller = Get.find<TwitchChatViewController>(tag: channel);
     }
 
     final double height = MediaQuery.of(context).size.height;

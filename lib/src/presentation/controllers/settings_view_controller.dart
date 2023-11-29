@@ -6,7 +6,7 @@ import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/events/settings_events.dart';
 
-import '../../domain/entities/twitch_user.dart';
+import '../../domain/entities/twitch/twitch_user.dart';
 
 class SettingsViewController extends GetxController {
   SettingsViewController({required this.settingsEvents});

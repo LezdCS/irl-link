@@ -1,4 +1,5 @@
-import 'package:irllink/src/domain/entities/twitch_decoded_idtoken.dart';
+
+import 'package:irllink/src/domain/entities/twitch/twitch_decoded_idtoken.dart';
 
 class TwitchDecodedIdTokenDTO extends TwitchDecodedIdToken {
   const TwitchDecodedIdTokenDTO({

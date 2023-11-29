@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/utils/convert_to_device_timezone.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_hype_train.dart';
-import 'package:irllink/src/domain/entities/twitch_prediction.dart';
-import 'package:irllink/src/domain/entities/twitch_stream_infos.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 
 import '../../core/utils/twitch_event_sub.dart';
-import '../../domain/entities/twitch_poll.dart';
+import '../../domain/entities/twitch/twitch_poll.dart';
 import 'home_view_controller.dart';
 
 class TwitchTabViewController extends GetxController {
