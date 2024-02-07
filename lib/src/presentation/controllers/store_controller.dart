@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
@@ -24,7 +25,7 @@ class StoreController extends GetxController {
 
   //Function isSubscribed
   bool isSubscribed() {
-    return purchases.firstWhereOrNull(
+    return kDebugMode || purchases.firstWhereOrNull(
           (element) => element.productID == kIds.first,
         ) !=
         null;

@@ -107,6 +107,7 @@ class StreamelementsViewController extends GetxController
     socket!.on('connect', (data) => onConnect());
     socket!.on('disconnect', (data) => onDisconnect());
     socket!.on('authenticated', (data) => onAuthenticated(data));
+
     socket!.on(
       'event:test',
       (data) => {
@@ -129,6 +130,42 @@ class StreamelementsViewController extends GetxController
         // debugPrint(data.toString())
       },
     );
+   
+    socket!.on(
+      'songrequest:song:next',
+      (data) => {
+        debugPrint(data.toString())
+      },
+    );
+
+    socket!.on(
+      'songrequest:song:previous',
+      (data) => {
+        debugPrint(data.toString())
+      },
+    );
+
+    socket!.on(
+      'songrequest:queue:add',
+      (data) => {
+        debugPrint(data.toString())
+      },
+    );
+
+    socket!.on(
+      'songrequest:queue:remove',
+      (data) => {
+        debugPrint(data.toString())
+      },
+    );
+
+    socket!.on(
+      'songrequest:queue:clear',
+      (data) => {
+        debugPrint(data.toString())
+      },
+    );
+
   }
 
   Future<void> onConnect() async {

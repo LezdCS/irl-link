@@ -31,10 +31,11 @@ class HomeView extends GetView<HomeViewController> {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
 
-    return WillPopScope(
-      onWillPop: () async {
-        MoveToBackground.moveTaskToBack();
-        return false;
+    return PopScope(
+      onPopInvoked: (bool invoked) async {
+        if(invoked){
+          MoveToBackground.moveTaskToBack();
+        }
       },
       child: AnnotatedRegion(
         value: SystemUiOverlayStyle(

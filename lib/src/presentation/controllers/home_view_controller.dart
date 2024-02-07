@@ -127,10 +127,7 @@ class HomeViewController extends GetxController
     TwitchTabView twitchPage = const TwitchTabView();
     tabElements.add(twitchPage);
 
-    bool isSubscribed = Get.find<StoreController>().purchases.firstWhereOrNull(
-              (element) => element.productID == "irl_premium_subscription",
-            ) !=
-        null;
+    bool isSubscribed = Get.find<StoreController>().isSubscribed();
     if ((twitchData == null && isSubscribed) ||
         isSubscribed &&
             settings.value.streamElementsAccessToken != null &&
