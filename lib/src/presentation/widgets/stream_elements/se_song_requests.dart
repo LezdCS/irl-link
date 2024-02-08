@@ -25,7 +25,7 @@ class SeSongRequests extends GetView {
                 Wrap(
                   children: [
                     const Icon(Icons.skip_previous),
-                    const Icon(Icons.pause), //Icon(Icons.play_arrow_outlined),
+                    controller.isPlaying.value ? const Icon(Icons.pause) : const Icon(Icons.play_arrow_outlined),
                     InkWell(
                       onTap: () {
                         controller.nextSong();
@@ -52,9 +52,9 @@ class SeSongRequests extends GetView {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            controller.songRequestQueue.isNotEmpty
-                ? _songRow(context, controller.songRequestQueue.first)
-                : const Text("No song request in queue."),
+            controller.currentSong.value != null
+                ? _songRow(context, controller.currentSong.value!)
+                : const Text("No song playing."),
             const Padding(
               padding: EdgeInsets.only(bottom: 15),
             ),
@@ -80,9 +80,9 @@ class SeSongRequests extends GetView {
               child: ListView.builder(
                 shrinkWrap: true,
                 controller: controller.songRequestScrollController,
-                itemCount: controller.songRequestQueue.length - 1,
+                itemCount: controller.songRequestQueue.length,
                 itemBuilder: (BuildContext context, int index) {
-                  SeSong song = controller.songRequestQueue[index + 1];
+                  SeSong song = controller.songRequestQueue[index];
                   return _songRow(context, song);
                 },
               ),
@@ -146,9 +146,15 @@ class SeSongRequests extends GetView {
                       ),
                     ),
                     TextSpan(
-                      text: song.duration,
+                      text: song.duration.toString(),
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
+                        color: Theme.of(context).textTheme.bodyLarge!.color,
+                      ),
+                    ),
+                    TextSpan(
+                      text: "s",
+                      style: TextStyle(
                         color: Theme.of(context).textTheme.bodyLarge!.color,
                       ),
                     ),

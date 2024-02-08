@@ -22,8 +22,11 @@ class StreamelementsViewController extends GetxController
   RxList<SeActivity> activities = <SeActivity>[].obs;
   late ScrollController activitiesScrollController;
 
+  // Song Requests
   RxList<SeSong> songRequestQueue = <SeSong>[].obs;
+  Rxn<SeSong> currentSong = Rxn<SeSong>();
   late ScrollController songRequestScrollController;
+  RxBool isPlaying = false.obs;
 
   RxList<SeOverlay> overlays = <SeOverlay>[].obs;
 
@@ -38,7 +41,7 @@ class StreamelementsViewController extends GetxController
   Future<void> onInit() async {
     homeViewController = Get.find<HomeViewController>();
 
-    tabController = TabController(length: 1, vsync: this);
+    tabController = TabController(length: 2, vsync: this);
     activitiesScrollController = ScrollController();
     songRequestScrollController = ScrollController();
 
@@ -81,17 +84,20 @@ class StreamelementsViewController extends GetxController
   }
 
   void nextSong() {
-    if (songRequestQueue.isNotEmpty) {
-      songRequestQueue.removeAt(0);
-    }
+    //https://api.streamelements.com/kappa/v2/songrequest/userID/skip
   }
 
   void removeSong(SeSong song) {
-    songRequestQueue.remove(song);
+    // https://api.streamelements.com/kappa/v2/songrequest/userID/queue/songId
+    // Request Method:
+    // DELETE
   }
 
   void resetQueue() {
-    songRequestQueue.clear();
+    // Request URL:
+    // https://api.streamelements.com/kappa/v2/songrequest/userID/queue
+    // Request Method:
+    // DELETE
   }
 
   /// Connect to WebSocket
@@ -130,42 +136,43 @@ class StreamelementsViewController extends GetxController
         // debugPrint(data.toString())
       },
     );
-   
+
     socket!.on(
       'songrequest:song:next',
-      (data) => {
-        debugPrint(data.toString())
-      },
+      (data) => onNextSong(data),
     );
 
     socket!.on(
       'songrequest:song:previous',
-      (data) => {
-        debugPrint(data.toString())
-      },
+      (data) => onPreviousSong(data),
     );
 
     socket!.on(
       'songrequest:queue:add',
-      (data) => {
-        debugPrint(data.toString())
-      },
+      (data) => onAddSongQueue(data),
     );
 
     socket!.on(
       'songrequest:queue:remove',
-      (data) => {
-        debugPrint(data.toString())
-      },
+      (data) => onRemoveSongQueue(data),
     );
 
     socket!.on(
       'songrequest:queue:clear',
       (data) => {
-        debugPrint(data.toString())
+        songRequestQueue.clear(),
       },
     );
 
+    socket!.on(
+      'songrequest:play',
+      (data) => {isPlaying.value = true},
+    );
+
+    socket!.on(
+      'songrequest:pause',
+      (data) => {isPlaying.value = false},
+    );
   }
 
   Future<void> onConnect() async {
@@ -185,6 +192,48 @@ class StreamelementsViewController extends GetxController
   Future<void> onAuthenticated(data) async {
     isSocketConnected.value = true;
     debugPrint('Connected to StreamElements websocket');
+  }
+
+  void onAddSongQueue(data) {
+    dynamic songData = data[0]["song"];
+    SeSong song = SeSong(
+      id: songData["_id"],
+      title: songData["title"],
+      videoId: songData["videoId"],
+      duration: songData["duration"],
+      channel: songData["channel"],
+    );
+    songRequestQueue.add(song);
+  }
+
+  void onRemoveSongQueue(data) {
+    dynamic songData = data[0]["song"];
+    songRequestQueue.removeWhere((element) => element.id == songData["_id"]);
+  }
+
+  void onNextSong(data) {
+    dynamic songData = data[0]["nextSong"];
+    SeSong song = SeSong(
+      id: songData["_id"],
+      title: songData["title"],
+      videoId: songData["videoId"],
+      duration: songData["duration"],
+      channel: songData["channel"],
+    );
+    currentSong.value = song;
+    songRequestQueue.removeAt(0);
+  }
+
+  void onPreviousSong(data) {
+    dynamic songData = data[0]["song"];
+    SeSong song = SeSong(
+      id: songData["_id"],
+      title: songData["title"],
+      videoId: songData["videoId"],
+      duration: songData["duration"],
+      channel: songData["channel"],
+    );
+    currentSong.value = song;
   }
 
   void parseTestEvent(data) {

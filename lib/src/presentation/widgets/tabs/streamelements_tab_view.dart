@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
+import 'package:irllink/src/presentation/widgets/stream_elements/se_song_requests.dart';
 
 import '../stream_elements/se_activities_list.dart';
 
@@ -21,12 +22,14 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
                     labelColor: Theme.of(context).colorScheme.tertiary,
                     unselectedLabelColor:
                         context.theme.textTheme.bodyLarge!.color,
-                    indicatorColor: Theme.of(context).colorScheme.tertiary,
-                    indicatorWeight: 0.000001,
+                    indicator: const BoxDecoration(
+                      border: null,
+                    ),
+                    tabAlignment: TabAlignment.center,
                     dividerColor: Colors.transparent,
                     tabs: const [
                       Text("Activities"),
-                      // Text("Song Requests"),
+                      Text("Song Requests"),
                     ],
                   ),
                 ),
@@ -41,9 +44,9 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
                         SeActivitiesList(
                           controller: controller,
                         ),
-                        // SeSongRequests(
-                        //   controller: controller,
-                        // ),
+                        SeSongRequests(
+                          controller: controller,
+                        ),
                       ],
                     ),
                   ),

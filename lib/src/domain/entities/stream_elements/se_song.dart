@@ -5,7 +5,7 @@ class SeSong extends Equatable {
   final String videoId;
   final String title;
   final String channel;
-  final String duration;
+  final int duration;
 
   const SeSong({
     required this.id,

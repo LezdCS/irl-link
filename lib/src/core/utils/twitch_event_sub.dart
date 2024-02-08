@@ -37,8 +37,10 @@ class TwitchEventSub {
 
     _webSocketChannel =
         IOWebSocketChannel.connect("wss://eventsub.wss.twitch.tv/ws");
-        // _webSocketChannel =
-        //     IOWebSocketChannel.connect("ws://localhost:8080/ws");
+
+    if (kDebugMode) {
+      _webSocketChannel = IOWebSocketChannel.connect("ws://localhost:8080/ws");
+    }
 
     _streamSubscription = _webSocketChannel?.stream.listen(
       (data) => _eventListener(data),
