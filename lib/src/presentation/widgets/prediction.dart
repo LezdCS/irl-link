@@ -185,10 +185,12 @@ void pickWinnerDialog(
     radius: 10,
     onCancel: () {
       controller.selectedOutcomeId.value = "-1";
+      Get.back();
     },
     onConfirm: () {
       endPrediction('RESOLVED', controller.selectedOutcomeId.value);
       controller.selectedOutcomeId.value = "-1";
+      Get.back();
     },
     content: Obx(
       () => Column(
