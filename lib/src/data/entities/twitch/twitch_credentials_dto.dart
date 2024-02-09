@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:irllink/src/data/entities/twitch_decoded_idtoken_dto.dart';
-import 'package:irllink/src/data/entities/twitch_user_dto.dart';
-import 'package:irllink/src/domain/entities/twitch_credentials.dart';
+import 'package:irllink/src/data/entities/twitch/twitch_decoded_idtoken_dto.dart';
+import 'package:irllink/src/data/entities/twitch/twitch_user_dto.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 
 class TwitchCredentialsDTO extends TwitchCredentials {
   const TwitchCredentialsDTO({

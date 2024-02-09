@@ -1,15 +1,14 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
-import 'package:irllink/src/domain/entities/twitch_credentials.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/store_controller.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/tts_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:irllink/src/presentation/widgets/tabs/obs_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/tabs/twitch_tab_view.dart';
@@ -22,10 +21,10 @@ import '../../data/repositories/settings_repository_impl.dart';
 import '../../data/repositories/twitch_repository_impl.dart';
 import '../../domain/usecases/settings_usecase.dart';
 import '../../domain/usecases/twitch_usecase.dart';
-import '../widgets/chat_view.dart';
+import '../widgets/twitch_chat_view.dart';
 import '../widgets/tabs/streamelements_tab_view.dart';
 import '../widgets/web_page_view.dart';
-import 'chat_view_controller.dart';
+import 'twitch_chat_view_controller.dart';
 
 class HomeViewController extends GetxController
     with GetTickerProviderStateMixin {
@@ -59,32 +58,19 @@ class HomeViewController extends GetxController
   Timer? timerKeepSpeakerOn;
   AudioPlayer audioPlayer = AudioPlayer();
 
-  late StreamSubscription<List<PurchaseDetails>> subscription;
-  List<ProductDetails> products = [];
-  RxBool purchasePending = false.obs;
-  RxList<PurchaseDetails> purchases = <PurchaseDetails>[].obs;
-  RxBool storeFound = false.obs;
-
   RxBool displayDashboard = false.obs;
 
-  RxList<ChatView> channels = <ChatView>[].obs;
+  RxList<TwitchChatView> channels = <TwitchChatView>[].obs;
   TwitchChat? selectedChat;
   int? selectedChatIndex;
 
   late TabController chatTabsController;
   Rxn<ChatMessage> selectedMessage = Rxn<ChatMessage>();
 
-  late FlutterTts flutterTts;
-
   @override
   void onInit() async {
     chatInputController = TextEditingController();
     chatTabsController = TabController(length: 0, vsync: this);
-
-    flutterTts = FlutterTts();
-    if (Platform.isAndroid) {
-      flutterTts.setEngine(flutterTts.getDefaultEngine.toString());
-    }
 
     if (Get.arguments != null) {
       TwitchTabView twitchPage = const TwitchTabView();
@@ -103,14 +89,11 @@ class HomeViewController extends GetxController
                 }),
       );
     }
-    await getStore();
     await getSettings();
-    await getStoreProducts();
 
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
-    initListeningStorePurchase();
     super.onInit();
   }
 
@@ -121,16 +104,30 @@ class HomeViewController extends GetxController
     super.onClose();
   }
 
+  void lazyPutChat(String channel) {
+    Get.lazyPut(
+      () => TwitchChatViewController(
+        homeEvents: HomeEvents(
+          twitchUseCase: TwitchUseCase(
+            twitchRepository: TwitchRepositoryImpl(),
+          ),
+          settingsUseCase: SettingsUseCase(
+            settingsRepository: SettingsRepositoryImpl(),
+          ),
+        ),
+        channel: channel,
+      ),
+      tag: channel,
+    );
+  }
+
   Future generateTabs() async {
     tabElements.clear();
 
     TwitchTabView twitchPage = const TwitchTabView();
     tabElements.add(twitchPage);
 
-    bool isSubscribed = purchases.firstWhereOrNull(
-          (element) => element.productID == "irl_premium_subscription",
-        ) !=
-        null;
+    bool isSubscribed = Get.find<StoreController>().isSubscribed();
     if ((twitchData == null && isSubscribed) ||
         isSubscribed &&
             settings.value.streamElementsAccessToken != null &&
@@ -165,8 +162,8 @@ class HomeViewController extends GetxController
     tabController = TabController(length: tabElements.length, vsync: this);
     if (tabIndex.value > tabElements.length - 1) {
       tabIndex.value = 0;
-      tabController.animateTo(tabIndex.value);
     }
+    tabController.animateTo(tabIndex.value);
   }
 
   void generateChats() {
@@ -176,9 +173,9 @@ class HomeViewController extends GetxController
 
     String self = twitchData!.twitchUser.login;
 
-    RxList<ChatView> tempChannels = RxList<ChatView>.from(channels);
+    RxList<TwitchChatView> tempChannels = RxList<TwitchChatView>.from(channels);
     for (var temp in tempChannels) {
-      ChatView view =
+      TwitchChatView view =
           channels.firstWhere((element) => element.channel == temp.channel);
       String channel = view.channel;
       if (channel == self) continue;
@@ -188,34 +185,21 @@ class HomeViewController extends GetxController
 
       if (selectedChat?.channel == channel) {
         selectedChat = channels.isNotEmpty
-            ? Get.find<ChatViewController>(tag: channels[0].channel).twitchChat
+            ? Get.find<TwitchChatViewController>(tag: channels[0].channel).twitchChat
             : null;
         selectedChatIndex = channels.isNotEmpty ? 0 : null;
       }
 
       channels.remove(view);
-      Get.delete<ChatViewController>(tag: channel);
+      Get.delete<TwitchChatViewController>(tag: channel);
     }
 
     for (String chat in settings.value.chatSettings!.chatsJoined) {
       if (channels.firstWhereOrNull((channel) => channel.channel == chat) ==
           null) {
-        Get.lazyPut(
-          () => ChatViewController(
-            homeEvents: HomeEvents(
-              twitchUseCase: TwitchUseCase(
-                twitchRepository: TwitchRepositoryImpl(),
-              ),
-              settingsUseCase: SettingsUseCase(
-                settingsRepository: SettingsRepositoryImpl(),
-              ),
-            ),
-            channel: chat,
-          ),
-          tag: chat,
-        );
+        lazyPutChat(chat);
         channels.add(
-          ChatView(
+          TwitchChatView(
             channel: chat,
           ),
         );
@@ -227,28 +211,15 @@ class HomeViewController extends GetxController
     if (joinSelfChannel) {
       if (channels.firstWhereOrNull((channel) => channel.channel == self) ==
           null) {
-        Get.lazyPut(
-          () => ChatViewController(
-            homeEvents: HomeEvents(
-              twitchUseCase: TwitchUseCase(
-                twitchRepository: TwitchRepositoryImpl(),
-              ),
-              settingsUseCase: SettingsUseCase(
-                settingsRepository: SettingsRepositoryImpl(),
-              ),
-            ),
-            channel: self,
-          ),
-          tag: self,
-        );
-        channels.insert(0, ChatView(channel: self));
+        lazyPutChat(self);
+        channels.insert(0, TwitchChatView(channel: self));
       }
     } else {
       channels.remove(channels.firstWhereOrNull((c) => c.channel == self));
-      Get.delete<ChatViewController>(tag: self);
+      Get.delete<TwitchChatViewController>(tag: self);
       if (selectedChat?.channel == self) {
         selectedChat = channels.isNotEmpty
-            ? Get.find<ChatViewController>(tag: channels[0].channel).twitchChat
+            ? Get.find<TwitchChatViewController>(tag: channels[0].channel).twitchChat
             : null;
         selectedChatIndex = channels.isNotEmpty ? 0 : null;
       }
@@ -330,7 +301,7 @@ class HomeViewController extends GetxController
       await generateTabs();
       Get.find<DashboardController>();
       generateChats();
-      initTts(settings.value);
+      Get.find<TtsController>().initTts(settings.value);
       if (!settings.value.generalSettings!.isDarkMode) {
         Get.changeThemeMode(ThemeMode.light);
       }
@@ -350,131 +321,5 @@ class HomeViewController extends GetxController
       splitViewController?.weights =
           settings.value.generalSettings!.splitViewWeights;
     }
-  }
-
-  void initTts(Settings settings) async {
-    //  The following setup allows background music and in-app audio session to continue simultaneously:
-    await flutterTts.setIosAudioCategory(
-        IosTextToSpeechAudioCategory.ambient,
-        [
-          IosTextToSpeechAudioCategoryOptions.allowBluetooth,
-          IosTextToSpeechAudioCategoryOptions.allowBluetoothA2DP,
-          IosTextToSpeechAudioCategoryOptions.mixWithOthers
-        ],
-        IosTextToSpeechAudioMode.voicePrompt);
-
-    await flutterTts.awaitSpeakCompletion(true);
-    await flutterTts.setLanguage(settings.ttsSettings!.language);
-    await flutterTts.setSpeechRate(settings.ttsSettings!.rate);
-    await flutterTts.setVolume(settings.ttsSettings!.volume);
-    await flutterTts.setPitch(settings.ttsSettings!.pitch);
-    await flutterTts.setVoice(settings.ttsSettings!.voice);
-
-    if (Platform.isAndroid) {
-      await flutterTts.setQueueMode(1);
-    }
-
-    if (!settings.ttsSettings!.ttsEnabled) {
-      //prevent the queue to continue if we come back from settings and turn off TTS
-      flutterTts.stop();
-    }
-  }
-
-  Future<void> getStore() async {
-    final bool available = await InAppPurchase.instance.isAvailable();
-    if (available) {
-      storeFound.value = true;
-    }
-  }
-
-  void initListeningStorePurchase() async {
-    final Stream purchaseUpdated = InAppPurchase.instance.purchaseStream;
-    subscription = purchaseUpdated.listen((purchaseDetailsList) {
-      listenToPurchaseUpdated(purchaseDetailsList);
-    }, onDone: () {
-      subscription.cancel();
-    }, onError: (error) {
-      // handle error here.
-    }) as StreamSubscription<List<PurchaseDetails>>;
-
-    try {
-      await InAppPurchase.instance.restorePurchases();
-    } catch (error) {
-      debugPrint('not logged to any store');
-    }
-  }
-
-  void listenToPurchaseUpdated(
-      List<PurchaseDetails> purchaseDetailsList) async {
-    for (var purchaseDetails in purchaseDetailsList) {
-      if (purchaseDetails.status == PurchaseStatus.pending) {
-        purchasePending.value = true;
-      } else {
-        if (purchaseDetails.status == PurchaseStatus.error) {
-          purchasePending.value = false;
-          Get.snackbar(
-            "Error",
-            purchaseDetails.error!.message,
-            snackPosition: SnackPosition.TOP,
-            icon: const Icon(Icons.error_outline, color: Colors.red),
-            borderWidth: 1,
-            borderColor: Colors.red,
-          );
-        } else if (purchaseDetails.status == PurchaseStatus.purchased ||
-            purchaseDetails.status == PurchaseStatus.restored) {
-          bool valid = await verifyPurchase(purchaseDetails);
-          if (valid) {
-            deliverProduct(purchaseDetails);
-          } else {
-            Get.snackbar(
-              "Error",
-              "Invalid purchase",
-              snackPosition: SnackPosition.BOTTOM,
-              icon: const Icon(Icons.error_outline, color: Colors.red),
-              borderWidth: 1,
-              borderColor: Colors.red,
-            );
-            purchasePending.value = false;
-          }
-        }
-        if (purchaseDetails.pendingCompletePurchase) {
-          await InAppPurchase.instance.completePurchase(purchaseDetails);
-        }
-      }
-    }
-  }
-
-  Future<bool> verifyPurchase(PurchaseDetails purchaseDetails) {
-    // IMPORTANT!! Always verify a purchase before delivering the product.
-    // For the purpose of an example, we directly return true.
-    return Future<bool>.value(true);
-  }
-
-  Future<void> deliverProduct(PurchaseDetails purchaseDetails) async {
-    purchases.add(purchaseDetails);
-    getSettings();
-    purchasePending.value = false;
-
-    if (purchaseDetails.status == PurchaseStatus.purchased) {
-      Get.back();
-      Get.snackbar(
-        "Success",
-        "Thanks for your purchase, enjoy your premium subscription!",
-        snackPosition: SnackPosition.BOTTOM,
-        icon: const Icon(Icons.check, color: Colors.green),
-        borderWidth: 1,
-        borderColor: Colors.green,
-      );
-    }
-  }
-
-  Future<void> getStoreProducts() async {
-    const Set<String> kIds = <String>{'irl_premium_subscription'};
-    final ProductDetailsResponse response =
-        await InAppPurchase.instance.queryProductDetails(kIds);
-    if (response.notFoundIDs.isNotEmpty) {
-      // Handle the error.
-    }
-    products = response.productDetails;
   }
 }

@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/store_controller.dart';
 import 'package:irllink/src/presentation/widgets/settings/chat_events.dart';
 import 'package:irllink/src/presentation/widgets/settings/dashboard_settings_view.dart';
 import 'package:irllink/src/presentation/widgets/settings/stream_elements.dart';
@@ -21,6 +23,8 @@ class SettingsView extends GetView<SettingsViewController> {
   final SettingsViewController controller = Get.find<SettingsViewController>();
 
   SettingsView({super.key});
+
+  final StoreController storeController = Get.find<StoreController>();
 
   @override
   Widget build(BuildContext context) {
@@ -81,13 +85,13 @@ class SettingsView extends GetView<SettingsViewController> {
                 const EdgeInsets.only(top: 8, left: 10, right: 10, bottom: 8),
             children: [
               Visibility(
-                visible: controller.homeViewController.storeFound.value &&
-                    controller.homeViewController.products.isNotEmpty,
+                visible: storeController.storeFound.value &&
+                    storeController.products.isNotEmpty,
                 child: Subscription(controller: controller),
               ),
               Visibility(
-                visible: controller.homeViewController.storeFound.value &&
-                    controller.homeViewController.products.isNotEmpty,
+                visible: storeController.storeFound.value &&
+                    storeController.products.isNotEmpty,
                 child: Divider(
                   height: 20,
                   thickness: 2,
@@ -525,8 +529,8 @@ class SettingsView extends GetView<SettingsViewController> {
                 ),
                 const SizedBox(height: 10),
                 Visibility(
-                  visible: controller.homeViewController.storeFound.value &&
-                      controller.homeViewController.products.isNotEmpty,
+                  visible: kDebugMode || storeController.storeFound.value &&
+                      storeController.products.isNotEmpty,
                   child: StreamElements(controller: controller),
                 ),
               ],

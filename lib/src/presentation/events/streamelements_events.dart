@@ -3,6 +3,7 @@ import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
+import 'package:irllink/src/domain/entities/stream_elements/se_song.dart';
 import 'package:irllink/src/domain/usecases/streamelements_usecase.dart';
 
 import '../../domain/entities/settings.dart';
@@ -43,5 +44,29 @@ class StreamelementsEvents {
 
   Future<DataState<Settings>> getSettings() {
     return settingsUseCase.getSettings();
+  }
+
+  Future<DataState<List<SeSong>>> getSongQueue(String token, String userId) {
+    return streamelementsUseCase.getSongQueue(token, userId);
+  }
+
+  Future<DataState<SeSong>> getSongPlaying(String token, String userId) {
+    return streamelementsUseCase.getSongPlaying(token, userId);
+  }
+
+  Future<void> updatePlayerState(String token, String userId, String state) {
+    return streamelementsUseCase.updatePlayerState(token, userId, state);
+  }
+
+  Future<void> nextSong(String token, String userId) {
+    return streamelementsUseCase.nextSong(token, userId);
+  }
+
+  Future<void> removeSong(String token, String userId, String songId) {
+    return streamelementsUseCase.removeSong(token, userId, songId);
+  }
+
+  Future<void> resetQueue(String token, String userId) {
+    return streamelementsUseCase.resetQueue(token, userId);
   }
 }

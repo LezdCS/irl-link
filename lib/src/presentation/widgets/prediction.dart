@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/utils/print_duration.dart';
-import 'package:irllink/src/domain/entities/twitch_prediction.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
@@ -185,10 +185,12 @@ void pickWinnerDialog(
     radius: 10,
     onCancel: () {
       controller.selectedOutcomeId.value = "-1";
+      Get.back();
     },
     onConfirm: () {
       endPrediction('RESOLVED', controller.selectedOutcomeId.value);
       controller.selectedOutcomeId.value = "-1";
+      Get.back();
     },
     content: Obx(
       () => Column(

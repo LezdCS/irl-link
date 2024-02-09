@@ -82,26 +82,28 @@ class ObsTabViewController extends GetxController {
       });
 
       obsWebSocket!.addFallbackListener((Event event) {
-        if (event.eventType == 'CurrentProgramSceneChanged') {
-          getCurrentScene();
-        }
-        if (event.eventType == 'InputVolumeChanged') {
-          sourcesVolumesMap[event.eventData?['inputName']] =
-              event.eventData?['inputVolumeDb'];
-          sourcesList.refresh();
-          sourcesVolumesMap.refresh();
-        }
-        if (event.eventType == 'SceneListChanged') {
-          getSceneList();
-        }
-        if (event.eventType == 'SceneItemCreated') {
-          getCurrentScene();
-        }
-        if (event.eventType == 'SceneItemRemoved') {
-          getCurrentScene();
-        }
-        if (event.eventType == 'InputNameChanged') {
-          getCurrentScene();
+        switch (event.eventType) {
+          case 'CurrentProgramSceneChanged':
+            getCurrentScene();
+            break;
+          case 'InputVolumeChanged':
+            sourcesVolumesMap[event.eventData?['inputName']] =
+                event.eventData?['inputVolumeDb'];
+            sourcesList.refresh();
+            sourcesVolumesMap.refresh();
+            break;
+          case 'SceneListChanged':
+            getSceneList();
+            break;
+          case 'SceneItemCreated':
+            getCurrentScene();
+            break;
+          case 'SceneItemRemoved':
+            getCurrentScene();
+            break;
+          case 'InputNameChanged':
+            getCurrentScene();
+            break;
         }
       });
 

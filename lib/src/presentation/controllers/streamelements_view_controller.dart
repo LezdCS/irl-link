@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
+import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_song.dart';
 import 'package:irllink/src/presentation/events/streamelements_events.dart';
@@ -22,8 +23,13 @@ class StreamelementsViewController extends GetxController
   RxList<SeActivity> activities = <SeActivity>[].obs;
   late ScrollController activitiesScrollController;
 
+  SeMe? userSeProfile;
+
+  // Song Requests
   RxList<SeSong> songRequestQueue = <SeSong>[].obs;
+  Rxn<SeSong> currentSong = Rxn<SeSong>();
   late ScrollController songRequestScrollController;
+  RxBool isPlaying = false.obs;
 
   RxList<SeOverlay> overlays = <SeOverlay>[].obs;
 
@@ -38,13 +44,11 @@ class StreamelementsViewController extends GetxController
   Future<void> onInit() async {
     homeViewController = Get.find<HomeViewController>();
 
-    tabController = TabController(length: 1, vsync: this);
+    tabController = TabController(length: 2, vsync: this);
     activitiesScrollController = ScrollController();
     songRequestScrollController = ScrollController();
 
-    homeViewController.homeEvents
-        .getSettings()
-        .then((value) => applySettings());
+    streamelementsEvents.getSettings().then((value) => applySettings());
 
     super.onInit();
   }
@@ -66,15 +70,26 @@ class StreamelementsViewController extends GetxController
       activities.clear();
       jwt = homeViewController.settings.value.streamElementsAccessToken!;
       streamelementsEvents.getMe(jwt).then((value) => {
-            streamelementsEvents
-                .getOverlays(jwt, value.data!.id)
-                .then((value) => overlays.value = value.data!),
-            streamelementsEvents
-                .getLastActivities(jwt, value.data!.id)
-                .then((value) => activities.value = value.data!)
+            if (value.error == null) {handleGetMe(value.data!)}
           });
       connectWebsocket();
     }
+  }
+
+  void handleGetMe(SeMe me) {
+    userSeProfile = me;
+    streamelementsEvents
+        .getOverlays(jwt, me.id)
+        .then((value) => overlays.value = value.data!);
+    streamelementsEvents
+        .getLastActivities(jwt, me.id)
+        .then((value) => activities.value = value.data!);
+    streamelementsEvents
+        .getSongQueue(jwt, me.id)
+        .then((value) => songRequestQueue.value = value.data!);
+    streamelementsEvents
+        .getSongPlaying(jwt, me.id)
+        .then((value) => currentSong.value = value.data!);
   }
 
   Future<void> login() async {
@@ -82,18 +97,24 @@ class StreamelementsViewController extends GetxController
     await streamelementsEvents.login(params: params);
   }
 
+  void updatePlayerState(String state) {
+    if (userSeProfile == null) return;
+    streamelementsEvents.updatePlayerState(jwt, userSeProfile!.id, state);
+  }
+
   void nextSong() {
-    if (songRequestQueue.isNotEmpty) {
-      songRequestQueue.removeAt(0);
-    }
+    if (userSeProfile == null) return;
+    streamelementsEvents.nextSong(jwt, userSeProfile!.id);
   }
 
   void removeSong(SeSong song) {
-    songRequestQueue.remove(song);
+    if (userSeProfile == null) return;
+    streamelementsEvents.removeSong(jwt, userSeProfile!.id, song.id);
   }
 
   void resetQueue() {
-    songRequestQueue.clear();
+    if (userSeProfile == null) return;
+    streamelementsEvents.resetQueue(jwt, userSeProfile!.id);
   }
 
   /// Connect to WebSocket
@@ -109,6 +130,7 @@ class StreamelementsViewController extends GetxController
     socket!.on('connect', (data) => onConnect());
     socket!.on('disconnect', (data) => onDisconnect());
     socket!.on('authenticated', (data) => onAuthenticated(data));
+
     socket!.on(
       'event:test',
       (data) => {
@@ -131,6 +153,43 @@ class StreamelementsViewController extends GetxController
         // debugPrint(data.toString())
       },
     );
+
+    socket!.on(
+      'songrequest:song:next',
+      (data) => onNextSong(data),
+    );
+
+    socket!.on(
+      'songrequest:song:previous',
+      (data) => onPreviousSong(data),
+    );
+
+    socket!.on(
+      'songrequest:queue:add',
+      (data) => onAddSongQueue(data),
+    );
+
+    socket!.on(
+      'songrequest:queue:remove',
+      (data) => onRemoveSongQueue(data),
+    );
+
+    socket!.on(
+      'songrequest:queue:clear',
+      (data) => {
+        songRequestQueue.clear(),
+      },
+    );
+
+    socket!.on(
+      'songrequest:play',
+      (data) => {isPlaying.value = true},
+    );
+
+    socket!.on(
+      'songrequest:pause',
+      (data) => {isPlaying.value = false},
+    );
   }
 
   Future<void> onConnect() async {
@@ -150,6 +209,33 @@ class StreamelementsViewController extends GetxController
   Future<void> onAuthenticated(data) async {
     isSocketConnected.value = true;
     debugPrint('Connected to StreamElements websocket');
+  }
+
+  void onAddSongQueue(data) {
+    dynamic songData = data[0]["song"];
+    SeSong song = SeSong.fromJson(songData);
+    songRequestQueue.add(song);
+  }
+
+  void onRemoveSongQueue(data) {
+    dynamic songId = data[0]["songId"];
+    songRequestQueue.removeWhere((element) => element.id == songId);
+  }
+
+  void onNextSong(data) {
+    dynamic songData = data[0]["nextSong"];
+    if(songData == {}) return;
+    SeSong song = SeSong.fromJson(songData);
+    currentSong.value = song;
+    if(song.id != ''){
+      songRequestQueue.removeAt(0);
+    }
+  }
+
+  void onPreviousSong(data) {
+    dynamic songData = data[0]["song"];
+    SeSong song = SeSong.fromJson(songData);
+    currentSong.value = song;
   }
 
   void parseTestEvent(data) {
@@ -279,7 +365,7 @@ class StreamelementsViewController extends GetxController
       case "tip":
         if (!homeViewController.settings.value.streamElementsSettings!
             .showDonationActivity) return;
-            debugPrint(event.toString());
+        debugPrint(event.toString());
         SeActivity activity = SeActivity(
           id: event["_id"],
           channel: event["channel"],

@@ -10,7 +10,9 @@ import 'package:irllink/src/domain/usecases/twitch_usecase.dart';
 import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/store_controller.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/tts_controller.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:irllink/src/presentation/events/streamelements_events.dart';
@@ -31,6 +33,12 @@ class HomeBindings extends Bindings {
       ),
     );
     Get.find<HomeViewController>();
+
+    Get.lazyPut<StoreController>(() => StoreController());
+    Get.find<StoreController>();
+
+    Get.lazyPut<TtsController>(() => TtsController());
+    Get.find<TtsController>();
 
     Get.lazyPut<ObsTabViewController>(() => ObsTabViewController(
           homeEvents: HomeEvents(

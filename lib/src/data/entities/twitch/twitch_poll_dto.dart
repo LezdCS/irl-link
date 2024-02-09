@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:irllink/src/domain/entities/twitch_poll.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 
 class TwitchPollDTO extends TwitchPoll {
   const TwitchPollDTO({

@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:irllink/src/domain/entities/twitch_stream_infos.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
 
 class TwitchStreamInfosDto extends TwitchStreamInfos {
   const TwitchStreamInfosDto({
