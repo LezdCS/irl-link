@@ -213,13 +213,7 @@ class StreamelementsViewController extends GetxController
 
   void onAddSongQueue(data) {
     dynamic songData = data[0]["song"];
-    SeSong song = SeSong(
-      id: songData["_id"],
-      title: songData["title"],
-      videoId: songData["videoId"],
-      duration: songData["duration"],
-      channel: songData["channel"],
-    );
+    SeSong song = SeSong.fromJson(songData);
     songRequestQueue.add(song);
   }
 
@@ -232,13 +226,7 @@ class StreamelementsViewController extends GetxController
   void onNextSong(data) {
     dynamic songData = data[0]["nextSong"];
     if(songData == {}) return;
-    SeSong song = SeSong(
-      id: songData["_id"] ?? '',
-      title: songData["title"],
-      videoId: songData["videoId"],
-      duration: songData["duration"] ?? 0,
-      channel: songData["channel"],
-    );
+    SeSong song = SeSong.fromJson(songData);
     currentSong.value = song;
     if(song.id != ''){
       songRequestQueue.removeAt(0);
@@ -247,13 +235,7 @@ class StreamelementsViewController extends GetxController
 
   void onPreviousSong(data) {
     dynamic songData = data[0]["song"];
-    SeSong song = SeSong(
-      id: songData["_id"],
-      title: songData["title"],
-      videoId: songData["videoId"],
-      duration: songData["duration"],
-      channel: songData["channel"],
-    );
+    SeSong song = SeSong.fromJson(songData);
     currentSong.value = song;
   }
 

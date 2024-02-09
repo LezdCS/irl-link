@@ -15,6 +15,16 @@ class SeSong extends Equatable {
     required this.duration,
   });
 
+  factory SeSong.fromJson(Map<String, dynamic> map) {
+    return SeSong(
+      id: map["_id"]  ?? '',
+      title: map["title"],
+      videoId: map["videoId"],
+      duration: map["duration"]  ?? 0,
+      channel: map["channel"],
+    );
+  }
+
   @override
   List<Object?> get props {
     return [
