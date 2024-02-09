@@ -218,7 +218,6 @@ class StreamelementsViewController extends GetxController
   }
 
   void onRemoveSongQueue(data) {
-    debugPrint(data.toString());
     dynamic songId = data[0]["songId"];
     songRequestQueue.removeWhere((element) => element.id == songId);
   }

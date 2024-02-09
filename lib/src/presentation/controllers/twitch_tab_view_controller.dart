@@ -33,9 +33,9 @@ class TwitchTabViewController extends GetxController {
   Rx<Duration> myDuration = const Duration(seconds: 15).obs;
 
   TwitchEventSub? twitchEventSub;
-  late Rx<Duration> remainingTimePoll;
-  late Rx<Duration> remainingTimePrediction;
-  late Rx<Duration> remainingTimeHypeTrain;
+  Rx<Duration> remainingTimePoll = const Duration(seconds: 0).obs;
+  Rx<Duration> remainingTimePrediction = const Duration(seconds: 0).obs;
+  Rx<Duration> remainingTimeHypeTrain = const Duration(seconds: 0).obs;
 
   @override
   void onInit() {
