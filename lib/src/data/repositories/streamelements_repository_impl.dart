@@ -9,6 +9,7 @@ import 'package:irllink/src/data/entities/stream_elements/se_overlay_dto.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
+import 'package:irllink/src/domain/entities/stream_elements/se_song.dart';
 // import 'package:irllink/src/core/utils/constants.dart';
 
 import 'package:irllink/src/domain/repositories/streamelements_repository.dart';
@@ -135,6 +136,112 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
     } on DioException catch (e) {
       debugPrint(e.toString());
       return DataFailed(e.toString());
+    }
+  }
+
+  @override
+  Future<void> nextSong(String token, String userId) async {
+    var dio = Dio();
+    try {
+      dio.options.headers["Authorization"] = "Bearer $token";
+      await dio.post(
+        'https://api.streamelements.com/kappa/v2/songrequest/$userId/skip',
+      );
+    } on DioException catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  @override
+  Future<void> removeSong(String token, String userId, String songId) async {
+    var dio = Dio();
+    try {
+      dio.options.headers["Authorization"] = "Bearer $token";
+      await dio.delete(
+        'https://api.streamelements.com/kappa/v2/songrequest/$userId/queue/$songId',
+      );
+    } on DioException catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  @override
+  Future<void> resetQueue(String token, String userId) async {
+    var dio = Dio();
+    try {
+      dio.options.headers["Authorization"] = "Bearer $token";
+      await dio.delete(
+        'https://api.streamelements.com/kappa/v2/songrequest/$userId/queue/',
+      );
+    } on DioException catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  @override
+  Future<DataState<List<SeSong>>> getSongQueue(
+      String token, String userId) async {
+    List<SeSong> songs = [];
+    var dio = Dio();
+    try {
+      dio.options.headers["Authorization"] = "Bearer $token";
+      Response response = await dio.get(
+        'https://api.streamelements.com/kappa/v2/songrequest/$userId/queue',
+      );
+
+      response.data.forEach(
+        (song) => {
+          songs.add(SeSong(
+            channel: song['channel'],
+            duration: song['duration'],
+            id: song['_id'],
+            title: song['title'],
+            videoId: song['videoId'],
+          )),
+        },
+      );
+
+      return DataSuccess(songs);
+    } on DioException catch (e) {
+      debugPrint(e.toString());
+      return DataFailed(e.toString());
+    }
+  }
+
+  @override
+  Future<DataState<SeSong>> getSongPlaying(String token, String userId) async {
+    var dio = Dio();
+    try {
+      dio.options.headers["Authorization"] = "Bearer $token";
+      Response response = await dio.get(
+        'https://api.streamelements.com/kappa/v2/songrequest/$userId/playing',
+      );
+
+      SeSong song = SeSong(
+        channel: response.data['channel'],
+        duration: response.data['duration'],
+        id: response.data['_id'],
+        title: response.data['title'],
+        videoId: response.data['videoId'],
+      );
+
+      return DataSuccess(song);
+    } on DioException catch (e) {
+      debugPrint(e.toString());
+      return DataFailed(e.toString());
+    }
+  }
+  
+  @override
+  Future<void> updatePlayerState(String token, String userId, String state) async {
+    var dio = Dio();
+    try {
+      dio.options.headers["Authorization"] = "Bearer $token";
+      await dio.post(
+        'https://api.streamelements.com/kappa/v2/songrequest/$userId/player/$state',
+      );
+    } on DioException catch (e) {
+      debugPrint(e.toString());
     }
   }
 }

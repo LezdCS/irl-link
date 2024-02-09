@@ -24,8 +24,13 @@ class SeSongRequests extends GetView {
               children: [
                 Wrap(
                   children: [
-                    const Icon(Icons.skip_previous),
-                    controller.isPlaying.value ? const Icon(Icons.pause) : const Icon(Icons.play_arrow_outlined),
+                    // const Icon(Icons.skip_previous),
+                    InkWell(
+                      onTap: () {
+                        controller.updatePlayerState(controller.isPlaying.value ? 'pause' : 'play');
+                      },
+                      child: controller.isPlaying.value ? const Icon(Icons.pause) : const Icon(Icons.play_arrow_outlined),
+                    ),
                     InkWell(
                       onTap: () {
                         controller.nextSong();
@@ -53,7 +58,7 @@ class SeSongRequests extends GetView {
               ),
             ),
             controller.currentSong.value != null
-                ? _songRow(context, controller.currentSong.value!)
+                ? _songRow(context, controller.currentSong.value!, false)
                 : const Text("No song playing."),
             const Padding(
               padding: EdgeInsets.only(bottom: 15),
@@ -83,7 +88,7 @@ class SeSongRequests extends GetView {
                 itemCount: controller.songRequestQueue.length,
                 itemBuilder: (BuildContext context, int index) {
                   SeSong song = controller.songRequestQueue[index];
-                  return _songRow(context, song);
+                  return _songRow(context, song, true);
                 },
               ),
             ),
@@ -93,7 +98,7 @@ class SeSongRequests extends GetView {
     );
   }
 
-  Widget _songRow(BuildContext context, SeSong song) {
+  Widget _songRow(BuildContext context, SeSong song, bool removable) {
     return Container(
       padding: const EdgeInsets.only(left: 8, right: 8, top: 5, bottom: 5),
       decoration: BoxDecoration(
@@ -163,13 +168,16 @@ class SeSongRequests extends GetView {
               ],
             ),
           ),
-          InkWell(
-            onTap: () {
-              controller.removeSong(song);
-            },
-            child: const Icon(
-              Icons.close,
-              color: Colors.red,
+          Visibility(
+            visible: removable,
+            child: InkWell(
+              onTap: () {
+                controller.removeSong(song);
+              },
+              child: const Icon(
+                Icons.close,
+                color: Colors.red,
+              ),
             ),
           ),
         ],

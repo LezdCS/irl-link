@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
+import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_song.dart';
 import 'package:irllink/src/presentation/events/streamelements_events.dart';
@@ -21,6 +22,8 @@ class StreamelementsViewController extends GetxController
 
   RxList<SeActivity> activities = <SeActivity>[].obs;
   late ScrollController activitiesScrollController;
+
+  SeMe? userSeProfile;
 
   // Song Requests
   RxList<SeSong> songRequestQueue = <SeSong>[].obs;
@@ -67,15 +70,26 @@ class StreamelementsViewController extends GetxController
       activities.clear();
       jwt = homeViewController.settings.value.streamElementsAccessToken!;
       streamelementsEvents.getMe(jwt).then((value) => {
-            streamelementsEvents
-                .getOverlays(jwt, value.data!.id)
-                .then((value) => overlays.value = value.data!),
-            streamelementsEvents
-                .getLastActivities(jwt, value.data!.id)
-                .then((value) => activities.value = value.data!)
+            if (value.error == null) {handleGetMe(value.data!)}
           });
       connectWebsocket();
     }
+  }
+
+  void handleGetMe(SeMe me) {
+    userSeProfile = me;
+    streamelementsEvents
+        .getOverlays(jwt, me.id)
+        .then((value) => overlays.value = value.data!);
+    streamelementsEvents
+        .getLastActivities(jwt, me.id)
+        .then((value) => activities.value = value.data!);
+    streamelementsEvents
+        .getSongQueue(jwt, me.id)
+        .then((value) => songRequestQueue.value = value.data!);
+    streamelementsEvents
+        .getSongPlaying(jwt, me.id)
+        .then((value) => currentSong.value = value.data!);
   }
 
   Future<void> login() async {
@@ -83,21 +97,24 @@ class StreamelementsViewController extends GetxController
     await streamelementsEvents.login(params: params);
   }
 
+  void updatePlayerState(String state) {
+    if (userSeProfile == null) return;
+    streamelementsEvents.updatePlayerState(jwt, userSeProfile!.id, state);
+  }
+
   void nextSong() {
-    //https://api.streamelements.com/kappa/v2/songrequest/userID/skip
+    if (userSeProfile == null) return;
+    streamelementsEvents.nextSong(jwt, userSeProfile!.id);
   }
 
   void removeSong(SeSong song) {
-    // https://api.streamelements.com/kappa/v2/songrequest/userID/queue/songId
-    // Request Method:
-    // DELETE
+    if (userSeProfile == null) return;
+    streamelementsEvents.removeSong(jwt, userSeProfile!.id, song.id);
   }
 
   void resetQueue() {
-    // Request URL:
-    // https://api.streamelements.com/kappa/v2/songrequest/userID/queue
-    // Request Method:
-    // DELETE
+    if (userSeProfile == null) return;
+    streamelementsEvents.resetQueue(jwt, userSeProfile!.id);
   }
 
   /// Connect to WebSocket
@@ -207,21 +224,25 @@ class StreamelementsViewController extends GetxController
   }
 
   void onRemoveSongQueue(data) {
-    dynamic songData = data[0]["song"];
-    songRequestQueue.removeWhere((element) => element.id == songData["_id"]);
+    debugPrint(data.toString());
+    dynamic songId = data[0]["songId"];
+    songRequestQueue.removeWhere((element) => element.id == songId);
   }
 
   void onNextSong(data) {
     dynamic songData = data[0]["nextSong"];
+    if(songData == {}) return;
     SeSong song = SeSong(
-      id: songData["_id"],
+      id: songData["_id"] ?? '',
       title: songData["title"],
       videoId: songData["videoId"],
-      duration: songData["duration"],
+      duration: songData["duration"] ?? 0,
       channel: songData["channel"],
     );
     currentSong.value = song;
-    songRequestQueue.removeAt(0);
+    if(song.id != ''){
+      songRequestQueue.removeAt(0);
+    }
   }
 
   void onPreviousSong(data) {
