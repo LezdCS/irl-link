@@ -77,10 +77,36 @@ Widget inAppPurchaseDialog(
                         // todo: preview button show feature screen
                       ],
                     ),
+                    Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.check_circle_outline_rounded,
+                          size: 18,
+                          color: Colors.green,
+                        ),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        Text(
+                          'StreamElements media request control',
+                          style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyLarge!.color,
+                              fontSize: 13),
+                        )
+                        // todo: preview button show feature screen
+                      ],
+                    ),
                   ],
                 ),
               ),
             ],
+          ),
+          Text(
+            'You will be billed $price every month. \n You can cancel your subscription anytime from your Google Play Store application.',
+            style: const TextStyle(fontSize: 13, color: Colors.grey),
+            textAlign: TextAlign.center,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
