@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/utils/lazy_put_twitch_chat.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
@@ -21,7 +20,6 @@ import '../../core/utils/constants.dart';
 import '../widgets/twitch_chat_view.dart';
 import '../widgets/tabs/streamelements_tab_view.dart';
 import '../widgets/web_page_view.dart';
-import 'chats/twitch_chat_controller.dart';
 
 class HomeViewController extends GetxController
     with GetTickerProviderStateMixin {
@@ -32,35 +30,35 @@ class HomeViewController extends GetxController
   SplitViewController? splitViewController =
       SplitViewController(limits: [null, WeightLimit(min: 0.12, max: 0.92)]);
 
-  //TABS
+  late Rx<Settings> settings = const Settings.defaultSettings().obs;
+
+  TwitchCredentials? twitchData;
+
+  //////////// TABS ////////////
   late TabController tabController;
   Rx<int> tabIndex = 0.obs;
   RxList<Widget> tabElements = <Widget>[].obs;
   RxList<WebPageView> iOSAudioSources = <WebPageView>[].obs;
 
-  TwitchCredentials? twitchData;
-
-  //chat input
-  late TextEditingController chatInputController;
-  RxList<Emote> twitchEmotes = <Emote>[].obs;
-
-  //emote picker
+  //////////// EMOTE PICKER ////////////
   RxBool isPickingEmote = false.obs;
   ObsTabViewController? obsTabViewController;
   StreamelementsViewController? streamelementsViewController;
 
-  late Rx<Settings> settings = const Settings.defaultSettings().obs;
-
+  //////////// KEEP SPEAKER ON ////////////
   Timer? timerRefreshToken;
   Timer? timerKeepSpeakerOn;
   AudioPlayer audioPlayer = AudioPlayer();
-
+  
+  //////////// DASHBOARD ////////////
   RxBool displayDashboard = false.obs;
 
+  //////////// CHATS ////////////
   RxList<TwitchChatView> channels = <TwitchChatView>[].obs;
   TwitchChat? selectedChat;
-  int? selectedChatIndex;
-
+  int? selectedChatTab;
+  late TextEditingController chatInputController;
+  RxList<Emote> twitchEmotes = <Emote>[].obs;
   late TabController chatTabsController;
   Rxn<ChatMessage> selectedMessage = Rxn<ChatMessage>();
 
@@ -146,71 +144,16 @@ class HomeViewController extends GetxController
     tabController.animateTo(tabIndex.value);
   }
 
-  void generateChats() {
-    if (twitchData == null) {
-      return;
-    }
+  void generateChatsTabs() {
+    // get the chat groups saved in settings
 
-    String self = twitchData!.twitchUser.login;
+    // compare current tabs and chats existing in the tabs with the settings
+    // WARN: check if in the settings we should show our own twitch chat
+    // if need to delete the complete tab, delete from the chatTabView RxList
+    // and call Get.delete<anyController>(tag: anyTag) to remove the controller, either a chat controller or a chatTabViewController
 
-    RxList<TwitchChatView> tempChannels = RxList<TwitchChatView>.from(channels);
-    for (var temp in tempChannels) {
-      TwitchChatView view =
-          channels.firstWhere((element) => element.channel == temp.channel);
-      String channel = view.channel;
-      if (channel == self) continue;
-      if (settings.value.chatSettings!.chatsJoined.contains(channel)) {
-        continue;
-      }
-
-      if (selectedChat?.channel == channel) {
-        selectedChat = channels.isNotEmpty
-            ? Get.find<TwitchChatController>(tag: channels[0].channel).twitchChat
-            : null;
-        selectedChatIndex = channels.isNotEmpty ? 0 : null;
-      }
-
-      channels.remove(view);
-      Get.delete<TwitchChatController>(tag: channel);
-    }
-
-    for (String chat in settings.value.chatSettings!.chatsJoined) {
-      if (channels.firstWhereOrNull((channel) => channel.channel == chat) ==
-          null) {
-        lazyPutTwitchChat(chat);
-        channels.add(
-          TwitchChatView(
-            channel: chat,
-          ),
-        );
-      }
-    }
-
-    bool joinSelfChannel = settings.value.chatSettings!.joinMyself;
-
-    if (joinSelfChannel) {
-      if (channels.firstWhereOrNull((channel) => channel.channel == self) ==
-          null) {
-        lazyPutTwitchChat(self);
-        channels.insert(0, TwitchChatView(channel: self));
-      }
-    } else {
-      channels.remove(channels.firstWhereOrNull((c) => c.channel == self));
-      Get.delete<TwitchChatController>(tag: self);
-      if (selectedChat?.channel == self) {
-        selectedChat = channels.isNotEmpty
-            ? Get.find<TwitchChatController>(tag: channels[0].channel).twitchChat
-            : null;
-        selectedChatIndex = channels.isNotEmpty ? 0 : null;
-      }
-    }
-
-    chatTabsController = TabController(length: channels.length, vsync: this);
-
-    if (channels.isEmpty) {
-      selectedChatIndex = null;
-      selectedChat = null;
-    }
+    // if need to add, invoke a lazyPut for chatTabViewController
+    // then add a new chatTabView in a RxList
   }
 
   void sendChatMessage(String message) {
@@ -280,7 +223,7 @@ class HomeViewController extends GetxController
       settings.value = value.data!;
       await generateTabs();
       Get.find<DashboardController>();
-      generateChats();
+      generateChatsTabs();
       Get.find<TtsController>().initTts(settings.value);
       if (!settings.value.generalSettings!.isDarkMode) {
         Get.changeThemeMode(ThemeMode.light);

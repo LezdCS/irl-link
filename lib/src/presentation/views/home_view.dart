@@ -459,10 +459,10 @@ class HomeView extends GetView<HomeViewController> {
                 }
                 controller.obsTabViewController?.applySettings();
                 controller.streamelementsViewController?.applySettings();
-                if (controller.selectedChatIndex != null) {
-                  controller.chatTabsController
-                      .animateTo(controller.selectedChatIndex!);
-                }
+                // if (controller.selectedChatIndex != null) {
+                //   controller.chatTabsController
+                //       .animateTo(controller.selectedChatIndex!);
+                // }
               },
               child: Icon(
                 Icons.settings,
@@ -511,7 +511,7 @@ class HomeView extends GetView<HomeViewController> {
           controller.selectedChat = c.twitchChat;
         }
         controller.selectedMessage.value = null;
-        controller.selectedChatIndex = i;
+        // controller.selectedChatIndex = i;
       },
       tabs: List<Tab>.generate(
         controller.channels.length,
