@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:kick_chat/kick_chat.dart';
 
-class KickChatViewController extends GetxController {
-  KickChatViewController({
-    required this.homeEvents,
+class KickChatController extends GetxController {
+  KickChatController({
     required this.chatroomId,
   });
 
-  final HomeEvents homeEvents;
   final String chatroomId;
 
   late KickChat kickChat;

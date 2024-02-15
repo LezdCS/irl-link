@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
-import 'package:irllink/src/presentation/controllers/twitch_chat_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/chats/twitch_chat_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/store_controller.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
@@ -449,10 +449,10 @@ class HomeView extends GetView<HomeViewController> {
                 await controller.getSettings();
                 if (controller.twitchData != null) {
                   for (var chan in controller.channels) {
-                    if (Get.isRegistered<TwitchChatViewController>(
+                    if (Get.isRegistered<TwitchChatController>(
                         tag: chan.channel)) {
-                      TwitchChatViewController c =
-                          Get.find<TwitchChatViewController>(tag: chan.channel);
+                      TwitchChatController c =
+                          Get.find<TwitchChatController>(tag: chan.channel);
                       c.applySettings();
                     }
                   }
@@ -503,10 +503,10 @@ class HomeView extends GetView<HomeViewController> {
       indicatorWeight: 0.01,
       dividerColor: Colors.transparent,
       onTap: (int i) {
-        if (Get.isRegistered<TwitchChatViewController>(
+        if (Get.isRegistered<TwitchChatController>(
             tag: controller.channels[i].channel)) {
-          TwitchChatViewController c =
-              Get.find<TwitchChatViewController>(tag: controller.channels[i].channel);
+          TwitchChatController c =
+              Get.find<TwitchChatController>(tag: controller.channels[i].channel);
           c.scrollToBottom();
           controller.selectedChat = c.twitchChat;
         }

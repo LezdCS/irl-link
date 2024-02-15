@@ -9,11 +9,11 @@ import 'package:irllink/src/presentation/controllers/tts_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 
-import 'home_view_controller.dart';
+import '../home_view_controller.dart';
 
-class TwitchChatViewController extends GetxController
+class TwitchChatController extends GetxController
     with GetTickerProviderStateMixin {
-  TwitchChatViewController({
+  TwitchChatController({
     required this.homeEvents,
     required this.channel,
   });

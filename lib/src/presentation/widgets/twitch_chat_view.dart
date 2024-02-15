@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/presentation/controllers/twitch_chat_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/chats/twitch_chat_controller.dart';
 import 'package:irllink/src/presentation/widgets/chat_message/event_container.dart';
 import 'package:irllink/src/presentation/widgets/chat_message/message_container.dart';
 import 'package:irllink/src/presentation/widgets/chat_message/moderation_bottom_sheet.dart';
@@ -17,9 +17,9 @@ class TwitchChatView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TwitchChatViewController? controller;
-    if (Get.isRegistered<TwitchChatViewController>(tag: channel)) {
-      controller = Get.find<TwitchChatViewController>(tag: channel);
+    TwitchChatController? controller;
+    if (Get.isRegistered<TwitchChatController>(tag: channel)) {
+      controller = Get.find<TwitchChatController>(tag: channel);
     }
 
     final double height = MediaQuery.of(context).size.height;
