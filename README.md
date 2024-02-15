@@ -25,7 +25,7 @@ Soon to be released on the iOS App Store!
   - [x] Viewer count
   - [x] Change stream title
   - [x] Polls & predictions
-  - [ ] Hype train
+  - [x] Hype train
 - [x] OBS
   - [x] Start & stop streaming/recording
   - [x] Switch scenes
@@ -35,7 +35,8 @@ Soon to be released on the iOS App Store!
 - [x] StreamElements
   - [x] Display activities (subs, follows, tips...)
   - [x] Replay activities
-  - [ ] Song request managment
+  - [x] Song request controls
+  - [ ] Song request audio
 
 ## Screenshots
 <div>
