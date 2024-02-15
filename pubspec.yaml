@@ -72,6 +72,9 @@ dependencies:
   flutter_slidable: ^3.0.1
   flutter_colorpicker: ^1.0.3
   instant: ^0.5.1
+  kick_chat:
+    git:
+      url: https://github.com/LezdCS/kick_chat # repository
 
 dependency_overrides:
   wakelock_windows:
