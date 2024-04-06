@@ -364,7 +364,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
         },
         data: jsonEncode(titleMap),
       );
-      return const DataSuccess("");
+      return const DataSuccess(null);
     } on DioException catch (e) {
       debugPrint(e.toString());
       return const DataFailed("Error editing Stream chat settings");

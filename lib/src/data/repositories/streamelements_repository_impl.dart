@@ -35,7 +35,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       // final refreshToken = Uri.parse(result).queryParameters['refresh_token'];
       // final expiresIn = Uri.parse(result).queryParameters['expires_in'];
 
-      return const DataSuccess('');
+      return const DataSuccess(null);
     } catch (e) {
       return const DataFailed("Unable to retrieve StreamElements token");
     }
