@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart' as dio_l;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -114,10 +115,24 @@ class StoreController extends GetxController {
     }
   }
 
-  Future<bool> verifyPurchase(PurchaseDetails purchaseDetails) {
-    // IMPORTANT!! Always verify a purchase before delivering the product.
-    // For the purpose of an example, we directly return true.
-    return Future<bool>.value(true);
+  Future<bool> verifyPurchase(PurchaseDetails purchaseDetails) async {
+    String? pruchaseToken =
+        purchaseDetails.verificationData.serverVerificationData;
+    HomeViewController homeViewController = Get.find<HomeViewController>();
+    var dio = dio_l.Dio();
+    try {
+      await dio.post(
+        'https://www.irllink.com/api/verify-android-purchase',
+        data: {
+          'purchaseToken': pruchaseToken,
+          'twitchId': homeViewController.twitchData?.twitchUser.id,
+        },
+      );
+      return Future<bool>.value(true);
+    } on dio_l.DioException catch (e) {
+      debugPrint(e.toString());
+      return Future<bool>.value(false);
+    }
   }
 
   Future<void> deliverProduct(PurchaseDetails purchaseDetails) async {

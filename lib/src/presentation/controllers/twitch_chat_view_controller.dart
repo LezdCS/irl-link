@@ -121,18 +121,17 @@ class TwitchChatViewController extends GetxController
     } else {
       chatDemoTimer = Timer.periodic(
         const Duration(seconds: 3),
-        (Timer t) => {
-          chatMessages.add(ChatMessage.randomGeneration(null, null, null)),
-          if (scrollController.hasClients && isAutoScrolldown.value)
-            {
-              Timer(const Duration(milliseconds: 100), () {
-                if (isAutoScrolldown.value) {
-                  scrollController.jumpTo(
-                    scrollController.position.maxScrollExtent,
-                  );
-                }
-              }),
-            }
+        (Timer t) {
+          chatMessages.add(ChatMessage.randomGeneration(null, null, null));
+          if (scrollController.hasClients && isAutoScrolldown.value) {
+            Timer(const Duration(milliseconds: 100), () {
+              if (isAutoScrolldown.value) {
+                scrollController.jumpTo(
+                  scrollController.position.maxScrollExtent,
+                );
+              }
+            });
+          }
         },
       );
       alertMessage.value = "DEMO";
