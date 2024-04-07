@@ -25,6 +25,7 @@
     </queries>
     <application
         android:label="IRL Link"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <!-- <service
           android:name=".MyMediaPlaybackService"
