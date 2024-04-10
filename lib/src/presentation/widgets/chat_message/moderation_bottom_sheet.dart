@@ -50,7 +50,7 @@ class ModerationBottomSheet extends StatelessWidget {
                         scheme: "https",
                         host: "twitch.tv",
                         path: controller.homeViewController.selectedMessage
-                            .value?.displayName,
+                            .value?.username,
                       ),
                       mode: LaunchMode.externalApplication,
                     ),
