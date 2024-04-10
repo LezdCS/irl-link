@@ -14,6 +14,9 @@ class TtsSettingsDTO extends TtsSettings {
     required Map<String, String> voice,
     required List ttsUsersToIgnore,
     required bool ttsMuteViewerName,
+    required bool ttsOnlyVip,
+    required bool ttsOnlyMod,
+    required bool ttsOnlySubscriber,
   }) : super(
           ttsEnabled: ttsEnabled,
           language: language,
@@ -25,6 +28,9 @@ class TtsSettingsDTO extends TtsSettings {
           voice: voice,
           ttsUsersToIgnore: ttsUsersToIgnore,
           ttsMuteViewerName: ttsMuteViewerName,
+          ttsOnlyVip: ttsOnlyVip,
+          ttsOnlyMod: ttsOnlyMod,
+          ttsOnlySubscriber: ttsOnlySubscriber,
         );
 
   @override
@@ -63,6 +69,12 @@ class TtsSettingsDTO extends TtsSettings {
           const Settings.defaultSettings().ttsSettings!.ttsUsersToIgnore,
       ttsMuteViewerName: map['ttsMuteViewerName'] ??
           const Settings.defaultSettings().ttsSettings!.ttsMuteViewerName,
+      ttsOnlyVip: map['ttsOnlyVip'] ??
+          const Settings.defaultSettings().ttsSettings!.ttsOnlyVip,
+      ttsOnlyMod: map['ttsOnlyMod'] ??
+          const Settings.defaultSettings().ttsSettings!.ttsOnlyMod,
+      ttsOnlySubscriber: map['ttsOnlySubscriber'] ??
+          const Settings.defaultSettings().ttsSettings!.ttsOnlySubscriber,
     );
   }
 }

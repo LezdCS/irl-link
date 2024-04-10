@@ -261,6 +261,87 @@ class Tts extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Only read VIP messages",
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyLarge!.color,
+                        fontSize: 18,
+                      ),
+                    ),
+                    Switch(
+                      value: controller.homeViewController.settings.value
+                          .ttsSettings!.ttsOnlyVip,
+                      onChanged: (value) {
+                        controller.homeViewController.settings.value =
+                            controller.homeViewController.settings.value
+                                .copyWith(
+                          ttsSettings: controller
+                              .homeViewController.settings.value.ttsSettings
+                              ?.copyWith(ttsOnlyVip: value),
+                        );
+                        controller.saveSettings();
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Only read Mod messages",
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyLarge!.color,
+                        fontSize: 18,
+                      ),
+                    ),
+                    Switch(
+                      value: controller.homeViewController.settings.value
+                          .ttsSettings!.ttsOnlyMod,
+                      onChanged: (value) {
+                        controller.homeViewController.settings.value =
+                            controller.homeViewController.settings.value
+                                .copyWith(
+                          ttsSettings: controller
+                              .homeViewController.settings.value.ttsSettings
+                              ?.copyWith(ttsOnlyMod: value),
+                        );
+                        controller.saveSettings();
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Only read Subscriber messages",
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyLarge!.color,
+                        fontSize: 18,
+                      ),
+                    ),
+                    Switch(
+                      value: controller.homeViewController.settings.value
+                          .ttsSettings!.ttsOnlySubscriber,
+                      onChanged: (value) {
+                        controller.homeViewController.settings.value =
+                            controller.homeViewController.settings.value
+                                .copyWith(
+                          ttsSettings: controller
+                              .homeViewController.settings.value.ttsSettings
+                              ?.copyWith(ttsOnlySubscriber: value),
+                        );
+                        controller.saveSettings();
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
                 InkWell(
                   onTap: () {
                     _ttsDialog(

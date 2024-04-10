@@ -31,10 +31,10 @@ dependencies:
   equatable: ^2.0.5
   expandable: ^5.0.1
   faker: ^2.1.0
-  firebase_core: ^2.20.0
-  firebase_crashlytics: ^3.4.14
-  firebase_remote_config: ^4.3.13
-  firebase_analytics: ^10.8.5
+  firebase_core: ^2.29.0
+  firebase_crashlytics: ^3.5.1
+  firebase_remote_config: ^4.4.1
+  firebase_analytics: ^10.10.1
   fl_chart: ^0.64.0
   floating_draggable_widget: ^2.1.4
   flutter_background_service: ^5.0.5

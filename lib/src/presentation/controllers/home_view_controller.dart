@@ -237,7 +237,7 @@ class HomeViewController extends GetxController
     if (twitchData == null) return;
 
     TwitchChat twitchChat = TwitchChat(
-      selectedChat?.channel,
+      selectedChat!.channel,
       twitchData!.twitchUser.login,
       twitchData!.accessToken,
       clientId: kTwitchAuthClientId,
@@ -257,9 +257,9 @@ class HomeViewController extends GetxController
   }
 
   void getEmotes() {
-    List<Emote> emotes = List.from(selectedChat?.emotes)
-      ..addAll(selectedChat?.emotesFromSets)
-      ..addAll(selectedChat?.thirdPartEmotes);
+    List<Emote> emotes = List.from(selectedChat!.emotes)
+      ..addAll(selectedChat!.emotesFromSets)
+      ..addAll(selectedChat!.thirdPartEmotes);
     twitchEmotes
       ..clear()
       ..addAll(emotes);
@@ -267,9 +267,9 @@ class HomeViewController extends GetxController
   }
 
   void searchEmote(String input) {
-    List<Emote> emotes = List.from(selectedChat?.emotes)
-      ..addAll(selectedChat?.emotesFromSets)
-      ..addAll(selectedChat?.thirdPartEmotes);
+    List<Emote> emotes = List.from(selectedChat!.emotes)
+      ..addAll(selectedChat!.emotesFromSets)
+      ..addAll(selectedChat!.thirdPartEmotes);
     emotes = emotes
         .where(
           (emote) => emote.name.toLowerCase().contains(input.toLowerCase()),
