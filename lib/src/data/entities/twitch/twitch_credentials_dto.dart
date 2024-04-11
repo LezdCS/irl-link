@@ -6,22 +6,14 @@ import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 
 class TwitchCredentialsDTO extends TwitchCredentials {
   const TwitchCredentialsDTO({
-    required String accessToken,
-    required String idToken,
-    required String refreshToken,
-    required String expiresIn,
-    required TwitchDecodedIdTokenDTO decodedIdToken,
-    required TwitchUserDTO twitchUser,
-    required String scopes,
-  }) : super(
-          accessToken: accessToken,
-          idToken: idToken,
-          refreshToken: refreshToken,
-          expiresIn: expiresIn,
-          decodedIdToken: decodedIdToken,
-          twitchUser: twitchUser,
-          scopes: scopes,
-        );
+    required super.accessToken,
+    required super.idToken,
+    required super.refreshToken,
+    required super.expiresIn,
+    required TwitchDecodedIdTokenDTO super.decodedIdToken,
+    required TwitchUserDTO super.twitchUser,
+    required super.scopes,
+  });
 
   @override
   Map toJson() => {

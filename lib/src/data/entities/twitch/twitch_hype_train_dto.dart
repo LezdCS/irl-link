@@ -4,24 +4,15 @@ import '../../../domain/entities/twitch/twitch_hype_train.dart';
 
 class TwitchHypeTrainDTO extends TwitchHypeTrain {
   const TwitchHypeTrainDTO({
-    required String id,
-    required int total,
-    required int progress,
-    required int goal,
-    required int level,
-    required List<Contribution> topContributions,
-    required Contribution? lastContribution,
-    required DateTime endsAt,
-  }) : super(
-          id: id,
-          total: total,
-          progress: progress,
-          goal: goal,
-          level: level,
-          topContributions: topContributions,
-          lastContribution: lastContribution,
-          endsAt: endsAt,
-        );
+    required super.id,
+    required super.total,
+    required super.progress,
+    required super.goal,
+    required super.level,
+    required super.topContributions,
+    required super.lastContribution,
+    required super.endsAt,
+  });
 
   @override
   Map toJson() => {
@@ -64,17 +55,12 @@ class TwitchHypeTrainDTO extends TwitchHypeTrain {
 
 class ContributionDTO extends Contribution {
   const ContributionDTO({
-    required String userId,
-    required String userLogin,
-    required String userName,
-    required String type,
-    required int total,
-  }) : super(
-            userId: userId,
-            userLogin: userLogin,
-            userName: userName,
-            type: type,
-            total: total);
+    required super.userId,
+    required super.userLogin,
+    required super.userName,
+    required super.type,
+    required super.total,
+  });
 
   factory ContributionDTO.fromJson(Map<String, dynamic> map) {
     return ContributionDTO(

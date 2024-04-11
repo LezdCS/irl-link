@@ -175,7 +175,7 @@ class Main extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       home: UpgradeAlert(
-        upgrader: Upgrader(shouldPopScope: () => true),
+        upgrader: Upgrader(),
         child: const LoginView(),
       ),
       theme: Themes().lightTheme,

@@ -2,30 +2,18 @@ import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
 
 class SeActivityDTO extends SeActivity {
   const SeActivityDTO({
-    required String id,
-    required String channel,
-    required String username,
-    required ActivityType activityType,
-    String? message,
-    String? amount,
-    String? tier,
-    bool? gifted,
-    String? sender,
-    String? currency,
-    bool? isTest,
-  }) : super(
-          id: id,
-          channel: channel,
-          username: username,
-          activityType: activityType,
-          message: message,
-          amount: amount,
-          tier: tier,
-          gifted: gifted,
-          sender: sender,
-          currency: currency,
-          isTest: isTest,
-        );
+    required super.id,
+    required super.channel,
+    required super.username,
+    required super.activityType,
+    super.message,
+    super.amount,
+    super.tier,
+    super.gifted,
+    super.sender,
+    super.currency,
+    super.isTest,
+  });
 
   factory SeActivityDTO.fromJson(Map<String, dynamic> map) {
     switch (map['type']) {

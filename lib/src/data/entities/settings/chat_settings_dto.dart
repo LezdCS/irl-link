@@ -4,14 +4,10 @@ import '../../../domain/entities/settings/chat_settings.dart';
 
 class ChatSettingsDTO extends ChatSettings {
   const ChatSettingsDTO({
-    required List chatsJoined,
-    required bool joinMyself,
-    required bool hideDeletedMessages,
-  }) : super(
-          chatsJoined: chatsJoined,
-          joinMyself: joinMyself,
-          hideDeletedMessages: hideDeletedMessages,
-        );
+    required super.chatsJoined,
+    required super.joinMyself,
+    required super.hideDeletedMessages,
+  });
 
   @override
   Map toJson() => {

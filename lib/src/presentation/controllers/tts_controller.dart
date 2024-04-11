@@ -80,6 +80,25 @@ class TtsController extends GetxController {
         .contains(message.displayName)) {
       return;
     }
+
+    // If we allow only vip to be read, we don't read the message if the user is not a vip
+    if (homeViewController.settings.value.ttsSettings!.ttsOnlyVip &&
+        !message.isVip) {
+      return;
+    }
+
+    // If we allow only vip to be read, we don't read the message if the user is not a vip
+    if (homeViewController.settings.value.ttsSettings!.ttsOnlyMod &&
+        !message.isModerator) {
+      return;
+    }
+
+    // If we allow only vip to be read, we don't read the message if the user is not a vip
+    if (homeViewController.settings.value.ttsSettings!.ttsOnlySubscriber &&
+        !message.isSubscriber) {
+      return;
+    }
+
     // If the prefix is in the ignore list, we don't read the message
     for (String prefix
         in homeViewController.settings.value.ttsSettings!.prefixsToIgnore) {

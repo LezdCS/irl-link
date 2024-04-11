@@ -3,20 +3,13 @@ import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 
 class TwitchPollDTO extends TwitchPoll {
   const TwitchPollDTO({
-    required String id,
-    required String title,
-    required List<Choice> choices,
-    required int totalVotes,
-    required PollStatus status,
-    required DateTime endsAt,
-  }) : super(
-          id: id,
-          title: title,
-          choices: choices,
-          totalVotes: totalVotes,
-          status: status,
-          endsAt: endsAt,
-        );
+    required super.id,
+    required super.title,
+    required super.choices,
+    required super.totalVotes,
+    required super.status,
+    required super.endsAt,
+  });
 
   @override
   Map toJson() => {
@@ -64,10 +57,10 @@ class TwitchPollDTO extends TwitchPoll {
 
 class ChoiceDTO extends Choice {
   const ChoiceDTO({
-    required String id,
-    required String title,
-    required int votes,
-  }) : super(id: id, title: title, votes: votes);
+    required super.id,
+    required super.title,
+    required super.votes,
+  });
 
   @override
   Map toJson() => {

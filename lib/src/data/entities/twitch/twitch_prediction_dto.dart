@@ -4,22 +4,14 @@ import '../../../domain/entities/twitch/twitch_prediction.dart';
 
 class TwitchPredictionDTO extends TwitchPrediction {
   const TwitchPredictionDTO({
-    required String id,
-    required String title,
-    required String winningOutcomeId,
-    required int totalUsers,
-    required List<Outcome> outcomes,
-    required PredictionStatus status,
-    required DateTime remainingTime,
-  }) : super(
-          id: id,
-          title: title,
-          winningOutcomeId: winningOutcomeId,
-          totalUsers: totalUsers,
-          outcomes: outcomes,
-          status: status,
-          remainingTime: remainingTime,
-        );
+    required super.id,
+    required super.title,
+    required super.winningOutcomeId,
+    required super.totalUsers,
+    required super.outcomes,
+    required super.status,
+    required super.remainingTime,
+  });
 
   @override
   Map toJson() => {
@@ -75,17 +67,12 @@ class TwitchPredictionDTO extends TwitchPrediction {
 
 class OutcomeDTO extends Outcome {
   const OutcomeDTO({
-    required String id,
-    required String title,
-    required int users,
-    required int channelPoints,
-    required Color color,
-  }) : super(
-            id: id,
-            title: title,
-            users: users,
-            channelPoints: channelPoints,
-            color: color);
+    required super.id,
+    required super.title,
+    required super.users,
+    required super.channelPoints,
+    required super.color,
+  });
 
   @override
   Map toJson() => {

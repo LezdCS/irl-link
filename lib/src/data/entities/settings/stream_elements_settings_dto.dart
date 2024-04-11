@@ -3,22 +3,14 @@ import 'package:irllink/src/domain/entities/settings/stream_elements_settings.da
 
 class StreamElementsSettingsDTO extends StreamElementsSettings {
   const StreamElementsSettingsDTO({
-    required bool showFollowerActivity,
-    required bool showSubscriberActivity,
-    required bool showDonationActivity,
-    required bool showCheerActivity,
-    required bool showRaidActivity,
-    required bool showHostActivity,
-    required bool showMerchActivity,
-  }) : super(
-          showFollowerActivity: showFollowerActivity,
-          showSubscriberActivity: showSubscriberActivity,
-          showDonationActivity: showDonationActivity,
-          showCheerActivity: showCheerActivity,
-          showRaidActivity: showRaidActivity,
-          showHostActivity: showHostActivity,
-          showMerchActivity: showMerchActivity,
-        );
+    required super.showFollowerActivity,
+    required super.showSubscriberActivity,
+    required super.showDonationActivity,
+    required super.showCheerActivity,
+    required super.showRaidActivity,
+    required super.showHostActivity,
+    required super.showMerchActivity,
+  });
 
   @override
   Map toJson() => {
