@@ -14,6 +14,9 @@ class TtsSettingsDTO extends TtsSettings {
     required super.voice,
     required super.ttsUsersToIgnore,
     required super.ttsMuteViewerName,
+    required super.ttsOnlyVip,
+    required super.ttsOnlyMod,
+    required super.ttsOnlySubscriber,
   });
 
   @override
@@ -52,6 +55,12 @@ class TtsSettingsDTO extends TtsSettings {
           const Settings.defaultSettings().ttsSettings!.ttsUsersToIgnore,
       ttsMuteViewerName: map['ttsMuteViewerName'] ??
           const Settings.defaultSettings().ttsSettings!.ttsMuteViewerName,
+      ttsOnlyVip: map['ttsOnlyVip'] ??
+          const Settings.defaultSettings().ttsSettings!.ttsOnlyVip,
+      ttsOnlyMod: map['ttsOnlyMod'] ??
+          const Settings.defaultSettings().ttsSettings!.ttsOnlyMod,
+      ttsOnlySubscriber: map['ttsOnlySubscriber'] ??
+          const Settings.defaultSettings().ttsSettings!.ttsOnlySubscriber,
     );
   }
 }

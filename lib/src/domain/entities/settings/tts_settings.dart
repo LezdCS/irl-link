@@ -11,6 +11,9 @@ class TtsSettings extends Equatable {
   final Map<String, String> voice;
   final List ttsUsersToIgnore;
   final bool ttsMuteViewerName;
+  final bool ttsOnlyVip;
+  final bool ttsOnlyMod;
+  final bool ttsOnlySubscriber;
 
   const TtsSettings({
     required this.ttsEnabled,
@@ -23,6 +26,9 @@ class TtsSettings extends Equatable {
     required this.voice,
     required this.ttsUsersToIgnore,
     required this.ttsMuteViewerName,
+    required this.ttsOnlyVip,
+    required this.ttsOnlyMod,
+    required this.ttsOnlySubscriber,
   });
 
   @override
@@ -38,6 +44,9 @@ class TtsSettings extends Equatable {
       voice,
       ttsUsersToIgnore,
       ttsMuteViewerName,
+      ttsOnlyVip,
+      ttsOnlyMod,
+      ttsOnlySubscriber,
     ];
   }
 
@@ -52,6 +61,9 @@ class TtsSettings extends Equatable {
         'voice': voice,
         'ttsUsersToIgnore': ttsUsersToIgnore,
         'ttsMuteViewerName': ttsMuteViewerName,
+        'ttsOnlyVip': ttsOnlyVip,
+        'ttsOnlyMod': ttsOnlyMod,
+        'ttsOnlySubscriber': ttsOnlySubscriber,
       };
 
   @override
@@ -68,6 +80,9 @@ class TtsSettings extends Equatable {
     Map<String, String>? voice,
     List? ttsUsersToIgnore,
     bool? ttsMuteViewerName,
+    bool? ttsOnlyVip,
+    bool? ttsOnlyMod,
+    bool? ttsOnlySubscriber,
   }) {
     return TtsSettings(
       ttsEnabled: ttsEnabled ?? this.ttsEnabled,
@@ -80,6 +95,9 @@ class TtsSettings extends Equatable {
       voice: voice ?? this.voice,
       ttsUsersToIgnore: ttsUsersToIgnore ?? this.ttsUsersToIgnore,
       ttsMuteViewerName: ttsMuteViewerName ?? this.ttsMuteViewerName,
+      ttsOnlyVip: ttsOnlyVip ?? this.ttsOnlyVip,
+      ttsOnlyMod: ttsOnlyMod ?? this.ttsOnlyMod,
+      ttsOnlySubscriber: ttsOnlySubscriber ?? this.ttsOnlySubscriber,
     );
   }
 }

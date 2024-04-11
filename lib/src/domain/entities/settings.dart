@@ -119,6 +119,9 @@ class Settings extends Equatable {
       voice: {"name": "en-us-x-sfg-local", "locale": "en-US"},
       ttsUsersToIgnore: [],
       ttsMuteViewerName: false,
+      ttsOnlyVip: false,
+      ttsOnlyMod: false,
+      ttsOnlySubscriber: false,
     ),
   });
 
