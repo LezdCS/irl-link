@@ -3,22 +3,14 @@ import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
 
 class TwitchUserDTO extends TwitchUser {
   const TwitchUserDTO({
-    required String id,
-    required String login,
-    required String displayName,
-    required String broadcasterType,
-    required String description,
-    required String profileImageUrl,
-    required String viewCount,
-  }) : super(
-          id: id,
-          login: login,
-          displayName: displayName,
-          broadcasterType: broadcasterType,
-          description: description,
-          profileImageUrl: profileImageUrl,
-          viewCount: viewCount,
-        );
+    required super.id,
+    required super.login,
+    required super.displayName,
+    required super.broadcasterType,
+    required super.description,
+    required super.profileImageUrl,
+    required super.viewCount,
+  });
 
   @override
   Map toJson() => {

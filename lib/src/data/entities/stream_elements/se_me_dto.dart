@@ -2,16 +2,11 @@ import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 
 class SeMeDTO extends SeMe {
   const SeMeDTO({
-    required String id,
-    required String avatar,
-    required String username,
-    required String displayName,
-  }) : super(
-          id: id,
-          avatar: avatar,
-          username: username,
-          displayName: displayName,
-        );
+    required super.id,
+    required super.avatar,
+    required super.username,
+    required super.displayName,
+  });
 
   Map toJson() => {
         'id': id,

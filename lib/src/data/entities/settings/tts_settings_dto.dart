@@ -4,34 +4,20 @@ import '../../../domain/entities/settings/tts_settings.dart';
 
 class TtsSettingsDTO extends TtsSettings {
   const TtsSettingsDTO({
-    required bool ttsEnabled,
-    required String language,
-    required List prefixsToIgnore,
-    required List prefixsToUseTtsOnly,
-    required double volume,
-    required double pitch,
-    required double rate,
-    required Map<String, String> voice,
-    required List ttsUsersToIgnore,
-    required bool ttsMuteViewerName,
-    required bool ttsOnlyVip,
-    required bool ttsOnlyMod,
-    required bool ttsOnlySubscriber,
-  }) : super(
-          ttsEnabled: ttsEnabled,
-          language: language,
-          prefixsToIgnore: prefixsToIgnore,
-          prefixsToUseTtsOnly: prefixsToUseTtsOnly,
-          volume: volume,
-          pitch: pitch,
-          rate: rate,
-          voice: voice,
-          ttsUsersToIgnore: ttsUsersToIgnore,
-          ttsMuteViewerName: ttsMuteViewerName,
-          ttsOnlyVip: ttsOnlyVip,
-          ttsOnlyMod: ttsOnlyMod,
-          ttsOnlySubscriber: ttsOnlySubscriber,
-        );
+    required super.ttsEnabled,
+    required super.language,
+    required super.prefixsToIgnore,
+    required super.prefixsToUseTtsOnly,
+    required super.volume,
+    required super.pitch,
+    required super.rate,
+    required super.voice,
+    required super.ttsUsersToIgnore,
+    required super.ttsMuteViewerName,
+    required super.ttsOnlyVip,
+    required super.ttsOnlyMod,
+    required super.ttsOnlySubscriber,
+  });
 
   @override
   Map toJson() => {

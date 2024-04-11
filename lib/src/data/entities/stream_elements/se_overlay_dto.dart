@@ -2,12 +2,9 @@ import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
 
 class SeOverlayDTO extends SeOverlay {
   const SeOverlayDTO({
-    required String id,
-    required String name,
-  }) : super(
-          id: id,
-          name: name,
-        );
+    required super.id,
+    required super.name,
+  });
 
   Map toJson() => {
         'id': id,

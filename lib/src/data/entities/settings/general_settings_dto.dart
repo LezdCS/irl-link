@@ -3,18 +3,12 @@ import 'package:irllink/src/domain/entities/settings/general_settings.dart';
 
 class GeneralSettingsDTO extends GeneralSettings {
   const GeneralSettingsDTO({
-    required bool isDarkMode,
-    required bool keepSpeakerOn,
-    required bool displayViewerCount,
-    required Map<dynamic, dynamic> appLanguage,
-    required List<double> splitViewWeights,
-  }) : super(
-          isDarkMode: isDarkMode,
-          keepSpeakerOn: keepSpeakerOn,
-          displayViewerCount: displayViewerCount,
-          appLanguage: appLanguage,
-          splitViewWeights: splitViewWeights,
-        );
+    required super.isDarkMode,
+    required super.keepSpeakerOn,
+    required super.displayViewerCount,
+    required super.appLanguage,
+    required super.splitViewWeights,
+  });
 
   @override
   Map toJson() => {
