@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
-import 'package:irllink/src/presentation/widgets/chat_message/third_part_emote.dart';
-import 'package:irllink/src/presentation/widgets/chat_message/timestamp.dart';
-import 'package:irllink/src/presentation/widgets/chat_message/author_name.dart';
-import 'package:irllink/src/presentation/widgets/chat_message/twitch_emote.dart';
-import 'package:irllink/src/presentation/widgets/chat_message/word.dart';
+import 'package:irllink/src/presentation/widgets/chat_message/shared/third_part_emote.dart';
+import 'package:irllink/src/presentation/widgets/chat_message/shared/timestamp.dart';
+import 'package:irllink/src/presentation/widgets/chat_message/shared/author_name.dart';
+import 'package:irllink/src/presentation/widgets/chat_message/twitch/twitch_emote.dart';
+import 'package:irllink/src/presentation/widgets/chat_message/shared/word.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 
 import 'cheer_emote.dart';

@@ -10,7 +10,7 @@ import 'package:irllink/src/presentation/controllers/twitch_chat_view_controller
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/store_controller.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
-import 'package:irllink/src/presentation/widgets/twitch_chat_view.dart';
+import 'package:irllink/src/presentation/widgets/chats/twitch_chat_view.dart';
 import 'package:irllink/src/presentation/widgets/dashboard.dart';
 import 'package:irllink/src/presentation/widgets/emote_picker_view.dart';
 import 'package:irllink/src/presentation/widgets/hype_train.dart';

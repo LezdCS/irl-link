@@ -21,7 +21,7 @@ import '../../data/repositories/settings_repository_impl.dart';
 import '../../data/repositories/twitch_repository_impl.dart';
 import '../../domain/usecases/settings_usecase.dart';
 import '../../domain/usecases/twitch_usecase.dart';
-import '../widgets/twitch_chat_view.dart';
+import '../widgets/chats/twitch_chat_view.dart';
 import '../widgets/tabs/streamelements_tab_view.dart';
 import '../widgets/web_page_view.dart';
 import 'twitch_chat_view_controller.dart';
