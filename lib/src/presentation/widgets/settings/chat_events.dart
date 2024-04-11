@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/presentation/widgets/chat_message/twitch/event_container.dart';
+import 'package:irllink/src/presentation/widgets/chats/chat_message/twitch/event_container.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 
 class ChatEvents extends StatelessWidget {

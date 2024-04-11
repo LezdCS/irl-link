@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:irllink/src/presentation/widgets/chat_message/kick/kick_message_row.dart';
+import 'package:irllink/src/presentation/widgets/chats/chat_message/kick/kick_message_row.dart';
 import 'package:kick_chat/kick_chat.dart';
 
 class KickEventContainer extends StatelessWidget {

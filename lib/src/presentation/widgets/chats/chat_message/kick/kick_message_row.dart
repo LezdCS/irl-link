@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:irllink/src/presentation/widgets/chat_message/shared/timestamp.dart';
-import 'package:irllink/src/presentation/widgets/chat_message/shared/author_name.dart';
-import 'package:irllink/src/presentation/widgets/chat_message/shared/word.dart';
+import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/timestamp.dart';
+import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/author_name.dart';
+import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/word.dart';
 import 'package:kick_chat/kick_chat.dart';
 
 class KickMessageRow extends StatelessWidget {
