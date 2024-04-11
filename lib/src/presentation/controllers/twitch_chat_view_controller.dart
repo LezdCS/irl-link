@@ -78,7 +78,7 @@ class TwitchChatViewController extends GetxController
           twitchChat!.connect();
         },
         onError: () {},
-        params: TwitchChatParameters(addFirstMessages: true),
+        params: const TwitchChatParameters(addFirstMessages: true),
       );
 
       twitchChat!.isConnected.addListener(() {
@@ -216,7 +216,7 @@ class TwitchChatViewController extends GetxController
   void deleteMessageInstruction(ChatMessage message) {
     TwitchApi.deleteMessage(
       twitchData!.accessToken,
-      twitchChat?.channelId,
+      twitchChat!.channelId!,
       message,
       kTwitchAuthClientId,
     );
@@ -229,7 +229,7 @@ class TwitchChatViewController extends GetxController
   void timeoutMessageInstruction(ChatMessage message, int duration) {
     TwitchApi.banUser(
       twitchData!.accessToken,
-      twitchChat?.channelId,
+      twitchChat!.channelId!,
       message,
       duration,
       kTwitchAuthClientId,
@@ -242,7 +242,7 @@ class TwitchChatViewController extends GetxController
   void banMessageInstruction(ChatMessage message) {
     TwitchApi.banUser(
       twitchData!.accessToken,
-      twitchChat!.channelId,
+      twitchChat!.channelId!,
       message,
       null,
       kTwitchAuthClientId,
