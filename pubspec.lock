@@ -1170,7 +1170,6 @@ packages:
     dependency: transitive
     description:
       name: vector_graphics_codec
-
       sha256: c86987475f162fadff579e7320c7ddda04cd2fdeffbe1129227a85d9ac9e03da
       url: "https://pub.dev"
     source: hosted
