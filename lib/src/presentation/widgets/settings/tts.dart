@@ -292,7 +292,7 @@ class Tts extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Only read Mod messages",
+                      "Only read Moderators messages",
                       style: TextStyle(
                         color: Theme.of(context).textTheme.bodyLarge!.color,
                         fontSize: 18,
