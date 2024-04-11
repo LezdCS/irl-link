@@ -3,12 +3,9 @@ import 'package:irllink/src/domain/entities/twitch/twitch_decoded_idtoken.dart';
 
 class TwitchDecodedIdTokenDTO extends TwitchDecodedIdToken {
   const TwitchDecodedIdTokenDTO({
-    required String preferredUsername,
-    required String profilePicture,
-  }) : super(
-          preferredUsername: preferredUsername,
-          profilePicture: profilePicture,
-        );
+    required super.preferredUsername,
+    required super.profilePicture,
+  });
 
   @override
   Map toJson() => {

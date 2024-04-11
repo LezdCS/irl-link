@@ -4,12 +4,9 @@ import '../dashboard_event_dto.dart';
 
 class DashboardSettingsDTO extends DashboardSettings {
   const DashboardSettingsDTO({
-    required List<DashboardEventDTO> userEvents,
-    required bool activated,
-  }) : super(
-          userEvents: userEvents,
-          activated: activated,
-        );
+    required List<DashboardEventDTO> super.userEvents,
+    required super.activated,
+  });
 
   factory DashboardSettingsDTO.fromJson(Map<String, dynamic> map) {
     List<DashboardEventDTO> userEvents = [];

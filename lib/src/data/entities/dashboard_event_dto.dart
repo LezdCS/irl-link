@@ -4,18 +4,12 @@ import 'package:irllink/src/domain/entities/dashboard_event.dart';
 
 class DashboardEventDTO extends DashboardEvent {
   const DashboardEventDTO({
-    required String title,
-    required Color color,
-    required DashboardActionsTypes dashboardActionsType,
-    required SupportedEvents event,
-    required dynamic customValue,
-  }) : super(
-          title: title,
-          color: color,
-          dashboardActionsType: dashboardActionsType,
-          event: event,
-          customValue: customValue,
-        );
+    required super.title,
+    required super.color,
+    required super.dashboardActionsType,
+    required super.event,
+    required super.customValue,
+  });
 
   factory DashboardEventDTO.fromJson(Map<String, dynamic> map) {
     DashboardActionsTypes action = getActionFromString(map['dashboardActionsType']);
