@@ -44,7 +44,7 @@ class MessageRow extends StatelessWidget {
               ),
             ),
           ),
-          for (ChatBadge badge in message.badges)
+          for (ChatBadge badge in message.badgesList)
             Container(
               padding: const EdgeInsets.only(right: 4, top: 3),
               child: Image(
@@ -55,7 +55,7 @@ class MessageRow extends StatelessWidget {
           AuthorName(
             isAction: message.isAction,
             username: message.username,
-            displayName: message.authorName,
+            displayName: message.displayName,
             color: message.color,
             textSize: textSize,
           ),

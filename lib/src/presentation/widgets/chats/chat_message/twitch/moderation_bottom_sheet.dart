@@ -35,7 +35,7 @@ class ModerationBottomSheet extends StatelessWidget {
             children: [
               Text(
                 controller.homeViewController.selectedMessage.value
-                        ?.authorName ??
+                        ?.displayName ??
                     "",
                 style: const TextStyle(
                     color: Colors.white,

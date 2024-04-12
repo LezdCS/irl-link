@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
-import 'package:twitch_chat/twitch_chat.dart' as twitch;
 
 import 'message_row.dart';
 
@@ -72,24 +71,20 @@ class EventContainer extends StatelessWidget {
   String getStringFromType(EventType type, ChatMessage message) {
     switch (type) {
       case EventType.bitDonation:
-        twitch.BitDonation msg = message as twitch.BitDonation;
-        return "Cheered ${msg.totalBits.toString()} Bits";
+        return "Cheered ${message.totalBits.toString()} Bits";
       case EventType.firstTimeChatter:
         return "First message";
       case EventType.channelPointRedemption:
         return "Redeemed a reward";
       case EventType.subscription:
-        twitch.Subscription msg = message as twitch.Subscription;
-        bool isPrime = msg.tier == "Prime";
-        return "${message.authorName} subscribed${isPrime ? " with prime" : ""}. They've subscribed for ${msg.months} months.";
+        bool isPrime = message.tier == "Prime";
+        return "${message.displayName} subscribed${isPrime ? " with prime" : ""}. They've subscribed for ${message.months} months.";
       case EventType.announcement:
         return "Announcement";
       case EventType.subscriptionGifted:
-        twitch.SubGift msg = message as twitch.SubGift;
-        return "${message.authorName} gifted a subscription to ${msg.giftedName}!";
+        return "${message.displayName} gifted a subscription to ${message.giftedName}!";
       case EventType.incomingRaid:
-        twitch.IncomingRaid raid = message as twitch.IncomingRaid;
-        return "${raid.viewerCount} raiders from ${raid.raidingChannelName} have joined!";
+        return "${message.viewerCount} raiders from ${message.raidingChannelName} have joined!";
       default:
         return "Unsupported event";
     }
