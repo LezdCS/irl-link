@@ -77,7 +77,7 @@ class ChatMessage extends Equatable {
       isDeleted: false,
       rawData: message.rawData,
       eventType: EventType.values.firstWhereOrNull(
-        (e) => e.toString() == 'EventType.${message.highlightType}',
+        (e) => e.toString().split('.').last == message.highlightType.toString().split('.').last,
       ),
       badges: message.badges.map((badge) => ChatBadge.fromTwitch(badge)).toList(),
       emotes: message.emotes,

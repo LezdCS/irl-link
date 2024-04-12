@@ -8,6 +8,7 @@ import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/presentation/controllers/tts_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
+import 'package:kick_chat/kick_chat.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 
 import 'home_view_controller.dart';
@@ -44,6 +45,7 @@ class ChatViewController extends GetxController
   late TtsController ttsController;
 
   TwitchChat? twitchChat;
+  KickChat? kickChat;
 
   @override
   void onInit() async {
@@ -106,7 +108,8 @@ class ChatViewController extends GetxController
         if (homeViewController.settings.value.ttsSettings!.ttsEnabled) {
           ttsController.readTts(message);
         }
-        entity.ChatMessage twitchMessage = entity.ChatMessage.fromTwitch(message);
+        entity.ChatMessage twitchMessage =
+            entity.ChatMessage.fromTwitch(message);
         chatMessages.add(twitchMessage);
 
         if (scrollController.hasClients && isAutoScrolldown.value) {
@@ -121,6 +124,27 @@ class ChatViewController extends GetxController
       });
 
       homeViewController.selectedChat = twitchChat;
+
+      kickChat = KickChat(
+        '',
+        onDone: () => {},
+        onError: () => {},
+      );
+
+      kickChat!.chatStream.listen((message) {
+        entity.ChatMessage kickMessage = entity.ChatMessage.fromKick(message);
+        chatMessages.add(kickMessage);
+
+        if (scrollController.hasClients && isAutoScrolldown.value) {
+          Timer(const Duration(milliseconds: 100), () {
+            if (isAutoScrolldown.value) {
+              scrollController.jumpTo(
+                scrollController.position.maxScrollExtent,
+              );
+            }
+          });
+        }
+      });
 
       await applySettings();
     } else {
