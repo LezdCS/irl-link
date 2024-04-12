@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:twitch_chat/twitch_chat.dart';
+import 'package:irllink/src/domain/entities/chat/chat_message.dart';
+import 'package:twitch_chat/twitch_chat.dart' as twitch;
 
 import 'message_row.dart';
 
@@ -9,7 +10,6 @@ class EventContainer extends StatelessWidget {
   final ChatMessage? selectedMessage;
   final bool displayTimestamp;
   final double textSize;
-  final TwitchChat? twitchChat;
   final bool hideDeletedMessages;
 
   const EventContainer({
@@ -18,19 +18,18 @@ class EventContainer extends StatelessWidget {
     required this.selectedMessage,
     required this.displayTimestamp,
     required this.textSize,
-    this.twitchChat,
     required this.hideDeletedMessages,
   });
 
   @override
   Widget build(BuildContext context) {
-    Color borderColor = getColorFromType(message.highlightType!)["border"];
+    Color borderColor = getColorFromType(message.eventType!)["border"];
     return Container(
       padding: const EdgeInsets.only(top: 2, bottom: 2, left: 5),
       decoration: BoxDecoration(
         color: selectedMessage != null && selectedMessage == message
             ? Theme.of(Get.context!).colorScheme.secondary
-            : getColorFromType(message.highlightType!)["background"],
+            : getColorFromType(message.eventType!)["background"],
         border: Border(
           left: BorderSide(
             width: 3.0,
@@ -47,11 +46,11 @@ class EventContainer extends StatelessWidget {
         children: [
           Row(
             children: [
-              getIconFromType(message.highlightType!),
+              getIconFromType(message.eventType!),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  getStringFromType(message.highlightType!, message),
+                  getStringFromType(message.eventType!, message),
                   style: TextStyle(color: Colors.grey[300], fontSize: 16),
                 ),
               ),
@@ -62,7 +61,6 @@ class EventContainer extends StatelessWidget {
                   message: message,
                   displayTimestamp: displayTimestamp,
                   textSize: textSize,
-                  twitchChat: twitchChat,
                   hideDeletedMessages: hideDeletedMessages,
                 )
               : Container(),
@@ -71,65 +69,65 @@ class EventContainer extends StatelessWidget {
     );
   }
 
-  String getStringFromType(HighlightType type, ChatMessage message) {
+  String getStringFromType(EventType type, ChatMessage message) {
     switch (type) {
-      case HighlightType.bitDonation:
-        BitDonation msg = message as BitDonation;
+      case EventType.bitDonation:
+        twitch.BitDonation msg = message as twitch.BitDonation;
         return "Cheered ${msg.totalBits.toString()} Bits";
-      case HighlightType.firstTimeChatter:
+      case EventType.firstTimeChatter:
         return "First message";
-      case HighlightType.channelPointRedemption:
+      case EventType.channelPointRedemption:
         return "Redeemed a reward";
-      case HighlightType.subscription:
-        Subscription msg = message as Subscription;
+      case EventType.subscription:
+        twitch.Subscription msg = message as twitch.Subscription;
         bool isPrime = msg.tier == "Prime";
-        return "${message.displayName} subscribed${isPrime ? " with prime" : ""}. They've subscribed for ${msg.months} months.";
-      case HighlightType.announcement:
+        return "${message.authorName} subscribed${isPrime ? " with prime" : ""}. They've subscribed for ${msg.months} months.";
+      case EventType.announcement:
         return "Announcement";
-      case HighlightType.subscriptionGifted:
-        SubGift msg = message as SubGift;
-        return "${message.displayName} gifted a subscription to ${msg.giftedName}!";
-      case HighlightType.incomingRaid:
-        IncomingRaid raid = message as IncomingRaid;
+      case EventType.subscriptionGifted:
+        twitch.SubGift msg = message as twitch.SubGift;
+        return "${message.authorName} gifted a subscription to ${msg.giftedName}!";
+      case EventType.incomingRaid:
+        twitch.IncomingRaid raid = message as twitch.IncomingRaid;
         return "${raid.viewerCount} raiders from ${raid.raidingChannelName} have joined!";
       default:
         return "Unsupported event";
     }
   }
 
-  Map<String, dynamic> getColorFromType(HighlightType type) {
+  Map<String, dynamic> getColorFromType(EventType type) {
     switch (type) {
-      case HighlightType.bitDonation:
+      case EventType.bitDonation:
         return {
           "border": const Color(0xFF9147ff),
           "background": const Color(0xFF9147ff).withOpacity(0.2)
         };
-      case HighlightType.firstTimeChatter:
+      case EventType.firstTimeChatter:
         return {
           "border": const Color(0xff0033b5),
           "background": const Color(0xff0033b5).withOpacity(0.2)
         };
-      case HighlightType.channelPointRedemption:
+      case EventType.channelPointRedemption:
         return {
           "border": const Color(0xff486d1a),
           "background": const Color(0xff486d1a).withOpacity(0.2)
         };
-      case HighlightType.subscription:
+      case EventType.subscription:
         return {
           "border": const Color(0xFF9147ff),
           "background": const Color(0xFF9147ff).withOpacity(0.2)
         };
-      case HighlightType.announcement:
+      case EventType.announcement:
         return {
           "border": const Color(0xffff475c),
           "background": const Color(0xffff475c).withOpacity(0.2)
         };
-      case HighlightType.subscriptionGifted:
+      case EventType.subscriptionGifted:
         return {
           "border": const Color(0xFF9147ff),
           "background": const Color(0xFF9147ff).withOpacity(0.2)
         };
-      case HighlightType.incomingRaid:
+      case EventType.incomingRaid:
         return {
           "border": const Color(0xffb53600),
           "background": const Color(0xffb53600).withOpacity(0.2)
@@ -142,24 +140,24 @@ class EventContainer extends StatelessWidget {
     }
   }
 
-  Icon getIconFromType(HighlightType type) {
+  Icon getIconFromType(EventType type) {
     switch (type) {
-      case HighlightType.bitDonation:
+      case EventType.bitDonation:
         return const Icon(Icons.toll);
-      case HighlightType.firstTimeChatter:
+      case EventType.firstTimeChatter:
         return const Icon(
           Icons.chat,
           size: 16,
         );
-      case HighlightType.channelPointRedemption:
+      case EventType.channelPointRedemption:
         return const Icon(Icons.redeem);
-      case HighlightType.subscription:
+      case EventType.subscription:
         return const Icon(Icons.star);
-      case HighlightType.announcement:
+      case EventType.announcement:
         return const Icon(Icons.campaign);
-      case HighlightType.subscriptionGifted:
+      case EventType.subscriptionGifted:
         return const Icon(Icons.card_giftcard);
-      case HighlightType.incomingRaid:
+      case EventType.incomingRaid:
         return const Icon(Icons.diversity_3);
       default:
         return const Icon(Icons.auto_awesome);

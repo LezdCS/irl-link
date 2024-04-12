@@ -312,7 +312,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
   connectivity_plus: bf0076dd84a130856aa636df1c71ccaff908fa1d
-  device_info_plus: c6fb39579d0f423935b0c9ce7ee2f44b71b9fce6
+  device_info_plus: 97af1d7e84681a90d0693e63169a5d50e0839a0d
   Firebase: 797fd7297b7e1be954432743a0b3f90038e45a71
   firebase_analytics: 8e6cecb9b9541db49ac40a46eec7c0f519de7252
   firebase_core: aaadbddb3cb2ee3792b9804f9dbb63e5f6f7b55c
@@ -360,4 +360,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: a57f30d18f102dd3ce366b1d62a55ecbef2158e5
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.14.2

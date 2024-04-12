@@ -4,16 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/utils/constants.dart';
+import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/presentation/controllers/tts_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 
 import 'home_view_controller.dart';
+import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
 
-class TwitchChatViewController extends GetxController
+class ChatViewController extends GetxController
     with GetTickerProviderStateMixin {
-  TwitchChatViewController({
+  ChatViewController({
     required this.homeEvents,
     required this.channel,
   });
@@ -30,7 +32,9 @@ class TwitchChatViewController extends GetxController
 
   RxString alertMessage = "Connecting...".obs;
   TwitchCredentials? twitchData;
-  RxList<ChatMessage> chatMessages = <ChatMessage>[].obs;
+  RxList<entity.ChatMessage> chatMessages = <entity.ChatMessage>[].obs;
+  RxList<ChatEmote> cheerEmotes = <ChatEmote>[].obs;
+  RxList<ChatEmote> thirdPartEmotes = <ChatEmote>[].obs;
 
   late TextEditingController banDurationInputController;
 
@@ -102,7 +106,8 @@ class TwitchChatViewController extends GetxController
         if (homeViewController.settings.value.ttsSettings!.ttsEnabled) {
           ttsController.readTts(message);
         }
-        chatMessages.add(message);
+        entity.ChatMessage twitchMessage = entity.ChatMessage.fromTwitch(message);
+        chatMessages.add(twitchMessage);
 
         if (scrollController.hasClients && isAutoScrolldown.value) {
           Timer(const Duration(milliseconds: 100), () {
@@ -122,7 +127,7 @@ class TwitchChatViewController extends GetxController
       chatDemoTimer = Timer.periodic(
         const Duration(seconds: 3),
         (Timer t) {
-          chatMessages.add(ChatMessage.randomGeneration(null, null, null));
+          // chatMessages.add(ChatMessage.randomGeneration(null, null, null));
           if (scrollController.hasClients && isAutoScrolldown.value) {
             Timer(const Duration(milliseconds: 100), () {
               if (isAutoScrolldown.value) {
@@ -213,11 +218,11 @@ class TwitchChatViewController extends GetxController
   }
 
   /// Delete [message] by his id
-  void deleteMessageInstruction(ChatMessage message) {
+  void deleteMessageInstruction(entity.ChatMessage message) {
     TwitchApi.deleteMessage(
       twitchData!.accessToken,
       twitchChat!.channelId!,
-      message,
+      message.id,
       kTwitchAuthClientId,
     );
 
@@ -226,11 +231,11 @@ class TwitchChatViewController extends GetxController
   }
 
   /// Ban user for specific [duration] based on the author name in the [message]
-  void timeoutMessageInstruction(ChatMessage message, int duration) {
+  void timeoutMessageInstruction(entity.ChatMessage message, int duration) {
     TwitchApi.banUser(
       twitchData!.accessToken,
       twitchChat!.channelId!,
-      message,
+      message.authorId,
       duration,
       kTwitchAuthClientId,
     );
@@ -239,11 +244,11 @@ class TwitchChatViewController extends GetxController
   }
 
   /// Ban user based on the author name in the [message]
-  void banMessageInstruction(ChatMessage message) {
+  void banMessageInstruction(entity.ChatMessage message) {
     TwitchApi.banUser(
       twitchData!.accessToken,
       twitchChat!.channelId!,
-      message,
+      message.authorId,
       null,
       kTwitchAuthClientId,
     );
@@ -251,7 +256,7 @@ class TwitchChatViewController extends GetxController
   }
 
   /// Hide every future messages from an user (only on this application, not on Twitch)
-  void hideUser(ChatMessage message) {
+  void hideUser(entity.ChatMessage message) {
     if (twitchData == null) return;
 
     List hiddenUsersIds =

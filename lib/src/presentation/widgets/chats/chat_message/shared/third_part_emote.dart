@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:twitch_chat/twitch_chat.dart';
+import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
 
 class ThirdPartEmote extends StatelessWidget {
-  final Emote emote;
+  final ChatEmote emote;
 
   const ThirdPartEmote({super.key, required this.emote});
 

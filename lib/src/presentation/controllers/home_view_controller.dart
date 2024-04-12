@@ -21,10 +21,12 @@ import '../../data/repositories/settings_repository_impl.dart';
 import '../../data/repositories/twitch_repository_impl.dart';
 import '../../domain/usecases/settings_usecase.dart';
 import '../../domain/usecases/twitch_usecase.dart';
-import '../widgets/chats/twitch_chat_view.dart';
+import '../widgets/chats/chat_view.dart';
 import '../widgets/tabs/streamelements_tab_view.dart';
 import '../widgets/web_page_view.dart';
-import 'twitch_chat_view_controller.dart';
+import 'chat_view_controller.dart';
+import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
+
 
 class HomeViewController extends GetxController
     with GetTickerProviderStateMixin {
@@ -60,12 +62,12 @@ class HomeViewController extends GetxController
 
   RxBool displayDashboard = false.obs;
 
-  RxList<TwitchChatView> channels = <TwitchChatView>[].obs;
+  RxList<ChatView> channels = <ChatView>[].obs;
   TwitchChat? selectedChat;
   int? selectedChatIndex;
 
   late TabController chatTabsController;
-  Rxn<ChatMessage> selectedMessage = Rxn<ChatMessage>();
+  Rxn<entity.ChatMessage> selectedMessage = Rxn<entity.ChatMessage>();
 
   @override
   void onInit() async {
@@ -106,7 +108,7 @@ class HomeViewController extends GetxController
 
   void lazyPutChat(String channel) {
     Get.lazyPut(
-      () => TwitchChatViewController(
+      () => ChatViewController(
         homeEvents: HomeEvents(
           twitchUseCase: TwitchUseCase(
             twitchRepository: TwitchRepositoryImpl(),
@@ -173,9 +175,9 @@ class HomeViewController extends GetxController
 
     String self = twitchData!.twitchUser.login;
 
-    RxList<TwitchChatView> tempChannels = RxList<TwitchChatView>.from(channels);
+    RxList<ChatView> tempChannels = RxList<ChatView>.from(channels);
     for (var temp in tempChannels) {
-      TwitchChatView view =
+      ChatView view =
           channels.firstWhere((element) => element.channel == temp.channel);
       String channel = view.channel;
       if (channel == self) continue;
@@ -185,13 +187,13 @@ class HomeViewController extends GetxController
 
       if (selectedChat?.channel == channel) {
         selectedChat = channels.isNotEmpty
-            ? Get.find<TwitchChatViewController>(tag: channels[0].channel).twitchChat
+            ? Get.find<ChatViewController>(tag: channels[0].channel).twitchChat
             : null;
         selectedChatIndex = channels.isNotEmpty ? 0 : null;
       }
 
       channels.remove(view);
-      Get.delete<TwitchChatViewController>(tag: channel);
+      Get.delete<ChatViewController>(tag: channel);
     }
 
     for (String chat in settings.value.chatSettings!.chatsJoined) {
@@ -199,7 +201,7 @@ class HomeViewController extends GetxController
           null) {
         lazyPutChat(chat);
         channels.add(
-          TwitchChatView(
+          ChatView(
             channel: chat,
           ),
         );
@@ -212,14 +214,14 @@ class HomeViewController extends GetxController
       if (channels.firstWhereOrNull((channel) => channel.channel == self) ==
           null) {
         lazyPutChat(self);
-        channels.insert(0, TwitchChatView(channel: self));
+        channels.insert(0, ChatView(channel: self));
       }
     } else {
       channels.remove(channels.firstWhereOrNull((c) => c.channel == self));
-      Get.delete<TwitchChatViewController>(tag: self);
+      Get.delete<ChatViewController>(tag: self);
       if (selectedChat?.channel == self) {
         selectedChat = channels.isNotEmpty
-            ? Get.find<TwitchChatViewController>(tag: channels[0].channel).twitchChat
+            ? Get.find<ChatViewController>(tag: channels[0].channel).twitchChat
             : null;
         selectedChatIndex = channels.isNotEmpty ? 0 : null;
       }

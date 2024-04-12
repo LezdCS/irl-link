@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
+import 'package:get/get.dart';
+import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
+import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
+import 'package:irllink/src/domain/entities/chat/chat_message.dart';
+import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/third_part_emote.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/timestamp.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/author_name.dart';
@@ -7,13 +12,12 @@ import 'package:irllink/src/presentation/widgets/chats/chat_message/twitch/twitc
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/word.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 
-import 'cheer_emote.dart';
+import '../twitch/cheer_emote.dart';
 
 class MessageRow extends StatelessWidget {
-  final ChatMessage message;
+  final entity.ChatMessage message;
   final bool displayTimestamp;
   final double textSize;
-  final TwitchChat? twitchChat;
   final bool hideDeletedMessages;
 
   const MessageRow({
@@ -21,7 +25,6 @@ class MessageRow extends StatelessWidget {
     required this.message,
     required this.displayTimestamp,
     required this.textSize,
-    this.twitchChat,
     required this.hideDeletedMessages,
   });
 
@@ -52,7 +55,7 @@ class MessageRow extends StatelessWidget {
           AuthorName(
             isAction: message.isAction,
             username: message.username,
-            displayName: message.displayName,
+            displayName: message.authorName,
             color: message.color,
             textSize: textSize,
           ),
@@ -66,8 +69,6 @@ class MessageRow extends StatelessWidget {
             )
           else
             for (Widget i in messageContent(
-              twitchChat?.cheerEmotes ?? List.empty(),
-              twitchChat?.thirdPartEmotes ?? List.empty(),
               message,
               null,
               textSize,
@@ -79,13 +80,13 @@ class MessageRow extends StatelessWidget {
   }
 
   List<Widget> messageContent(
-    final List<Emote> cheerEmotes,
-    final List<Emote> thirdPartEmotes,
-    final ChatMessage message,
+    final entity.ChatMessage message,
     final TwitchChatParameters? params,
     final double textSize,
   ) {
     List<Widget> messageWidgetsBuild = [];
+    List<ChatEmote> cheerEmotes = Get.find<ChatViewController>().cheerEmotes;
+    List<ChatEmote> thirdPartEmotes = Get.find<ChatViewController>().thirdPartEmotes;
 
     for (int i = 0; i < message.message.trim().split(' ').length; i++) {
       String word = message.message.trim().split(' ')[i];
@@ -99,7 +100,7 @@ class MessageRow extends StatelessWidget {
                   word)
               .isNotEmpty);
 
-      Emote? thirdPartyEmote =
+      ChatEmote? thirdPartyEmote =
           thirdPartEmotes.firstWhereOrNull((element) => element.name == word);
 
       if (emote != null) {
@@ -124,7 +125,7 @@ class MessageRow extends StatelessWidget {
             ],
           ),
         );
-      } else if (message.highlightType == HighlightType.bitDonation &&
+      } else if (message.eventType == EventType.bitDonation &&
           cheerEmotes.firstWhereOrNull((emote) => emote.name == word) != null) {
         messageWidgetsBuild.add(
           CheerEmote(

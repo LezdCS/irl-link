@@ -3,10 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../../controllers/twitch_chat_view_controller.dart';
+import '../../../../controllers/chat_view_controller.dart';
 
 class ModerationBottomSheet extends StatelessWidget {
-  final TwitchChatViewController controller;
+  final ChatViewController controller;
   final double width;
 
   const ModerationBottomSheet({
@@ -35,7 +35,7 @@ class ModerationBottomSheet extends StatelessWidget {
             children: [
               Text(
                 controller.homeViewController.selectedMessage.value
-                        ?.displayName ??
+                        ?.authorName ??
                     "",
                 style: const TextStyle(
                     color: Colors.white,
