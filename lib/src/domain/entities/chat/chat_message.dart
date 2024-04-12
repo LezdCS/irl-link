@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
+import 'package:irllink/src/domain/entities/chat/chat_badge.dart';
 import 'package:kick_chat/kick_chat.dart';
 import 'package:twitch_chat/twitch_chat.dart' as twitch;
 
@@ -36,7 +37,7 @@ class ChatMessage extends Equatable {
   bool isDeleted;
   final String rawData;
   final EventType? eventType;
-  final List badges; //TODO : badge entity
+  final List<ChatBadge> badges;
   final Map<String, List> emotes; //TODO: emote entity
   final Platform platform;
 
@@ -78,8 +79,8 @@ class ChatMessage extends Equatable {
       eventType: EventType.values.firstWhereOrNull(
         (e) => e.toString() == 'EventType.${message.highlightType}',
       ),
-      badges: const [], //TODO: Add badges for Twitch ChatMessage
-      emotes: const {}, //TODO: Add emotes for Twitch ChatMessage
+      badges: message.badges.map((badge) => ChatBadge.fromTwitch(badge)).toList(),
+      emotes: message.emotes,
       platform: Platform.twitch,
     );
   }

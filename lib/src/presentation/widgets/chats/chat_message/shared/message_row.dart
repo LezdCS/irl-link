@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/domain/entities/chat/chat_badge.dart';
 import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
-import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/third_part_emote.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/timestamp.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/author_name.dart';
@@ -44,7 +44,7 @@ class MessageRow extends StatelessWidget {
               ),
             ),
           ),
-          for (TwitchBadge badge in message.badges)
+          for (ChatBadge badge in message.badges)
             Container(
               padding: const EdgeInsets.only(right: 4, top: 3),
               child: Image(
@@ -85,8 +85,8 @@ class MessageRow extends StatelessWidget {
     final double textSize,
   ) {
     List<Widget> messageWidgetsBuild = [];
-    List<ChatEmote> cheerEmotes = Get.find<ChatViewController>().cheerEmotes;
-    List<ChatEmote> thirdPartEmotes = Get.find<ChatViewController>().thirdPartEmotes;
+    List<ChatEmote> cheerEmotes = [];
+    List<ChatEmote> thirdPartEmotes = [];
 
     for (int i = 0; i < message.message.trim().split(' ').length; i++) {
       String word = message.message.trim().split(' ')[i];
