@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../controllers/chat_view_controller.dart';
@@ -17,6 +18,7 @@ class ModerationBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ChatMessage message = controller.homeViewController.selectedMessage.value!;
     return Container(
       padding: const EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
       decoration: BoxDecoration(
@@ -48,7 +50,7 @@ class ModerationBottomSheet extends StatelessWidget {
                     onTap: () => launchUrl(
                       Uri(
                         scheme: "https",
-                        host: "twitch.tv",
+                        host: message.platform == Platform.twitch ? "twitch.tv" : 'kick.com',
                         path: controller.homeViewController.selectedMessage
                             .value?.username,
                       ),
