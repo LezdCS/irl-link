@@ -57,6 +57,7 @@ class ChatEvents extends StatelessWidget {
                       hideDeletedMessages: false,
                       cheerEmotes: const [],
                       thirdPartEmotes: const [],
+                      showPlatformBadge: false,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -107,6 +108,7 @@ class ChatEvents extends StatelessWidget {
                       hideDeletedMessages: false,
                       cheerEmotes: const [],
                       thirdPartEmotes: const [],
+                      showPlatformBadge: false,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -157,6 +159,7 @@ class ChatEvents extends StatelessWidget {
                       hideDeletedMessages: false,
                       cheerEmotes: const [],
                       thirdPartEmotes: const [],
+                      showPlatformBadge: false,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -207,6 +210,7 @@ class ChatEvents extends StatelessWidget {
                       hideDeletedMessages: false,
                       cheerEmotes: const [],
                       thirdPartEmotes: const [],
+                      showPlatformBadge: false,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -257,6 +261,7 @@ class ChatEvents extends StatelessWidget {
                       hideDeletedMessages: false,
                       cheerEmotes: const [],
                       thirdPartEmotes: const [],
+                      showPlatformBadge: false,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -307,6 +312,7 @@ class ChatEvents extends StatelessWidget {
                       hideDeletedMessages: false,
                       cheerEmotes: const [],
                       thirdPartEmotes: const [],
+                      showPlatformBadge: false,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

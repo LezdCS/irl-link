@@ -21,6 +21,7 @@ class MessageRow extends StatelessWidget {
   final bool hideDeletedMessages;
   final List<ChatEmote> cheerEmotes;
   final List<ChatEmote> thirdPartEmotes;
+  final bool showPlatformBadge;
 
   const MessageRow({
     super.key,
@@ -30,22 +31,25 @@ class MessageRow extends StatelessWidget {
     required this.hideDeletedMessages,
     required this.cheerEmotes,
     required this.thirdPartEmotes,
+    required this.showPlatformBadge,
   });
 
   @override
   Widget build(BuildContext context) {
     List<ChatBadge> badges = [];
     badges.addAll(message.badgesList);
-    String kickBadge =
-        'https://static.wikia.nocookie.net/logopedia/images/1/11/Kick_%28Icon%29.svg/revision/latest/scale-to-width-down/250?cb=20230622003955';
-    String twitchBadge = 'https://pngimg.com/d/twitch_PNG18.png';
-    ChatBadge platformBadge = ChatBadge(
-      imageUrl1x: message.platform == Platform.kick ? kickBadge : twitchBadge,
-      imageUrl2x: message.platform == Platform.kick ? kickBadge : twitchBadge,
-      imageUrl4x: message.platform == Platform.kick ? kickBadge : twitchBadge,
-      id: '',
-    );
-    badges.insert(0, platformBadge);
+    if (showPlatformBadge) {
+      String kickBadge =
+          'https://static.wikia.nocookie.net/logopedia/images/1/11/Kick_%28Icon%29.svg/revision/latest/scale-to-width-down/250?cb=20230622003955';
+      String twitchBadge = 'https://pngimg.com/d/twitch_PNG18.png';
+      ChatBadge platformBadge = ChatBadge(
+        imageUrl1x: message.platform == Platform.kick ? kickBadge : twitchBadge,
+        imageUrl2x: message.platform == Platform.kick ? kickBadge : twitchBadge,
+        imageUrl4x: message.platform == Platform.kick ? kickBadge : twitchBadge,
+        id: '',
+      );
+      badges.insert(0, platformBadge);
+    }
 
     return Opacity(
       opacity: message.isDeleted && !hideDeletedMessages ? 0.5 : 1,

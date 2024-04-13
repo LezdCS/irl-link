@@ -15,6 +15,7 @@ class MessageContainer extends StatelessWidget {
   final bool hideDeletedMessages;
   final List<ChatEmote> cheerEmotes;
   final List<ChatEmote> thirdPartEmotes;
+  final bool showPlatformBadge;
 
   const MessageContainer({
     super.key,
@@ -26,6 +27,7 @@ class MessageContainer extends StatelessWidget {
     required this.hideDeletedMessages,
     required this.cheerEmotes,
     required this.thirdPartEmotes,
+    required this.showPlatformBadge,
   });
 
   @override
@@ -44,6 +46,7 @@ class MessageContainer extends StatelessWidget {
         hideDeletedMessages: hideDeletedMessages,
         cheerEmotes: cheerEmotes,
         thirdPartEmotes: thirdPartEmotes,
+        showPlatformBadge: showPlatformBadge,
       ),
     );
   }

@@ -13,6 +13,7 @@ class EventContainer extends StatelessWidget {
   final bool hideDeletedMessages;
   final List<ChatEmote> cheerEmotes;
   final List<ChatEmote> thirdPartEmotes;
+  final bool showPlatformBadge;
 
   const EventContainer({
     super.key,
@@ -23,6 +24,7 @@ class EventContainer extends StatelessWidget {
     required this.hideDeletedMessages,
     required this.cheerEmotes,
     required this.thirdPartEmotes,
+    required this.showPlatformBadge,
   });
 
   @override
@@ -68,6 +70,7 @@ class EventContainer extends StatelessWidget {
                   hideDeletedMessages: hideDeletedMessages,
                   cheerEmotes: cheerEmotes,
                   thirdPartEmotes: thirdPartEmotes,
+                  showPlatformBadge: showPlatformBadge,
                 )
               : Container(),
         ],

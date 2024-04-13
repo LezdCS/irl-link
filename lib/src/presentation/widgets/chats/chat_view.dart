@@ -27,6 +27,7 @@ class ChatView extends StatelessWidget {
     if (controller == null) {
       return Container();
     }
+    bool multiplePlatform = controller.kickChat != null && controller.twitchChat != null;
     return Obx(
       () => Stack(children: [
         GestureDetector(
@@ -113,6 +114,7 @@ class ChatView extends StatelessWidget {
                                       .hideDeletedMessages,
                                   cheerEmotes: controller.cheerEmotes,
                                   thirdPartEmotes: controller.thirdPartEmotes,
+                                  showPlatformBadge: multiplePlatform,
                                 )
                               : MessageContainer(
                                   selectedMessage: controller
@@ -134,6 +136,7 @@ class ChatView extends StatelessWidget {
                                       .hideDeletedMessages,
                                   cheerEmotes: controller.cheerEmotes,
                                   thirdPartEmotes: controller.thirdPartEmotes,
+                                  showPlatformBadge: multiplePlatform,
                                 ),
                         ),
                       );
