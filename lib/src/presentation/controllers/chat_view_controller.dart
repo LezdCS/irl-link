@@ -128,12 +128,18 @@ class ChatViewController extends GetxController
       kickChat = KickChat(
         '',
         onDone: () => {},
-        onError: () => {},
+        onError: () => {
+          debugPrint('error on kick chat'),
+        },
       );
-
+      kickChat!.connect();
       kickChat!.chatStream.listen((message) {
-        entity.ChatMessage kickMessage = entity.ChatMessage.fromKick(message);
-        chatMessages.add(kickMessage);
+        final KickEvent? kickEvent = eventParser(message);
+        if (kickEvent?.event == TypeEvent.message) {
+          entity.ChatMessage kickMessage =
+              entity.ChatMessage.fromKick(kickEvent as KickMessage);
+          chatMessages.add(kickMessage);
+        }
 
         if (scrollController.hasClients && isAutoScrolldown.value) {
           Timer(const Duration(milliseconds: 100), () {

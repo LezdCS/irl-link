@@ -30,6 +30,19 @@ class MessageRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    List<ChatBadge> badges = [];
+    badges.addAll(message.badgesList);
+    String kickBadge = 'https://static.wikia.nocookie.net/logopedia/images/1/11/Kick_%28Icon%29.svg/revision/latest/scale-to-width-down/250?cb=20230622003955';
+    String twitchBadge = 'https://pngimg.com/d/twitch_PNG18.png';
+    ChatBadge platformBadge = ChatBadge(
+      imageUrl1x: message.platform == Platform.kick ? kickBadge : twitchBadge,
+      imageUrl2x: message.platform == Platform.kick ? kickBadge : twitchBadge,
+      imageUrl4x: message.platform == Platform.kick ? kickBadge : twitchBadge,
+      id: '',
+    );
+    badges.insert(0, platformBadge);
+
     return Opacity(
       opacity: message.isDeleted && !hideDeletedMessages ? 0.5 : 1,
       child: Wrap(
@@ -44,10 +57,12 @@ class MessageRow extends StatelessWidget {
               ),
             ),
           ),
-          for (ChatBadge badge in message.badgesList)
+          for (ChatBadge badge in badges)
             Container(
               padding: const EdgeInsets.only(right: 4, top: 3),
               child: Image(
+                width: 18,
+                height: 18,
                 image: NetworkImage(badge.imageUrl1x),
                 filterQuality: FilterQuality.high,
               ),

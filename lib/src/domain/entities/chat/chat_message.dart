@@ -131,7 +131,7 @@ class ChatMessage extends Equatable implements twitch.Subscription, twitch.SubGi
       username: message.data.sender.username,
       color: message.data.sender.identity.color,
       message: message.data.content,
-      timestamp: int.parse(message.data.createdAt),
+      timestamp: DateTime.now().toUtc().millisecondsSinceEpoch,
       isAction: false,
       isSubscriber: false,
       isModerator: false,
