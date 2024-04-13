@@ -19,6 +19,8 @@ class MessageRow extends StatelessWidget {
   final bool displayTimestamp;
   final double textSize;
   final bool hideDeletedMessages;
+  final List<ChatEmote> cheerEmotes;
+  final List<ChatEmote> thirdPartEmotes;
 
   const MessageRow({
     super.key,
@@ -26,14 +28,16 @@ class MessageRow extends StatelessWidget {
     required this.displayTimestamp,
     required this.textSize,
     required this.hideDeletedMessages,
+    required this.cheerEmotes,
+    required this.thirdPartEmotes,
   });
 
   @override
   Widget build(BuildContext context) {
-
     List<ChatBadge> badges = [];
     badges.addAll(message.badgesList);
-    String kickBadge = 'https://static.wikia.nocookie.net/logopedia/images/1/11/Kick_%28Icon%29.svg/revision/latest/scale-to-width-down/250?cb=20230622003955';
+    String kickBadge =
+        'https://static.wikia.nocookie.net/logopedia/images/1/11/Kick_%28Icon%29.svg/revision/latest/scale-to-width-down/250?cb=20230622003955';
     String twitchBadge = 'https://pngimg.com/d/twitch_PNG18.png';
     ChatBadge platformBadge = ChatBadge(
       imageUrl1x: message.platform == Platform.kick ? kickBadge : twitchBadge,
@@ -88,6 +92,8 @@ class MessageRow extends StatelessWidget {
               message,
               null,
               textSize,
+              cheerEmotes,
+              thirdPartEmotes,
             ))
               i,
         ],
@@ -99,10 +105,10 @@ class MessageRow extends StatelessWidget {
     final entity.ChatMessage message,
     final TwitchChatParameters? params,
     final double textSize,
+    final List<ChatEmote> cheerEmotes,
+    final List<ChatEmote> thirdPartEmotes,
   ) {
     List<Widget> messageWidgetsBuild = [];
-    List<ChatEmote> cheerEmotes = [];
-    List<ChatEmote> thirdPartEmotes = [];
 
     for (int i = 0; i < message.message.trim().split(' ').length; i++) {
       String word = message.message.trim().split(' ')[i];

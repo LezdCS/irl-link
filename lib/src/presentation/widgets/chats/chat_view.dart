@@ -111,6 +111,8 @@ class ChatView extends StatelessWidget {
                                       .value
                                       .chatSettings!
                                       .hideDeletedMessages,
+                                  cheerEmotes: controller.cheerEmotes,
+                                  thirdPartEmotes: controller.thirdPartEmotes,
                                 )
                               : MessageContainer(
                                   selectedMessage: controller
@@ -130,6 +132,8 @@ class ChatView extends StatelessWidget {
                                       .value
                                       .chatSettings!
                                       .hideDeletedMessages,
+                                  cheerEmotes: controller.cheerEmotes,
+                                  thirdPartEmotes: controller.thirdPartEmotes,
                                 ),
                         ),
                       );

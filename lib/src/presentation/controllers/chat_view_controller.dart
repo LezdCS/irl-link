@@ -101,6 +101,16 @@ class ChatViewController extends GetxController
       });
 
       twitchChat!.chatStream.listen((message) {
+        if (cheerEmotes.isEmpty) {
+          cheerEmotes.value = twitchChat!.cheerEmotes
+              .map((e) => ChatEmote.fromTwitch(e))
+              .toList();
+        }
+        if (thirdPartEmotes.isEmpty) {
+          thirdPartEmotes.value = twitchChat!.thirdPartEmotes
+              .map((e) => ChatEmote.fromTwitch(e))
+              .toList();
+        }
         if (homeViewController.settings.value.hiddenUsersIds!
             .contains(message.authorId)) {
           return;

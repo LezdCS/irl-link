@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 
 import 'message_row.dart';
@@ -10,6 +11,8 @@ class EventContainer extends StatelessWidget {
   final bool displayTimestamp;
   final double textSize;
   final bool hideDeletedMessages;
+  final List<ChatEmote> cheerEmotes;
+  final List<ChatEmote> thirdPartEmotes;
 
   const EventContainer({
     super.key,
@@ -18,6 +21,8 @@ class EventContainer extends StatelessWidget {
     required this.displayTimestamp,
     required this.textSize,
     required this.hideDeletedMessages,
+    required this.cheerEmotes,
+    required this.thirdPartEmotes,
   });
 
   @override
@@ -61,6 +66,8 @@ class EventContainer extends StatelessWidget {
                   displayTimestamp: displayTimestamp,
                   textSize: textSize,
                   hideDeletedMessages: hideDeletedMessages,
+                  cheerEmotes: cheerEmotes,
+                  thirdPartEmotes: thirdPartEmotes,
                 )
               : Container(),
         ],

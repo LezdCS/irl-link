@@ -55,6 +55,8 @@ class ChatEvents extends StatelessWidget {
                       displayTimestamp: false,
                       textSize: 16,
                       hideDeletedMessages: false,
+                      cheerEmotes: const [],
+                      thirdPartEmotes: const [],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -103,6 +105,8 @@ class ChatEvents extends StatelessWidget {
                       displayTimestamp: false,
                       textSize: 16,
                       hideDeletedMessages: false,
+                      cheerEmotes: const [],
+                      thirdPartEmotes: const [],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -151,6 +155,8 @@ class ChatEvents extends StatelessWidget {
                       displayTimestamp: false,
                       textSize: 16,
                       hideDeletedMessages: false,
+                      cheerEmotes: const [],
+                      thirdPartEmotes: const [],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -199,6 +205,8 @@ class ChatEvents extends StatelessWidget {
                       displayTimestamp: false,
                       textSize: 16,
                       hideDeletedMessages: false,
+                      cheerEmotes: const [],
+                      thirdPartEmotes: const [],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -247,6 +255,8 @@ class ChatEvents extends StatelessWidget {
                       displayTimestamp: false,
                       textSize: 16,
                       hideDeletedMessages: false,
+                      cheerEmotes: const [],
+                      thirdPartEmotes: const [],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -295,6 +305,8 @@ class ChatEvents extends StatelessWidget {
                       displayTimestamp: false,
                       textSize: 16,
                       hideDeletedMessages: false,
+                      cheerEmotes: const [],
+                      thirdPartEmotes: const [],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
