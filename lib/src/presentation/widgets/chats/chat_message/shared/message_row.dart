@@ -73,6 +73,7 @@ class MessageRow extends StatelessWidget {
             displayName: message.displayName,
             color: message.color,
             textSize: textSize,
+            platform: message.platform,
           ),
           if (message.isDeleted && hideDeletedMessages)
             Text(

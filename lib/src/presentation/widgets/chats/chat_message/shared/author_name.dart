@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 
 class AuthorName extends StatelessWidget {
   final bool isAction;
@@ -6,6 +7,7 @@ class AuthorName extends StatelessWidget {
   final String displayName;
   final String color;
   final double textSize;
+  final Platform platform;
 
   const AuthorName({
     super.key,
@@ -14,6 +16,7 @@ class AuthorName extends StatelessWidget {
     required this.displayName,
     required this.color,
     required this.textSize,
+    required this.platform,
   });
 
   @override
@@ -28,7 +31,7 @@ class AuthorName extends StatelessWidget {
         ),
         children: [
           TextSpan(
-            text: username != displayName.toLowerCase() ? "($displayName)" : "",
+            text: username != displayName.toLowerCase() && platform == Platform.twitch ? "($displayName)" : "",
             style: TextStyle(
               color: Color(int.parse(color.replaceAll('#', '0xff'))),
               fontSize: textSize,
