@@ -1,6 +1,6 @@
+import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
-
-import '../../../domain/entities/settings/chat_settings.dart';
+import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 
 class ChatSettingsDTO extends ChatSettings {
   const ChatSettingsDTO({
@@ -10,14 +10,15 @@ class ChatSettingsDTO extends ChatSettings {
 
   @override
   Map toJson() => {
-        'chatGroups': chatGroups,
+        'chatGroups': chatGroups.map((e) => e.toJson()).toList(),
         'hideDeletedMessages': hideDeletedMessages,
       };
 
   factory ChatSettingsDTO.fromJson(Map<String, dynamic> map) {
     List<ChatGroup> gDto = [];
-    map['chatGroups'].map((e) => gDto.add(ChatGroupDTO.fromJson(e)));
-
+    for (dynamic chatGroup in map['chatGroups']) {
+      gDto.add(ChatGroupDTO.fromJson(chatGroup));
+    }
     return ChatSettingsDTO(
       chatGroups: gDto,
       hideDeletedMessages: map['hideDeletedMessages'] ??
@@ -34,14 +35,22 @@ class ChatGroupDTO extends ChatGroup {
 
   factory ChatGroupDTO.fromJson(Map<String, dynamic> map) {
     List<Channel> cDto = [];
-    map['channels'].map((e) => cDto.add(ChannelDTO.fromJson(e)));
+    for (dynamic channel in map['channels']) {
+      cDto.add(ChannelDTO.fromJson(channel));
+    }
 
     return ChatGroupDTO(
-      id: map['channels'] ??
+      id: map['id'] ??
           const Settings.defaultSettings().chatSettings!.chatGroups.first.id,
       channels: cDto,
     );
   }
+
+  @override
+  Map toJson() => {
+        'id': id,
+        'channels': channels.map((e) => e.toJson()).toList(),
+      };
 }
 
 class ChannelDTO extends Channel {
@@ -53,15 +62,17 @@ class ChannelDTO extends Channel {
 
   factory ChannelDTO.fromJson(Map<String, dynamic> map) {
     return ChannelDTO(
-      platform: map['channels'] ??
-          const Settings.defaultSettings()
-              .chatSettings!
-              .chatGroups
-              .first
-              .channels
-              .first
-              .platform,
-      channel: map['channels'] ??
+      platform: getPlatformFromString(
+        map['platform'] ??
+            const Settings.defaultSettings()
+                .chatSettings!
+                .chatGroups
+                .first
+                .channels
+                .first
+                .platform,
+      ),
+      channel: map['channel'] ??
           const Settings.defaultSettings()
               .chatSettings!
               .chatGroups
@@ -69,7 +80,7 @@ class ChannelDTO extends Channel {
               .channels
               .first
               .channel,
-      enabled: map['channels'] ??
+      enabled: map['enabled'] ??
           const Settings.defaultSettings()
               .chatSettings!
               .chatGroups
@@ -79,4 +90,20 @@ class ChannelDTO extends Channel {
               .enabled,
     );
   }
+
+  @override
+  Map toJson() => {
+        'platform': platform,
+        'channel': channel,
+        'enabled': enabled,
+      };
+}
+
+Platform getPlatformFromString(String platformAsString) {
+  for (Platform element in Platform.values) {
+    if (element.name == platformAsString) {
+      return element;
+    }
+  }
+  throw Exception('Platform not found');
 }
