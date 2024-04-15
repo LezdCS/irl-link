@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
+import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/event_container.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/message_container.dart';
@@ -10,16 +11,16 @@ import '../alert_message_view.dart';
 class ChatView extends StatelessWidget {
   const ChatView({
     super.key,
-    required this.channel,
+    required this.chatGroup,
   });
 
-  final String channel;
+  final ChatGroup chatGroup;
 
   @override
   Widget build(BuildContext context) {
     ChatViewController? controller;
-    if (Get.isRegistered<ChatViewController>(tag: channel)) {
-      controller = Get.find<ChatViewController>(tag: channel);
+    if (Get.isRegistered<ChatViewController>(tag: chatGroup.id)) {
+      controller = Get.find<ChatViewController>(tag: chatGroup.id);
     }
 
     final double height = MediaQuery.of(context).size.height;

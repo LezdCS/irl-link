@@ -33,7 +33,7 @@ class HomeView extends GetView<HomeViewController> {
 
     return PopScope(
       onPopInvoked: (bool invoked) async {
-        if(invoked){
+        if (invoked) {
           MoveToBackground.moveTaskToBack();
         }
       },
@@ -139,7 +139,8 @@ class HomeView extends GetView<HomeViewController> {
                           child: const Dashboard(),
                         ),
                         Visibility(
-                          visible: Get.find<StoreController>().purchasePending.value,
+                          visible:
+                              Get.find<StoreController>().purchasePending.value,
                           child: CircularProgressIndicator(
                             color: context.theme.colorScheme.tertiary,
                           ),
@@ -450,9 +451,9 @@ class HomeView extends GetView<HomeViewController> {
                 if (controller.twitchData != null) {
                   for (var chan in controller.channels) {
                     if (Get.isRegistered<ChatViewController>(
-                        tag: chan.channel)) {
+                        tag: chan.chatGroup.id)) {
                       ChatViewController c =
-                          Get.find<ChatViewController>(tag: chan.channel);
+                          Get.find<ChatViewController>(tag: chan.chatGroup.id);
                       c.applySettings();
                     }
                   }
@@ -504,11 +505,11 @@ class HomeView extends GetView<HomeViewController> {
       dividerColor: Colors.transparent,
       onTap: (int i) {
         if (Get.isRegistered<ChatViewController>(
-            tag: controller.channels[i].channel)) {
+            tag: controller.channels[i].chatGroup.id)) {
           ChatViewController c =
-              Get.find<ChatViewController>(tag: controller.channels[i].channel);
+              Get.find<ChatViewController>(tag: controller.channels[i].chatGroup.id);
           c.scrollToBottom();
-          controller.selectedChat = c.twitchChat;
+          controller.selectedChatGroup = c.chatGroup;
         }
         controller.selectedMessage.value = null;
         controller.selectedChatIndex = i;
@@ -517,7 +518,8 @@ class HomeView extends GetView<HomeViewController> {
         controller.channels.length,
         (int index) => Tab(
           height: 30,
-          child: Text(controller.channels[index].channel),
+          child: Text(controller.channels[index].chatGroup.id,
+              style: Theme.of(context).textTheme.bodyLarge),
         ),
       ),
     );

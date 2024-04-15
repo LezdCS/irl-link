@@ -2,7 +2,9 @@ import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
+import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
@@ -26,7 +28,6 @@ import '../widgets/tabs/streamelements_tab_view.dart';
 import '../widgets/web_page_view.dart';
 import 'chat_view_controller.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
-
 
 class HomeViewController extends GetxController
     with GetTickerProviderStateMixin {
@@ -63,7 +64,7 @@ class HomeViewController extends GetxController
   RxBool displayDashboard = false.obs;
 
   RxList<ChatView> channels = <ChatView>[].obs;
-  TwitchChat? selectedChat;
+  ChatGroup? selectedChatGroup;
   int? selectedChatIndex;
 
   late TabController chatTabsController;
@@ -106,7 +107,7 @@ class HomeViewController extends GetxController
     super.onClose();
   }
 
-  void lazyPutChat(String channel) {
+  void lazyPutChat(ChatGroup chatGroup) {
     Get.lazyPut(
       () => ChatViewController(
         homeEvents: HomeEvents(
@@ -117,9 +118,9 @@ class HomeViewController extends GetxController
             settingsRepository: SettingsRepositoryImpl(),
           ),
         ),
-        channel: channel,
+        chatGroup: chatGroup,
       ),
-      tag: channel,
+      tag: chatGroup.id,
     );
   }
 
@@ -173,57 +174,40 @@ class HomeViewController extends GetxController
       return;
     }
 
-    String self = twitchData!.twitchUser.login;
+    RxList<ChatView> chatViews = RxList<ChatView>.from(channels);
+    for (var temp in chatViews) {
+      ChatView view = channels
+          .firstWhere((element) => element.chatGroup.id == temp.chatGroup.id);
 
-    RxList<ChatView> tempChannels = RxList<ChatView>.from(channels);
-    for (var temp in tempChannels) {
-      ChatView view =
-          channels.firstWhere((element) => element.channel == temp.channel);
-      String channel = view.channel;
-      if (channel == self) continue;
-      if (settings.value.chatSettings!.chatsJoined.contains(channel)) {
+      ChatGroup group = view.chatGroup;
+      if (settings.value.chatSettings!.chatGroups
+          .map((e) => e.id)
+          .contains(group.id)) {
         continue;
       }
 
-      if (selectedChat?.channel == channel) {
-        selectedChat = channels.isNotEmpty
-            ? Get.find<ChatViewController>(tag: channels[0].channel).twitchChat
+      if (selectedChatGroup == group) {
+        selectedChatGroup = channels.isNotEmpty
+            ? Get.find<ChatViewController>(tag: channels[0].chatGroup.id)
+                .chatGroup
             : null;
         selectedChatIndex = channels.isNotEmpty ? 0 : null;
       }
 
       channels.remove(view);
-      Get.delete<ChatViewController>(tag: channel);
+      Get.delete<ChatViewController>(tag: group.id);
     }
 
-    for (String chat in settings.value.chatSettings!.chatsJoined) {
-      if (channels.firstWhereOrNull((channel) => channel.channel == chat) ==
+    for (ChatGroup chatGroup in settings.value.chatSettings!.chatGroups) {
+      if (channels
+              .firstWhereOrNull((channel) => channel.chatGroup == chatGroup) ==
           null) {
-        lazyPutChat(chat);
+        lazyPutChat(chatGroup);
         channels.add(
           ChatView(
-            channel: chat,
+            chatGroup: chatGroup,
           ),
         );
-      }
-    }
-
-    bool joinSelfChannel = settings.value.chatSettings!.joinMyself;
-
-    if (joinSelfChannel) {
-      if (channels.firstWhereOrNull((channel) => channel.channel == self) ==
-          null) {
-        lazyPutChat(self);
-        channels.insert(0, ChatView(channel: self));
-      }
-    } else {
-      channels.remove(channels.firstWhereOrNull((c) => c.channel == self));
-      Get.delete<ChatViewController>(tag: self);
-      if (selectedChat?.channel == self) {
-        selectedChat = channels.isNotEmpty
-            ? Get.find<ChatViewController>(tag: channels[0].channel).twitchChat
-            : null;
-        selectedChatIndex = channels.isNotEmpty ? 0 : null;
       }
     }
 
@@ -231,15 +215,20 @@ class HomeViewController extends GetxController
 
     if (channels.isEmpty) {
       selectedChatIndex = null;
-      selectedChat = null;
+      selectedChatGroup = null;
     }
   }
 
   void sendChatMessage(String message) {
     if (twitchData == null) return;
 
+    String? channelToSend = selectedChatGroup?.channels.firstWhereOrNull((c) => c.platform == Platform.twitch)?.channel;
+    if(channelToSend == null) {
+      return;
+    }
+
     TwitchChat twitchChat = TwitchChat(
-      selectedChat!.channel,
+      channelToSend,
       twitchData!.twitchUser.login,
       twitchData!.accessToken,
       clientId: kTwitchAuthClientId,
@@ -259,9 +248,11 @@ class HomeViewController extends GetxController
   }
 
   void getEmotes() {
-    List<Emote> emotes = List.from(selectedChat!.emotes)
-      ..addAll(selectedChat!.emotesFromSets)
-      ..addAll(selectedChat!.thirdPartEmotes);
+    ChatViewController? chatController =  Get.find<ChatViewController>(tag: selectedChatGroup!.id);
+    
+    List<Emote> emotes = List.from(chatController.twitchChat!.emotes)
+      ..addAll(chatController.twitchChat!.emotesFromSets)
+      ..addAll(chatController.twitchChat!.thirdPartEmotes);
     twitchEmotes
       ..clear()
       ..addAll(emotes);
@@ -269,9 +260,11 @@ class HomeViewController extends GetxController
   }
 
   void searchEmote(String input) {
-    List<Emote> emotes = List.from(selectedChat!.emotes)
-      ..addAll(selectedChat!.emotesFromSets)
-      ..addAll(selectedChat!.thirdPartEmotes);
+    ChatViewController? chatController =  Get.find<ChatViewController>(tag: selectedChatGroup!.id);
+
+    List<Emote> emotes = List.from(chatController.twitchChat!.emotes)
+      ..addAll(chatController.twitchChat!.emotesFromSets)
+      ..addAll(chatController.twitchChat!.thirdPartEmotes);
     emotes = emotes
         .where(
           (emote) => emote.name.toLowerCase().contains(input.toLowerCase()),

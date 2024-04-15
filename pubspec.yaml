@@ -77,6 +77,7 @@ dependencies:
   flutter_slidable: ^3.1.0
   flutter_colorpicker: ^1.0.3
   instant: ^0.5.1
+  uuid:  ^3.0.7
 
 dependency_overrides:
   wakelock_windows:
