@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/domain/entities/chat/chat_badge.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 
@@ -72,16 +71,16 @@ class ChatsJoined extends GetView<SettingsViewController> {
                   height: 10,
                 ),
                 //   onReorder: (int oldIndex, int newIndex) {
-              //     if (newIndex > oldIndex) {
-              //       newIndex -= 1;
-              //     }
-              //     final element = controller.homeViewController.settings.value
-              //         .chatSettings!.chatsJoined
-              //         .removeAt(oldIndex);
-              //     controller.homeViewController.settings.value.chatSettings!
-              //         .chatsJoined
-              //         .insert(newIndex, element);
-              //   },
+                //     if (newIndex > oldIndex) {
+                //       newIndex -= 1;
+                //     }
+                //     final element = controller.homeViewController.settings.value
+                //         .chatSettings!.chatsJoined
+                //         .removeAt(oldIndex);
+                //     controller.homeViewController.settings.value.chatSettings!
+                //         .chatsJoined
+                //         .insert(newIndex, element);
+                //   },
                 itemBuilder: (BuildContext context, int index) {
                   ChatGroup group = controller.homeViewController.settings.value
                       .chatSettings!.chatGroups[index];
@@ -93,7 +92,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
                   );
                 },
               ),
-              _addGroupButton(context, channelTextController),
+              _addGroupButton(context),
             ],
           ),
         ),
@@ -126,12 +125,6 @@ class ChatsJoined extends GetView<SettingsViewController> {
               String twitchBadge = 'https://pngimg.com/d/twitch_PNG18.png';
               String badge =
                   channel.platform == Platform.kick ? kickBadge : twitchBadge;
-              ChatBadge platformBadge = ChatBadge(
-                imageUrl1x: badge,
-                imageUrl2x: badge,
-                imageUrl4x: badge,
-                id: '',
-              );
               return Container(
                 margin: const EdgeInsets.only(bottom: 10),
                 child: Row(
@@ -140,7 +133,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
                     Image(
                       width: 18,
                       height: 18,
-                      image: NetworkImage(platformBadge.imageUrl1x),
+                      image: NetworkImage(badge),
                       filterQuality: FilterQuality.high,
                     ),
                     const Padding(padding: EdgeInsets.only(right: 8)),
@@ -158,64 +151,62 @@ class ChatsJoined extends GetView<SettingsViewController> {
 
   Widget _addChannelToGroupButton(
       context, channelTextController, ChatGroup chatGroup) {
-    return Container(
-      padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
-      margin: const EdgeInsets.only(bottom: 5, top: 5, left: 12, right: 12),
-      decoration: BoxDecoration(
-        // dotted border
-        border: Border.all(
-          color: Theme.of(context).colorScheme.tertiary,
-          width: 1,
-        ),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          InkWell(
-            onTap: () {
-              Get.defaultDialog(
-                content: _addDialog(context, channelTextController),
-                title: "add".tr,
-                textCancel: "cancel".tr,
-                textConfirm: "add".tr,
-                titleStyle: TextStyle(
-                  color: Theme.of(context).textTheme.bodyLarge!.color,
-                ),
-                backgroundColor: Theme.of(context).colorScheme.background,
-                buttonColor: const Color(0xFF9147ff),
-                cancelTextColor: const Color(0xFF9147ff),
-                confirmTextColor: Colors.white,
-                radius: 10,
-                onConfirm: () {
-                  Channel newChan = Channel(
-                    platform: Platform.twitch,
-                    channel: channelTextController.text.trim(),
-                    enabled: true,
-                  );
-                  chatGroup.channels.add(newChan);
-                  //TODO : edit settings
-                  controller.saveSettings();
-                  controller.homeViewController.settings.refresh();
-                  channelTextController.text = '';
-                  Get.back();
-                },
-                onCancel: () {
-                  channelTextController.text = '';
-                },
-              );
-            },
-            child: Text(
-              "add".tr,
-              textAlign: TextAlign.center,
-            ),
+    Rx<Platform?> selectedPlatform = Platform.values.first.obs;
+
+    return InkWell(
+      onTap: () {
+        Get.defaultDialog(
+          content: _addDialog(context, channelTextController, selectedPlatform),
+          title: "add".tr,
+          textCancel: "cancel".tr,
+          textConfirm: "add".tr,
+          titleStyle: TextStyle(
+            color: Theme.of(context).textTheme.bodyLarge!.color,
           ),
-        ],
+          backgroundColor: Theme.of(context).colorScheme.background,
+          buttonColor: const Color(0xFF9147ff),
+          cancelTextColor: const Color(0xFF9147ff),
+          confirmTextColor: Colors.white,
+          radius: 10,
+          onConfirm: () {
+            Channel newChan = Channel(
+              platform: selectedPlatform.value!,
+              channel: channelTextController.text.trim(),
+              enabled: true,
+            );
+            chatGroup.channels.add(newChan);
+            //TODO : edit settings
+            controller.saveSettings();
+            controller.homeViewController.settings.refresh();
+            channelTextController.text = '';
+            Get.back();
+          },
+          onCancel: () {
+            channelTextController.text = '';
+          },
+        );
+      },
+      child: Container(
+        padding:
+            const EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
+        margin: const EdgeInsets.only(bottom: 5, top: 5, left: 12, right: 12),
+        decoration: BoxDecoration(
+          // dotted border
+          border: Border.all(
+            color: Theme.of(context).colorScheme.tertiary,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Text(
+          "add".tr,
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }
 
-  Widget _addGroupButton(context, channelTextController) {
+  Widget _addGroupButton(context) {
     return InkWell(
       onTap: () {
         var uuid = const Uuid();
@@ -227,7 +218,6 @@ class ChatsJoined extends GetView<SettingsViewController> {
         groups.addAll(controller
                 .homeViewController.settings.value.chatSettings?.chatGroups ??
             []);
-        debugPrint('groups: $groups');
         groups.add(newGroup);
 
         controller.homeViewController.settings.value =
@@ -261,41 +251,94 @@ class ChatsJoined extends GetView<SettingsViewController> {
     );
   }
 
-  Widget _addDialog(context, channelTextController) {
+  Widget _addDialog(context, channelTextController, selectedPlatform) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Form(
-          child: TextFormField(
-            controller: channelTextController,
-            textInputAction: TextInputAction.send,
-            style: TextStyle(
-              color: Theme.of(context).textTheme.bodyLarge!.color,
-            ),
-            maxLines: 1,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter the channel name';
-              }
-              return null;
-            },
-            decoration: InputDecoration(
-              isDense: true,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-              enabledBorder: Theme.of(context).inputDecorationTheme.border,
-              hintStyle: TextStyle(
-                  color: Theme.of(context).textTheme.bodyLarge!.color,
-                  fontSize: 16),
-              labelStyle: TextStyle(
-                color: Theme.of(context).textTheme.bodyLarge!.color,
+          child: Column(
+            children: [
+              Obx(
+                () => DropdownButton(
+                  value: selectedPlatform.toString(),
+                  items: List.generate(Platform.values.length, (index) {
+                    String kickBadge =
+                        'https://static.wikia.nocookie.net/logopedia/images/1/11/Kick_%28Icon%29.svg/revision/latest/scale-to-width-down/250?cb=20230622003955';
+                    String twitchBadge =
+                        'https://pngimg.com/d/twitch_PNG18.png';
+                    String badge = Platform.values[index] == Platform.kick
+                        ? kickBadge
+                        : twitchBadge;
+                    return DropdownMenuItem(
+                      value: Platform.values[index].toString(),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image(
+                            width: 18,
+                            height: 18,
+                            image: NetworkImage(badge),
+                            filterQuality: FilterQuality.high,
+                          ),
+                          const Padding(padding: EdgeInsets.only(right: 8)),
+                          Text(
+                            Platform.values[index].name
+                                .toString()
+                                .toCapitalized(),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+                  onChanged: (value) {
+                    Platform pFromS = Platform.values.firstWhere(
+                      (element) => element.toString() == value,
+                    );
+                    selectedPlatform.value = pFromS;
+                  },
+                ),
               ),
-              hintText: 'Channel name',
-              labelText: 'Channel name',
-            ),
+              TextFormField(
+                controller: channelTextController,
+                textInputAction: TextInputAction.send,
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyLarge!.color,
+                ),
+                maxLines: 1,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter the channel name';
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                  isDense: true,
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                  enabledBorder: Theme.of(context).inputDecorationTheme.border,
+                  hintStyle: TextStyle(
+                      color: Theme.of(context).textTheme.bodyLarge!.color,
+                      fontSize: 16),
+                  labelStyle: TextStyle(
+                    color: Theme.of(context).textTheme.bodyLarge!.color,
+                  ),
+                  hintText: 'Channel name',
+                  labelText: 'Channel name',
+                ),
+              ),
+            ],
           ),
         ),
       ],
     );
   }
+}
+
+extension StringCasingExtension on String {
+  String toCapitalized() =>
+      length > 0 ? '${this[0].toUpperCase()}${substring(1).toLowerCase()}' : '';
+  String toTitleCase() => replaceAll(RegExp(' +'), ' ')
+      .split(' ')
+      .map((str) => str.toCapitalized())
+      .join(' ');
 }
