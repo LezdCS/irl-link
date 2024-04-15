@@ -19,7 +19,7 @@ class ChatSettings extends Equatable {
   }
 
   Map toJson() => {
-        'chatGroups': chatGroups,
+        'chatGroups': chatGroups.map((e) => e.toJson()).toList(),
         'hideDeletedMessages': hideDeletedMessages,
       };
 
@@ -37,7 +37,7 @@ class ChatSettings extends Equatable {
   }
 }
 
-class ChatGroup {
+class ChatGroup extends Equatable {
   final String id;
   final List<Channel> channels;
 
@@ -48,11 +48,19 @@ class ChatGroup {
 
   Map toJson() => {
         'id': id,
-        'channels': channels,
+        'channels': channels.map((e) => e.toJson()).toList(),
       };
+
+  @override
+  List<Object?> get props {
+    return [
+      id,
+      channels,
+    ];
+  }
 }
 
-class Channel {
+class Channel extends Equatable {
   final Platform platform;
   final String channel;
   final bool enabled;
@@ -64,8 +72,17 @@ class Channel {
   });
 
   Map toJson() => {
-        'platform': platform,
+        'platform': platform.name.toString(),
         'channel': channel,
         'enabled': enabled,
       };
+
+  @override
+  List<Object?> get props {
+    return [
+      platform,
+      channel,
+      enabled,
+    ];
+  }
 }
