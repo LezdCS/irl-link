@@ -117,7 +117,7 @@ flutter:
      - lib/assets/
      - lib/assets/i18n/
      - lib/assets/twitch/
-     - lib/assets/kick/
+     - lib/assets/kick/badges/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

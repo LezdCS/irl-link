@@ -32,22 +32,22 @@ class ChatBadge extends Equatable {
       src= subBadges.lastWhere((element) => badge.count >= element.months).badgeImage.src;
         break;
       case 'vip':
-        src = './lib/assets/kick/vip.svg';
+        src = './lib/assets/kick/badges/vip.svg';
         break;
       case 'og':
-        src = './lib/assets/kick/og.svg';
+        src = './lib/assets/kick/badges/og.svg';
         break;
       case 'founder':
-        src = './lib/assets/kick/founder.svg';
+        src = './lib/assets/kick/badges/founder.svg';
         break;
       case 'verified':
-        src = './lib/assets/kick/verified.svg';
+        src = './lib/assets/kick/badges/verified.svg';
         break;
       case 'moderator':
-        src = './lib/assets/kick/moderator.svg';
+        src = './lib/assets/kick/badges/moderator.svg';
         break;
       case 'sub_gifter':
-        src = './lib/assets/kick/sub_gifter.svg';
+        src = './lib/assets/kick/badges/sub_gifter.svg';
         break;
     }
 
