@@ -359,9 +359,13 @@ class ChatViewController extends GetxController
     });
   }
 
-  void createKickChat(Channel kc) {
+  Future<void> createKickChat(Channel kc) async {
+    int? channelId = await KickApi.getChannelId(kc.channel);
+    if(channelId == null) {
+      return;
+    }
     KickChat kickChat = KickChat(
-      kc.channel,
+      channelId.toString(),
       onDone: () => {},
       onError: () => {
         debugPrint('error on kick chat'),
