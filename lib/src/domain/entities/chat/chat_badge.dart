@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:kick_chat/kick_chat.dart';
 import 'package:twitch_chat/twitch_chat.dart' as twitch;
 
 class ChatBadge extends Equatable {
@@ -23,11 +24,14 @@ class ChatBadge extends Equatable {
     );
   }
 
-  // factory ChatBadge.fromKick(KickBadge badge) {
-  //   return ChatBadge(
-  //     id: badge.id,
-  //   );
-  // }
+  factory ChatBadge.fromKick(KickBadge badge) {
+    return ChatBadge(
+      id: badge.id.toString(),
+      imageUrl1x: badge.badgeImage.src,
+      imageUrl2x: badge.badgeImage.src,
+      imageUrl4x: badge.badgeImage.src,
+    );
+  }
 
   Map toJson() => {
         'id': id,

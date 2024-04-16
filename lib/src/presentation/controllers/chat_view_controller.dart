@@ -365,10 +365,11 @@ class ChatViewController extends GetxController
   }
 
   Future<void> createKickChat(Channel kc) async {
-    int? channelId = await KickApi.getChannelId(kc.channel);
-    if (channelId == null) {
+    KickUser? userDetails = await KickApi.getUserDetails(kc.channel);
+    if (userDetails == null) {
       return;
     }
+    int channelId = userDetails.id;
     bool alreadyCreated =
         kickChats.firstWhereOrNull((k) => k.chatroomId == channelId.toString()) != null;
     if (alreadyCreated) {

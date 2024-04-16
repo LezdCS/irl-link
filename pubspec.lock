@@ -629,7 +629,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "3bd6cb617ab976ea746b8d2e46e9ec689e924289"
+      resolved-ref: "2144a214f9fdb1ba4aa752b49d1a1bf9675cdbee"
       url: "https://github.com/LezdCS/kick_chat.git"
     source: git
     version: "0.0.1"
