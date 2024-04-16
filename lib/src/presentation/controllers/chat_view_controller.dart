@@ -98,7 +98,7 @@ class ChatViewController extends GetxController
           onError: () {},
           params: const TwitchChatParameters(addFirstMessages: true),
         );
-
+        twitchChat.connect();
         twitchChat.isConnected.addListener(() {
           if (twitchChat.isConnected.value) {
             isChatConnected.value = true;
@@ -130,8 +130,8 @@ class ChatViewController extends GetxController
           if (homeViewController.settings.value.ttsSettings!.ttsEnabled) {
             ttsController.readTts(message);
           }
-          entity.ChatMessage twitchMessage =
-              entity.ChatMessage.fromTwitch(message, twitchChat.channelId ?? '');
+          entity.ChatMessage twitchMessage = entity.ChatMessage.fromTwitch(
+              message, twitchChat.channelId ?? '');
           chatMessages.add(twitchMessage);
 
           if (scrollController.hasClients && isAutoScrolldown.value) {
@@ -158,8 +158,8 @@ class ChatViewController extends GetxController
         kickChat.chatStream.listen((message) {
           final KickEvent? kickEvent = eventParser(message);
           if (kickEvent?.event == TypeEvent.message) {
-            entity.ChatMessage kickMessage =
-                entity.ChatMessage.fromKick(kickEvent as KickMessage, kickChat.chatroomId);
+            entity.ChatMessage kickMessage = entity.ChatMessage.fromKick(
+                kickEvent as KickMessage, kickChat.chatroomId);
             chatMessages.add(kickMessage);
           }
 
@@ -277,8 +277,7 @@ class ChatViewController extends GetxController
   }
 
   /// Delete [message] by his id
-  void deleteMessageInstruction(
-      entity.ChatMessage message) {
+  void deleteMessageInstruction(entity.ChatMessage message) {
     TwitchApi.deleteMessage(
       twitchData!.accessToken,
       message.channelId,
@@ -291,8 +290,7 @@ class ChatViewController extends GetxController
   }
 
   /// Ban user for specific [duration] based on the author name in the [message]
-  void timeoutMessageInstruction(
-      entity.ChatMessage message, int duration) {
+  void timeoutMessageInstruction(entity.ChatMessage message, int duration) {
     TwitchApi.banUser(
       twitchData!.accessToken,
       message.channelId,
@@ -305,8 +303,7 @@ class ChatViewController extends GetxController
   }
 
   /// Ban user based on the author name in the [message]
-  void banMessageInstruction(
-      entity.ChatMessage message) {
+  void banMessageInstruction(entity.ChatMessage message) {
     TwitchApi.banUser(
       twitchData!.accessToken,
       message.channelId,
