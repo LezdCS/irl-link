@@ -268,7 +268,19 @@ class ChatViewController extends GetxController
       }
     }
 
-    //TODO: find non existing channels existing in TwitchChats and KickChats not existing anymore in the chatGroup.channels and remove them
+    // Remove 
+    List<TwitchChat> twitchChatToRemove = twitchChats.where((tc) => twitchChannels.firstWhereOrNull((tCa) => tCa.channel == tc.channel) == null).toList();
+    List<KickChat> kickChatToRemove = kickChats.where((kc) => kickChannels.firstWhereOrNull((kCa) => kCa.channel == kc.chatroomId) == null).toList();
+
+    for(TwitchChat t in twitchChatToRemove) {
+      t.close();
+      twitchChats.removeWhere((tc) => tc.channelId == t.channelId);
+    }
+
+     for(KickChat k in kickChatToRemove) {
+      k.close();
+      kickChats.removeWhere((kc) => kc.chatroomId == k.chatroomId);
+    }
   }
 
   void createTwitchChat(Channel tc) {
