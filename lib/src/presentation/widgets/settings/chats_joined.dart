@@ -151,9 +151,9 @@ class ChatsJoined extends GetView<SettingsViewController> {
                 return Dismissible(
                   direction: DismissDirection.endToStart,
                   background: Container(
-        color: Colors.red,
-        child: const Icon(Icons.delete),
-      ),
+                    color: Colors.red,
+                    child: const Icon(Icons.delete),
+                  ),
                   confirmDismiss: (direction) => Future.value(true),
                   onDismissed: (direction) {
                     if (direction == DismissDirection.endToStart) {
