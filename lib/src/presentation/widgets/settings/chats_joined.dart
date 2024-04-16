@@ -103,6 +103,27 @@ class ChatsJoined extends GetView<SettingsViewController> {
   Widget _group(context, channelTextController, ChatGroup group) {
     return Dismissible(
       key: ValueKey(group),
+      direction: DismissDirection.endToStart,
+      background: Container(
+        color: Colors.red,
+        child: const Icon(Icons.delete),
+      ),
+      onDismissed: (direction) {
+        if (direction == DismissDirection.endToStart) {
+          List<ChatGroup>? groups = [];
+          groups.addAll(controller
+                  .homeViewController.settings.value.chatSettings?.chatGroups ??
+              []);
+          groups.removeWhere((element) => element.id == group.id);
+          controller.homeViewController.settings.value =
+              controller.homeViewController.settings.value.copyWith(
+                  chatSettings: controller
+                      .homeViewController.settings.value.chatSettings
+                      ?.copyWith(chatGroups: groups));
+          controller.saveSettings();
+          controller.homeViewController.settings.refresh();
+        }
+      },
       child: Container(
         padding: const EdgeInsets.only(
           left: 20,
@@ -128,14 +149,11 @@ class ChatsJoined extends GetView<SettingsViewController> {
                 String badge =
                     channel.platform == Platform.kick ? kickBadge : twitchBadge;
                 return Dismissible(
+                  direction: DismissDirection.endToStart,
                   background: Container(
-                    color: Colors.green,
-                    child: const Icon(Icons.edit),
-                  ),
-                  secondaryBackground: Container(
-                    color: Colors.red,
-                    child: const Icon(Icons.delete),
-                  ),
+        color: Colors.red,
+        child: const Icon(Icons.delete),
+      ),
                   confirmDismiss: (direction) => Future.value(true),
                   onDismissed: (direction) {
                     if (direction == DismissDirection.endToStart) {
