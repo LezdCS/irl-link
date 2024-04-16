@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:irllink/src/domain/entities/chat/chat_badge.dart';
 import 'package:kick_chat/kick_chat.dart';
 import 'package:twitch_chat/twitch_chat.dart' as twitch;
@@ -128,9 +127,6 @@ class ChatMessage extends Equatable implements twitch.Subscription, twitch.SubGi
   }
 
   factory ChatMessage.fromKick(KickMessage message, String channelId, List<KickBadge> subBadges) {
-    debugPrint(message.data.sender.identity.badges.toString());
-    //[type: subscriber, text: Subscriber, count: 3]
-    //[type: vip, text: VIP, count: 0, type: subscriber, text: Subscriber, count: 6]
     return ChatMessage(
       id: message.data.id,
       authorId: message.data.sender.id.toString(),
