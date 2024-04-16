@@ -50,6 +50,7 @@ class ChatEvents extends StatelessWidget {
                           "Hey guys, I'm new here!",
                           "Lezd",
                         ),
+                        '',
                       ),
                       selectedMessage: null,
                       displayTimestamp: false,
@@ -101,6 +102,7 @@ class ChatEvents extends StatelessWidget {
                     EventContainer(
                       message: entity.ChatMessage.fromTwitch(
                         Subscription.randomGeneration(),
+                        '',
                       ),
                       selectedMessage: null,
                       displayTimestamp: false,
@@ -152,6 +154,7 @@ class ChatEvents extends StatelessWidget {
                     EventContainer(
                       message: entity.ChatMessage.fromTwitch(
                         BitDonation.randomGeneration(),
+                        '',
                       ),
                       selectedMessage: null,
                       displayTimestamp: false,
@@ -203,6 +206,7 @@ class ChatEvents extends StatelessWidget {
                     EventContainer(
                       message: entity.ChatMessage.fromTwitch(
                         Announcement.randomGeneration(),
+                        '',
                       ),
                       selectedMessage: null,
                       displayTimestamp: false,
@@ -254,6 +258,7 @@ class ChatEvents extends StatelessWidget {
                     EventContainer(
                       message: entity.ChatMessage.fromTwitch(
                         IncomingRaid.randomGeneration(),
+                        '',
                       ),
                       selectedMessage: null,
                       displayTimestamp: false,
@@ -305,6 +310,7 @@ class ChatEvents extends StatelessWidget {
                     EventContainer(
                       message: entity.ChatMessage.fromTwitch(
                         RewardRedemption.randomGeneration(),
+                        '',
                       ),
                       selectedMessage: null,
                       displayTimestamp: false,

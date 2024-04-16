@@ -21,7 +21,7 @@ class SettingsRepositoryImpl extends SettingsRepository {
   @override
   Future<void> setSettings(Settings settings) async {
     final box = GetStorage();
-    String settingsJson = jsonEncode(settings);
+    String settingsJson = jsonEncode(settings.toJson());
     box.write('settings', settingsJson);
   }
 }

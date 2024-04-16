@@ -46,8 +46,8 @@ class ChatViewController extends GetxController
   late HomeViewController homeViewController;
   late TtsController ttsController;
 
-  TwitchChat? twitchChat;
-  KickChat? kickChat;
+  List<TwitchChat> twitchChats = [];
+  List<KickChat> kickChats = [];
 
   @override
   void onInit() async {
@@ -67,7 +67,7 @@ class ChatViewController extends GetxController
           chatGroup.channels.where((e) => e.platform == Platform.kick).toList();
 
       for (Channel tc in twitchChannels) {
-        twitchChat = TwitchChat(
+        TwitchChat twitchChat = TwitchChat(
           tc.channel,
           twitchData!.twitchUser.login,
           twitchData!.accessToken,
@@ -91,14 +91,16 @@ class ChatViewController extends GetxController
             chatMessages.refresh();
           },
           onDone: () {
-            twitchChat!.connect();
+            TwitchChat? chat =
+                twitchChats.firstWhereOrNull((t) => t.channel == tc.channel);
+            chat?.connect();
           },
           onError: () {},
           params: const TwitchChatParameters(addFirstMessages: true),
         );
 
-        twitchChat!.isConnected.addListener(() {
-          if (twitchChat!.isConnected.value) {
+        twitchChat.isConnected.addListener(() {
+          if (twitchChat.isConnected.value) {
             isChatConnected.value = true;
             isAlertProgress.value = false;
             alertMessage.value = "CONNECTED";
@@ -110,14 +112,14 @@ class ChatViewController extends GetxController
           }
         });
 
-        twitchChat!.chatStream.listen((message) {
+        twitchChat.chatStream.listen((message) {
           if (cheerEmotes.isEmpty) {
-            cheerEmotes.value = twitchChat!.cheerEmotes
+            cheerEmotes.value = twitchChat.cheerEmotes
                 .map((e) => ChatEmote.fromTwitch(e))
                 .toList();
           }
           if (thirdPartEmotes.isEmpty) {
-            thirdPartEmotes.value = twitchChat!.thirdPartEmotes
+            thirdPartEmotes.value = twitchChat.thirdPartEmotes
                 .map((e) => ChatEmote.fromTwitch(e))
                 .toList();
           }
@@ -129,7 +131,7 @@ class ChatViewController extends GetxController
             ttsController.readTts(message);
           }
           entity.ChatMessage twitchMessage =
-              entity.ChatMessage.fromTwitch(message);
+              entity.ChatMessage.fromTwitch(message, twitchChat.channelId ?? '');
           chatMessages.add(twitchMessage);
 
           if (scrollController.hasClients && isAutoScrolldown.value) {
@@ -145,19 +147,19 @@ class ChatViewController extends GetxController
       }
 
       for (Channel kc in kickChannels) {
-        kickChat = KickChat(
+        KickChat kickChat = KickChat(
           kc.channel,
           onDone: () => {},
           onError: () => {
             debugPrint('error on kick chat'),
           },
         );
-        kickChat!.connect();
-        kickChat!.chatStream.listen((message) {
+        kickChat.connect();
+        kickChat.chatStream.listen((message) {
           final KickEvent? kickEvent = eventParser(message);
           if (kickEvent?.event == TypeEvent.message) {
             entity.ChatMessage kickMessage =
-                entity.ChatMessage.fromKick(kickEvent as KickMessage);
+                entity.ChatMessage.fromKick(kickEvent as KickMessage, kickChat.chatroomId);
             chatMessages.add(kickMessage);
           }
 
@@ -205,15 +207,19 @@ class ChatViewController extends GetxController
       Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
         switch (result) {
           case ConnectivityResult.wifi:
-            if (twitchChat != null && !twitchChat!.isConnected.value) {
-              twitchChat!.close();
-              twitchChat!.connect();
+            for (TwitchChat twitchChat in twitchChats) {
+              if (!twitchChat.isConnected.value) {
+                twitchChat.close();
+                twitchChat.connect();
+              }
             }
             break;
           case ConnectivityResult.mobile:
-            if (twitchChat != null && !twitchChat!.isConnected.value) {
-              twitchChat!.close();
-              twitchChat!.connect();
+            for (TwitchChat twitchChat in twitchChats) {
+              if (!twitchChat.isConnected.value) {
+                twitchChat.close();
+                twitchChat.connect();
+              }
             }
             break;
           case ConnectivityResult.none:
@@ -229,9 +235,11 @@ class ChatViewController extends GetxController
           case ConnectivityResult.vpn:
             break;
           case ConnectivityResult.other:
-            if (twitchChat != null && !twitchChat!.isConnected.value) {
-              twitchChat!.close();
-              twitchChat!.connect();
+            for (TwitchChat twitchChat in twitchChats) {
+              if (!twitchChat.isConnected.value) {
+                twitchChat.close();
+                twitchChat.connect();
+              }
             }
             break;
         }
@@ -269,10 +277,11 @@ class ChatViewController extends GetxController
   }
 
   /// Delete [message] by his id
-  void deleteMessageInstruction(entity.ChatMessage message) {
+  void deleteMessageInstruction(
+      entity.ChatMessage message) {
     TwitchApi.deleteMessage(
       twitchData!.accessToken,
-      twitchChat!.channelId!,
+      message.channelId,
       message.id,
       kTwitchAuthClientId,
     );
@@ -282,10 +291,11 @@ class ChatViewController extends GetxController
   }
 
   /// Ban user for specific [duration] based on the author name in the [message]
-  void timeoutMessageInstruction(entity.ChatMessage message, int duration) {
+  void timeoutMessageInstruction(
+      entity.ChatMessage message, int duration) {
     TwitchApi.banUser(
       twitchData!.accessToken,
-      twitchChat!.channelId!,
+      message.channelId,
       message.authorId,
       duration,
       kTwitchAuthClientId,
@@ -295,10 +305,11 @@ class ChatViewController extends GetxController
   }
 
   /// Ban user based on the author name in the [message]
-  void banMessageInstruction(entity.ChatMessage message) {
+  void banMessageInstruction(
+      entity.ChatMessage message) {
     TwitchApi.banUser(
       twitchData!.accessToken,
-      twitchChat!.channelId!,
+      message.channelId,
       message.authorId,
       null,
       kTwitchAuthClientId,
@@ -348,12 +359,10 @@ class ChatViewController extends GetxController
   Future applySettings() async {
     isAutoScrolldown.value = true;
 
-    if (twitchChat != null && !twitchChat!.isConnected.value) {
-      twitchChat?.connect();
+    for (TwitchChat twitchChat in twitchChats) {
+      if (!twitchChat.isConnected.value) {
+        twitchChat.connect();
+      }
     }
-  }
-
-  void changeChannel(String channel) {
-    twitchChat?.changeChannel(channel);
   }
 }

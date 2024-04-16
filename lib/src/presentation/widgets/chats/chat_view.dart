@@ -6,6 +6,7 @@ import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/event_container.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/message_container.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/twitch/moderation_bottom_sheet.dart';
+import 'package:twitch_chat/twitch_chat.dart' as twitch_chat;
 import '../alert_message_view.dart';
 
 class ChatView extends StatelessWidget {
@@ -28,7 +29,8 @@ class ChatView extends StatelessWidget {
     if (controller == null) {
       return Container();
     }
-    bool multiplePlatform = controller.kickChat != null && controller.twitchChat != null;
+    bool multiplePlatform =
+        controller.kickChats.isNotEmpty && controller.twitchChats.isNotEmpty;
     return Obx(
       () => Stack(children: [
         GestureDetector(
@@ -50,8 +52,11 @@ class ChatView extends StatelessWidget {
               cancelTextColor: Theme.of(context).textTheme.bodyLarge!.color,
               buttonColor: Theme.of(context).colorScheme.tertiary,
               onConfirm: () {
-                controller?.twitchChat?.close();
-                controller?.twitchChat?.connect();
+                for (twitch_chat.TwitchChat twitchChat
+                    in controller!.twitchChats) {
+                  twitchChat.close();
+                  twitchChat.connect();
+                }
                 Get.back();
               },
               onCancel: () {
@@ -66,19 +71,9 @@ class ChatView extends StatelessWidget {
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.background,
             ),
-            child: controller!.chatMessages.isEmpty
-                ? Container(
-                    padding: const EdgeInsets.only(left: 5),
-                    child: Text(
-                      "Welcome on ${controller.twitchChat?.channel} 's chat room !",
-                      style: const TextStyle(
-                        color: Color(0xFF878585),
-                      ),
-                    ),
-                  )
-                : ListView.builder(
-                    controller: controller.scrollController,
-                    itemCount: controller.chatMessages.length,
+            child: ListView.builder(
+                    controller: controller?.scrollController,
+                    itemCount: controller?.chatMessages.length,
                     itemBuilder: (BuildContext context, int index) {
                       ChatMessage message = controller!.chatMessages[index];
                       return Container(
@@ -128,7 +123,6 @@ class ChatView extends StatelessWidget {
                                       .displayTimestamp!,
                                   textSize: controller.homeViewController
                                       .settings.value.textSize!,
-                                  twitchChat: controller.twitchChat!,
                                   hideDeletedMessages: controller
                                       .homeViewController
                                       .settings
@@ -150,7 +144,7 @@ class ChatView extends StatelessWidget {
           left: 0,
           right: 0,
           child: Visibility(
-            visible: !controller.isAutoScrolldown.value,
+            visible: controller != null && !controller.isAutoScrolldown.value,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -177,15 +171,15 @@ class ChatView extends StatelessWidget {
           left: 0,
           right: 0,
           child: AnimatedSlide(
-            offset: controller.homeViewController.selectedMessage.value != null
+            offset: controller?.homeViewController.selectedMessage.value != null
                 ? Offset.zero
                 : const Offset(0, 1),
             duration: const Duration(milliseconds: 200),
             child: Visibility(
               visible:
-                  controller.homeViewController.selectedMessage.value != null,
+                  controller != null && controller.homeViewController.selectedMessage.value != null,
               child:
-                  ModerationBottomSheet(controller: controller, width: width),
+                  ModerationBottomSheet(controller: controller!, width: width),
             ),
           ),
         ),

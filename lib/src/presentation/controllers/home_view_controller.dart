@@ -222,8 +222,10 @@ class HomeViewController extends GetxController
   void sendChatMessage(String message) {
     if (twitchData == null) return;
 
-    String? channelToSend = selectedChatGroup?.channels.firstWhereOrNull((c) => c.platform == Platform.twitch)?.channel;
-    if(channelToSend == null) {
+    String? channelToSend = selectedChatGroup?.channels
+        .firstWhereOrNull((c) => c.platform == Platform.twitch)
+        ?.channel;
+    if (channelToSend == null) {
       return;
     }
 
@@ -248,31 +250,37 @@ class HomeViewController extends GetxController
   }
 
   void getEmotes() {
-    ChatViewController? chatController =  Get.find<ChatViewController>(tag: selectedChatGroup!.id);
-    
-    List<Emote> emotes = List.from(chatController.twitchChat!.emotes)
-      ..addAll(chatController.twitchChat!.emotesFromSets)
-      ..addAll(chatController.twitchChat!.thirdPartEmotes);
-    twitchEmotes
-      ..clear()
-      ..addAll(emotes);
+    ChatViewController? chatController =
+        Get.find<ChatViewController>(tag: selectedChatGroup!.id);
+    for (TwitchChat twitchChat in chatController.twitchChats) {
+      List<Emote> emotes = List.from(twitchChat.emotes)
+        ..addAll(twitchChat.emotesFromSets)
+        ..addAll(twitchChat.thirdPartEmotes);
+      twitchEmotes
+        ..clear()
+        ..addAll(emotes);
+    }
+
     isPickingEmote.toggle();
   }
 
   void searchEmote(String input) {
-    ChatViewController? chatController =  Get.find<ChatViewController>(tag: selectedChatGroup!.id);
+    ChatViewController? chatController =
+        Get.find<ChatViewController>(tag: selectedChatGroup!.id);
 
-    List<Emote> emotes = List.from(chatController.twitchChat!.emotes)
-      ..addAll(chatController.twitchChat!.emotesFromSets)
-      ..addAll(chatController.twitchChat!.thirdPartEmotes);
-    emotes = emotes
-        .where(
-          (emote) => emote.name.toLowerCase().contains(input.toLowerCase()),
-        )
-        .toList();
-    twitchEmotes
-      ..clear()
-      ..addAll(emotes);
+    for (TwitchChat twitchChat in chatController.twitchChats) {
+      List<Emote> emotes = List.from(twitchChat.emotes)
+        ..addAll(twitchChat.emotesFromSets)
+        ..addAll(twitchChat.thirdPartEmotes);
+      emotes = emotes
+          .where(
+            (emote) => emote.name.toLowerCase().contains(input.toLowerCase()),
+          )
+          .toList();
+      twitchEmotes
+        ..clear()
+        ..addAll(emotes);
+    }
   }
 
   void login() {

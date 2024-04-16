@@ -16,7 +16,7 @@ class ChatSettingsDTO extends ChatSettings {
 
   factory ChatSettingsDTO.fromJson(Map<String, dynamic> map) {
     List<ChatGroup> gDto = [];
-    for (dynamic chatGroup in map['chatGroups']) {
+    for (dynamic chatGroup in map['chatGroups'] ?? []) {
       gDto.add(ChatGroupDTO.fromJson(chatGroup));
     }
     return ChatSettingsDTO(
@@ -35,7 +35,7 @@ class ChatGroupDTO extends ChatGroup {
 
   factory ChatGroupDTO.fromJson(Map<String, dynamic> map) {
     List<Channel> cDto = [];
-    for (dynamic channel in map['channels']) {
+    for (dynamic channel in map['channels'] ?? []) {
       cDto.add(ChannelDTO.fromJson(channel));
     }
 
@@ -93,7 +93,7 @@ class ChannelDTO extends Channel {
 
   @override
   Map toJson() => {
-        'platform': platform,
+        'platform': platform.name.toString(),
         'channel': channel,
         'enabled': enabled,
       };

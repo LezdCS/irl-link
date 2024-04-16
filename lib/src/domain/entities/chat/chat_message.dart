@@ -48,6 +48,7 @@ class ChatMessage extends Equatable implements twitch.Subscription, twitch.SubGi
   @override
   final String rawData;
 
+  final String channelId;
   final EventType? eventType;
   final List<ChatBadge> badgesList;
   final Map<String, List> emotes; //TODO: emote entity
@@ -67,6 +68,7 @@ class ChatMessage extends Equatable implements twitch.Subscription, twitch.SubGi
     required this.isDeleted,
     required this.rawData,
     required this.eventType,
+    required this.channelId,
     required this.badgesList,
     required this.emotes,
     required this.platform,
@@ -85,7 +87,7 @@ class ChatMessage extends Equatable implements twitch.Subscription, twitch.SubGi
     required this.viewerCount,
   });
 
-  factory ChatMessage.fromTwitch(twitch.ChatMessage message) {
+  factory ChatMessage.fromTwitch(twitch.ChatMessage message, String channelId) {
 
     EventType? type = EventType.values.firstWhereOrNull(
         (e) => e.toString().split('.').last == message.highlightType.toString().split('.').last,
@@ -108,6 +110,7 @@ class ChatMessage extends Equatable implements twitch.Subscription, twitch.SubGi
       badgesList: message.badges.map((badge) => ChatBadge.fromTwitch(badge)).toList(),
       emotes: message.emotes,
       platform: Platform.twitch,
+      channelId: channelId,
 
       //implements
       raidingChannelName: type == EventType.incomingRaid ? (message as twitch.IncomingRaid).raidingChannelName : '',
@@ -123,7 +126,7 @@ class ChatMessage extends Equatable implements twitch.Subscription, twitch.SubGi
     );
   }
 
-  factory ChatMessage.fromKick(KickMessage message) {
+  factory ChatMessage.fromKick(KickMessage message, String channelId) {
     return ChatMessage(
       id: message.data.id,
       authorId: message.data.sender.id.toString(),
@@ -142,6 +145,7 @@ class ChatMessage extends Equatable implements twitch.Subscription, twitch.SubGi
       badgesList: const [], //TODO: Add badges for KickMessage
       emotes: const {}, //TODO: Add emotes for KickMessage
       platform: Platform.kick,
+      channelId: channelId,
 
       //implements
       raidingChannelName: '',

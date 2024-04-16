@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
-import 'package:twitch_chat/twitch_chat.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
 
 import 'message_row.dart';
@@ -11,7 +10,6 @@ class MessageContainer extends StatelessWidget {
   final entity.ChatMessage message;
   final bool displayTimestamp;
   final double textSize;
-  final TwitchChat twitchChat;
   final bool hideDeletedMessages;
   final List<ChatEmote> cheerEmotes;
   final List<ChatEmote> thirdPartEmotes;
@@ -23,7 +21,6 @@ class MessageContainer extends StatelessWidget {
     required this.message,
     required this.displayTimestamp,
     required this.textSize,
-    required this.twitchChat,
     required this.hideDeletedMessages,
     required this.cheerEmotes,
     required this.thirdPartEmotes,
