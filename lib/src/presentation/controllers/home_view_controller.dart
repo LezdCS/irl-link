@@ -175,7 +175,27 @@ class HomeViewController extends GetxController
     }
 
     RxList<ChatView> chatViews = RxList<ChatView>.from(channels);
+    if (channels.firstWhereOrNull((element) => element.chatGroup.id == '1') ==
+        null) {
+      ChatGroup chatGroupSelf = ChatGroup(id: '1', channels: [
+        Channel(
+          platform: Platform.twitch,
+          channel: twitchData?.twitchUser.login ?? '',
+          enabled: true,
+        )
+      ]);
+      lazyPutChat(chatGroupSelf);
+      channels.add(
+        ChatView(
+          chatGroup: chatGroupSelf,
+        ),
+      );
+    }
+
     for (var temp in chatViews) {
+      if(temp.chatGroup.id == '1') {
+        continue;
+      }
       ChatView view = channels
           .firstWhere((element) => element.chatGroup.id == temp.chatGroup.id);
 
@@ -199,8 +219,8 @@ class HomeViewController extends GetxController
     }
 
     for (ChatGroup chatGroup in settings.value.chatSettings!.chatGroups) {
-      if (channels
-              .firstWhereOrNull((channel) => channel.chatGroup.id == chatGroup.id) ==
+      if (channels.firstWhereOrNull(
+              (channel) => channel.chatGroup.id == chatGroup.id) ==
           null) {
         lazyPutChat(chatGroup);
         channels.add(
