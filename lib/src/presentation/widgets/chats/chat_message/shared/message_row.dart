@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/chat/chat_badge.dart';
 import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
@@ -68,12 +69,18 @@ class MessageRow extends StatelessWidget {
           for (ChatBadge badge in badges)
             Container(
               padding: const EdgeInsets.only(right: 4, top: 3),
-              child: Image(
-                width: 18,
-                height: 18,
-                image: NetworkImage(badge.imageUrl1x),
-                filterQuality: FilterQuality.high,
-              ),
+              child: Uri.parse(badge.imageUrl1x).isAbsolute
+                  ? Image(
+                      width: 18,
+                      height: 18,
+                      image: NetworkImage(badge.imageUrl1x),
+                      filterQuality: FilterQuality.high,
+                    )
+                  : SvgPicture.asset(
+                      badge.imageUrl1x,
+                      width: 18,
+                      height: 18,
+                    ),
             ),
           AuthorName(
             isAction: message.isAction,

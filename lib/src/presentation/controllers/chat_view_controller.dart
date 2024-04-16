@@ -273,7 +273,7 @@ class ChatViewController extends GetxController
     List<KickChat> kickChatToRemove = kickChats
         .where((kc) =>
             kickChannels
-                .firstWhereOrNull((kCa) => kCa.channel == kc.chatroomId) ==
+                .firstWhereOrNull((kCa) => kCa.channel == kc.username) ==
             null)
         .toList();
 
@@ -284,7 +284,7 @@ class ChatViewController extends GetxController
 
     for (KickChat k in kickChatToRemove) {
       k.close();
-      kickChats.removeWhere((kc) => kc.chatroomId == k.chatroomId);
+      kickChats.removeWhere((kc) => kc.username == k.username);
     }
   }
 
@@ -365,18 +365,13 @@ class ChatViewController extends GetxController
   }
 
   Future<void> createKickChat(Channel kc) async {
-    KickUser? userDetails = await KickApi.getUserDetails(kc.channel);
-    if (userDetails == null) {
-      return;
-    }
-    int channelId = userDetails.id;
     bool alreadyCreated =
-        kickChats.firstWhereOrNull((k) => k.chatroomId == channelId.toString()) != null;
+        kickChats.firstWhereOrNull((k) => k.username == kc.channel) != null;
     if (alreadyCreated) {
       return;
     }
     KickChat kickChat = KickChat(
-      channelId.toString(),
+      kc.channel,
       onDone: () => {},
       onError: () => {
         debugPrint('error on kick chat'),
@@ -389,7 +384,7 @@ class ChatViewController extends GetxController
       final KickEvent? kickEvent = eventParser(message);
       if (kickEvent?.event == TypeEvent.message) {
         entity.ChatMessage kickMessage = entity.ChatMessage.fromKick(
-            kickEvent as KickMessage, kickChat.chatroomId);
+            kickEvent as KickMessage, kickChat.userDetails!.userId.toString(), kickChat.userDetails!.subBadges);
         chatMessages.add(kickMessage);
       }
 

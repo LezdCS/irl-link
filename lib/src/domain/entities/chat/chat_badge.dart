@@ -24,12 +24,44 @@ class ChatBadge extends Equatable {
     );
   }
 
-  factory ChatBadge.fromKick(KickBadge badge) {
+  factory ChatBadge.fromKick(
+      String channelId, UserBadge badge, List<KickBadge> subBadges) {
+    String src = '';
+    switch (badge.type) {
+      case 'subscriber':
+      src= subBadges.lastWhere((element) => badge.count >= element.months).badgeImage.src;
+        break;
+      case 'vip':
+        src = './lib/assets/kick/vip.svg';
+        break;
+      case 'og':
+        src = './lib/assets/kick/og.svg';
+        break;
+      case 'founder':
+        src = './lib/assets/kick/founder.svg';
+        break;
+      case 'verified':
+        src = './lib/assets/kick/verified.svg';
+        break;
+      case 'moderator':
+        src = './lib/assets/kick/moderator.svg';
+        break;
+      case 'sub_gifter':
+        src = './lib/assets/kick/sub_gifter.svg';
+        break;
+    }
+
+    KickBadge correspondingBadge = KickBadge(
+      id: 0,
+      channelId: int.parse(channelId),
+      months: 0,
+      badgeImage: BadgeImage(src: src),
+    );
     return ChatBadge(
-      id: badge.id.toString(),
-      imageUrl1x: badge.badgeImage.src,
-      imageUrl2x: badge.badgeImage.src,
-      imageUrl4x: badge.badgeImage.src,
+      id: correspondingBadge.id.toString(),
+      imageUrl1x: correspondingBadge.badgeImage.src,
+      imageUrl2x: correspondingBadge.badgeImage.src,
+      imageUrl4x: correspondingBadge.badgeImage.src,
     );
   }
 

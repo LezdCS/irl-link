@@ -127,7 +127,7 @@ class ChatMessage extends Equatable implements twitch.Subscription, twitch.SubGi
     );
   }
 
-  factory ChatMessage.fromKick(KickMessage message, String channelId) {
+  factory ChatMessage.fromKick(KickMessage message, String channelId, List<KickBadge> subBadges) {
     debugPrint(message.data.sender.identity.badges.toString());
     //[type: subscriber, text: Subscriber, count: 3]
     //[type: vip, text: VIP, count: 0, type: subscriber, text: Subscriber, count: 6]
@@ -146,7 +146,7 @@ class ChatMessage extends Equatable implements twitch.Subscription, twitch.SubGi
       isDeleted: false,
       rawData: '',
       eventType: null, //TODO: Add event type for KickMessage
-      badgesList: const [], //TODO: Add badges for KickMessage
+      badgesList: message.data.sender.identity.badges.map((badge) => ChatBadge.fromKick(channelId, badge, subBadges)).toList(),
       emotes: const {}, //TODO: Add emotes for KickMessage
       platform: Platform.kick,
       channelId: channelId,
