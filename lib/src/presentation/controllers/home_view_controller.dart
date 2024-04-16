@@ -200,7 +200,7 @@ class HomeViewController extends GetxController
 
     for (ChatGroup chatGroup in settings.value.chatSettings!.chatGroups) {
       if (channels
-              .firstWhereOrNull((channel) => channel.chatGroup == chatGroup) ==
+              .firstWhereOrNull((channel) => channel.chatGroup.id == chatGroup.id) ==
           null) {
         lazyPutChat(chatGroup);
         channels.add(

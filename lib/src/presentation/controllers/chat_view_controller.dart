@@ -323,10 +323,6 @@ class ChatViewController extends GetxController
         isAlertProgress.value = false;
         alertMessage.value = "CONNECTED";
         alertColor.value = const Color(0xFF1DBF1D);
-      } else {
-        isChatConnected.value = false;
-        alertMessage.value = "DISCONNECTED";
-        alertColor.value = const Color.fromARGB(255, 191, 37, 29);
       }
     });
 
