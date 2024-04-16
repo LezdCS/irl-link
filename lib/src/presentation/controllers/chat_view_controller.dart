@@ -262,7 +262,7 @@ class ChatViewController extends GetxController
 
     for (Channel kc in kickChannels) {
       bool alreadyCreated =
-          kickChannels.firstWhereOrNull((k) => k.channel == kc.channel) != null;
+          kickChats.firstWhereOrNull((k) => k.chatroomId == kc.channel) != null;
       if (!alreadyCreated) {
         createKickChat(kc);
       }
