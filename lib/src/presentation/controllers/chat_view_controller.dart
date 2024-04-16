@@ -242,7 +242,7 @@ class ChatViewController extends GetxController
 
   Future applySettings() async {
     isAutoScrolldown.value = true;
-
+    debugPrint('apllysettings');
     createChats(chatGroup.channels);
   }
 
@@ -259,25 +259,32 @@ class ChatViewController extends GetxController
         createTwitchChat(tc);
       }
     }
+    debugPrint(kickChannels.toString());
 
     for (Channel kc in kickChannels) {
-      bool alreadyCreated =
-          kickChats.firstWhereOrNull((k) => k.chatroomId == kc.channel) != null;
-      if (!alreadyCreated) {
-        createKickChat(kc);
-      }
+      createKickChat(kc);
     }
 
-    // Remove 
-    List<TwitchChat> twitchChatToRemove = twitchChats.where((tc) => twitchChannels.firstWhereOrNull((tCa) => tCa.channel == tc.channel) == null).toList();
-    List<KickChat> kickChatToRemove = kickChats.where((kc) => kickChannels.firstWhereOrNull((kCa) => kCa.channel == kc.chatroomId) == null).toList();
+    // Remove
+    List<TwitchChat> twitchChatToRemove = twitchChats
+        .where((tc) =>
+            twitchChannels
+                .firstWhereOrNull((tCa) => tCa.channel == tc.channel) ==
+            null)
+        .toList();
+    List<KickChat> kickChatToRemove = kickChats
+        .where((kc) =>
+            kickChannels
+                .firstWhereOrNull((kCa) => kCa.channel == kc.chatroomId) ==
+            null)
+        .toList();
 
-    for(TwitchChat t in twitchChatToRemove) {
+    for (TwitchChat t in twitchChatToRemove) {
       t.close();
       twitchChats.removeWhere((tc) => tc.channelId == t.channelId);
     }
 
-     for(KickChat k in kickChatToRemove) {
+    for (KickChat k in kickChatToRemove) {
       k.close();
       kickChats.removeWhere((kc) => kc.chatroomId == k.chatroomId);
     }
@@ -361,7 +368,12 @@ class ChatViewController extends GetxController
 
   Future<void> createKickChat(Channel kc) async {
     int? channelId = await KickApi.getChannelId(kc.channel);
-    if(channelId == null) {
+    if (channelId == null) {
+      return;
+    }
+    bool alreadyCreated =
+        kickChats.firstWhereOrNull((k) => k.chatroomId == channelId.toString()) != null;
+    if (alreadyCreated) {
       return;
     }
     KickChat kickChat = KickChat(
@@ -373,6 +385,7 @@ class ChatViewController extends GetxController
     );
     kickChat.connect();
     kickChats.add(kickChat);
+    isChatConnected.value = true;
     kickChat.chatStream.listen((message) {
       final KickEvent? kickEvent = eventParser(message);
       if (kickEvent?.event == TypeEvent.message) {
