@@ -242,7 +242,6 @@ class ChatViewController extends GetxController
 
   Future applySettings() async {
     isAutoScrolldown.value = true;
-    debugPrint('apllysettings');
     createChats(chatGroup.channels);
   }
 
@@ -259,7 +258,6 @@ class ChatViewController extends GetxController
         createTwitchChat(tc);
       }
     }
-    debugPrint(kickChannels.toString());
 
     for (Channel kc in kickChannels) {
       createKickChat(kc);

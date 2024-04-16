@@ -50,7 +50,6 @@ class TwitchEventSub {
   }
 
   void close() {
-    debugPrint('close');
     _webSocketChannel?.sink.close();
     _streamSubscription?.cancel();
     _streamSubscription = null;
