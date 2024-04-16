@@ -24,7 +24,7 @@ class ChatViewController extends GetxController
   });
 
   final HomeEvents homeEvents;
-  final ChatGroup chatGroup;
+  ChatGroup chatGroup;
 
   //CHAT
   late ScrollController scrollController;
@@ -60,120 +60,7 @@ class ChatViewController extends GetxController
       homeViewController.selectedChatGroup = chatGroup;
       twitchData = Get.arguments[0];
 
-      List<Channel> twitchChannels = chatGroup.channels
-          .where((e) => e.platform == Platform.twitch)
-          .toList();
-      List<Channel> kickChannels =
-          chatGroup.channels.where((e) => e.platform == Platform.kick).toList();
-
-      for (Channel tc in twitchChannels) {
-        TwitchChat twitchChat = TwitchChat(
-          tc.channel,
-          twitchData!.twitchUser.login,
-          twitchData!.accessToken,
-          clientId: kTwitchAuthClientId,
-          onConnected: () {},
-          onClearChat: () {
-            chatMessages.clear();
-          },
-          onDeletedMessageByUserId: (String? userId) {
-            for (var message in chatMessages) {
-              if (message.authorId == userId) {
-                message.isDeleted = true;
-              }
-            }
-            chatMessages.refresh();
-          },
-          onDeletedMessageByMessageId: (String? messageId) {
-            chatMessages
-                .firstWhereOrNull((message) => message.id == messageId)!
-                .isDeleted = true;
-            chatMessages.refresh();
-          },
-          onDone: () {
-            TwitchChat? chat =
-                twitchChats.firstWhereOrNull((t) => t.channel == tc.channel);
-            chat?.connect();
-          },
-          onError: () {},
-          params: const TwitchChatParameters(addFirstMessages: true),
-        );
-        twitchChat.connect();
-        twitchChat.isConnected.addListener(() {
-          if (twitchChat.isConnected.value) {
-            isChatConnected.value = true;
-            isAlertProgress.value = false;
-            alertMessage.value = "CONNECTED";
-            alertColor.value = const Color(0xFF1DBF1D);
-          } else {
-            isChatConnected.value = false;
-            alertMessage.value = "DISCONNECTED";
-            alertColor.value = const Color.fromARGB(255, 191, 37, 29);
-          }
-        });
-
-        twitchChat.chatStream.listen((message) {
-          if (cheerEmotes.isEmpty) {
-            cheerEmotes.value = twitchChat.cheerEmotes
-                .map((e) => ChatEmote.fromTwitch(e))
-                .toList();
-          }
-          if (thirdPartEmotes.isEmpty) {
-            thirdPartEmotes.value = twitchChat.thirdPartEmotes
-                .map((e) => ChatEmote.fromTwitch(e))
-                .toList();
-          }
-          if (homeViewController.settings.value.hiddenUsersIds!
-              .contains(message.authorId)) {
-            return;
-          }
-          if (homeViewController.settings.value.ttsSettings!.ttsEnabled) {
-            ttsController.readTts(message);
-          }
-          entity.ChatMessage twitchMessage = entity.ChatMessage.fromTwitch(
-              message, twitchChat.channelId ?? '');
-          chatMessages.add(twitchMessage);
-
-          if (scrollController.hasClients && isAutoScrolldown.value) {
-            Timer(const Duration(milliseconds: 100), () {
-              if (isAutoScrolldown.value) {
-                scrollController.jumpTo(
-                  scrollController.position.maxScrollExtent,
-                );
-              }
-            });
-          }
-        });
-      }
-
-      for (Channel kc in kickChannels) {
-        KickChat kickChat = KickChat(
-          kc.channel,
-          onDone: () => {},
-          onError: () => {
-            debugPrint('error on kick chat'),
-          },
-        );
-        kickChat.connect();
-        kickChat.chatStream.listen((message) {
-          final KickEvent? kickEvent = eventParser(message);
-          if (kickEvent?.event == TypeEvent.message) {
-            entity.ChatMessage kickMessage = entity.ChatMessage.fromKick(
-                kickEvent as KickMessage, kickChat.chatroomId);
-            chatMessages.add(kickMessage);
-          }
-
-          if (scrollController.hasClients && isAutoScrolldown.value) {
-            Timer(const Duration(milliseconds: 100), () {
-              if (isAutoScrolldown.value) {
-                scrollController.jumpTo(
-                  scrollController.position.maxScrollExtent,
-                );
-              }
-            });
-          }
-        });
-      }
+      createChats(chatGroup.channels);
 
       await applySettings();
     } else {
@@ -356,10 +243,141 @@ class ChatViewController extends GetxController
   Future applySettings() async {
     isAutoScrolldown.value = true;
 
-    for (TwitchChat twitchChat in twitchChats) {
-      if (!twitchChat.isConnected.value) {
-        twitchChat.connect();
+    createChats(chatGroup.channels);
+  }
+
+  void createChats(List<Channel> channels) {
+    List<Channel> twitchChannels =
+        chatGroup.channels.where((e) => e.platform == Platform.twitch).toList();
+    List<Channel> kickChannels =
+        chatGroup.channels.where((e) => e.platform == Platform.kick).toList();
+
+    for (Channel tc in twitchChannels) {
+      bool alreadyCreated =
+          twitchChats.firstWhereOrNull((t) => t.channel == tc.channel) != null;
+      if (!alreadyCreated) {
+        createTwitchChat(tc);
       }
     }
+
+    for (Channel kc in kickChannels) {
+      bool alreadyCreated =
+          kickChannels.firstWhereOrNull((k) => k.channel == kc.channel) != null;
+      if (!alreadyCreated) {
+        createKickChat(kc);
+      }
+    }
+
+    //TODO: find non existing channels existing in TwitchChats and KickChats not existing anymore in the chatGroup.channels and remove them
+  }
+
+  void createTwitchChat(Channel tc) {
+    TwitchChat twitchChat = TwitchChat(
+      tc.channel,
+      twitchData!.twitchUser.login,
+      twitchData!.accessToken,
+      clientId: kTwitchAuthClientId,
+      onConnected: () {},
+      onClearChat: () {
+        chatMessages.clear();
+      },
+      onDeletedMessageByUserId: (String? userId) {
+        for (var message in chatMessages) {
+          if (message.authorId == userId) {
+            message.isDeleted = true;
+          }
+        }
+        chatMessages.refresh();
+      },
+      onDeletedMessageByMessageId: (String? messageId) {
+        chatMessages
+            .firstWhereOrNull((message) => message.id == messageId)!
+            .isDeleted = true;
+        chatMessages.refresh();
+      },
+      onDone: () {
+        TwitchChat? chat =
+            twitchChats.firstWhereOrNull((t) => t.channel == tc.channel);
+        chat?.connect();
+      },
+      onError: () {},
+      params: const TwitchChatParameters(addFirstMessages: true),
+    );
+    twitchChat.connect();
+    twitchChats.add(twitchChat);
+    twitchChat.isConnected.addListener(() {
+      if (twitchChat.isConnected.value) {
+        isChatConnected.value = true;
+        isAlertProgress.value = false;
+        alertMessage.value = "CONNECTED";
+        alertColor.value = const Color(0xFF1DBF1D);
+      } else {
+        isChatConnected.value = false;
+        alertMessage.value = "DISCONNECTED";
+        alertColor.value = const Color.fromARGB(255, 191, 37, 29);
+      }
+    });
+
+    twitchChat.chatStream.listen((message) {
+      if (cheerEmotes.isEmpty) {
+        cheerEmotes.value =
+            twitchChat.cheerEmotes.map((e) => ChatEmote.fromTwitch(e)).toList();
+      }
+      if (thirdPartEmotes.isEmpty) {
+        thirdPartEmotes.value = twitchChat.thirdPartEmotes
+            .map((e) => ChatEmote.fromTwitch(e))
+            .toList();
+      }
+      if (homeViewController.settings.value.hiddenUsersIds!
+          .contains(message.authorId)) {
+        return;
+      }
+      if (homeViewController.settings.value.ttsSettings!.ttsEnabled) {
+        ttsController.readTts(message);
+      }
+      entity.ChatMessage twitchMessage =
+          entity.ChatMessage.fromTwitch(message, twitchChat.channelId ?? '');
+      chatMessages.add(twitchMessage);
+
+      if (scrollController.hasClients && isAutoScrolldown.value) {
+        Timer(const Duration(milliseconds: 100), () {
+          if (isAutoScrolldown.value) {
+            scrollController.jumpTo(
+              scrollController.position.maxScrollExtent,
+            );
+          }
+        });
+      }
+    });
+  }
+
+  void createKickChat(Channel kc) {
+    KickChat kickChat = KickChat(
+      kc.channel,
+      onDone: () => {},
+      onError: () => {
+        debugPrint('error on kick chat'),
+      },
+    );
+    kickChat.connect();
+    kickChats.add(kickChat);
+    kickChat.chatStream.listen((message) {
+      final KickEvent? kickEvent = eventParser(message);
+      if (kickEvent?.event == TypeEvent.message) {
+        entity.ChatMessage kickMessage = entity.ChatMessage.fromKick(
+            kickEvent as KickMessage, kickChat.chatroomId);
+        chatMessages.add(kickMessage);
+      }
+
+      if (scrollController.hasClients && isAutoScrolldown.value) {
+        Timer(const Duration(milliseconds: 100), () {
+          if (isAutoScrolldown.value) {
+            scrollController.jumpTo(
+              scrollController.position.maxScrollExtent,
+            );
+          }
+        });
+      }
+    });
   }
 }

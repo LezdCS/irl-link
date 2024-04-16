@@ -140,6 +140,17 @@ class ChatsJoined extends GetView<SettingsViewController> {
                   onDismissed: (direction) {
                     if (direction == DismissDirection.endToStart) {
                       group.channels.removeAt(index);
+
+                      List<ChatGroup>? groups = [];
+                      groups.addAll(controller.homeViewController.settings.value
+                              .chatSettings?.chatGroups ??
+                          []);
+                      controller.homeViewController.settings.value =
+                          controller.homeViewController.settings.value.copyWith(
+                              chatSettings: controller.homeViewController
+                                  .settings.value.chatSettings
+                                  ?.copyWith(chatGroups: groups));
+
                       controller.saveSettings();
                       controller.homeViewController.settings.refresh();
                     }

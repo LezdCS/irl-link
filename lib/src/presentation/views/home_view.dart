@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
+import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
@@ -454,6 +455,12 @@ class HomeView extends GetView<HomeViewController> {
                         tag: chan.chatGroup.id)) {
                       ChatViewController c =
                           Get.find<ChatViewController>(tag: chan.chatGroup.id);
+                      ChatGroup? chatGroupUpdated = controller
+                          .settings.value.chatSettings?.chatGroups
+                          .firstWhereOrNull((cg) => cg.id == chan.chatGroup.id);
+                      if (chatGroupUpdated != null) {
+                        c.chatGroup = chatGroupUpdated;
+                      }
                       c.applySettings();
                     }
                   }
@@ -506,8 +513,8 @@ class HomeView extends GetView<HomeViewController> {
       onTap: (int i) {
         if (Get.isRegistered<ChatViewController>(
             tag: controller.channels[i].chatGroup.id)) {
-          ChatViewController c =
-              Get.find<ChatViewController>(tag: controller.channels[i].chatGroup.id);
+          ChatViewController c = Get.find<ChatViewController>(
+              tag: controller.channels[i].chatGroup.id);
           c.scrollToBottom();
           controller.selectedChatGroup = c.chatGroup;
         }
@@ -518,7 +525,10 @@ class HomeView extends GetView<HomeViewController> {
         controller.channels.length,
         (int index) => Tab(
           height: 30,
-          child: Text(controller.channels[index].chatGroup.channels.map((e) => e.channel).join(", "),
+          child: Text(
+              controller.channels[index].chatGroup.channels
+                  .map((e) => e.channel)
+                  .join(", "),
               style: Theme.of(context).textTheme.bodyLarge),
         ),
       ),
