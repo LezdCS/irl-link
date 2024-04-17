@@ -12,6 +12,7 @@ import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/store_controller.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_view.dart';
+import 'package:irllink/src/presentation/widgets/chats/select_channel_dialog.dart';
 import 'package:irllink/src/presentation/widgets/dashboard.dart';
 import 'package:irllink/src/presentation/widgets/emote_picker_view.dart';
 import 'package:irllink/src/presentation/widgets/hype_train.dart';
@@ -23,6 +24,7 @@ import 'package:irllink/src/presentation/widgets/tabs/twitch_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/web_page_view.dart';
 import 'package:move_to_background/move_to_background.dart';
 import 'package:split_view/split_view.dart';
+import 'package:twitch_chat/twitch_chat.dart';
 
 class HomeView extends GetView<HomeViewController> {
   const HomeView({super.key});
@@ -290,8 +292,21 @@ class HomeView extends GetView<HomeViewController> {
                         child: TextField(
                           controller: controller.chatInputController,
                           onSubmitted: (String value) {
-                            controller.sendChatMessage(value);
-                            FocusScope.of(context).unfocus();
+                            if (controller.selectedChatGroup == null) return;
+                            ChatViewController chatViewController =
+                                Get.find<ChatViewController>(
+                                    tag: controller.selectedChatGroup!.id);
+                            List<TwitchChat> twitchChats = [];
+                            twitchChats.addAll(
+                                chatViewController.twitchChats.toList());
+                            if (twitchChats.length == 1) {
+                              controller.sendChatMessage(value);
+                              controller.chatInputController.text = '';
+                              FocusScope.of(context).unfocus();
+                            } else {
+                              selectChatToSend(
+                                  context, controller, twitchChats, value);
+                            }
                           },
                           onTap: () {
                             controller.selectedMessage.value = null;
@@ -321,10 +336,22 @@ class HomeView extends GetView<HomeViewController> {
                       ),
                       InkWell(
                         onTap: () {
-                          controller.sendChatMessage(
-                              controller.chatInputController.text);
-                          controller.chatInputController.text = '';
-                          FocusScope.of(context).unfocus();
+                          if (controller.selectedChatGroup == null) return;
+                          ChatViewController chatViewController =
+                              Get.find<ChatViewController>(
+                                  tag: controller.selectedChatGroup!.id);
+                          List<TwitchChat> twitchChats = [];
+                          twitchChats
+                              .addAll(chatViewController.twitchChats.toList());
+                          if (twitchChats.length == 1) {
+                            controller.sendChatMessage(
+                                controller.chatInputController.text);
+                            controller.chatInputController.text = '';
+                            FocusScope.of(context).unfocus();
+                          } else {
+                            selectChatToSend(context, controller, twitchChats,
+                                controller.chatInputController.text);
+                          }
                         },
                         child: SvgPicture.asset(
                           './lib/assets/sendArrow.svg',
@@ -553,6 +580,37 @@ class HomeView extends GetView<HomeViewController> {
       ),
     );
   }
+}
+
+void selectChatToSend(
+  BuildContext context,
+  HomeViewController controller,
+  List<TwitchChat> twitchChats,
+  String message,
+) {
+  Get.defaultDialog(
+    title: 'Select',
+    titleStyle: const TextStyle(color: Colors.white),
+    backgroundColor: const Color(0xFF282828),
+    buttonColor: const Color(0xFF9147ff),
+    cancelTextColor: const Color(0xFF9147ff),
+    confirmTextColor: Colors.white,
+    textCancel: "Back",
+    textConfirm: "Send",
+    radius: 10,
+    onCancel: () {
+      Get.back();
+    },
+    onConfirm: () {
+      controller.sendChatMessage(message);
+      controller.chatInputController.text = '';
+      FocusScope.of(context).unfocus();
+      Get.back();
+    },
+    content: SelectChannelDialog(
+      twitchChats: twitchChats,
+    ),
+  );
 }
 
 class KeepAlive extends StatefulWidget {
