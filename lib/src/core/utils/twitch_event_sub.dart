@@ -38,9 +38,9 @@ class TwitchEventSub {
     _webSocketChannel =
         IOWebSocketChannel.connect("wss://eventsub.wss.twitch.tv/ws");
 
-    if (kDebugMode) {
-      _webSocketChannel = IOWebSocketChannel.connect("ws://localhost:8080/ws");
-    }
+    // if (kDebugMode) {
+    //   _webSocketChannel = IOWebSocketChannel.connect("ws://localhost:8080/ws");
+    // }
 
     _streamSubscription = _webSocketChannel?.stream.listen(
       (data) => _eventListener(data),
@@ -50,7 +50,6 @@ class TwitchEventSub {
   }
 
   void close() {
-    debugPrint('close');
     _webSocketChannel?.sink.close();
     _streamSubscription?.cancel();
     _streamSubscription = null;
@@ -143,8 +142,8 @@ class TwitchEventSub {
   }
 
   void _onError(Object o, StackTrace s) {
-    debugPrint(o.toString());
-    debugPrint(s.toString());
+    debugPrint('Twitch event sub error: $o');
+    debugPrint('Twitch event sub error: $s');
   }
 
   Future<String> _getChannelId() async {

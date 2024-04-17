@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/presentation/widgets/chat_message/event_container.dart';
+import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/event_container.dart';
 import 'package:twitch_chat/twitch_chat.dart';
+
+import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
 
 class ChatEvents extends StatelessWidget {
   final SettingsViewController controller;
@@ -42,15 +44,21 @@ class ChatEvents extends StatelessWidget {
                 Column(
                   children: [
                     EventContainer(
-                      message: ChatMessage.randomGeneration(
-                        HighlightType.firstTimeChatter,
-                        "Hey guys, I'm new here!",
-                        "Lezd",
+                      message: entity.ChatMessage.fromTwitch(
+                        ChatMessage.randomGeneration(
+                          HighlightType.firstTimeChatter,
+                          "Hey guys, I'm new here!",
+                          "Lezd",
+                        ),
+                        '',
                       ),
                       selectedMessage: null,
                       displayTimestamp: false,
                       textSize: 16,
                       hideDeletedMessages: false,
+                      cheerEmotes: const [],
+                      thirdPartEmotes: const [],
+                      showPlatformBadge: false,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -92,11 +100,17 @@ class ChatEvents extends StatelessWidget {
                 Column(
                   children: [
                     EventContainer(
-                      message: Subscription.randomGeneration(),
+                      message: entity.ChatMessage.fromTwitch(
+                        Subscription.randomGeneration(),
+                        '',
+                      ),
                       selectedMessage: null,
                       displayTimestamp: false,
                       textSize: 16,
                       hideDeletedMessages: false,
+                      cheerEmotes: const [],
+                      thirdPartEmotes: const [],
+                      showPlatformBadge: false,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -138,11 +152,17 @@ class ChatEvents extends StatelessWidget {
                 Column(
                   children: [
                     EventContainer(
-                      message: BitDonation.randomGeneration(),
+                      message: entity.ChatMessage.fromTwitch(
+                        BitDonation.randomGeneration(),
+                        '',
+                      ),
                       selectedMessage: null,
                       displayTimestamp: false,
                       textSize: 16,
                       hideDeletedMessages: false,
+                      cheerEmotes: const [],
+                      thirdPartEmotes: const [],
+                      showPlatformBadge: false,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -184,11 +204,17 @@ class ChatEvents extends StatelessWidget {
                 Column(
                   children: [
                     EventContainer(
-                      message: Announcement.randomGeneration(),
+                      message: entity.ChatMessage.fromTwitch(
+                        Announcement.randomGeneration(),
+                        '',
+                      ),
                       selectedMessage: null,
                       displayTimestamp: false,
                       textSize: 16,
                       hideDeletedMessages: false,
+                      cheerEmotes: const [],
+                      thirdPartEmotes: const [],
+                      showPlatformBadge: false,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -230,11 +256,17 @@ class ChatEvents extends StatelessWidget {
                 Column(
                   children: [
                     EventContainer(
-                      message: IncomingRaid.randomGeneration(),
+                      message: entity.ChatMessage.fromTwitch(
+                        IncomingRaid.randomGeneration(),
+                        '',
+                      ),
                       selectedMessage: null,
                       displayTimestamp: false,
                       textSize: 16,
                       hideDeletedMessages: false,
+                      cheerEmotes: const [],
+                      thirdPartEmotes: const [],
+                      showPlatformBadge: false,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -276,11 +308,17 @@ class ChatEvents extends StatelessWidget {
                 Column(
                   children: [
                     EventContainer(
-                      message: RewardRedemption.randomGeneration(),
+                      message: entity.ChatMessage.fromTwitch(
+                        RewardRedemption.randomGeneration(),
+                        '',
+                      ),
                       selectedMessage: null,
                       displayTimestamp: false,
                       textSize: 16,
                       hideDeletedMessages: false,
+                      cheerEmotes: const [],
+                      thirdPartEmotes: const [],
+                      showPlatformBadge: false,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

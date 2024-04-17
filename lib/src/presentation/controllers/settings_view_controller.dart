@@ -100,21 +100,12 @@ class SettingsViewController extends GetxController {
   }
 
   void removeChatJoined(channel) {
-    List channels = homeViewController.settings.value.chatSettings!.chatsJoined;
-    channels.remove(channel);
-    homeViewController.settings.value = homeViewController.settings.value
-        .copyWith(
-            chatSettings: homeViewController.settings.value.chatSettings
-                ?.copyWith(chatsJoined: channels));
-    saveSettings();
-    homeViewController.settings.refresh();
-  }
-
-  void hideMyself(bool value) {
-    homeViewController.settings.value = homeViewController.settings.value
-        .copyWith(
-            chatSettings: homeViewController.settings.value.chatSettings
-                ?.copyWith(joinMyself: value));
+    // List channels = homeViewController.settings.value.chatSettings!.chatsJoined;
+    // channels.remove(channel);
+    // homeViewController.settings.value = homeViewController.settings.value
+    //     .copyWith(
+    //         chatSettings: homeViewController.settings.value.chatSettings
+    //             ?.copyWith(chatsJoined: channels));
     saveSettings();
     homeViewController.settings.refresh();
   }

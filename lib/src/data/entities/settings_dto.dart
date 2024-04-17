@@ -107,8 +107,7 @@ class SettingsDTO extends Settings {
           ? GeneralSettingsDTO.fromJson(map['generalSettings'])
           : const Settings.defaultSettings().generalSettings!,
       dashboardSettings: map['dashboardSettings'] != null
-          ? DashboardSettingsDTO.fromJson(
-              map['dashboardSettings'])
+          ? DashboardSettingsDTO.fromJson(map['dashboardSettings'])
           : const Settings.defaultSettings().dashboardSettings!,
       //CONNECTIONS SETTINGS
       isObsConnected: map['isObsConnected'] != null

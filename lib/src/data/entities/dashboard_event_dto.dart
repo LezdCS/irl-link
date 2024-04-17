@@ -12,7 +12,8 @@ class DashboardEventDTO extends DashboardEvent {
   });
 
   factory DashboardEventDTO.fromJson(Map<String, dynamic> map) {
-    DashboardActionsTypes action = getActionFromString(map['dashboardActionsType']);
+    DashboardActionsTypes action =
+        getActionFromString(map['dashboardActionsType']);
     SupportedEvents event = getEventFromString(map['event']);
     return DashboardEventDTO(
       title: map['title'] ?? "None",

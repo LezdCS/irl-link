@@ -72,8 +72,7 @@ class Settings extends Equatable {
       redemptions: true,
     ),
     this.chatSettings = const ChatSettings(
-      chatsJoined: [],
-      joinMyself: true,
+      chatGroups: [],
       hideDeletedMessages: true,
     ),
 
@@ -211,8 +210,7 @@ class Settings extends Equatable {
         chatSettings: chatSettings ?? this.chatSettings,
         //GENERAL
         generalSettings: generalSettings ?? this.generalSettings,
-        dashboardSettings:
-            dashboardSettings ?? this.dashboardSettings,
+        dashboardSettings: dashboardSettings ?? this.dashboardSettings,
         //CONNECTIONS
         isObsConnected: isObsConnected ?? this.isObsConnected,
         obsWebsocketUrl: obsWebsocketUrl ?? this.obsWebsocketUrl,

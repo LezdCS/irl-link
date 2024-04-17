@@ -64,6 +64,9 @@ dependencies:
   twitch_chat:
     git:
         url: https://github.com/LezdCS/twitch_chat.git
+  kick_chat:
+    git:
+        url: https://github.com/LezdCS/kick_chat.git
   upgrader: ^10.1.0
   url_launcher: ^6.2.4
   wakelock: ^0.6.2
@@ -74,6 +77,7 @@ dependencies:
   flutter_slidable: ^3.1.0
   flutter_colorpicker: ^1.0.3
   instant: ^0.5.1
+  uuid:  ^3.0.7
 
 dependency_overrides:
   wakelock_windows:
@@ -113,6 +117,7 @@ flutter:
      - lib/assets/
      - lib/assets/i18n/
      - lib/assets/twitch/
+     - lib/assets/kick/badges/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
