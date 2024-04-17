@@ -239,18 +239,11 @@ class HomeViewController extends GetxController
     }
   }
 
-  void sendChatMessage(String message) {
+  void sendChatMessage(String message, String channel) {
     if (twitchData == null) return;
 
-    String? channelToSend = selectedChatGroup?.channels
-        .firstWhereOrNull((c) => c.platform == Platform.twitch)
-        ?.channel;
-    if (channelToSend == null) {
-      return;
-    }
-
     TwitchChat twitchChat = TwitchChat(
-      channelToSend,
+      channel,
       twitchData!.twitchUser.login,
       twitchData!.accessToken,
       clientId: kTwitchAuthClientId,

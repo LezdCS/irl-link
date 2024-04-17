@@ -300,7 +300,7 @@ class HomeView extends GetView<HomeViewController> {
                             twitchChats.addAll(
                                 chatViewController.twitchChats.toList());
                             if (twitchChats.length == 1) {
-                              controller.sendChatMessage(value);
+                              controller.sendChatMessage(value, twitchChats.first.channel);
                               controller.chatInputController.text = '';
                               FocusScope.of(context).unfocus();
                             } else {
@@ -345,7 +345,7 @@ class HomeView extends GetView<HomeViewController> {
                               .addAll(chatViewController.twitchChats.toList());
                           if (twitchChats.length == 1) {
                             controller.sendChatMessage(
-                                controller.chatInputController.text);
+                                controller.chatInputController.text, twitchChats.first.channel);
                             controller.chatInputController.text = '';
                             FocusScope.of(context).unfocus();
                           } else {
@@ -589,26 +589,20 @@ void selectChatToSend(
   String message,
 ) {
   Get.defaultDialog(
-    title: 'Select',
+    title: 'Select a chat to send',
     titleStyle: const TextStyle(color: Colors.white),
     backgroundColor: const Color(0xFF282828),
     buttonColor: const Color(0xFF9147ff),
     cancelTextColor: const Color(0xFF9147ff),
-    confirmTextColor: Colors.white,
     textCancel: "Back",
-    textConfirm: "Send",
     radius: 10,
     onCancel: () {
       Get.back();
     },
-    onConfirm: () {
-      controller.sendChatMessage(message);
-      controller.chatInputController.text = '';
-      FocusScope.of(context).unfocus();
-      Get.back();
-    },
     content: SelectChannelDialog(
       twitchChats: twitchChats,
+      controller: controller,
+      message: message,
     ),
   );
 }
