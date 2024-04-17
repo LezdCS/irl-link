@@ -422,36 +422,37 @@ class SettingsView extends GetView<SettingsViewController> {
                       ),
                     ),
                     DropdownButton(
-                        value: supportedLanguages.firstWhereOrNull((element) =>
-                                element['languageCode'] ==
-                                    Get.locale!.languageCode &&
-                                element['countryCode'] ==
-                                    Get.locale!.countryCode) ??
-                            supportedLanguages[0],
-                        items: List.generate(
-                          supportedLanguages.length,
-                          (index) => DropdownMenuItem(
-                            value: supportedLanguages[index],
-                            child: Text(supportedLanguages[index]['name']!),
-                          ),
+                      value: supportedLanguages.firstWhereOrNull((element) =>
+                              element['languageCode'] ==
+                                  Get.locale!.languageCode &&
+                              element['countryCode'] ==
+                                  Get.locale!.countryCode) ??
+                          supportedLanguages[0],
+                      items: List.generate(
+                        supportedLanguages.length,
+                        (index) => DropdownMenuItem(
+                          value: supportedLanguages[index],
+                          child: Text(supportedLanguages[index]['name']!),
                         ),
-                        onChanged: (value) {
-                          Locale locale = Locale(
-                              value!['languageCode']!, value['countryCode']!);
-                          Get.updateLocale(locale);
+                      ),
+                      onChanged: (value) {
+                        Locale locale = Locale(
+                            value!['languageCode']!, value['countryCode']!);
+                        Get.updateLocale(locale);
 
-                          controller.homeViewController.settings.value =
-                              controller.homeViewController.settings.value
-                                  .copyWith(
-                            generalSettings: controller.homeViewController
-                                .settings.value.generalSettings
-                                ?.copyWith(appLanguage: {
-                              "languageCode": value['languageCode']!,
-                              "countryCode": value['countryCode']!
-                            }),
-                          );
-                          controller.saveSettings();
-                        }),
+                        controller.homeViewController.settings.value =
+                            controller.homeViewController.settings.value
+                                .copyWith(
+                          generalSettings: controller
+                              .homeViewController.settings.value.generalSettings
+                              ?.copyWith(appLanguage: {
+                            "languageCode": value['languageCode']!,
+                            "countryCode": value['countryCode']!
+                          }),
+                        );
+                        controller.saveSettings();
+                      },
+                    ),
                   ],
                 ),
               ],

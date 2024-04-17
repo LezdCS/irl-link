@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/presentation/controllers/twitch_chat_view_controller.dart';
-import 'package:irllink/src/presentation/widgets/chat_message/event_container.dart';
-import 'package:irllink/src/presentation/widgets/chat_message/message_container.dart';
-import 'package:irllink/src/presentation/widgets/chat_message/moderation_bottom_sheet.dart';
-import 'package:twitch_chat/twitch_chat.dart';
-import 'alert_message_view.dart';
+import 'package:irllink/src/domain/entities/chat/chat_message.dart';
+import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
+import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
+import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/event_container.dart';
+import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/message_container.dart';
+import 'package:irllink/src/presentation/widgets/chats/chat_message/twitch/moderation_bottom_sheet.dart';
+import 'package:twitch_chat/twitch_chat.dart' as twitch_chat;
+import '../alert_message_view.dart';
 
-class TwitchChatView extends StatelessWidget {
-  const TwitchChatView({
+class ChatView extends StatelessWidget {
+  const ChatView({
     super.key,
-    required this.channel,
+    required this.chatGroup,
   });
 
-  final String channel;
+  final ChatGroup chatGroup;
 
   @override
   Widget build(BuildContext context) {
-    TwitchChatViewController? controller;
-    if (Get.isRegistered<TwitchChatViewController>(tag: channel)) {
-      controller = Get.find<TwitchChatViewController>(tag: channel);
+    ChatViewController? controller;
+    if (Get.isRegistered<ChatViewController>(tag: chatGroup.id)) {
+      controller = Get.find<ChatViewController>(tag: chatGroup.id);
     }
 
     final double height = MediaQuery.of(context).size.height;
@@ -27,6 +29,8 @@ class TwitchChatView extends StatelessWidget {
     if (controller == null) {
       return Container();
     }
+    bool multiplePlatform =
+        controller.kickChats.isNotEmpty && controller.twitchChats.isNotEmpty;
     return Obx(
       () => Stack(children: [
         GestureDetector(
@@ -48,8 +52,11 @@ class TwitchChatView extends StatelessWidget {
               cancelTextColor: Theme.of(context).textTheme.bodyLarge!.color,
               buttonColor: Theme.of(context).colorScheme.tertiary,
               onConfirm: () {
-                 controller?.twitchChat?.close();
-                  controller?.twitchChat?.connect();
+                for (twitch_chat.TwitchChat twitchChat
+                    in controller!.twitchChats) {
+                  twitchChat.close();
+                  twitchChat.connect();
+                }
                 Get.back();
               },
               onCancel: () {
@@ -64,19 +71,9 @@ class TwitchChatView extends StatelessWidget {
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.background,
             ),
-            child: controller!.chatMessages.isEmpty
-                ? Container(
-                    padding: const EdgeInsets.only(left: 5),
-                    child: Text(
-                      "Welcome on ${controller.twitchChat?.channel} 's chat room !",
-                      style: const TextStyle(
-                        color: Color(0xFF878585),
-                      ),
-                    ),
-                  )
-                : ListView.builder(
-                    controller: controller.scrollController,
-                    itemCount: controller.chatMessages.length,
+            child: ListView.builder(
+                    controller: controller?.scrollController,
+                    itemCount: controller?.chatMessages.length,
                     itemBuilder: (BuildContext context, int index) {
                       ChatMessage message = controller!.chatMessages[index];
                       return Container(
@@ -93,7 +90,7 @@ class TwitchChatView extends StatelessWidget {
                             controller!.homeViewController.selectedMessage
                                 .value ??= message;
                           },
-                          child: message.highlightType != null
+                          child: message.eventType != null
                               ? EventContainer(
                                   message: message,
                                   selectedMessage: controller
@@ -105,13 +102,15 @@ class TwitchChatView extends StatelessWidget {
                                       .displayTimestamp!,
                                   textSize: controller.homeViewController
                                       .settings.value.textSize!,
-                                  twitchChat: controller.twitchChat!,
                                   hideDeletedMessages: controller
                                       .homeViewController
                                       .settings
                                       .value
                                       .chatSettings!
                                       .hideDeletedMessages,
+                                  cheerEmotes: controller.cheerEmotes,
+                                  thirdPartEmotes: controller.thirdPartEmotes,
+                                  showPlatformBadge: multiplePlatform,
                                 )
                               : MessageContainer(
                                   selectedMessage: controller
@@ -124,13 +123,15 @@ class TwitchChatView extends StatelessWidget {
                                       .displayTimestamp!,
                                   textSize: controller.homeViewController
                                       .settings.value.textSize!,
-                                  twitchChat: controller.twitchChat!,
                                   hideDeletedMessages: controller
                                       .homeViewController
                                       .settings
                                       .value
                                       .chatSettings!
                                       .hideDeletedMessages,
+                                  cheerEmotes: controller.cheerEmotes,
+                                  thirdPartEmotes: controller.thirdPartEmotes,
+                                  showPlatformBadge: multiplePlatform,
                                 ),
                         ),
                       );
@@ -143,7 +144,7 @@ class TwitchChatView extends StatelessWidget {
           left: 0,
           right: 0,
           child: Visibility(
-            visible: !controller.isAutoScrolldown.value,
+            visible: controller != null && !controller.isAutoScrolldown.value,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -170,15 +171,15 @@ class TwitchChatView extends StatelessWidget {
           left: 0,
           right: 0,
           child: AnimatedSlide(
-            offset: controller.homeViewController.selectedMessage.value != null
+            offset: controller?.homeViewController.selectedMessage.value != null
                 ? Offset.zero
                 : const Offset(0, 1),
             duration: const Duration(milliseconds: 200),
             child: Visibility(
               visible:
-                  controller.homeViewController.selectedMessage.value != null,
+                  controller != null && controller.homeViewController.selectedMessage.value != null,
               child:
-                  ModerationBottomSheet(controller: controller, width: width),
+                  ModerationBottomSheet(controller: controller!, width: width),
             ),
           ),
         ),

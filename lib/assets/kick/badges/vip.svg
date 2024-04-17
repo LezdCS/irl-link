@@ -1,0 +1,10 @@
+<svg version="1.1" x="0px" y="0px" viewBox="0 0 16 16" xml:space="preserve" width="16" height="16">
+	<linearGradient id="badge-vip-gradient" gradientUnits="userSpaceOnUse" x1="8" y1="-163.4867" x2="8" y2="-181.56"
+		gradientTransform="matrix(1 0 0 -1 0 -164)">
+		<stop offset="0" style="stop-color: rgb(255, 201, 0);"></stop>
+		<stop offset="0.99" style="stop-color: rgb(255, 149, 0);"></stop>
+	</linearGradient>
+	<path d="M13.9,2.4v1.1h-1.2v2.3
+	h-1.1v1.1h-1.1V4.6H9.3V1.3H6.7v3.3H5.6v2.3H4.4V5.8H3.3V3.5H2.1V2.4H0v12.3h16V2.4H13.9z"
+		style="fill: url(&quot;#badge-vip-gradient&quot;);"></path>
+</svg>

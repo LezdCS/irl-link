@@ -1,32 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
-import 'package:irllink/src/presentation/widgets/chat_message/third_part_emote.dart';
-import 'package:irllink/src/presentation/widgets/chat_message/timestamp.dart';
-import 'package:irllink/src/presentation/widgets/chat_message/author_name.dart';
-import 'package:irllink/src/presentation/widgets/chat_message/twitch_emote.dart';
-import 'package:irllink/src/presentation/widgets/chat_message/word.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:irllink/src/domain/entities/chat/chat_badge.dart';
+import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
+import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
+import 'package:irllink/src/domain/entities/chat/chat_message.dart';
+import 'package:irllink/src/presentation/widgets/chats/chat_message/kick/kick_emote.dart';
+import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/third_part_emote.dart';
+import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/timestamp.dart';
+import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/author_name.dart';
+import 'package:irllink/src/presentation/widgets/chats/chat_message/twitch/twitch_emote.dart';
+import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/word.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 
-import 'cheer_emote.dart';
+import '../twitch/cheer_emote.dart';
 
 class MessageRow extends StatelessWidget {
-  final ChatMessage message;
+  final entity.ChatMessage message;
   final bool displayTimestamp;
   final double textSize;
-  final TwitchChat? twitchChat;
   final bool hideDeletedMessages;
+  final List<ChatEmote> cheerEmotes;
+  final List<ChatEmote> thirdPartEmotes;
+  final bool showPlatformBadge;
 
   const MessageRow({
     super.key,
     required this.message,
     required this.displayTimestamp,
     required this.textSize,
-    this.twitchChat,
     required this.hideDeletedMessages,
+    required this.cheerEmotes,
+    required this.thirdPartEmotes,
+    required this.showPlatformBadge,
   });
 
   @override
   Widget build(BuildContext context) {
+    List<ChatBadge> badges = [];
+    badges.addAll(message.badgesList);
+    if (showPlatformBadge) {
+      String kickBadge =
+          'https://static.wikia.nocookie.net/logopedia/images/1/11/Kick_%28Icon%29.svg/revision/latest/scale-to-width-down/250?cb=20230622003955';
+      String twitchBadge = 'https://pngimg.com/d/twitch_PNG18.png';
+      ChatBadge platformBadge = ChatBadge(
+        imageUrl1x: message.platform == Platform.kick ? kickBadge : twitchBadge,
+        imageUrl2x: message.platform == Platform.kick ? kickBadge : twitchBadge,
+        imageUrl4x: message.platform == Platform.kick ? kickBadge : twitchBadge,
+        id: '',
+      );
+      badges.insert(0, platformBadge);
+    }
+
     return Opacity(
       opacity: message.isDeleted && !hideDeletedMessages ? 0.5 : 1,
       child: Wrap(
@@ -41,13 +67,21 @@ class MessageRow extends StatelessWidget {
               ),
             ),
           ),
-          for (TwitchBadge badge in message.badges)
+          for (ChatBadge badge in badges)
             Container(
               padding: const EdgeInsets.only(right: 4, top: 3),
-              child: Image(
-                image: NetworkImage(badge.imageUrl1x),
-                filterQuality: FilterQuality.high,
-              ),
+              child: Uri.parse(badge.imageUrl1x).isAbsolute
+                  ? Image(
+                      width: 18,
+                      height: 18,
+                      image: NetworkImage(badge.imageUrl1x),
+                      filterQuality: FilterQuality.high,
+                    )
+                  : SvgPicture.asset(
+                      badge.imageUrl1x,
+                      width: 18,
+                      height: 18,
+                    ),
             ),
           AuthorName(
             isAction: message.isAction,
@@ -55,6 +89,7 @@ class MessageRow extends StatelessWidget {
             displayName: message.displayName,
             color: message.color,
             textSize: textSize,
+            platform: message.platform,
           ),
           if (message.isDeleted && hideDeletedMessages)
             Text(
@@ -66,11 +101,11 @@ class MessageRow extends StatelessWidget {
             )
           else
             for (Widget i in messageContent(
-              twitchChat?.cheerEmotes ?? List.empty(),
-              twitchChat?.thirdPartEmotes ?? List.empty(),
               message,
               null,
               textSize,
+              cheerEmotes,
+              thirdPartEmotes,
             ))
               i,
         ],
@@ -79,11 +114,11 @@ class MessageRow extends StatelessWidget {
   }
 
   List<Widget> messageContent(
-    final List<Emote> cheerEmotes,
-    final List<Emote> thirdPartEmotes,
-    final ChatMessage message,
+    final entity.ChatMessage message,
     final TwitchChatParameters? params,
     final double textSize,
+    final List<ChatEmote> cheerEmotes,
+    final List<ChatEmote> thirdPartEmotes,
   ) {
     List<Widget> messageWidgetsBuild = [];
 
@@ -98,8 +133,16 @@ class MessageRow extends StatelessWidget {
                       int.parse(position[0]), int.parse(position[1]) + 1) ==
                   word)
               .isNotEmpty);
+        
+        // [emote:37227:LULW]
+      String? kickEmoteId;
+      if (word.startsWith('[') && word.endsWith(']') && message.platform == Platform.kick) {
+        if(':'.allMatches(word).length == 2){
+          kickEmoteId = word.split(':')[1];
+        }
+      }
 
-      Emote? thirdPartyEmote =
+      ChatEmote? thirdPartyEmote =
           thirdPartEmotes.firstWhereOrNull((element) => element.name == word);
 
       if (emote != null) {
@@ -124,7 +167,18 @@ class MessageRow extends StatelessWidget {
             ],
           ),
         );
-      } else if (message.highlightType == HighlightType.bitDonation &&
+      } else if (kickEmoteId != null) {
+        messageWidgetsBuild.add(
+          Wrap(
+            children: [
+              KickEmote(
+                emoteId: kickEmoteId,
+              ),
+              const Text(' '),
+            ],
+          ),
+        );
+      } else if (message.eventType == EventType.bitDonation &&
           cheerEmotes.firstWhereOrNull((emote) => emote.name == word) != null) {
         messageWidgetsBuild.add(
           CheerEmote(
