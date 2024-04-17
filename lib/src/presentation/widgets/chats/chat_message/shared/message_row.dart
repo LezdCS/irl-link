@@ -6,6 +6,7 @@ import 'package:irllink/src/domain/entities/chat/chat_badge.dart';
 import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
+import 'package:irllink/src/presentation/widgets/chats/chat_message/kick/kick_emote.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/third_part_emote.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/timestamp.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/author_name.dart';
@@ -132,6 +133,14 @@ class MessageRow extends StatelessWidget {
                       int.parse(position[0]), int.parse(position[1]) + 1) ==
                   word)
               .isNotEmpty);
+        
+        // [emote:37227:LULW]
+      String? kickEmoteId;
+      if (word.startsWith('[') && word.endsWith(']') && message.platform == Platform.kick) {
+        if(':'.allMatches(word).length == 2){
+          kickEmoteId = word.split(':')[1];
+        }
+      }
 
       ChatEmote? thirdPartyEmote =
           thirdPartEmotes.firstWhereOrNull((element) => element.name == word);
@@ -153,6 +162,17 @@ class MessageRow extends StatelessWidget {
             children: [
               ThirdPartEmote(
                 emote: thirdPartyEmote,
+              ),
+              const Text(' '),
+            ],
+          ),
+        );
+      } else if (kickEmoteId != null) {
+        messageWidgetsBuild.add(
+          Wrap(
+            children: [
+              KickEmote(
+                emoteId: kickEmoteId,
               ),
               const Text(' '),
             ],
