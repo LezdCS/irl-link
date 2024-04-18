@@ -627,12 +627,11 @@ packages:
   kick_chat:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "22cf50375f97792493e3fb5aebf2cf9867387017"
-      url: "https://github.com/LezdCS/kick_chat.git"
-    source: git
-    version: "0.0.1"
+      name: kick_chat
+      sha256: "20482ae4c01b82249e3565758a920e127545cc912d178ba489ad59f12bfdbfbd"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   leak_tracker:
     dependency: transitive
     description:
@@ -1057,12 +1056,11 @@ packages:
   twitch_chat:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "1aa2c714f0d3ae17bf6f785c95fcfcfbffef30dc"
-      url: "https://github.com/LezdCS/twitch_chat.git"
-    source: git
-    version: "1.0.0"
+      name: twitch_chat
+      sha256: b827f2a56888bbe8a79d561ad9da6700cc9822eb17c132121d1996f374d25436
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
   typed_data:
     dependency: transitive
     description:
