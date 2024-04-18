@@ -382,10 +382,49 @@ class ChatViewController extends GetxController
     isChatConnected.value = true;
     kickChat.chatStream.listen((message) {
       final KickEvent? kickEvent = eventParser(message);
-      if (kickEvent?.event == TypeEvent.message) {
-        entity.ChatMessage kickMessage = entity.ChatMessage.fromKick(
-            kickEvent as KickMessage, kickChat.userDetails!.userId.toString(), kickChat.userDetails!.subBadges);
-        chatMessages.add(kickMessage);
+      switch (kickEvent?.event) {
+        case TypeEvent.message:
+          entity.ChatMessage kickMessage = entity.ChatMessage.fromKick(
+              kickEvent as KickMessage,
+              kickChat.userDetails!.userId.toString(),
+              kickChat.userDetails!.subBadges);
+          chatMessages.add(kickMessage);
+          break;
+        case TypeEvent.followersUpdated:
+          // TODO: Handle this case.
+          break;
+        case TypeEvent.streamHostEvent:
+          // TODO: Handle this case.
+          break;
+        case TypeEvent.subscriptionEvent:
+          // TODO: Handle this case.
+          break;
+        case TypeEvent.chatroomUpdatedEvent:
+          // TODO: Handle this case.
+          break;
+        case TypeEvent.userBannedEvent:
+          // TODO: Handle this case.
+          break;
+        case TypeEvent.chatroomClearEvent:
+          KickChatroomClear event = kickEvent as KickChatroomClear;
+          chatMessages.removeWhere((message) => message.channelId == event.channel);
+          break;
+        case TypeEvent.giftedSubscriptionsEvent:
+          // TODO: Handle this case.
+          break;
+        case TypeEvent.pinnedMessageCreatedEvent:
+          // TODO: Handle this case.
+          break;
+        case TypeEvent.pollUpdateEvent:
+          // TODO: Handle this case.
+          break;
+        case TypeEvent.messageDeletedEvent:
+          KickMessageDeleted event = kickEvent as KickMessageDeleted;
+          chatMessages.firstWhereOrNull((message) => message.id == event.data.message.id)?.isDeleted = true;
+          break;
+        case null:
+          // TODO: Handle this case.
+          break;
       }
 
       if (scrollController.hasClients && isAutoScrolldown.value) {

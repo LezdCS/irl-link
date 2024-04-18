@@ -62,7 +62,7 @@ dependencies:
   split_view: ^3.2.1
   transparent_image: ^2.0.1
   twitch_chat: ^1.2.0
-  kick_chat: ^1.0.0
+  kick_chat: ^1.0.1
   upgrader: ^10.1.0
   url_launcher: ^6.2.4
   wakelock: ^0.6.2
