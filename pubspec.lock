@@ -636,10 +636,10 @@ packages:
     dependency: "direct main"
     description:
       name: kick_chat
-      sha256: "29f8c5b2f76cf5783f5b137efe5cfff47379c2810142caa570f575dc6111e1f9"
+      sha256: edc41e0195d459c5ec0e0f3fc9414ded3c1cbe53a2a85e6791b0a8b6673aed66
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.3"
+    version: "1.0.4"
   leak_tracker:
     dependency: transitive
     description:
