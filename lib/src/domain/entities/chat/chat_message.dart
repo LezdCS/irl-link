@@ -162,6 +162,111 @@ class ChatMessage extends Equatable implements twitch.Subscription, twitch.SubGi
     );
   }
 
+  factory ChatMessage.kickSub(KickSubscription sub, String channelId, List<KickBadge> subBadges) {
+    return ChatMessage(
+      id: '',
+      authorId: '',
+      displayName: sub.data.username,
+      username: sub.data.username,
+      color: '',
+      message: '',
+      timestamp: DateTime.now().toUtc().millisecondsSinceEpoch,
+      isAction: false,
+      isSubscriber: false,
+      isModerator: false,
+      isVip: false,
+      isDeleted: false,
+      rawData: '',
+      eventType: EventType.subscription,
+      badgesList: const [],
+      emotes: const {},
+      platform: Platform.kick,
+      channelId: channelId,
+
+      //implements
+      raidingChannelName: '',
+      badges: const [],
+      giftedName: '',
+      highlightType: null,
+      isGift: false,
+      months: sub.data.months.toString(),
+      systemMessage: '',
+      tier: '',
+      totalBits: 0,
+      viewerCount: 0,
+    );
+  }
+
+  factory ChatMessage.kickSubGift(KickGiftedSubscriptions sub, String channelId, List<KickBadge> subBadges) {
+    return ChatMessage(
+      id: '',
+      authorId: '',
+      displayName: sub.data.gifterUsername,
+      username: sub.data.gifterUsername,
+      color: '',
+      message: '',
+      timestamp: DateTime.now().toUtc().millisecondsSinceEpoch,
+      isAction: false,
+      isSubscriber: false,
+      isModerator: false,
+      isVip: false,
+      isDeleted: false,
+      rawData: '',
+      eventType: EventType.subscriptionGifted,
+      badgesList: const [],
+      emotes: const {},
+      platform: Platform.kick,
+      channelId: channelId,
+
+      //implements
+      raidingChannelName: '',
+      badges: const [],
+      giftedName: sub.data.giftedUsernames.first, //TODO: handle multiple usernames gifted
+      highlightType: null,
+      isGift: true,
+      months: '',
+      systemMessage: '',
+      tier: '',
+      totalBits: 0,
+      viewerCount: 0,
+    );
+  }
+
+  factory ChatMessage.kickHost(KickStreamHost host, String channelId, List<KickBadge> subBadges) {
+    return ChatMessage(
+      id: '',
+      authorId: '',
+      displayName: host.data.hostUsername,
+      username: host.data.hostUsername,
+      color: '',
+      message: host.data.optionalMessage,
+      timestamp: DateTime.now().toUtc().millisecondsSinceEpoch,
+      isAction: false,
+      isSubscriber: false,
+      isModerator: false,
+      isVip: false,
+      isDeleted: false,
+      rawData: '',
+      eventType: EventType.incomingRaid,
+      badgesList: const [],
+      emotes: const {},
+      platform: Platform.kick,
+      channelId: channelId,
+
+      //implements
+      raidingChannelName: '',
+      badges: const [],
+      giftedName: '',
+      highlightType: null,
+      isGift: true,
+      months: '',
+      systemMessage: '',
+      tier: '',
+      totalBits: 0,
+      viewerCount: host.data.numberViewers,
+    );
+  }
+
   Map toJson() => {
         'id': id,
         'authorId': authorId,

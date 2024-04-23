@@ -304,6 +304,13 @@ class ChatViewController extends GetxController
             message.isDeleted = true;
           }
         }
+
+        for (var message in chatMessages.where(
+          (message) =>
+              message.authorId == userId && message.platform == Platform.twitch,
+        )) {
+          message.isDeleted = true;
+        }
         chatMessages.refresh();
       },
       onDeletedMessageByMessageId: (String? messageId) {
@@ -382,10 +389,75 @@ class ChatViewController extends GetxController
     isChatConnected.value = true;
     kickChat.chatStream.listen((message) {
       final KickEvent? kickEvent = eventParser(message);
-      if (kickEvent?.event == TypeEvent.message) {
-        entity.ChatMessage kickMessage = entity.ChatMessage.fromKick(
-            kickEvent as KickMessage, kickChat.userDetails!.userId.toString(), kickChat.userDetails!.subBadges);
-        chatMessages.add(kickMessage);
+      switch (kickEvent?.event) {
+        case TypeEvent.message:
+          entity.ChatMessage kickMessage = entity.ChatMessage.fromKick(
+            kickEvent as KickMessage,
+            kickChat.userDetails!.userId.toString(),
+            kickChat.userDetails!.subBadges,
+          );
+          chatMessages.add(kickMessage);
+          break;
+        case TypeEvent.followersUpdated:
+          // TODO: TBD
+          break;
+        case TypeEvent.streamHostEvent:
+          entity.ChatMessage kickMessage = entity.ChatMessage.kickHost(
+            kickEvent as KickStreamHost,
+            kickChat.userDetails!.userId.toString(),
+            kickChat.userDetails!.subBadges,
+          );
+          chatMessages.add(kickMessage);
+          break;
+        case TypeEvent.subscriptionEvent:
+          entity.ChatMessage kickMessage = entity.ChatMessage.kickSub(
+            kickEvent as KickSubscription,
+            kickChat.userDetails!.userId.toString(),
+            kickChat.userDetails!.subBadges,
+          );
+          chatMessages.add(kickMessage);
+          break;
+        case TypeEvent.chatroomUpdatedEvent:
+          // TODO: TBD
+          break;
+        case TypeEvent.userBannedEvent:
+          KickUserBanned event = kickEvent as KickUserBanned;
+          for (var message in chatMessages.where(
+            (message) =>
+                message.authorId == event.data.user.id.toString() &&
+                message.platform == Platform.kick,
+          )) {
+            message.isDeleted = true;
+          }
+          break;
+        case TypeEvent.chatroomClearEvent:
+          KickChatroomClear event = kickEvent as KickChatroomClear;
+          chatMessages
+              .removeWhere((message) => message.channelId == event.channel);
+          break;
+        case TypeEvent.giftedSubscriptionsEvent:
+          entity.ChatMessage kickMessage = entity.ChatMessage.kickSubGift(
+            kickEvent as KickGiftedSubscriptions,
+            kickChat.userDetails!.userId.toString(),
+            kickChat.userDetails!.subBadges,
+          );
+          chatMessages.add(kickMessage);
+          break;
+        case TypeEvent.pinnedMessageCreatedEvent:
+          // TODO: event in chat (NOT CURRENTLY CODED IN THE APP, SAME FOR TWITCH)
+          break;
+        case TypeEvent.pollUpdateEvent:
+          // TODO: rework poll view to integrate kick polls
+          break;
+        case TypeEvent.messageDeletedEvent:
+          KickMessageDeleted event = kickEvent as KickMessageDeleted;
+          chatMessages
+              .firstWhereOrNull(
+                  (message) => message.id == event.data.message.id)
+              ?.isDeleted = true;
+          break;
+        case null:
+          break;
       }
 
       if (scrollController.hasClients && isAutoScrolldown.value) {
