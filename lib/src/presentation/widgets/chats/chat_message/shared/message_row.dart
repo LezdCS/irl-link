@@ -141,7 +141,7 @@ class MessageRow extends StatelessWidget {
           message.platform == Platform.kick) {
         if ('['.allMatches(word).length > 1) {
           int numberOfLeft = '['.allMatches(word).length;
-          int numberOfRight = '['.allMatches(word).length;
+          int numberOfRight = ']'.allMatches(word).length;
           if (numberOfLeft == numberOfRight) {
             // it might means we are in a scenario where there is no spacing between the emotes
             // [emote:37227:LULW][emote:37227:LULW][emote:37227:LULW]
