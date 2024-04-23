@@ -12,6 +12,7 @@ import 'package:irllink/routes/app_pages.dart';
 import 'package:irllink/src/bindings/login_bindings.dart';
 import 'package:irllink/src/core/resources/themes.dart';
 import 'package:irllink/src/presentation/views/login_view.dart';
+import 'package:kick_chat/kick_chat.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:wakelock/wakelock.dart';
@@ -24,6 +25,7 @@ void main() async {
   await initializeService();
   await GetStorage.init();
   await Wakelock.enable();
+  await KickChat.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
