@@ -133,12 +133,30 @@ class MessageRow extends StatelessWidget {
                       int.parse(position[0]), int.parse(position[1]) + 1) ==
                   word)
               .isNotEmpty);
-        
-        // [emote:37227:LULW]
-      String? kickEmoteId;
-      if (word.startsWith('[') && word.endsWith(']') && message.platform == Platform.kick) {
-        if(':'.allMatches(word).length == 2){
-          kickEmoteId = word.split(':')[1];
+
+      // [emote:37227:LULW]
+      List<String> kickEmotesIds = [];
+      if (word.startsWith('[') &&
+          word.endsWith(']') &&
+          message.platform == Platform.kick) {
+        if ('['.allMatches(word).length > 1) {
+          int numberOfLeft = '['.allMatches(word).length;
+          int numberOfRight = '['.allMatches(word).length;
+          if (numberOfLeft == numberOfRight) {
+            // it might means we are in a scenario where there is no spacing between the emotes
+            // [emote:37227:LULW][emote:37227:LULW][emote:37227:LULW]
+            List<String> emotesSplit = word.split(']');
+            kickEmotesIds = [];
+            for (String e in emotesSplit) {
+              if (':'.allMatches(e).length == 2) {
+                kickEmotesIds.add(word.split(':')[1]);
+              }
+            }
+          }
+        } else {
+          if (':'.allMatches(word).length == 2) {
+            kickEmotesIds.add(word.split(':')[1]);
+          }
         }
       }
 
@@ -167,15 +185,15 @@ class MessageRow extends StatelessWidget {
             ],
           ),
         );
-      } else if (kickEmoteId != null) {
+      } else if (kickEmotesIds.isNotEmpty) {
         messageWidgetsBuild.add(
           Wrap(
-            children: [
-              KickEmote(
-                emoteId: kickEmoteId,
+            children: List.generate(
+              kickEmotesIds.length,
+              (index) => KickEmote(
+                emoteId: kickEmotesIds[index],
               ),
-              const Text(' '),
-            ],
+            ),
           ),
         );
       } else if (message.eventType == EventType.bitDonation &&
