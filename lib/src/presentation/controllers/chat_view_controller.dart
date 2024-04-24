@@ -59,9 +59,6 @@ class ChatViewController extends GetxController
     if (Get.arguments != null) {
       homeViewController.selectedChatGroup = chatGroup;
       twitchData = Get.arguments[0];
-
-      createChats(chatGroup.channels);
-
       await applySettings();
     } else {
       chatDemoTimer = Timer.periodic(
@@ -384,7 +381,10 @@ class ChatViewController extends GetxController
         debugPrint('error on kick chat'),
       },
     );
-    kickChat.connect();
+    await kickChat.connect();
+    for (var e in kickChat.seventvEmotes) {
+      thirdPartEmotes.add(ChatEmote.fromKick(e));
+    }
     kickChats.add(kickChat);
     isChatConnected.value = true;
     kickChat.chatStream.listen((message) {
