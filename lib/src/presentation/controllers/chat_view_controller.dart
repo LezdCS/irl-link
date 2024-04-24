@@ -384,7 +384,10 @@ class ChatViewController extends GetxController
         debugPrint('error on kick chat'),
       },
     );
-    kickChat.connect();
+    await kickChat.connect();
+    for (var e in kickChat.seventvEmotes) {
+      thirdPartEmotes.add(ChatEmote.fromKick(e));
+    }
     kickChats.add(kickChat);
     isChatConnected.value = true;
     kickChat.chatStream.listen((message) {

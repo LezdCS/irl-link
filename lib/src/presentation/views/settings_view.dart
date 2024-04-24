@@ -85,13 +85,13 @@ class SettingsView extends GetView<SettingsViewController> {
                 const EdgeInsets.only(top: 8, left: 10, right: 10, bottom: 8),
             children: [
               Subscription(controller: controller),
-              // Divider(
-              //   height: 20,
-              //   thickness: 2,
-              //   indent: 0,
-              //   endIndent: 0,
-              //   color: Theme.of(context).colorScheme.secondary,
-              // ),
+              Divider(
+                height: 20,
+                thickness: 2,
+                indent: 0,
+                endIndent: 0,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
               chatSettings(context, width),
               Divider(
                 height: 20,
