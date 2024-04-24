@@ -59,9 +59,6 @@ class ChatViewController extends GetxController
     if (Get.arguments != null) {
       homeViewController.selectedChatGroup = chatGroup;
       twitchData = Get.arguments[0];
-
-      createChats(chatGroup.channels);
-
       await applySettings();
     } else {
       chatDemoTimer = Timer.periodic(
