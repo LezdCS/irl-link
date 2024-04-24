@@ -13,10 +13,10 @@ packages:
     dependency: transitive
     description:
       name: api_7tv
-      sha256: f48175fcd7af58aad4a4d91e0a650157aceb224d0ecb1c9a75abc73c7584319f
+      sha256: "2b05dd8c3a43997d9ba3153acd413327c747205fd3fe3041ca1f8a12a426e24c"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.2"
+    version: "0.0.3"
   archive:
     dependency: transitive
     description:
@@ -644,10 +644,10 @@ packages:
     dependency: "direct main"
     description:
       name: kick_chat
-      sha256: "154a5d6358af91fb73461291b89351dfdc1049ba879feb7d52157d557951e5b6"
+      sha256: "4141b46d8771b524b17966827ee3358f372bc2b9c41b94d85b122f52a201d453"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.0"
+    version: "1.1.1"
   leak_tracker:
     dependency: transitive
     description:
@@ -1073,10 +1073,10 @@ packages:
     dependency: "direct main"
     description:
       name: twitch_chat
-      sha256: "8f1ec69c08adbb754a86ce190558e296a9ef9f0521f04de06349015d7512daf0"
+      sha256: ad04eaeb572719a33209e2ee0603e5f34447d1557c0ad1c35826c2ab71e14db1
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.1"
+    version: "1.2.2"
   typed_data:
     dependency: transitive
     description:

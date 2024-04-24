@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:kick_chat/kick_chat.dart';
 import 'package:twitch_chat/twitch_chat.dart' as twitch;
@@ -29,7 +30,13 @@ class ChatBadge extends Equatable {
     String src = '';
     switch (badge.type) {
       case 'subscriber':
-      src= subBadges.lastWhere((element) => badge.count >= element.months).badgeImage.src;
+        KickBadge? subBadge = subBadges
+            .lastWhereOrNull((element) => badge.count >= element.months);
+        if (subBadge != null) {
+          src = subBadge.badgeImage.src;
+        } else {
+          src = './lib/assets/kick/badges/sub.svg';
+        }
         break;
       case 'vip':
         src = './lib/assets/kick/badges/vip.svg';
