@@ -9,6 +9,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.30"
+  api_7tv:
+    dependency: transitive
+    description:
+      name: api_7tv
+      sha256: "2b05dd8c3a43997d9ba3153acd413327c747205fd3fe3041ca1f8a12a426e24c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
   archive:
     dependency: transitive
     description:
@@ -636,10 +644,10 @@ packages:
     dependency: "direct main"
     description:
       name: kick_chat
-      sha256: "43d6f0ef86b77417819ef2e2074b361a3479ac4d58c49d60889831c2a54786eb"
+      sha256: "4141b46d8771b524b17966827ee3358f372bc2b9c41b94d85b122f52a201d453"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.8"
+    version: "1.1.1"
   leak_tracker:
     dependency: transitive
     description:
@@ -1065,10 +1073,10 @@ packages:
     dependency: "direct main"
     description:
       name: twitch_chat
-      sha256: b827f2a56888bbe8a79d561ad9da6700cc9822eb17c132121d1996f374d25436
+      sha256: ad04eaeb572719a33209e2ee0603e5f34447d1557c0ad1c35826c2ab71e14db1
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.0"
+    version: "1.2.2"
   typed_data:
     dependency: transitive
     description:
@@ -1351,5 +1359,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.3.0 <4.0.0"
+  dart: ">=3.3.3 <4.0.0"
   flutter: ">=3.19.0"

@@ -40,11 +40,27 @@ class ChatEmote extends Equatable {
     );
   }
 
-  // factory ChatEmote.fromKick(KickBadge badge) {
-  //   return ChatEmote(
-  //     id: badge.id,
-  //   );
-  // }
+  factory ChatEmote.fromKick(Map<String, dynamic> map) {
+    String url = map['data']['host']['url'];
+    url = url.substring(2);
+    List webpfNames = (map['data']['host']['files'] as List)
+        .where((element) => element['format'] == "WEBP")
+        .toList();
+
+    String url1x = 'https://$url/${webpfNames[0]['name']}';
+    String url2x = 'https://$url/${webpfNames[1]['name']}';
+    String url4x = 'https://$url/${webpfNames[2]['name']}';
+    return ChatEmote(
+      id: map["id"].toString(),
+      name: map["name"],
+      url1x: url1x,
+      url2x: url2x,
+      url4x: url4x,
+      color: null,
+      emoteType: twitch.EmoteType.thirdPart,
+      plateform: EmotePlateform.kick,
+    );
+  }
 
   Map toJson() => {
         'id': id,
