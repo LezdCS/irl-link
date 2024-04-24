@@ -38,6 +38,9 @@ class ChatBadge extends Equatable {
           src = './lib/assets/kick/badges/sub.svg';
         }
         break;
+      case 'broadcaster':
+        src = './lib/assets/kick/badges/broadcaster.svg';
+        break;
       case 'vip':
         src = './lib/assets/kick/badges/vip.svg';
         break;
