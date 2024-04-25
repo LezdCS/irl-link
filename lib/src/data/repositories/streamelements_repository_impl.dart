@@ -66,7 +66,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
   ) async {
     Response response;
     Dio dio = Dio();
-     try {
+    try {
       final remoteConfig = FirebaseRemoteConfig.instance;
       await remoteConfig.fetchAndActivate();
       String apiRefreshTokenUrl =
@@ -117,7 +117,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
   @override
   Future<DataState<void>> disconnect(String accessToken) async {
     GetStorage box = GetStorage();
-    box.remove('streamelementsData');
+    box.remove('seCredentials');
     Dio dio = Dio();
     try {
       await dio.post(
@@ -144,6 +144,44 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       );
     } on DioException catch (e) {
       debugPrint(e.toString());
+    }
+  }
+
+  @override
+  Future<DataState<SeCredentials>> getSeCredentialsFromLocal() async {
+    final box = GetStorage();
+    var seCredentialsString = box.read('seCredentials');
+    if (seCredentialsString != null) {
+      Map<String, dynamic> seCredentialsJson = jsonDecode(seCredentialsString);
+
+      SeCredentials seCredentials = SeCredentialsDTO.fromJson(seCredentialsJson);
+
+      StreamelementsAuthParams params = const StreamelementsAuthParams();
+
+      List paramsScopesList = params.scopes.split(' ');
+      paramsScopesList.sort((a, b) {
+        return a.compareTo(b);
+      });
+      String paramsScopesOrdered = paramsScopesList.join(' ');
+
+      List savedScopesList = seCredentials.scopes.split(' ');
+      savedScopesList.sort((a, b) {
+        return a.compareTo(b);
+      });
+      String savedScopesOrdered = savedScopesList.join(' ');
+
+      if (savedScopesOrdered != paramsScopesOrdered) {
+        disconnect(seCredentials.accessToken);
+        return const DataFailed("Scopes have been updated, please login again");
+      }
+
+      //refresh the access token to be sure the token is going to be valid after starting the app
+      await refreshAccessToken(seCredentials)
+          .then((value) => seCredentials = value.data!);
+
+      return DataSuccess(seCredentials);
+    } else {
+      return const DataFailed("No Twitch Data in local storage");
     }
   }
 

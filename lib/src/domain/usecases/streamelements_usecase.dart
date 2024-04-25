@@ -1,6 +1,7 @@
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
+import 'package:irllink/src/domain/entities/stream_elements/se_credentials.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_song.dart';
@@ -13,6 +14,16 @@ class StreamelementsUseCase {
   Future<DataState<void>> login({required StreamelementsAuthParams params}) {
     return streamelementsRepository.login(params);
   }
+
+  Future<DataState<SeCredentials>> refreshAccessToken({required SeCredentials seCredentials}) {
+    return streamelementsRepository.refreshAccessToken(seCredentials);
+  }
+
+  Future<DataState<SeCredentials>> getSeCredentialsFromLocal() {
+    return streamelementsRepository.getSeCredentialsFromLocal();
+  }
+
+  
 
   Future<DataState<void>> disconnect(String accessToken) {
     return streamelementsRepository.disconnect(accessToken);

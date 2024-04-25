@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
+import 'package:irllink/src/core/params/streamelements_auth_params.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/store_controller.dart';
 import 'package:irllink/src/presentation/controllers/tts_controller.dart';
 import 'package:irllink/src/presentation/events/settings_events.dart';
+import 'package:irllink/src/presentation/events/streamelements_events.dart';
 
 import '../../domain/entities/twitch/twitch_user.dart';
 
 class SettingsViewController extends GetxController {
-  SettingsViewController({required this.settingsEvents});
+  SettingsViewController(
+      {required this.settingsEvents, required this.streamelementsEvents});
 
   final SettingsEvents settingsEvents;
+  final StreamelementsEvents streamelementsEvents;
 
   late TextEditingController alternateChannelChatController;
   late TextEditingController obsWebsocketUrlFieldController;
@@ -90,22 +94,27 @@ class SettingsViewController extends GetxController {
     Get.offAllNamed(Routes.login);
   }
 
+  Future<void> loginStreamElements() async {
+    StreamelementsAuthParams params = const StreamelementsAuthParams();
+    await streamelementsEvents.login(params: params).then((value) {
+      if (value.error == null) {
+        //TODO: snackbar error
+      } else {
+        //TODO: snackbar success
+        // TODO: save in settings the credentials
+      }
+    });
+  }
+
+  void disconnectStreamElements() {
+    //TODO
+  }
+
   void removeHiddenUser(userId) {
     List hiddenUsersIds = homeViewController.settings.value.hiddenUsersIds!;
     hiddenUsersIds.remove(userId);
     homeViewController.settings.value = homeViewController.settings.value
         .copyWith(hiddenUsersIds: hiddenUsersIds);
-    saveSettings();
-    homeViewController.settings.refresh();
-  }
-
-  void removeChatJoined(channel) {
-    // List channels = homeViewController.settings.value.chatSettings!.chatsJoined;
-    // channels.remove(channel);
-    // homeViewController.settings.value = homeViewController.settings.value
-    //     .copyWith(
-    //         chatSettings: homeViewController.settings.value.chatSettings
-    //             ?.copyWith(chatsJoined: channels));
     saveSettings();
     homeViewController.settings.refresh();
   }

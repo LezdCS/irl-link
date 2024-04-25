@@ -2,10 +2,13 @@ import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
+import 'package:irllink/src/domain/entities/stream_elements/se_credentials.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
+import 'package:irllink/src/domain/usecases/streamelements_usecase.dart';
 import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/store_controller.dart';
@@ -45,6 +48,7 @@ class HomeViewController extends GetxController
   RxList<WebPageView> iOSAudioSources = <WebPageView>[].obs;
 
   TwitchCredentials? twitchData;
+  SeCredentials? seCredentials;
 
   //chat input
   late TextEditingController chatInputController;
@@ -83,14 +87,16 @@ class HomeViewController extends GetxController
 
       twitchData = Get.arguments[0];
 
-      timerRefreshToken = Timer.periodic(
-        const Duration(seconds: 13000),
-        (Timer t) => homeEvents
-            .refreshAccessToken(twitchData: twitchData!)
-            .then((value) => {
-                  if (value.error == null) {twitchData = value.data!}
-                }),
-      );
+      timerRefreshToken =
+          Timer.periodic(const Duration(seconds: 13000), (Timer t) {
+        homeEvents.getSeCredentialsFromLocal().then((value) => {
+              if (value.error == null) {seCredentials = value.data!}
+            });
+
+        homeEvents.refreshAccessToken(twitchData: twitchData!).then((value) => {
+              if (value.error == null) {twitchData = value.data!}
+            });
+      });
     }
     await getSettings();
 
@@ -116,6 +122,9 @@ class HomeViewController extends GetxController
           ),
           settingsUseCase: SettingsUseCase(
             settingsRepository: SettingsRepositoryImpl(),
+          ),
+          streamelementsUseCase: StreamelementsUseCase(
+            streamelementsRepository: StreamelementsRepositoryImpl(),
           ),
         ),
         chatGroup: chatGroup,
@@ -193,7 +202,7 @@ class HomeViewController extends GetxController
     }
 
     for (var temp in chatViews) {
-      if(temp.chatGroup.id == '1') {
+      if (temp.chatGroup.id == '1') {
         continue;
       }
       ChatView view = channels

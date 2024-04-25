@@ -13,6 +13,8 @@ abstract class StreamelementsRepository {
 
   Future<DataState<void>> disconnect(String accessToken);
 
+  Future<DataState<SeCredentials>> getSeCredentialsFromLocal();
+
   Future<void> replayActivity(String token, SeActivity activity);
 
   Future<DataState<List<SeActivity>>> getLastActivities(
