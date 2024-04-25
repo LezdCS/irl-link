@@ -96,6 +96,7 @@ class StreamelementsViewController extends GetxController
   Future<void> login() async {
     StreamelementsAuthParams params = const StreamelementsAuthParams();
     await streamelementsEvents.login(params: params);
+    //TODO: set SeCredentials and seMe in homeviewcontroller
   }
 
   void updatePlayerState(String state) {
