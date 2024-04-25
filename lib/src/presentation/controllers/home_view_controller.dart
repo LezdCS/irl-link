@@ -7,6 +7,7 @@ import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_credentials.dart';
+import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/domain/usecases/streamelements_usecase.dart';
 import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
@@ -48,7 +49,10 @@ class HomeViewController extends GetxController
   RxList<WebPageView> iOSAudioSources = <WebPageView>[].obs;
 
   TwitchCredentials? twitchData;
+
+  // StreamElements
   SeCredentials? seCredentials;
+  SeMe? seMe;
 
   //chat input
   late TextEditingController chatInputController;
@@ -90,7 +94,15 @@ class HomeViewController extends GetxController
       timerRefreshToken =
           Timer.periodic(const Duration(seconds: 13000), (Timer t) {
         homeEvents.getSeCredentialsFromLocal().then((value) => {
-              if (value.error == null) {seCredentials = value.data!}
+              if (value.error == null)
+                {
+                  seCredentials = value.data!,
+                  homeEvents
+                      .getSeMe(seCredentials!.accessToken)
+                      .then((value) => {
+                            if (value.error == null) {seMe = value.data!}
+                          }),
+                },
             });
 
         homeEvents.refreshAccessToken(twitchData: twitchData!).then((value) => {
@@ -141,9 +153,7 @@ class HomeViewController extends GetxController
 
     bool isSubscribed = Get.find<StoreController>().isSubscribed();
     if ((twitchData == null && isSubscribed) ||
-        isSubscribed &&
-            settings.value.streamElementsAccessToken != null &&
-            settings.value.streamElementsAccessToken!.isNotEmpty) {
+        isSubscribed && seCredentials != null) {
       streamelementsViewController = Get.find<StreamelementsViewController>();
       StreamelementsTabView streamelementsPage = const StreamelementsTabView();
       tabElements.add(streamelementsPage);

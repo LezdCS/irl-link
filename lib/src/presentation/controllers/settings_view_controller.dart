@@ -20,7 +20,6 @@ class SettingsViewController extends GetxController {
   late TextEditingController alternateChannelChatController;
   late TextEditingController obsWebsocketUrlFieldController;
   late TextEditingController obsWebsocketPasswordFieldController;
-  late TextEditingController streamElementsFieldController;
   late TextEditingController addBrowserTitleController;
   late TextEditingController addBrowserUrlController;
   late TextEditingController addHiddenUsernameController;
@@ -53,7 +52,6 @@ class SettingsViewController extends GetxController {
     storeController = Get.find<StoreController>();
 
     obsWebsocketUrlFieldController = TextEditingController();
-    streamElementsFieldController = TextEditingController();
     obsWebsocketPasswordFieldController = TextEditingController();
     addBrowserTitleController = TextEditingController();
     addBrowserUrlController = TextEditingController();
@@ -73,8 +71,6 @@ class SettingsViewController extends GetxController {
           homeViewController.settings.value.obsWebsocketUrl!;
       obsWebsocketPasswordFieldController.text =
           homeViewController.settings.value.obsWebsocketPassword!;
-      streamElementsFieldController.text =
-          homeViewController.settings.value.streamElementsAccessToken!;
 
       getUsernames();
     }
@@ -106,8 +102,9 @@ class SettingsViewController extends GetxController {
     });
   }
 
-  void disconnectStreamElements() {
-    //TODO
+  Future<void> disconnectStreamElements() async {
+    if( homeViewController.seCredentials == null) return;
+    await streamelementsEvents.disconnect(homeViewController.seCredentials!.accessToken);
   }
 
   void removeHiddenUser(userId) {

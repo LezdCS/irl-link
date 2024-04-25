@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import '../../controllers/settings_view_controller.dart';
 
 class StreamElements extends GetView {
@@ -14,6 +15,7 @@ class StreamElements extends GetView {
 
   @override
   Widget build(BuildContext context) {
+    bool isLoggedIn = controller.homeViewController.seMe != null;
     return Column(
       children: [
         Row(
@@ -63,30 +65,59 @@ class StreamElements extends GetView {
           ),
           child: Column(
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Image(
-                    image: AssetImage("lib/assets/streamelements/seLogo.png"),
-                    width: 30,
-                  ),
-                  const SizedBox(
-                    width: 12,
-                  ),
-                  InkWell(
-                    onTap: (() => {controller.loginStreamElements()}),
-                    child: const Text(
-                      'Login with StreamElements',
-                      style: TextStyle(fontSize: 16),
+              isLoggedIn
+                  ? Column(
+                      children: [
+                        profile(
+                          controller.homeViewController.seMe!,
+                        ),
+                         InkWell(
+                          onTap: (() => {controller.disconnectStreamElements()}),
+                          child: const Text(
+                            'Logout',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Image(
+                          image: AssetImage(
+                              "lib/assets/streamelements/seLogo.png"),
+                          width: 30,
+                        ),
+                        const SizedBox(
+                          width: 12,
+                        ),
+                        InkWell(
+                          onTap: (() => {controller.loginStreamElements()}),
+                          child: const Text(
+                            'Login with StreamElements',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
             ],
           ),
         ),
       ],
+    );
+  }
+
+  Widget profile(SeMe me) {
+    return Container(
+      child: Row(
+        children: [
+          Image(
+            image: NetworkImage(me.avatar),
+          ),
+          Text(me.displayName),
+        ],
+      ),
     );
   }
 }

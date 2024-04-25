@@ -23,7 +23,6 @@ class Settings extends Equatable {
   final bool? isObsConnected;
   final String? obsWebsocketUrl;
   final String? obsWebsocketPassword;
-  final String? streamElementsAccessToken;
   final List? browserTabs;
   final List? obsConnectionsHistory;
   final StreamElementsSettings? streamElementsSettings;
@@ -48,7 +47,6 @@ class Settings extends Equatable {
     required this.isObsConnected,
     required this.obsWebsocketUrl,
     required this.obsWebsocketPassword,
-    required this.streamElementsAccessToken,
     required this.browserTabs,
     required this.obsConnectionsHistory,
     required this.streamElementsSettings,
@@ -93,7 +91,6 @@ class Settings extends Equatable {
     this.isObsConnected = false,
     this.obsWebsocketUrl = "",
     this.obsWebsocketPassword = "",
-    this.streamElementsAccessToken = "",
     this.browserTabs = const [],
     this.obsConnectionsHistory = const [],
     this.streamElementsSettings = const StreamElementsSettings(
@@ -139,7 +136,6 @@ class Settings extends Equatable {
         'isObsConnected': isObsConnected,
         'obsWebsocketUrl': obsWebsocketUrl,
         'obsWebsocketPassword': obsWebsocketPassword,
-        'streamElementsAccessToken': streamElementsAccessToken,
         'browserTabs': browserTabs,
         'obsConnectionsHistory': obsConnectionsHistory,
         'streamElementsSettings': streamElementsSettings?.toJson(),
@@ -164,7 +160,6 @@ class Settings extends Equatable {
       isObsConnected,
       obsWebsocketUrl,
       obsWebsocketPassword,
-      streamElementsAccessToken,
       browserTabs,
       obsConnectionsHistory,
       streamElementsSettings,
@@ -194,7 +189,6 @@ class Settings extends Equatable {
           bool? isObsConnected,
           String? obsWebsocketUrl,
           String? obsWebsocketPassword,
-          String? streamElementsAccessToken,
           List? browserTabs,
           List? obsConnectionsHistory,
           StreamElementsSettings? streamElementsSettings,
@@ -215,8 +209,6 @@ class Settings extends Equatable {
         isObsConnected: isObsConnected ?? this.isObsConnected,
         obsWebsocketUrl: obsWebsocketUrl ?? this.obsWebsocketUrl,
         obsWebsocketPassword: obsWebsocketPassword ?? this.obsWebsocketPassword,
-        streamElementsAccessToken:
-            streamElementsAccessToken ?? this.streamElementsAccessToken,
         browserTabs: browserTabs ?? this.browserTabs,
         obsConnectionsHistory:
             obsConnectionsHistory ?? this.obsConnectionsHistory,

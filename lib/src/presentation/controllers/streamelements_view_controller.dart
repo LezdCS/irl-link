@@ -64,11 +64,12 @@ class StreamelementsViewController extends GetxController
   }
 
   Future<void> applySettings() async {
-    if (jwt != homeViewController.settings.value.streamElementsAccessToken!) {
+    if(homeViewController.seCredentials == null) return;
+    if (jwt != homeViewController.seCredentials!.accessToken) {
       socket?.dispose();
       socket = null;
       activities.clear();
-      jwt = homeViewController.settings.value.streamElementsAccessToken!;
+      jwt = homeViewController.seCredentials!.accessToken;
       streamelementsEvents.getMe(jwt).then((value) => {
             if (value.error == null) {handleGetMe(value.data!)}
           });
