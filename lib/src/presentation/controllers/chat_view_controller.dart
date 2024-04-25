@@ -257,6 +257,11 @@ class ChatViewController extends GetxController
     }
 
     for (Channel kc in kickChannels) {
+      bool alreadyCreated =
+          kickChats.firstWhereOrNull((k) => k.username == kc.channel) != null;
+      if (alreadyCreated) {
+        return;
+      }
       createKickChat(kc);
     }
 
@@ -369,11 +374,6 @@ class ChatViewController extends GetxController
   }
 
   Future<void> createKickChat(Channel kc) async {
-    bool alreadyCreated =
-        kickChats.firstWhereOrNull((k) => k.username == kc.channel) != null;
-    if (alreadyCreated) {
-      return;
-    }
     KickChat kickChat = KickChat(
       kc.channel,
       onDone: () => {},
