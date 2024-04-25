@@ -14,8 +14,8 @@ class StreamelementsUseCase {
     return streamelementsRepository.login(params);
   }
 
-  Future<DataState<void>> disconnect() {
-    return streamelementsRepository.disconnect();
+  Future<DataState<void>> disconnect(String accessToken) {
+    return streamelementsRepository.disconnect(accessToken);
   }
 
   Future<void> replayActivity(String token, SeActivity activity) {

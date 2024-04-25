@@ -74,7 +74,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       await getTwitchUser(null, accessToken)
           .then((value) => twitchUser = value.data!);
 
-      final twitchData = TwitchCredentialsDTO(
+      TwitchCredentials twitchData = TwitchCredentialsDTO(
         accessToken: accessToken,
         idToken: idToken,
         refreshToken: refreshToken!,
@@ -84,7 +84,6 @@ class TwitchRepositoryImpl extends TwitchRepository {
         scopes: scopes,
       );
 
-      //save the twitch credentials on the smartphone
       setTwitchOnLocal(twitchData);
 
       return DataSuccess(twitchData);
@@ -202,7 +201,6 @@ class TwitchRepositoryImpl extends TwitchRepository {
     }
   }
 
-  @override
   Future<void> setTwitchOnLocal(TwitchCredentials twitchData) async {
     final box = GetStorage();
     String jsonTwitchData = jsonEncode(twitchData);

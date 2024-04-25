@@ -1,14 +1,17 @@
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
+import 'package:irllink/src/domain/entities/stream_elements/se_credentials.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_song.dart';
 
 abstract class StreamelementsRepository {
-  Future<DataState<void>> login(StreamelementsAuthParams params);
+  Future<DataState<SeCredentials>> login(StreamelementsAuthParams params);
 
-  Future<DataState<void>> disconnect();
+  Future<DataState<SeCredentials>> refreshAccessToken(SeCredentials seCredentials);
+
+  Future<DataState<void>> disconnect(String accessToken);
 
   Future<void> replayActivity(String token, SeActivity activity);
 

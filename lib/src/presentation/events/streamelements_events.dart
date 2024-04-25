@@ -22,8 +22,8 @@ class StreamelementsEvents {
     return streamelementsUseCase.login(params: params);
   }
 
-  Future<DataState<void>> disconnect() {
-    return streamelementsUseCase.disconnect();
+  Future<DataState<void>> disconnect(String accessToken) {
+    return streamelementsUseCase.disconnect(accessToken);
   }
 
   Future<void> replayActivity(String token, SeActivity activity) {

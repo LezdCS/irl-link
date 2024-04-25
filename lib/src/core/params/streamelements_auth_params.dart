@@ -8,8 +8,16 @@ class StreamelementsAuthParams {
 
   const StreamelementsAuthParams({
     this.clientId = kStreamelementsAuthClientId,
-    this.redirectUri = 'https://irllink.com/streamelements/auth',
+    this.redirectUri = 'https://irllink.com/api/streamelements/auth',
     this.responseType = 'code',
-    this.scopes = 'activities:read activities:write tips:read',
+    this.scopes = 'tips:read '
+        'activities:read '
+        'loyalty:read '
+        'overlays:read '
+        'store:read '
+        'bot:read '
+        'session:read '
+        'contest:read '
+        'giveaway:read ',
   });
 }
