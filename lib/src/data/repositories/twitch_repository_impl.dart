@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
@@ -19,6 +20,7 @@ import 'package:irllink/src/domain/repositories/twitch_repository.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:quiver/iterables.dart';
 import 'package:twitch_chat/twitch_chat.dart';
+import 'package:irllink/src/core/utils/globals.dart' as globals;
 
 import '../entities/twitch/twitch_poll_dto.dart';
 
@@ -107,7 +109,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       response = await dio.get(
         apiRefreshTokenUrl,
-        queryParameters: {'refresh_token': twitchData.refreshToken},
+        queryParameters: {'refresh_token': twitchData.refreshToken, 'app_version': globals.version, 'platform': Platform.isAndroid ? 'android' : 'ios'},
       );
 
       TwitchCredentials newTwitchData = TwitchCredentials(
