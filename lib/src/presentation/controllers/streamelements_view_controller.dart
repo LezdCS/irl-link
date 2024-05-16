@@ -335,7 +335,6 @@ class StreamelementsViewController extends GetxController
     String type = event["type"];
     switch (type) {
       case "follower":
-        debugPrint(event.toString());
         if (!homeViewController.settings.value.streamElementsSettings!
             .showFollowerActivity) return;
         SeActivity activity = SeActivity(
@@ -365,7 +364,6 @@ class StreamelementsViewController extends GetxController
       case "tip":
         if (!homeViewController.settings.value.streamElementsSettings!
             .showDonationActivity) return;
-        debugPrint(event.toString());
         SeActivity activity = SeActivity(
           id: event["_id"],
           channel: event["channel"],

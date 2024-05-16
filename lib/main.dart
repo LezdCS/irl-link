@@ -23,7 +23,9 @@ import 'src/core/utils/globals.dart' as globals;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final talker = TalkerFlutter.init();
+  final talker = TalkerFlutter.init(
+     settings:  TalkerSettings(),
+  );
   await initializeService();
   await GetStorage.init();
   await Wakelock.enable();

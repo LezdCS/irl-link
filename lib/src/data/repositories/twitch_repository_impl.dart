@@ -110,7 +110,11 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       response = await dio.get(
         apiRefreshTokenUrl,
-        queryParameters: {'refresh_token': twitchData.refreshToken, 'app_version': globals.version, 'platform': Platform.isAndroid ? 'android' : 'ios'},
+        queryParameters: {
+          'refresh_token': twitchData.refreshToken,
+          'app_version': globals.version,
+          'platform': Platform.isAndroid ? 'android' : 'ios'
+        },
       );
 
       TwitchCredentials newTwitchData = TwitchCredentials(
@@ -128,8 +132,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(newTwitchData);
     } on DioException catch (e) {
-      debugPrint(e.toString());
-      return const DataFailed("Refresh encountered issues");
+      return DataFailed(e.toString());
     }
   }
 
@@ -141,8 +144,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       response = await dio.get('https://id.twitch.tv/oauth2/validate');
       return response.data;
     } on DioException catch (e) {
-      debugPrint(e.response.toString());
-      return "error";
+      return DataFailed(e.toString());
     }
   }
 
@@ -162,9 +164,8 @@ class TwitchRepositoryImpl extends TwitchRepository {
       );
       return DataSuccess(response.toString());
     } on DioException catch (e) {
-      debugPrint(e.toString());
+      return DataFailed(e.toString());
     }
-    return const DataSuccess('Logged out successfuly');
   }
 
   @override
@@ -238,8 +239,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(twitchUser);
     } on DioException catch (e) {
-      debugPrint(e.toString());
-      return const DataFailed("Error retrieving user infos");
+      return DataFailed(e.toString());
     }
   }
 
@@ -272,8 +272,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(twitchUsers);
     } on DioException catch (e) {
-      debugPrint(e.toString());
-      return const DataFailed("Error retrieving users infos");
+      return DataFailed(e.toString());
     }
   }
 
@@ -305,8 +304,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(twitchStreamInfosDto);
     } on DioException catch (e) {
-      debugPrint(e.toString());
-      return const DataFailed("Error Getting Stream Infos");
+      return DataFailed(e.toString());
     }
   }
 
@@ -346,8 +344,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(response);
     } on DioException catch (e) {
-      debugPrint(e.toString());
-      return const DataFailed("Error editing Stream chat settings");
+      return DataFailed(e.toString());
     }
   }
 
@@ -369,8 +366,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       );
       return const DataSuccess(null);
     } on DioException catch (e) {
-      debugPrint(e.toString());
-      return const DataFailed("Error editing Stream chat settings");
+      return DataFailed(e.toString());
     }
   }
 
@@ -402,8 +398,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return const DataSuccess("");
     } on DioException catch (e) {
-      debugPrint(e.response.toString());
-      return const DataFailed("Error ending prediction");
+      return DataFailed(e.toString());
     }
   }
 
@@ -433,8 +428,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(poll);
     } on DioException catch (e) {
-      debugPrint(e.response.toString());
-      return const DataFailed("Error ending poll");
+      return DataFailed(e.toString());
     }
   }
 
@@ -452,8 +446,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(newPoll);
     } on DioException catch (e) {
-      debugPrint(e.response.toString());
-      return const DataFailed("Error retrieving Twitch Prediction");
+      return DataFailed(e.toString());
     }
   }
 

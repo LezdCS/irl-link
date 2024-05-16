@@ -90,10 +90,6 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       );
       return DataSuccess(activities);
     } on DioException catch (e) {
-      debugPrint(e.toString());
-      debugPrint(e.response.toString());
-      debugPrint(e.error.toString());
-
       return DataFailed(e.toString());
     }
   }
@@ -116,7 +112,6 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       );
       return DataSuccess(overlays);
     } on DioException catch (e) {
-      debugPrint(e.toString());
       return DataFailed(e.toString());
     }
   }
@@ -135,7 +130,6 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
 
       return DataSuccess(me);
     } on DioException catch (e) {
-      debugPrint(e.toString());
       return DataFailed(e.toString());
     }
   }
@@ -204,7 +198,6 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
 
       return DataSuccess(songs);
     } on DioException catch (e) {
-      debugPrint(e.toString());
       return DataFailed(e.toString());
     }
   }
@@ -228,7 +221,6 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
 
       return DataSuccess(song);
     } on DioException catch (e) {
-      debugPrint(e.toString());
       return DataFailed(e.toString());
     }
   }
