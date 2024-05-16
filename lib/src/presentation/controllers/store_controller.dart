@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:dio/dio.dart' as dio_l;
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 
 class StoreController extends GetxController {
@@ -120,7 +121,7 @@ class StoreController extends GetxController {
     String? pruchaseToken =
         purchaseDetails.verificationData.serverVerificationData;
     HomeViewController homeViewController = Get.find<HomeViewController>();
-    var dio = dio_l.Dio();
+    var dio = initDio();
     try {
       await dio.post(
         'https://www.irllink.com/api/verify-android-purchase',
@@ -130,7 +131,7 @@ class StoreController extends GetxController {
         },
       );
       return Future<bool>.value(true);
-    } on dio_l.DioException catch (e) {
+    } on DioException catch (e) {
       debugPrint(e.toString());
       return Future<bool>.value(false);
     }

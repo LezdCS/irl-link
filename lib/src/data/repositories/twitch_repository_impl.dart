@@ -9,6 +9,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/utils/constants.dart';
+import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_credentials_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_decoded_idtoken_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_stream_infos_dto.dart';
@@ -100,7 +101,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
     TwitchCredentials twitchData,
   ) async {
     Response response;
-    var dio = Dio();
+    var dio = initDio();
     try {
       final remoteConfig = FirebaseRemoteConfig.instance;
       await remoteConfig.fetchAndActivate();
@@ -135,7 +136,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
   Future<dynamic> validateToken(String accessToken) async {
     try {
       Response response;
-      var dio = Dio();
+      var dio = initDio();
       dio.options.headers["authorization"] = "Bearer $accessToken";
       response = await dio.get('https://id.twitch.tv/oauth2/validate');
       return response.data;
@@ -150,7 +151,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
     final box = GetStorage();
     box.remove('twitchData');
     Response response;
-    var dio = Dio();
+    var dio = initDio();
     try {
       response = await dio.post(
         'https://id.twitch.tv/oauth2/revoke',
@@ -215,7 +216,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
   Future<DataState<TwitchUserDTO>> getTwitchUser(
       String? username, String accessToken) async {
     Response response;
-    var dio = Dio();
+    var dio = initDio();
     try {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
       dio.options.headers["authorization"] = "Bearer $accessToken";
@@ -246,7 +247,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
   Future<DataState<List<TwitchUserDTO>>> getTwitchUsers(
       List ids, String accessToken) async {
     Response response;
-    var dio = Dio();
+    var dio = initDio();
     List<TwitchUserDTO> twitchUsers = <TwitchUserDTO>[];
     try {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
@@ -281,7 +282,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       String accessToken, String broadcasterId) async {
     Response response;
     Response response2;
-    var dio = Dio();
+    var dio = initDio();
     try {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
       dio.options.headers["authorization"] = "Bearer $accessToken";
@@ -314,7 +315,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       String broadcasterId, TwitchStreamInfos? twitchStreamInfos) async {
     Response response;
     Map<String, dynamic> settings = {};
-    var dio = Dio();
+    var dio = initDio();
     try {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
       dio.options.headers["authorization"] = "Bearer $accessToken";
@@ -353,7 +354,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
   @override
   Future<DataState<void>> setStreamTitle(
       String accessToken, String broadcasterId, String title) async {
-    var dio = Dio();
+    var dio = initDio();
     try {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
       dio.options.headers["authorization"] = "Bearer $accessToken";
@@ -381,7 +382,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
     String status,
     String? winningOutcomeId,
   ) async {
-    var dio = Dio();
+    var dio = initDio();
 
     try {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
@@ -409,7 +410,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
   @override
   Future<DataState<TwitchPoll>> endPoll(String accessToken,
       String broadcasterId, String pollId, String status) async {
-    var dio = Dio();
+    var dio = initDio();
     Response response;
     TwitchPoll? poll;
 
@@ -441,7 +442,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
   Future<DataState<TwitchPoll>> createPoll(
       String accessToken, String broadcasterId, TwitchPoll newPoll) async {
     // Response response;
-    var dio = Dio();
+    var dio = initDio();
     // TwitchPrediction? prediction;
     try {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
@@ -463,7 +464,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
     ChatMessage message,
     int? duration,
   ) async {
-    var dio = Dio();
+    var dio = initDio();
     try {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
       dio.options.headers["authorization"] = "Bearer $accessToken";
@@ -495,7 +496,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
     String broadcasterId,
     ChatMessage message,
   ) async {
-    var dio = Dio();
+    var dio = initDio();
     try {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
       dio.options.headers["authorization"] = "Bearer $accessToken";

@@ -74,7 +74,9 @@ dependencies:
   flutter_colorpicker: ^1.0.3
   instant: ^0.5.1
   uuid:  ^3.0.7
-
+  talker_flutter: ^4.2.0
+  talker_dio_logger: ^4.2.0
+  
 dependency_overrides:
   wakelock_windows:
     git:

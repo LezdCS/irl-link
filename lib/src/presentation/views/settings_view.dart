@@ -7,6 +7,7 @@ import 'package:irllink/src/presentation/controllers/store_controller.dart';
 import 'package:irllink/src/presentation/widgets/settings/chat_events.dart';
 import 'package:irllink/src/presentation/widgets/settings/dashboard_settings_view.dart';
 import 'package:irllink/src/presentation/widgets/settings/stream_elements.dart';
+import 'package:irllink/src/presentation/widgets/settings/talker_screen.dart';
 import 'package:irllink/src/presentation/widgets/settings/tts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:irllink/src/core/utils/globals.dart' as globals;
@@ -315,6 +316,18 @@ class SettingsView extends GetView<SettingsViewController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                settingsGoToRow(
+                  context,
+                  'Logs',
+                  Icons.list_alt,
+                  () {
+                    Get.to(
+                      () => TalkerScreenView(
+                        talker: globals.talker!,
+                      ),
+                    );
+                  },
+                ),
                 settingsGoToRow(
                   context,
                   "Dashboard",
