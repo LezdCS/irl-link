@@ -83,6 +83,8 @@ dependency_overrides:
       url: https://github.com/chandrabezzo/wakelock.git # repository
       ref: main # branch
       path: wakelock_windows/ # folder
+  flutter_colorpicker:
+    git: https://github.com/mchome/flutter_colorpicker.git
 
 dev_dependencies:
   flutter_lints: ^3.0.2
