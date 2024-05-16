@@ -122,6 +122,18 @@ class SettingsView extends GetView<SettingsViewController> {
                 padding: const EdgeInsets.only(left: 4, right: 4, top: 6),
                 child: Text("Version: ${globals.version}"),
               ),
+              settingsGoToRow(
+                context,
+                'Logs',
+                Icons.list_alt,
+                () {
+                  Get.to(
+                    () => TalkerScreenView(
+                      talker: globals.talker!,
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -316,18 +328,6 @@ class SettingsView extends GetView<SettingsViewController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                settingsGoToRow(
-                  context,
-                  'Logs',
-                  Icons.list_alt,
-                  () {
-                    Get.to(
-                      () => TalkerScreenView(
-                        talker: globals.talker!,
-                      ),
-                    );
-                  },
-                ),
                 settingsGoToRow(
                   context,
                   "Dashboard",
