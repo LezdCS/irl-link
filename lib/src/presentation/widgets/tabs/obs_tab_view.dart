@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
-import 'package:marquee/marquee.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 
 import '../alert_message_view.dart';
@@ -362,21 +361,11 @@ class ObsTabView extends GetView<ObsTabViewController> {
             label: SizedBox(
               width: 100,
               height: 17,
-              child: source.sourceName.length > 12
-                  ? Marquee(
-                      text: source.sourceName,
-                      scrollAxis: Axis.horizontal,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      blankSpace: 10.0,
-                      velocity: 30.0,
-                      startAfter: const Duration(seconds: 2),
-                      pauseAfterRound: const Duration(seconds: 2),
-                    )
-                  : Text(
-                      source.sourceName,
-                      softWrap: false,
-                      textAlign: TextAlign.center,
-                    ),
+              child: Text(
+                source.sourceName,
+                softWrap: false,
+                textAlign: TextAlign.center,
+              ),
             ),
             labelStyle: const TextStyle(color: Colors.white),
             selected: source.sceneItemEnabled,

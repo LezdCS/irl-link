@@ -50,7 +50,6 @@ dependencies:
   in_app_purchase: ^3.1.13
   intl: ^0.18.1
   jwt_decoder: ^2.0.1
-  marquee: ^2.2.3
   mobile_scanner: ^4.0.1
   move_to_background: ^1.0.2
   obs_websocket: ^5.1.0+2
