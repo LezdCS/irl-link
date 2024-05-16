@@ -14,6 +14,6 @@ class TalkerScreenView extends GetView {
 
   @override
   Widget build(BuildContext context) {
-    return TalkerScreen(talker: talker);
+    return TalkerScreen(appBarTitle: 'Logs', talker: talker);
   }
 }

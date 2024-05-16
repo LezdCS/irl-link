@@ -10,7 +10,7 @@ Dio initDio() {
     TalkerDioLogger(
       talker: talker,
       settings: TalkerDioLoggerSettings(
-        responseFilter: (response) => response.statusCode != 200,
+        responseFilter: (response) => ![200, 202].contains(response.statusCode),
       ),
     ),
   );
