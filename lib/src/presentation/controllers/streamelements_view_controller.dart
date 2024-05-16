@@ -9,6 +9,7 @@ import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_song.dart';
 import 'package:irllink/src/presentation/events/streamelements_events.dart';
 import 'package:socket_io_client/socket_io_client.dart';
+import 'package:irllink/src/core/utils/globals.dart' as globals;
 
 import 'home_view_controller.dart';
 
@@ -198,17 +199,19 @@ class StreamelementsViewController extends GetxController
 
   Future<void> onError() async {
     isSocketConnected.value = false;
-    debugPrint('Error connecting to StreamElements websocket');
+    globals.talker?.error('Error on StreamElements websocket');
+
   }
 
   Future<void> onDisconnect() async {
     isSocketConnected.value = false;
-    debugPrint('Disconnected from StreamElements websocket');
+    globals.talker?.warning('Disconnected from StreamElements websocket');
   }
 
   Future<void> onAuthenticated(data) async {
     isSocketConnected.value = true;
-    debugPrint('Connected to StreamElements websocket');
+    globals.talker?.info('Connected to StreamElements websocket');
+    
   }
 
   void onAddSongQueue(data) {

@@ -12,6 +12,7 @@ import 'package:irllink/src/presentation/controllers/tts_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:kick_chat/kick_chat.dart';
 import 'package:twitch_chat/twitch_chat.dart';
+import 'package:irllink/src/core/utils/globals.dart' as globals;
 
 import 'home_view_controller.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
@@ -378,7 +379,7 @@ class ChatViewController extends GetxController
       kc.channel,
       onDone: () => {},
       onError: () => {
-        debugPrint('error on kick chat'),
+        globals.talker?.error('error on kick chat'),
       },
     );
     await kickChat.connect();

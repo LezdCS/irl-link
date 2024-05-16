@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:obs_websocket/obs_websocket.dart';
+import 'package:irllink/src/core/utils/globals.dart' as globals;
 
 import 'home_view_controller.dart';
 
@@ -140,7 +141,7 @@ class ObsTabViewController extends GetxController {
 
       final StatsResponse statsResponse =
           await obsWebSocket!.general.getStats();
-      debugPrint(statsResponse.toString());
+      globals.talker?.debug(statsResponse.toString());
     } catch (e) {
       alertMessage.value = "Failed to connect to OBS";
       isConnected.value = false;
@@ -148,7 +149,8 @@ class ObsTabViewController extends GetxController {
   }
 
   void connectionLost() {
-    debugPrint("connectionLost");
+    globals.talker?.error("connection lost");
+
     isConnected.value = false;
     alertMessage.value = "Connection with OBS lost...";
   }
