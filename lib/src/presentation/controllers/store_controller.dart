@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:dio/dio.dart' as dio_l;
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
+import 'package:irllink/src/core/utils/globals.dart' as globals;
 
 class StoreController extends GetxController {
   late StreamSubscription<List<PurchaseDetails>> subscription;
@@ -72,7 +74,7 @@ class StoreController extends GetxController {
     try {
       await InAppPurchase.instance.restorePurchases();
     } catch (error) {
-      debugPrint('not logged to any store');
+      globals.talker?.error('Not logged to any store.');
     }
   }
 
@@ -120,7 +122,7 @@ class StoreController extends GetxController {
     String? pruchaseToken =
         purchaseDetails.verificationData.serverVerificationData;
     HomeViewController homeViewController = Get.find<HomeViewController>();
-    var dio = dio_l.Dio();
+    var dio = initDio();
     try {
       await dio.post(
         'https://www.irllink.com/api/verify-android-purchase',
@@ -130,8 +132,8 @@ class StoreController extends GetxController {
         },
       );
       return Future<bool>.value(true);
-    } on dio_l.DioException catch (e) {
-      debugPrint(e.toString());
+    } on DioException catch (e) {
+      globals.talker?.error(e.toString());
       return Future<bool>.value(false);
     }
   }
