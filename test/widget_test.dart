@@ -9,11 +9,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:irllink/main.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+    final talker = TalkerFlutter.init(
+     settings:  TalkerSettings(),
+  );
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const Main());
+    await tester.pumpWidget(Main(talker: talker));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

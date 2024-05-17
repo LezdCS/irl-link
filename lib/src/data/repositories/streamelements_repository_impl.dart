@@ -8,6 +8,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/utils/constants.dart';
+import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_activity_dto.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_credentials_dto.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_me_dto.dart';
@@ -136,7 +137,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
 
   @override
   Future<void> replayActivity(String token, SeActivity activity) async {
-    Dio dio = Dio();
+    var dio = initDio();
     try {
       dio.options.headers["Authorization"] = "Bearer $token";
       await dio.post(
@@ -188,7 +189,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
   @override
   Future<DataState<List<SeActivity>>> getLastActivities(
       String token, String channel) async {
-    Dio dio = Dio();
+    var dio = initDio();
     Response response;
     List<SeActivity> activities = [];
     try {
@@ -214,10 +215,6 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       );
       return DataSuccess(activities);
     } on DioException catch (e) {
-      debugPrint(e.toString());
-      debugPrint(e.response.toString());
-      debugPrint(e.error.toString());
-
       return DataFailed(e.toString());
     }
   }
@@ -225,7 +222,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
   @override
   Future<DataState<List<SeOverlay>>> getOverlays(
       String token, String channel) async {
-    Dio dio = Dio();
+    var dio = initDio();
     List<SeOverlay> overlays = [];
     try {
       dio.options.headers["Authorization"] = "Bearer $token";
@@ -240,14 +237,13 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       );
       return DataSuccess(overlays);
     } on DioException catch (e) {
-      debugPrint(e.toString());
       return DataFailed(e.toString());
     }
   }
 
   @override
   Future<DataState<SeMe>> getMe(String token) async {
-    Dio dio = Dio();
+    var dio = initDio();
     late SeMe me;
     try {
       dio.options.headers["Authorization"] = "Bearer $token";
@@ -259,14 +255,13 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
 
       return DataSuccess(me);
     } on DioException catch (e) {
-      debugPrint(e.toString());
       return DataFailed(e.toString());
     }
   }
 
   @override
   Future<void> nextSong(String token, String userId) async {
-    Dio dio = Dio();
+    var dio = initDio();
     try {
       dio.options.headers["Authorization"] = "Bearer $token";
       await dio.post(
@@ -279,7 +274,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
 
   @override
   Future<void> removeSong(String token, String userId, String songId) async {
-    Dio dio = Dio();
+    var dio = initDio();
     try {
       dio.options.headers["Authorization"] = "Bearer $token";
       await dio.delete(
@@ -292,7 +287,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
 
   @override
   Future<void> resetQueue(String token, String userId) async {
-    Dio dio = Dio();
+    var dio = initDio();
     try {
       dio.options.headers["Authorization"] = "Bearer $token";
       await dio.delete(
@@ -307,7 +302,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
   Future<DataState<List<SeSong>>> getSongQueue(
       String token, String userId) async {
     List<SeSong> songs = [];
-    Dio dio = Dio();
+    var dio = initDio();
     try {
       dio.options.headers["Authorization"] = "Bearer $token";
       Response response = await dio.get(
@@ -328,14 +323,13 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
 
       return DataSuccess(songs);
     } on DioException catch (e) {
-      debugPrint(e.toString());
       return DataFailed(e.toString());
     }
   }
 
   @override
   Future<DataState<SeSong>> getSongPlaying(String token, String userId) async {
-    Dio dio = Dio();
+    var dio = initDio();
     try {
       dio.options.headers["Authorization"] = "Bearer $token";
       Response response = await dio.get(
@@ -352,15 +346,13 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
 
       return DataSuccess(song);
     } on DioException catch (e) {
-      debugPrint(e.toString());
       return DataFailed(e.toString());
     }
   }
 
   @override
-  Future<void> updatePlayerState(
-      String token, String userId, String state) async {
-    Dio dio = Dio();
+  Future<void> updatePlayerState(String token, String userId, String state) async {
+    var dio = initDio();
     try {
       dio.options.headers["Authorization"] = "Bearer $token";
       await dio.post(
