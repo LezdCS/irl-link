@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_poll_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_prediction_dto.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_hype_train.dart';
@@ -11,6 +12,7 @@ import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 import 'package:web_socket_channel/io.dart';
+import 'package:irllink/src/core/utils/globals.dart' as globals;
 
 import '../../data/entities/twitch/twitch_hype_train_dto.dart';
 import 'constants.dart';
@@ -137,13 +139,12 @@ class TwitchEventSub {
   }
 
   void _onDone() {
-    debugPrint("Twitch Sub Event: Connection closed");
+    globals.talker?.debug("Twitch Sub Event: Connection closed");
     close();
   }
 
   void _onError(Object o, StackTrace s) {
-    debugPrint('Twitch event sub error: $o');
-    debugPrint('Twitch event sub error: $s');
+    globals.talker?.error("Twitch Sub Event: error", o, s);
   }
 
   Future<String> _getChannelId() async {
@@ -154,7 +155,7 @@ class TwitchEventSub {
 
   void subscribeToEvent(String type, String version, String sessionId,
       Map<String, String> condition) async {
-    var dio = Dio();
+    var dio = initDio();
     try {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
       dio.options.headers["authorization"] = "Bearer $accessToken";
@@ -167,7 +168,7 @@ class TwitchEventSub {
         "transport": {"method": "websocket", "session_id": sessionId}
       });
     } on DioException catch (e) {
-      debugPrint(e.response.toString());
+      globals.talker?.error(e.response.toString());
     }
   }
 }
