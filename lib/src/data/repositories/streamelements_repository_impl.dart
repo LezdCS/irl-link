@@ -18,6 +18,7 @@ import 'package:irllink/src/domain/entities/stream_elements/se_credentials.dart'
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_song.dart';
+import 'package:irllink/src/core/utils/globals.dart' as globals;
 
 import 'package:irllink/src/domain/repositories/streamelements_repository.dart';
 
@@ -42,6 +43,10 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       String? accessToken = Uri.parse(result).queryParameters['access_token'];
       String? refreshToken = Uri.parse(result).queryParameters['refresh_token'];
       String? expiresIn = Uri.parse(result).queryParameters['expires_in'];
+      globals.talker?.debug(accessToken);
+      globals.talker?.debug(refreshToken);
+      globals.talker?.debug(expiresIn);
+      globals.talker?.info('StreamElements login successful');
 
       dynamic tokenInfos = await validateToken(accessToken!);
       final String scopes = tokenInfos['scopes'].join(' ');
@@ -54,6 +59,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       );
 
       storeCredentials(seCredentials);
+      globals.talker?.info('StreamElements login successful');
 
       return DataSuccess(seCredentials);
     } catch (e) {
@@ -152,10 +158,13 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
   Future<DataState<SeCredentials>> getSeCredentialsFromLocal() async {
     final box = GetStorage();
     var seCredentialsString = box.read('seCredentials');
+    globals.talker?.info(seCredentialsString);
+
     if (seCredentialsString != null) {
       Map<String, dynamic> seCredentialsJson = jsonDecode(seCredentialsString);
 
-      SeCredentials seCredentials = SeCredentialsDTO.fromJson(seCredentialsJson);
+      SeCredentials seCredentials =
+          SeCredentialsDTO.fromJson(seCredentialsJson);
 
       StreamelementsAuthParams params = const StreamelementsAuthParams();
 
@@ -351,7 +360,8 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
   }
 
   @override
-  Future<void> updatePlayerState(String token, String userId, String state) async {
+  Future<void> updatePlayerState(
+      String token, String userId, String state) async {
     var dio = initDio();
     try {
       dio.options.headers["Authorization"] = "Bearer $token";

@@ -22,7 +22,6 @@ class StreamelementsUseCase {
   Future<DataState<SeCredentials>> getSeCredentialsFromLocal() {
     return streamelementsRepository.getSeCredentialsFromLocal();
   }
-
   
 
   Future<DataState<void>> disconnect(String accessToken) {

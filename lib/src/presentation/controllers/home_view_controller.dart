@@ -91,23 +91,29 @@ class HomeViewController extends GetxController
 
       twitchData = Get.arguments[0];
 
+      homeEvents.getSeCredentialsFromLocal().then((value) => {
+            if (value.error == null)
+              {
+                seCredentials = value.data!,
+                homeEvents.getSeMe(seCredentials!.accessToken).then((value) => {
+                      if (value.error == null) {seMe = value.data!}
+                    }),
+              },
+          });
+
       timerRefreshToken =
           Timer.periodic(const Duration(seconds: 13000), (Timer t) {
-        homeEvents.getSeCredentialsFromLocal().then((value) => {
-              if (value.error == null)
-                {
-                  seCredentials = value.data!,
-                  homeEvents
-                      .getSeMe(seCredentials!.accessToken)
-                      .then((value) => {
-                            if (value.error == null) {seMe = value.data!}
-                          }),
-                },
-            });
-
         homeEvents.refreshAccessToken(twitchData: twitchData!).then((value) => {
               if (value.error == null) {twitchData = value.data!}
             });
+
+        if (seCredentials != null) {
+          homeEvents
+              .refreshSeAccessToken(seCredentials: seCredentials!)
+              .then((value) => {
+                    if (value.error == null) {seCredentials = value.data!}
+                  });
+        }
       });
     }
     await getSettings();

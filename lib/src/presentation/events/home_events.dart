@@ -45,6 +45,12 @@ class HomeEvents {
     return twitchUseCase.refreshAccessToken(twitchData: twitchData);
   }
 
+  Future<DataState<SeCredentials>> refreshSeAccessToken({
+    required SeCredentials seCredentials,
+  }) {
+    return streamelementsUseCase.refreshAccessToken(seCredentials: seCredentials);
+  }
+
   Future<DataState<SeCredentials>> getSeCredentialsFromLocal() {
     return streamelementsUseCase.getSeCredentialsFromLocal();
   }

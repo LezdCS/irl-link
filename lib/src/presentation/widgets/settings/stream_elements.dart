@@ -92,7 +92,7 @@ class StreamElements extends GetView {
                         const SizedBox(
                           width: 12,
                         ),
-                        InkWell(
+                        controller.homeViewController.seCredentials != null ? const Text('logged in') : InkWell(
                           onTap: (() => {controller.loginStreamElements()}),
                           child: const Text(
                             'Login with StreamElements',
@@ -109,15 +109,13 @@ class StreamElements extends GetView {
   }
 
   Widget profile(SeMe me) {
-    return Container(
-      child: Row(
-        children: [
-          Image(
-            image: NetworkImage(me.avatar),
-          ),
-          Text(me.displayName),
-        ],
-      ),
+    return Row(
+      children: [
+        Image(
+          image: NetworkImage(me.avatar),
+        ),
+        Text(me.displayName),
+      ],
     );
   }
 }
