@@ -64,6 +64,7 @@ class StreamelementsViewController extends GetxController
   }
 
   Future<void> applySettings() async {
+    globals.talker?.info('Applying StreamElements settings');
     if (homeViewController.seCredentials == null) return;
     if (jwt != homeViewController.seCredentials!.accessToken) {
       jwt = homeViewController.seCredentials!.accessToken;
@@ -85,9 +86,9 @@ class StreamelementsViewController extends GetxController
     streamelementsEvents
         .getLastActivities(jwt, me.id)
         .then((value) => activities.value = value.data!);
-    streamelementsEvents
-        .getSongQueue(jwt, me.id)
-        .then((value) => songRequestQueue.value = value.data!);
+    streamelementsEvents.getSongQueue(jwt, me.id).then((value) => {
+          if (value.error == null) {songRequestQueue.value = value.data!}
+        });
     streamelementsEvents
         .getSongPlaying(jwt, me.id)
         .then((value) => currentSong.value = value.data!);
@@ -115,18 +116,17 @@ class StreamelementsViewController extends GetxController
 
   /// Connect to WebSocket
   Future<void> connectWebsocket() async {
-    socket = io(
-        'https://realtime.streamelements.com',
-        OptionBuilder()
-            .setTransports(['websocket']) // for Flutter or Dart VM
-            .disableAutoConnect()
-            .build());
-    socket!.connect();
+    socket = io('https://realtime.streamelements.com',
+        OptionBuilder().setTransports(['websocket'])
+        // .disableAutoConnect()
+        .build()
+        );
+
+    // socket!.connect();
     socket!.on('connect_error', (data) => onError());
     socket!.on('connect', (data) => onConnect());
     socket!.on('disconnect', (data) => onDisconnect());
     socket!.on('authenticated', (data) => onAuthenticated(data));
-
     socket!.on(
       'event:test',
       (data) => {
@@ -189,7 +189,7 @@ class StreamelementsViewController extends GetxController
   }
 
   Future<void> onConnect() async {
-    socket?.emit('authenticate', {"method": 'jwt', "token": jwt});
+    socket?.emit('authenticate', {"method": 'oauth2', "token": jwt});
   }
 
   Future<void> onError() async {

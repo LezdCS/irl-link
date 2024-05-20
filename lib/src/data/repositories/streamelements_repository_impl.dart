@@ -54,7 +54,6 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
         expiresIn: expiresIn,
         scopes: scopes,
       );
-      globals.talker?.debug(seCredentials);
 
       await storeCredentials(seCredentials);
 
@@ -80,8 +79,6 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
         apiRefreshTokenUrl,
         queryParameters: {'refresh_token': seCredentials.refreshToken},
       );
-
-      globals.talker?.debug('Refresh SE response: ', response.data);
 
       SeCredentials newSeCredentials = SeCredentials(
         accessToken: response.data['access_token'],
@@ -208,7 +205,6 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
     var dio = initDio();
     Response response;
     List<SeActivity> activities = [];
-    globals.talker?.debug(token);
     try {
       dio.options.headers["Authorization"] = "oAuth $token";
       response = await dio.get(
@@ -267,10 +263,9 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       Response response = await dio.get(
         'https://api.streamelements.com/kappa/v2/channels/me',
       );
-      globals.talker?.debug('response: ${response.data}');
 
       me = SeMeDTO.fromJson(response.data);
-      globals.talker?.debug('me: $me');
+      globals.talker?.debug('SE me: $me');
 
       return DataSuccess(me);
     } on DioException catch (e) {

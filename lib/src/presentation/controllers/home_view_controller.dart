@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
@@ -32,7 +33,6 @@ import '../widgets/tabs/streamelements_tab_view.dart';
 import '../widgets/web_page_view.dart';
 import 'chat_view_controller.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
-import 'package:irllink/src/core/utils/globals.dart' as globals;
 
 class HomeViewController extends GetxController
     with GetTickerProviderStateMixin {
@@ -92,16 +92,16 @@ class HomeViewController extends GetxController
 
       twitchData = Get.arguments[0];
 
-      homeEvents.getSeCredentialsFromLocal().then((value) => {
-            if (value.error == null)
-              {
-                seCredentials = value.data!,
-                homeEvents.getSeMe(seCredentials!.accessToken).then((value) => {
-                      globals.talker?.debug('seMe value: ', value.data),
-                      if (value.error == null) {seMe = value.data!}
-                    }),
-              },
-          });
+      DataState<SeCredentials> seCreds =
+          await homeEvents.getSeCredentialsFromLocal();
+      if (seCreds.error == null) {
+        seCredentials = seCreds.data;
+        DataState<SeMe> seMeResult =
+            await homeEvents.getSeMe(seCredentials!.accessToken);
+        if (seMeResult.error == null) {
+          seMe = seMeResult.data;
+        }
+      }
 
       timerRefreshToken =
           Timer.periodic(const Duration(seconds: 13000), (Timer t) {
