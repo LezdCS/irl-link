@@ -69,7 +69,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
     SeCredentials seCredentials,
   ) async {
     Response response;
-    Dio dio = Dio();
+    Dio dio = initDio();
     try {
       final remoteConfig = FirebaseRemoteConfig.instance;
       await remoteConfig.fetchAndActivate();
@@ -111,7 +111,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
   Future<DataState<dynamic>> validateToken(String accessToken) async {
     try {
       Response response;
-      Dio dio = Dio();
+      Dio dio = initDio();
       dio.options.headers["authorization"] = "OAuth $accessToken";
       response =
           await dio.get('https://api.streamelements.com/oauth2/validate');
@@ -126,9 +126,8 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
 
   @override
   Future<DataState<void>> disconnect(String accessToken) async {
-    GetStorage box = GetStorage();
-    box.remove('seCredentials');
-    Dio dio = Dio();
+    Dio dio = initDio();
+    dio.options.headers["authorization"] = "OAuth $accessToken";
     try {
       await dio.post(
         'https://api.streamelements.com/oauth2/revoke',
@@ -137,7 +136,8 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
           'token': accessToken,
         },
       );
-
+      GetStorage box = GetStorage();
+      box.remove('seCredentials');
       return DataSuccess(null);
     } on DioException catch (e) {
       return DataFailed("Unable to revoke StreamElements token: ${e.message}");
