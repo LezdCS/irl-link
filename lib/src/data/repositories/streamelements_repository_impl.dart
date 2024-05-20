@@ -40,30 +40,27 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
         preferEphemeral: true,
       );
 
-      String? accessToken = Uri.parse(result).queryParameters['access_token'];
-      String? refreshToken = Uri.parse(result).queryParameters['refresh_token'];
-      String? expiresIn = Uri.parse(result).queryParameters['expires_in'];
-      globals.talker?.debug(accessToken);
-      globals.talker?.debug(refreshToken);
-      globals.talker?.debug(expiresIn);
+      String accessToken = Uri.parse(result).queryParameters['access_token']!;
+      String refreshToken = Uri.parse(result).queryParameters['refresh_token']!;
+      int expiresIn = int.parse(Uri.parse(result).queryParameters['expires_in']!);
       globals.talker?.info('StreamElements login successful');
 
-      dynamic tokenInfos = await validateToken(accessToken!);
-      final String scopes = tokenInfos['scopes'].join(' ');
+      DataState tokenInfos = await validateToken(accessToken);
+      final String scopes = tokenInfos.data['scopes'].join(' ');
 
-      SeCredentials seCredentials = SeCredentialsDTO(
+      SeCredentials seCredentials = SeCredentials(
         accessToken: accessToken,
-        refreshToken: refreshToken!,
-        expiresIn: int.parse(expiresIn ?? '0'),
+        refreshToken: refreshToken,
+        expiresIn: expiresIn,
         scopes: scopes,
       );
+      globals.talker?.debug(seCredentials);
 
-      storeCredentials(seCredentials);
-      globals.talker?.info('StreamElements login successful');
+      await storeCredentials(seCredentials);
 
       return DataSuccess(seCredentials);
     } catch (e) {
-      return const DataFailed("Unable to retrieve StreamElements token");
+      return DataFailed("Unable to retrieve StreamElements token: $e");
     }
   }
 
@@ -78,11 +75,14 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       await remoteConfig.fetchAndActivate();
       String apiRefreshTokenUrl =
           remoteConfig.getString('irllink_refresh_se_token_url');
+      globals.talker?.debug('Refresh url: ', apiRefreshTokenUrl);
 
       response = await dio.get(
         apiRefreshTokenUrl,
         queryParameters: {'refresh_token': seCredentials.refreshToken},
       );
+
+      globals.talker?.debug('Refresh SE response: ', response.data);
 
       SeCredentials newSeCredentials = SeCredentials(
         accessToken: response.data['access_token'],
@@ -90,21 +90,23 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
         expiresIn: response.data['expires_in'],
         scopes: seCredentials.scopes,
       );
-      storeCredentials(newSeCredentials);
+      await storeCredentials(newSeCredentials);
 
       await validateToken(newSeCredentials.accessToken);
 
       return DataSuccess(newSeCredentials);
     } on DioException catch (e) {
-      debugPrint(e.toString());
-      return const DataFailed("Refresh encountered issues");
+      return DataFailed("Refresh SE token failed: ${e.message}");
     }
   }
 
-  void storeCredentials(SeCredentials seCredentials) {
+  Future<void> storeCredentials(SeCredentials seCredentials) async {
     GetStorage box = GetStorage();
-    String jsonTwitchData = jsonEncode(seCredentials);
-    box.write('seCredentials', jsonTwitchData);
+    globals.talker?.info('Encoding SE credentials into a String');
+    String jsonData = jsonEncode(seCredentials);
+    globals.talker?.info('Successfully encoded SE creds: $jsonData');
+    await box.write('seCredentials', jsonData);
+    globals.talker?.info('SE creds saved in local');
   }
 
   Future<DataState<dynamic>> validateToken(String accessToken) async {
@@ -114,8 +116,10 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       dio.options.headers["authorization"] = "OAuth $accessToken";
       response =
           await dio.get('https://api.streamelements.com/oauth2/validate');
+      globals.talker?.info('Token validated: ${response.data}');
       return DataSuccess(response.data);
     } on DioException catch (e) {
+      globals.talker?.error(e.message);
       return DataFailed(
           "Unable to validate StreamElements token: ${e.message}");
     }
@@ -135,7 +139,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
         },
       );
 
-      return const DataSuccess(null);
+      return DataSuccess(null);
     } on DioException catch (e) {
       return DataFailed("Unable to revoke StreamElements token: ${e.message}");
     }
@@ -157,6 +161,8 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
   @override
   Future<DataState<SeCredentials>> getSeCredentialsFromLocal() async {
     final box = GetStorage();
+    globals.talker?.info('Getting SE creds from local storage');
+
     var seCredentialsString = box.read('seCredentials');
     globals.talker?.info(seCredentialsString);
 
@@ -166,32 +172,34 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       SeCredentials seCredentials =
           SeCredentialsDTO.fromJson(seCredentialsJson);
 
+      globals.talker?.info('Checking if Scopes changed.');
       StreamelementsAuthParams params = const StreamelementsAuthParams();
-
       List paramsScopesList = params.scopes.split(' ');
       paramsScopesList.sort((a, b) {
         return a.compareTo(b);
       });
       String paramsScopesOrdered = paramsScopesList.join(' ');
-
       List savedScopesList = seCredentials.scopes.split(' ');
       savedScopesList.sort((a, b) {
         return a.compareTo(b);
       });
       String savedScopesOrdered = savedScopesList.join(' ');
-
       if (savedScopesOrdered != paramsScopesOrdered) {
+        globals.talker?.info('Scopes changed, user need to relogin to SE.');
         disconnect(seCredentials.accessToken);
-        return const DataFailed("Scopes have been updated, please login again");
+        return DataFailed("Scopes have been updated, please login again.");
       }
+      globals.talker?.info('Scopes are the same: OK');
 
       //refresh the access token to be sure the token is going to be valid after starting the app
       await refreshAccessToken(seCredentials)
           .then((value) => seCredentials = value.data!);
+      
+      globals.talker?.info('SE token refreshed.');
 
       return DataSuccess(seCredentials);
     } else {
-      return const DataFailed("No Twitch Data in local storage");
+      return DataFailed("No SE Data in local storage");
     }
   }
 
