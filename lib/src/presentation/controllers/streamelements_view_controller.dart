@@ -64,13 +64,14 @@ class StreamelementsViewController extends GetxController
   }
 
   Future<void> applySettings() async {
-    if(homeViewController.seCredentials == null) return;
+    if (homeViewController.seCredentials == null) return;
     if (jwt != homeViewController.seCredentials!.accessToken) {
+      jwt = homeViewController.seCredentials!.accessToken;
       socket?.dispose();
       socket = null;
       activities.clear();
-      if(homeViewController.seMe != null) {
-      handleGetMe(homeViewController.seMe!);
+      if (homeViewController.seMe != null) {
+        handleGetMe(homeViewController.seMe!);
       }
       connectWebsocket();
     }
@@ -194,7 +195,6 @@ class StreamelementsViewController extends GetxController
   Future<void> onError() async {
     isSocketConnected.value = false;
     globals.talker?.error('Error on StreamElements websocket');
-
   }
 
   Future<void> onDisconnect() async {
@@ -205,7 +205,6 @@ class StreamelementsViewController extends GetxController
   Future<void> onAuthenticated(data) async {
     isSocketConnected.value = true;
     globals.talker?.info('Connected to StreamElements websocket');
-    
   }
 
   void onAddSongQueue(data) {
@@ -221,10 +220,10 @@ class StreamelementsViewController extends GetxController
 
   void onNextSong(data) {
     dynamic songData = data[0]["nextSong"];
-    if(songData == {}) return;
+    if (songData == {}) return;
     SeSong song = SeSong.fromJson(songData);
     currentSong.value = song;
-    if(song.id != ''){
+    if (song.id != '') {
       songRequestQueue.removeAt(0);
     }
   }
