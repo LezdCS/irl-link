@@ -11,7 +11,7 @@ class StreamelementsUseCase {
   final StreamelementsRepository streamelementsRepository;
   StreamelementsUseCase({required this.streamelementsRepository});
 
-  Future<DataState<void>> login({required StreamelementsAuthParams params}) {
+  Future<DataState<SeCredentials>> login({required StreamelementsAuthParams params}) {
     return streamelementsRepository.login(params);
   }
 

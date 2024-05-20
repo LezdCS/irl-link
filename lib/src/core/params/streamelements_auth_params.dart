@@ -10,6 +10,6 @@ class StreamelementsAuthParams {
     this.clientId = kStreamelementsAuthClientId,
     this.redirectUri = 'https://www.irllink.com/api/streamelements/auth',
     this.responseType = 'code',
-    this.scopes = 'tips:read activities:read overlays:read',
+    this.scopes = 'channel:read tips:read activities:read overlays:read',
   });
 }

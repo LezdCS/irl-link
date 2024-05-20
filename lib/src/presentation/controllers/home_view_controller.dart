@@ -32,6 +32,7 @@ import '../widgets/tabs/streamelements_tab_view.dart';
 import '../widgets/web_page_view.dart';
 import 'chat_view_controller.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
+import 'package:irllink/src/core/utils/globals.dart' as globals;
 
 class HomeViewController extends GetxController
     with GetTickerProviderStateMixin {
@@ -96,6 +97,7 @@ class HomeViewController extends GetxController
               {
                 seCredentials = value.data!,
                 homeEvents.getSeMe(seCredentials!.accessToken).then((value) => {
+                      globals.talker?.debug('seMe value: ', value.data),
                       if (value.error == null) {seMe = value.data!}
                     }),
               },

@@ -97,7 +97,7 @@ class SettingsViewController extends GetxController {
         //TODO: snackbar error
       } else {
         //TODO: snackbar success
-        // TODO: save in settings the credentials
+        Get.back();
       }
     });
   }

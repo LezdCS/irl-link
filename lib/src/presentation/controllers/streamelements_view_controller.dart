@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/params/streamelements_auth_params.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
@@ -70,10 +69,9 @@ class StreamelementsViewController extends GetxController
       socket?.dispose();
       socket = null;
       activities.clear();
-      jwt = homeViewController.seCredentials!.accessToken;
-      streamelementsEvents.getMe(jwt).then((value) => {
-            if (value.error == null) {handleGetMe(value.data!)}
-          });
+      if(homeViewController.seMe != null) {
+      handleGetMe(homeViewController.seMe!);
+      }
       connectWebsocket();
     }
   }
@@ -92,12 +90,6 @@ class StreamelementsViewController extends GetxController
     streamelementsEvents
         .getSongPlaying(jwt, me.id)
         .then((value) => currentSong.value = value.data!);
-  }
-
-  Future<void> login() async {
-    StreamelementsAuthParams params = const StreamelementsAuthParams();
-    await streamelementsEvents.login(params: params);
-    //TODO: set SeCredentials and seMe in homeviewcontroller
   }
 
   void updatePlayerState(String state) {

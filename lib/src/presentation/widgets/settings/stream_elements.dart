@@ -15,7 +15,7 @@ class StreamElements extends GetView {
 
   @override
   Widget build(BuildContext context) {
-    bool isLoggedIn = controller.homeViewController.seMe != null;
+    bool isLoggedIn = controller.homeViewController.seCredentials != null;
     return Column(
       children: [
         Row(
@@ -71,12 +71,27 @@ class StreamElements extends GetView {
                         profile(
                           controller.homeViewController.seMe!,
                         ),
-                         InkWell(
-                          onTap: (() => {controller.disconnectStreamElements()}),
-                          child: const Text(
-                            'Logout',
-                            style: TextStyle(fontSize: 16),
-                          ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Image(
+                              image: AssetImage(
+                                  "lib/assets/streamelements/seLogo.png"),
+                              width: 30,
+                            ),
+                            const SizedBox(
+                              width: 12,
+                            ),
+                            InkWell(
+                              onTap: (() =>
+                                  {controller.disconnectStreamElements()}),
+                              child: const Text(
+                                'Logout',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     )
@@ -92,7 +107,7 @@ class StreamElements extends GetView {
                         const SizedBox(
                           width: 12,
                         ),
-                        controller.homeViewController.seCredentials != null ? const Text('logged in') : InkWell(
+                        InkWell(
                           onTap: (() => {controller.loginStreamElements()}),
                           child: const Text(
                             'Login with StreamElements',
@@ -113,6 +128,7 @@ class StreamElements extends GetView {
       children: [
         Image(
           image: NetworkImage(me.avatar),
+          width: 40,
         ),
         Text(me.displayName),
       ],
