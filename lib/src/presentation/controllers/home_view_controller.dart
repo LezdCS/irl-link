@@ -52,8 +52,8 @@ class HomeViewController extends GetxController
   TwitchCredentials? twitchData;
 
   // StreamElements
-  Rxn<SeCredentials?> seCredentials = Rxn<SeCredentials>();
-  Rxn<SeMe?> seMe = Rxn<SeMe>();
+  Rxn<SeCredentials> seCredentials = Rxn<SeCredentials>();
+  Rxn<SeMe> seMe = Rxn<SeMe>();
   StreamelementsViewController? streamelementsViewController;
 
   // Chat input
