@@ -36,6 +36,9 @@ class SettingsViewController extends GetxController {
   RxBool obsWebsocketPasswordShow = false.obs;
   RxBool obsWebsocketUrlShow = false.obs;
   RxBool seJwtShow = false.obs;
+  RxBool seOverlayTokenShow = false.obs;
+  late TextEditingController seJwtInputController;
+  late TextEditingController seOverlayTokenInputController;
 
   late TextEditingController addTtsIgnoredUsersController;
   late TextEditingController addTtsIgnoredPrefixsController;
@@ -60,6 +63,8 @@ class SettingsViewController extends GetxController {
     addTtsIgnoredUsersController = TextEditingController();
     addTtsIgnoredPrefixsController = TextEditingController();
     addTtsAllowedPrefixsController = TextEditingController();
+    seJwtInputController = TextEditingController();
+    seOverlayTokenInputController = TextEditingController();
 
     usernamesHiddenUsers = <String>[].obs;
     super.onInit();

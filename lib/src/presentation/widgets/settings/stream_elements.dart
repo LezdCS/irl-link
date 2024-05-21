@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../../controllers/settings_view_controller.dart';
 
 class StreamElements extends GetView {
@@ -71,6 +72,134 @@ class StreamElements extends GetView {
                         children: [
                           _profile(
                             controller.homeViewController.seMe.value!,
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                flex: 7,
+                                child: TextFormField(
+                                  controller: controller.seJwtInputController,
+                                  obscureText: !controller.seJwtShow.value,
+                                  onChanged: (value) {
+                                    //TODO: edit JWT in SE local settings
+
+                                    // controller.homeViewController.settings.value =
+                                    //     controller
+                                    //         .homeViewController.settings.value
+                                    //         .copyWith(obsWebsocketUrl: value);
+                                    controller.saveSettings();
+                                  },
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .color,
+                                  ),
+                                  decoration: InputDecoration(
+                                    isDense: true,
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 7),
+                                    enabledBorder: Theme.of(context)
+                                        .inputDecorationTheme
+                                        .border,
+                                    hintText: 'JWT',
+                                    labelText: 'JWT',
+                                    labelStyle: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .tertiary,
+                                    ),
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                          controller.obsWebsocketUrlShow.value
+                                              ? Icons.visibility
+                                              : Icons.visibility_off),
+                                      color: Theme.of(context)
+                                          .primaryIconTheme
+                                          .color,
+                                      onPressed: () {
+                                        controller.obsWebsocketUrlShow.value =
+                                            !controller
+                                                .obsWebsocketUrlShow.value;
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          _jwtExplanation(context),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                flex: 7,
+                                child: TextFormField(
+                                  controller:
+                                      controller.seOverlayTokenInputController,
+                                  obscureText:
+                                      !controller.seOverlayTokenShow.value,
+                                  onChanged: (value) {
+                                    //TODO: edit overlayToken in SE local settings
+
+                                    // controller.homeViewController.settings.value =
+                                    //     controller
+                                    //         .homeViewController.settings.value
+                                    //         .copyWith(obsWebsocketUrl: value);
+                                    controller.saveSettings();
+                                  },
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .color,
+                                  ),
+                                  decoration: InputDecoration(
+                                    isDense: true,
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 7),
+                                    enabledBorder: Theme.of(context)
+                                        .inputDecorationTheme
+                                        .border,
+                                    hintText: 'Token',
+                                    labelText: 'Overlay Token',
+                                    labelStyle: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .tertiary,
+                                    ),
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                          controller.obsWebsocketUrlShow.value
+                                              ? Icons.visibility
+                                              : Icons.visibility_off),
+                                      color: Theme.of(context)
+                                          .primaryIconTheme
+                                          .color,
+                                      onPressed: () {
+                                        controller.obsWebsocketUrlShow.value =
+                                            !controller
+                                                .obsWebsocketUrlShow.value;
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            'Same as above for the overlay token',
+                            style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyLarge!.color,
+                            ),
                           ),
                           const SizedBox(
                             height: 8,
@@ -146,9 +275,49 @@ class StreamElements extends GetView {
           foregroundImage: NetworkImage(me.avatar),
           radius: 20,
         ),
-        const SizedBox(width: 8,),
+        const SizedBox(
+          width: 8,
+        ),
         Text(me.displayName),
       ],
+    );
+  }
+
+  Widget _jwtExplanation(BuildContext context) {
+    return RichText(
+      textAlign: TextAlign.center,
+      text: TextSpan(
+        children: [
+          TextSpan(
+            text: 'To get your Access Token ',
+            style: TextStyle(
+              color: Theme.of(context).textTheme.bodyLarge!.color,
+            ),
+          ),
+          WidgetSpan(
+            child: InkWell(
+              onTap: () {
+                launchUrlString(
+                  "https://streamelements.com/dashboard/account/channels",
+                  mode: LaunchMode.externalApplication,
+                );
+              },
+              child: Text(
+                "click here",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.tertiary,
+                ),
+              ),
+            ),
+          ),
+          TextSpan(
+            text: '. Then press "Show Secret" and copy your JWT Token!',
+            style: TextStyle(
+              color: Theme.of(context).textTheme.bodyLarge!.color,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

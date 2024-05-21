@@ -10,6 +10,8 @@ class StreamElementsSettingsDTO extends StreamElementsSettings {
     required super.showRaidActivity,
     required super.showHostActivity,
     required super.showMerchActivity,
+    required super.jwt,
+    required super.overlayToken,
   });
 
   @override
@@ -21,6 +23,8 @@ class StreamElementsSettingsDTO extends StreamElementsSettings {
         'showRaidActivity': showRaidActivity,
         'showHostActivity': showHostActivity,
         'showMerchActivity': showMerchActivity,
+        'jwt': jwt,
+        'overlayToken': overlayToken,
       };
 
   factory StreamElementsSettingsDTO.fromJson(Map<String, dynamic> map) {
@@ -53,6 +57,10 @@ class StreamElementsSettingsDTO extends StreamElementsSettings {
           const Settings.defaultSettings()
               .streamElementsSettings!
               .showMerchActivity,
+      jwt: map['jwt'] ??
+          const Settings.defaultSettings().streamElementsSettings!.jwt,
+      overlayToken: map['overlayToken'] ??
+          const Settings.defaultSettings().streamElementsSettings!.overlayToken,
     );
   }
 }

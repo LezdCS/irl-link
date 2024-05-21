@@ -101,6 +101,8 @@ class Settings extends Equatable {
       showRaidActivity: true,
       showHostActivity: true,
       showMerchActivity: true,
+      jwt: null,
+      overlayToken: null,
     ),
 
     //TTS SETTINGS
