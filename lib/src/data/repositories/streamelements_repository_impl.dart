@@ -42,7 +42,8 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
 
       String accessToken = Uri.parse(result).queryParameters['access_token']!;
       String refreshToken = Uri.parse(result).queryParameters['refresh_token']!;
-      int expiresIn = int.parse(Uri.parse(result).queryParameters['expires_in']!);
+      int expiresIn =
+          int.parse(Uri.parse(result).queryParameters['expires_in']!);
       globals.talker?.info('StreamElements login successful');
 
       DataState tokenInfos = await validateToken(accessToken);
@@ -188,9 +189,13 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       globals.talker?.info('Scopes are the same: OK');
 
       //refresh the access token to be sure the token is going to be valid after starting the app
-      await refreshAccessToken(seCredentials)
-          .then((value) => seCredentials = value.data!);
-      
+      DataState<SeCredentials> creds = await refreshAccessToken(seCredentials);
+      if (creds.error == null) {
+        seCredentials = creds.data!;
+      } else {
+        return DataFailed("Error refreshing SE Token");
+      }
+
       globals.talker?.info('SE token refreshed.');
 
       return DataSuccess(seCredentials);
