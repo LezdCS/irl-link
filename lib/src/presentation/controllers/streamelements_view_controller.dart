@@ -64,7 +64,6 @@ class StreamelementsViewController extends GetxController
   }
 
   Future<void> applySettings() async {
-    globals.talker?.info('Applying StreamElements settings');
     if (homeViewController.seCredentials.value == null) return;
     if (jwt != homeViewController.seCredentials.value!.accessToken) {
       jwt = homeViewController.seCredentials.value!.accessToken;
