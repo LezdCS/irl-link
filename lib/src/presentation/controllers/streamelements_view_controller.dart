@@ -65,14 +65,14 @@ class StreamelementsViewController extends GetxController
 
   Future<void> applySettings() async {
     globals.talker?.info('Applying StreamElements settings');
-    if (homeViewController.seCredentials == null) return;
-    if (jwt != homeViewController.seCredentials!.value.accessToken) {
-      jwt = homeViewController.seCredentials!.value.accessToken;
+    if (homeViewController.seCredentials.value == null) return;
+    if (jwt != homeViewController.seCredentials.value!.accessToken) {
+      jwt = homeViewController.seCredentials.value!.accessToken;
       socket?.dispose();
       socket = null;
       activities.clear();
-      if (homeViewController.seMe != null) {
-        handleGetMe(homeViewController.seMe!.value);
+      if (homeViewController.seMe.value != null) {
+        handleGetMe(homeViewController.seMe.value!);
       }
       connectWebsocket();
     }

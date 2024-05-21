@@ -62,63 +62,63 @@ class StreamElements extends GetView {
             ),
             color: Theme.of(context).colorScheme.secondary,
           ),
-          child: Column(
-            children: [
-              controller.homeViewController.seCredentials != null &&
-                      controller.homeViewController.seMe != null
-                  ? Column(
-                      children: [
-                        Obx(
-                          () => _profile(
-                            controller.homeViewController.seMe!.value,
+          child: Obx(
+            () => Column(
+              children: [
+                controller.homeViewController.seCredentials.value != null &&
+                        controller.homeViewController.seMe.value != null
+                    ? Column(
+                        children: [
+                          _profile(
+                            controller.homeViewController.seMe.value!,
                           ),
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Image(
-                              image: AssetImage(
-                                  "lib/assets/streamelements/seLogo.png"),
-                              width: 30,
-                            ),
-                            const SizedBox(
-                              width: 12,
-                            ),
-                            InkWell(
-                              onTap: (() =>
-                                  {controller.disconnectStreamElements()}),
-                              child: const Text(
-                                'Logout',
-                                style: TextStyle(fontSize: 16),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Image(
+                                image: AssetImage(
+                                    "lib/assets/streamelements/seLogo.png"),
+                                width: 30,
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    )
-                  : Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Image(
-                          image: AssetImage(
-                              "lib/assets/streamelements/seLogo.png"),
-                          width: 30,
-                        ),
-                        const SizedBox(
-                          width: 12,
-                        ),
-                        InkWell(
-                          onTap: (() => {controller.loginStreamElements()}),
-                          child: const Text(
-                            'Login with StreamElements',
-                            style: TextStyle(fontSize: 16),
+                              const SizedBox(
+                                width: 12,
+                              ),
+                              InkWell(
+                                onTap: (() =>
+                                    {controller.disconnectStreamElements()}),
+                                child: const Text(
+                                  'Logout',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-            ],
+                        ],
+                      )
+                    : Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Image(
+                            image: AssetImage(
+                                "lib/assets/streamelements/seLogo.png"),
+                            width: 30,
+                          ),
+                          const SizedBox(
+                            width: 12,
+                          ),
+                          InkWell(
+                            onTap: (() => {controller.loginStreamElements()}),
+                            child: const Text(
+                              'Login with StreamElements',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ],
+                      ),
+              ],
+            ),
           ),
         ),
       ],

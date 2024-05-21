@@ -43,7 +43,7 @@ class HomeViewController extends GetxController
   SplitViewController? splitViewController =
       SplitViewController(limits: [null, WeightLimit(min: 0.12, max: 0.92)]);
 
-  //TABS
+  // Tabs
   late TabController tabController;
   Rx<int> tabIndex = 0.obs;
   RxList<Widget> tabElements = <Widget>[].obs;
@@ -52,17 +52,17 @@ class HomeViewController extends GetxController
   TwitchCredentials? twitchData;
 
   // StreamElements
-  Rx<SeCredentials>? seCredentials;
-  Rx<SeMe>? seMe;
+  Rx<SeCredentials?> seCredentials = null.obs;
+  Rx<SeMe?> seMe = null.obs;
+  StreamelementsViewController? streamelementsViewController;
 
-  //chat input
+  // Chat input
   late TextEditingController chatInputController;
   RxList<Emote> twitchEmotes = <Emote>[].obs;
 
-  //emote picker
+  // Emote picker
   RxBool isPickingEmote = false.obs;
   ObsTabViewController? obsTabViewController;
-  StreamelementsViewController? streamelementsViewController;
 
   late Rx<Settings> settings = const Settings.defaultSettings().obs;
 
@@ -72,6 +72,7 @@ class HomeViewController extends GetxController
 
   RxBool displayDashboard = false.obs;
 
+  // Chats
   RxList<ChatView> channels = <ChatView>[].obs;
   ChatGroup? selectedChatGroup;
   int? selectedChatIndex;
@@ -100,12 +101,12 @@ class HomeViewController extends GetxController
               if (value.error == null) {twitchData = value.data!}
             });
 
-        if (seCredentials != null) {
+        if (seCredentials.value != null) {
           homeEvents
-              .refreshSeAccessToken(seCredentials: seCredentials!.value)
+              .refreshSeAccessToken(seCredentials: seCredentials.value!)
               .then((value) => {
                     if (value.error == null)
-                      {seCredentials!.value = value.data!}
+                      {seCredentials.value = value.data!}
                   });
         }
       });
@@ -129,14 +130,14 @@ class HomeViewController extends GetxController
     DataState<SeCredentials> seCreds =
         await homeEvents.getSeCredentialsFromLocal();
     if (seCreds.error == null) {
-      seCredentials = seCreds.data!.obs;
-      await setSeMe(seCredentials!.value);
+      seCredentials.value = seCreds.data!;
+      await setSeMe(seCredentials.value!);
     }
   }
 
   Future<void> setSeMe(SeCredentials seCreds) async {
     DataState<SeMe> seMeResult =
-        await homeEvents.getSeMe(seCredentials!.value.accessToken);
+        await homeEvents.getSeMe(seCredentials.value!.accessToken);
     if (seMeResult.error == null) {
       seMe = seMeResult.data!.obs;
     }
@@ -170,7 +171,7 @@ class HomeViewController extends GetxController
 
     bool isSubscribed = Get.find<StoreController>().isSubscribed();
     if ((twitchData == null && isSubscribed) ||
-        isSubscribed && seCredentials != null) {
+        isSubscribed && seCredentials.value != null) {
       streamelementsViewController = Get.find<StreamelementsViewController>();
       StreamelementsTabView streamelementsPage = const StreamelementsTabView();
       tabElements.add(streamelementsPage);

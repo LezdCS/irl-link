@@ -105,8 +105,8 @@ class SettingsViewController extends GetxController {
         );
       } else {
         homeViewController.setStreamElementsCredentials();
-        homeViewController.seCredentials?.refresh();
-        homeViewController.seMe?.refresh();
+        homeViewController.seCredentials.refresh();
+        homeViewController.seMe.refresh();
         Get.snackbar(
           "StreamElements",
           "Login successfull",
@@ -120,14 +120,14 @@ class SettingsViewController extends GetxController {
   }
 
   Future<void> disconnectStreamElements() async {
-    if (homeViewController.seCredentials == null) return;
+    if (homeViewController.seCredentials.value == null) return;
     DataState<void> result = await streamelementsEvents
-        .disconnect(homeViewController.seCredentials!.value.accessToken);
+        .disconnect(homeViewController.seCredentials.value!.accessToken);
     if (result.error == null) {
-      homeViewController.seCredentials = null;
-      homeViewController.seMe = null;
-      homeViewController.seCredentials?.refresh();
-      homeViewController.seMe?.refresh();
+      homeViewController.seCredentials.value = null;
+      homeViewController.seMe.value = null;
+      homeViewController.seCredentials.refresh();
+      homeViewController.seMe.refresh();
       Get.snackbar(
         "StreamElements",
         "Successfully disconnected.",
