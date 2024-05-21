@@ -15,7 +15,6 @@ class StreamElements extends GetView {
 
   @override
   Widget build(BuildContext context) {
-    bool isLoggedIn = controller.homeViewController.seCredentials != null;
     return Column(
       children: [
         Row(
@@ -65,11 +64,14 @@ class StreamElements extends GetView {
           ),
           child: Column(
             children: [
-              isLoggedIn
+              controller.homeViewController.seCredentials != null &&
+                      controller.homeViewController.seMe != null
                   ? Column(
                       children: [
-                        profile(
-                          controller.homeViewController.seMe!,
+                        Obx(
+                          () => _profile(
+                            controller.homeViewController.seMe!.value,
+                          ),
                         ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -123,7 +125,7 @@ class StreamElements extends GetView {
     );
   }
 
-  Widget profile(SeMe me) {
+  Widget _profile(SeMe me) {
     return Row(
       children: [
         Image(

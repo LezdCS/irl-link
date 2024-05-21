@@ -52,8 +52,8 @@ class HomeViewController extends GetxController
   TwitchCredentials? twitchData;
 
   // StreamElements
-  SeCredentials? seCredentials;
-  SeMe? seMe;
+  Rx<SeCredentials>? seCredentials;
+  Rx<SeMe>? seMe;
 
   //chat input
   late TextEditingController chatInputController;
@@ -92,16 +92,7 @@ class HomeViewController extends GetxController
 
       twitchData = Get.arguments[0];
 
-      DataState<SeCredentials> seCreds =
-          await homeEvents.getSeCredentialsFromLocal();
-      if (seCreds.error == null) {
-        seCredentials = seCreds.data;
-        DataState<SeMe> seMeResult =
-            await homeEvents.getSeMe(seCredentials!.accessToken);
-        if (seMeResult.error == null) {
-          seMe = seMeResult.data;
-        }
-      }
+      await setStreamElementsCredentials();
 
       timerRefreshToken =
           Timer.periodic(const Duration(seconds: 13000), (Timer t) {
@@ -111,9 +102,10 @@ class HomeViewController extends GetxController
 
         if (seCredentials != null) {
           homeEvents
-              .refreshSeAccessToken(seCredentials: seCredentials!)
+              .refreshSeAccessToken(seCredentials: seCredentials!.value)
               .then((value) => {
-                    if (value.error == null) {seCredentials = value.data!}
+                    if (value.error == null)
+                      {seCredentials!.value = value.data!}
                   });
         }
       });
@@ -131,6 +123,23 @@ class HomeViewController extends GetxController
     timerRefreshToken?.cancel();
     timerKeepSpeakerOn?.cancel();
     super.onClose();
+  }
+
+  Future<void> setStreamElementsCredentials() async {
+    DataState<SeCredentials> seCreds =
+        await homeEvents.getSeCredentialsFromLocal();
+    if (seCreds.error == null) {
+      seCredentials = seCreds.data!.obs;
+      await setSeMe(seCredentials!.value);
+    }
+  }
+
+  Future<void> setSeMe(SeCredentials seCreds) async {
+    DataState<SeMe> seMeResult =
+        await homeEvents.getSeMe(seCredentials!.value.accessToken);
+    if (seMeResult.error == null) {
+      seMe = seMeResult.data!.obs;
+    }
   }
 
   void lazyPutChat(ChatGroup chatGroup) {

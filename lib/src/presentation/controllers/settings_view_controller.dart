@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
+import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/store_controller.dart';
 import 'package:irllink/src/presentation/controllers/tts_controller.dart';
@@ -93,18 +94,49 @@ class SettingsViewController extends GetxController {
   Future<void> loginStreamElements() async {
     StreamelementsAuthParams params = const StreamelementsAuthParams();
     await streamelementsEvents.login(params: params).then((value) {
-      if (value.error == null) {
-        //TODO: snackbar error
+      if (value.error != null) {
+        Get.snackbar(
+          "Error",
+          "Login failed: ${value.error}",
+          snackPosition: SnackPosition.BOTTOM,
+          icon: const Icon(Icons.error_outline, color: Colors.red),
+          borderWidth: 1,
+          borderColor: Colors.red,
+        );
       } else {
-        //TODO: snackbar success
-        Get.back();
+        homeViewController.setStreamElementsCredentials();
+        homeViewController.seCredentials?.refresh();
+        homeViewController.seMe?.refresh();
+        Get.snackbar(
+          "StreamElements",
+          "Login successfull",
+          snackPosition: SnackPosition.BOTTOM,
+          icon: const Icon(Icons.check, color: Colors.green),
+          borderWidth: 1,
+          borderColor: Colors.green,
+        );
       }
     });
   }
 
   Future<void> disconnectStreamElements() async {
-    if( homeViewController.seCredentials == null) return;
-    await streamelementsEvents.disconnect(homeViewController.seCredentials!.accessToken);
+    if (homeViewController.seCredentials == null) return;
+    DataState<void> result = await streamelementsEvents
+        .disconnect(homeViewController.seCredentials!.value.accessToken);
+    if (result.error == null) {
+      homeViewController.seCredentials = null;
+      homeViewController.seMe = null;
+      homeViewController.seCredentials?.refresh();
+      homeViewController.seMe?.refresh();
+      Get.snackbar(
+        "StreamElements",
+        "Successfully disconnected.",
+        snackPosition: SnackPosition.BOTTOM,
+        icon: const Icon(Icons.check, color: Colors.green),
+        borderWidth: 1,
+        borderColor: Colors.green,
+      );
+    }
   }
 
   void removeHiddenUser(userId) {
