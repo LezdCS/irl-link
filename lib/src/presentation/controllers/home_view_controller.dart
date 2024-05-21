@@ -139,7 +139,7 @@ class HomeViewController extends GetxController
     DataState<SeMe> seMeResult =
         await homeEvents.getSeMe(seCredentials.value!.accessToken);
     if (seMeResult.error == null) {
-      seMe = seMeResult.data!.obs;
+      seMe.value = seMeResult.data!;
     }
   }
 
