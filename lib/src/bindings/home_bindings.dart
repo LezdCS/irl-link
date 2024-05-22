@@ -29,6 +29,9 @@ class HomeBindings extends Bindings {
           settingsUseCase: SettingsUseCase(
             settingsRepository: SettingsRepositoryImpl(),
           ),
+          streamelementsUseCase: StreamelementsUseCase(
+            streamelementsRepository: StreamelementsRepositoryImpl(),
+          ),
         ),
       ),
     );
@@ -47,6 +50,9 @@ class HomeBindings extends Bindings {
             ),
             settingsUseCase: SettingsUseCase(
               settingsRepository: SettingsRepositoryImpl(),
+            ),
+            streamelementsUseCase: StreamelementsUseCase(
+              streamelementsRepository: StreamelementsRepositoryImpl(),
             ),
           ),
         ));
@@ -71,6 +77,9 @@ class HomeBindings extends Bindings {
             ),
             settingsUseCase: SettingsUseCase(
               settingsRepository: SettingsRepositoryImpl(),
+            ),
+            streamelementsUseCase: StreamelementsUseCase(
+              streamelementsRepository: StreamelementsRepositoryImpl(),
             ),
           ),
         ));

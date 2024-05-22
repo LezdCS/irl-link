@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
+import 'package:irllink/src/presentation/widgets/stream_elements/se_overlays.dart';
 import 'package:irllink/src/presentation/widgets/stream_elements/se_song_requests.dart';
 
 import '../stream_elements/se_activities_list.dart';
@@ -30,6 +31,7 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
                     tabs: const [
                       Text("Activities"),
                       Text("Song Requests"),
+                      Text("Overlays"),
                     ],
                   ),
                 ),
@@ -45,6 +47,9 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
                           controller: controller,
                         ),
                         SeSongRequests(
+                          controller: controller,
+                        ),
+                        SeOverlays(
                           controller: controller,
                         ),
                       ],

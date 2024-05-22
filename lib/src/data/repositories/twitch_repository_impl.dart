@@ -77,7 +77,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       await getTwitchUser(null, accessToken)
           .then((value) => twitchUser = value.data!);
 
-      final twitchData = TwitchCredentialsDTO(
+      TwitchCredentials twitchData = TwitchCredentialsDTO(
         accessToken: accessToken,
         idToken: idToken,
         refreshToken: refreshToken!,
@@ -87,12 +87,11 @@ class TwitchRepositoryImpl extends TwitchRepository {
         scopes: scopes,
       );
 
-      //save the twitch credentials on the smartphone
       setTwitchOnLocal(twitchData);
 
       return DataSuccess(twitchData);
     } catch (e) {
-      return const DataFailed("Unable to retrieve Twitch Data from Auth");
+      return DataFailed("Unable to retrieve Twitch Data from Auth: $e");
     }
   }
 
@@ -193,7 +192,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       String savedScopesOrdered = savedScopesList.join(' ');
 
       if (savedScopesOrdered != paramsScopesOrdered) {
-        return const DataFailed("Scopes have been updated, please login again");
+        return DataFailed("Scopes have been updated, please login again.");
       }
 
       //refresh the access token to be sure the token is going to be valid after starting the app
@@ -202,11 +201,10 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       return DataSuccess(twitchData);
     } else {
-      return const DataFailed("No Twitch Data in local storage");
+      return DataFailed("No Twitch Data in local storage");
     }
   }
 
-  @override
   Future<void> setTwitchOnLocal(TwitchCredentials twitchData) async {
     final box = GetStorage();
     String jsonTwitchData = jsonEncode(twitchData);
@@ -364,7 +362,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
         },
         data: jsonEncode(titleMap),
       );
-      return const DataSuccess(null);
+      return DataSuccess(null);
     } on DioException catch (e) {
       return DataFailed(e.toString());
     }
@@ -396,7 +394,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
         data: jsonEncode(body),
       );
 
-      return const DataSuccess("");
+      return DataSuccess("");
     } on DioException catch (e) {
       return DataFailed(e.toString());
     }

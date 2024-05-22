@@ -29,7 +29,6 @@ class SettingsDTO extends Settings {
     required bool isObsConnected,
     required String obsWebsocketUrl,
     required String obsWebsocketPassword,
-    required String streamElementsAccessToken,
     required List browserTabs,
     required List obsConnectionsHistory,
     required StreamElementsSettings streamElementsSettings,
@@ -50,7 +49,6 @@ class SettingsDTO extends Settings {
             obsWebsocketUrl: obsWebsocketUrl,
             obsWebsocketPassword: obsWebsocketPassword,
             isObsConnected: isObsConnected,
-            streamElementsAccessToken: streamElementsAccessToken,
             browserTabs: browserTabs,
             obsConnectionsHistory: obsConnectionsHistory,
             streamElementsSettings: streamElementsSettings,
@@ -73,7 +71,6 @@ class SettingsDTO extends Settings {
         'isObsConnected': isObsConnected,
         'obsWebsocketUrl': obsWebsocketUrl,
         'obsWebsocketPassword': obsWebsocketPassword,
-        'streamElementsAccessToken': streamElementsAccessToken,
         'browserTabs': browserTabs,
         'obsConnectionsHistory': obsConnectionsHistory,
         'streamElementsSettings': streamElementsSettings?.toJson(),
@@ -119,9 +116,6 @@ class SettingsDTO extends Settings {
       obsWebsocketPassword: map['obsWebsocketPassword'] != null
           ? map['obsWebsocketPassword'] as String
           : const Settings.defaultSettings().obsWebsocketPassword!,
-      streamElementsAccessToken: map['streamElementsAccessToken'] != null
-          ? map['streamElementsAccessToken'] as String
-          : const Settings.defaultSettings().streamElementsAccessToken!,
       browserTabs: map['browserTabs'] != null
           ? map['browserTabs'] as List
           : const Settings.defaultSettings().browserTabs!,
