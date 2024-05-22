@@ -46,7 +46,7 @@ class StreamelementsViewController extends GetxController
   Future<void> onInit() async {
     homeViewController = Get.find<HomeViewController>();
 
-    tabController = TabController(length: 2, vsync: this);
+    tabController = TabController(length: 3, vsync: this);
     activitiesScrollController = ScrollController();
     songRequestScrollController = ScrollController();
 
