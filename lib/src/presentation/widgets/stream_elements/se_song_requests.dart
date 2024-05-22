@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_song.dart';
@@ -19,34 +20,37 @@ class SeSongRequests extends GetView {
         margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
         child: Column(
           children: [
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     Wrap(
-            //       children: [
-            //         // const Icon(Icons.skip_previous),
-            //         InkWell(
-            //           onTap: () {
-            //             controller.updatePlayerState(controller.isPlaying.value ? 'pause' : 'play');
-            //           },
-            //           child: controller.isPlaying.value ? const Icon(Icons.pause) : const Icon(Icons.play_arrow_outlined),
-            //         ),
-            //         InkWell(
-            //           onTap: () {
-            //             controller.nextSong();
-            //           },
-            //           child: const Icon(Icons.skip_next),
-            //         ),
-            //       ],
-            //     ),
-            //     InkWell(
-            //       onTap: () {
-            //         controller.resetQueue();
-            //       },
-            //       child: const Icon(Icons.delete),
-            //     ),
-            //   ],
-            // ),
+            Visibility(
+              visible: controller.jwt != null,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Wrap(
+                    children: [
+                      // const Icon(Icons.skip_previous),
+                      InkWell(
+                        onTap: () {
+                          controller.updatePlayerState(controller.isPlaying.value ? 'pause' : 'play');
+                        },
+                        child: controller.isPlaying.value ? const Icon(Icons.pause) : const Icon(Icons.play_arrow_outlined),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          controller.nextSong();
+                        },
+                        child: const Icon(Icons.skip_next),
+                      ),
+                    ],
+                  ),
+                  InkWell(
+                    onTap: () {
+                      controller.resetQueue();
+                    },
+                    child: const Icon(Icons.delete),
+                  ),
+                ],
+              ),
+            ),
             const Padding(
               padding: EdgeInsets.only(top: 10),
             ),
@@ -168,18 +172,18 @@ class SeSongRequests extends GetView {
               ],
             ),
           ),
-          // Visibility(
-          //   visible: removable,
-          //   child: InkWell(
-          //     onTap: () {
-          //       controller.removeSong(song);
-          //     },
-          //     child: const Icon(
-          //       Icons.close,
-          //       color: Colors.red,
-          //     ),
-          //   ),
-          // ),
+          Visibility(
+            visible: controller.jwt != null && removable,
+            child: InkWell(
+              onTap: () {
+                controller.removeSong(song);
+              },
+              child: const Icon(
+                Icons.close,
+                color: Colors.red,
+              ),
+            ),
+          ),
         ],
       ),
     );

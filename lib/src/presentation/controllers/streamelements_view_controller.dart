@@ -74,7 +74,7 @@ class StreamelementsViewController extends GetxController
     if (homeViewController.seMe.value != null) {
       handleGetMe(homeViewController.seMe.value!);
     }
-    if(!isSocketConnected.value) {
+    if (!isSocketConnected.value) {
       connectWebsocket();
     }
   }
@@ -162,6 +162,8 @@ class StreamelementsViewController extends GetxController
       },
     );
 
+    socket!.onAny((event, data) => globals.talker?.debug(data),);
+
     socket!.on(
       'songrequest:song:next',
       (data) => onNextSong(data),
@@ -221,7 +223,9 @@ class StreamelementsViewController extends GetxController
 
   Future<void> onAuthenticated(data) async {
     isSocketConnected.value = true;
-    globals.talker?.info('Connected to StreamElements websocket');
+    socket?.emit('subscribe', {"room": 'songrequest::611168252645244a6f16ab67'});
+    globals.talker?.info('SE WebSocket authenticated.');
+    // socket?.emit('songrequest::mediashare', {"event": 'clients:get', "target": ["control", "widget"], 'data': {'deviceId': "9bbf7619-820ba74f", 'isInControl': false, 'timestamp': 1716348618427}});
   }
 
   void onAddSongQueue(data) {
