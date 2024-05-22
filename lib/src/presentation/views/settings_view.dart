@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -535,7 +537,7 @@ class SettingsView extends GetView<SettingsViewController> {
                 ),
                 const SizedBox(height: 10),
                 Visibility(
-                  visible: kDebugMode ||
+                  visible: Platform.isIOS || kDebugMode ||
                       storeController.storeFound.value &&
                           storeController.products.isNotEmpty,
                   child: StreamElements(controller: controller),

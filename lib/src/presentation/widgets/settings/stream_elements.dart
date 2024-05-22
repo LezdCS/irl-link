@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/presentation/controllers/store_controller.dart';
+import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../controllers/settings_view_controller.dart';
 
@@ -16,133 +16,316 @@ class StreamElements extends GetView {
 
   @override
   Widget build(BuildContext context) {
-    bool isSubscribed = Get.find<StoreController>().isSubscribed();
-    return Obx(
-      () => Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'StreamElements',
-                style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyLarge!.color,
-                  fontSize: 18,
-                ),
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'StreamElements',
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyLarge!.color,
+                fontSize: 18,
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                margin: const EdgeInsets.only(left: 4),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.tertiary,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Wrap(
-                  children: [
-                    Text(
-                      "Premium feature",
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge!.color,
-                        fontSize: 12,
-                      ),
-                    ),
-                    const Icon(
-                      CupertinoIcons.sparkles,
-                      size: 12,
-                      color: Colors.yellow,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 6),
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(
-                Radius.circular(8),
-              ),
-              color: Theme.of(context).colorScheme.secondary,
             ),
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: controller.streamElementsFieldController,
-                  onChanged: (value) {
-                    controller.homeViewController.settings.value = controller
-                        .homeViewController.settings.value
-                        .copyWith(streamElementsAccessToken: value);
-                    controller.saveSettings();
-                  },
-                  obscureText: !controller.seJwtShow.value,
-                  enabled: isSubscribed ? true : false,
-                  decoration: InputDecoration(
-                    isDense: true,
-                    disabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.grey[700]!,
-                      ),
-                    ),
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
-                    hintText: 'StreamElements Access Token',
-                    labelText: isSubscribed
-                        ? 'StreamElements Access Token'
-                        : 'Subscribe to unlock this feature',
-                    labelStyle: TextStyle(
-                      color: Theme.of(context).colorScheme.tertiary,
-                    ),
-                    suffixIcon: IconButton(
-                      icon: Icon(controller.seJwtShow.value
-                          ? Icons.visibility
-                          : Icons.visibility_off),
-                      color: Theme.of(context).primaryIconTheme.color,
-                      onPressed: () {
-                        controller.seJwtShow.value =
-                            !controller.seJwtShow.value;
-                      },
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              margin: const EdgeInsets.only(left: 4),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.tertiary,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Wrap(
+                children: [
+                  Text(
+                    "Premium feature",
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyLarge!.color,
+                      fontSize: 12,
                     ),
                   ),
-                ),
-                const SizedBox(height: 6),
-                RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: 'To get your Access Token ',
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge!.color,
-                        ),
-                      ),
-                      WidgetSpan(
-                        child: InkWell(
-                          onTap: () {
-                            launchUrlString(
-                              "https://streamelements.com/dashboard/account/channels",
-                              mode: LaunchMode.externalApplication,
-                            );
-                          },
-                          child: Text(
-                            "click here",
+                  const Icon(
+                    CupertinoIcons.sparkles,
+                    size: 12,
+                    color: Colors.yellow,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 6),
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(
+              Radius.circular(8),
+            ),
+            color: Theme.of(context).colorScheme.secondary,
+          ),
+          child: Obx(
+            () => Column(
+              children: [
+                controller.homeViewController.seCredentials.value != null &&
+                        controller.homeViewController.seMe.value != null
+                    ? Column(
+                        children: [
+                          _profile(
+                            controller.homeViewController.seMe.value!,
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                flex: 7,
+                                child: TextFormField(
+                                  controller: controller.seJwtInputController,
+                                  obscureText: !controller.seJwtShow.value,
+                                  onChanged: (value) {
+                                    controller
+                                            .homeViewController.settings.value =
+                                        controller
+                                            .homeViewController.settings.value
+                                            .copyWith(
+                                      streamElementsSettings: controller
+                                          .homeViewController
+                                          .settings
+                                          .value
+                                          .streamElementsSettings!
+                                          .copyWith(jwt: value),
+                                    );
+                                    controller.saveSettings();
+                                  },
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .color,
+                                  ),
+                                  decoration: InputDecoration(
+                                    isDense: true,
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 7),
+                                    enabledBorder: Theme.of(context)
+                                        .inputDecorationTheme
+                                        .border,
+                                    hintText: 'JWT',
+                                    labelText: 'JWT',
+                                    labelStyle: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .tertiary,
+                                    ),
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                          controller.obsWebsocketUrlShow.value
+                                              ? Icons.visibility
+                                              : Icons.visibility_off),
+                                      color: Theme.of(context)
+                                          .primaryIconTheme
+                                          .color,
+                                      onPressed: () {
+                                        controller.obsWebsocketUrlShow.value =
+                                            !controller
+                                                .obsWebsocketUrlShow.value;
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          _jwtExplanation(context),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                flex: 7,
+                                child: TextFormField(
+                                  controller:
+                                      controller.seOverlayTokenInputController,
+                                  obscureText:
+                                      !controller.seOverlayTokenShow.value,
+                                  onChanged: (value) {
+                                    controller
+                                            .homeViewController.settings.value =
+                                        controller
+                                            .homeViewController.settings.value
+                                            .copyWith(
+                                      streamElementsSettings: controller
+                                          .homeViewController
+                                          .settings
+                                          .value
+                                          .streamElementsSettings!
+                                          .copyWith(overlayToken: value),
+                                    );
+                                    controller.saveSettings();
+                                  },
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .color,
+                                  ),
+                                  decoration: InputDecoration(
+                                    isDense: true,
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 7),
+                                    enabledBorder: Theme.of(context)
+                                        .inputDecorationTheme
+                                        .border,
+                                    hintText: 'Token',
+                                    labelText: 'Overlay Token',
+                                    labelStyle: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .tertiary,
+                                    ),
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                          controller.obsWebsocketUrlShow.value
+                                              ? Icons.visibility
+                                              : Icons.visibility_off),
+                                      color: Theme.of(context)
+                                          .primaryIconTheme
+                                          .color,
+                                      onPressed: () {
+                                        controller.obsWebsocketUrlShow.value =
+                                            !controller
+                                                .obsWebsocketUrlShow.value;
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            'Same as above for the overlay token',
                             style: TextStyle(
-                              color: Theme.of(context).colorScheme.tertiary,
+                              color:
+                                  Theme.of(context).textTheme.bodyLarge!.color,
                             ),
                           ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(8),
+                              ),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .tertiaryContainer,
+                            ),
+                            padding: const EdgeInsets.only(top: 8, bottom: 8),
+                            child: InkWell(
+                              onTap: (() =>
+                                  {controller.disconnectStreamElements()}),
+                              child: const Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image(
+                                    image: AssetImage(
+                                        "lib/assets/streamelements/seLogo.png"),
+                                    width: 30,
+                                  ),
+                                  SizedBox(
+                                    width: 12,
+                                  ),
+                                  Text(
+                                    'Logout',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : InkWell(
+                        onTap: (() => {controller.loginStreamElements()}),
+                        child: const Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image(
+                              image: AssetImage(
+                                  "lib/assets/streamelements/seLogo.png"),
+                              width: 30,
+                            ),
+                            SizedBox(
+                              width: 12,
+                            ),
+                            Text(
+                              'Login with StreamElements',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ],
                         ),
                       ),
-                      TextSpan(
-                        text:
-                            '. Then press "Show Secret" and copy your JWT Token!',
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge!.color,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
               ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _profile(SeMe me) {
+    return Row(
+      children: [
+        CircleAvatar(
+          foregroundImage: NetworkImage(me.avatar),
+          radius: 20,
+        ),
+        const SizedBox(
+          width: 8,
+        ),
+        Text(me.displayName),
+      ],
+    );
+  }
+
+  Widget _jwtExplanation(BuildContext context) {
+    return RichText(
+      textAlign: TextAlign.center,
+      text: TextSpan(
+        children: [
+          TextSpan(
+            text: 'To get your Access Token ',
+            style: TextStyle(
+              color: Theme.of(context).textTheme.bodyLarge!.color,
+            ),
+          ),
+          WidgetSpan(
+            child: InkWell(
+              onTap: () {
+                launchUrlString(
+                  "https://streamelements.com/dashboard/account/channels",
+                  mode: LaunchMode.externalApplication,
+                );
+              },
+              child: Text(
+                "click here",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.tertiary,
+                ),
+              ),
+            ),
+          ),
+          TextSpan(
+            text: '. Then press "Show Secret" and copy your JWT Token!',
+            style: TextStyle(
+              color: Theme.of(context).textTheme.bodyLarge!.color,
             ),
           ),
         ],

@@ -2,19 +2,23 @@ import 'package:dio/dio.dart';
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
+import 'package:irllink/src/domain/entities/stream_elements/se_credentials.dart';
+import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
 import 'package:irllink/src/domain/usecases/settings_usecase.dart';
+import 'package:irllink/src/domain/usecases/streamelements_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch_usecase.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 
 class HomeEvents {
   final TwitchUseCase twitchUseCase;
   final SettingsUseCase settingsUseCase;
+  final StreamelementsUseCase streamelementsUseCase;
 
-  HomeEvents({required this.twitchUseCase, required this.settingsUseCase});
+  HomeEvents({required this.twitchUseCase, required this.settingsUseCase, required this.streamelementsUseCase});
 
   Future<DataState<TwitchCredentials>> getTwitchFromLocal() {
     return twitchUseCase.getTwitchFromLocal();
@@ -39,6 +43,20 @@ class HomeEvents {
     required TwitchCredentials twitchData,
   }) {
     return twitchUseCase.refreshAccessToken(twitchData: twitchData);
+  }
+
+  Future<DataState<SeCredentials>> refreshSeAccessToken({
+    required SeCredentials seCredentials,
+  }) {
+    return streamelementsUseCase.refreshAccessToken(seCredentials: seCredentials);
+  }
+
+  Future<DataState<SeCredentials>> getSeCredentialsFromLocal() {
+    return streamelementsUseCase.getSeCredentialsFromLocal();
+  }
+
+   Future<DataState<SeMe>> getSeMe(String token) {
+    return streamelementsUseCase.getMe(token);
   }
 
   Future<DataState<TwitchStreamInfos>> getStreamInfo(

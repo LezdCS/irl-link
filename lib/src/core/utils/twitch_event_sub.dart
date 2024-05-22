@@ -139,7 +139,7 @@ class TwitchEventSub {
   }
 
   void _onDone() {
-    globals.talker?.debug("Twitch Sub Event: Connection closed");
+    globals.talker?.info("Twitch Sub Event: Connection closed");
     close();
   }
 

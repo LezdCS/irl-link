@@ -2,10 +2,15 @@ import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
+import 'package:irllink/src/domain/entities/stream_elements/se_credentials.dart';
+import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
+import 'package:irllink/src/domain/usecases/streamelements_usecase.dart';
 import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/store_controller.dart';
@@ -38,7 +43,7 @@ class HomeViewController extends GetxController
   SplitViewController? splitViewController =
       SplitViewController(limits: [null, WeightLimit(min: 0.12, max: 0.92)]);
 
-  //TABS
+  // Tabs
   late TabController tabController;
   Rx<int> tabIndex = 0.obs;
   RxList<Widget> tabElements = <Widget>[].obs;
@@ -46,14 +51,18 @@ class HomeViewController extends GetxController
 
   TwitchCredentials? twitchData;
 
-  //chat input
+  // StreamElements
+  Rxn<SeCredentials> seCredentials = Rxn<SeCredentials>();
+  Rxn<SeMe> seMe = Rxn<SeMe>();
+  StreamelementsViewController? streamelementsViewController;
+
+  // Chat input
   late TextEditingController chatInputController;
   RxList<Emote> twitchEmotes = <Emote>[].obs;
 
-  //emote picker
+  // Emote picker
   RxBool isPickingEmote = false.obs;
   ObsTabViewController? obsTabViewController;
-  StreamelementsViewController? streamelementsViewController;
 
   late Rx<Settings> settings = const Settings.defaultSettings().obs;
 
@@ -63,6 +72,7 @@ class HomeViewController extends GetxController
 
   RxBool displayDashboard = false.obs;
 
+  // Chats
   RxList<ChatView> channels = <ChatView>[].obs;
   ChatGroup? selectedChatGroup;
   int? selectedChatIndex;
@@ -83,14 +93,23 @@ class HomeViewController extends GetxController
 
       twitchData = Get.arguments[0];
 
-      timerRefreshToken = Timer.periodic(
-        const Duration(seconds: 13000),
-        (Timer t) => homeEvents
-            .refreshAccessToken(twitchData: twitchData!)
-            .then((value) => {
-                  if (value.error == null) {twitchData = value.data!}
-                }),
-      );
+      await setStreamElementsCredentials();
+
+      timerRefreshToken =
+          Timer.periodic(const Duration(seconds: 13000), (Timer t) {
+        homeEvents.refreshAccessToken(twitchData: twitchData!).then((value) => {
+              if (value.error == null) {twitchData = value.data!}
+            });
+
+        if (seCredentials.value != null) {
+          homeEvents
+              .refreshSeAccessToken(seCredentials: seCredentials.value!)
+              .then((value) => {
+                    if (value.error == null)
+                      {seCredentials.value = value.data!}
+                  });
+        }
+      });
     }
     await getSettings();
 
@@ -107,6 +126,23 @@ class HomeViewController extends GetxController
     super.onClose();
   }
 
+  Future<void> setStreamElementsCredentials() async {
+    DataState<SeCredentials> seCreds =
+        await homeEvents.getSeCredentialsFromLocal();
+    if (seCreds.error == null) {
+      seCredentials.value = seCreds.data!;
+      await setSeMe(seCredentials.value!);
+    }
+  }
+
+  Future<void> setSeMe(SeCredentials seCreds) async {
+    DataState<SeMe> seMeResult =
+        await homeEvents.getSeMe(seCredentials.value!.accessToken);
+    if (seMeResult.error == null) {
+      seMe.value = seMeResult.data!;
+    }
+  }
+
   void lazyPutChat(ChatGroup chatGroup) {
     Get.lazyPut(
       () => ChatViewController(
@@ -116,6 +152,9 @@ class HomeViewController extends GetxController
           ),
           settingsUseCase: SettingsUseCase(
             settingsRepository: SettingsRepositoryImpl(),
+          ),
+          streamelementsUseCase: StreamelementsUseCase(
+            streamelementsRepository: StreamelementsRepositoryImpl(),
           ),
         ),
         chatGroup: chatGroup,
@@ -132,9 +171,7 @@ class HomeViewController extends GetxController
 
     bool isSubscribed = Get.find<StoreController>().isSubscribed();
     if ((twitchData == null && isSubscribed) ||
-        isSubscribed &&
-            settings.value.streamElementsAccessToken != null &&
-            settings.value.streamElementsAccessToken!.isNotEmpty) {
+        isSubscribed && seCredentials.value != null) {
       streamelementsViewController = Get.find<StreamelementsViewController>();
       StreamelementsTabView streamelementsPage = const StreamelementsTabView();
       tabElements.add(streamelementsPage);
@@ -193,7 +230,7 @@ class HomeViewController extends GetxController
     }
 
     for (var temp in chatViews) {
-      if(temp.chatGroup.id == '1') {
+      if (temp.chatGroup.id == '1') {
         continue;
       }
       ChatView view = channels

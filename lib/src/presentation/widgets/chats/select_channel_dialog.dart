@@ -17,7 +17,7 @@ class SelectChannelDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 200,
       height: 60,
       child: ListView.separated(

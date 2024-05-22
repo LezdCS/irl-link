@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
+import 'package:irllink/src/core/params/streamelements_auth_params.dart';
+import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/store_controller.dart';
 import 'package:irllink/src/presentation/controllers/tts_controller.dart';
 import 'package:irllink/src/presentation/events/settings_events.dart';
+import 'package:irllink/src/presentation/events/streamelements_events.dart';
 
 import '../../domain/entities/twitch/twitch_user.dart';
 
 class SettingsViewController extends GetxController {
-  SettingsViewController({required this.settingsEvents});
+  SettingsViewController(
+      {required this.settingsEvents, required this.streamelementsEvents});
 
   final SettingsEvents settingsEvents;
+  final StreamelementsEvents streamelementsEvents;
 
   late TextEditingController alternateChannelChatController;
   late TextEditingController obsWebsocketUrlFieldController;
   late TextEditingController obsWebsocketPasswordFieldController;
-  late TextEditingController streamElementsFieldController;
   late TextEditingController addBrowserTitleController;
   late TextEditingController addBrowserUrlController;
   late TextEditingController addHiddenUsernameController;
@@ -32,6 +36,9 @@ class SettingsViewController extends GetxController {
   RxBool obsWebsocketPasswordShow = false.obs;
   RxBool obsWebsocketUrlShow = false.obs;
   RxBool seJwtShow = false.obs;
+  RxBool seOverlayTokenShow = false.obs;
+  late TextEditingController seJwtInputController;
+  late TextEditingController seOverlayTokenInputController;
 
   late TextEditingController addTtsIgnoredUsersController;
   late TextEditingController addTtsIgnoredPrefixsController;
@@ -49,7 +56,6 @@ class SettingsViewController extends GetxController {
     storeController = Get.find<StoreController>();
 
     obsWebsocketUrlFieldController = TextEditingController();
-    streamElementsFieldController = TextEditingController();
     obsWebsocketPasswordFieldController = TextEditingController();
     addBrowserTitleController = TextEditingController();
     addBrowserUrlController = TextEditingController();
@@ -57,6 +63,8 @@ class SettingsViewController extends GetxController {
     addTtsIgnoredUsersController = TextEditingController();
     addTtsIgnoredPrefixsController = TextEditingController();
     addTtsAllowedPrefixsController = TextEditingController();
+    seJwtInputController = TextEditingController();
+    seOverlayTokenInputController = TextEditingController();
 
     usernamesHiddenUsers = <String>[].obs;
     super.onInit();
@@ -69,8 +77,6 @@ class SettingsViewController extends GetxController {
           homeViewController.settings.value.obsWebsocketUrl!;
       obsWebsocketPasswordFieldController.text =
           homeViewController.settings.value.obsWebsocketPassword!;
-      streamElementsFieldController.text =
-          homeViewController.settings.value.streamElementsAccessToken!;
 
       getUsernames();
     }
@@ -90,22 +96,59 @@ class SettingsViewController extends GetxController {
     Get.offAllNamed(Routes.login);
   }
 
+  Future<void> loginStreamElements() async {
+    StreamelementsAuthParams params = const StreamelementsAuthParams();
+    await streamelementsEvents.login(params: params).then((value) {
+      if (value.error != null) {
+        Get.snackbar(
+          "Error",
+          "Login failed: ${value.error}",
+          snackPosition: SnackPosition.BOTTOM,
+          icon: const Icon(Icons.error_outline, color: Colors.red),
+          borderWidth: 1,
+          borderColor: Colors.red,
+        );
+      } else {
+        homeViewController.setStreamElementsCredentials();
+        homeViewController.seCredentials.refresh();
+        homeViewController.seMe.refresh();
+        Get.snackbar(
+          "StreamElements",
+          "Login successfull",
+          snackPosition: SnackPosition.BOTTOM,
+          icon: const Icon(Icons.check, color: Colors.green),
+          borderWidth: 1,
+          borderColor: Colors.green,
+        );
+      }
+    });
+  }
+
+  Future<void> disconnectStreamElements() async {
+    if (homeViewController.seCredentials.value == null) return;
+    DataState<void> result = await streamelementsEvents
+        .disconnect(homeViewController.seCredentials.value!.accessToken);
+    if (result.error == null) {
+      homeViewController.seCredentials.value = null;
+      homeViewController.seMe.value = null;
+      homeViewController.seCredentials.refresh();
+      homeViewController.seMe.refresh();
+      Get.snackbar(
+        "StreamElements",
+        "Successfully disconnected.",
+        snackPosition: SnackPosition.BOTTOM,
+        icon: const Icon(Icons.check, color: Colors.green),
+        borderWidth: 1,
+        borderColor: Colors.green,
+      );
+    }
+  }
+
   void removeHiddenUser(userId) {
     List hiddenUsersIds = homeViewController.settings.value.hiddenUsersIds!;
     hiddenUsersIds.remove(userId);
     homeViewController.settings.value = homeViewController.settings.value
         .copyWith(hiddenUsersIds: hiddenUsersIds);
-    saveSettings();
-    homeViewController.settings.refresh();
-  }
-
-  void removeChatJoined(channel) {
-    // List channels = homeViewController.settings.value.chatSettings!.chatsJoined;
-    // channels.remove(channel);
-    // homeViewController.settings.value = homeViewController.settings.value
-    //     .copyWith(
-    //         chatSettings: homeViewController.settings.value.chatSettings
-    //             ?.copyWith(chatsJoined: channels));
     saveSettings();
     homeViewController.settings.refresh();
   }

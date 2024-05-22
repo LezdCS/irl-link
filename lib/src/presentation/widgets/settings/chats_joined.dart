@@ -282,7 +282,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
         var uuid = const Uuid();
         ChatGroup newGroup = ChatGroup(
           id: uuid.v4(),
-          channels: [],
+          channels: const [],
         );
         List<ChatGroup>? groups = [];
         groups.addAll(controller

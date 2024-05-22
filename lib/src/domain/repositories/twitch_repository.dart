@@ -19,10 +19,6 @@ abstract class TwitchRepository {
 
   Future<DataState<TwitchCredentials>> getTwitchFromLocal();
 
-  Future<void> setTwitchOnLocal(
-    TwitchCredentials twitchData,
-  );
-
   Future<DataState<String>> logout(
     String accessToken,
   );

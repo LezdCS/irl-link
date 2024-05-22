@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -29,10 +30,12 @@ class StoreController extends GetxController {
 
   //Function isSubscribed
   bool isSubscribed() {
-    return Platform.isIOS || kDebugMode || purchases.firstWhereOrNull(
-          (element) => element.productID == kIds.first,
-        ) !=
-        null;
+    return Platform.isIOS ||
+        kDebugMode ||
+        purchases.firstWhereOrNull(
+              (element) => element.productID == kIds.first,
+            ) !=
+            null;
   }
 
   // Function get subscription price
@@ -122,10 +125,13 @@ class StoreController extends GetxController {
     String? pruchaseToken =
         purchaseDetails.verificationData.serverVerificationData;
     HomeViewController homeViewController = Get.find<HomeViewController>();
+    final remoteConfig = FirebaseRemoteConfig.instance;
+    await remoteConfig.fetchAndActivate();
+    String url = remoteConfig.getString('verify_android_purchase');
     var dio = initDio();
     try {
       await dio.post(
-        'https://www.irllink.com/api/verify-android-purchase',
+        url,
         data: {
           'purchaseToken': pruchaseToken,
           'twitchId': homeViewController.twitchData?.twitchUser.id,
