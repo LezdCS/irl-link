@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
@@ -34,7 +35,8 @@ class StreamelementsViewController extends GetxController
   RxList<SeOverlay> overlays = <SeOverlay>[].obs;
 
   Socket? socket;
-  late String jwt = "";
+  late String? jwt;
+  late String? overlayToken;
 
   RxBool isSocketConnected = false.obs;
 
@@ -60,66 +62,78 @@ class StreamelementsViewController extends GetxController
   }
 
   void replayEvent(SeActivity activity) {
-    streamelementsEvents.replayActivity(jwt, activity);
+    String accessToken = homeViewController.seCredentials.value!.accessToken;
+    streamelementsEvents.replayActivity(accessToken, activity);
   }
 
   Future<void> applySettings() async {
     if (homeViewController.seCredentials.value == null) return;
-    if (jwt != homeViewController.seCredentials.value!.accessToken) {
-      jwt = homeViewController.seCredentials.value!.accessToken;
-      socket?.dispose();
-      socket = null;
-      activities.clear();
-      if (homeViewController.seMe.value != null) {
-        handleGetMe(homeViewController.seMe.value!);
+    jwt = homeViewController.settings.value.streamElementsSettings?.jwt;
+    overlayToken =
+        homeViewController.settings.value.streamElementsSettings?.overlayToken;
+    socket?.dispose();
+    socket = null;
+    activities.clear();
+    if (homeViewController.seMe.value != null) {
+      handleGetMe(homeViewController.seMe.value!);
+    }
+    connectWebsocket();
+  }
+
+  Future<void> handleGetMe(SeMe me) async {
+    userSeProfile = me;
+    String? accessToken = homeViewController.seCredentials.value?.accessToken;
+    if (accessToken == null) {
+      globals.talker?.error('There is no accessToken to use for SE api calls.');
+      return;
+    }
+
+    streamelementsEvents
+        .getOverlays(accessToken, me.id)
+        .then((value) => overlays.value = value.data ?? []);
+    streamelementsEvents
+        .getLastActivities(accessToken, me.id)
+        .then((value) => activities.value = value.data ?? []);
+    streamelementsEvents
+        .getSongPlaying(accessToken, me.id)
+        .then((value) => currentSong.value = value.data);
+
+    if (jwt != null) {
+      DataState<List<SeSong>> songQueue =
+          await streamelementsEvents.getSongQueue(jwt!, me.id);
+      if (songQueue.error == null) {
+        songRequestQueue.value = songQueue.data ?? [];
       }
-      connectWebsocket();
     }
   }
 
-  void handleGetMe(SeMe me) {
-    userSeProfile = me;
-    streamelementsEvents
-        .getOverlays(jwt, me.id)
-        .then((value) => overlays.value = value.data!);
-    streamelementsEvents
-        .getLastActivities(jwt, me.id)
-        .then((value) => activities.value = value.data!);
-    streamelementsEvents.getSongQueue(jwt, me.id).then((value) => {
-          if (value.error == null) {songRequestQueue.value = value.data!}
-        });
-    streamelementsEvents
-        .getSongPlaying(jwt, me.id)
-        .then((value) => currentSong.value = value.data!);
-  }
-
   void updatePlayerState(String state) {
-    if (userSeProfile == null) return;
-    streamelementsEvents.updatePlayerState(jwt, userSeProfile!.id, state);
+    if (userSeProfile == null || jwt == null) return;
+    streamelementsEvents.updatePlayerState(jwt!, userSeProfile!.id, state);
   }
 
   void nextSong() {
-    if (userSeProfile == null) return;
-    streamelementsEvents.nextSong(jwt, userSeProfile!.id);
+    if (userSeProfile == null || jwt == null) return;
+    streamelementsEvents.nextSong(jwt!, userSeProfile!.id);
   }
 
   void removeSong(SeSong song) {
-    if (userSeProfile == null) return;
-    streamelementsEvents.removeSong(jwt, userSeProfile!.id, song.id);
+    if (userSeProfile == null || jwt == null) return;
+    streamelementsEvents.removeSong(jwt!, userSeProfile!.id, song.id);
   }
 
   void resetQueue() {
-    if (userSeProfile == null) return;
-    streamelementsEvents.resetQueue(jwt, userSeProfile!.id);
+    if (userSeProfile == null || jwt == null) return;
+    streamelementsEvents.resetQueue(jwt!, userSeProfile!.id);
   }
 
   /// Connect to WebSocket
   Future<void> connectWebsocket() async {
-    socket = io('https://realtime.streamelements.com',
+    socket = io(
+        'https://realtime.streamelements.com',
         OptionBuilder().setTransports(['websocket'])
-        // .disableAutoConnect()
-        .build()
-        );
+            // .disableAutoConnect()
+            .build());
 
     // socket!.connect();
     socket!.on('connect_error', (data) => onError());
@@ -188,7 +202,12 @@ class StreamelementsViewController extends GetxController
   }
 
   Future<void> onConnect() async {
-    socket?.emit('authenticate', {"method": 'oauth2', "token": jwt});
+    String? accessToken = homeViewController.seCredentials.value?.accessToken;
+    if (accessToken != null) {
+      socket?.emit('authenticate', {"method": 'oauth2', "token": accessToken});
+    } else {
+      globals.talker?.error('There is no accessToken to use for SE weboscket.');
+    }
   }
 
   Future<void> onError() async {
