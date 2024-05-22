@@ -103,6 +103,7 @@ class Settings extends Equatable {
       showMerchActivity: true,
       jwt: null,
       overlayToken: null,
+      mutedOverlays: [],
     ),
 
     //TTS SETTINGS

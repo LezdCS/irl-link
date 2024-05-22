@@ -38,7 +38,10 @@ Widget _overlayRow(StreamelementsViewController controller, SeOverlay overlay,
     BuildContext context) {
   String? overlayUrl;
   Widget? webpage;
-  if (controller.overlayToken != null) {
+  bool isMuted = controller
+      .homeViewController.settings.value.streamElementsSettings!.mutedOverlays
+      .contains(overlay.id);
+  if (controller.overlayToken != null && isMuted == false) {
     overlayUrl =
         'https://streamelements.com/overlay/${overlay.id}/${controller.overlayToken}';
     webpage = WebPageView(overlay.name, overlayUrl);
@@ -70,7 +73,8 @@ Widget _overlayRow(StreamelementsViewController controller, SeOverlay overlay,
                             cancelTextColor: const Color(0xFF9147ff),
                             textCancel: "return".tr,
                             radius: 10,
-                            content: SizedBox(width:384, height: 216, child: webpage!),
+                            content: SizedBox(
+                                width: 384, height: 216, child: webpage!),
                           )
                         }),
                     child: const Icon(Icons.preview),
@@ -80,12 +84,27 @@ Widget _overlayRow(StreamelementsViewController controller, SeOverlay overlay,
               width: 10,
             ),
             InkWell(
-              onTap: (() => {}),
-              child: Icon(Icons.volume_up),
+              onTap: () {
+                List<String> mutedList = controller.homeViewController.settings
+                    .value.streamElementsSettings!.mutedOverlays;
+                if (isMuted) {
+                  mutedList.removeWhere((element) => element == overlay.id);
+                } else {
+                  mutedList.add(overlay.id);
+                }
+                controller.homeViewController.settings.value =
+                    controller.homeViewController.settings.value.copyWith(
+                        streamElementsSettings: controller.homeViewController
+                            .settings.value.streamElementsSettings!
+                            .copyWith(mutedOverlays: mutedList));
+                controller.homeViewController.saveSettings();
+                controller.overlays.refresh();
+              },
+              child: Icon(isMuted ? Icons.volume_mute : Icons.volume_up),
             ),
           ],
         ),
-        webpage != null
+        controller.overlayToken != null
             ? SizedBox(width: 0, height: 0, child: webpage)
             : Container(),
       ],

@@ -10,6 +10,7 @@ class StreamElementsSettings extends Equatable {
   final bool showMerchActivity;
   final String? jwt;
   final String? overlayToken;
+  final List<String> mutedOverlays;
 
   const StreamElementsSettings({
     required this.showFollowerActivity,
@@ -21,6 +22,7 @@ class StreamElementsSettings extends Equatable {
     required this.showMerchActivity,
     required this.jwt,
     required this.overlayToken,
+    required this.mutedOverlays,
   });
 
   @override
@@ -35,6 +37,7 @@ class StreamElementsSettings extends Equatable {
       showMerchActivity,
       jwt,
       overlayToken,
+      mutedOverlays,
     ];
   }
 
@@ -48,6 +51,7 @@ class StreamElementsSettings extends Equatable {
         'showMerchActivity': showMerchActivity,
         'jwt': jwt,
         'overlayToken': overlayToken,
+        'mutedOverlays': mutedOverlays,
       };
 
   @override
@@ -63,6 +67,7 @@ class StreamElementsSettings extends Equatable {
     bool? showMerchActivity,
     String? jwt,
     String? overlayToken,
+    List<String>? mutedOverlays,
   }) {
     return StreamElementsSettings(
       showFollowerActivity: showFollowerActivity ?? this.showFollowerActivity,
@@ -75,6 +80,7 @@ class StreamElementsSettings extends Equatable {
       showMerchActivity: showMerchActivity ?? this.showMerchActivity,
       jwt: jwt ?? this.jwt,
       overlayToken: overlayToken ?? this.overlayToken,
+      mutedOverlays: mutedOverlays ?? this.mutedOverlays,
     );
   }
 }
