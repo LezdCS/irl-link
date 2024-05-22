@@ -223,9 +223,8 @@ class StreamelementsViewController extends GetxController
 
   Future<void> onAuthenticated(data) async {
     isSocketConnected.value = true;
-    socket?.emit('subscribe', {"room": 'songrequest::611168252645244a6f16ab67'});
+    // socket?.emit('subscribe', {"room": 'songrequest::611168252645244a6f16ab67'});
     globals.talker?.info('SE WebSocket authenticated.');
-    // socket?.emit('songrequest::mediashare', {"event": 'clients:get', "target": ["control", "widget"], 'data': {'deviceId': "9bbf7619-820ba74f", 'isInControl': false, 'timestamp': 1716348618427}});
   }
 
   void onAddSongQueue(data) {
