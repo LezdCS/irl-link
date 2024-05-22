@@ -26,7 +26,7 @@ class SeOverlays extends GetView {
           ),
           itemBuilder: (BuildContext context, int index) {
             SeOverlay overlay = controller.overlays[index];
-            return _overlayCollapsed(controller, overlay, context);
+            return _overlayRow(controller, overlay, context);
           },
         ),
       ),
@@ -34,7 +34,7 @@ class SeOverlays extends GetView {
   }
 }
 
-Widget _overlayCollapsed(StreamelementsViewController controller,
+Widget _overlayRow(StreamelementsViewController controller,
     SeOverlay overlay, BuildContext context) {
   String overlayUrl =
       'https://streamelements.com/overlay/${overlay.id}/${controller.overlayToken}';
@@ -51,10 +51,18 @@ Widget _overlayCollapsed(StreamelementsViewController controller,
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(overlay.name),
+            Expanded(
+              child: Text(overlay.name),
+            ),
             InkWell(
               onTap: (() => {}),
-              // child: Icon(Icons.volume_off),
+              child: Icon(Icons.preview),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            InkWell(
+              onTap: (() => {}),
               child: Icon(Icons.volume_up),
             ),
           ],
