@@ -71,13 +71,12 @@ class StreamelementsViewController extends GetxController
     jwt = homeViewController.settings.value.streamElementsSettings?.jwt;
     overlayToken =
         homeViewController.settings.value.streamElementsSettings?.overlayToken;
-    socket?.dispose();
-    socket = null;
-    activities.clear();
     if (homeViewController.seMe.value != null) {
       handleGetMe(homeViewController.seMe.value!);
     }
-    connectWebsocket();
+    if(!isSocketConnected.value) {
+      connectWebsocket();
+    }
   }
 
   Future<void> handleGetMe(SeMe me) async {
