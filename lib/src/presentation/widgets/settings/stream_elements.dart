@@ -85,12 +85,18 @@ class StreamElements extends GetView {
                                   controller: controller.seJwtInputController,
                                   obscureText: !controller.seJwtShow.value,
                                   onChanged: (value) {
-                                    //TODO: edit JWT in SE local settings
-
-                                    // controller.homeViewController.settings.value =
-                                    //     controller
-                                    //         .homeViewController.settings.value
-                                    //         .copyWith(obsWebsocketUrl: value);
+                                    controller
+                                            .homeViewController.settings.value =
+                                        controller
+                                            .homeViewController.settings.value
+                                            .copyWith(
+                                      streamElementsSettings: controller
+                                          .homeViewController
+                                          .settings
+                                          .value
+                                          .streamElementsSettings!
+                                          .copyWith(jwt: value),
+                                    );
                                     controller.saveSettings();
                                   },
                                   style: TextStyle(
@@ -147,12 +153,18 @@ class StreamElements extends GetView {
                                   obscureText:
                                       !controller.seOverlayTokenShow.value,
                                   onChanged: (value) {
-                                    //TODO: edit overlayToken in SE local settings
-
-                                    // controller.homeViewController.settings.value =
-                                    //     controller
-                                    //         .homeViewController.settings.value
-                                    //         .copyWith(obsWebsocketUrl: value);
+                                    controller
+                                            .homeViewController.settings.value =
+                                        controller
+                                            .homeViewController.settings.value
+                                            .copyWith(
+                                      streamElementsSettings: controller
+                                          .homeViewController
+                                          .settings
+                                          .value
+                                          .streamElementsSettings!
+                                          .copyWith(overlayToken: value),
+                                    );
                                     controller.saveSettings();
                                   },
                                   style: TextStyle(

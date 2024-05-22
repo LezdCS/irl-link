@@ -282,7 +282,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
   Future<void> nextSong(String token, String userId) async {
     var dio = initDio();
     try {
-      dio.options.headers["Authorization"] = "oAuth $token";
+      dio.options.headers["Authorization"] = "Bearer $token";
       await dio.post(
         'https://api.streamelements.com/kappa/v2/songrequest/$userId/skip',
       );
@@ -295,7 +295,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
   Future<void> removeSong(String token, String userId, String songId) async {
     var dio = initDio();
     try {
-      dio.options.headers["Authorization"] = "oAuth $token";
+      dio.options.headers["Authorization"] = "Bearer $token";
       await dio.delete(
         'https://api.streamelements.com/kappa/v2/songrequest/$userId/queue/$songId',
       );
@@ -308,7 +308,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
   Future<void> resetQueue(String token, String userId) async {
     var dio = initDio();
     try {
-      dio.options.headers["Authorization"] = "oAuth $token";
+      dio.options.headers["Authorization"] = "Bearer $token";
       await dio.delete(
         'https://api.streamelements.com/kappa/v2/songrequest/$userId/queue/',
       );
@@ -323,7 +323,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
     List<SeSong> songs = [];
     var dio = initDio();
     try {
-      dio.options.headers["Authorization"] = "oAuth $token";
+      dio.options.headers["Authorization"] = "Bearer $token";
       Response response = await dio.get(
         'https://api.streamelements.com/kappa/v2/songrequest/$userId/queue',
       );
@@ -374,7 +374,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       String token, String userId, String state) async {
     var dio = initDio();
     try {
-      dio.options.headers["Authorization"] = "oAuth $token";
+      dio.options.headers["Authorization"] = "Bearer $token";
       await dio.post(
         'https://api.streamelements.com/kappa/v2/songrequest/$userId/player/$state',
       );

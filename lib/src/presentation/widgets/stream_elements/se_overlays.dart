@@ -34,10 +34,15 @@ class SeOverlays extends GetView {
   }
 }
 
-Widget _overlayRow(StreamelementsViewController controller,
-    SeOverlay overlay, BuildContext context) {
-  String overlayUrl =
-      'https://streamelements.com/overlay/${overlay.id}/${controller.overlayToken}';
+Widget _overlayRow(StreamelementsViewController controller, SeOverlay overlay,
+    BuildContext context) {
+  String? overlayUrl;
+  Widget? webpage;
+  if (controller.overlayToken != null) {
+    overlayUrl =
+        'https://streamelements.com/overlay/${overlay.id}/${controller.overlayToken}';
+    webpage = WebPageView(overlay.name, overlayUrl);
+  }
   return Container(
     decoration: BoxDecoration(
       color: Theme.of(context).colorScheme.secondary,
@@ -54,10 +59,23 @@ Widget _overlayRow(StreamelementsViewController controller,
             Expanded(
               child: Text(overlay.name),
             ),
-            InkWell(
-              onTap: (() => {}),
-              child: Icon(Icons.preview),
-            ),
+            webpage != null
+                ? InkWell(
+                    onTap: (() => {
+                          Get.defaultDialog(
+                            title: 'Overlay',
+                            titleStyle: const TextStyle(color: Colors.white),
+                            backgroundColor: const Color(0xFF0e0e10),
+                            buttonColor: const Color(0xFF9147ff),
+                            cancelTextColor: const Color(0xFF9147ff),
+                            textCancel: "return".tr,
+                            radius: 10,
+                            content: SizedBox(width:384, height: 216, child: webpage!),
+                          )
+                        }),
+                    child: const Icon(Icons.preview),
+                  )
+                : Container(),
             const SizedBox(
               width: 10,
             ),
@@ -67,10 +85,9 @@ Widget _overlayRow(StreamelementsViewController controller,
             ),
           ],
         ),
-        Visibility(
-          visible: false,
-          child: WebPageView(overlay.name, overlayUrl),
-        ),
+        webpage != null
+            ? SizedBox(width: 0, height: 0, child: webpage)
+            : Container(),
       ],
     ),
   );

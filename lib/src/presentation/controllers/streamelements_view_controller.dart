@@ -240,7 +240,7 @@ class StreamelementsViewController extends GetxController
 
   void onNextSong(data) {
     dynamic songData = data[0]["nextSong"];
-    if (songData == {}) return;
+    if (songData == null || songData == {}) return;
     SeSong song = SeSong.fromJson(songData);
     currentSong.value = song;
     if (song.id != '') {
