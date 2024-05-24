@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/dashboard_event.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
@@ -82,6 +83,48 @@ String getSupportedEventString(SupportedEvents event) {
     //   return 'Twitch End Poll';
     default:
       return 'Unknown';
+  }
+}
+
+Widget? getSupportedEventIcon(SupportedEvents event) {
+  switch (event) {
+    case SupportedEvents.none:
+      return null;
+    case SupportedEvents.obsStreamStart:
+      return null;
+    case SupportedEvents.obsStreamStop:
+      return null;
+    case SupportedEvents.obsRecordToggle:
+      return null;
+    case SupportedEvents.twitchChatMessage:
+      return const Image(
+        image: AssetImage("lib/assets/twitch/twitch_logo.png"),
+        width: 16,
+      );
+    // case SupportedEvents.twitchFollowerOnly:
+    //   return Icon(Icons.person);
+    // case SupportedEvents.twitchSubOnly:
+    //   return Icon(Icons.star);
+    // case SupportedEvents.twitchEmoteOnly:
+    //   return Icon(Icons.emoji_emotions);
+    // case SupportedEvents.twitchSlowMode:
+    //   return Icon(Icons.timer);
+    // case SupportedEvents.twitchCreatePrediction:
+    //   return Icon(Icons.poll);
+    // case SupportedEvents.twitchLockPrediction:
+    //   return Icon(Icons.lock);
+    // case SupportedEvents.twitchEndPrediction:
+    //   return Icon(Icons.done);
+    // case SupportedEvents.twitchCancelPrediction:
+    //   return Icon(Icons.cancel);
+    // case SupportedEvents.twitchCreatePoll:
+    //   return Icon(Icons.poll);
+    // case SupportedEvents.twitchCancelPoll:
+    //   return Icon(Icons.cancel);
+    // case SupportedEvents.twitchEndPoll:
+    //   return Icon(Icons.done);
+    default:
+      return null;
   }
 }
 
