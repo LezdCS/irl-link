@@ -42,7 +42,7 @@ class HomeView extends GetView<HomeViewController> {
       },
       child: AnnotatedRegion(
         value: SystemUiOverlayStyle(
-          systemNavigationBarColor: Theme.of(context).colorScheme.background,
+          systemNavigationBarColor: Theme.of(context).colorScheme.surface,
         ),
         child: Scaffold(
           resizeToAvoidBottomInset: true,
@@ -78,7 +78,7 @@ class HomeView extends GetView<HomeViewController> {
                 child: Container(
                   constraints: const BoxConstraints.expand(),
                   decoration: BoxDecoration(
-                    color: context.theme.colorScheme.background,
+                    color: context.theme.colorScheme.surface,
                   ),
                   child: SafeArea(
                     child: Stack(
@@ -162,7 +162,7 @@ class HomeView extends GetView<HomeViewController> {
 
   Widget _top(BuildContext context, double height, double width) {
     return Container(
-      color: Theme.of(context).colorScheme.background,
+      color: Theme.of(context).colorScheme.surface,
       child: Column(
         children: [
           _tabBar(context, height, width),
@@ -174,7 +174,7 @@ class HomeView extends GetView<HomeViewController> {
 
   Widget _bottom(BuildContext context, double height, double width) {
     return Container(
-      color: Theme.of(context).colorScheme.background,
+      color: Theme.of(context).colorScheme.surface,
       child: Stack(
         children: [
           Listener(
@@ -300,7 +300,8 @@ class HomeView extends GetView<HomeViewController> {
                             twitchChats.addAll(
                                 chatViewController.twitchChats.toList());
                             if (twitchChats.length == 1) {
-                              controller.sendChatMessage(value, twitchChats.first.channel);
+                              controller.sendChatMessage(
+                                  value, twitchChats.first.channel);
                               controller.chatInputController.text = '';
                               FocusScope.of(context).unfocus();
                             } else {
@@ -345,7 +346,8 @@ class HomeView extends GetView<HomeViewController> {
                               .addAll(chatViewController.twitchChats.toList());
                           if (twitchChats.length == 1) {
                             controller.sendChatMessage(
-                                controller.chatInputController.text, twitchChats.first.channel);
+                                controller.chatInputController.text,
+                                twitchChats.first.channel);
                             controller.chatInputController.text = '';
                             FocusScope.of(context).unfocus();
                           } else {
@@ -381,12 +383,12 @@ class HomeView extends GetView<HomeViewController> {
                           Get.dialog(
                             AlertDialog(
                               backgroundColor:
-                                  Theme.of(context).colorScheme.background,
+                                  Theme.of(context).colorScheme.surface,
                               surfaceTintColor:
-                                  Theme.of(context).colorScheme.background,
+                                  Theme.of(context).colorScheme.surface,
                               content: Container(
                                 width: width,
-                                color: Theme.of(context).colorScheme.background,
+                                color: Theme.of(context).colorScheme.surface,
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -432,12 +434,12 @@ class HomeView extends GetView<HomeViewController> {
                           Get.dialog(
                             AlertDialog(
                               backgroundColor:
-                                  Theme.of(context).colorScheme.background,
+                                  Theme.of(context).colorScheme.surface,
                               surfaceTintColor:
-                                  Theme.of(context).colorScheme.background,
+                                  Theme.of(context).colorScheme.surface,
                               content: Container(
                                 width: width,
-                                color: Theme.of(context).colorScheme.background,
+                                color: Theme.of(context).colorScheme.surface,
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -514,7 +516,7 @@ class HomeView extends GetView<HomeViewController> {
   Widget _tabs(BuildContext context) {
     return Expanded(
       child: Container(
-        color: Theme.of(context).colorScheme.background,
+        color: Theme.of(context).colorScheme.surface,
         child: IndexedStack(
           index: controller.tabIndex.value,
           children: List<Widget>.generate(
@@ -565,7 +567,7 @@ class HomeView extends GetView<HomeViewController> {
   Widget _chats(BuildContext context) {
     return Expanded(
       child: Container(
-        color: Theme.of(context).colorScheme.background,
+        color: Theme.of(context).colorScheme.surface,
         child: TabBarView(
           physics: const NeverScrollableScrollPhysics(),
           controller: controller.chatTabsController,

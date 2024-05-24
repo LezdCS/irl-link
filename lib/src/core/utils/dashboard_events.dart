@@ -132,7 +132,8 @@ Map<SupportedEvents, ExistingDashboardEvent> dashboardEvents = {
     provider: DashboardActionsProvider.twitch,
     actionsAllowed: [DashboardActionsTypes.button],
     action: (String v) {
-      String channel = Get.find<HomeViewController>().twitchData!.twitchUser.login;
+      String channel =
+          Get.find<HomeViewController>().twitchData!.twitchUser.login;
       Get.find<HomeViewController>()
           .sendChatMessage(v.substring(1, v.length - 1), channel);
     },

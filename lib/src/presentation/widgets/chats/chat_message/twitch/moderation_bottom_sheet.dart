@@ -50,9 +50,11 @@ class ModerationBottomSheet extends StatelessWidget {
                     onTap: () => launchUrl(
                       Uri(
                         scheme: "https",
-                        host: message.platform == Platform.twitch ? "twitch.tv" : 'kick.com',
-                        path: controller.homeViewController.selectedMessage
-                            .value?.username,
+                        host: message.platform == Platform.twitch
+                            ? "twitch.tv"
+                            : 'kick.com',
+                        path: controller
+                            .homeViewController.selectedMessage.value?.username,
                       ),
                       mode: LaunchMode.externalApplication,
                     ),

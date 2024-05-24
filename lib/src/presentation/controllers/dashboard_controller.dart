@@ -10,7 +10,8 @@ class DashboardController extends GetxController {
   // Add a dashboard event
   void addDashboardEvent(DashboardEvent event) {
     List<DashboardEvent> events = [];
-    events.addAll(homeViewController.settings.value.dashboardSettings!.userEvents);
+    events.addAll(
+        homeViewController.settings.value.dashboardSettings!.userEvents);
     events.add(event);
     homeViewController.settings.value =
         homeViewController.settings.value.copyWith(

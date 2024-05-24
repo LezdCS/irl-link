@@ -17,7 +17,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
         () => controller.isConnected.value
             ? Container(
                 padding: const EdgeInsets.only(left: 8, top: 10, right: 8),
-                color: context.theme.colorScheme.background,
+                color: context.theme.colorScheme.surface,
                 child: Column(
                   children: [
                     SizedBox(
@@ -215,7 +215,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
                 ),
               )
             : Container(
-                color: context.theme.colorScheme.background,
+                color: context.theme.colorScheme.surface,
                 child: Column(
                   children: [
                     AlertMessageView(

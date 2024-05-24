@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_song.dart';
@@ -30,9 +29,12 @@ class SeSongRequests extends GetView {
                       // const Icon(Icons.skip_previous),
                       InkWell(
                         onTap: () {
-                          controller.updatePlayerState(controller.isPlaying.value ? 'pause' : 'play');
+                          controller.updatePlayerState(
+                              controller.isPlaying.value ? 'pause' : 'play');
                         },
-                        child: controller.isPlaying.value ? const Icon(Icons.pause) : const Icon(Icons.play_arrow_outlined),
+                        child: controller.isPlaying.value
+                            ? const Icon(Icons.pause)
+                            : const Icon(Icons.play_arrow_outlined),
                       ),
                       InkWell(
                         onTap: () {

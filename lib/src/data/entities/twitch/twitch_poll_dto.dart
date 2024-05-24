@@ -43,7 +43,7 @@ class TwitchPollDTO extends TwitchPoll {
 
     DateFormat df = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     DateTime endsAt = df.parse(map['ends_at'] ?? map['ended_at']);
-    
+
     return TwitchPollDTO(
       id: map['id'],
       title: map['title'],

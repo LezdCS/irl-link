@@ -92,7 +92,7 @@ class SeActivity extends Equatable {
         colors.add(const Color(0xFF2E0219));
         break;
       case ActivityType.unsupported:
-       //background color
+        //background color
         colors.add(const Color(0xFFA47CED));
         //circle color
         colors.add(const Color(0xFF341D5B));
@@ -129,7 +129,7 @@ class SeActivity extends Equatable {
         s = '$amount Hosted viewers';
         break;
       case ActivityType.unsupported:
-       s = 'Unsupported event';
+        s = 'Unsupported event';
         break;
     }
     return s;

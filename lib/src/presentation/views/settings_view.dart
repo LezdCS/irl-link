@@ -81,7 +81,7 @@ class SettingsView extends GetView<SettingsViewController> {
         ),
         body: Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.surface,
           ),
           child: ListView(
             padding:
@@ -145,7 +145,7 @@ class SettingsView extends GetView<SettingsViewController> {
 
   Widget chatSettings(BuildContext context, double width) {
     return Container(
-      color: Theme.of(context).colorScheme.background,
+      color: Theme.of(context).colorScheme.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -316,7 +316,7 @@ class SettingsView extends GetView<SettingsViewController> {
 
   Widget generalSettings(BuildContext context, double width) {
     return Container(
-      color: Theme.of(context).colorScheme.background,
+      color: Theme.of(context).colorScheme.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -480,7 +480,7 @@ class SettingsView extends GetView<SettingsViewController> {
 
   Widget connectionsSettings(BuildContext context, double width) {
     return Container(
-      color: Theme.of(context).colorScheme.background,
+      color: Theme.of(context).colorScheme.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -537,7 +537,8 @@ class SettingsView extends GetView<SettingsViewController> {
                 ),
                 const SizedBox(height: 10),
                 Visibility(
-                  visible: Platform.isIOS || kDebugMode ||
+                  visible: Platform.isIOS ||
+                      kDebugMode ||
                       storeController.storeFound.value &&
                           storeController.products.isNotEmpty,
                   child: StreamElements(controller: controller),
@@ -552,7 +553,7 @@ class SettingsView extends GetView<SettingsViewController> {
 
   Widget contactSettings(BuildContext context, double width) {
     return Container(
-      color: Theme.of(context).colorScheme.background,
+      color: Theme.of(context).colorScheme.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

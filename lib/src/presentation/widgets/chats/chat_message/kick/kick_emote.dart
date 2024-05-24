@@ -10,8 +10,7 @@ class KickEmote extends StatelessWidget {
     return Image(
       height: 24,
       width: 24,
-      image: NetworkImage(
-          "https://files.kick.com/emotes/$emoteId/fullsize"),
+      image: NetworkImage("https://files.kick.com/emotes/$emoteId/fullsize"),
     );
   }
 }

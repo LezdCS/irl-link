@@ -23,7 +23,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
           () => Container(
             padding: const EdgeInsets.only(
                 left: 20.0, top: 12.0, right: 20.0, bottom: 12.0),
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.surface,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

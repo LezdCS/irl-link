@@ -14,8 +14,8 @@ import 'package:talker_flutter/talker_flutter.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     final talker = TalkerFlutter.init(
-     settings:  TalkerSettings(),
-  );
+      settings: TalkerSettings(),
+    );
     // Build our app and trigger a frame.
     await tester.pumpWidget(Main(talker: talker));
 

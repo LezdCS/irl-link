@@ -52,7 +52,7 @@ class ManageListBrowserTabs extends GetView {
         ),
         body: Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.surface,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -132,7 +132,7 @@ class ManageListBrowserTabs extends GetView {
                                               ),
                                               backgroundColor: Theme.of(context)
                                                   .colorScheme
-                                                  .background,
+                                                  .surface,
                                               buttonColor:
                                                   const Color(0xFF9147ff),
                                               cancelTextColor:
@@ -163,7 +163,7 @@ class ManageListBrowserTabs extends GetView {
                                               ),
                                               backgroundColor: Theme.of(context)
                                                   .colorScheme
-                                                  .background,
+                                                  .surface,
                                               buttonColor:
                                                   const Color(0xFF9147ff),
                                               cancelTextColor:
@@ -226,7 +226,7 @@ class ManageListBrowserTabs extends GetView {
                                   Theme.of(context).textTheme.bodyLarge!.color,
                             ),
                             backgroundColor:
-                                Theme.of(context).colorScheme.background,
+                                Theme.of(context).colorScheme.surface,
                             buttonColor: const Color(0xFF9147ff),
                             cancelTextColor: const Color(0xFF9147ff),
                             confirmTextColor: Colors.white,

@@ -34,7 +34,7 @@ class MessageContainer extends StatelessWidget {
       decoration: BoxDecoration(
         color: selectedMessage != null && selectedMessage == message
             ? Theme.of(Get.context!).colorScheme.secondary
-            : Theme.of(Get.context!).colorScheme.background,
+            : Theme.of(Get.context!).colorScheme.surface,
       ),
       child: MessageRow(
         message: message,

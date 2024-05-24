@@ -8,7 +8,7 @@ abstract class DataState<T> {
     this.data,
     this.error,
   }) {
-    if(error != null) {
+    if (error != null) {
       globals.talker?.error(error);
     }
   }
