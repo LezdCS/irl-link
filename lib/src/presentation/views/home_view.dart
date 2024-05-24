@@ -444,17 +444,20 @@ class HomeView extends GetView<HomeViewController> {
                   ),
                 )
               : Container(),
-          Expanded(
-            flex: 1,
-            child: InkWell(
-              onTap: () async {
-                controller.displayDashboard.value =
-                                !controller.displayDashboard.value;
-              },
-              child: Icon(
-                Icons.dashboard_rounded,
-                color: Theme.of(context).primaryIconTheme.color,
-                size: 22,
+          Visibility(
+            visible: controller.settings.value.dashboardSettings!.activated,
+            child: Expanded(
+              flex: 1,
+              child: InkWell(
+                onTap: () async {
+                  controller.displayDashboard.value =
+                                  !controller.displayDashboard.value;
+                },
+                child: Icon(
+                  Icons.dashboard_rounded,
+                  color: Theme.of(context).primaryIconTheme.color,
+                  size: 22,
+                ),
               ),
             ),
           ),
