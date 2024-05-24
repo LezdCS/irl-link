@@ -1,4 +1,3 @@
-import 'package:floating_draggable_widget/floating_draggable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -47,109 +46,84 @@ class HomeView extends GetView<HomeViewController> {
         child: Scaffold(
           resizeToAvoidBottomInset: true,
           body: Obx(
-            () => FloatingDraggableWidget(
-              floatingWidget:
-                  controller.settings.value.dashboardSettings!.activated
-                      ? InkWell(
-                          onTap: () {
-                            controller.displayDashboard.value =
-                                !controller.displayDashboard.value;
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: context.theme.colorScheme.tertiary,
-                            ),
-                            child: const Icon(
-                              Icons.dashboard_rounded,
-                              size: 26,
-                            ),
-                          ),
-                        )
-                      : Container(),
-              floatingWidgetWidth: 40,
-              floatingWidgetHeight: 100,
-              dy: 10,
-              dx: 10,
-              mainScreenWidget: Listener(
-                onPointerUp: (_) => {
-                  FocusScope.of(context).unfocus(),
-                },
-                child: Container(
-                  constraints: const BoxConstraints.expand(),
-                  decoration: BoxDecoration(
-                    color: context.theme.colorScheme.surface,
-                  ),
-                  child: SafeArea(
-                    child: Stack(
-                      children: [
-                        Stack(
-                          children: List<Widget>.generate(
-                            controller.iOSAudioSources.length,
-                            (int index) => controller.iOSAudioSources[index],
-                          ),
+            () => Listener(
+              onPointerUp: (_) => {
+                FocusScope.of(context).unfocus(),
+              },
+              child: Container(
+                constraints: const BoxConstraints.expand(),
+                decoration: BoxDecoration(
+                  color: context.theme.colorScheme.surface,
+                ),
+                child: SafeArea(
+                  child: Stack(
+                    children: [
+                      Stack(
+                        children: List<Widget>.generate(
+                          controller.iOSAudioSources.length,
+                          (int index) => controller.iOSAudioSources[index],
                         ),
-                        Listener(
-                          onPointerUp: (_) => {
-                            controller.displayDashboard.value = false,
-                          },
-                          child: SplitView(
-                            controller: controller.splitViewController,
-                            gripColor: context.theme.colorScheme.secondary,
-                            gripColorActive:
-                                context.theme.colorScheme.secondary,
-                            gripSize: 8,
+                      ),
+                      Listener(
+                        onPointerUp: (_) => {
+                          controller.displayDashboard.value = false,
+                        },
+                        child: SplitView(
+                          controller: controller.splitViewController,
+                          gripColor: context.theme.colorScheme.secondary,
+                          gripColorActive:
+                              context.theme.colorScheme.secondary,
+                          gripSize: 8,
+                          viewMode: context.isPortrait
+                              ? SplitViewMode.Vertical
+                              : SplitViewMode.Horizontal,
+                          indicator: SplitIndicator(
                             viewMode: context.isPortrait
                                 ? SplitViewMode.Vertical
                                 : SplitViewMode.Horizontal,
-                            indicator: SplitIndicator(
-                              viewMode: context.isPortrait
-                                  ? SplitViewMode.Vertical
-                                  : SplitViewMode.Horizontal,
-                              color: const Color(0xFF464444),
-                            ),
-                            activeIndicator: SplitIndicator(
-                              color: const Color(0xFF464444),
-                              viewMode: context.isPortrait
-                                  ? SplitViewMode.Vertical
-                                  : SplitViewMode.Horizontal,
-                              isActive: true,
-                            ),
-                            onWeightChanged: (weight) {
-                              controller.settings.value =
-                                  controller.settings.value.copyWith(
-                                generalSettings: controller
-                                    .settings.value.generalSettings
-                                    ?.copyWith(
-                                  splitViewWeights: [weight[0]!, weight[1]!],
-                                ),
-                              );
-                              controller.saveSettings();
-                            },
-                            children: [
-                              controller.tabElements.isNotEmpty
-                                  ? _top(context, height, width)
-                                  : const Text(
-                                      "No tabs",
-                                      textAlign: TextAlign.center,
-                                    ),
-                              _bottom(context, height, width),
-                            ],
+                            color: const Color(0xFF464444),
                           ),
-                        ),
-                        Visibility(
-                          visible: controller.displayDashboard.value,
-                          child: const Dashboard(),
-                        ),
-                        Visibility(
-                          visible:
-                              Get.find<StoreController>().purchasePending.value,
-                          child: CircularProgressIndicator(
-                            color: context.theme.colorScheme.tertiary,
+                          activeIndicator: SplitIndicator(
+                            color: const Color(0xFF464444),
+                            viewMode: context.isPortrait
+                                ? SplitViewMode.Vertical
+                                : SplitViewMode.Horizontal,
+                            isActive: true,
                           ),
+                          onWeightChanged: (weight) {
+                            controller.settings.value =
+                                controller.settings.value.copyWith(
+                              generalSettings: controller
+                                  .settings.value.generalSettings
+                                  ?.copyWith(
+                                splitViewWeights: [weight[0]!, weight[1]!],
+                              ),
+                            );
+                            controller.saveSettings();
+                          },
+                          children: [
+                            controller.tabElements.isNotEmpty
+                                ? _top(context, height, width)
+                                : const Text(
+                                    "No tabs",
+                                    textAlign: TextAlign.center,
+                                  ),
+                            _bottom(context, height, width),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      Visibility(
+                        visible: controller.displayDashboard.value,
+                        child: const Dashboard(),
+                      ),
+                      Visibility(
+                        visible:
+                            Get.find<StoreController>().purchasePending.value,
+                        child: CircularProgressIndicator(
+                          color: context.theme.colorScheme.tertiary,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -470,6 +444,20 @@ class HomeView extends GetView<HomeViewController> {
                   ),
                 )
               : Container(),
+          Expanded(
+            flex: 1,
+            child: InkWell(
+              onTap: () async {
+                controller.displayDashboard.value =
+                                !controller.displayDashboard.value;
+              },
+              child: Icon(
+                Icons.dashboard_rounded,
+                color: Theme.of(context).primaryIconTheme.color,
+                size: 22,
+              ),
+            ),
+          ),
           Expanded(
             flex: 1,
             child: InkWell(
