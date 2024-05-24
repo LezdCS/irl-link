@@ -38,7 +38,7 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
                 Expanded(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: context.theme.colorScheme.background,
+                      color: context.theme.colorScheme.surface,
                     ),
                     child: TabBarView(
                       controller: controller.tabController,

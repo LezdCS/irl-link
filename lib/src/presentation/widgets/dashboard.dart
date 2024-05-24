@@ -41,7 +41,8 @@ class Dashboard extends GetView<DashboardController> {
                       .value.dashboardSettings!.userEvents[index];
                   // Check if the event is still supported
                   if (event.event == SupportedEvents.none) {
-                     return _disabledServiceEvent(event, "Event not supported anymore");
+                    return _disabledServiceEvent(
+                        event, "Event not supported anymore");
                   }
                   // Check if the service is enabled
                   bool isServiceEnabled = isDashboardServiceEnabled(event);

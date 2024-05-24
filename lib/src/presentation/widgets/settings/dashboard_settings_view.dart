@@ -57,7 +57,7 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
         body: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.surface,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -93,7 +93,7 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
                       children: [
                         SlidableAction(
                           backgroundColor:
-                              Theme.of(context).colorScheme.background,
+                              Theme.of(context).colorScheme.surface,
                           onPressed: (context) {
                             dashboardController.removeDashboardEvent(event);
                           },
@@ -141,10 +141,10 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
               ),
               TextButton(
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
+                  backgroundColor: WidgetStateProperty.all(
                     Theme.of(context).colorScheme.secondary,
                   ),
-                  foregroundColor: MaterialStateProperty.all(
+                  foregroundColor: WidgetStateProperty.all(
                     Theme.of(context).textTheme.bodyLarge!.color,
                   ),
                 ),
@@ -157,7 +157,7 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
                     titleStyle: TextStyle(
                       color: Theme.of(context).textTheme.bodyLarge!.color,
                     ),
-                    backgroundColor: Theme.of(context).colorScheme.background,
+                    backgroundColor: Theme.of(context).colorScheme.surface,
                     buttonColor: const Color(0xFF9147ff),
                     cancelTextColor: const Color(0xFF9147ff),
                     confirmTextColor: Colors.white,
@@ -220,10 +220,21 @@ Widget _addDialog(context, DashboardController dashboardController) {
             isExpanded: true,
             value: SupportedEvents.values[0],
             items: SupportedEvents.values.map((event) {
+              Widget? icon = getSupportedEventIcon(event);
               return DropdownMenuItem(
                 value: event,
-                child: Text(
-                  getSupportedEventString(event),
+                child: Row(
+                  children: [
+                    icon ?? const SizedBox(),
+                    icon != null
+                        ? const SizedBox(
+                            width: 8,
+                          )
+                        : const SizedBox(),
+                    Text(
+                      getSupportedEventString(event),
+                    ),
+                  ],
                 ),
               );
             }).toList(),
@@ -312,10 +323,10 @@ Widget _addDialog(context, DashboardController dashboardController) {
           ),
           ElevatedButton(
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(
+              backgroundColor: WidgetStateProperty.all(
                 Theme.of(context).colorScheme.tertiary,
               ),
-              foregroundColor: MaterialStateProperty.all(
+              foregroundColor: WidgetStateProperty.all(
                 Theme.of(context).textTheme.bodyLarge!.color,
               ),
             ),
@@ -344,7 +355,7 @@ Widget colorPickerPreview(Color color, Function(Color) onColorChanged) {
       onTap: () {
         Get.defaultDialog(
           title: 'Pick a color!',
-          backgroundColor: Theme.of(Get.context!).colorScheme.background,
+          backgroundColor: Theme.of(Get.context!).colorScheme.surface,
           content: BlockPicker(
             pickerColor: color,
             onColorChanged: onColorChanged,

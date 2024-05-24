@@ -35,7 +35,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
         ),
         body: Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.surface,
           ),
           child: Column(
             children: [
@@ -222,7 +222,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
           titleStyle: TextStyle(
             color: Theme.of(context).textTheme.bodyLarge!.color,
           ),
-          backgroundColor: Theme.of(context).colorScheme.background,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           buttonColor: const Color(0xFF9147ff),
           cancelTextColor: const Color(0xFF9147ff),
           confirmTextColor: Colors.white,

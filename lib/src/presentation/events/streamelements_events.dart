@@ -19,7 +19,8 @@ class StreamelementsEvents {
     required this.settingsUseCase,
   });
 
-  Future<DataState<SeCredentials>> login({required StreamelementsAuthParams params}) {
+  Future<DataState<SeCredentials>> login(
+      {required StreamelementsAuthParams params}) {
     return streamelementsUseCase.login(params: params);
   }
 
@@ -35,7 +36,8 @@ class StreamelementsEvents {
     return streamelementsUseCase.getOverlays(token, channel);
   }
 
-  Future<DataState<List<SeActivity>>> getLastActivities(String token, String channel) {
+  Future<DataState<List<SeActivity>>> getLastActivities(
+      String token, String channel) {
     return streamelementsUseCase.getLastActivities(token, channel);
   }
 

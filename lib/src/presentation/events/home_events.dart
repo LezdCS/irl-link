@@ -18,7 +18,10 @@ class HomeEvents {
   final SettingsUseCase settingsUseCase;
   final StreamelementsUseCase streamelementsUseCase;
 
-  HomeEvents({required this.twitchUseCase, required this.settingsUseCase, required this.streamelementsUseCase});
+  HomeEvents(
+      {required this.twitchUseCase,
+      required this.settingsUseCase,
+      required this.streamelementsUseCase});
 
   Future<DataState<TwitchCredentials>> getTwitchFromLocal() {
     return twitchUseCase.getTwitchFromLocal();
@@ -48,14 +51,15 @@ class HomeEvents {
   Future<DataState<SeCredentials>> refreshSeAccessToken({
     required SeCredentials seCredentials,
   }) {
-    return streamelementsUseCase.refreshAccessToken(seCredentials: seCredentials);
+    return streamelementsUseCase.refreshAccessToken(
+        seCredentials: seCredentials);
   }
 
   Future<DataState<SeCredentials>> getSeCredentialsFromLocal() {
     return streamelementsUseCase.getSeCredentialsFromLocal();
   }
 
-   Future<DataState<SeMe>> getSeMe(String token) {
+  Future<DataState<SeMe>> getSeMe(String token) {
     return streamelementsUseCase.getMe(token);
   }
 

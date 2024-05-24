@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class Themes {
   final ThemeData darkTheme = ThemeData.dark().copyWith(
     colorScheme: ColorScheme.fromSwatch().copyWith(
-      background: const Color(0xFF0e0e10),
+      surface: const Color(0xFF0e0e10),
       secondary: const Color(0xFF18181b),
       error: const Color(0xFFEC0808),
 
@@ -25,23 +25,23 @@ class Themes {
       ),
     ),
     switchTheme: SwitchThemeData(
-      thumbColor: MaterialStateProperty.resolveWith(
-        (Set<MaterialState> states) {
-          if (states.contains(MaterialState.selected)) {
+      thumbColor: WidgetStateProperty.resolveWith(
+        (Set<WidgetState> states) {
+          if (states.contains(WidgetState.selected)) {
             return Colors.white;
           }
-          if (states.contains(MaterialState.disabled)) {
+          if (states.contains(WidgetState.disabled)) {
             return null;
           }
           return Colors.white;
         },
       ),
-      trackColor: MaterialStateProperty.resolveWith(
-        (Set<MaterialState> states) {
-          if (states.contains(MaterialState.selected)) {
+      trackColor: WidgetStateProperty.resolveWith(
+        (Set<WidgetState> states) {
+          if (states.contains(WidgetState.selected)) {
             return Colors.deepPurpleAccent[200];
           }
-          if (states.contains(MaterialState.disabled)) {
+          if (states.contains(WidgetState.disabled)) {
             return Colors.grey[850];
           }
           return Colors.grey[850];
@@ -61,7 +61,7 @@ class Themes {
 
   final ThemeData lightTheme = ThemeData.light().copyWith(
     colorScheme: ColorScheme.fromSwatch().copyWith(
-      background: const Color(0xFFffffff),
+      surface: const Color(0xFFffffff),
       secondary: const Color(0xFFefeff1),
       error: const Color(0xFFEC0808),
 
@@ -77,23 +77,23 @@ class Themes {
       ),
     ),
     switchTheme: SwitchThemeData(
-      thumbColor: MaterialStateProperty.resolveWith(
-        (Set<MaterialState> states) {
-          if (states.contains(MaterialState.selected)) {
+      thumbColor: WidgetStateProperty.resolveWith(
+        (Set<WidgetState> states) {
+          if (states.contains(WidgetState.selected)) {
             return Colors.white;
           }
-          if (states.contains(MaterialState.disabled)) {
+          if (states.contains(WidgetState.disabled)) {
             return null;
           }
           return Colors.white;
         },
       ),
-      trackColor: MaterialStateProperty.resolveWith(
-        (Set<MaterialState> states) {
-          if (states.contains(MaterialState.selected)) {
+      trackColor: WidgetStateProperty.resolveWith(
+        (Set<WidgetState> states) {
+          if (states.contains(WidgetState.selected)) {
             return Colors.deepPurpleAccent[200];
           }
-          if (states.contains(MaterialState.disabled)) {
+          if (states.contains(WidgetState.disabled)) {
             return Colors.grey[850];
           }
           return Colors.grey[850];

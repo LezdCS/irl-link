@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:irllink/src/core/utils/dashboard_events.dart';
 import 'package:irllink/src/domain/entities/dashboard_event.dart';
@@ -20,7 +22,7 @@ class DashboardEventDTO extends DashboardEvent {
       color: Color(map['color'] ?? '0xFF000000'),
       dashboardActionsType: action,
       event: event,
-      customValue: map['customValue'],
+      customValue: jsonDecode(map['customValue']),
     );
   }
 }

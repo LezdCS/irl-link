@@ -10,7 +10,8 @@ Dio initDio() {
     TalkerDioLogger(
       talker: talker,
       settings: TalkerDioLoggerSettings(
-        requestFilter: (RequestOptions options) => !options.path.contains('api.twitch.tv'),
+        requestFilter: (RequestOptions options) =>
+            !options.path.contains('api.twitch.tv'),
         printRequestHeaders: true,
         // responseFilter: (response) => ![200, 202].contains(response.statusCode),
       ),

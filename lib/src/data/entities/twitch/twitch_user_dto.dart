@@ -1,4 +1,3 @@
-
 import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
 
 class TwitchUserDTO extends TwitchUser {

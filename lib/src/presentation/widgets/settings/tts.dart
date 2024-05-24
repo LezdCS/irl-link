@@ -13,7 +13,7 @@ class Tts extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(
@@ -36,7 +36,7 @@ class Tts extends StatelessWidget {
           child: Container(
             padding:
                 const EdgeInsets.only(top: 8, left: 10, right: 10, bottom: 8),
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.surface,
             child: Column(
               children: [
                 Row(
@@ -117,7 +117,8 @@ class Tts extends StatelessWidget {
                             ),
                           ),
                           DropdownButton(
-                            value: controller.ttsController.ttsVoices.firstWhere(
+                            value:
+                                controller.ttsController.ttsVoices.firstWhere(
                               (element) =>
                                   element["name"] ==
                                   controller.homeViewController.settings.value
@@ -140,9 +141,10 @@ class Tts extends StatelessWidget {
                             items: List.generate(
                               controller.ttsController.ttsVoices.length,
                               (index) => DropdownMenuItem(
-                                value: controller.ttsController.ttsVoices[index],
-                                child:
-                                    Text(controller.ttsController.ttsVoices[index]["name"]),
+                                value:
+                                    controller.ttsController.ttsVoices[index],
+                                child: Text(controller
+                                    .ttsController.ttsVoices[index]["name"]),
                               ),
                             ),
                           ),
