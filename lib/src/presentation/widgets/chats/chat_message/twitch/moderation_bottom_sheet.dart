@@ -95,40 +95,47 @@ class ModerationBottomSheet extends StatelessWidget {
               ),
             ),
           ),
-          InkWell(
-            onTap: () => controller.deleteMessageInstruction(
-              controller.homeViewController.selectedMessage.value!,
-            ),
-            child: moderationViewButton(null, "Delete message"),
-          ),
-          const SizedBox(height: 15),
-          Row(children: [
-            InkWell(
-              onTap: () => controller.banMessageInstruction(
+          Visibility(
+            visible: message.platform == Platform.twitch,
+            child: InkWell(
+              onTap: () => controller.deleteMessageInstruction(
                 controller.homeViewController.selectedMessage.value!,
               ),
-              child: moderationViewButton(Icons.stop, "Ban"),
+              child: moderationViewButton(null, "Delete message"),
             ),
-            const SizedBox(width: 10),
-            InkWell(
-              onTap: () => timeoutDialog(),
-              child: moderationViewButton(Icons.timer, "Timeout"),
-            ),
-            const SizedBox(width: 10),
-            InkWell(
-              onTap: () => controller.hideUser(
-                  controller.homeViewController.selectedMessage.value!),
-              child: (controller
-                          .homeViewController.settings.value.hiddenUsersIds!
-                          .firstWhereOrNull((userId) =>
-                              controller.homeViewController.selectedMessage
-                                  .value!.authorId ==
-                              userId) !=
-                      null)
-                  ? moderationViewButton(Icons.visibility, "Unhide user")
-                  : moderationViewButton(Icons.visibility_off, "Hide user"),
-            ),
-          ]),
+          ),
+          const SizedBox(height: 15),
+          Visibility(
+            visible: message.platform == Platform.twitch,
+
+            child: Row(children: [
+              InkWell(
+                onTap: () => controller.banMessageInstruction(
+                  controller.homeViewController.selectedMessage.value!,
+                ),
+                child: moderationViewButton(Icons.stop, "Ban"),
+              ),
+              const SizedBox(width: 10),
+              InkWell(
+                onTap: () => timeoutDialog(),
+                child: moderationViewButton(Icons.timer, "Timeout"),
+              ),
+              const SizedBox(width: 10),
+              InkWell(
+                onTap: () => controller.hideUser(
+                    controller.homeViewController.selectedMessage.value!),
+                child: (controller
+                            .homeViewController.settings.value.hiddenUsersIds!
+                            .firstWhereOrNull((userId) =>
+                                controller.homeViewController.selectedMessage
+                                    .value!.authorId ==
+                                userId) !=
+                        null)
+                    ? moderationViewButton(Icons.visibility, "Unhide user")
+                    : moderationViewButton(Icons.visibility_off, "Hide user"),
+              ),
+            ]),
+          ),
         ],
       ),
     );
