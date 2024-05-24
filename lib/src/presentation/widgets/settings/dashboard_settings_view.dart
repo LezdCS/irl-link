@@ -220,10 +220,21 @@ Widget _addDialog(context, DashboardController dashboardController) {
             isExpanded: true,
             value: SupportedEvents.values[0],
             items: SupportedEvents.values.map((event) {
+              Widget? icon = getSupportedEventIcon(event);
               return DropdownMenuItem(
                 value: event,
-                child: Text(
-                  getSupportedEventString(event),
+                child: Row(
+                  children: [
+                    icon ?? const SizedBox(),
+                    icon != null
+                        ? const SizedBox(
+                            width: 8,
+                          )
+                        : const SizedBox(),
+                    Text(
+                      getSupportedEventString(event),
+                    ),
+                  ],
                 ),
               );
             }).toList(),
