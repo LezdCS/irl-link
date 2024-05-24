@@ -8,12 +8,11 @@ IRL Link is a mobile application to monitor your IRL Stream.
 [![GitHub](https://img.shields.io/github/license/lezdcs/irl_link?color=%238442f5)](https://choosealicense.com/licenses/gpl-3.0/)
 
 ## Download
-<a href='https://play.google.com/store/apps/details?id=dev.lezd.www.irllink&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1' target="_blank"><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' height="85"/></a>
-<a href='https://apps.apple.com/us/app/irl-link/id6447156883' target="_blank"><img alt='Get it on the App Store' src='https://www.irllink.com/_next/static/media/app-store-badge.a2e763b8.svg' height="74px"/></a>
+<a href='https://play.google.com/store/apps/details?id=dev.lezd.www.irllink&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="85" src='./assets/google-play-badge.png'/></a>
+<a href="https://apps.apple.com/app/id6447156883"><img alt='Download on the App Store' height="85" src="./assets/apple-download.svg"></a>
 
 Also available in the [Releases](https://github.com/LezdCS/irl_link/releases).
 <br />
-Soon to be released on the iOS App Store!
 
 ## Features
 

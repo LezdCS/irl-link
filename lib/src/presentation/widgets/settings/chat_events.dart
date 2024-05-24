@@ -15,7 +15,7 @@ class ChatEvents extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(
@@ -38,7 +38,7 @@ class ChatEvents extends StatelessWidget {
           child: Container(
             padding:
                 const EdgeInsets.only(top: 8, left: 10, right: 10, bottom: 8),
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.surface,
             child: Column(
               children: [
                 Column(

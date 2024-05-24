@@ -105,8 +105,7 @@ class HomeViewController extends GetxController
           homeEvents
               .refreshSeAccessToken(seCredentials: seCredentials.value!)
               .then((value) => {
-                    if (value.error == null)
-                      {seCredentials.value = value.data!}
+                    if (value.error == null) {seCredentials.value = value.data!}
                   });
         }
       });

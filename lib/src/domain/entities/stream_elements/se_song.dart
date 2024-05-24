@@ -17,10 +17,10 @@ class SeSong extends Equatable {
 
   factory SeSong.fromJson(Map<String, dynamic> map) {
     return SeSong(
-      id: map["_id"]  ?? '',
+      id: map["_id"] ?? '',
       title: map["title"],
       videoId: map["videoId"],
-      duration: map["duration"]  ?? 0,
+      duration: map["duration"] ?? 0,
       channel: map["channel"],
     );
   }

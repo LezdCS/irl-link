@@ -31,7 +31,10 @@ class AuthorName extends StatelessWidget {
         ),
         children: [
           TextSpan(
-            text: username != displayName.toLowerCase() && platform == Platform.twitch ? "($displayName)" : "",
+            text: username != displayName.toLowerCase() &&
+                    platform == Platform.twitch
+                ? "($displayName)"
+                : "",
             style: TextStyle(
               color: Color(int.parse(color.replaceAll('#', '0xff'))),
               fontSize: textSize,

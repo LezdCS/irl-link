@@ -13,7 +13,7 @@ class LoginView extends GetView<LoginViewController> {
     Get.find<LoginViewController>();
     return Scaffold(
       body: Container(
-        color: Theme.of(context).colorScheme.background,
+        color: Theme.of(context).colorScheme.surface,
         child: SafeArea(
           child: Obx(
             () => loginScreen(

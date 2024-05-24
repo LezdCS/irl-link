@@ -9,7 +9,8 @@ import 'package:irllink/src/domain/entities/stream_elements/se_song.dart';
 abstract class StreamelementsRepository {
   Future<DataState<SeCredentials>> login(StreamelementsAuthParams params);
 
-  Future<DataState<SeCredentials>> refreshAccessToken(SeCredentials seCredentials);
+  Future<DataState<SeCredentials>> refreshAccessToken(
+      SeCredentials seCredentials);
 
   Future<DataState<void>> disconnect(String accessToken);
 

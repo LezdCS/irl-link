@@ -11,18 +11,19 @@ class StreamelementsUseCase {
   final StreamelementsRepository streamelementsRepository;
   StreamelementsUseCase({required this.streamelementsRepository});
 
-  Future<DataState<SeCredentials>> login({required StreamelementsAuthParams params}) {
+  Future<DataState<SeCredentials>> login(
+      {required StreamelementsAuthParams params}) {
     return streamelementsRepository.login(params);
   }
 
-  Future<DataState<SeCredentials>> refreshAccessToken({required SeCredentials seCredentials}) {
+  Future<DataState<SeCredentials>> refreshAccessToken(
+      {required SeCredentials seCredentials}) {
     return streamelementsRepository.refreshAccessToken(seCredentials);
   }
 
   Future<DataState<SeCredentials>> getSeCredentialsFromLocal() {
     return streamelementsRepository.getSeCredentialsFromLocal();
   }
-  
 
   Future<DataState<void>> disconnect(String accessToken) {
     return streamelementsRepository.disconnect(accessToken);

@@ -18,7 +18,7 @@ class SeActivityDTO extends SeActivity {
   factory SeActivityDTO.fromJson(Map<String, dynamic> map) {
     switch (map['type']) {
       case 'follow':
-        return SeActivityDTO (
+        return SeActivityDTO(
           id: map["_id"],
           channel: map["channel"],
           username: map["data"]["displayName"],
@@ -37,7 +37,7 @@ class SeActivityDTO extends SeActivity {
           activityType: ActivityType.subscription,
         );
       case "tip":
-       return SeActivityDTO(
+        return SeActivityDTO(
           id: map["_id"],
           channel: map["channel"],
           username: map["data"]["displayName"],

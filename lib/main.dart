@@ -26,8 +26,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final crashlyticsTalkerObserver = CrashlyticsTalkerObserver();
   final talker = TalkerFlutter.init(
-     settings:  TalkerSettings(),
-     observer: crashlyticsTalkerObserver,
+    settings: TalkerSettings(),
+    observer: crashlyticsTalkerObserver,
   );
   await initializeService();
   await GetStorage.init();
@@ -43,7 +43,9 @@ void main() async {
   globals.packageName = packageInfo.packageName;
   globals.talker = talker;
   AppTranslations.initLanguages();
-  runApp(Main(talker: talker,));
+  runApp(Main(
+    talker: talker,
+  ));
 }
 
 const notificationChannelId = 'irllink_foreground';

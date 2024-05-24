@@ -43,7 +43,7 @@ class ChatView extends StatelessWidget {
           onDoubleTap: () {
             // Open a confirmation dialog to reconnect to the chat
             Get.defaultDialog(
-              backgroundColor: Theme.of(context).colorScheme.background,
+              backgroundColor: Theme.of(context).colorScheme.surface,
               title: "Confirmation",
               middleText: "Do you want to reconnect ?",
               textConfirm: "Yes",
@@ -69,74 +69,68 @@ class ChatView extends StatelessWidget {
             height: double.infinity,
             padding: EdgeInsets.only(top: 10, bottom: height * 0.07),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.background,
+              color: Theme.of(context).colorScheme.surface,
             ),
             child: ListView.builder(
-                    controller: controller?.scrollController,
-                    itemCount: controller?.chatMessages.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      ChatMessage message = controller!.chatMessages[index];
-                      return Container(
-                        padding: const EdgeInsets.only(top: 1, bottom: 1),
-                        child: InkWell(
-                          onTap: () {
-                            if (FocusScope.of(context).isFirstFocus) {
-                              FocusScope.of(context).unfocus();
-                            }
-                            controller!.homeViewController.selectedMessage
-                                .value = null;
-                          },
-                          onLongPress: () {
-                            controller!.homeViewController.selectedMessage
-                                .value ??= message;
-                          },
-                          child: message.eventType != null
-                              ? EventContainer(
-                                  message: message,
-                                  selectedMessage: controller
-                                      .homeViewController.selectedMessage.value,
-                                  displayTimestamp: controller
-                                      .homeViewController
-                                      .settings
-                                      .value
-                                      .displayTimestamp!,
-                                  textSize: controller.homeViewController
-                                      .settings.value.textSize!,
-                                  hideDeletedMessages: controller
-                                      .homeViewController
-                                      .settings
-                                      .value
-                                      .chatSettings!
-                                      .hideDeletedMessages,
-                                  cheerEmotes: controller.cheerEmotes,
-                                  thirdPartEmotes: controller.thirdPartEmotes,
-                                  showPlatformBadge: multiplePlatform,
-                                )
-                              : MessageContainer(
-                                  selectedMessage: controller
-                                      .homeViewController.selectedMessage.value,
-                                  message: message,
-                                  displayTimestamp: controller
-                                      .homeViewController
-                                      .settings
-                                      .value
-                                      .displayTimestamp!,
-                                  textSize: controller.homeViewController
-                                      .settings.value.textSize!,
-                                  hideDeletedMessages: controller
-                                      .homeViewController
-                                      .settings
-                                      .value
-                                      .chatSettings!
-                                      .hideDeletedMessages,
-                                  cheerEmotes: controller.cheerEmotes,
-                                  thirdPartEmotes: controller.thirdPartEmotes,
-                                  showPlatformBadge: multiplePlatform,
-                                ),
-                        ),
-                      );
+              controller: controller?.scrollController,
+              itemCount: controller?.chatMessages.length,
+              itemBuilder: (BuildContext context, int index) {
+                ChatMessage message = controller!.chatMessages[index];
+                return Container(
+                  padding: const EdgeInsets.only(top: 1, bottom: 1),
+                  child: InkWell(
+                    onTap: () {
+                      if (FocusScope.of(context).isFirstFocus) {
+                        FocusScope.of(context).unfocus();
+                      }
+                      controller!.homeViewController.selectedMessage.value =
+                          null;
                     },
+                    onLongPress: () {
+                      controller!.homeViewController.selectedMessage.value ??=
+                          message;
+                    },
+                    child: message.eventType != null
+                        ? EventContainer(
+                            message: message,
+                            selectedMessage: controller
+                                .homeViewController.selectedMessage.value,
+                            displayTimestamp: controller.homeViewController
+                                .settings.value.displayTimestamp!,
+                            textSize: controller
+                                .homeViewController.settings.value.textSize!,
+                            hideDeletedMessages: controller
+                                .homeViewController
+                                .settings
+                                .value
+                                .chatSettings!
+                                .hideDeletedMessages,
+                            cheerEmotes: controller.cheerEmotes,
+                            thirdPartEmotes: controller.thirdPartEmotes,
+                            showPlatformBadge: multiplePlatform,
+                          )
+                        : MessageContainer(
+                            selectedMessage: controller
+                                .homeViewController.selectedMessage.value,
+                            message: message,
+                            displayTimestamp: controller.homeViewController
+                                .settings.value.displayTimestamp!,
+                            textSize: controller
+                                .homeViewController.settings.value.textSize!,
+                            hideDeletedMessages: controller
+                                .homeViewController
+                                .settings
+                                .value
+                                .chatSettings!
+                                .hideDeletedMessages,
+                            cheerEmotes: controller.cheerEmotes,
+                            thirdPartEmotes: controller.thirdPartEmotes,
+                            showPlatformBadge: multiplePlatform,
+                          ),
                   ),
+                );
+              },
+            ),
           ),
         ),
         Positioned(
@@ -176,8 +170,8 @@ class ChatView extends StatelessWidget {
                 : const Offset(0, 1),
             duration: const Duration(milliseconds: 200),
             child: Visibility(
-              visible:
-                  controller != null && controller.homeViewController.selectedMessage.value != null,
+              visible: controller != null &&
+                  controller.homeViewController.selectedMessage.value != null,
               child:
                   ModerationBottomSheet(controller: controller!, width: width),
             ),

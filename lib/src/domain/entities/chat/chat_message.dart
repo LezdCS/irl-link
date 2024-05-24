@@ -22,12 +22,17 @@ enum Platform {
 }
 
 // ignore: must_be_immutable
-class ChatMessage extends Equatable implements twitch.Subscription, twitch.SubGift, twitch.BitDonation, twitch.IncomingRaid {
+class ChatMessage extends Equatable
+    implements
+        twitch.Subscription,
+        twitch.SubGift,
+        twitch.BitDonation,
+        twitch.IncomingRaid {
   @override
   final String id;
   @override
   final String authorId;
-   @override
+  @override
   final String username;
   @override
   final String color;
@@ -51,6 +56,7 @@ class ChatMessage extends Equatable implements twitch.Subscription, twitch.SubGi
   final String channelId;
   final EventType? eventType;
   final List<ChatBadge> badgesList;
+  @override
   final Map<String, List> emotes; //TODO: emote entity
   final Platform platform;
 
@@ -88,10 +94,11 @@ class ChatMessage extends Equatable implements twitch.Subscription, twitch.SubGi
   });
 
   factory ChatMessage.fromTwitch(twitch.ChatMessage message, String channelId) {
-
     EventType? type = EventType.values.firstWhereOrNull(
-        (e) => e.toString().split('.').last == message.highlightType.toString().split('.').last,
-      );
+      (e) =>
+          e.toString().split('.').last ==
+          message.highlightType.toString().split('.').last,
+    );
     return ChatMessage(
       id: message.id,
       authorId: message.authorId,
@@ -107,26 +114,42 @@ class ChatMessage extends Equatable implements twitch.Subscription, twitch.SubGi
       isDeleted: false,
       rawData: message.rawData,
       eventType: type,
-      badgesList: message.badges.map((badge) => ChatBadge.fromTwitch(badge)).toList(),
+      badgesList:
+          message.badges.map((badge) => ChatBadge.fromTwitch(badge)).toList(),
       emotes: message.emotes,
       platform: Platform.twitch,
       channelId: channelId,
 
       //implements
-      raidingChannelName: type == EventType.incomingRaid ? (message as twitch.IncomingRaid).raidingChannelName : '',
+      raidingChannelName: type == EventType.incomingRaid
+          ? (message as twitch.IncomingRaid).raidingChannelName
+          : '',
       badges: message.badges,
-      giftedName: type == EventType.subscriptionGifted ? (message as twitch.SubGift).giftedName : '',
+      giftedName: type == EventType.subscriptionGifted
+          ? (message as twitch.SubGift).giftedName
+          : '',
       highlightType: message.highlightType,
       isGift: type == EventType.subscriptionGifted,
-      months: type == EventType.subscription ? (message as twitch.Subscription).months : '',
-      systemMessage: type == EventType.subscriptionGifted ? (message as twitch.SubGift).systemMessage : '',
-      tier: type == EventType.subscription ? (message as twitch.Subscription).tier : '',
-      totalBits: type == EventType.bitDonation ? (message as twitch.BitDonation).totalBits : 0,
-      viewerCount: type == EventType.incomingRaid ? (message as twitch.IncomingRaid).viewerCount : 0,
+      months: type == EventType.subscription
+          ? (message as twitch.Subscription).months
+          : '',
+      systemMessage: type == EventType.subscriptionGifted
+          ? (message as twitch.SubGift).systemMessage
+          : '',
+      tier: type == EventType.subscription
+          ? (message as twitch.Subscription).tier
+          : '',
+      totalBits: type == EventType.bitDonation
+          ? (message as twitch.BitDonation).totalBits
+          : 0,
+      viewerCount: type == EventType.incomingRaid
+          ? (message as twitch.IncomingRaid).viewerCount
+          : 0,
     );
   }
 
-  factory ChatMessage.fromKick(KickMessage message, String channelId, List<KickBadge> subBadges) {
+  factory ChatMessage.fromKick(
+      KickMessage message, String channelId, List<KickBadge> subBadges) {
     return ChatMessage(
       id: message.data.id,
       authorId: message.data.sender.id.toString(),
@@ -142,7 +165,9 @@ class ChatMessage extends Equatable implements twitch.Subscription, twitch.SubGi
       isDeleted: false,
       rawData: '',
       eventType: null, //TODO: Add event type for KickMessage
-      badgesList: message.data.sender.identity.badges.map((badge) => ChatBadge.fromKick(channelId, badge, subBadges)).toList(),
+      badgesList: message.data.sender.identity.badges
+          .map((badge) => ChatBadge.fromKick(channelId, badge, subBadges))
+          .toList(),
       emotes: const {}, //TODO: Add emotes for KickMessage
       platform: Platform.kick,
       channelId: channelId,
@@ -158,11 +183,11 @@ class ChatMessage extends Equatable implements twitch.Subscription, twitch.SubGi
       tier: '',
       totalBits: 0,
       viewerCount: 0,
-      
     );
   }
 
-  factory ChatMessage.kickSub(KickSubscription sub, String channelId, List<KickBadge> subBadges) {
+  factory ChatMessage.kickSub(
+      KickSubscription sub, String channelId, List<KickBadge> subBadges) {
     return ChatMessage(
       id: '',
       authorId: '',
@@ -197,7 +222,8 @@ class ChatMessage extends Equatable implements twitch.Subscription, twitch.SubGi
     );
   }
 
-  factory ChatMessage.kickSubGift(KickGiftedSubscriptions sub, String channelId, List<KickBadge> subBadges) {
+  factory ChatMessage.kickSubGift(KickGiftedSubscriptions sub, String channelId,
+      List<KickBadge> subBadges) {
     return ChatMessage(
       id: '',
       authorId: '',
@@ -221,7 +247,8 @@ class ChatMessage extends Equatable implements twitch.Subscription, twitch.SubGi
       //implements
       raidingChannelName: '',
       badges: const [],
-      giftedName: sub.data.giftedUsernames.first, //TODO: handle multiple usernames gifted
+      giftedName: sub
+          .data.giftedUsernames.first, //TODO: handle multiple usernames gifted
       highlightType: null,
       isGift: true,
       months: '',
@@ -232,7 +259,8 @@ class ChatMessage extends Equatable implements twitch.Subscription, twitch.SubGi
     );
   }
 
-  factory ChatMessage.kickHost(KickStreamHost host, String channelId, List<KickBadge> subBadges) {
+  factory ChatMessage.kickHost(
+      KickStreamHost host, String channelId, List<KickBadge> subBadges) {
     return ChatMessage(
       id: '',
       authorId: '',
@@ -312,13 +340,13 @@ class ChatMessage extends Equatable implements twitch.Subscription, twitch.SubGi
 
   @override
   bool get stringify => true;
-  
+
   @override
   String raidingChannelName;
 
-  @override 
+  @override
   List<twitch.TwitchBadge> badges;
-  
+
   @override
   String displayName;
 
@@ -327,28 +355,27 @@ class ChatMessage extends Equatable implements twitch.Subscription, twitch.SubGi
 
   @override
   twitch.HighlightType? highlightType;
-  
+
   @override
   bool isGift;
-  
+
   @override
   String months;
-  
+
   @override
   String systemMessage;
-  
+
   @override
   String tier;
-  
+
   @override
   int totalBits;
-  
+
   @override
   int viewerCount;
-  
+
   @override
-  set rawData(String _rawData) {
+  set rawData(String rawData) {
     // TODO: implement rawData
   }
-  
 }
