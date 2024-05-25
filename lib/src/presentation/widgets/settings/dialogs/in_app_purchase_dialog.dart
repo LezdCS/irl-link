@@ -55,7 +55,13 @@ Widget inAppPurchaseDialog(
                   ),
                 ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const Text(
+                      'StreamElements',
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
                     Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
@@ -68,13 +74,12 @@ Widget inAppPurchaseDialog(
                           width: 4,
                         ),
                         Text(
-                          'StreamElements events view',
+                          'Events list view',
                           style: TextStyle(
                               color:
                                   Theme.of(context).textTheme.bodyLarge!.color,
                               fontSize: 13),
                         )
-                        // todo: preview button show feature screen
                       ],
                     ),
                     Wrap(
@@ -89,13 +94,32 @@ Widget inAppPurchaseDialog(
                           width: 4,
                         ),
                         Text(
-                          'StreamElements media request control',
+                          'Media request control (no audio)',
                           style: TextStyle(
                               color:
                                   Theme.of(context).textTheme.bodyLarge!.color,
                               fontSize: 13),
                         )
-                        // todo: preview button show feature screen
+                      ],
+                    ),
+                    Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.check_circle_outline_rounded,
+                          size: 18,
+                          color: Colors.green,
+                        ),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        Text(
+                          'Overlays (audio on Android only)',
+                          style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyLarge!.color,
+                              fontSize: 13),
+                        )
                       ],
                     ),
                   ],
