@@ -35,7 +35,7 @@ jobs:
         with:
           channel: 'stable'
         
-     - working-directory: ${{ inputs.working-directory }}
+      - working-directory: ${{ inputs.working-directory }}
         run: |
           flutter pub get
           dart analyze
