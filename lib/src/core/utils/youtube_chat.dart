@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as parser;
@@ -5,6 +6,9 @@ import 'package:irllink/src/core/utils/globals.dart' as globals;
 
 class YoutubeChat {
   String videoId;
+  
+  final StreamController _chatStreamController = StreamController.broadcast();
+  Stream get chatStream => _chatStreamController.stream;
 
   YoutubeChat(
     this.videoId,
@@ -85,6 +89,9 @@ class YoutubeChat {
           .where((message) => message != null)
           .toList();
       globals.talker?.info("Fetched messages: $messages");
+      messages?.forEach((message) {
+        _chatStreamController.add(message);
+      });
 
       final newContinuationToken = data['continuationContents']
               ['liveChatContinuation']['continuations'][0]
