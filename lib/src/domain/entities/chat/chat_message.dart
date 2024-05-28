@@ -19,6 +19,7 @@ enum EventType {
 enum Platform {
   twitch,
   kick,
+  youtube,
 }
 
 // ignore: must_be_immutable
