@@ -293,6 +293,12 @@ class ChatViewController extends GetxController
                 .firstWhereOrNull((kCa) => kCa.channel == kc.username) ==
             null)
         .toList();
+    List<YoutubeChat> youtubeChatToRemove = youtubeChats
+        .where((yc) =>
+            youtubeChannels
+                .firstWhereOrNull((yCa) => yCa.channel == yc.videoId) ==
+            null)
+        .toList();
 
     for (TwitchChat t in twitchChatToRemove) {
       t.close();
@@ -302,6 +308,10 @@ class ChatViewController extends GetxController
     for (KickChat k in kickChatToRemove) {
       k.close();
       kickChats.removeWhere((kc) => kc.username == k.username);
+    }
+
+    for (YoutubeChat y in youtubeChatToRemove) {
+      youtubeChats.removeWhere((yc) => yc.videoId == y.videoId);
     }
   }
 
