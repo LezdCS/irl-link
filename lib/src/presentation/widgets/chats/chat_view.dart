@@ -29,8 +29,8 @@ class ChatView extends StatelessWidget {
     if (controller == null) {
       return Container();
     }
-    bool multiplePlatform =
-        controller.kickChats.isNotEmpty && controller.twitchChats.isNotEmpty;
+    bool multiplePlatform = atLeastTwoNotEmpty([controller.kickChats, controller.twitchChats, controller.youtubeChats]);
+    debugPrint('LOLLLLLLL: , $multiplePlatform');
     return Obx(
       () => Stack(children: [
         GestureDetector(
@@ -189,4 +189,19 @@ class ChatView extends StatelessWidget {
       ]),
     );
   }
+}
+
+bool atLeastTwoNotEmpty(List<List> lists) {
+  int count = 0;
+
+  for (final list in lists) {
+    if (list.isNotEmpty) {
+      count++;
+      if (count >= 2) {
+        return true;
+      }
+    }
+  }
+
+  return false;
 }

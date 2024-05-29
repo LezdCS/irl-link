@@ -143,11 +143,18 @@ class ChatsJoined extends GetView<SettingsViewController> {
               itemCount: group.channels.length,
               itemBuilder: (BuildContext context, int index) {
                 Channel channel = group.channels[index];
-                String kickBadge =
-                    'https://static.wikia.nocookie.net/logopedia/images/1/11/Kick_%28Icon%29.svg/revision/latest/scale-to-width-down/250?cb=20230622003955';
-                String twitchBadge = 'https://pngimg.com/d/twitch_PNG18.png';
-                String badge =
-                    channel.platform == Platform.kick ? kickBadge : twitchBadge;
+                String badge = '';
+                switch (channel.platform) {
+                  case Platform.twitch:
+                    badge = "lib/assets/twitch/twitch_logo.png";
+                    break;
+                  case Platform.kick:
+                    badge = "lib/assets/kick/kickLogo.png";
+                    break;
+                  case Platform.youtube:
+                    badge = "lib/assets/youtube/youtubeLogo.png";
+                    break;
+                }
                 return Dismissible(
                   direction: DismissDirection.endToStart,
                   background: Container(
@@ -189,7 +196,9 @@ class ChatsJoined extends GetView<SettingsViewController> {
                         Image(
                           width: 18,
                           height: 18,
-                          image: NetworkImage(badge),
+                          image: AssetImage(
+                            badge,
+                          ),
                           filterQuality: FilterQuality.high,
                         ),
                         const Padding(padding: EdgeInsets.only(right: 8)),
@@ -331,13 +340,18 @@ class ChatsJoined extends GetView<SettingsViewController> {
                 () => DropdownButton(
                   value: selectedPlatform.toString(),
                   items: List.generate(Platform.values.length, (index) {
-                    String kickBadge =
-                        'https://static.wikia.nocookie.net/logopedia/images/1/11/Kick_%28Icon%29.svg/revision/latest/scale-to-width-down/250?cb=20230622003955';
-                    String twitchBadge =
-                        'https://pngimg.com/d/twitch_PNG18.png';
-                    String badge = Platform.values[index] == Platform.kick
-                        ? kickBadge
-                        : twitchBadge;
+                    String badge = '';
+                    switch (Platform.values[index]) {
+                      case Platform.twitch:
+                        badge = "lib/assets/twitch/twitch_logo.png";
+                        break;
+                      case Platform.kick:
+                        badge = "lib/assets/kick/kickLogo.png";
+                        break;
+                      case Platform.youtube:
+                        badge = "lib/assets/youtube/youtubeLogo.png";
+                        break;
+                    }
                     return DropdownMenuItem(
                       value: Platform.values[index].toString(),
                       child: Row(
@@ -346,7 +360,9 @@ class ChatsJoined extends GetView<SettingsViewController> {
                           Image(
                             width: 18,
                             height: 18,
-                            image: NetworkImage(badge),
+                            image: AssetImage(
+                              badge,
+                            ),
                             filterQuality: FilterQuality.high,
                           ),
                           const Padding(padding: EdgeInsets.only(right: 8)),

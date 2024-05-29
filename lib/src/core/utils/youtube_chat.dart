@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as parser;
 import 'package:irllink/src/core/utils/globals.dart' as globals;
+import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 
 class YoutubeChat {
   String videoId;
@@ -15,7 +16,7 @@ class YoutubeChat {
   );
 
   // Function to fetch the initial continuation token
-  Future<String?> fetchInitialContinuationToken(String videoId) async {
+  Future<String?> fetchInitialContinuationToken() async {
     var headers = {
       'accept':
           'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
@@ -80,17 +81,16 @@ class YoutubeChat {
       final response = await http.post(Uri.parse(url),
           headers: options['headers'], body: body);
       final data = json.decode(response.body);
-      final messages = (data['continuationContents']['liveChatContinuation']
+
+
+      final messagesData = (data['continuationContents']['liveChatContinuation']
               ['actions'] as List?)
           ?.map((action) => (action['addChatItemAction']['item']
-                  ['liveChatTextMessageRenderer']['message']['runs'] as List?)
-              ?.map((run) => run['text'])
-              .join(''))
-          .where((message) => message != null)
-          .toList();
-      globals.talker?.info("Fetched messages: $messages");
-      messages?.forEach((message) {
-        _chatStreamController.add(message);
+                  ['liveChatTextMessageRenderer']));
+
+      messagesData?.forEach((message) {
+        ChatMessage msg = ChatMessage.fromYoutube(message, videoId);
+        _chatStreamController.add(msg);
       });
 
       final newContinuationToken = data['continuationContents']
@@ -107,8 +107,8 @@ class YoutubeChat {
     }
   }
 
-  Future<void> startFetchingChat(String videoId) async {
-    var continuationToken = await fetchInitialContinuationToken(videoId);
+  Future<void> startFetchingChat() async {
+    var continuationToken = await fetchInitialContinuationToken();
     if (continuationToken == null) {
       globals.talker?.error('Failed to fetch initial continuation token.');
       return;
