@@ -30,7 +30,6 @@ class ChatView extends StatelessWidget {
       return Container();
     }
     bool multiplePlatform = atLeastTwoNotEmpty([controller.kickChats, controller.twitchChats, controller.youtubeChats]);
-    debugPrint('LOLLLLLLL: , $multiplePlatform');
     return Obx(
       () => Stack(children: [
         GestureDetector(
