@@ -398,14 +398,20 @@ class ChatViewController extends GetxController
     });
   }
 
-  Future<void> createYoutubeChat(String videoId) async {
+  Future<void> createYoutubeChat(String channelId) async {
+    String? videoId = await getLiveVideoId(channelId);
+    if (videoId == null) {
+      globals.talker?.error('VideoID not found for the channel: $channelId');
+      return;
+    }
+    globals.talker?.error('videoId: $videoId');
+
     YoutubeChat youtubeChat = YoutubeChat(
       videoId,
     );
     youtubeChat.startFetchingChat();
     youtubeChat.chatStream.listen((message) {
       chatMessages.add(message);
-
       if (scrollController.hasClients && isAutoScrolldown.value) {
         Timer(const Duration(milliseconds: 100), () {
           if (isAutoScrolldown.value) {

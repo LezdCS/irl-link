@@ -202,8 +202,13 @@ class ChatsJoined extends GetView<SettingsViewController> {
                           filterQuality: FilterQuality.high,
                         ),
                         const Padding(padding: EdgeInsets.only(right: 8)),
-                        Text(channel.channel,
-                            style: const TextStyle(fontSize: 18)),
+                        Flexible(
+                          child: Text(
+                            channel.channel,
+                            style: const TextStyle(fontSize: 18),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                       ],
                     ),
                   ),
