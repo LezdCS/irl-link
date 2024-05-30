@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/utils/constants.dart';
+import 'package:irllink/src/core/utils/youtube_chat.dart';
 import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
@@ -49,6 +50,7 @@ class ChatViewController extends GetxController
 
   List<TwitchChat> twitchChats = [];
   List<KickChat> kickChats = [];
+  List<YoutubeChat> youtubeChats = [];
 
   @override
   void onInit() async {
@@ -248,6 +250,9 @@ class ChatViewController extends GetxController
         chatGroup.channels.where((e) => e.platform == Platform.twitch).toList();
     List<Channel> kickChannels =
         chatGroup.channels.where((e) => e.platform == Platform.kick).toList();
+    List<Channel> youtubeChannels = chatGroup.channels
+        .where((e) => e.platform == Platform.youtube)
+        .toList();
 
     for (Channel tc in twitchChannels) {
       bool alreadyCreated =
@@ -266,6 +271,15 @@ class ChatViewController extends GetxController
       createKickChat(kc);
     }
 
+    for (Channel kc in youtubeChannels) {
+      bool alreadyCreated =
+          kickChats.firstWhereOrNull((k) => k.username == kc.channel) != null;
+      if (alreadyCreated) {
+        return;
+      }
+      createYoutubeChat(kc.channel);
+    }
+
     // Remove
     List<TwitchChat> twitchChatToRemove = twitchChats
         .where((tc) =>
@@ -279,6 +293,12 @@ class ChatViewController extends GetxController
                 .firstWhereOrNull((kCa) => kCa.channel == kc.username) ==
             null)
         .toList();
+    List<YoutubeChat> youtubeChatToRemove = youtubeChats
+        .where((yc) =>
+            youtubeChannels
+                .firstWhereOrNull((yCa) => yCa.channel == yc.videoId) ==
+            null)
+        .toList();
 
     for (TwitchChat t in twitchChatToRemove) {
       t.close();
@@ -288,6 +308,11 @@ class ChatViewController extends GetxController
     for (KickChat k in kickChatToRemove) {
       k.close();
       kickChats.removeWhere((kc) => kc.username == k.username);
+    }
+
+    for (YoutubeChat y in youtubeChatToRemove) {
+      y.closeStream();
+      youtubeChats.removeWhere((yc) => yc.videoId == y.videoId);
     }
   }
 
@@ -372,6 +397,33 @@ class ChatViewController extends GetxController
         });
       }
     });
+  }
+
+  Future<void> createYoutubeChat(String channelId) async {
+    String? videoId = await getLiveVideoId(channelId);
+    if (videoId == null) {
+      globals.talker?.error('VideoID not found for the channel: $channelId');
+      return;
+    }
+
+    YoutubeChat youtubeChat = YoutubeChat(
+      videoId,
+    );
+    youtubeChat.startFetchingChat();
+    youtubeChat.chatStream.listen((message) {
+      chatMessages.add(message);
+      if (scrollController.hasClients && isAutoScrolldown.value) {
+        Timer(const Duration(milliseconds: 100), () {
+          if (isAutoScrolldown.value) {
+            scrollController.jumpTo(
+              scrollController.position.maxScrollExtent,
+            );
+          }
+        });
+      }
+    });
+    youtubeChats.add(youtubeChat);
+    isChatConnected.value = true;
   }
 
   Future<void> createKickChat(Channel kc) async {

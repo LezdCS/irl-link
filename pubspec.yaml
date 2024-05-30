@@ -74,6 +74,7 @@ dependencies:
   uuid:  ^3.0.7
   talker_flutter: ^4.2.2
   talker_dio_logger: ^4.2.2
+  html: ^0.15.4
   
 dependency_overrides:
   wakelock_windows:
@@ -116,7 +117,9 @@ flutter:
      - lib/assets/i18n/
      - lib/assets/twitch/
      - lib/assets/kick/badges/
+     - lib/assets/kick/
      - lib/assets/streamelements/
+     - lib/assets/youtube/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
