@@ -83,8 +83,8 @@ class YoutubeChat {
           headers: options['headers'], body: body);
       dynamic data = json.decode(response.body);
 
-      Iterable<dynamic>? messagesData = (data['continuationContents']['liveChatContinuation']
-              ['actions'] as List?)
+      Iterable<dynamic>? messagesData = (data['continuationContents']
+              ['liveChatContinuation']['actions'] as List?)
           ?.map((action) => (action['addChatItemAction']['item']
               ['liveChatTextMessageRenderer']));
       messagesData?.forEach((message) {
@@ -154,7 +154,10 @@ Future<String?> getLiveVideoId(String channelURL) async {
           if (content is Map &&
               content['richItemRenderer'] != null &&
               content['richItemRenderer']['content'] != null &&
-              content['richItemRenderer']['content']['videoRenderer'] != null) {
+              content['richItemRenderer']['content']['videoRenderer'] != null &&
+              content['richItemRenderer']['content']['videoRenderer']
+                      ['upcomingEventData'] ==
+                  null) {
             var videoId = content['richItemRenderer']['content']
                 ['videoRenderer']['videoId'];
             return videoId;
