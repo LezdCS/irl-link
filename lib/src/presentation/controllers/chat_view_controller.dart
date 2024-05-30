@@ -404,7 +404,6 @@ class ChatViewController extends GetxController
       globals.talker?.error('VideoID not found for the channel: $channelId');
       return;
     }
-    globals.talker?.error('videoId: $videoId');
 
     YoutubeChat youtubeChat = YoutubeChat(
       videoId,
