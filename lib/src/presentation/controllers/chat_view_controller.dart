@@ -311,6 +311,7 @@ class ChatViewController extends GetxController
     }
 
     for (YoutubeChat y in youtubeChatToRemove) {
+      y.closeStream();
       youtubeChats.removeWhere((yc) => yc.videoId == y.videoId);
     }
   }

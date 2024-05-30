@@ -17,6 +17,10 @@ class YoutubeChat {
     this.videoId,
   );
 
+  void closeStream() {
+    _chatStreamController.close();
+  }
+
   // Function to fetch the initial continuation token
   Future<String?> fetchInitialContinuationToken() async {
     var headers = {
@@ -123,6 +127,7 @@ class YoutubeChat {
     }
 
     while (continuationToken != null) {
+      if(_chatStreamController.isClosed) return;
       continuationToken = await fetchChatMessages(continuationToken);
       await Future.delayed(const Duration(seconds: 5)); // 5-second pause
     }
