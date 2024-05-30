@@ -187,14 +187,10 @@ class ChatMessage extends Equatable
     );
   }
 
-  factory ChatMessage.fromYoutube(dynamic message, String videoId) {
-    String authorName = message['authorName']['simpleText'];
-    String id = message['id'];
-    String timestamp = message['timestampUsec'];
-    List? messages = (message['message']['runs'] as List?)
-        ?.map((run) => run['text'])
-        .where((message) => message != null)
-        .toList();
+  factory ChatMessage.fromYoutube(dynamic messageRaw, List? messages, String videoId) {
+    String authorName = messageRaw['authorName']['simpleText'];
+    String id = messageRaw['id'];
+    String timestamp = messageRaw['timestampUsec'];
     return ChatMessage(
       id: id,
       authorId: '',

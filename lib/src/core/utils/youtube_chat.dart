@@ -83,12 +83,21 @@ class YoutubeChat {
           headers: options['headers'], body: body);
       dynamic data = json.decode(response.body);
 
+
       Iterable<dynamic>? messagesData = (data['continuationContents']
               ['liveChatContinuation']['actions'] as List?)
           ?.map((action) => (action['addChatItemAction']['item']
               ['liveChatTextMessageRenderer']));
+
       messagesData?.forEach((message) {
-        ChatMessage msg = ChatMessage.fromYoutube(message, videoId);
+        if(message['message'] == null) return;
+        List? messages = (message['message']['runs'] as List?)
+        ?.map((run) => run['text'])
+        .where((message) => message != null)
+        .toList();
+        if(messages == null) return;
+        if(messages.isEmpty) return;
+        ChatMessage msg = ChatMessage.fromYoutube(message, messages, videoId);
         _chatStreamController.add(msg);
       });
 
