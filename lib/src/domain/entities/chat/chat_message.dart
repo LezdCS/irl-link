@@ -19,6 +19,7 @@ enum EventType {
 enum Platform {
   twitch,
   kick,
+  youtube,
 }
 
 // ignore: must_be_immutable
@@ -164,13 +165,51 @@ class ChatMessage extends Equatable
       isVip: false,
       isDeleted: false,
       rawData: '',
-      eventType: null, //TODO: Add event type for KickMessage
+      eventType: null,
       badgesList: message.data.sender.identity.badges
           .map((badge) => ChatBadge.fromKick(channelId, badge, subBadges))
           .toList(),
-      emotes: const {}, //TODO: Add emotes for KickMessage
+      emotes: const {},
       platform: Platform.kick,
       channelId: channelId,
+
+      //implements
+      raidingChannelName: '',
+      badges: const [],
+      giftedName: '',
+      highlightType: null,
+      isGift: false,
+      months: '',
+      systemMessage: '',
+      tier: '',
+      totalBits: 0,
+      viewerCount: 0,
+    );
+  }
+
+  factory ChatMessage.fromYoutube(dynamic messageRaw, List? messages, String videoId) {
+    String authorName = messageRaw['authorName']['simpleText'];
+    String id = messageRaw['id'];
+    String timestamp = messageRaw['timestampUsec'];
+    return ChatMessage(
+      id: id,
+      authorId: '',
+      displayName: authorName,
+      username: authorName,
+      color: '#FFFFFF',
+      message: messages?[0],
+      timestamp: int.parse(timestamp),
+      isAction: false,
+      isSubscriber: false,
+      isModerator: false,
+      isVip: false,
+      isDeleted: false,
+      rawData: '',
+      eventType: null,
+      badgesList: const [],
+      emotes: const {}, 
+      platform: Platform.youtube,
+      channelId: videoId,
 
       //implements
       raidingChannelName: '',

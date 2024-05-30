@@ -235,7 +235,8 @@ class StreamElements extends GetView {
                                 children: [
                                   Image(
                                     image: AssetImage(
-                                        "lib/assets/streamelements/seLogo.png"),
+                                      "lib/assets/streamelements/seLogo.png",
+                                    ),
                                     width: 30,
                                   ),
                                   SizedBox(

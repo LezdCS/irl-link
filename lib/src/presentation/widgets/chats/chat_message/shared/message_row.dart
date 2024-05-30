@@ -41,13 +41,22 @@ class MessageRow extends StatelessWidget {
     List<ChatBadge> badges = [];
     badges.addAll(message.badgesList);
     if (showPlatformBadge) {
-      String kickBadge =
-          'https://static.wikia.nocookie.net/logopedia/images/1/11/Kick_%28Icon%29.svg/revision/latest/scale-to-width-down/250?cb=20230622003955';
-      String twitchBadge = 'https://pngimg.com/d/twitch_PNG18.png';
+      String badge = '';
+      switch (message.platform) {
+        case Platform.twitch:
+          badge = "lib/assets/twitch/twitch_logo.png";
+          break;
+        case Platform.kick:
+          badge = "lib/assets/kick/kickLogo.png";
+          break;
+        case Platform.youtube:
+          badge = "lib/assets/youtube/youtubeLogo.png";
+          break;
+      }
       ChatBadge platformBadge = ChatBadge(
-        imageUrl1x: message.platform == Platform.kick ? kickBadge : twitchBadge,
-        imageUrl2x: message.platform == Platform.kick ? kickBadge : twitchBadge,
-        imageUrl4x: message.platform == Platform.kick ? kickBadge : twitchBadge,
+        imageUrl1x: badge,
+        imageUrl2x: badge,
+        imageUrl4x: badge,
         id: '',
       );
       badges.insert(0, platformBadge);
@@ -69,20 +78,28 @@ class MessageRow extends StatelessWidget {
           ),
           for (ChatBadge badge in badges)
             Container(
-              padding: const EdgeInsets.only(right: 4, top: 3),
-              child: Uri.parse(badge.imageUrl1x).isAbsolute
-                  ? Image(
-                      width: 18,
-                      height: 18,
-                      image: NetworkImage(badge.imageUrl1x),
-                      filterQuality: FilterQuality.high,
-                    )
-                  : SvgPicture.asset(
-                      badge.imageUrl1x,
-                      width: 18,
-                      height: 18,
-                    ),
-            ),
+                padding: const EdgeInsets.only(right: 4, top: 3),
+                child: Uri.parse(badge.imageUrl1x).isAbsolute
+                    ? Image(
+                        width: 18,
+                        height: 18,
+                        image: NetworkImage(badge.imageUrl1x),
+                        filterQuality: FilterQuality.high,
+                      )
+                    : badge.imageUrl1x.endsWith('.svg')
+                        ? SvgPicture.asset(
+                            badge.imageUrl1x,
+                            width: 18,
+                            height: 18,
+                          )
+                        : Image(
+                            width: 18,
+                            height: 18,
+                            image: AssetImage(
+                              badge.imageUrl1x,
+                            ),
+                            filterQuality: FilterQuality.high,
+                          )),
           AuthorName(
             isAction: message.isAction,
             username: message.username,
