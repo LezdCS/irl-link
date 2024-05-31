@@ -338,11 +338,11 @@ class ChatsJoined extends GetView<SettingsViewController> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Form(
-          child: Column(
-            children: [
-              Obx(
-                () => DropdownButton(
+        Obx(
+          () => Form(
+            child: Column(
+              children: [
+                DropdownButton(
                   value: selectedPlatform.toString(),
                   items: List.generate(Platform.values.length, (index) {
                     String badge = '';
@@ -387,40 +387,72 @@ class ChatsJoined extends GetView<SettingsViewController> {
                     selectedPlatform.value = pFromS;
                   },
                 ),
-              ),
-              TextFormField(
-                controller: channelTextController,
-                textInputAction: TextInputAction.send,
-                style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyLarge!.color,
-                ),
-                maxLines: 1,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the channel name';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  isDense: true,
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-                  enabledBorder: Theme.of(context).inputDecorationTheme.border,
-                  hintStyle: TextStyle(
-                      color: Theme.of(context).textTheme.bodyLarge!.color,
-                      fontSize: 16),
-                  labelStyle: TextStyle(
+                TextFormField(
+                  controller: channelTextController,
+                  textInputAction: TextInputAction.send,
+                  style: TextStyle(
                     color: Theme.of(context).textTheme.bodyLarge!.color,
                   ),
-                  hintText: 'Channel name',
-                  labelText: 'Channel name',
+                  maxLines: 1,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the channel name';
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    helperText: _getHelperText(selectedPlatform.value),
+                    helperStyle: TextStyle(
+                      color: Theme.of(context).textTheme.bodyLarge!.color,
+                    ),
+                    isDense: true,
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                    enabledBorder:
+                        Theme.of(context).inputDecorationTheme.border,
+                    hintStyle: TextStyle(
+                      color: Theme.of(context).textTheme.bodyMedium!.color,
+                      fontSize: 16,
+                    ),
+                    labelStyle: TextStyle(
+                      color: Theme.of(context).textTheme.bodyLarge!.color,
+                    ),
+                    hintText: _getHintText(selectedPlatform.value),
+                    labelText: _getHintText(selectedPlatform.value),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],
     );
+  }
+
+  String _getHelperText(Platform platform) {
+    switch (platform) {
+      case Platform.twitch:
+        return '';
+      case Platform.kick:
+        return '';
+      case Platform.youtube:
+        return 'Ex: youtube.com/@channel/streams';
+      default:
+        return '';
+    }
+  }
+
+  String _getHintText(Platform platform) {
+    switch (platform) {
+      case Platform.twitch:
+        return 'Channel name';
+      case Platform.kick:
+        return 'Channel name';
+      case Platform.youtube:
+        return 'Channel URL';
+      default:
+        return '';
+    }
   }
 }
 
