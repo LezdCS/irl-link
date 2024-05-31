@@ -282,7 +282,7 @@ Widget _addDialog(context, SettingsViewController controller) {
                 const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
             enabledBorder: Theme.of(context).inputDecorationTheme.border,
             hintStyle: TextStyle(
-                color: Theme.of(context).textTheme.bodyLarge!.color,
+                color: Theme.of(context).textTheme.bodyMedium!.color,
                 fontSize: 16),
             labelStyle: TextStyle(
               color: Theme.of(context).textTheme.bodyLarge!.color,
@@ -317,7 +317,7 @@ Widget _addDialog(context, SettingsViewController controller) {
                 const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
             enabledBorder: Theme.of(context).inputDecorationTheme.border,
             hintStyle: TextStyle(
-                color: Theme.of(context).textTheme.bodyLarge!.color,
+                color: Theme.of(context).textTheme.bodyMedium!.color,
                 fontSize: 16),
             labelStyle: TextStyle(
               color: Theme.of(context).textTheme.bodyLarge!.color,
@@ -402,7 +402,7 @@ Widget _editDialog(context, SettingsViewController controller, elem) {
                 const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
             enabledBorder: Theme.of(context).inputDecorationTheme.border,
             hintStyle: TextStyle(
-                color: Theme.of(context).textTheme.bodyLarge!.color,
+                color: Theme.of(context).textTheme.bodyMedium!.color,
                 fontSize: 16),
             hintText: 'Tab title',
             labelText: 'Title',
@@ -435,7 +435,7 @@ Widget _editDialog(context, SettingsViewController controller, elem) {
                 const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
             enabledBorder: Theme.of(context).inputDecorationTheme.border,
             hintStyle: TextStyle(
-                color: Theme.of(context).textTheme.bodyLarge!.color,
+                color: Theme.of(context).textTheme.bodyMedium!.color,
                 fontSize: 16),
             hintText: 'Tab url',
             labelText: 'URL',
