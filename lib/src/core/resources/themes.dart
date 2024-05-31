@@ -11,7 +11,10 @@ class Themes {
       tertiary: Colors.deepPurpleAccent[200],
       tertiaryContainer: Colors.grey[850],
     ),
-    textTheme: const TextTheme(bodyLarge: TextStyle(color: Colors.white)),
+    textTheme: const TextTheme(
+      bodyLarge: TextStyle(color: Colors.white),
+      bodyMedium: TextStyle(color: Color.fromARGB(255, 75, 75, 75)),
+    ),
     primaryIconTheme: const IconThemeData(color: Colors.white),
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(
@@ -69,7 +72,10 @@ class Themes {
       tertiary: Colors.deepPurpleAccent[200],
       tertiaryContainer: Colors.grey[850],
     ),
-    textTheme: const TextTheme(bodyLarge: TextStyle(color: Colors.black)),
+    textTheme: const TextTheme(
+      bodyLarge: TextStyle(color: Colors.black),
+      bodyMedium: TextStyle(color: Color.fromARGB(255, 75, 75, 75)),
+    ),
     primaryIconTheme: const IconThemeData(color: Colors.black),
     inputDecorationTheme: const InputDecorationTheme(
       border: OutlineInputBorder(
