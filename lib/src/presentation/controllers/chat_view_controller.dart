@@ -68,15 +68,7 @@ class ChatViewController extends GetxController
         const Duration(seconds: 3),
         (Timer t) {
           // chatMessages.add(ChatMessage.randomGeneration(null, null, null));
-          if (scrollController.hasClients && isAutoScrolldown.value) {
-            Timer(const Duration(milliseconds: 100), () {
-              if (isAutoScrolldown.value) {
-                scrollController.jumpTo(
-                  scrollController.position.maxScrollExtent,
-                );
-              }
-            });
-          }
+          scrollChatToBottom();
         },
       );
       alertMessage.value = "DEMO";
@@ -386,16 +378,7 @@ class ChatViewController extends GetxController
       entity.ChatMessage twitchMessage =
           entity.ChatMessage.fromTwitch(message, twitchChat.channelId ?? '');
       chatMessages.add(twitchMessage);
-
-      if (scrollController.hasClients && isAutoScrolldown.value) {
-        Timer(const Duration(milliseconds: 100), () {
-          if (isAutoScrolldown.value) {
-            scrollController.jumpTo(
-              scrollController.position.maxScrollExtent,
-            );
-          }
-        });
-      }
+      scrollChatToBottom();
     });
   }
 
@@ -412,15 +395,7 @@ class ChatViewController extends GetxController
     youtubeChat.startFetchingChat();
     youtubeChat.chatStream.listen((message) {
       chatMessages.add(message);
-      if (scrollController.hasClients && isAutoScrolldown.value) {
-        Timer(const Duration(milliseconds: 100), () {
-          if (isAutoScrolldown.value) {
-            scrollController.jumpTo(
-              scrollController.position.maxScrollExtent,
-            );
-          }
-        });
-      }
+      scrollChatToBottom();
     });
     youtubeChats.add(youtubeChat);
     isChatConnected.value = true;
@@ -513,15 +488,19 @@ class ChatViewController extends GetxController
           break;
       }
 
-      if (scrollController.hasClients && isAutoScrolldown.value) {
-        Timer(const Duration(milliseconds: 100), () {
-          if (isAutoScrolldown.value) {
-            scrollController.jumpTo(
-              scrollController.position.maxScrollExtent,
-            );
-          }
-        });
-      }
+      scrollChatToBottom();
     });
+  }
+
+  void scrollChatToBottom() {
+    if (scrollController.hasClients && isAutoScrolldown.value) {
+      Timer(const Duration(milliseconds: 100), () {
+        if (isAutoScrolldown.value) {
+          scrollController.jumpTo(
+            scrollController.position.maxScrollExtent,
+          );
+        }
+      });
+    }
   }
 }
