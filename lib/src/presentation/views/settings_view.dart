@@ -36,9 +36,8 @@ class SettingsView extends GetView<SettingsViewController> {
       () => Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.arrow_back,
-              color: Theme.of(context).textTheme.bodyLarge!.color,
             ),
             onPressed: () => Get.back(),
           ),
@@ -71,11 +70,8 @@ class SettingsView extends GetView<SettingsViewController> {
             ),
           ],
           backgroundColor: Theme.of(context).colorScheme.secondary,
-          title: Text(
+          title: const Text(
             "Settings",
-            style: TextStyle(
-              color: Theme.of(context).textTheme.bodyLarge!.color,
-            ),
           ),
           centerTitle: false,
         ),
@@ -162,10 +158,9 @@ class SettingsView extends GetView<SettingsViewController> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       "FFZ, BTTV & 7TV emotes",
                       style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge!.color,
                         fontSize: 18,
                       ),
                     ),
@@ -186,17 +181,13 @@ class SettingsView extends GetView<SettingsViewController> {
                   children: [
                     Text(
                       "text_size".tr,
-                      style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge!.color,
-                          fontSize: 18),
+                      style: const TextStyle(fontSize: 18),
                     ),
                     Text(
                         controller.homeViewController.settings.value.textSize!
                             .ceil()
                             .toString(),
-                        style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyLarge!.color,
-                            fontSize: 18)),
+                        style: const TextStyle(fontSize: 18)),
                     Slider(
                       onChanged: (value) {
                         controller.homeViewController.settings.value =
@@ -219,9 +210,7 @@ class SettingsView extends GetView<SettingsViewController> {
                   children: [
                     Text(
                       "show_timestamp".tr,
-                      style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge!.color,
-                          fontSize: 18),
+                      style: const TextStyle(fontSize: 18),
                     ),
                     Switch(
                       onChanged: (value) {
@@ -238,11 +227,9 @@ class SettingsView extends GetView<SettingsViewController> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       "Hide deleted messages",
-                      style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge!.color,
-                          fontSize: 18),
+                      style: TextStyle(fontSize: 18),
                     ),
                     Switch(
                       onChanged: (value) {
@@ -346,8 +333,7 @@ class SettingsView extends GetView<SettingsViewController> {
                   children: [
                     Text(
                       "dark_mode".tr,
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge!.color,
+                      style: const TextStyle(
                         fontSize: 18,
                       ),
                     ),
@@ -376,8 +362,7 @@ class SettingsView extends GetView<SettingsViewController> {
                     Expanded(
                       child: Text(
                         "prevent_speaker".tr,
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge!.color,
+                        style: const TextStyle(
                           fontSize: 18,
                         ),
                       ),
@@ -401,11 +386,10 @@ class SettingsView extends GetView<SettingsViewController> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(
+                    const Expanded(
                       child: Text(
                         "Display viewer count",
                         style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge!.color,
                           fontSize: 18,
                         ),
                       ),
@@ -431,8 +415,7 @@ class SettingsView extends GetView<SettingsViewController> {
                   children: [
                     Text(
                       "language".tr,
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge!.color,
+                      style: const TextStyle(
                         fontSize: 18,
                       ),
                     ),
@@ -509,10 +492,9 @@ class SettingsView extends GetView<SettingsViewController> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       "OBS",
                       style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge!.color,
                         fontSize: 18,
                       ),
                     ),
@@ -682,8 +664,7 @@ class SettingsView extends GetView<SettingsViewController> {
                   padding: const EdgeInsets.only(left: 10),
                   child: Text(
                     title,
-                    style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyLarge!.color,
+                    style: const TextStyle(
                       fontSize: 18,
                     ),
                   ),

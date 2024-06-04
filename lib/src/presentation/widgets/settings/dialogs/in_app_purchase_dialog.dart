@@ -82,43 +82,41 @@ Widget inAppPurchaseDialog(
                         )
                       ],
                     ),
-                    Wrap(
+                    const Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.check_circle_outline_rounded,
                           size: 18,
                           color: Colors.green,
                         ),
-                        const SizedBox(
+                        SizedBox(
                           width: 4,
                         ),
                         Text(
                           'Media request control (no audio)',
                           style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                              fontSize: 13),
+                            fontSize: 13,
+                          ),
                         )
                       ],
                     ),
-                    Wrap(
+                    const Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.check_circle_outline_rounded,
                           size: 18,
                           color: Colors.green,
                         ),
-                        const SizedBox(
+                        SizedBox(
                           width: 4,
                         ),
                         Text(
                           'Overlays (audio on Android only)',
                           style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                              fontSize: 13),
+                            fontSize: 13,
+                          ),
                         )
                       ],
                     ),
@@ -144,11 +142,11 @@ Widget inAppPurchaseDialog(
                   backgroundColor:
                       Theme.of(context).colorScheme.tertiaryContainer,
                 ),
-                child: Text(
+                child: const Text(
                   "Cancel",
                   style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyLarge!.color,
-                      fontSize: 13),
+                    fontSize: 13,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -163,9 +161,9 @@ Widget inAppPurchaseDialog(
                 ),
                 child: Text(
                   "Subscribe for $price",
-                  style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyLarge!.color,
-                      fontSize: 13),
+                  style: const TextStyle(
+                    fontSize: 13,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ),

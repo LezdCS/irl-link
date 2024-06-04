@@ -26,11 +26,9 @@ class ChatEvents extends StatelessWidget {
           ),
           actions: const [],
           backgroundColor: Theme.of(context).colorScheme.secondary,
-          title: Text(
+          title: const Text(
             "Chat events",
-            style: TextStyle(
-              color: Theme.of(context).textTheme.bodyLarge!.color,
-            ),
+            style: TextStyle(),
           ),
           centerTitle: false,
         ),
@@ -63,10 +61,9 @@ class ChatEvents extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        const Text(
                           "First time chatter",
                           style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyLarge!.color,
                             fontSize: 18,
                           ),
                         ),
@@ -115,10 +112,9 @@ class ChatEvents extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        const Text(
                           "Subscriptions",
                           style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyLarge!.color,
                             fontSize: 18,
                           ),
                         ),
@@ -167,10 +163,9 @@ class ChatEvents extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        const Text(
                           "Bits donations",
                           style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyLarge!.color,
                             fontSize: 18,
                           ),
                         ),
@@ -219,10 +214,9 @@ class ChatEvents extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        const Text(
                           "Announcements",
                           style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyLarge!.color,
                             fontSize: 18,
                           ),
                         ),
@@ -271,10 +265,9 @@ class ChatEvents extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        const Text(
                           "Incoming raids",
                           style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyLarge!.color,
                             fontSize: 18,
                           ),
                         ),
@@ -323,10 +316,9 @@ class ChatEvents extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        const Text(
                           "Channelpoint redemptions",
                           style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyLarge!.color,
                             fontSize: 18,
                           ),
                         ),

@@ -26,11 +26,8 @@ class ManageListHiddenUsers extends GetView {
           ),
           actions: const [],
           backgroundColor: Theme.of(context).colorScheme.secondary,
-          title: Text(
+          title: const Text(
             "Manage hidden users",
-            style: TextStyle(
-              color: Theme.of(context).textTheme.bodyLarge!.color,
-            ),
           ),
           centerTitle: false,
         ),
@@ -46,11 +43,8 @@ class ManageListHiddenUsers extends GetView {
                         .hiddenUsersIds!.isEmpty
                     ? Container(
                         padding: const EdgeInsets.only(top: 20),
-                        child: Text(
+                        child: const Text(
                           "Nothing in the list!",
-                          style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyLarge!.color,
-                          ),
                         ),
                       )
                     : controller.usernamesHiddenUsers.length !=

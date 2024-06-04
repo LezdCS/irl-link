@@ -42,11 +42,8 @@ class ManageListBrowserTabs extends GetView {
                 ]
               : const [],
           backgroundColor: Theme.of(context).colorScheme.secondary,
-          title: Text(
+          title: const Text(
             "Manage browser tabs",
-            style: TextStyle(
-              color: Theme.of(context).textTheme.bodyLarge!.color,
-            ),
           ),
           centerTitle: false,
         ),
@@ -62,11 +59,8 @@ class ManageListBrowserTabs extends GetView {
                         .homeViewController.settings.value.browserTabs!.isEmpty
                     ? Container(
                         padding: const EdgeInsets.only(top: 20),
-                        child: Text(
+                        child: const Text(
                           "Nothing in the list!",
-                          style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyLarge!.color,
-                          ),
                         ),
                       )
                     : ReorderableListView.builder(
@@ -221,10 +215,6 @@ class ManageListBrowserTabs extends GetView {
                             title: "add".tr,
                             textCancel: "cancel".tr,
                             textConfirm: "add".tr,
-                            titleStyle: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                            ),
                             backgroundColor:
                                 Theme.of(context).colorScheme.surface,
                             buttonColor: const Color(0xFF9147ff),
@@ -266,9 +256,6 @@ Widget _addDialog(context, SettingsViewController controller) {
         child: TextFormField(
           controller: controller.addBrowserTitleController,
           textInputAction: TextInputAction.send,
-          style: TextStyle(
-            color: Theme.of(context).textTheme.bodyLarge!.color,
-          ),
           maxLines: 1,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -276,13 +263,10 @@ Widget _addDialog(context, SettingsViewController controller) {
             }
             return null;
           },
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             isDense: true,
             contentPadding:
-                const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-            labelStyle: TextStyle(
-              color: Theme.of(context).textTheme.bodyLarge!.color,
-            ),
+                EdgeInsets.symmetric(horizontal: 8, vertical: 12),
             hintText: 'Tab title',
             labelText: 'Title',
           ),
@@ -307,13 +291,10 @@ Widget _addDialog(context, SettingsViewController controller) {
             }
             return null;
           },
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             isDense: true,
             contentPadding:
-                const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-            labelStyle: TextStyle(
-              color: Theme.of(context).textTheme.bodyLarge!.color,
-            ),
+                EdgeInsets.symmetric(horizontal: 8, vertical: 12),
             hintText: 'Tab url',
             labelText: 'URL',
           ),
@@ -322,10 +303,9 @@ Widget _addDialog(context, SettingsViewController controller) {
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
+          const Text(
             "Enabled",
             style: TextStyle(
-              color: Theme.of(context).textTheme.bodyLarge!.color,
               fontSize: 18,
             ),
           ),
@@ -344,10 +324,9 @@ Widget _addDialog(context, SettingsViewController controller) {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
+            const Text(
               "Is an audio source",
               style: TextStyle(
-                color: Theme.of(context).textTheme.bodyLarge!.color,
                 fontSize: 18,
               ),
             ),
@@ -388,10 +367,10 @@ Widget _editDialog(context, SettingsViewController controller, elem) {
             }
             return null;
           },
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             isDense: true,
             contentPadding:
-                const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                EdgeInsets.symmetric(horizontal: 8, vertical: 12),
             hintText: 'Tab title',
             labelText: 'Title',
           ),
@@ -426,10 +405,9 @@ Widget _editDialog(context, SettingsViewController controller, elem) {
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
+          const Text(
             "Enabled",
             style: TextStyle(
-              color: Theme.of(context).textTheme.bodyLarge!.color,
               fontSize: 18,
             ),
           ),
@@ -448,10 +426,9 @@ Widget _editDialog(context, SettingsViewController controller, elem) {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
+            const Text(
               "Is an audio source",
               style: TextStyle(
-                color: Theme.of(context).textTheme.bodyLarge!.color,
                 fontSize: 18,
               ),
             ),

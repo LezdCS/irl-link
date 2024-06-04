@@ -46,11 +46,8 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
             ),
           ],
           backgroundColor: Theme.of(context).colorScheme.secondary,
-          title: Text(
+          title: const Text(
             "Dashboard events",
-            style: TextStyle(
-              color: Theme.of(context).textTheme.bodyLarge!.color,
-            ),
           ),
           centerTitle: false,
         ),
@@ -201,9 +198,6 @@ Widget _addDialog(context, DashboardController dashboardController) {
                   const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
               hintText: 'Event title',
               labelText: 'Event title',
-              labelStyle: TextStyle(
-                color: Theme.of(context).textTheme.bodyLarge!.color,
-              ),
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -295,9 +289,6 @@ Widget _addDialog(context, DashboardController dashboardController) {
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
                   hintText: 'Your message',
                   labelText: 'Your message',
-                  labelStyle: TextStyle(
-                    color: Theme.of(context).textTheme.bodyLarge!.color,
-                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {

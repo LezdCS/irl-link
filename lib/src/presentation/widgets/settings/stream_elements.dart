@@ -21,10 +21,9 @@ class StreamElements extends GetView {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
+            const Text(
               'StreamElements',
               style: TextStyle(
-                color: Theme.of(context).textTheme.bodyLarge!.color,
                 fontSize: 18,
               ),
             ),
@@ -35,16 +34,15 @@ class StreamElements extends GetView {
                 color: Theme.of(context).colorScheme.tertiary,
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: Wrap(
+              child: const Wrap(
                 children: [
                   Text(
                     "Premium feature",
                     style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyLarge!.color,
                       fontSize: 12,
                     ),
                   ),
-                  const Icon(
+                  Icon(
                     CupertinoIcons.sparkles,
                     size: 12,
                     color: Colors.yellow,
@@ -206,12 +204,8 @@ class StreamElements extends GetView {
                               ),
                             ],
                           ),
-                          Text(
+                          const Text(
                             'Same as above for the overlay token',
-                            style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                            ),
                           ),
                           const SizedBox(
                             height: 8,
@@ -301,11 +295,8 @@ class StreamElements extends GetView {
       textAlign: TextAlign.center,
       text: TextSpan(
         children: [
-          TextSpan(
+          const TextSpan(
             text: 'To get your Access Token ',
-            style: TextStyle(
-              color: Theme.of(context).textTheme.bodyLarge!.color,
-            ),
           ),
           WidgetSpan(
             child: InkWell(
@@ -323,11 +314,8 @@ class StreamElements extends GetView {
               ),
             ),
           ),
-          TextSpan(
+          const TextSpan(
             text: '. Then press "Show Secret" and copy your JWT Token!',
-            style: TextStyle(
-              color: Theme.of(context).textTheme.bodyLarge!.color,
-            ),
           ),
         ],
       ),

@@ -92,19 +92,25 @@ class Themes {
       bodyMedium: TextStyle(color: Colors.black),
     ),
     primaryIconTheme: const IconThemeData(color: Colors.black),
-    inputDecorationTheme: const InputDecorationTheme(
-      border: OutlineInputBorder(
+    inputDecorationTheme: InputDecorationTheme(
+      border: const OutlineInputBorder(
         borderSide: BorderSide(color: Colors.black),
       ),
-      helperStyle: TextStyle(
-        color: Colors.black,
+      helperStyle: const TextStyle(
+        color: Color.fromARGB(255, 28, 25, 25),
       ),
-      hintStyle: TextStyle(
+      hintStyle: const TextStyle(
         color: Color.fromARGB(255, 75, 75, 75),
         fontSize: 16,
       ),
-      labelStyle: TextStyle(
+      labelStyle: const TextStyle(
         color: Colors.black,
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.grey[600]!),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.deepPurpleAccent[200]!),
       ),
     ),
     tabBarTheme: TabBarTheme(

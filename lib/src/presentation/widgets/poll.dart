@@ -11,15 +11,12 @@ Widget poll(
   TwitchPoll poll,
 ) {
   if (poll.status == PollStatus.empty) {
-    return Row(
+    return const Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           "No poll running",
-          style: TextStyle(
-            color: Theme.of(context).textTheme.bodyLarge!.color,
-          ),
         ),
       ],
     );
@@ -28,10 +25,9 @@ Widget poll(
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(
+      const Text(
         "Poll",
         style: TextStyle(
-          color: Theme.of(Get.context!).textTheme.bodyLarge!.color,
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
@@ -56,8 +52,7 @@ Widget poll(
                 children: [
                   Text(
                     choice.title,
-                    style: TextStyle(
-                      color: Theme.of(Get.context!).textTheme.bodyLarge!.color,
+                    style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                     ),

@@ -25,11 +25,9 @@ class ChatsJoined extends GetView<SettingsViewController> {
           ),
           actions: const [],
           backgroundColor: Theme.of(context).colorScheme.secondary,
-          title: Text(
+          title: const Text(
             "Chats joined",
-            style: TextStyle(
-              color: Theme.of(context).textTheme.bodyLarge!.color,
-            ),
+            style: TextStyle(),
           ),
           centerTitle: false,
         ),
@@ -54,8 +52,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
                         controller.homeViewController.twitchData?.twitchUser
                                 .login ??
                             '',
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge!.color,
+                        style: const TextStyle(
                           fontSize: 20,
                         ),
                       ),
