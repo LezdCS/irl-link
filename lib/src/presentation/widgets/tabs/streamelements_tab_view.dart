@@ -20,14 +20,10 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
                   child: TabBar(
                     controller: controller.tabController,
                     isScrollable: true,
-                    labelColor: Theme.of(context).colorScheme.tertiary,
-                    unselectedLabelColor:
-                        context.theme.textTheme.bodyLarge!.color,
                     indicator: const BoxDecoration(
                       border: null,
                     ),
                     tabAlignment: TabAlignment.center,
-                    dividerColor: Colors.transparent,
                     tabs: const [
                       Text("Activities"),
                       Text("Song Requests"),

@@ -13,12 +13,22 @@ class Themes {
     ),
     textTheme: const TextTheme(
       bodyLarge: TextStyle(color: Colors.white),
-      bodyMedium: TextStyle(color: Color.fromARGB(255, 75, 75, 75)),
+      bodyMedium: TextStyle(color: Colors.white),
     ),
     primaryIconTheme: const IconThemeData(color: Colors.white),
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(
         borderSide: BorderSide(color: Colors.grey[600]!),
+      ),
+      hintStyle: const TextStyle(
+        color: Color.fromARGB(255, 75, 75, 75),
+        fontSize: 16,
+      ),
+      helperStyle: const TextStyle(
+        color: Colors.white,
+      ),
+      labelStyle: const TextStyle(
+        color: Colors.white,
       ),
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(color: Colors.grey[600]!),
@@ -26,6 +36,11 @@ class Themes {
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(color: Colors.deepPurpleAccent[200]!),
       ),
+    ),
+    tabBarTheme: TabBarTheme(
+      labelColor: Colors.deepPurpleAccent[200],
+      unselectedLabelColor: Colors.white,
+      dividerColor: Colors.transparent,
     ),
     switchTheme: SwitchThemeData(
       thumbColor: WidgetStateProperty.resolveWith(
@@ -74,13 +89,28 @@ class Themes {
     ),
     textTheme: const TextTheme(
       bodyLarge: TextStyle(color: Colors.black),
-      bodyMedium: TextStyle(color: Color.fromARGB(255, 75, 75, 75)),
+      bodyMedium: TextStyle(color: Colors.black),
     ),
     primaryIconTheme: const IconThemeData(color: Colors.black),
     inputDecorationTheme: const InputDecorationTheme(
       border: OutlineInputBorder(
         borderSide: BorderSide(color: Colors.black),
       ),
+      helperStyle: TextStyle(
+        color: Colors.black,
+      ),
+      hintStyle: TextStyle(
+        color: Color.fromARGB(255, 75, 75, 75),
+        fontSize: 16,
+      ),
+      labelStyle: TextStyle(
+        color: Colors.black,
+      ),
+    ),
+    tabBarTheme: TabBarTheme(
+      labelColor: Colors.deepPurpleAccent[200],
+      unselectedLabelColor: Colors.black,
+      dividerColor: Colors.transparent,
     ),
     switchTheme: SwitchThemeData(
       thumbColor: WidgetStateProperty.resolveWith(

@@ -402,21 +402,9 @@ class ChatsJoined extends GetView<SettingsViewController> {
                   },
                   decoration: InputDecoration(
                     helperText: _getHelperText(selectedPlatform.value),
-                    helperStyle: TextStyle(
-                      color: Theme.of(context).textTheme.bodyLarge!.color,
-                    ),
                     isDense: true,
                     contentPadding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-                    enabledBorder:
-                        Theme.of(context).inputDecorationTheme.border,
-                    hintStyle: TextStyle(
-                      color: Theme.of(context).textTheme.bodyMedium!.color,
-                      fontSize: 16,
-                    ),
-                    labelStyle: TextStyle(
-                      color: Theme.of(context).textTheme.bodyLarge!.color,
-                    ),
                     hintText: _getHintText(selectedPlatform.value),
                     labelText: _getHintText(selectedPlatform.value),
                   ),

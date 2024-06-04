@@ -71,8 +71,7 @@ class HomeView extends GetView<HomeViewController> {
                         child: SplitView(
                           controller: controller.splitViewController,
                           gripColor: context.theme.colorScheme.secondary,
-                          gripColorActive:
-                              context.theme.colorScheme.secondary,
+                          gripColorActive: context.theme.colorScheme.secondary,
                           gripSize: 8,
                           viewMode: context.isPortrait
                               ? SplitViewMode.Vertical
@@ -204,13 +203,10 @@ class HomeView extends GetView<HomeViewController> {
       () => TabBar(
         controller: controller.tabController,
         isScrollable: true,
-        labelColor: Theme.of(context).colorScheme.tertiary,
-        unselectedLabelColor: Theme.of(context).textTheme.bodyLarge!.color,
         indicatorColor: Theme.of(context).colorScheme.tertiary,
         labelPadding: const EdgeInsets.symmetric(horizontal: 30),
         indicatorSize: TabBarIndicatorSize.tab,
         indicatorWeight: 2,
-        dividerColor: Colors.transparent,
         onTap: (index) {
           controller.tabIndex.value = index;
         },
@@ -292,12 +288,6 @@ class HomeView extends GetView<HomeViewController> {
                           maxLines: 1,
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintStyle: TextStyle(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .backgroundColor,
-                                fontSize: 16),
                             hintText: controller.settings.value.generalSettings!
                                     .displayViewerCount
                                 ? '${Get.find<TwitchTabViewController>().twitchStreamInfos.value.viewerCount} viewers'
@@ -451,7 +441,7 @@ class HomeView extends GetView<HomeViewController> {
               child: InkWell(
                 onTap: () async {
                   controller.displayDashboard.value =
-                                  !controller.displayDashboard.value;
+                      !controller.displayDashboard.value;
                 },
                 child: Icon(
                   Icons.dashboard_rounded,

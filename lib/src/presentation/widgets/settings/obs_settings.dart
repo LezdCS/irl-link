@@ -44,8 +44,6 @@ class ObsSettings extends StatelessWidget {
                       isDense: true,
                       contentPadding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 7),
-                      enabledBorder:
-                          Theme.of(context).inputDecorationTheme.border,
                       hintText: 'url',
                       labelText: 'Websocket Url',
                       labelStyle: TextStyle(
@@ -87,13 +85,8 @@ class ObsSettings extends StatelessWidget {
                       isDense: true,
                       contentPadding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 7),
-                      enabledBorder:
-                          Theme.of(context).inputDecorationTheme.border,
                       hintText: 'password',
                       labelText: 'Websocket Password',
-                      labelStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.tertiary,
-                      ),
                       suffixIcon: IconButton(
                         icon: Icon(controller.obsWebsocketPasswordShow.value
                             ? Icons.visibility

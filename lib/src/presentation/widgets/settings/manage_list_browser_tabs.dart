@@ -280,10 +280,6 @@ Widget _addDialog(context, SettingsViewController controller) {
             isDense: true,
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-            enabledBorder: Theme.of(context).inputDecorationTheme.border,
-            hintStyle: TextStyle(
-                color: Theme.of(context).textTheme.bodyMedium!.color,
-                fontSize: 16),
             labelStyle: TextStyle(
               color: Theme.of(context).textTheme.bodyLarge!.color,
             ),
@@ -315,10 +311,6 @@ Widget _addDialog(context, SettingsViewController controller) {
             isDense: true,
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-            enabledBorder: Theme.of(context).inputDecorationTheme.border,
-            hintStyle: TextStyle(
-                color: Theme.of(context).textTheme.bodyMedium!.color,
-                fontSize: 16),
             labelStyle: TextStyle(
               color: Theme.of(context).textTheme.bodyLarge!.color,
             ),
@@ -400,15 +392,8 @@ Widget _editDialog(context, SettingsViewController controller, elem) {
             isDense: true,
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-            enabledBorder: Theme.of(context).inputDecorationTheme.border,
-            hintStyle: TextStyle(
-                color: Theme.of(context).textTheme.bodyMedium!.color,
-                fontSize: 16),
             hintText: 'Tab title',
             labelText: 'Title',
-            labelStyle: TextStyle(
-              color: Theme.of(context).textTheme.bodyLarge!.color,
-            ),
           ),
         ),
       ),
@@ -429,19 +414,12 @@ Widget _editDialog(context, SettingsViewController controller, elem) {
             }
             return null;
           },
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             isDense: true,
             contentPadding:
-                const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-            enabledBorder: Theme.of(context).inputDecorationTheme.border,
-            hintStyle: TextStyle(
-                color: Theme.of(context).textTheme.bodyMedium!.color,
-                fontSize: 16),
+                EdgeInsets.symmetric(horizontal: 8, vertical: 12),
             hintText: 'Tab url',
             labelText: 'URL',
-            labelStyle: TextStyle(
-              color: Theme.of(context).textTheme.bodyLarge!.color,
-            ),
           ),
         ),
       ),

@@ -47,7 +47,6 @@ class EmotePickerView extends GetView {
                   size: 20,
                 ),
                 border: InputBorder.none,
-                hintStyle: TextStyle(color: Colors.grey, fontSize: 16),
                 hintText: 'Emote name',
                 isDense: true,
                 contentPadding: EdgeInsets.only(left: 5),
