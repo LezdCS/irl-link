@@ -81,13 +81,9 @@ class LoginView extends GetView<LoginViewController> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        const Text(
-          "IRL LINK",
-          style: TextStyle(
-            fontSize: 34,
-            fontFamily: "Roboto",
-            fontWeight: FontWeight.bold,
-          ),
+        const Image(
+          image: AssetImage("lib/assets/irl_link_dark_trans_logo.png"),
+          width: 200,
         ),
         content,
         Container(),
