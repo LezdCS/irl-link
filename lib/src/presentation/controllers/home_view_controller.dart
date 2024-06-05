@@ -74,7 +74,7 @@ class HomeViewController extends GetxController
 
   // Chats
   RxList<ChatView> channels = <ChatView>[].obs;
-  ChatGroup? selectedChatGroup;
+  Rxn<ChatGroup> selectedChatGroup = Rxn<ChatGroup>();
   int? selectedChatIndex;
 
   late TabController chatTabsController;
@@ -242,8 +242,8 @@ class HomeViewController extends GetxController
         continue;
       }
 
-      if (selectedChatGroup == group) {
-        selectedChatGroup = channels.isNotEmpty
+      if (selectedChatGroup.value == group) {
+        selectedChatGroup.value = channels.isNotEmpty
             ? Get.find<ChatViewController>(tag: channels[0].chatGroup.id)
                 .chatGroup
             : null;
@@ -271,7 +271,7 @@ class HomeViewController extends GetxController
 
     if (channels.isEmpty) {
       selectedChatIndex = null;
-      selectedChatGroup = null;
+      selectedChatGroup.value = null;
     }
   }
 
@@ -300,7 +300,7 @@ class HomeViewController extends GetxController
 
   void getEmotes() {
     ChatViewController? chatController =
-        Get.find<ChatViewController>(tag: selectedChatGroup!.id);
+        Get.find<ChatViewController>(tag: selectedChatGroup.value?.id);
     for (TwitchChat twitchChat in chatController.twitchChats) {
       List<Emote> emotes = List.from(twitchChat.emotes)
         ..addAll(twitchChat.emotesFromSets)
@@ -315,7 +315,7 @@ class HomeViewController extends GetxController
 
   void searchEmote(String input) {
     ChatViewController? chatController =
-        Get.find<ChatViewController>(tag: selectedChatGroup!.id);
+        Get.find<ChatViewController>(tag: selectedChatGroup.value?.id);
 
     for (TwitchChat twitchChat in chatController.twitchChats) {
       List<Emote> emotes = List.from(twitchChat.emotes)
