@@ -64,6 +64,9 @@ class Themes {
             fontSize: 12,
           ),
         ),
+        foregroundColor: WidgetStatePropertyAll(
+          Colors.white
+        ),
       ),
     ),
     switchTheme: SwitchThemeData(
@@ -163,6 +166,9 @@ class Themes {
           TextStyle(
             fontSize: 12,
           ),
+        ),
+        foregroundColor: WidgetStatePropertyAll(
+          Colors.white
         ),
       ),
     ),

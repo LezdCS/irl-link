@@ -108,7 +108,6 @@ class ObsSettings extends StatelessWidget {
                     onPressed: () {
                       MobileScannerController cameraController =
                           MobileScannerController();
-
                       Get.dialog(
                         _qrPasswordScanner(
                           cameraController,
@@ -116,7 +115,6 @@ class ObsSettings extends StatelessWidget {
                           context,
                         ),
                       );
-
                       FocusManager.instance.primaryFocus?.unfocus();
                     },
                     child: Row(
@@ -124,9 +122,6 @@ class ObsSettings extends StatelessWidget {
                       children: [
                         Text(
                           'scan_qr'.tr,
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
                         ),
                         const SizedBox(width: 5),
                         const Icon(Icons.qr_code, color: Colors.white),
@@ -159,9 +154,6 @@ class ObsSettings extends StatelessWidget {
                       children: [
                         Text(
                           'history'.tr,
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
                         ),
                         const SizedBox(width: 10),
                         const Icon(Icons.history, color: Colors.white),

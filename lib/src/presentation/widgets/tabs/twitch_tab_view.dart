@@ -110,7 +110,9 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                           focusNode: controller.focus,
                           decoration: InputDecoration(
                             contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 7),
+                              horizontal: 8,
+                              vertical: 7,
+                            ),
                             hintText: 'Your stream\'s title',
                             labelText: 'stream_title'.tr,
                           ),
@@ -120,7 +122,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                     TextButton(
                       style: TextButton.styleFrom(
                         backgroundColor: Colors.deepPurpleAccent,
-                        fixedSize: const Size(50, 20),
+                        fixedSize: const Size(80, 20),
                       ),
                       onPressed: () {
                         controller.setStreamTitle();

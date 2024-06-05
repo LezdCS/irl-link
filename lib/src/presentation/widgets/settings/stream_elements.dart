@@ -113,16 +113,16 @@ class StreamElements extends GetView {
                                     ),
                                     suffixIcon: IconButton(
                                       icon: Icon(
-                                          controller.obsWebsocketUrlShow.value
+                                          controller.seJwtShow.value
                                               ? Icons.visibility
                                               : Icons.visibility_off),
                                       color: Theme.of(context)
                                           .primaryIconTheme
                                           .color,
                                       onPressed: () {
-                                        controller.obsWebsocketUrlShow.value =
+                                        controller.seJwtShow.value =
                                             !controller
-                                                .obsWebsocketUrlShow.value;
+                                                .seJwtShow.value;
                                       },
                                     ),
                                   ),
@@ -175,16 +175,16 @@ class StreamElements extends GetView {
                                     ),
                                     suffixIcon: IconButton(
                                       icon: Icon(
-                                          controller.obsWebsocketUrlShow.value
+                                          controller.seOverlayTokenShow.value
                                               ? Icons.visibility
                                               : Icons.visibility_off),
                                       color: Theme.of(context)
                                           .primaryIconTheme
                                           .color,
                                       onPressed: () {
-                                        controller.obsWebsocketUrlShow.value =
+                                        controller.seOverlayTokenShow.value =
                                             !controller
-                                                .obsWebsocketUrlShow.value;
+                                                .seOverlayTokenShow.value;
                                       },
                                     ),
                                   ),
@@ -226,7 +226,9 @@ class StreamElements extends GetView {
                                   ),
                                   Text(
                                     'Logout',
-                                    style: TextStyle(fontSize: 16),
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),
                                   ),
                                 ],
                               ),
