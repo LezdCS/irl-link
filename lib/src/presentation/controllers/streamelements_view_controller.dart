@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
@@ -68,9 +69,9 @@ class StreamelementsViewController extends GetxController
 
   Future<void> applySettings() async {
     if (homeViewController.seCredentials.value == null) return;
-    jwt = homeViewController.settings.value.streamElementsSettings?.jwt;
-    overlayToken =
-        homeViewController.settings.value.streamElementsSettings?.overlayToken;
+    Settings settings = homeViewController.settings.value;
+    jwt = settings.streamElementsSettings?.jwt;
+    overlayToken = settings.streamElementsSettings?.overlayToken;
     if (homeViewController.seMe.value != null) {
       handleGetMe(homeViewController.seMe.value!);
     }

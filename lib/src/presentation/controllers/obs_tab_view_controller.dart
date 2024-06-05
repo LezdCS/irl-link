@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 import 'package:irllink/src/core/utils/globals.dart' as globals;
@@ -245,12 +246,12 @@ class ObsTabViewController extends GetxController {
   }
 
   Future applySettings() async {
+    Settings settings = homeViewController.settings.value;
     if (obsWebSocket != null) {
       obsWebSocket!.close();
     }
-    if (homeViewController.settings.value.isObsConnected!) {
-      connectWs(homeViewController.settings.value.obsWebsocketUrl!,
-          homeViewController.settings.value.obsWebsocketPassword!);
+    if (settings.isObsConnected!) {
+      connectWs(settings.obsWebsocketUrl!, settings.obsWebsocketPassword!);
     }
   }
 }

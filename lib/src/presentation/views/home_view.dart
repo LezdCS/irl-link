@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
+import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
@@ -237,7 +238,9 @@ class HomeView extends GetView<HomeViewController> {
       height: height * 0.06,
       child: Row(
         children: [
-          Expanded(
+          controller.selectedChatGroup?.channels.firstWhereOrNull((c) => c.platform == Platform.twitch) == null ? 
+          Container()
+          : Expanded(
             flex: 5,
             child: Stack(
               alignment: AlignmentDirectional.center,

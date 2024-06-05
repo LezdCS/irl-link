@@ -58,6 +58,16 @@ class ChatGroup extends Equatable {
       channels,
     ];
   }
+
+  ChatGroup copyWith({
+    String? id,
+    List<Channel>? channels,
+  }) {
+    return ChatGroup(
+      id: id ?? this.id,
+      channels: channels ?? this.channels,
+    );
+  }
 }
 
 class Channel extends Equatable {

@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:flutter/services.dart';
+import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/presentation/events/login_events.dart';
 
 class LoginViewController extends GetxController {
@@ -28,13 +30,13 @@ class LoginViewController extends GetxController {
     await Future.doWhile(() =>
         Future.delayed(const Duration(seconds: 2)).then((_) => hasNoNetwork()));
 
-    await loginEvents.getTwitchFromLocal().then((value) {
-      if (value.error == null) {
-        Get.offAllNamed(Routes.home, arguments: [value.data]);
-      }
-    }).catchError((e) {});
-
+    DataState<TwitchCredentials> twitchCredsResult =
+        await loginEvents.getTwitchFromLocal();
     isLoading.value = false;
+
+    if (twitchCredsResult.error == null) {
+      Get.offAllNamed(Routes.home, arguments: [twitchCredsResult.data]);
+    }
 
     super.onReady();
   }

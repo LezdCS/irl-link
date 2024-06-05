@@ -261,21 +261,24 @@ class ChatsJoined extends GetView<SettingsViewController> {
               channel: channelTextController.text.trim(),
               enabled: true,
             );
-            chatGroup.channels.add(newChan);
-
+            List<Channel> channels = [...chatGroup.channels, newChan];
+            chatGroup = chatGroup.copyWith(
+              channels: channels
+            );
             List<ChatGroup>? groups = [];
             groups.addAll(controller.homeViewController.settings.value
                     .chatSettings?.chatGroups ??
                 []);
+            int indexToReplace = groups.indexWhere((g) => g.id == chatGroup.id);
+            groups.removeAt(indexToReplace);
+            groups.insert(indexToReplace, chatGroup);
             controller.homeViewController.settings.value =
                 controller.homeViewController.settings.value.copyWith(
               chatSettings: controller
                   .homeViewController.settings.value.chatSettings
                   ?.copyWith(chatGroups: groups),
             );
-
             controller.saveSettings();
-            controller.homeViewController.settings.refresh();
             channelTextController.text = '';
             Get.back();
           },
@@ -324,7 +327,6 @@ class ChatsJoined extends GetView<SettingsViewController> {
               ?.copyWith(chatGroups: groups),
         );
         controller.saveSettings();
-        controller.homeViewController.settings.refresh();
       },
       child: Container(
         padding:
