@@ -44,7 +44,8 @@ class ManageListHiddenUsers extends GetView {
                     ? Container(
                         padding: const EdgeInsets.only(top: 20),
                         child: const Text(
-                          "Nothing in the list!",
+                          "Nothing in the list! To add users, select them in a chat and press 'Hide user'",
+                          textAlign: TextAlign.center,
                         ),
                       )
                     : controller.usernamesHiddenUsers.length !=

@@ -40,17 +40,34 @@ class ChatsJoined extends GetView<SettingsViewController> {
               Container(
                 color: Theme.of(context).colorScheme.secondary,
                 padding: const EdgeInsets.only(
-                    left: 20, right: 20, bottom: 10, top: 10),
-                margin: const EdgeInsets.only(bottom: 5, top: 5),
+                  left: 20,
+                  right: 20,
+                  bottom: 10,
+                  top: 10,
+                ),
+                margin: const EdgeInsets.only(
+                  bottom: 5,
+                  top: 5,
+                ),
                 child: InkWell(
                   onTap: () {},
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      const Image(
+                        width: 18,
+                        height: 18,
+                        image: AssetImage(
+                          "lib/assets/twitch/twitch_logo.png",
+                        ),
+                        filterQuality: FilterQuality.high,
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
                       Text(
                         controller.homeViewController.twitchData?.twitchUser
-                                .login ??
+                                .displayName ??
                             '',
                         style: const TextStyle(
                           fontSize: 20,
