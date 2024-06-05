@@ -610,8 +610,7 @@ class Tts extends StatelessWidget {
   }) {
     Get.defaultDialog(
       title: title,
-      titleStyle: const TextStyle(color: Colors.white),
-      backgroundColor: const Color(0xFF0e0e10),
+      titleStyle: Theme.of(Get.context!).textTheme.bodyLarge!,
       buttonColor: const Color(0xFF9147ff),
       cancelTextColor: const Color(0xFF9147ff),
       textCancel: "Back",

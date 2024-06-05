@@ -69,6 +69,15 @@ class Themes {
         ),
       ),
     ),
+    chipTheme: const ChipThemeData(
+      deleteIconColor: Colors.white,
+      labelStyle: TextStyle(
+        color: Colors.white,
+      ),
+      side: BorderSide(
+        color: Colors.white,
+      )
+    ),
     switchTheme: SwitchThemeData(
       thumbColor: WidgetStateProperty.resolveWith(
         (Set<WidgetState> states) {
@@ -171,6 +180,15 @@ class Themes {
           Colors.white
         ),
       ),
+    ),
+    chipTheme: const ChipThemeData(
+      deleteIconColor: Colors.black,
+      labelStyle: TextStyle(
+        color: Colors.black,
+      ),
+      side: BorderSide(
+        color: Colors.black,
+      )
     ),
     switchTheme: SwitchThemeData(
       thumbColor: WidgetStateProperty.resolveWith(
