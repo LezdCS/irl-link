@@ -54,10 +54,10 @@ Widget inAppPurchaseDialog(
                     Radius.circular(8),
                   ),
                 ),
-                child: Column(
+                child: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'StreamElements',
                       style:
                           TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
@@ -65,24 +65,22 @@ Widget inAppPurchaseDialog(
                     Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.check_circle_outline_rounded,
                           size: 18,
                           color: Colors.green,
                         ),
-                        const SizedBox(
+                        SizedBox(
                           width: 4,
                         ),
                         Text(
                           'Events list view',
                           style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
                               fontSize: 13),
                         )
                       ],
                     ),
-                    const Wrap(
+                    Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         Icon(
@@ -101,7 +99,7 @@ Widget inAppPurchaseDialog(
                         )
                       ],
                     ),
-                    const Wrap(
+                    Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         Icon(

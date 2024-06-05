@@ -52,20 +52,14 @@ class ManageListHiddenUsers extends GetView {
                                 .hiddenUsersIds!.length
                         ? Container(
                             padding: const EdgeInsets.only(top: 20),
-                            child: Column(
+                            child: const Column(
                               children: [
-                                const CircularProgressIndicator(),
-                                const SizedBox(
+                                CircularProgressIndicator(),
+                                SizedBox(
                                   height: 10,
                                 ),
                                 Text(
                                   "Loading...",
-                                  style: TextStyle(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge!
-                                        .color,
-                                  ),
                                 ),
                               ],
                             ),

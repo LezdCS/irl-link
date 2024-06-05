@@ -242,9 +242,9 @@ Widget _activityCollapsed(
           activity.getIcon(),
           const SizedBox(width: 4),
           Expanded(
-            child: RichText(
+            child: Text.rich(
               overflow: TextOverflow.ellipsis,
-              text: TextSpan(
+              TextSpan(
                 children: [
                   TextSpan(
                     text: activity.textFromEnum(),
@@ -301,8 +301,8 @@ Widget _activityExpanded(
               activity.getIcon(),
               const SizedBox(width: 4),
               Expanded(
-                child: RichText(
-                  text: TextSpan(children: [
+                child: Text.rich(
+                  TextSpan(children: [
                     TextSpan(
                       text: activity.textFromEnum(),
                       style: TextStyle(

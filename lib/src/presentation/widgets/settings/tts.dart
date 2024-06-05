@@ -395,11 +395,7 @@ class Tts extends StatelessWidget {
                           children: [
                             Text(
                               "prefixs_ignored".tr,
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .color,
+                              style: const TextStyle(
                                 fontSize: 18,
                               ),
                             ),
@@ -487,11 +483,7 @@ class Tts extends StatelessWidget {
                           children: [
                             Text(
                               "prefixs_allowed".tr,
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .color,
+                              style: const TextStyle(
                                 fontSize: 18,
                               ),
                             ),
@@ -689,11 +681,6 @@ class Tts extends StatelessWidget {
                       },
                       child: Text(
                         "add".tr,
-                        style: TextStyle(
-                            color: Theme.of(Get.context!)
-                                .textTheme
-                                .bodyLarge!
-                                .color),
                       ),
                     ),
                   ),

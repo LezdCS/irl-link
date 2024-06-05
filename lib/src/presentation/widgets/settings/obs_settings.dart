@@ -37,9 +37,6 @@ class ObsSettings extends StatelessWidget {
                           .copyWith(obsWebsocketUrl: value);
                       controller.saveSettings();
                     },
-                    style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyLarge!.color,
-                    ),
                     decoration: InputDecoration(
                       isDense: true,
                       contentPadding: const EdgeInsets.symmetric(
@@ -78,9 +75,6 @@ class ObsSettings extends StatelessWidget {
                           .copyWith(obsWebsocketPassword: value);
                       controller.saveSettings();
                     },
-                    style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyLarge!.color,
-                    ),
                     decoration: InputDecoration(
                       isDense: true,
                       contentPadding: const EdgeInsets.symmetric(

@@ -31,8 +31,8 @@ class Word extends StatelessWidget {
               fontStyle: isAction ? FontStyle.italic : FontStyle.normal,
             ),
           )
-        : RichText(
-            text: TextSpan(
+        : Text.rich(
+            TextSpan(
               text: "$word ",
               style: TextStyle(
                 color: Colors.lightBlue,

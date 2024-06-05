@@ -42,6 +42,15 @@ class Themes {
       unselectedLabelColor: Colors.white,
       dividerColor: Colors.transparent,
     ),
+    appBarTheme: const AppBarTheme(
+      titleTextStyle: TextStyle(
+        color: Colors.white,
+        fontSize: 18,
+      ),
+      iconTheme: IconThemeData(
+        color: Colors.white,
+      ),
+    ),
     dividerTheme: const DividerThemeData(
       thickness: 2,
       indent: 0,
@@ -132,6 +141,15 @@ class Themes {
       labelColor: Colors.deepPurpleAccent[200],
       unselectedLabelColor: Colors.black,
       dividerColor: Colors.transparent,
+    ),
+    appBarTheme: const AppBarTheme(
+      titleTextStyle: TextStyle(
+        color: Colors.black,
+        fontSize: 18,
+      ),
+      iconTheme: IconThemeData(
+        color: Colors.black,
+      ),
     ),
     dividerTheme: const DividerThemeData(
       thickness: 2,

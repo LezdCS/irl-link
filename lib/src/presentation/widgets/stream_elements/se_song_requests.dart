@@ -68,9 +68,9 @@ class SeSongRequests extends GetView {
             const Padding(
               padding: EdgeInsets.only(bottom: 15),
             ),
-            RichText(
+            Text.rich(
               overflow: TextOverflow.ellipsis,
-              text: TextSpan(children: [
+              TextSpan(children: [
                 const TextSpan(
                   text: "Queue ",
                   style: TextStyle(
@@ -116,9 +116,9 @@ class SeSongRequests extends GetView {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                RichText(
+                Text.rich(
                   overflow: TextOverflow.ellipsis,
-                  text: TextSpan(
+                  TextSpan(
                     children: [
                       TextSpan(
                         text: song.channel,
@@ -137,9 +137,9 @@ class SeSongRequests extends GetView {
                     ],
                   ),
                 ),
-                RichText(
+                Text.rich(
                   overflow: TextOverflow.ellipsis,
-                  text: TextSpan(children: [
+                  TextSpan(children: [
                     const TextSpan(
                       text: "Duration: ",
                       style: TextStyle(),

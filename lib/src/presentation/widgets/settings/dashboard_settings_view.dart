@@ -151,9 +151,6 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
                     title: "New event".tr,
                     cancel: null,
                     confirm: Container(),
-                    titleStyle: TextStyle(
-                      color: Theme.of(context).textTheme.bodyLarge!.color,
-                    ),
                     backgroundColor: Theme.of(context).colorScheme.surface,
                     buttonColor: const Color(0xFF9147ff),
                     cancelTextColor: const Color(0xFF9147ff),

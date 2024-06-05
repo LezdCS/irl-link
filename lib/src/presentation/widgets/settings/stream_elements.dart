@@ -97,12 +97,6 @@ class StreamElements extends GetView {
                                     );
                                     controller.saveSettings();
                                   },
-                                  style: TextStyle(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge!
-                                        .color,
-                                  ),
                                   decoration: InputDecoration(
                                     isDense: true,
                                     contentPadding: const EdgeInsets.symmetric(
@@ -165,12 +159,6 @@ class StreamElements extends GetView {
                                     );
                                     controller.saveSettings();
                                   },
-                                  style: TextStyle(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge!
-                                        .color,
-                                  ),
                                   decoration: InputDecoration(
                                     isDense: true,
                                     contentPadding: const EdgeInsets.symmetric(
@@ -291,9 +279,9 @@ class StreamElements extends GetView {
   }
 
   Widget _jwtExplanation(BuildContext context) {
-    return RichText(
+    return Text.rich(
       textAlign: TextAlign.center,
-      text: TextSpan(
+      TextSpan(
         children: [
           const TextSpan(
             text: 'To get your Access Token ',

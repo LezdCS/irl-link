@@ -93,12 +93,6 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                           ),
                           Text(
                             "viewers".tr,
-                            style: TextStyle(
-                              color: Theme.of(Get.context!)
-                                  .textTheme
-                                  .bodyLarge!
-                                  .color,
-                            ),
                           ),
                         ],
                       ),
@@ -114,7 +108,6 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         child: TextFormField(
                           controller: controller.titleFormController,
                           focusNode: controller.focus,
-                          style: Theme.of(Get.context!).textTheme.bodyLarge,
                           decoration: InputDecoration(
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 7),

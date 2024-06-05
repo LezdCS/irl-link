@@ -21,8 +21,8 @@ class AuthorName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RichText(
-      text: TextSpan(
+    return Text.rich(
+      TextSpan(
         text: username != displayName.toLowerCase() ? username : displayName,
         style: TextStyle(
           color: Color(int.parse(color.replaceAll('#', '0xff'))),

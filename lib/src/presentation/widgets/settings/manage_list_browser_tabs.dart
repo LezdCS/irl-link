@@ -94,12 +94,6 @@ class ManageListBrowserTabs extends GetView {
                             child: ListTile(
                               title: Text(
                                 elem['title'],
-                                style: TextStyle(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .color,
-                                ),
                               ),
                               trailing: !controller.browserTabsSelected
                                       .contains(elem)
@@ -118,12 +112,6 @@ class ManageListBrowserTabs extends GetView {
                                               title: 'Edit',
                                               textCancel: "cancel".tr,
                                               textConfirm: "confirm".tr,
-                                              titleStyle: TextStyle(
-                                                color: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyLarge!
-                                                    .color,
-                                              ),
                                               backgroundColor: Theme.of(context)
                                                   .colorScheme
                                                   .surface,
@@ -149,12 +137,6 @@ class ManageListBrowserTabs extends GetView {
                                               title: 'Delete',
                                               textCancel: "cancel".tr,
                                               textConfirm: "confirm".tr,
-                                              titleStyle: TextStyle(
-                                                color: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyLarge!
-                                                    .color,
-                                              ),
                                               backgroundColor: Theme.of(context)
                                                   .colorScheme
                                                   .surface,
@@ -280,9 +262,6 @@ Widget _addDialog(context, SettingsViewController controller) {
         child: TextFormField(
           controller: controller.addBrowserUrlController,
           textInputAction: TextInputAction.send,
-          style: TextStyle(
-            color: Theme.of(context).textTheme.bodyLarge!.color,
-          ),
           maxLines: 1,
           textCapitalization: TextCapitalization.none,
           validator: (value) {
@@ -359,7 +338,6 @@ Widget _editDialog(context, SettingsViewController controller, elem) {
         child: TextFormField(
           controller: controller.addBrowserTitleController,
           textInputAction: TextInputAction.send,
-          style: Theme.of(context).textTheme.bodyLarge,
           maxLines: 1,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -384,7 +362,6 @@ Widget _editDialog(context, SettingsViewController controller, elem) {
         child: TextFormField(
           controller: controller.addBrowserUrlController,
           textInputAction: TextInputAction.send,
-          style: Theme.of(context).textTheme.bodyLarge,
           maxLines: 1,
           textCapitalization: TextCapitalization.none,
           validator: (value) {
