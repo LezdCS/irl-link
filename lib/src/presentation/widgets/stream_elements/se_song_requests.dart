@@ -56,10 +56,9 @@ class SeSongRequests extends GetView {
             const Padding(
               padding: EdgeInsets.only(top: 10),
             ),
-            Text(
+            const Text(
               'Now Playing',
               style: TextStyle(
-                color: Theme.of(context).textTheme.bodyLarge!.color,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -72,18 +71,14 @@ class SeSongRequests extends GetView {
             RichText(
               overflow: TextOverflow.ellipsis,
               text: TextSpan(children: [
-                TextSpan(
+                const TextSpan(
                   text: "Queue ",
                   style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyLarge!.color,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 TextSpan(
                   text: "(${controller.songRequestQueue.length} videos)",
-                  style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyLarge!.color,
-                  ),
                 ),
               ]),
             ),
@@ -127,22 +122,17 @@ class SeSongRequests extends GetView {
                     children: [
                       TextSpan(
                         text: song.channel,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Theme.of(context).textTheme.bodyLarge!.color,
                         ),
                       ),
-                      TextSpan(
+                      const TextSpan(
                         text: " - ",
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge!.color,
-                        ),
+                        style: TextStyle(),
                       ),
                       TextSpan(
                         text: song.title,
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge!.color,
-                        ),
+                        style: const TextStyle(),
                       )
                     ],
                   ),
@@ -150,24 +140,18 @@ class SeSongRequests extends GetView {
                 RichText(
                   overflow: TextOverflow.ellipsis,
                   text: TextSpan(children: [
-                    TextSpan(
+                    const TextSpan(
                       text: "Duration: ",
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge!.color,
-                      ),
+                      style: TextStyle(),
                     ),
                     TextSpan(
                       text: song.duration.toString(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Theme.of(context).textTheme.bodyLarge!.color,
                       ),
                     ),
-                    TextSpan(
+                    const TextSpan(
                       text: "s",
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge!.color,
-                      ),
                     ),
                   ]),
                 ),

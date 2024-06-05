@@ -138,7 +138,6 @@ Widget inAppPurchaseDialog(
                   Get.back();
                 },
                 style: TextButton.styleFrom(
-                  textStyle: const TextStyle(fontSize: 12),
                   backgroundColor:
                       Theme.of(context).colorScheme.tertiaryContainer,
                 ),
@@ -156,7 +155,6 @@ Widget inAppPurchaseDialog(
                   controller.storeController.purchase();
                 },
                 style: TextButton.styleFrom(
-                  textStyle: const TextStyle(fontSize: 12),
                   backgroundColor: Colors.deepPurpleAccent,
                 ),
                 child: Text(

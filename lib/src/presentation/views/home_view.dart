@@ -284,7 +284,6 @@ class HomeView extends GetView<HomeViewController> {
                             controller.isPickingEmote.value = false;
                           },
                           textInputAction: TextInputAction.send,
-                          style: Theme.of(context).textTheme.bodyLarge,
                           maxLines: 1,
                           decoration: InputDecoration(
                             border: InputBorder.none,
@@ -536,10 +535,10 @@ class HomeView extends GetView<HomeViewController> {
         (int index) => Tab(
           height: 30,
           child: Text(
-              controller.channels[index].chatGroup.channels
-                  .map((e) => e.channel)
-                  .join(", "),
-              style: Theme.of(context).textTheme.bodyLarge),
+            controller.channels[index].chatGroup.channels
+                .map((e) => e.channel)
+                .join(", "),
+          ),
         ),
       ),
     );

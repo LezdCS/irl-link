@@ -128,7 +128,6 @@ class Dashboard extends GetView<DashboardController> {
       alignment: Alignment.center,
       child: TextButton(
         style: TextButton.styleFrom(
-          textStyle: const TextStyle(fontSize: 12),
           backgroundColor: event.color,
         ),
         onPressed: () {

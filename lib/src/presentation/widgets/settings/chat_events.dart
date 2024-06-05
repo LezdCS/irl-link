@@ -87,12 +87,8 @@ class ChatEvents extends StatelessWidget {
                     ),
                   ],
                 ),
-                Divider(
+                const Divider(
                   height: 20,
-                  thickness: 2,
-                  indent: 0,
-                  endIndent: 0,
-                  color: Theme.of(context).colorScheme.secondary,
                 ),
                 Column(
                   children: [
@@ -138,12 +134,8 @@ class ChatEvents extends StatelessWidget {
                     ),
                   ],
                 ),
-                Divider(
+                const Divider(
                   height: 20,
-                  thickness: 2,
-                  indent: 0,
-                  endIndent: 0,
-                  color: Theme.of(context).colorScheme.secondary,
                 ),
                 Column(
                   children: [
@@ -189,12 +181,8 @@ class ChatEvents extends StatelessWidget {
                     ),
                   ],
                 ),
-                Divider(
+                const Divider(
                   height: 20,
-                  thickness: 2,
-                  indent: 0,
-                  endIndent: 0,
-                  color: Theme.of(context).colorScheme.secondary,
                 ),
                 Column(
                   children: [
@@ -240,12 +228,8 @@ class ChatEvents extends StatelessWidget {
                     ),
                   ],
                 ),
-                Divider(
+                const Divider(
                   height: 20,
-                  thickness: 2,
-                  indent: 0,
-                  endIndent: 0,
-                  color: Theme.of(context).colorScheme.secondary,
                 ),
                 Column(
                   children: [
@@ -291,12 +275,8 @@ class ChatEvents extends StatelessWidget {
                     ),
                   ],
                 ),
-                Divider(
+                const Divider(
                   height: 20,
-                  thickness: 2,
-                  indent: 0,
-                  endIndent: 0,
-                  color: Theme.of(context).colorScheme.secondary,
                 ),
                 Column(
                   children: [

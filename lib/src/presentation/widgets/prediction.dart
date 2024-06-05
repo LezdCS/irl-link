@@ -118,7 +118,6 @@ Widget prediction(
               children: [
                 TextButton(
                   style: TextButton.styleFrom(
-                    textStyle: const TextStyle(fontSize: 12),
                     backgroundColor:
                         Theme.of(context).colorScheme.tertiaryContainer,
                   ),
@@ -134,7 +133,6 @@ Widget prediction(
                 ),
                 TextButton(
                   style: TextButton.styleFrom(
-                    textStyle: const TextStyle(fontSize: 12),
                     backgroundColor: Colors.green,
                   ),
                   onPressed: () {

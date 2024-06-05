@@ -89,7 +89,6 @@ Widget poll(
               children: [
                 TextButton(
                   style: TextButton.styleFrom(
-                    textStyle: const TextStyle(fontSize: 12),
                     backgroundColor:
                         Theme.of(context).colorScheme.tertiaryContainer,
                   ),
@@ -105,7 +104,6 @@ Widget poll(
                 ),
                 TextButton(
                   style: TextButton.styleFrom(
-                    textStyle: const TextStyle(fontSize: 12),
                     backgroundColor: Colors.green,
                   ),
                   onPressed: () {

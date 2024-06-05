@@ -108,7 +108,6 @@ class ObsSettings extends StatelessWidget {
                 Expanded(
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      textStyle: const TextStyle(fontSize: 12),
                       backgroundColor: Theme.of(context).colorScheme.tertiary,
                       fixedSize: const Size(50, 20),
                     ),
@@ -145,7 +144,6 @@ class ObsSettings extends StatelessWidget {
                 Expanded(
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      textStyle: const TextStyle(fontSize: 12),
                       backgroundColor:
                           Theme.of(context).colorScheme.tertiaryContainer,
                       fixedSize: const Size(50, 20),

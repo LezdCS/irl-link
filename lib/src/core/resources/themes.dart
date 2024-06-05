@@ -27,8 +27,8 @@ class Themes {
       helperStyle: const TextStyle(
         color: Colors.white,
       ),
-      labelStyle: const TextStyle(
-        color: Colors.white,
+      labelStyle: TextStyle(
+        color: Colors.deepPurpleAccent[200],
       ),
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(color: Colors.grey[600]!),
@@ -41,6 +41,21 @@ class Themes {
       labelColor: Colors.deepPurpleAccent[200],
       unselectedLabelColor: Colors.white,
       dividerColor: Colors.transparent,
+    ),
+    dividerTheme: const DividerThemeData(
+      thickness: 2,
+      indent: 0,
+      endIndent: 0,
+      color: Color(0xFF18181b),
+    ),
+    textButtonTheme: const TextButtonThemeData(
+      style: ButtonStyle(
+        textStyle: WidgetStatePropertyAll(
+          TextStyle(
+            fontSize: 12,
+          ),
+        ),
+      ),
     ),
     switchTheme: SwitchThemeData(
       thumbColor: WidgetStateProperty.resolveWith(
@@ -103,8 +118,8 @@ class Themes {
         color: Color.fromARGB(255, 75, 75, 75),
         fontSize: 16,
       ),
-      labelStyle: const TextStyle(
-        color: Colors.black,
+      labelStyle: TextStyle(
+        color: Colors.deepPurpleAccent[200],
       ),
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(color: Colors.grey[600]!),
@@ -117,6 +132,21 @@ class Themes {
       labelColor: Colors.deepPurpleAccent[200],
       unselectedLabelColor: Colors.black,
       dividerColor: Colors.transparent,
+    ),
+    dividerTheme: const DividerThemeData(
+      thickness: 2,
+      indent: 0,
+      endIndent: 0,
+      color: Color(0xFFefeff1),
+    ),
+    textButtonTheme: const TextButtonThemeData(
+      style: ButtonStyle(
+        textStyle: WidgetStatePropertyAll(
+          TextStyle(
+            fontSize: 12,
+          ),
+        ),
+      ),
     ),
     switchTheme: SwitchThemeData(
       thumbColor: WidgetStateProperty.resolveWith(

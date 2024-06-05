@@ -54,7 +54,6 @@ class SettingsView extends GetView<SettingsViewController> {
                   }
                 },
                 style: TextButton.styleFrom(
-                  textStyle: const TextStyle(fontSize: 12),
                   backgroundColor:
                       controller.homeViewController.twitchData != null
                           ? Colors.red
@@ -84,12 +83,8 @@ class SettingsView extends GetView<SettingsViewController> {
                 const EdgeInsets.only(top: 8, left: 10, right: 10, bottom: 8),
             children: [
               Subscription(controller: controller),
-              Divider(
+              const Divider(
                 height: 20,
-                thickness: 2,
-                indent: 0,
-                endIndent: 0,
-                color: Theme.of(context).colorScheme.secondary,
               ),
               chatSettings(context, width),
               Divider(
@@ -100,20 +95,12 @@ class SettingsView extends GetView<SettingsViewController> {
                 color: Theme.of(context).colorScheme.secondary,
               ),
               connectionsSettings(context, width),
-              Divider(
+              const Divider(
                 height: 20,
-                thickness: 2,
-                indent: 0,
-                endIndent: 0,
-                color: Theme.of(context).colorScheme.secondary,
               ),
               generalSettings(context, width),
-              Divider(
+              const Divider(
                 height: 20,
-                thickness: 2,
-                indent: 0,
-                endIndent: 0,
-                color: Theme.of(context).colorScheme.secondary,
               ),
               contactSettings(context, width),
               Container(
