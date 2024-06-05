@@ -26,9 +26,6 @@ class Tts extends StatelessWidget {
           backgroundColor: Theme.of(context).colorScheme.secondary,
           title: Text(
             "text_to_speech".tr,
-            style: TextStyle(
-              color: Theme.of(context).textTheme.bodyLarge!.color,
-            ),
           ),
           centerTitle: false,
         ),
@@ -44,8 +41,7 @@ class Tts extends StatelessWidget {
                   children: [
                     Text(
                       "enable_tts".tr,
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge!.color,
+                      style: const TextStyle(
                         fontSize: 18,
                       ),
                     ),
@@ -70,8 +66,7 @@ class Tts extends StatelessWidget {
                   children: [
                     Text(
                       "language".tr,
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge!.color,
+                      style: const TextStyle(
                         fontSize: 18,
                       ),
                     ),
@@ -110,9 +105,7 @@ class Tts extends StatelessWidget {
                         children: [
                           Text(
                             "voice".tr,
-                            style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
+                            style: const TextStyle(
                               fontSize: 18,
                             ),
                           ),
@@ -154,10 +147,9 @@ class Tts extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       "Volume",
                       style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge!.color,
                         fontSize: 18,
                       ),
                     ),
@@ -184,8 +176,7 @@ class Tts extends StatelessWidget {
                   children: [
                     Text(
                       "speech_rate".tr,
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge!.color,
+                      style: const TextStyle(
                         fontSize: 18,
                       ),
                     ),
@@ -212,8 +203,7 @@ class Tts extends StatelessWidget {
                   children: [
                     Text(
                       "pitch".tr,
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge!.color,
+                      style: const TextStyle(
                         fontSize: 18,
                       ),
                     ),
@@ -239,10 +229,9 @@ class Tts extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       "Mute viewer name",
                       style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge!.color,
                         fontSize: 18,
                       ),
                     ),
@@ -266,10 +255,9 @@ class Tts extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       "Only read VIP messages",
                       style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge!.color,
                         fontSize: 18,
                       ),
                     ),
@@ -293,10 +281,9 @@ class Tts extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       "Only read Moderators messages",
                       style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge!.color,
                         fontSize: 18,
                       ),
                     ),
@@ -320,10 +307,9 @@ class Tts extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       "Only read Subscriber messages",
                       style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge!.color,
                         fontSize: 18,
                       ),
                     ),
@@ -409,11 +395,7 @@ class Tts extends StatelessWidget {
                           children: [
                             Text(
                               "prefixs_ignored".tr,
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .color,
+                              style: const TextStyle(
                                 fontSize: 18,
                               ),
                             ),
@@ -501,11 +483,7 @@ class Tts extends StatelessWidget {
                           children: [
                             Text(
                               "prefixs_allowed".tr,
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .color,
+                              style: const TextStyle(
                                 fontSize: 18,
                               ),
                             ),
@@ -591,9 +569,7 @@ class Tts extends StatelessWidget {
                         children: [
                           Text(
                             "ignored_users".tr,
-                            style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
+                            style: const TextStyle(
                               fontSize: 18,
                             ),
                           ),
@@ -705,11 +681,6 @@ class Tts extends StatelessWidget {
                       },
                       child: Text(
                         "add".tr,
-                        style: TextStyle(
-                            color: Theme.of(Get.context!)
-                                .textTheme
-                                .bodyLarge!
-                                .color),
                       ),
                     ),
                   ),

@@ -80,11 +80,8 @@ class SeActivitiesList extends GetView {
             () => CheckboxListTile(
               activeColor: Colors.deepPurple[600],
               controlAffinity: ListTileControlAffinity.leading,
-              title: Text(
+              title: const Text(
                 "Followers",
-                style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyLarge!.color,
-                ),
               ),
               value: controller.homeViewController.settings.value
                   .streamElementsSettings!.showFollowerActivity,
@@ -107,11 +104,8 @@ class SeActivitiesList extends GetView {
             () => CheckboxListTile(
               activeColor: Colors.deepPurple[600],
               controlAffinity: ListTileControlAffinity.leading,
-              title: Text(
+              title: const Text(
                 "Subscriptions",
-                style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyLarge!.color,
-                ),
               ),
               value: controller.homeViewController.settings.value
                   .streamElementsSettings!.showSubscriberActivity,
@@ -134,11 +128,8 @@ class SeActivitiesList extends GetView {
             () => CheckboxListTile(
               activeColor: Colors.deepPurple[600],
               controlAffinity: ListTileControlAffinity.leading,
-              title: Text(
+              title: const Text(
                 "Bits",
-                style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyLarge!.color,
-                ),
               ),
               value: controller.homeViewController.settings.value
                   .streamElementsSettings!.showCheerActivity,
@@ -161,11 +152,8 @@ class SeActivitiesList extends GetView {
             () => CheckboxListTile(
               activeColor: Colors.deepPurple[600],
               controlAffinity: ListTileControlAffinity.leading,
-              title: Text(
+              title: const Text(
                 "Donations",
-                style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyLarge!.color,
-                ),
               ),
               value: controller.homeViewController.settings.value
                   .streamElementsSettings!.showDonationActivity,
@@ -188,11 +176,8 @@ class SeActivitiesList extends GetView {
             () => CheckboxListTile(
               activeColor: Colors.deepPurple[600],
               controlAffinity: ListTileControlAffinity.leading,
-              title: Text(
+              title: const Text(
                 "Raids",
-                style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyLarge!.color,
-                ),
               ),
               value: controller.homeViewController.settings.value
                   .streamElementsSettings!.showRaidActivity,
@@ -215,11 +200,8 @@ class SeActivitiesList extends GetView {
             () => CheckboxListTile(
               activeColor: Colors.deepPurple[600],
               controlAffinity: ListTileControlAffinity.leading,
-              title: Text(
+              title: const Text(
                 "Hosts",
-                style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyLarge!.color,
-                ),
               ),
               value: controller.homeViewController.settings.value
                   .streamElementsSettings!.showHostActivity,
@@ -260,9 +242,9 @@ Widget _activityCollapsed(
           activity.getIcon(),
           const SizedBox(width: 4),
           Expanded(
-            child: RichText(
+            child: Text.rich(
               overflow: TextOverflow.ellipsis,
-              text: TextSpan(
+              TextSpan(
                 children: [
                   TextSpan(
                     text: activity.textFromEnum(),
@@ -319,8 +301,8 @@ Widget _activityExpanded(
               activity.getIcon(),
               const SizedBox(width: 4),
               Expanded(
-                child: RichText(
-                  text: TextSpan(children: [
+                child: Text.rich(
+                  TextSpan(children: [
                     TextSpan(
                       text: activity.textFromEnum(),
                       style: TextStyle(

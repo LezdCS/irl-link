@@ -64,12 +64,6 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                           controller.twitchStreamInfos.value.isOnline!
                               ? "live".tr
                               : "offline".tr,
-                          style: TextStyle(
-                            color: Theme.of(Get.context!)
-                                .textTheme
-                                .bodyLarge!
-                                .color,
-                          ),
                         ),
                       ],
                     ),
@@ -99,12 +93,6 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                           ),
                           Text(
                             "viewers".tr,
-                            style: TextStyle(
-                              color: Theme.of(Get.context!)
-                                  .textTheme
-                                  .bodyLarge!
-                                  .color,
-                            ),
                           ),
                         ],
                       ),
@@ -120,24 +108,21 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         child: TextFormField(
                           controller: controller.titleFormController,
                           focusNode: controller.focus,
-                          style: Theme.of(Get.context!).textTheme.bodyLarge,
                           decoration: InputDecoration(
                             contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 7),
+                              horizontal: 8,
+                              vertical: 7,
+                            ),
                             hintText: 'Your stream\'s title',
                             labelText: 'stream_title'.tr,
-                            labelStyle: TextStyle(
-                              color: Theme.of(context).colorScheme.tertiary,
-                            ),
                           ),
                         ),
                       ),
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
-                        textStyle: const TextStyle(fontSize: 11),
                         backgroundColor: Colors.deepPurpleAccent,
-                        fixedSize: const Size(50, 20),
+                        fixedSize: const Size(80, 20),
                       ),
                       onPressed: () {
                         controller.setStreamTitle();
@@ -152,17 +137,12 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                     ),
                   ],
                 ),
-                Divider(
+                const Divider(
                   height: 40,
-                  thickness: 4,
-                  indent: 0,
-                  endIndent: 0,
-                  color: Theme.of(context).colorScheme.secondary,
                 ),
                 Text(
                   "shortcuts".tr,
-                  style: TextStyle(
-                    color: Theme.of(Get.context!).textTheme.bodyLarge!.color,
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
@@ -214,12 +194,8 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                     ),
                   ],
                 ),
-                Divider(
+                const Divider(
                   height: 40,
-                  thickness: 4,
-                  indent: 0,
-                  endIndent: 0,
-                  color: Theme.of(context).colorScheme.secondary,
                 ),
                 _shortcutButton(
                   onTap: () {
@@ -274,12 +250,8 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                   context: context,
                   isOn: false,
                 ),
-                Divider(
+                const Divider(
                   height: 40,
-                  thickness: 4,
-                  indent: 0,
-                  endIndent: 0,
-                  color: Theme.of(context).colorScheme.secondary,
                 ),
                 Get.find<TwitchTabViewController>().twitchEventSub != null
                     ? prediction(
@@ -288,12 +260,8 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         controller.twitchEventSub!.currentPrediction.value,
                       )
                     : Container(),
-                Divider(
+                const Divider(
                   height: 40,
-                  thickness: 4,
-                  indent: 0,
-                  endIndent: 0,
-                  color: Theme.of(context).colorScheme.secondary,
                 ),
                 controller.twitchEventSub != null
                     ? poll(

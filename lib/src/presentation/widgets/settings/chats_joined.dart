@@ -25,11 +25,9 @@ class ChatsJoined extends GetView<SettingsViewController> {
           ),
           actions: const [],
           backgroundColor: Theme.of(context).colorScheme.secondary,
-          title: Text(
+          title: const Text(
             "Chats joined",
-            style: TextStyle(
-              color: Theme.of(context).textTheme.bodyLarge!.color,
-            ),
+            style: TextStyle(),
           ),
           centerTitle: false,
         ),
@@ -42,20 +40,36 @@ class ChatsJoined extends GetView<SettingsViewController> {
               Container(
                 color: Theme.of(context).colorScheme.secondary,
                 padding: const EdgeInsets.only(
-                    left: 20, right: 20, bottom: 10, top: 10),
-                margin: const EdgeInsets.only(bottom: 5, top: 5),
+                  left: 20,
+                  right: 20,
+                  bottom: 10,
+                  top: 10,
+                ),
+                margin: const EdgeInsets.only(
+                  bottom: 5,
+                  top: 5,
+                ),
                 child: InkWell(
                   onTap: () {},
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      const Image(
+                        width: 18,
+                        height: 18,
+                        image: AssetImage(
+                          "lib/assets/twitch/twitch_logo.png",
+                        ),
+                        filterQuality: FilterQuality.high,
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
                       Text(
                         controller.homeViewController.twitchData?.twitchUser
-                                .login ??
+                                .displayName ??
                             '',
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge!.color,
+                        style: const TextStyle(
                           fontSize: 20,
                         ),
                       ),
@@ -402,21 +416,9 @@ class ChatsJoined extends GetView<SettingsViewController> {
                   },
                   decoration: InputDecoration(
                     helperText: _getHelperText(selectedPlatform.value),
-                    helperStyle: TextStyle(
-                      color: Theme.of(context).textTheme.bodyLarge!.color,
-                    ),
                     isDense: true,
                     contentPadding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-                    enabledBorder:
-                        Theme.of(context).inputDecorationTheme.border,
-                    hintStyle: TextStyle(
-                      color: Theme.of(context).textTheme.bodyMedium!.color,
-                      fontSize: 16,
-                    ),
-                    labelStyle: TextStyle(
-                      color: Theme.of(context).textTheme.bodyLarge!.color,
-                    ),
                     hintText: _getHintText(selectedPlatform.value),
                     labelText: _getHintText(selectedPlatform.value),
                   ),

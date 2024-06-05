@@ -37,15 +37,10 @@ class ObsSettings extends StatelessWidget {
                           .copyWith(obsWebsocketUrl: value);
                       controller.saveSettings();
                     },
-                    style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyLarge!.color,
-                    ),
                     decoration: InputDecoration(
                       isDense: true,
                       contentPadding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 7),
-                      enabledBorder:
-                          Theme.of(context).inputDecorationTheme.border,
                       hintText: 'url',
                       labelText: 'Websocket Url',
                       labelStyle: TextStyle(
@@ -80,20 +75,12 @@ class ObsSettings extends StatelessWidget {
                           .copyWith(obsWebsocketPassword: value);
                       controller.saveSettings();
                     },
-                    style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyLarge!.color,
-                    ),
                     decoration: InputDecoration(
                       isDense: true,
                       contentPadding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 7),
-                      enabledBorder:
-                          Theme.of(context).inputDecorationTheme.border,
                       hintText: 'password',
                       labelText: 'Websocket Password',
-                      labelStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.tertiary,
-                      ),
                       suffixIcon: IconButton(
                         icon: Icon(controller.obsWebsocketPasswordShow.value
                             ? Icons.visibility
@@ -115,14 +102,12 @@ class ObsSettings extends StatelessWidget {
                 Expanded(
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      textStyle: const TextStyle(fontSize: 12),
                       backgroundColor: Theme.of(context).colorScheme.tertiary,
                       fixedSize: const Size(50, 20),
                     ),
                     onPressed: () {
                       MobileScannerController cameraController =
                           MobileScannerController();
-
                       Get.dialog(
                         _qrPasswordScanner(
                           cameraController,
@@ -130,7 +115,6 @@ class ObsSettings extends StatelessWidget {
                           context,
                         ),
                       );
-
                       FocusManager.instance.primaryFocus?.unfocus();
                     },
                     child: Row(
@@ -138,9 +122,6 @@ class ObsSettings extends StatelessWidget {
                       children: [
                         Text(
                           'scan_qr'.tr,
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
                         ),
                         const SizedBox(width: 5),
                         const Icon(Icons.qr_code, color: Colors.white),
@@ -152,7 +133,6 @@ class ObsSettings extends StatelessWidget {
                 Expanded(
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      textStyle: const TextStyle(fontSize: 12),
                       backgroundColor:
                           Theme.of(context).colorScheme.tertiaryContainer,
                       fixedSize: const Size(50, 20),
@@ -174,9 +154,6 @@ class ObsSettings extends StatelessWidget {
                       children: [
                         Text(
                           'history'.tr,
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
                         ),
                         const SizedBox(width: 10),
                         const Icon(Icons.history, color: Colors.white),
