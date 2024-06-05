@@ -13,18 +13,60 @@ class Themes {
     ),
     textTheme: const TextTheme(
       bodyLarge: TextStyle(color: Colors.white),
-      bodyMedium: TextStyle(color: Color.fromARGB(255, 75, 75, 75)),
+      bodyMedium: TextStyle(color: Colors.white),
     ),
     primaryIconTheme: const IconThemeData(color: Colors.white),
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(
         borderSide: BorderSide(color: Colors.grey[600]!),
       ),
+      hintStyle: const TextStyle(
+        color: Color.fromARGB(255, 75, 75, 75),
+        fontSize: 16,
+      ),
+      helperStyle: const TextStyle(
+        color: Colors.white,
+      ),
+      labelStyle: TextStyle(
+        color: Colors.deepPurpleAccent[200],
+      ),
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(color: Colors.grey[600]!),
       ),
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(color: Colors.deepPurpleAccent[200]!),
+      ),
+    ),
+    tabBarTheme: TabBarTheme(
+      labelColor: Colors.deepPurpleAccent[200],
+      unselectedLabelColor: Colors.white,
+      dividerColor: Colors.transparent,
+    ),
+    appBarTheme: const AppBarTheme(
+      titleTextStyle: TextStyle(
+        color: Colors.white,
+        fontSize: 18,
+      ),
+      iconTheme: IconThemeData(
+        color: Colors.white,
+      ),
+    ),
+    dividerTheme: const DividerThemeData(
+      thickness: 2,
+      indent: 0,
+      endIndent: 0,
+      color: Color(0xFF18181b),
+    ),
+    textButtonTheme: const TextButtonThemeData(
+      style: ButtonStyle(
+        textStyle: WidgetStatePropertyAll(
+          TextStyle(
+            fontSize: 12,
+          ),
+        ),
+        foregroundColor: WidgetStatePropertyAll(
+          Colors.white
+        ),
       ),
     ),
     switchTheme: SwitchThemeData(
@@ -74,12 +116,60 @@ class Themes {
     ),
     textTheme: const TextTheme(
       bodyLarge: TextStyle(color: Colors.black),
-      bodyMedium: TextStyle(color: Color.fromARGB(255, 75, 75, 75)),
+      bodyMedium: TextStyle(color: Colors.black),
     ),
     primaryIconTheme: const IconThemeData(color: Colors.black),
-    inputDecorationTheme: const InputDecorationTheme(
-      border: OutlineInputBorder(
+    inputDecorationTheme: InputDecorationTheme(
+      border: const OutlineInputBorder(
         borderSide: BorderSide(color: Colors.black),
+      ),
+      helperStyle: const TextStyle(
+        color: Color.fromARGB(255, 28, 25, 25),
+      ),
+      hintStyle: const TextStyle(
+        color: Color.fromARGB(255, 75, 75, 75),
+        fontSize: 16,
+      ),
+      labelStyle: TextStyle(
+        color: Colors.deepPurpleAccent[200],
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.grey[600]!),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.deepPurpleAccent[200]!),
+      ),
+    ),
+    tabBarTheme: TabBarTheme(
+      labelColor: Colors.deepPurpleAccent[200],
+      unselectedLabelColor: Colors.black,
+      dividerColor: Colors.transparent,
+    ),
+    appBarTheme: const AppBarTheme(
+      titleTextStyle: TextStyle(
+        color: Colors.black,
+        fontSize: 18,
+      ),
+      iconTheme: IconThemeData(
+        color: Colors.black,
+      ),
+    ),
+    dividerTheme: const DividerThemeData(
+      thickness: 2,
+      indent: 0,
+      endIndent: 0,
+      color: Color(0xFFefeff1),
+    ),
+    textButtonTheme: const TextButtonThemeData(
+      style: ButtonStyle(
+        textStyle: WidgetStatePropertyAll(
+          TextStyle(
+            fontSize: 12,
+          ),
+        ),
+        foregroundColor: WidgetStatePropertyAll(
+          Colors.white
+        ),
       ),
     ),
     switchTheme: SwitchThemeData(

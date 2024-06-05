@@ -54,10 +54,10 @@ Widget inAppPurchaseDialog(
                     Radius.circular(8),
                   ),
                 ),
-                child: Column(
+                child: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'StreamElements',
                       style:
                           TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
@@ -65,19 +65,17 @@ Widget inAppPurchaseDialog(
                     Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.check_circle_outline_rounded,
                           size: 18,
                           color: Colors.green,
                         ),
-                        const SizedBox(
+                        SizedBox(
                           width: 4,
                         ),
                         Text(
                           'Events list view',
                           style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
                               fontSize: 13),
                         )
                       ],
@@ -85,40 +83,38 @@ Widget inAppPurchaseDialog(
                     Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.check_circle_outline_rounded,
                           size: 18,
                           color: Colors.green,
                         ),
-                        const SizedBox(
+                        SizedBox(
                           width: 4,
                         ),
                         Text(
                           'Media request control (no audio)',
                           style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                              fontSize: 13),
+                            fontSize: 13,
+                          ),
                         )
                       ],
                     ),
                     Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.check_circle_outline_rounded,
                           size: 18,
                           color: Colors.green,
                         ),
-                        const SizedBox(
+                        SizedBox(
                           width: 4,
                         ),
                         Text(
                           'Overlays (audio on Android only)',
                           style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                              fontSize: 13),
+                            fontSize: 13,
+                          ),
                         )
                       ],
                     ),
@@ -140,15 +136,14 @@ Widget inAppPurchaseDialog(
                   Get.back();
                 },
                 style: TextButton.styleFrom(
-                  textStyle: const TextStyle(fontSize: 12),
                   backgroundColor:
                       Theme.of(context).colorScheme.tertiaryContainer,
                 ),
-                child: Text(
+                child: const Text(
                   "Cancel",
                   style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyLarge!.color,
-                      fontSize: 13),
+                    fontSize: 13,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -158,14 +153,13 @@ Widget inAppPurchaseDialog(
                   controller.storeController.purchase();
                 },
                 style: TextButton.styleFrom(
-                  textStyle: const TextStyle(fontSize: 12),
                   backgroundColor: Colors.deepPurpleAccent,
                 ),
                 child: Text(
                   "Subscribe for $price",
-                  style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyLarge!.color,
-                      fontSize: 13),
+                  style: const TextStyle(
+                    fontSize: 13,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ),

@@ -26,11 +26,8 @@ class ManageListHiddenUsers extends GetView {
           ),
           actions: const [],
           backgroundColor: Theme.of(context).colorScheme.secondary,
-          title: Text(
+          title: const Text(
             "Manage hidden users",
-            style: TextStyle(
-              color: Theme.of(context).textTheme.bodyLarge!.color,
-            ),
           ),
           centerTitle: false,
         ),
@@ -46,11 +43,9 @@ class ManageListHiddenUsers extends GetView {
                         .hiddenUsersIds!.isEmpty
                     ? Container(
                         padding: const EdgeInsets.only(top: 20),
-                        child: Text(
-                          "Nothing in the list!",
-                          style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyLarge!.color,
-                          ),
+                        child: const Text(
+                          "Nothing in the list! To add users, select them in a chat and press 'Hide user'",
+                          textAlign: TextAlign.center,
                         ),
                       )
                     : controller.usernamesHiddenUsers.length !=
@@ -58,20 +53,14 @@ class ManageListHiddenUsers extends GetView {
                                 .hiddenUsersIds!.length
                         ? Container(
                             padding: const EdgeInsets.only(top: 20),
-                            child: Column(
+                            child: const Column(
                               children: [
-                                const CircularProgressIndicator(),
-                                const SizedBox(
+                                CircularProgressIndicator(),
+                                SizedBox(
                                   height: 10,
                                 ),
                                 Text(
                                   "Loading...",
-                                  style: TextStyle(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge!
-                                        .color,
-                                  ),
                                 ),
                               ],
                             ),

@@ -245,7 +245,6 @@ class ModerationBottomSheet extends StatelessWidget {
                     decoration: const InputDecoration(
                       enabledBorder: InputBorder.none,
                       focusedBorder: InputBorder.none,
-                      hintStyle: TextStyle(color: Colors.grey, fontSize: 16),
                       hintText: 'Custom duration (s)',
                       isDense: true,
                       contentPadding: EdgeInsets.only(left: 5),

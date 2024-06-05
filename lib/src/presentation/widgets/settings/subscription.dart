@@ -66,9 +66,7 @@ class Subscription extends StatelessWidget {
                     ),
                     child: Text(
                       "Only $price",
-                      style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge!.color,
-                          fontSize: 13),
+                      style: const TextStyle(fontSize: 13),
                       textAlign: TextAlign.center,
                     ),
                   ),

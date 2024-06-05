@@ -70,7 +70,6 @@ class LoginView extends GetView<LoginViewController> {
           child: Obx(
             () => Text(
               controller.loadingMessage.value,
-              style: Theme.of(context).textTheme.bodyLarge,
             ),
           ),
         ),

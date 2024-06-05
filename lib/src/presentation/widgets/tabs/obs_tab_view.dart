@@ -162,10 +162,6 @@ class ObsTabView extends GetView<ObsTabViewController> {
                     // ),
                     Divider(
                       height: 40,
-                      thickness: 4,
-                      indent: 0,
-                      endIndent: 0,
-                      color: Theme.of(context).colorScheme.secondary,
                     ),
                     Wrap(children: [
                       Text(
@@ -179,12 +175,8 @@ class ObsTabView extends GetView<ObsTabViewController> {
                         child: getScenes(),
                       ),
                     ]),
-                    Divider(
+                    const Divider(
                       height: 40,
-                      thickness: 4,
-                      indent: 0,
-                      endIndent: 0,
-                      color: Theme.of(context).colorScheme.secondary,
                     ),
                     Wrap(children: [
                       Text(

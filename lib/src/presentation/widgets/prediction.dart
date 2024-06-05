@@ -12,14 +12,13 @@ Widget prediction(
   TwitchPrediction prediction,
 ) {
   if (prediction.status == PredictionStatus.empty) {
-    return Row(
+    return const Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           "No prediction running",
           style: TextStyle(
-            color: Theme.of(context).textTheme.bodyLarge!.color,
           ),
         ),
       ],
@@ -28,10 +27,9 @@ Widget prediction(
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(
+      const Text(
         "Prediction",
         style: TextStyle(
-          color: Theme.of(Get.context!).textTheme.bodyLarge!.color,
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
@@ -120,7 +118,6 @@ Widget prediction(
               children: [
                 TextButton(
                   style: TextButton.styleFrom(
-                    textStyle: const TextStyle(fontSize: 12),
                     backgroundColor:
                         Theme.of(context).colorScheme.tertiaryContainer,
                   ),
@@ -136,7 +133,6 @@ Widget prediction(
                 ),
                 TextButton(
                   style: TextButton.styleFrom(
-                    textStyle: const TextStyle(fontSize: 12),
                     backgroundColor: Colors.green,
                   ),
                   onPressed: () {
