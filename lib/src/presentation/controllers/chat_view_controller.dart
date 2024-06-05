@@ -60,9 +60,9 @@ class ChatViewController extends GetxController
     scrollController = ScrollController();
     banDurationInputController = TextEditingController();
     if (Get.arguments != null) {
-      homeViewController.selectedChatGroup = chatGroup;
       twitchData = Get.arguments[0];
       await applySettings();
+      homeViewController.selectedChatGroup.value = chatGroup;
     } else {
       chatDemoTimer = Timer.periodic(
         const Duration(seconds: 3),

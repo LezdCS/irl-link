@@ -238,7 +238,7 @@ class HomeView extends GetView<HomeViewController> {
       height: height * 0.06,
       child: Row(
         children: [
-          controller.selectedChatGroup?.channels.firstWhereOrNull((c) => c.platform == Platform.twitch) == null ? 
+          controller.selectedChatGroup.value?.channels.firstWhereOrNull((c) => c.platform == Platform.twitch) == null ? 
           Container()
           : Expanded(
             flex: 5,
@@ -265,10 +265,10 @@ class HomeView extends GetView<HomeViewController> {
                         child: TextField(
                           controller: controller.chatInputController,
                           onSubmitted: (String value) {
-                            if (controller.selectedChatGroup == null) return;
+                            if (controller.selectedChatGroup.value == null) return;
                             ChatViewController chatViewController =
                                 Get.find<ChatViewController>(
-                                    tag: controller.selectedChatGroup!.id);
+                                    tag: controller.selectedChatGroup.value?.id);
                             List<TwitchChat> twitchChats = [];
                             twitchChats.addAll(
                                 chatViewController.twitchChats.toList());
@@ -303,10 +303,10 @@ class HomeView extends GetView<HomeViewController> {
                       ),
                       InkWell(
                         onTap: () {
-                          if (controller.selectedChatGroup == null) return;
+                          if (controller.selectedChatGroup.value == null) return;
                           ChatViewController chatViewController =
                               Get.find<ChatViewController>(
-                                  tag: controller.selectedChatGroup!.id);
+                                  tag: controller.selectedChatGroup.value?.id);
                           List<TwitchChat> twitchChats = [];
                           twitchChats
                               .addAll(chatViewController.twitchChats.toList());
@@ -528,7 +528,7 @@ class HomeView extends GetView<HomeViewController> {
           ChatViewController c = Get.find<ChatViewController>(
               tag: controller.channels[i].chatGroup.id);
           c.scrollToBottom();
-          controller.selectedChatGroup = c.chatGroup;
+          controller.selectedChatGroup.value = c.chatGroup;
         }
         controller.selectedMessage.value = null;
         controller.selectedChatIndex = i;
