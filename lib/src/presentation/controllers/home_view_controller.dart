@@ -340,24 +340,25 @@ class HomeViewController extends GetxController
     homeEvents.setSettings(settings: settings.value);
   }
 
-  Future getSettings() async {
-    await homeEvents
-        .getSettings()
-        .then((value) async => await applySettings(value));
+  Future<DataState<Settings>> getSettings() async {
+    DataState<Settings> settings = await homeEvents.getSettings();
+    if (settings.error != null) {
+      return DataFailed('');
+    }
+    await applySettings(settings.data!);
+    return DataSuccess(settings.data!);
   }
 
-  Future applySettings(value) async {
+  Future applySettings(Settings settings) async {
     {
-      if (value.error != null) return;
-      settings.value = value.data!;
       await generateTabs();
       Get.find<DashboardController>();
       generateChats();
-      Get.find<TtsController>().initTts(settings.value);
-      if (!settings.value.generalSettings!.isDarkMode) {
+      Get.find<TtsController>().initTts(settings);
+      if (!settings.generalSettings!.isDarkMode) {
         Get.changeThemeMode(ThemeMode.light);
       }
-      if (settings.value.generalSettings!.keepSpeakerOn) {
+      if (settings.generalSettings!.keepSpeakerOn) {
         const path = "../lib/assets/blank.mp3";
         timerKeepSpeakerOn = Timer.periodic(
           const Duration(minutes: 5),
@@ -367,11 +368,11 @@ class HomeViewController extends GetxController
         timerKeepSpeakerOn?.cancel();
       }
       Locale locale = Locale(
-          settings.value.generalSettings!.appLanguage["languageCode"],
-          settings.value.generalSettings!.appLanguage["countryCode"]);
+        settings.generalSettings!.appLanguage["languageCode"],
+        settings.generalSettings!.appLanguage["countryCode"],
+      );
       Get.updateLocale(locale);
-      splitViewController?.weights =
-          settings.value.generalSettings!.splitViewWeights;
+      splitViewController?.weights = settings.generalSettings!.splitViewWeights;
     }
   }
 }
