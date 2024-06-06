@@ -16,7 +16,7 @@ Also available in the [Releases](https://github.com/LezdCS/irl_link/releases).
 
 ## Features
 
-- [x] Twitch
+- Twitch
   - [x] Chat
     - [x] Events (sub, follow, first message...)
     - [x] Modereation (TO, ban, delete message)
@@ -25,17 +25,27 @@ Also available in the [Releases](https://github.com/LezdCS/irl_link/releases).
   - [x] Viewer count
   - [x] Change stream title
   - [x] Polls & predictions
-  - [ ] Hype train
-- [x] OBS
+  - [x] Hype train
+- Kick
+  - [x] Chat
+    - [x] Messages
+    - [x] Events (subs, follow...)
+    - [x] Text To Speech
+    - [x] Emojis
+- YouTube
+  - [x] Chat
+    - [x] Messages
+- OBS
   - [x] Start & stop streaming/recording
   - [x] Switch scenes
   - [x] On/Off sources
   - [x] Manage sources volume
   - [ ] Display OBS statistics
-- [x] StreamElements
+- StreamElements
   - [x] Display activities (subs, follows, tips...)
   - [x] Replay activities
-  - [ ] Song request managment
+  - [x] Song request managment (just controls)
+  - [x] Overlays list (to be improved)
 
 ## Screenshots
 <div>
@@ -50,8 +60,9 @@ Also available in the [Releases](https://github.com/LezdCS/irl_link/releases).
 - Website : https://irllink.com
 - Wiki : https://github.com/LezdCS/irl_link/wiki
 - Bug Tracker : https://github.com/LezdCS/irl_link/issues
+- Support : https://discord.gg/irltools
 
-## Support
+## To support me
 I develop IRL Link on my free time! <br /> Please consider helping me if you use and like the application 😄<br />
 <br />
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/J3J43ML34)
