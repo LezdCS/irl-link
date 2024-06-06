@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/utils/init_dio.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
 
 enum RtIrlStatus {
   updating,
@@ -30,11 +29,12 @@ class RealtimeIrl {
           'longitude': p.longitude,
         },
       );
+      status = RtIrlStatus.updating;
       return DataSuccess(response.data);
     } on DioException catch (e) {
-      globals.talker?.error(e.message);
+      status = RtIrlStatus.stopped;
       return DataFailed(
-        "Unable to update your position on RTIRL",
+        "Unable to update your position on RTIRL : ${e.message}",
       );
     }
   }
@@ -46,11 +46,11 @@ class RealtimeIrl {
       response = await dio.post(
         "https://rtirl.com/api/stop?key=$key",
       );
+      status = RtIrlStatus.stopped;
       return DataSuccess(response.data);
     } on DioException catch (e) {
-      globals.talker?.error(e.message);
       return DataFailed(
-        "Unable to stop tracking your position on RTIRL.",
+        "Unable to stop tracking your position on RTIRL : ${e.message}",
       );
     }
   }

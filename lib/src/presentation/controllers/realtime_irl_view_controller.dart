@@ -17,19 +17,17 @@ class RealtimeIrlViewController extends GetxController {
   void onInit() {
     homeViewController = Get.find<HomeViewController>();
 
-    realtimeIrl = RealtimeIrl('key'); //TODO: set key from settings
+    realtimeIrl = RealtimeIrl(homeViewController.settings.value.rtIrlPushKey ?? '');
 
     super.onInit();
   }
 
   Future stop() async {
-    realtimeIrl.status = RtIrlStatus.stopped;
     timerRtIrl.cancel();
     return await realtimeIrl.stopTracking();
   }
 
   Future start() async {
-    realtimeIrl.status = RtIrlStatus.updating;
     timerRtIrl = Timer.periodic(const Duration(seconds: 4), (Timer t) async {
       DataState<Position> p = await determinePosition();
       if (p.error == null && realtimeIrl.status == RtIrlStatus.updating) {

@@ -80,11 +80,11 @@ class SettingsViewController extends GetxController {
       obsWebsocketPasswordFieldController.text =
           homeViewController.settings.value.obsWebsocketPassword!;
       seJwtInputController.text =
-          homeViewController.settings.value.streamElementsSettings!.jwt!;
+          homeViewController.settings.value.streamElementsSettings!.jwt ?? '';
       seOverlayTokenInputController.text = homeViewController
-          .settings.value.streamElementsSettings!.overlayToken!;
+          .settings.value.streamElementsSettings!.overlayToken ?? '';
       rtIrlInputController.text =
-          homeViewController.settings.value.rtIrlPushKey!;
+          homeViewController.settings.value.rtIrlPushKey ?? '';
       getUsernames();
     }
 

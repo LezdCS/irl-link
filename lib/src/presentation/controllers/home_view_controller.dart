@@ -18,6 +18,7 @@ import 'package:irllink/src/presentation/controllers/streamelements_view_control
 import 'package:irllink/src/presentation/controllers/tts_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:irllink/src/presentation/widgets/tabs/obs_tab_view.dart';
+import 'package:irllink/src/presentation/widgets/tabs/realtime_irl_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/tabs/twitch_tab_view.dart';
 import 'package:split_view/split_view.dart';
 import 'package:twitch_chat/twitch_chat.dart';
@@ -196,6 +197,13 @@ class HomeViewController extends GetxController
         WebPageView page = WebPageView(element['title'], element['url']);
         iOSAudioSources.add(page);
       }
+    }
+
+    if (settings.value.rtIrlPushKey != null &&
+        settings.value.rtIrlPushKey!.isNotEmpty) {
+      streamelementsViewController = Get.find<StreamelementsViewController>();
+      RealtimeIrlTabView realtimeIrlTabView = const RealtimeIrlTabView();
+      tabElements.add(realtimeIrlTabView);
     }
 
     tabController = TabController(length: tabElements.length, vsync: this);
