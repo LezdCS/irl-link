@@ -8,6 +8,7 @@ import 'package:irllink/src/presentation/controllers/settings_view_controller.da
 import 'package:irllink/src/presentation/controllers/store_controller.dart';
 import 'package:irllink/src/presentation/widgets/settings/chat_events.dart';
 import 'package:irllink/src/presentation/widgets/settings/dashboard_settings_view.dart';
+import 'package:irllink/src/presentation/widgets/settings/realtime_irl.dart';
 import 'package:irllink/src/presentation/widgets/settings/stream_elements.dart';
 import 'package:irllink/src/presentation/widgets/settings/talker_screen.dart';
 import 'package:irllink/src/presentation/widgets/settings/tts.dart';
@@ -512,6 +513,8 @@ class SettingsView extends GetView<SettingsViewController> {
                           storeController.products.isNotEmpty,
                   child: StreamElements(controller: controller),
                 ),
+                const SizedBox(height: 10),
+                RealtimeIrl(controller: controller),
               ],
             ),
           ),

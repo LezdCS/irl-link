@@ -18,9 +18,6 @@ class SettingsViewController extends GetxController {
   final SettingsEvents settingsEvents;
   final StreamelementsEvents streamelementsEvents;
 
-  late TextEditingController alternateChannelChatController;
-  late TextEditingController obsWebsocketUrlFieldController;
-  late TextEditingController obsWebsocketPasswordFieldController;
   late TextEditingController addBrowserTitleController;
   late TextEditingController addBrowserUrlController;
   late TextEditingController addHiddenUsernameController;
@@ -37,8 +34,12 @@ class SettingsViewController extends GetxController {
   RxBool obsWebsocketUrlShow = false.obs;
   RxBool seJwtShow = false.obs;
   RxBool seOverlayTokenShow = false.obs;
+  RxBool rtIrlKeyShow = false.obs;
+  late TextEditingController obsWebsocketUrlFieldController;
+  late TextEditingController obsWebsocketPasswordFieldController;
   late TextEditingController seJwtInputController;
   late TextEditingController seOverlayTokenInputController;
+  late TextEditingController rtIrlInputController;
 
   late TextEditingController addTtsIgnoredUsersController;
   late TextEditingController addTtsIgnoredPrefixsController;
@@ -65,6 +66,7 @@ class SettingsViewController extends GetxController {
     addTtsAllowedPrefixsController = TextEditingController();
     seJwtInputController = TextEditingController();
     seOverlayTokenInputController = TextEditingController();
+    rtIrlInputController = TextEditingController();
 
     usernamesHiddenUsers = <String>[].obs;
     super.onInit();
@@ -81,6 +83,8 @@ class SettingsViewController extends GetxController {
           homeViewController.settings.value.streamElementsSettings!.jwt!;
       seOverlayTokenInputController.text = homeViewController
           .settings.value.streamElementsSettings!.overlayToken!;
+      rtIrlInputController.text =
+          homeViewController.settings.value.rtIrlPushKey!;
       getUsernames();
     }
 

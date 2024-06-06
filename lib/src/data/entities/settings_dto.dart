@@ -32,6 +32,7 @@ class SettingsDTO extends Settings {
     required List browserTabs,
     required List obsConnectionsHistory,
     required StreamElementsSettings streamElementsSettings,
+    required String rtIrlPushKey,
     //TTS SETTINGS
     required TtsSettings ttsSettings,
   }) : super(
@@ -52,6 +53,7 @@ class SettingsDTO extends Settings {
             browserTabs: browserTabs,
             obsConnectionsHistory: obsConnectionsHistory,
             streamElementsSettings: streamElementsSettings,
+            rtIrlPushKey: rtIrlPushKey,
             //TTS SETTINGS
             ttsSettings: ttsSettings);
 
@@ -74,6 +76,7 @@ class SettingsDTO extends Settings {
         'browserTabs': browserTabs,
         'obsConnectionsHistory': obsConnectionsHistory,
         'streamElementsSettings': streamElementsSettings?.toJson(),
+        'rtIrlPushKey': rtIrlPushKey,
         //TTS
         'ttsSettings': ttsSettings?.toJson(),
       };
@@ -125,6 +128,9 @@ class SettingsDTO extends Settings {
       streamElementsSettings: map['streamElementsSettings'] != null
           ? StreamElementsSettingsDTO.fromJson(map['streamElementsSettings'])
           : const Settings.defaultSettings().streamElementsSettings!,
+      rtIrlPushKey: map['rtIrlPushKey'] != null
+          ? map['rtIrlPushKey'] as String
+          : const Settings.defaultSettings().rtIrlPushKey!,
       //TTS SETTINGS
       ttsSettings: map['ttsSettings'] != null
           ? TtsSettingsDTO.fromJson(map['ttsSettings'])
