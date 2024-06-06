@@ -20,7 +20,6 @@ Also available in the [Releases](https://github.com/LezdCS/irl_link/releases).
   - [x] Chat
     - [x] Events (sub, follow, first message...)
     - [x] Modereation (TO, ban, delete message)
-    - [x] Text To Speech
     - [x] Third-Party emojis (BTTV, 7TV, FFZ)
   - [x] Viewer count
   - [x] Change stream title
@@ -30,12 +29,11 @@ Also available in the [Releases](https://github.com/LezdCS/irl_link/releases).
   - [x] Chat
     - [x] Messages
     - [x] Events (subs, follow...)
-    - [x] Text To Speech
     - [x] Emojis
 - YouTube
   - [x] Chat
     - [x] Messages
-- OBS
+- OBS controls
   - [x] Start & stop streaming/recording
   - [x] Switch scenes
   - [x] On/Off sources
@@ -46,6 +44,10 @@ Also available in the [Releases](https://github.com/LezdCS/irl_link/releases).
   - [x] Replay activities
   - [x] Song request managment (just controls)
   - [x] Overlays list (to be improved)
+- Text To Speech
+- Light mode / Dark mode
+- Translations in English, French and Cantonese
+- Prevent your speaker to go in sleep mode
 
 ## Screenshots
 <div>
