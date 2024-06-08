@@ -10,7 +10,6 @@ import 'package:irllink/src/presentation/events/settings_events.dart';
 import 'package:irllink/src/presentation/events/streamelements_events.dart';
 
 import '../../domain/entities/twitch/twitch_user.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
 
 class SettingsViewController extends GetxController {
   SettingsViewController(
@@ -84,7 +83,6 @@ class SettingsViewController extends GetxController {
           homeViewController.settings.value.streamElementsSettings!.jwt ?? '';
       seOverlayTokenInputController.text = homeViewController
           .settings.value.streamElementsSettings!.overlayToken ?? '';
-      globals.talker?.debug(homeViewController.settings.value);
       rtIrlInputController.text =
           homeViewController.settings.value.rtIrlPushKey ?? '';
       getUsernames();
