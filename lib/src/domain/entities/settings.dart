@@ -26,6 +26,7 @@ class Settings extends Equatable {
   final List? browserTabs;
   final List? obsConnectionsHistory;
   final StreamElementsSettings? streamElementsSettings;
+  final String? rtIrlPushKey;
 
   //TTS SETTIGS
   final TtsSettings? ttsSettings;
@@ -50,6 +51,7 @@ class Settings extends Equatable {
     required this.browserTabs,
     required this.obsConnectionsHistory,
     required this.streamElementsSettings,
+    required this.rtIrlPushKey,
 
     //TTS SETTIGS
     required this.ttsSettings,
@@ -105,6 +107,7 @@ class Settings extends Equatable {
       overlayToken: null,
       mutedOverlays: [],
     ),
+    this.rtIrlPushKey = "",
 
     //TTS SETTINGS
     this.ttsSettings = const TtsSettings(
@@ -142,6 +145,7 @@ class Settings extends Equatable {
         'browserTabs': browserTabs,
         'obsConnectionsHistory': obsConnectionsHistory,
         'streamElementsSettings': streamElementsSettings?.toJson(),
+        'rtIrlPushKey': rtIrlPushKey,
         //TTS
         'ttsSettings': ttsSettings?.toJson(),
       };
@@ -166,6 +170,7 @@ class Settings extends Equatable {
       browserTabs,
       obsConnectionsHistory,
       streamElementsSettings,
+      rtIrlPushKey,
       //TTS
       ttsSettings
     ];
@@ -195,6 +200,7 @@ class Settings extends Equatable {
           List? browserTabs,
           List? obsConnectionsHistory,
           StreamElementsSettings? streamElementsSettings,
+          String? rtIrlPushKey,
           //TTS
           TtsSettings? ttsSettings}) =>
       Settings(
@@ -217,6 +223,7 @@ class Settings extends Equatable {
             obsConnectionsHistory ?? this.obsConnectionsHistory,
         streamElementsSettings:
             streamElementsSettings ?? this.streamElementsSettings,
+        rtIrlPushKey: rtIrlPushKey ?? this.rtIrlPushKey,
         //TTS
         ttsSettings: ttsSettings ?? this.ttsSettings,
       );

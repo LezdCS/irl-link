@@ -53,6 +53,10 @@
 		<array>
 			<string>audio</string>
 		</array> -->
+		<!-- <key>NSLocationWhenInUseUsageDescription</key>
+		<string>This app needs access to location when open.</string> -->
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>This app needs access to location when also in background.</string>
 		<key>NSAppTransportSecurity</key>
 		<dict>
 			<key>NSAllowsArbitraryLoads</key>
