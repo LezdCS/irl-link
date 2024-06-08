@@ -17,7 +17,8 @@ class RealtimeIrlViewController extends GetxController {
   void onInit() {
     homeViewController = Get.find<HomeViewController>();
 
-    realtimeIrl = RealtimeIrl(homeViewController.settings.value.rtIrlPushKey ?? '');
+    realtimeIrl =
+        RealtimeIrl(homeViewController.settings.value.rtIrlPushKey ?? '');
 
     super.onInit();
   }
@@ -28,10 +29,15 @@ class RealtimeIrlViewController extends GetxController {
   }
 
   Future start() async {
+    realtimeIrl.status.value = RtIrlStatus.updating;
     timerRtIrl = Timer.periodic(const Duration(seconds: 4), (Timer t) async {
       DataState<Position> p = await determinePosition();
       if (p is DataSuccess && realtimeIrl.status == RtIrlStatus.updating) {
-        realtimeIrl.updatePosition(p.data!);
+        DataState updateResult = await realtimeIrl.updatePosition(p.data!);
+        if(updateResult is DataFailed) {
+          realtimeIrl.status.value = RtIrlStatus.stopped;
+          await stop();
+        }
       }
     });
   }
