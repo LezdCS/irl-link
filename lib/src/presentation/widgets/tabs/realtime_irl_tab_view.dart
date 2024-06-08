@@ -9,12 +9,12 @@ class RealtimeIrlTabView extends GetView<RealtimeIrlViewController> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Container(
+      child: Obx(() => Container(
         alignment: Alignment.center,
-        child: controller.realtimeIrl.status == RtIrlStatus.updating
+        child: controller.realtimeIrl.status.value == RtIrlStatus.updating
             ? _stopUpdatingPosition()
             : _startUpdatingPosition(),
-      ),
+      ),),
     );
   }
 
