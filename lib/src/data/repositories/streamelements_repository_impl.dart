@@ -190,7 +190,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
 
       //refresh the access token to be sure the token is going to be valid after starting the app
       DataState<SeCredentials> creds = await refreshAccessToken(seCredentials);
-      if (creds.error == null) {
+      if (creds is DataSuccess) {
         seCredentials = creds.data!;
       } else {
         return DataFailed("Error refreshing SE Token");

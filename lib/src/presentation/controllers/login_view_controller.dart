@@ -34,7 +34,7 @@ class LoginViewController extends GetxController {
         await loginEvents.getTwitchFromLocal();
     isLoading.value = false;
 
-    if (twitchCredsResult.error == null) {
+    if (twitchCredsResult is DataSuccess) {
       Get.offAllNamed(Routes.home, arguments: [twitchCredsResult.data]);
     }
 
@@ -45,7 +45,7 @@ class LoginViewController extends GetxController {
     isLoading.value = true;
     TwitchAuthParams params = const TwitchAuthParams();
     await loginEvents.getTwitchOauth(params: params).then((value) {
-      if (value.error == null) {
+      if (value is DataSuccess) {
         Get.offAllNamed(Routes.home, arguments: [value.data]);
       }
     });

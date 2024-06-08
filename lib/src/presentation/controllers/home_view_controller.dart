@@ -99,14 +99,14 @@ class HomeViewController extends GetxController
       timerRefreshToken =
           Timer.periodic(const Duration(seconds: 13000), (Timer t) {
         homeEvents.refreshAccessToken(twitchData: twitchData!).then((value) => {
-              if (value.error == null) {twitchData = value.data!}
+              if (value is DataSuccess) {twitchData = value.data}
             });
 
         if (seCredentials.value != null) {
           homeEvents
               .refreshSeAccessToken(seCredentials: seCredentials.value!)
               .then((value) => {
-                    if (value.error == null) {seCredentials.value = value.data!}
+                    if (value is DataSuccess) {seCredentials.value = value.data}
                   });
         }
       });
@@ -129,8 +129,8 @@ class HomeViewController extends GetxController
   Future<void> setStreamElementsCredentials() async {
     DataState<SeCredentials> seCreds =
         await homeEvents.getSeCredentialsFromLocal();
-    if (seCreds.error == null) {
-      seCredentials.value = seCreds.data!;
+    if (seCreds is DataSuccess) {
+      seCredentials.value = seCreds.data;
       await setSeMe(seCredentials.value!);
     }
   }
@@ -138,8 +138,8 @@ class HomeViewController extends GetxController
   Future<void> setSeMe(SeCredentials seCreds) async {
     DataState<SeMe> seMeResult =
         await homeEvents.getSeMe(seCredentials.value!.accessToken);
-    if (seMeResult.error == null) {
-      seMe.value = seMeResult.data!;
+    if (seMeResult is DataSuccess) {
+      seMe.value = seMeResult.data;
     }
   }
 
@@ -350,7 +350,7 @@ class HomeViewController extends GetxController
 
   Future<DataState<Settings>> getSettings() async {
     DataState<Settings> settings = await homeEvents.getSettings();
-    if (settings.error != null) {
+    if (settings is DataFailed){
       return DataFailed('');
     }
     await applySettings(settings.data!);

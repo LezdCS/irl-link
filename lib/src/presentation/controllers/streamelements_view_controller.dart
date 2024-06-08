@@ -101,7 +101,7 @@ class StreamelementsViewController extends GetxController
     if (jwt != null) {
       DataState<List<SeSong>> songQueue =
           await streamelementsEvents.getSongQueue(jwt!, me.id);
-      if (songQueue.error == null) {
+      if (songQueue is DataSuccess) {
         songRequestQueue.value = songQueue.data ?? [];
       }
     }
