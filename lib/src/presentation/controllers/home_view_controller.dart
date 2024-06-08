@@ -349,12 +349,13 @@ class HomeViewController extends GetxController
   }
 
   Future<DataState<Settings>> getSettings() async {
-    DataState<Settings> settings = await homeEvents.getSettings();
+    DataState<Settings> settingsResult = await homeEvents.getSettings();
     if (settings is DataFailed){
       return DataFailed('');
     }
-    await applySettings(settings.data!);
-    return DataSuccess(settings.data!);
+    settings.value = settingsResult.data!;
+    await applySettings(settingsResult.data!);
+    return DataSuccess(settingsResult.data!);
   }
 
   Future applySettings(Settings settings) async {

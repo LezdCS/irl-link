@@ -10,6 +10,7 @@ import 'package:irllink/src/presentation/events/settings_events.dart';
 import 'package:irllink/src/presentation/events/streamelements_events.dart';
 
 import '../../domain/entities/twitch/twitch_user.dart';
+import 'package:irllink/src/core/utils/globals.dart' as globals;
 
 class SettingsViewController extends GetxController {
   SettingsViewController(
@@ -83,6 +84,7 @@ class SettingsViewController extends GetxController {
           homeViewController.settings.value.streamElementsSettings!.jwt ?? '';
       seOverlayTokenInputController.text = homeViewController
           .settings.value.streamElementsSettings!.overlayToken ?? '';
+      globals.talker?.debug(homeViewController.settings.value);
       rtIrlInputController.text =
           homeViewController.settings.value.rtIrlPushKey ?? '';
       getUsernames();
@@ -106,7 +108,7 @@ class SettingsViewController extends GetxController {
   Future<void> loginStreamElements() async {
     StreamelementsAuthParams params = const StreamelementsAuthParams();
     await streamelementsEvents.login(params: params).then((value) {
-      if (value.error != null) {
+      if (value is DataFailed) {
         Get.snackbar(
           "Error",
           "Login failed: ${value.error}",
@@ -135,7 +137,7 @@ class SettingsViewController extends GetxController {
     if (homeViewController.seCredentials.value == null) return;
     DataState<void> result = await streamelementsEvents
         .disconnect(homeViewController.seCredentials.value!.accessToken);
-    if (result.error == null) {
+    if (result is DataSuccess) {
       homeViewController.seCredentials.value = null;
       homeViewController.seMe.value = null;
       homeViewController.seCredentials.refresh();
