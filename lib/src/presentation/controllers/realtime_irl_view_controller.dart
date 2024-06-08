@@ -32,7 +32,7 @@ class RealtimeIrlViewController extends GetxController {
     realtimeIrl.status.value = RtIrlStatus.updating;
     timerRtIrl = Timer.periodic(const Duration(seconds: 4), (Timer t) async {
       DataState<Position> p = await determinePosition();
-      if (p is DataSuccess && realtimeIrl.status == RtIrlStatus.updating) {
+      if (p is DataSuccess && realtimeIrl.status.value == RtIrlStatus.updating) {
         DataState updateResult = await realtimeIrl.updatePosition(p.data!);
         if(updateResult is DataFailed) {
           realtimeIrl.status.value = RtIrlStatus.stopped;
