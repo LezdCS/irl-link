@@ -64,20 +64,28 @@ class Themes {
             fontSize: 12,
           ),
         ),
-        foregroundColor: WidgetStatePropertyAll(
-          Colors.white
+        foregroundColor: WidgetStatePropertyAll(Colors.white),
+      ),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        textStyle: const WidgetStatePropertyAll(
+          TextStyle(
+            fontSize: 12,
+          ),
         ),
+        foregroundColor: const WidgetStatePropertyAll(Colors.white),
+        backgroundColor: WidgetStatePropertyAll(Colors.deepPurpleAccent[200]),
       ),
     ),
     chipTheme: const ChipThemeData(
-      deleteIconColor: Colors.white,
-      labelStyle: TextStyle(
-        color: Colors.white,
-      ),
-      side: BorderSide(
-        color: Colors.white,
-      )
-    ),
+        deleteIconColor: Colors.white,
+        labelStyle: TextStyle(
+          color: Colors.white,
+        ),
+        side: BorderSide(
+          color: Colors.white,
+        )),
     switchTheme: SwitchThemeData(
       thumbColor: WidgetStateProperty.resolveWith(
         (Set<WidgetState> states) {
@@ -176,20 +184,28 @@ class Themes {
             fontSize: 12,
           ),
         ),
-        foregroundColor: WidgetStatePropertyAll(
-          Colors.white
+        foregroundColor: WidgetStatePropertyAll(Colors.white),
+      ),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        textStyle: const WidgetStatePropertyAll(
+          TextStyle(
+            fontSize: 12,
+          ),
         ),
+        foregroundColor: const WidgetStatePropertyAll(Colors.white),
+        backgroundColor: WidgetStatePropertyAll(Colors.deepPurpleAccent[200]),
       ),
     ),
     chipTheme: const ChipThemeData(
-      deleteIconColor: Colors.black,
-      labelStyle: TextStyle(
-        color: Colors.black,
-      ),
-      side: BorderSide(
-        color: Colors.black,
-      )
-    ),
+        deleteIconColor: Colors.black,
+        labelStyle: TextStyle(
+          color: Colors.black,
+        ),
+        side: BorderSide(
+          color: Colors.black,
+        )),
     switchTheme: SwitchThemeData(
       thumbColor: WidgetStateProperty.resolveWith(
         (Set<WidgetState> states) {

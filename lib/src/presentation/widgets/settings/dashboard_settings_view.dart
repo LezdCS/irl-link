@@ -310,14 +310,6 @@ Widget _addDialog(context, DashboardController dashboardController) {
             height: 10,
           ),
           ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: WidgetStateProperty.all(
-                Theme.of(context).colorScheme.tertiary,
-              ),
-              foregroundColor: WidgetStateProperty.all(
-                Theme.of(context).textTheme.bodyLarge!.color,
-              ),
-            ),
             onPressed: () {
               if (formKey.currentState!.validate()) {
                 DashboardEvent newEvent = DashboardEvent(

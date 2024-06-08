@@ -30,6 +30,9 @@ class RealtimeIrlTabView extends GetView<RealtimeIrlViewController> {
         ),
         const SizedBox(height: 10),
         ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+          ),
           onPressed: () {
             controller.start();
           },
@@ -51,6 +54,9 @@ class RealtimeIrlTabView extends GetView<RealtimeIrlViewController> {
         ),
         const SizedBox(height: 10),
         ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.red,
+          ),
           onPressed: () {
             controller.stop();
           },
