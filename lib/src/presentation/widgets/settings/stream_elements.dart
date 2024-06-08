@@ -101,9 +101,6 @@ class StreamElements extends GetView {
                                     isDense: true,
                                     contentPadding: const EdgeInsets.symmetric(
                                         horizontal: 8, vertical: 7),
-                                    enabledBorder: Theme.of(context)
-                                        .inputDecorationTheme
-                                        .border,
                                     hintText: 'JWT',
                                     labelText: 'JWT',
                                     labelStyle: TextStyle(
@@ -112,17 +109,15 @@ class StreamElements extends GetView {
                                           .tertiary,
                                     ),
                                     suffixIcon: IconButton(
-                                      icon: Icon(
-                                          controller.seJwtShow.value
-                                              ? Icons.visibility
-                                              : Icons.visibility_off),
+                                      icon: Icon(controller.seJwtShow.value
+                                          ? Icons.visibility
+                                          : Icons.visibility_off),
                                       color: Theme.of(context)
                                           .primaryIconTheme
                                           .color,
                                       onPressed: () {
                                         controller.seJwtShow.value =
-                                            !controller
-                                                .seJwtShow.value;
+                                            !controller.seJwtShow.value;
                                       },
                                     ),
                                   ),
@@ -163,9 +158,6 @@ class StreamElements extends GetView {
                                     isDense: true,
                                     contentPadding: const EdgeInsets.symmetric(
                                         horizontal: 8, vertical: 7),
-                                    enabledBorder: Theme.of(context)
-                                        .inputDecorationTheme
-                                        .border,
                                     hintText: 'Token',
                                     labelText: 'Overlay Token',
                                     labelStyle: TextStyle(

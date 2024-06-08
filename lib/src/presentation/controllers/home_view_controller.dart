@@ -18,6 +18,7 @@ import 'package:irllink/src/presentation/controllers/streamelements_view_control
 import 'package:irllink/src/presentation/controllers/tts_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:irllink/src/presentation/widgets/tabs/obs_tab_view.dart';
+import 'package:irllink/src/presentation/widgets/tabs/realtime_irl_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/tabs/twitch_tab_view.dart';
 import 'package:split_view/split_view.dart';
 import 'package:twitch_chat/twitch_chat.dart';
@@ -98,14 +99,14 @@ class HomeViewController extends GetxController
       timerRefreshToken =
           Timer.periodic(const Duration(seconds: 13000), (Timer t) {
         homeEvents.refreshAccessToken(twitchData: twitchData!).then((value) => {
-              if (value.error == null) {twitchData = value.data!}
+              if (value is DataSuccess) {twitchData = value.data}
             });
 
         if (seCredentials.value != null) {
           homeEvents
               .refreshSeAccessToken(seCredentials: seCredentials.value!)
               .then((value) => {
-                    if (value.error == null) {seCredentials.value = value.data!}
+                    if (value is DataSuccess) {seCredentials.value = value.data}
                   });
         }
       });
@@ -128,8 +129,8 @@ class HomeViewController extends GetxController
   Future<void> setStreamElementsCredentials() async {
     DataState<SeCredentials> seCreds =
         await homeEvents.getSeCredentialsFromLocal();
-    if (seCreds.error == null) {
-      seCredentials.value = seCreds.data!;
+    if (seCreds is DataSuccess) {
+      seCredentials.value = seCreds.data;
       await setSeMe(seCredentials.value!);
     }
   }
@@ -137,8 +138,8 @@ class HomeViewController extends GetxController
   Future<void> setSeMe(SeCredentials seCreds) async {
     DataState<SeMe> seMeResult =
         await homeEvents.getSeMe(seCredentials.value!.accessToken);
-    if (seMeResult.error == null) {
-      seMe.value = seMeResult.data!;
+    if (seMeResult is DataSuccess) {
+      seMe.value = seMeResult.data;
     }
   }
 
@@ -196,6 +197,13 @@ class HomeViewController extends GetxController
         WebPageView page = WebPageView(element['title'], element['url']);
         iOSAudioSources.add(page);
       }
+    }
+
+    if (settings.value.rtIrlPushKey != null &&
+        settings.value.rtIrlPushKey!.isNotEmpty) {
+      streamelementsViewController = Get.find<StreamelementsViewController>();
+      RealtimeIrlTabView realtimeIrlTabView = const RealtimeIrlTabView();
+      tabElements.add(realtimeIrlTabView);
     }
 
     tabController = TabController(length: tabElements.length, vsync: this);
@@ -340,24 +348,26 @@ class HomeViewController extends GetxController
     homeEvents.setSettings(settings: settings.value);
   }
 
-  Future getSettings() async {
-    await homeEvents
-        .getSettings()
-        .then((value) async => await applySettings(value));
+  Future<DataState<Settings>> getSettings() async {
+    DataState<Settings> settingsResult = await homeEvents.getSettings();
+    if (settings is DataFailed){
+      return DataFailed('');
+    }
+    settings.value = settingsResult.data!;
+    await applySettings(settingsResult.data!);
+    return DataSuccess(settingsResult.data!);
   }
 
-  Future applySettings(value) async {
+  Future applySettings(Settings settings) async {
     {
-      if (value.error != null) return;
-      settings.value = value.data!;
       await generateTabs();
       Get.find<DashboardController>();
       generateChats();
-      Get.find<TtsController>().initTts(settings.value);
-      if (!settings.value.generalSettings!.isDarkMode) {
+      Get.find<TtsController>().initTts(settings);
+      if (!settings.generalSettings!.isDarkMode) {
         Get.changeThemeMode(ThemeMode.light);
       }
-      if (settings.value.generalSettings!.keepSpeakerOn) {
+      if (settings.generalSettings!.keepSpeakerOn) {
         const path = "../lib/assets/blank.mp3";
         timerKeepSpeakerOn = Timer.periodic(
           const Duration(minutes: 5),
@@ -367,11 +377,11 @@ class HomeViewController extends GetxController
         timerKeepSpeakerOn?.cancel();
       }
       Locale locale = Locale(
-          settings.value.generalSettings!.appLanguage["languageCode"],
-          settings.value.generalSettings!.appLanguage["countryCode"]);
+        settings.generalSettings!.appLanguage["languageCode"],
+        settings.generalSettings!.appLanguage["countryCode"],
+      );
       Get.updateLocale(locale);
-      splitViewController?.weights =
-          settings.value.generalSettings!.splitViewWeights;
+      splitViewController?.weights = settings.generalSettings!.splitViewWeights;
     }
   }
 }

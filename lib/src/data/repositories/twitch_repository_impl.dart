@@ -196,8 +196,13 @@ class TwitchRepositoryImpl extends TwitchRepository {
       }
 
       //refresh the access token to be sure the token is going to be valid after starting the app
-      await refreshAccessToken(twitchData)
-          .then((value) => twitchData = value.data!);
+      DataState<TwitchCredentials> refreshTokenResult =
+          await refreshAccessToken(twitchData);
+      if (refreshTokenResult is DataFailed) {
+        return refreshTokenResult;
+      } else {
+        twitchData = refreshTokenResult.data!;
+      }
 
       return DataSuccess(twitchData);
     } else {

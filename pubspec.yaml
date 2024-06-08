@@ -74,6 +74,7 @@ dependencies:
   talker_flutter: ^4.2.3
   talker_dio_logger: ^4.2.3
   html: ^0.15.4
+  geolocator: ^12.0.0
   
 dependency_overrides:
   wakelock_windows:

@@ -10,6 +10,7 @@ import 'package:irllink/src/domain/usecases/twitch_usecase.dart';
 import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/realtime_irl_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/store_controller.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/tts_controller.dart';
@@ -86,5 +87,6 @@ class HomeBindings extends Bindings {
     Get.find<TwitchTabViewController>();
 
     Get.lazyPut<DashboardController>(() => DashboardController());
+    Get.lazyPut<RealtimeIrlViewController>(() => RealtimeIrlViewController());
   }
 }
