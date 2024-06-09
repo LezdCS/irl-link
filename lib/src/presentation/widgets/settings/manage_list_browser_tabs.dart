@@ -247,8 +247,7 @@ Widget _addDialog(context, SettingsViewController controller) {
           },
           decoration: const InputDecoration(
             isDense: true,
-            contentPadding:
-                EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
             hintText: 'Tab title',
             labelText: 'Title',
           ),
@@ -272,8 +271,7 @@ Widget _addDialog(context, SettingsViewController controller) {
           },
           decoration: const InputDecoration(
             isDense: true,
-            contentPadding:
-                EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
             hintText: 'Tab url',
             labelText: 'URL',
           ),
@@ -347,8 +345,7 @@ Widget _editDialog(context, SettingsViewController controller, elem) {
           },
           decoration: const InputDecoration(
             isDense: true,
-            contentPadding:
-                EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
             hintText: 'Tab title',
             labelText: 'Title',
           ),
@@ -372,8 +369,7 @@ Widget _editDialog(context, SettingsViewController controller, elem) {
           },
           decoration: const InputDecoration(
             isDense: true,
-            contentPadding:
-                EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
             hintText: 'Tab url',
             labelText: 'URL',
           ),

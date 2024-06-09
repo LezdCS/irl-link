@@ -262,9 +262,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
               enabled: true,
             );
             List<Channel> channels = [...chatGroup.channels, newChan];
-            chatGroup = chatGroup.copyWith(
-              channels: channels
-            );
+            chatGroup = chatGroup.copyWith(channels: channels);
             List<ChatGroup>? groups = [];
             groups.addAll(controller.homeViewController.settings.value
                     .chatSettings?.chatGroups ??

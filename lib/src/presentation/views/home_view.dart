@@ -313,8 +313,10 @@ class HomeView extends GetView<HomeViewController> {
                             ),
                             InkWell(
                               onTap: () {
-                                if (controller.selectedChatGroup.value == null)
+                                if (controller.selectedChatGroup.value ==
+                                    null) {
                                   return;
+                                }
                                 ChatViewController chatViewController =
                                     Get.find<ChatViewController>(
                                         tag: controller

@@ -18,8 +18,7 @@ Widget prediction(
       children: [
         Text(
           "No prediction running",
-          style: TextStyle(
-          ),
+          style: TextStyle(),
         ),
       ],
     );

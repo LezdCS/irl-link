@@ -82,7 +82,8 @@ class SettingsViewController extends GetxController {
       seJwtInputController.text =
           homeViewController.settings.value.streamElementsSettings!.jwt ?? '';
       seOverlayTokenInputController.text = homeViewController
-          .settings.value.streamElementsSettings!.overlayToken ?? '';
+              .settings.value.streamElementsSettings!.overlayToken ??
+          '';
       rtIrlInputController.text =
           homeViewController.settings.value.rtIrlPushKey ?? '';
       getUsernames();
