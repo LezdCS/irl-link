@@ -87,20 +87,19 @@ class YoutubeChat {
           headers: options['headers'], body: body);
       dynamic data = json.decode(response.body);
 
-
       Iterable<dynamic>? messagesData = (data['continuationContents']
               ['liveChatContinuation']['actions'] as List?)
           ?.map((action) => (action['addChatItemAction']['item']
               ['liveChatTextMessageRenderer']));
 
       messagesData?.forEach((message) {
-        if(message['message'] == null) return;
+        if (message['message'] == null) return;
         List? messages = (message['message']['runs'] as List?)
-        ?.map((run) => run['text'])
-        .where((message) => message != null)
-        .toList();
-        if(messages == null) return;
-        if(messages.isEmpty) return;
+            ?.map((run) => run['text'])
+            .where((message) => message != null)
+            .toList();
+        if (messages == null) return;
+        if (messages.isEmpty) return;
         ChatMessage msg = ChatMessage.fromYoutube(message, messages, videoId);
         _chatStreamController.add(msg);
       });
@@ -127,7 +126,7 @@ class YoutubeChat {
     }
 
     while (continuationToken != null) {
-      if(_chatStreamController.isClosed) return;
+      if (_chatStreamController.isClosed) return;
       continuationToken = await fetchChatMessages(continuationToken);
       await Future.delayed(const Duration(seconds: 5)); // 5-second pause
     }

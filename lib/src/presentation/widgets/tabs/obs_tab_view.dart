@@ -160,7 +160,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
                     //     ),
                     //   ],
                     // ),
-                    Divider(
+                    const Divider(
                       height: 40,
                     ),
                     Wrap(children: [

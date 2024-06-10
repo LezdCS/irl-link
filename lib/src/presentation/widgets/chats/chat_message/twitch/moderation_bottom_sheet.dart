@@ -107,7 +107,6 @@ class ModerationBottomSheet extends StatelessWidget {
           const SizedBox(height: 15),
           Visibility(
             visible: message.platform == Platform.twitch,
-
             child: Row(children: [
               InkWell(
                 onTap: () => controller.banMessageInstruction(
