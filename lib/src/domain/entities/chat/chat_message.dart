@@ -187,7 +187,8 @@ class ChatMessage extends Equatable
     );
   }
 
-  factory ChatMessage.fromYoutube(dynamic messageRaw, List? messages, String videoId) {
+  factory ChatMessage.fromYoutube(
+      dynamic messageRaw, List? messages, String videoId) {
     String authorName = messageRaw['authorName']['simpleText'];
     String id = messageRaw['id'];
     String timestamp = messageRaw['timestampUsec'];
@@ -207,7 +208,7 @@ class ChatMessage extends Equatable
       rawData: '',
       eventType: null,
       badgesList: const [],
-      emotes: const {}, 
+      emotes: const {},
       platform: Platform.youtube,
       channelId: videoId,
 
