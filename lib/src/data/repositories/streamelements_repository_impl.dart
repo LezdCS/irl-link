@@ -75,6 +75,10 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       await remoteConfig.fetchAndActivate();
       String apiRefreshTokenUrl =
           remoteConfig.getString('irllink_refresh_se_token_url');
+      if (kDebugMode) {
+        apiRefreshTokenUrl =
+            remoteConfig.getString('irllink_refresh_se_token_url_dev');
+      }
 
       response = await dio.get(
         apiRefreshTokenUrl,

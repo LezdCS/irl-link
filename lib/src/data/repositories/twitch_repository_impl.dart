@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
@@ -33,6 +34,9 @@ class TwitchRepositoryImpl extends TwitchRepository {
       final remoteConfig = FirebaseRemoteConfig.instance;
       await remoteConfig.fetchAndActivate();
       String redirectUri = remoteConfig.getString('irllink_auth_url');
+      if (kDebugMode) {
+        redirectUri = remoteConfig.getString('irllink_auth_url_dev');
+      }
 
       final url = Uri.https(kTwitchAuthUrlBase, kTwitchAuthUrlPath, {
         'client_id': params.clientId,
@@ -106,6 +110,10 @@ class TwitchRepositoryImpl extends TwitchRepository {
       await remoteConfig.fetchAndActivate();
       String apiRefreshTokenUrl =
           remoteConfig.getString('irllink_refresh_token_url');
+      if (kDebugMode) {
+        apiRefreshTokenUrl =
+            remoteConfig.getString('irllink_refresh_token_url_dev');
+      }
 
       response = await dio.get(
         apiRefreshTokenUrl,
