@@ -50,6 +50,9 @@ class Themes {
       iconTheme: IconThemeData(
         color: Colors.white,
       ),
+      backgroundColor: Color(0xFF18181b),
+      surfaceTintColor: Colors.transparent,
+      centerTitle: false,
     ),
     dividerTheme: const DividerThemeData(
       thickness: 2,
@@ -170,6 +173,9 @@ class Themes {
       iconTheme: IconThemeData(
         color: Colors.black,
       ),
+      backgroundColor: Color(0xFFefeff1),
+      surfaceTintColor: Colors.transparent,
+      centerTitle: false,
     ),
     dividerTheme: const DividerThemeData(
       thickness: 2,

@@ -23,11 +23,9 @@ class Tts extends StatelessWidget {
             onPressed: () => Get.back(),
           ),
           actions: const [],
-          backgroundColor: Theme.of(context).colorScheme.secondary,
           title: Text(
             "text_to_speech".tr,
           ),
-          centerTitle: false,
         ),
         body: SingleChildScrollView(
           child: Container(

@@ -45,11 +45,9 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
               },
             ),
           ],
-          backgroundColor: Theme.of(context).colorScheme.secondary,
           title: const Text(
             "Dashboard events",
           ),
-          centerTitle: false,
         ),
         body: Container(
           padding: const EdgeInsets.all(10),
