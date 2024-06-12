@@ -7,7 +7,7 @@ import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 
-import '../../core/utils/twitch_event_sub.dart';
+import '../../core/services/twitch_event_sub.dart';
 import '../../domain/entities/twitch/twitch_poll.dart';
 import 'home_view_controller.dart';
 
