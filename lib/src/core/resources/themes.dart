@@ -36,6 +36,8 @@ class Themes {
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(color: Colors.deepPurpleAccent[200]!),
       ),
+      iconColor: Colors.white,
+      prefixIconColor: Colors.white,
     ),
     tabBarTheme: TabBarTheme(
       labelColor: Colors.deepPurpleAccent[200],
@@ -159,6 +161,8 @@ class Themes {
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(color: Colors.deepPurpleAccent[200]!),
       ),
+      iconColor: Colors.black,
+      prefixIconColor: Colors.black,
     ),
     tabBarTheme: TabBarTheme(
       labelColor: Colors.deepPurpleAccent[200],

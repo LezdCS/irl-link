@@ -38,7 +38,6 @@ class EmotePickerView extends GetView {
               ),
             ),
             child: TextField(
-              style: const TextStyle(color: Colors.white),
               textAlignVertical: TextAlignVertical.center,
               onChanged: (value) => homeViewController.searchEmote(value),
               decoration: const InputDecoration(
@@ -46,10 +45,8 @@ class EmotePickerView extends GetView {
                   Icons.search,
                   size: 20,
                 ),
-                border: InputBorder.none,
                 hintText: 'Emote name',
                 isDense: true,
-                contentPadding: EdgeInsets.only(left: 5),
               ),
             ),
           ),
