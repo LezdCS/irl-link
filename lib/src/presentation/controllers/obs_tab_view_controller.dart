@@ -51,6 +51,7 @@ class ObsTabViewController extends GetxController {
   /// Connect to the OBS websocket at [url] with optional [password]
   void connectWs(String url, String password) async {
     try {
+      globals.talker?.info("Connecting to OBS at $url...");
       obsWebSocket = await ObsWebSocket.connect(
         'ws://$url',
         password: password,
@@ -58,19 +59,19 @@ class ObsTabViewController extends GetxController {
         timeout: const Duration(seconds: 30),
       );
 
-      await obsWebSocket!.listen(EventSubscription.all.code);
+      await obsWebSocket?.listen(EventSubscription.all.code);
 
-      obsWebSocket!.addHandler<RecordStateChanged>(
+      obsWebSocket?.addHandler<RecordStateChanged>(
           (RecordStateChanged recordingStateChanged) {
         isRecording.value = recordingStateChanged.outputActive;
       });
 
-      obsWebSocket!.addHandler<StreamStateChanged>(
+      obsWebSocket?.addHandler<StreamStateChanged>(
           (StreamStateChanged streamStateChanged) {
         isStreaming.value = streamStateChanged.outputActive;
       });
 
-      obsWebSocket!.addHandler<SceneItemEnableStateChanged>(
+      obsWebSocket?.addHandler<SceneItemEnableStateChanged>(
           (SceneItemEnableStateChanged sceneItemEnableStateChanged) {
         SceneItemDetail s = sourcesList.firstWhere((source) =>
             source.sceneItemId == sceneItemEnableStateChanged.sceneItemId);
@@ -83,7 +84,7 @@ class ObsTabViewController extends GetxController {
         sourcesList[sourcesList.indexOf(s)] = updatedSource;
       });
 
-      obsWebSocket!.addFallbackListener((Event event) {
+      obsWebSocket?.addFallbackListener((Event event) {
         switch (event.eventType) {
           case 'CurrentProgramSceneChanged':
             getCurrentScene();
@@ -140,9 +141,8 @@ class ObsTabViewController extends GetxController {
           await obsWebSocket!.record.getRecordStatus();
       isRecording.value = recordStatus.outputActive;
 
-      final StatsResponse statsResponse =
-          await obsWebSocket!.general.getStats();
-      globals.talker?.debug(statsResponse.toString());
+      // final StatsResponse statsResponse =
+      //     await obsWebSocket!.general.getStats();
     } catch (e) {
       alertMessage.value = "Failed to connect to OBS";
       isConnected.value = false;
@@ -150,7 +150,7 @@ class ObsTabViewController extends GetxController {
   }
 
   void connectionLost() {
-    globals.talker?.error("connection lost");
+    globals.talker?.error("Connection lost with OBS.");
 
     isConnected.value = false;
     alertMessage.value = "Connection with OBS lost...";
