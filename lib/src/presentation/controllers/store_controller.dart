@@ -128,6 +128,9 @@ class StoreController extends GetxController {
     final remoteConfig = FirebaseRemoteConfig.instance;
     await remoteConfig.fetchAndActivate();
     String url = remoteConfig.getString('verify_android_purchase');
+    if (kDebugMode) {
+      url = remoteConfig.getString('verify_android_purchase_dev');
+    }
     var dio = initDio();
     try {
       await dio.post(

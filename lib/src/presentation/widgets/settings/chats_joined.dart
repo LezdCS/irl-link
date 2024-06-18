@@ -24,12 +24,10 @@ class ChatsJoined extends GetView<SettingsViewController> {
             onPressed: () => Get.back(),
           ),
           actions: const [],
-          backgroundColor: Theme.of(context).colorScheme.secondary,
           title: const Text(
             "Chats joined",
             style: TextStyle(),
           ),
-          centerTitle: false,
         ),
         body: Container(
           decoration: BoxDecoration(

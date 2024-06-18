@@ -41,11 +41,9 @@ class ManageListBrowserTabs extends GetView {
                   )
                 ]
               : const [],
-          backgroundColor: Theme.of(context).colorScheme.secondary,
           title: const Text(
             "Manage browser tabs",
           ),
-          centerTitle: false,
         ),
         body: Container(
           decoration: BoxDecoration(

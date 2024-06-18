@@ -15,7 +15,7 @@ import 'package:web_socket_channel/io.dart';
 import 'package:irllink/src/core/utils/globals.dart' as globals;
 
 import '../../data/entities/twitch/twitch_hype_train_dto.dart';
-import 'constants.dart';
+import '../utils/constants.dart';
 
 class TwitchEventSub {
   String accessToken;
@@ -40,9 +40,9 @@ class TwitchEventSub {
     _webSocketChannel =
         IOWebSocketChannel.connect("wss://eventsub.wss.twitch.tv/ws");
 
-    // if (kDebugMode) {
-    //   _webSocketChannel = IOWebSocketChannel.connect("ws://localhost:8080/ws");
-    // }
+    if (kDebugMode) {
+      _webSocketChannel = IOWebSocketChannel.connect("ws://localhost:8080/ws");
+    }
 
     _streamSubscription = _webSocketChannel?.stream.listen(
       (data) => _eventListener(data),

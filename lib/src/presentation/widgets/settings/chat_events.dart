@@ -25,12 +25,10 @@ class ChatEvents extends StatelessWidget {
             onPressed: () => Get.back(),
           ),
           actions: const [],
-          backgroundColor: Theme.of(context).colorScheme.secondary,
           title: const Text(
             "Chat events",
             style: TextStyle(),
           ),
-          centerTitle: false,
         ),
         body: SingleChildScrollView(
           child: Container(

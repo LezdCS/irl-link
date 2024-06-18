@@ -25,11 +25,9 @@ class ManageListHiddenUsers extends GetView {
             onPressed: () => Get.back(),
           ),
           actions: const [],
-          backgroundColor: Theme.of(context).colorScheme.secondary,
           title: const Text(
             "Manage hidden users",
           ),
-          centerTitle: false,
         ),
         body: Container(
           decoration: BoxDecoration(

@@ -208,7 +208,7 @@ class HomeView extends GetView<HomeViewController> {
         indicatorColor: Theme.of(context).colorScheme.tertiary,
         labelPadding: const EdgeInsets.symmetric(horizontal: 30),
         indicatorSize: TabBarIndicatorSize.tab,
-        indicatorWeight: 2,
+        indicatorWeight: 0.01,
         onTap: (index) {
           controller.tabIndex.value = index;
         },
@@ -303,6 +303,12 @@ class HomeView extends GetView<HomeViewController> {
                                           .generalSettings!.displayViewerCount
                                       ? '${Get.find<TwitchTabViewController>().twitchStreamInfos.value.viewerCount} viewers'
                                       : 'send_message'.tr,
+                                  hintStyle: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .color!,
+                                  ),
                                   isDense: true,
                                   enabledBorder: InputBorder.none,
                                   focusedBorder: InputBorder.none,
@@ -338,10 +344,10 @@ class HomeView extends GetView<HomeViewController> {
                                       controller.chatInputController.text);
                                 }
                               },
-                              child: SvgPicture.asset(
-                                './lib/assets/sendArrow.svg',
-                                semanticsLabel: 'send message',
-                                width: 21,
+                              child: Icon(
+                                Icons.send,
+                                color: Theme.of(context).primaryIconTheme.color,
+                                size: 21,
                               ),
                             ),
                           ],

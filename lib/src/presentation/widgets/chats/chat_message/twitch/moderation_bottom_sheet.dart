@@ -239,14 +239,11 @@ class ModerationBottomSheet extends StatelessWidget {
                         );
                       }
                     },
-                    style: const TextStyle(color: Colors.white),
                     maxLines: 1,
                     decoration: const InputDecoration(
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
                       hintText: 'Custom duration (s)',
                       isDense: true,
-                      contentPadding: EdgeInsets.only(left: 5),
+                      contentPadding: EdgeInsets.all(10),
                     ),
                   ),
                 ),

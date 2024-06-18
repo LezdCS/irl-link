@@ -36,6 +36,8 @@ class Themes {
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(color: Colors.deepPurpleAccent[200]!),
       ),
+      iconColor: Colors.white,
+      prefixIconColor: Colors.white,
     ),
     tabBarTheme: TabBarTheme(
       labelColor: Colors.deepPurpleAccent[200],
@@ -50,6 +52,9 @@ class Themes {
       iconTheme: IconThemeData(
         color: Colors.white,
       ),
+      backgroundColor: Color(0xFF18181b),
+      surfaceTintColor: Colors.transparent,
+      centerTitle: false,
     ),
     dividerTheme: const DividerThemeData(
       thickness: 2,
@@ -78,14 +83,18 @@ class Themes {
         backgroundColor: WidgetStatePropertyAll(Colors.deepPurpleAccent[200]),
       ),
     ),
-    chipTheme: const ChipThemeData(
-        deleteIconColor: Colors.white,
-        labelStyle: TextStyle(
-          color: Colors.white,
-        ),
-        side: BorderSide(
-          color: Colors.white,
-        )),
+    chipTheme: ChipThemeData(
+      deleteIconColor: Colors.white,
+      labelStyle: const TextStyle(
+        color: Colors.white,
+      ),
+      side: const BorderSide(
+        color: Colors.white,
+      ),
+      disabledColor: const Color(0xFF18181b),
+      selectedColor: Colors.deepPurpleAccent[200],
+      iconTheme: const IconThemeData(color: Colors.white),
+    ),
     switchTheme: SwitchThemeData(
       thumbColor: WidgetStateProperty.resolveWith(
         (Set<WidgetState> states) {
@@ -156,6 +165,8 @@ class Themes {
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(color: Colors.deepPurpleAccent[200]!),
       ),
+      iconColor: Colors.black,
+      prefixIconColor: Colors.black,
     ),
     tabBarTheme: TabBarTheme(
       labelColor: Colors.deepPurpleAccent[200],
@@ -170,6 +181,9 @@ class Themes {
       iconTheme: IconThemeData(
         color: Colors.black,
       ),
+      backgroundColor: Color(0xFFefeff1),
+      surfaceTintColor: Colors.transparent,
+      centerTitle: false,
     ),
     dividerTheme: const DividerThemeData(
       thickness: 2,
@@ -198,14 +212,18 @@ class Themes {
         backgroundColor: WidgetStatePropertyAll(Colors.deepPurpleAccent[200]),
       ),
     ),
-    chipTheme: const ChipThemeData(
-        deleteIconColor: Colors.black,
-        labelStyle: TextStyle(
-          color: Colors.black,
-        ),
-        side: BorderSide(
-          color: Colors.black,
-        )),
+    chipTheme: ChipThemeData(
+      deleteIconColor: Colors.black,
+      labelStyle: const TextStyle(
+        color: Colors.black,
+      ),
+      side: const BorderSide(
+        color: Colors.black,
+      ),
+      disabledColor: const Color(0xFF18181b),
+      selectedColor: Colors.deepPurpleAccent[200],
+      iconTheme: const IconThemeData(color: Colors.white),
+    ),
     switchTheme: SwitchThemeData(
       thumbColor: WidgetStateProperty.resolveWith(
         (Set<WidgetState> states) {

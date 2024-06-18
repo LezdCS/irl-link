@@ -342,14 +342,14 @@ class ObsTabView extends GetView<ObsTabViewController> {
             );
           },
           child: ChoiceChip(
-            disabledColor: Theme.of(context).colorScheme.tertiaryContainer,
-            selectedColor: Theme.of(context).colorScheme.tertiary,
             avatar: sourceVolume != null
                 ? const Icon(
                     Icons.volume_up,
                     size: 18,
                   )
                 : null,
+            showCheckmark: false,
+            visualDensity: VisualDensity.comfortable,
             label: SizedBox(
               width: 100,
               height: 17,
@@ -359,7 +359,6 @@ class ObsTabView extends GetView<ObsTabViewController> {
                 textAlign: TextAlign.center,
               ),
             ),
-            labelStyle: const TextStyle(color: Colors.white),
             selected: source.sceneItemEnabled,
           ),
         );

@@ -23,11 +23,9 @@ class Tts extends StatelessWidget {
             onPressed: () => Get.back(),
           ),
           actions: const [],
-          backgroundColor: Theme.of(context).colorScheme.secondary,
           title: Text(
             "text_to_speech".tr,
           ),
-          centerTitle: false,
         ),
         body: SingleChildScrollView(
           child: Container(
@@ -656,13 +654,9 @@ class Tts extends StatelessWidget {
                     controller: textFieldController,
                     decoration: InputDecoration(
                       isDense: true,
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 16),
+                      contentPadding: const EdgeInsets.all(10),
                       hintText: textFieldHint,
                       labelText: textFieldHint,
-                      labelStyle: TextStyle(
-                        color: Theme.of(Get.context!).colorScheme.tertiary,
-                      ),
                     ),
                   ),
                 ),

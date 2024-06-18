@@ -69,11 +69,9 @@ class SettingsView extends GetView<SettingsViewController> {
               ),
             ),
           ],
-          backgroundColor: Theme.of(context).colorScheme.secondary,
           title: const Text(
             "Settings",
           ),
-          centerTitle: false,
         ),
         body: Container(
           decoration: BoxDecoration(
