@@ -178,7 +178,7 @@ Map<SupportedEvents, ExistingDashboardEvent> dashboardEvents = {
       String channel =
           Get.find<HomeViewController>().twitchData!.twitchUser.login;
       Get.find<HomeViewController>()
-          .sendChatMessage(v.substring(1, v.length - 1), channel);
+          .sendChatMessage(v, channel);
     },
   ),
   // SupportedEvents.twitchFollowerOnly: ExistingDashboardEvent(
