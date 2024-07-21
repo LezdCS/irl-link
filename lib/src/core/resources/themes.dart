@@ -128,6 +128,9 @@ class Themes {
       // thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
       // overlayShape: const RoundSliderOverlayShape(overlayRadius: 16),
     ),
+    listTileTheme: const ListTileThemeData(
+      textColor: Colors.white,
+    ),  
   );
 
   final ThemeData lightTheme = ThemeData.light().copyWith(
@@ -257,5 +260,8 @@ class Themes {
       // thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
       // overlayShape: const RoundSliderOverlayShape(overlayRadius: 16),
     ),
+    listTileTheme: const ListTileThemeData(
+      textColor: Colors.black,
+    ),  
   );
 }

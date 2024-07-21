@@ -5,7 +5,6 @@ import 'package:irllink/src/presentation/widgets/alert_message_view.dart';
 import 'package:irllink/src/presentation/widgets/poll.dart';
 import 'package:irllink/src/presentation/widgets/prediction.dart';
 import 'package:irllink/src/presentation/widgets/tabs/dialogs/slow_mode_dialog.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class TwitchTabView extends GetView<TwitchTabViewController> {
