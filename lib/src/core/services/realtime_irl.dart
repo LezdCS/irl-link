@@ -44,10 +44,10 @@ class RealtimeIrl {
     try {
       Response response;
       Dio dio = initDio();
+      status.value = RtIrlStatus.stopped;
       response = await dio.post(
         "https://rtirl.com/api/stop?key=$key",
       );
-      status.value = RtIrlStatus.stopped;
       return DataSuccess(response.data);
     } on DioException catch (e) {
       return DataFailed(
