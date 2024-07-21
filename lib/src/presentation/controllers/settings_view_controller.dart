@@ -8,6 +8,7 @@ import 'package:irllink/src/presentation/controllers/store_controller.dart';
 import 'package:irllink/src/presentation/controllers/tts_controller.dart';
 import 'package:irllink/src/presentation/events/settings_events.dart';
 import 'package:irllink/src/presentation/events/streamelements_events.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../domain/entities/twitch/twitch_user.dart';
 
@@ -173,7 +174,11 @@ class SettingsViewController extends GetxController {
     String url = addBrowserUrlController.text;
     bool toggled = addBrowserToggled.value;
     bool audioSourceToggled = addBrowserAudioSourceToggled.value;
+
+    var uuid = const Uuid();
+
     Map<String, dynamic> tab = {
+      'id': uuid.v4(),
       'title': title,
       'url': url,
       'toggled': toggled,

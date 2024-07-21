@@ -177,46 +177,45 @@ class ManageListBrowserTabs extends GetView {
   }
 }
 
-Widget _addGroupButton(BuildContext context, SettingsViewController controller) {
-    return InkWell(
-      onTap: () {
-        Get.defaultDialog(
-                            content: _addDialog(context, controller),
-                            title: "add".tr,
-                            textCancel: "cancel".tr,
-                            textConfirm: "add".tr,
-                            backgroundColor:
-                                Theme.of(context).colorScheme.surface,
-                            buttonColor: const Color(0xFF9147ff),
-                            cancelTextColor: const Color(0xFF9147ff),
-                            confirmTextColor: Colors.white,
-                            radius: 10,
-                            onConfirm: () {
-                              controller.addBrowserTab();
-                            },
-                          );
-      },
-      child: Container(
-        padding:
-            const EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
-        margin: const EdgeInsets.only(left: 12, right: 12),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Theme.of(context).colorScheme.secondary,
-            width: 2,
-          ),
-          borderRadius: BorderRadius.circular(8),
+Widget _addGroupButton(
+    BuildContext context, SettingsViewController controller) {
+  return InkWell(
+    onTap: () {
+      Get.defaultDialog(
+        content: _addDialog(context, controller),
+        title: "add".tr,
+        textCancel: "cancel".tr,
+        textConfirm: "add".tr,
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        buttonColor: const Color(0xFF9147ff),
+        cancelTextColor: const Color(0xFF9147ff),
+        confirmTextColor: Colors.white,
+        radius: 10,
+        onConfirm: () {
+          controller.addBrowserTab();
+        },
+      );
+    },
+    child: Container(
+      padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
+      margin: const EdgeInsets.only(left: 12, right: 12),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Theme.of(context).colorScheme.secondary,
+          width: 2,
         ),
-        child: const Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('New browser tab'),
-            Icon(Icons.add),
-          ],
-        ),
+        borderRadius: BorderRadius.circular(8),
       ),
-    );
-  }
+      child: const Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text('New browser tab'),
+          Icon(Icons.add),
+        ],
+      ),
+    ),
+  );
+}
 
 Widget _addDialog(context, SettingsViewController controller) {
   controller.addBrowserUrlController.text = '';
