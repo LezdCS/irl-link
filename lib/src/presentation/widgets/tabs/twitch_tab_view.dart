@@ -61,7 +61,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                     const Text(
                       'Refresh data',
                       style: TextStyle(
-                        fontSize: 8,
+                        fontSize: 10,
                       ),
                     ),
                   ],
