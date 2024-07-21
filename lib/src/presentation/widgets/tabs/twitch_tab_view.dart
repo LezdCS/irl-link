@@ -5,7 +5,6 @@ import 'package:irllink/src/presentation/widgets/alert_message_view.dart';
 import 'package:irllink/src/presentation/widgets/poll.dart';
 import 'package:irllink/src/presentation/widgets/prediction.dart';
 import 'package:irllink/src/presentation/widgets/tabs/dialogs/slow_mode_dialog.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class TwitchTabView extends GetView<TwitchTabViewController> {
@@ -35,18 +34,37 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                     isProgress: false,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: LinearPercentIndicator(
-                    animation: true,
-                    animateFromLastPercent: true,
-                    barRadius: const Radius.circular(8),
-                    padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                    lineHeight: 3.0,
-                    percent: controller.myDuration.value.inSeconds / 15,
-                    backgroundColor: Theme.of(context).colorScheme.secondary,
-                    progressColor: Theme.of(context).colorScheme.tertiary,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 14,
+                      height: 14,
+                      child: CircularProgressIndicator(
+                        value: controller.myDuration.value.inSeconds / 15,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.secondary,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            Theme.of(context).colorScheme.tertiary),
+                        strokeWidth: 2,
+                        strokeCap: StrokeCap.round,
+                        semanticsLabel:
+                            'Progress indicator for twitch data refresh',
+                        semanticsValue:
+                            (controller.myDuration.value.inSeconds / 15)
+                                .toString(),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    const Text(
+                      'Refresh data',
+                      style: TextStyle(
+                        fontSize: 10,
+                      ),
+                    ),
+                  ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

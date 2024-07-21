@@ -137,29 +137,6 @@ class ObsTabView extends GetView<ObsTabViewController> {
                         ],
                       ),
                     ),
-                    // SizedBox(height: 10),
-                    // Row(
-                    //   children: [
-                    //     Container(
-                    //       constraints: BoxConstraints(
-                    //         minWidth: 80.0,
-                    //       ),
-                    //       alignment: Alignment.center,
-                    //       decoration: BoxDecoration(
-                    //         color:
-                    //             Theme.of(context).colorScheme.tertiaryContainer,
-                    //         borderRadius: BorderRadius.all(
-                    //           Radius.circular(8),
-                    //         ),
-                    //       ),
-                    //       padding: EdgeInsets.all(8),
-                    //       child: Text(
-                    //         "Show advanced stats",
-                    //         textAlign: TextAlign.center,
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
                     const Divider(
                       height: 40,
                     ),
@@ -189,20 +166,26 @@ class ObsTabView extends GetView<ObsTabViewController> {
                         child: getSources(context),
                       ),
                     ]),
-                    // Divider(
-                    //   height: 40,
-                    //   thickness: 4,
-                    //   indent: 0,
-                    //   endIndent: 0,
-                    //   color: Theme.of(context).colorScheme.secondary,
-                    // ),
-                    // Wrap(children: [
-                    //   Text(
-                    //     "CPU Usage",
-                    //     style: TextStyle(color: Colors.white),
-                    //   ),
-                    //   _cpuGraph(width),
-                    // ]),
+                    Divider(
+                      height: 40,
+                      thickness: 4,
+                      indent: 0,
+                      endIndent: 0,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                          'CPU usage: ${controller.statsResponse.value?.cpuUsage.toStringAsFixed(2)}',
+                        ),
+                        Text(
+                          'Memory usage: ${controller.statsResponse.value?.memoryUsage.toStringAsFixed(2)}',
+                        ),
+                        Text(
+                          'Avaibalable disk space: ${controller.statsResponse.value?.availableDiskSpace.toStringAsFixed(2)}',
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               )
@@ -366,105 +349,3 @@ class ObsTabView extends GetView<ObsTabViewController> {
     );
   }
 }
-//
-// Widget leftTitleWidgetsCpu(double value, TitleMeta meta) {
-//   const style = TextStyle(
-//     color: Color(0xff75729e),
-//     fontWeight: FontWeight.normal,
-//     fontSize: 12,
-//   );
-//
-//   return Container(
-//     padding: const EdgeInsets.only(right: 6),
-//     child: Text(value.round().toString() + "%",
-//         style: style, textAlign: TextAlign.right),
-//   );
-// }
-//
-// Widget bottomTitleWidgetsHours(double value, TitleMeta meta) {
-//   const style = TextStyle(
-//     color: Color(0xff75729e),
-//     fontWeight: FontWeight.normal,
-//     fontSize: 12,
-//   );
-//
-//   return Container(
-//     padding: const EdgeInsets.only(top: 6),
-//     child: Text("4:30", style: style, textAlign: TextAlign.center),
-//   );
-// }
-//
-// Widget _cpuGraph(double width) {
-//
-//   List<FlSpot> spots = [
-//     FlSpot(1, 1),
-//     FlSpot(3, 20),
-//     FlSpot(5, 30),
-//     FlSpot(7, 30),
-//     FlSpot(10, 40),
-//     FlSpot(12, 29),
-//     FlSpot(13, 60),
-//   ];
-//
-//   return Container(
-//     margin: EdgeInsets.only(top: 10),
-//     width: width,
-//     height: 200,
-//     child: LineChart(
-//       //TODO : https://github.com/imaNNeoFighT/fl_chart/blob/master/example/lib/line_chart/samples/line_chart_sample1.dart
-//       LineChartData(
-//         lineTouchData: LineTouchData(
-//           handleBuiltInTouches: true,
-//           touchTooltipData: LineTouchTooltipData(
-//             tooltipBgColor: Colors.blueGrey.withOpacity(0.8),
-//           ),
-//         ),
-//         gridData: FlGridData(show: false),
-//         titlesData: FlTitlesData(
-//           leftTitles: AxisTitles(
-//             sideTitles: SideTitles(
-//               getTitlesWidget: leftTitleWidgetsCpu,
-//               showTitles: true,
-//               interval: 20,
-//               reservedSize: 40,
-//             ),
-//           ),
-//           bottomTitles: AxisTitles(
-//             sideTitles: SideTitles(
-//               getTitlesWidget: bottomTitleWidgetsHours,
-//               showTitles: true,
-//               interval: 9,
-//               reservedSize: 40,
-//             ),
-//           ),
-//           topTitles: AxisTitles(),
-//           rightTitles: AxisTitles(),
-//         ),
-//         borderData: FlBorderData(
-//           show: true,
-//           border: Border(
-//             bottom: BorderSide(color: Color(0xff4e4965), width: 1),
-//             left: BorderSide(color: Color(0xff4e4965), width: 1),
-//             right: BorderSide(color: Colors.transparent),
-//             top: BorderSide(color: Colors.transparent),
-//           ),
-//         ),
-//         lineBarsData: [
-//           LineChartBarData(
-//             isCurved: false,
-//             color: Colors.purple,
-//             barWidth: 2,
-//             isStrokeCapRound: true,
-//             dotData: FlDotData(show: false),
-//             belowBarData: BarAreaData(show: false),
-//             spots: spots,
-//           ),
-//         ],
-//         minX: 0,
-//         maxX: 60,
-//         maxY: 100,
-//         minY: 0,
-//       ),
-//     ),
-//   );
-// }

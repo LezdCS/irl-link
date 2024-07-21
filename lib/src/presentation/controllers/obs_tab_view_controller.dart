@@ -30,13 +30,13 @@ class ObsTabViewController extends GetxController {
   RxBool isStreaming = false.obs;
   RxBool isRecording = false.obs;
 
-  RxMap<Map, DateTime> obsData = <Map, DateTime>{}.obs;
+  Rxn<StatsResponse> statsResponse = Rxn<StatsResponse>();
 
   late HomeViewController homeViewController;
-
+  late Timer statsTimer;
+ 
   @override
   void onInit() {
-    obsData[{}] = DateTime.now();
     homeViewController = Get.find<HomeViewController>();
 
     super.onInit();
@@ -141,8 +141,13 @@ class ObsTabViewController extends GetxController {
           await obsWebSocket!.record.getRecordStatus();
       isRecording.value = recordStatus.outputActive;
 
-      // final StatsResponse statsResponse =
-      //     await obsWebSocket!.general.getStats();
+      statsResponse.value = await obsWebSocket!.general.getStats();
+      statsTimer = Timer.periodic(
+        const Duration(seconds: 10),
+        (Timer t) async {
+          statsResponse.value = await obsWebSocket!.general.getStats();
+        },
+      );
     } catch (e) {
       alertMessage.value = "Failed to connect to OBS";
       isConnected.value = false;
@@ -151,7 +156,7 @@ class ObsTabViewController extends GetxController {
 
   void connectionLost() {
     globals.talker?.error("Connection lost with OBS.");
-
+    statsTimer.cancel();
     isConnected.value = false;
     alertMessage.value = "Connection with OBS lost...";
   }

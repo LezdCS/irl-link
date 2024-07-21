@@ -55,7 +55,6 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
             color: Theme.of(context).colorScheme.surface,
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               ListView.builder(
                 shrinkWrap: true,
@@ -134,17 +133,19 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
                   );
                 },
               ),
-              TextButton(
-                style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all(
-                    Theme.of(context).colorScheme.secondary,
-                  ),
-                  foregroundColor: WidgetStateProperty.all(
-                    Theme.of(context).textTheme.bodyLarge!.color,
-                  ),
-                ),
-                onPressed: () {
-                  Get.defaultDialog(
+              _addGroupButton(context, dashboardController, controller),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+Widget _addGroupButton(BuildContext context, DashboardController dashboardController, SettingsViewController controller) {
+    return InkWell(
+      onTap: () {
+        Get.defaultDialog(
                     content: _addDialog(context, dashboardController),
                     title: "New event".tr,
                     cancel: null,
@@ -158,16 +159,28 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
                       controller.addBrowserTab();
                     },
                   );
-                },
-                child: const Text('New event'),
-              )
-            ],
+      },
+      child: Container(
+        padding:
+            const EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
+        margin: const EdgeInsets.only(left: 12, right: 12),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Theme.of(context).colorScheme.secondary,
+            width: 2,
           ),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('New event'),
+            Icon(Icons.add),
+          ],
         ),
       ),
     );
   }
-}
 
 Widget _addDialog(context, DashboardController dashboardController) {
   String title = '';
