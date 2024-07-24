@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
@@ -31,6 +32,19 @@ class RealtimeIrlViewController extends GetxController {
   Future start() async {
     realtimeIrl.status.value = RtIrlStatus.updating;
     DataState<Position> p = await determinePosition();
+
+    if (p.error != null) {
+      realtimeIrl.status.value = RtIrlStatus.stopped;
+      Get.snackbar(
+        "Error",
+        p.error!,
+        snackPosition: SnackPosition.BOTTOM,
+        icon: const Icon(Icons.error_outline, color: Colors.red),
+        borderWidth: 1,
+        borderColor: Colors.red,
+      );
+      return;
+    }
 
     timerRtIrl = Timer.periodic(const Duration(seconds: 4), (Timer t) async {
       if (p is DataSuccess &&
