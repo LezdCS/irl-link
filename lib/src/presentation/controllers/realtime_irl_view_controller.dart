@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
@@ -29,8 +31,41 @@ class RealtimeIrlViewController extends GetxController {
   }
 
   Future start() async {
-    realtimeIrl.status.value = RtIrlStatus.updating;
+    if (Platform.isAndroid) {
+      if (await Geolocator.checkPermission() == LocationPermission.denied) {
+        await Get.dialog(
+          barrierDismissible: false,
+          AlertDialog(
+            title: const Text('RealtimeIRL'),
+            content: const Text(
+              'This application will ask the permission to access your location to share it with RealtimeIRL service.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back(result: true);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    }
     DataState<Position> p = await determinePosition();
+
+    if (p.error != null) {
+      Get.snackbar(
+        "Error",
+        p.error!,
+        snackPosition: SnackPosition.BOTTOM,
+        icon: const Icon(Icons.error_outline, color: Colors.red),
+        borderWidth: 1,
+        borderColor: Colors.red,
+      );
+      return;
+    }
+    realtimeIrl.status.value = RtIrlStatus.updating;
 
     timerRtIrl = Timer.periodic(const Duration(seconds: 4), (Timer t) async {
       if (p is DataSuccess &&
