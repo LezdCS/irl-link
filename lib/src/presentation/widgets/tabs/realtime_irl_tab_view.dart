@@ -40,6 +40,11 @@ class RealtimeIrlTabView extends GetView<RealtimeIrlViewController> {
           },
           child: const Text('Start'),
         ),
+        const SizedBox(height: 10),
+        const Text(
+          'By clicking the button above, you will start sharing your current GPS location with RealtimeIRL.',
+          textAlign: TextAlign.center,
+        ),
       ],
     );
   }
@@ -63,6 +68,11 @@ class RealtimeIrlTabView extends GetView<RealtimeIrlViewController> {
             controller.stop();
           },
           child: const Text('Stop'),
+        ),
+        const SizedBox(height: 10),
+        const Text(
+          'Your GPS location is currently shared with RealtimeIRL...',
+          textAlign: TextAlign.center,
         ),
       ],
     );

@@ -130,7 +130,10 @@ class Themes {
     ),
     listTileTheme: const ListTileThemeData(
       textColor: Colors.white,
-    ),  
+    ),
+    checkboxTheme: CheckboxThemeData(
+      checkColor: WidgetStateProperty.all(Colors.deepPurple[600]),
+    ),
   );
 
   final ThemeData lightTheme = ThemeData.light().copyWith(
@@ -262,6 +265,9 @@ class Themes {
     ),
     listTileTheme: const ListTileThemeData(
       textColor: Colors.black,
-    ),  
+    ),
+    checkboxTheme: CheckboxThemeData(
+      checkColor: WidgetStateProperty.all(Colors.deepPurple[600]),
+    ),
   );
 }

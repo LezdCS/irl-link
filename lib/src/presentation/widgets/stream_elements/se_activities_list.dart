@@ -78,7 +78,6 @@ class SeActivitiesList extends GetView {
         PopupMenuItem(
           child: Obx(
             () => CheckboxListTile(
-              activeColor: Colors.deepPurple[600],
               controlAffinity: ListTileControlAffinity.leading,
               title: const Text(
                 "Followers",
@@ -102,7 +101,6 @@ class SeActivitiesList extends GetView {
         PopupMenuItem(
           child: Obx(
             () => CheckboxListTile(
-              activeColor: Colors.deepPurple[600],
               controlAffinity: ListTileControlAffinity.leading,
               title: const Text(
                 "Subscriptions",
@@ -126,7 +124,6 @@ class SeActivitiesList extends GetView {
         PopupMenuItem(
           child: Obx(
             () => CheckboxListTile(
-              activeColor: Colors.deepPurple[600],
               controlAffinity: ListTileControlAffinity.leading,
               title: const Text(
                 "Bits",
@@ -150,7 +147,6 @@ class SeActivitiesList extends GetView {
         PopupMenuItem(
           child: Obx(
             () => CheckboxListTile(
-              activeColor: Colors.deepPurple[600],
               controlAffinity: ListTileControlAffinity.leading,
               title: const Text(
                 "Donations",
@@ -174,7 +170,6 @@ class SeActivitiesList extends GetView {
         PopupMenuItem(
           child: Obx(
             () => CheckboxListTile(
-              activeColor: Colors.deepPurple[600],
               controlAffinity: ListTileControlAffinity.leading,
               title: const Text(
                 "Raids",
@@ -198,7 +193,6 @@ class SeActivitiesList extends GetView {
         PopupMenuItem(
           child: Obx(
             () => CheckboxListTile(
-              activeColor: Colors.deepPurple[600],
               controlAffinity: ListTileControlAffinity.leading,
               title: const Text(
                 "Hosts",
