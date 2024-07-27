@@ -62,7 +62,7 @@ dependencies:
   kick_chat: ^1.2.0
   upgrader: ^10.3.0
   url_launcher: ^6.3.0
-  wakelock: ^0.6.2
+  wakelock_plus: ^1.2.5
   web_socket_channel: ^3.0.0
   webview_flutter: ^4.8.0
   webview_flutter_android: ^3.16.2
@@ -77,13 +77,6 @@ dependencies:
   geolocator: ^12.0.0
   
 dependency_overrides:
-  wakelock_windows:
-    git:
-      url: https://github.com/chandrabezzo/wakelock.git # repository
-      ref: main # branch
-      path: wakelock_windows/ # folder
-  flutter_colorpicker:
-    git: https://github.com/mchome/flutter_colorpicker.git
   obs_websocket:
     git: https://github.com/LezdCS/easy_obs_websocket.git
 
@@ -91,7 +84,6 @@ dev_dependencies:
   flutter_lints: ^4.0.0
   flutter_test:
     sdk: flutter
-
   flutter_launcher_icons: ^0.13.1
 
 flutter_icons:

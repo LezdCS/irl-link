@@ -17,7 +17,7 @@ import 'package:kick_chat/kick_chat.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:upgrader/upgrader.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import 'firebase_options.dart';
 import 'src/core/resources/app_translations.dart';
 import 'src/core/utils/globals.dart' as globals;
@@ -31,7 +31,7 @@ void main() async {
   );
   await initializeService();
   await GetStorage.init();
-  await Wakelock.enable();
+  await WakelockPlus.enable();
   await KickChat.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
