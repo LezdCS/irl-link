@@ -811,12 +811,11 @@ packages:
   obs_websocket:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: d450100508e5b62a606f8e824214319db72acbf2
-      url: "https://github.com/LezdCS/easy_obs_websocket.git"
-    source: git
-    version: "5.1.0+8"
+      name: obs_websocket
+      sha256: fdffdbd604137324697c0b3d0cb6edc6874c58786386757bbebcc9620aece93e
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.1.0+9"
   os_detect:
     dependency: transitive
     description:

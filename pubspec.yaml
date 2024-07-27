@@ -56,7 +56,7 @@ dependencies:
   kick_chat: ^1.2.0
   mobile_scanner: ^5.1.1
   move_to_background: ^1.0.2
-  obs_websocket: ^5.1.0+8
+  obs_websocket: ^5.1.0+9
   package_info_plus: ^8.0.0
   percent_indicator: ^4.2.3
   qr_flutter: ^4.1.0
@@ -75,16 +75,12 @@ dependencies:
   webview_flutter: ^4.8.0
   webview_flutter_android: ^3.16.2
   webview_flutter_wkwebview: ^3.13.1
-  
-dependency_overrides:
-  obs_websocket:
-    git: https://github.com/LezdCS/easy_obs_websocket.git
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.13.1
   flutter_lints: ^4.0.0
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: ^0.13.1
 
 flutter_icons:
   android: true
