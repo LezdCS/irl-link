@@ -32,22 +32,25 @@ class RealtimeIrlViewController extends GetxController {
 
   Future start() async {
     if (Platform.isAndroid) {
-      dynamic result = await Get.dialog(
-        AlertDialog(
-          title: const Text('RealtimeIRL'),
-          content: const Text(
-            'This application will ask the permission to access your location to share it with RealtimeIRL service.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Get.back(result: true);
-              },
-              child: const Text('OK'),
+      if (await Geolocator.checkPermission() == LocationPermission.denied) {
+        await Get.dialog(
+          barrierDismissible: false,
+          AlertDialog(
+            title: const Text('RealtimeIRL'),
+            content: const Text(
+              'This application will ask the permission to access your location to share it with RealtimeIRL service.',
             ),
-          ],
-        ),
-      );
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back(result: true);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
     }
     DataState<Position> p = await determinePosition();
 
