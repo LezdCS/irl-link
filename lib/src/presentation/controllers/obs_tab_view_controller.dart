@@ -34,7 +34,7 @@ class ObsTabViewController extends GetxController {
 
   late HomeViewController homeViewController;
   late Timer statsTimer;
- 
+
   @override
   void onInit() {
     homeViewController = Get.find<HomeViewController>();
