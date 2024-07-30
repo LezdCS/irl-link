@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
-import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -17,7 +16,7 @@ import 'package:kick_chat/kick_chat.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:upgrader/upgrader.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import 'firebase_options.dart';
 import 'src/core/resources/app_translations.dart';
 import 'src/core/utils/globals.dart' as globals;
@@ -31,7 +30,7 @@ void main() async {
   );
   await initializeService();
   await GetStorage.init();
-  await Wakelock.enable();
+  await WakelockPlus.enable();
   await KickChat.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

@@ -402,43 +402,42 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_background_service
-      sha256: "94d9a143852729140e17254a53769383b03738cd92b6e588a8762003e6cd9dd9"
+      sha256: "30d1786c7fccba10ba1ca49297bc14343456f24e3dfd4cafc06f35de68d92619"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.5"
+    version: "5.0.6"
   flutter_background_service_android:
     dependency: "direct main"
     description:
       name: flutter_background_service_android
-      sha256: "30863ebafd8214b8e76d5e5c9f27887dc5cc303fcf3e89f71534f621fc486782"
+      sha256: b28215e18ee743eb78105a5869a802ca7a13b01ed21a0401a4b1c4900b63676e
       url: "https://pub.dev"
     source: hosted
-    version: "6.2.2"
+    version: "6.2.3"
   flutter_background_service_ios:
     dependency: "direct main"
     description:
       name: flutter_background_service_ios
-      sha256: ab73657535876e16abc89e40f924df3e92ad3dee83f64d187081417e824709ed
+      sha256: "9365d6b8d71ef967e32320417ea9e2444c82b526930cd6b88adb2c459e7dfc9d"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.0"
+    version: "5.0.1"
   flutter_background_service_platform_interface:
     dependency: transitive
     description:
       name: flutter_background_service_platform_interface
-      sha256: cd5720ff5b051d551a4734fae16683aace779bd0425e8d3f15d84a0cdcc2d8d9
+      sha256: da16560237e055c0ef65bc93597b71d4442698acee983951474f8882c1928ea7
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.0"
+    version: "5.1.0"
   flutter_colorpicker:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "92bdb69a313a56c391ef148c12ef6539bd31253d"
-      url: "https://github.com/mchome/flutter_colorpicker.git"
-    source: git
-    version: "1.0.3"
+      name: flutter_colorpicker
+      sha256: "969de5f6f9e2a570ac660fb7b501551451ea2a1ab9e2097e89475f60e07816ea"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -483,10 +482,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_slidable
-      sha256: "673403d2eeef1f9e8483bd6d8d92aae73b1d8bd71f382bc3930f699c731bc27c"
+      sha256: "2c5611c0b44e20d180e4342318e1bbc28b0a44ad2c442f5df16962606fd3e8e3"
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.0"
+    version: "3.1.1"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -605,10 +604,10 @@ packages:
     dependency: "direct main"
     description:
       name: http
-      sha256: "761a297c042deedc1ffbb156d6e2af13886bb305c2a343a4d972504cd67dd938"
+      sha256: b9c29a161230ee03d3ccf545097fccd9b87a5264228c5d348202e0f0c28f9010
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.1"
+    version: "1.2.2"
   http_parser:
     dependency: transitive
     description:
@@ -669,10 +668,10 @@ packages:
     dependency: "direct main"
     description:
       name: intl
-      sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"
+      sha256: d6f56758b7d3014a48af9701c085700aac781a92a87a62b1333b46d8879661cf
       url: "https://pub.dev"
     source: hosted
-    version: "0.18.1"
+    version: "0.19.0"
   js:
     dependency: transitive
     description:
@@ -812,12 +811,11 @@ packages:
   obs_websocket:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: d450100508e5b62a606f8e824214319db72acbf2
-      url: "https://github.com/LezdCS/easy_obs_websocket.git"
-    source: git
-    version: "5.1.0+8"
+      name: obs_websocket
+      sha256: fdffdbd604137324697c0b3d0cb6edc6874c58786386757bbebcc9620aece93e
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.1.0+9"
   os_detect:
     dependency: transitive
     description:
@@ -1123,34 +1121,34 @@ packages:
     dependency: transitive
     description:
       name: talker
-      sha256: f876081a34027464e3f1ac785c7e470a5fca2515f4c8c277fb6f78a63e5cda1e
+      sha256: "3cea253a65cccf9c9e6fd93cd689c870858860fe0b83a8bff0fdd79a132d09ca"
       url: "https://pub.dev"
     source: hosted
-    version: "4.2.3"
+    version: "4.3.4"
   talker_dio_logger:
     dependency: "direct main"
     description:
       name: talker_dio_logger
-      sha256: "54e03a5531d385932d34141012ee2fdd7302e01bdbfaf1867e3badf2583b89f8"
+      sha256: "66241efb90eec42f283c70b35e96b644ea822805f9c87da7bb2441054d53cfa8"
       url: "https://pub.dev"
     source: hosted
-    version: "4.2.3"
+    version: "4.3.4"
   talker_flutter:
     dependency: "direct main"
     description:
       name: talker_flutter
-      sha256: "45dab03948d8a611b97d396a782497d567f8fa5694466a2d306f84cfffca6910"
+      sha256: "09cd58b798476789a720cfd3846e5a036ebed73036f2e202dc087cc445cc9088"
       url: "https://pub.dev"
     source: hosted
-    version: "4.2.3"
+    version: "4.3.4"
   talker_logger:
     dependency: transitive
     description:
       name: talker_logger
-      sha256: "8728b67e97a2cd484ed217ec9dca1e05063aa6c9464a1c095e77540f944b1c8a"
+      sha256: ad022c4429efe114512fe3d38f398ccae22281958e02ca1ea9df0ca9967b8e65
       url: "https://pub.dev"
     source: hosted
-    version: "4.2.3"
+    version: "4.3.4"
   term_glyph:
     dependency: transitive
     description:
@@ -1283,10 +1281,10 @@ packages:
     dependency: "direct main"
     description:
       name: uuid
-      sha256: "814e9e88f21a176ae1359149021870e87f7cddaf633ab678a5d2b0bff7fd1ba8"
+      sha256: "83d37c7ad7aaf9aa8e275490669535c8080377cfa7a7004c24dfac53afffaa90"
       url: "https://pub.dev"
     source: hosted
-    version: "4.4.0"
+    version: "4.4.2"
   validators:
     dependency: transitive
     description:
@@ -1343,47 +1341,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "14.2.1"
-  wakelock:
+  wakelock_plus:
     dependency: "direct main"
     description:
-      name: wakelock
-      sha256: "769ecf42eb2d07128407b50cb93d7c10bd2ee48f0276ef0119db1d25cc2f87db"
+      name: wakelock_plus
+      sha256: "14758533319a462ffb5aa3b7ddb198e59b29ac3b02da14173a1715d65d4e6e68"
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.2"
-  wakelock_macos:
+    version: "1.2.5"
+  wakelock_plus_platform_interface:
     dependency: transitive
     description:
-      name: wakelock_macos
-      sha256: "047c6be2f88cb6b76d02553bca5a3a3b95323b15d30867eca53a19a0a319d4cd"
+      name: wakelock_plus_platform_interface
+      sha256: "422d1cdbb448079a8a62a5a770b69baa489f8f7ca21aef47800c726d404f9d16"
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.0"
-  wakelock_platform_interface:
-    dependency: transitive
-    description:
-      name: wakelock_platform_interface
-      sha256: "1f4aeb81fb592b863da83d2d0f7b8196067451e4df91046c26b54a403f9de621"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.0"
-  wakelock_web:
-    dependency: transitive
-    description:
-      name: wakelock_web
-      sha256: "1b256b811ee3f0834888efddfe03da8d18d0819317f20f6193e2922b41a501b5"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.4.0"
-  wakelock_windows:
-    dependency: "direct overridden"
-    description:
-      path: wakelock_windows
-      ref: main
-      resolved-ref: f3610d6c246098fee74463de09434ed81fc2a7c8
-      url: "https://github.com/chandrabezzo/wakelock.git"
-    source: git
-    version: "0.2.2"
+    version: "1.2.1"
   web:
     dependency: transitive
     description:
@@ -1404,10 +1377,10 @@ packages:
     dependency: "direct main"
     description:
       name: web_socket_channel
-      sha256: a2d56211ee4d35d9b344d9d4ce60f362e4f5d1aafb988302906bd732bc731276
+      sha256: "9f187088ed104edd8662ca07af4b124465893caf063ba29758f97af57e61da8f"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.0"
+    version: "3.0.1"
   webview_flutter:
     dependency: "direct main"
     description:
