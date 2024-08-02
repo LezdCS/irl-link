@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -402,8 +403,12 @@ class ChatViewController extends GetxController
   }
 
   Future<void> createKickChat(Channel kc) async {
+    final remoteConfig = FirebaseRemoteConfig.instance;
+    await remoteConfig.fetchAndActivate();
+    String pushKey = remoteConfig.getString('kick_chat_push_key');
     KickChat kickChat = KickChat(
       kc.channel,
+      pushKey,
       onDone: () => {},
       onError: () => {
         globals.talker?.error('error on kick chat'),
