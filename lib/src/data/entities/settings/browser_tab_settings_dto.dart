@@ -12,8 +12,18 @@ class BrowserTabSettingsDTO extends BrowserTabSettings {
       };
 
   factory BrowserTabSettingsDTO.fromJson(Map<String, dynamic> map) {
+    List<BrowserTab> bDto = [];
+    for (dynamic tab in map['tabs'] ?? []) {
+      bDto.add(BrowserTabDTO.fromJson(tab));
+    }
     return BrowserTabSettingsDTO(
-      tabs: (map['tabs'] ?? []).map((e) => BrowserTabDTO.fromJson(e)).toList(),
+      tabs: bDto,
+    );
+  }
+
+  factory BrowserTabSettingsDTO.fromList(List<dynamic> list) {
+    return BrowserTabSettingsDTO(
+      tabs: (list).map((e) => BrowserTabDTO.fromJson(e)).toList(),
     );
   }
 }

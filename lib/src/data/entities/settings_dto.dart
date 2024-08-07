@@ -122,7 +122,9 @@ class SettingsDTO extends Settings {
           ? map['obsWebsocketPassword'] as String
           : const Settings.defaultSettings().obsWebsocketPassword!,
       browserTabs: map['browserTabs'] != null
-          ? BrowserTabSettingsDTO.fromJson(map['browserTabs'])
+          ? map['browserTabs'] is List<dynamic>
+              ? BrowserTabSettingsDTO.fromList(map['browserTabs'])
+              : BrowserTabSettingsDTO.fromJson(map['browserTabs'])
           : const Settings.defaultSettings().browserTabs!,
       obsConnectionsHistory: map['obsConnectionsHistory'] != null
           ? map['obsConnectionsHistory'] as List

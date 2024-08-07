@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'dart:io';
 
 import '../../controllers/settings_view_controller.dart';
@@ -105,7 +106,10 @@ class ManageListBrowserTabs extends GetView {
                                           onTap: () {
                                             Get.defaultDialog(
                                               content: _editDialog(
-                                                  context, controller, elem),
+                                                context,
+                                                controller,
+                                                elem,
+                                              ),
                                               title: 'Edit',
                                               textCancel: "cancel".tr,
                                               textConfirm: "confirm".tr,
@@ -314,12 +318,15 @@ Widget _addDialog(context, SettingsViewController controller) {
   );
 }
 
-Widget _editDialog(context, SettingsViewController controller, elem) {
-  controller.addBrowserUrlController.text = elem['url'];
-  controller.addBrowserTitleController.text = elem['title'];
-  controller.addBrowserToggled.value = elem['toggled'] ?? true;
-  controller.addBrowserAudioSourceToggled.value =
-      elem['iOSAudioSource'] ?? false;
+Widget _editDialog(
+  context,
+  SettingsViewController controller,
+  BrowserTab elem,
+) {
+  controller.addBrowserUrlController.text = elem.url;
+  controller.addBrowserTitleController.text = elem.title;
+  controller.addBrowserToggled.value = elem.toggled;
+  controller.addBrowserAudioSourceToggled.value = elem.iOSAudioSource;
   return Column(
     mainAxisSize: MainAxisSize.min,
     children: [
