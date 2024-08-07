@@ -52,8 +52,8 @@ class ManageListBrowserTabs extends GetView {
           child: Column(
             children: [
               Container(
-                child: controller
-                        .homeViewController.settings.value.browserTabs!.isEmpty
+                child: controller.homeViewController.settings.value.browserTabs!
+                        .tabs.isEmpty
                     ? Container(
                         padding: const EdgeInsets.only(top: 20),
                         child: const Text(
@@ -65,32 +65,32 @@ class ManageListBrowserTabs extends GetView {
                         padding: const EdgeInsets.only(
                             top: 8, left: 18, right: 18, bottom: 8),
                         itemCount: controller.homeViewController.settings.value
-                            .browserTabs!.length,
+                            .browserTabs!.tabs.length,
                         onReorder: (int oldIndex, int newIndex) {
                           if (newIndex > oldIndex) {
                             newIndex -= 1;
                           }
-                          final element = controller
-                              .homeViewController.settings.value.browserTabs!
+                          final element = controller.homeViewController.settings
+                              .value.browserTabs!.tabs
                               .removeAt(oldIndex);
-                          controller
-                              .homeViewController.settings.value.browserTabs!
+                          controller.homeViewController.settings.value
+                              .browserTabs!.tabs
                               .insert(newIndex, element);
                           controller.saveSettings();
                         },
                         itemBuilder: (BuildContext context, int index) {
                           var elem = controller.homeViewController.settings
-                              .value.browserTabs![index];
+                              .value.browserTabs!.tabs[index];
                           return Container(
                             key: ValueKey(controller.homeViewController.settings
-                                .value.browserTabs![index]),
+                                .value.browserTabs!.tabs[index]),
                             color: controller.browserTabsSelected.contains(elem)
                                 ? Colors.red[800]
                                 : Theme.of(context).colorScheme.secondary,
                             margin: const EdgeInsets.only(bottom: 8),
                             child: ListTile(
                               title: Text(
-                                elem['title'],
+                                elem.title,
                               ),
                               trailing: !controller.browserTabsSelected
                                       .contains(elem)

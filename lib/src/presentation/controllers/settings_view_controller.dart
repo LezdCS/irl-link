@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/store_controller.dart';
 import 'package:irllink/src/presentation/controllers/tts_controller.dart';
@@ -177,20 +178,20 @@ class SettingsViewController extends GetxController {
 
     var uuid = const Uuid();
 
-    Map<String, dynamic> tab = {
-      'id': uuid.v4(),
-      'title': title,
-      'url': url,
-      'toggled': toggled,
-      'iOSAudioSource': audioSourceToggled
-    };
-    List browserTabs =
-        homeViewController.settings.value.browserTabs! == const []
-            ? []
-            : homeViewController.settings.value.browserTabs!;
-    browserTabs.add(tab);
+    BrowserTab tab = BrowserTab(
+      id: uuid.v4(),
+      title: title,
+      url: url,
+      toggled: toggled,
+      iOSAudioSource: audioSourceToggled,
+    );
+    List<BrowserTab> tabs = homeViewController.settings.value.browserTabs!.tabs;
+    tabs.add(tab);
     homeViewController.settings.value =
-        homeViewController.settings.value.copyWith(browserTabs: browserTabs);
+        homeViewController.settings.value.copyWith(
+      browserTabs:
+          homeViewController.settings.value.browserTabs?.copyWith(tabs: tabs),
+    );
     saveSettings();
     homeViewController.settings.refresh();
     Get.back();
@@ -212,22 +213,26 @@ class SettingsViewController extends GetxController {
     elem["url"] = url;
     elem["toggled"] = toggled;
     elem["iOSAudioSource"] = audioSourceToggled;
-    List browserTabs =
-        homeViewController.settings.value.browserTabs! == const []
-            ? []
-            : homeViewController.settings.value.browserTabs!;
+    List<BrowserTab> tabs = homeViewController.settings.value.browserTabs!.tabs;
     homeViewController.settings.value =
-        homeViewController.settings.value.copyWith(browserTabs: browserTabs);
+        homeViewController.settings.value.copyWith(
+      browserTabs:
+          homeViewController.settings.value.browserTabs?.copyWith(tabs: tabs),
+    );
     saveSettings();
     homeViewController.settings.refresh();
     Get.back();
   }
 
   void removeBrowserTab(tab) {
-    List tabs = homeViewController.settings.value.browserTabs!;
+    List<BrowserTab> tabs = homeViewController.settings.value.browserTabs!.tabs;
     tabs.remove(tab);
+
     homeViewController.settings.value =
-        homeViewController.settings.value.copyWith(browserTabs: tabs);
+        homeViewController.settings.value.copyWith(
+      browserTabs:
+          homeViewController.settings.value.browserTabs?.copyWith(tabs: tabs),
+    );
     saveSettings();
     homeViewController.settings.refresh();
     Get.back();

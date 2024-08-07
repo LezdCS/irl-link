@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/web_page_view.dart';
@@ -46,7 +47,14 @@ Widget _overlayRow(StreamelementsViewController controller, SeOverlay overlay,
     overlayUrl =
         'https://streamelements.com/overlay/${overlay.id}/${controller.overlayToken}';
     var uuid = const Uuid();
-    webpage = WebPageView(uuid.v4() ,overlay.name, overlayUrl);
+    BrowserTab tab = BrowserTab(
+      id: uuid.v4(),
+      title: overlay.name,
+      url: overlayUrl,
+      toggled: true,
+      iOSAudioSource: false,
+    );
+    webpage = WebPageView(tab);
   }
   return Container(
     decoration: BoxDecoration(

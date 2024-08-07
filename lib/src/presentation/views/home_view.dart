@@ -226,7 +226,7 @@ class HomeView extends GetView<HomeViewController> {
                               : controller.tabElements[index] is WebPageView
                                   ? (controller.tabElements[index]
                                           as WebPageView)
-                                      .title
+                                      .tab.title
                                   : "",
             ),
           ),

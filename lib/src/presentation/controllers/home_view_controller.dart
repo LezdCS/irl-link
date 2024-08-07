@@ -8,6 +8,7 @@ import 'package:irllink/src/core/utils/list_move.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
+import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_credentials.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
@@ -172,12 +173,12 @@ class HomeViewController extends GetxController
 
   void reorderTabs() {
     // Reorder tabs
-    List<dynamic> tabs = settings.value.browserTabs!;
+    List<BrowserTab> tabs = settings.value.browserTabs!.tabs;
     tabs.forEachIndexed((index, tab) {
-      if (tab['toggled'] == null || tab['toggled']) {
+      if (tab.toggled ) {
         // Find the index of the tab in the tabElements list
         int indexInTabs = tabElements.indexWhere(
-          (element) => element is WebPageView && element.id == tab['id'],
+          (element) => element is WebPageView && element.tab.id == tab.id,
         );
         // Move the tab to the correct index
         tabElements.move(indexInTabs, index);
@@ -190,7 +191,7 @@ class HomeViewController extends GetxController
     tabElements.whereType<WebPageView>().forEach((tab) {
       // Find in the settings if the tab exist based on the title and url
       bool tabExist =
-          settings.value.browserTabs!.any((element) => element['id'] == tab.id);
+          settings.value.browserTabs!.tabs.any((element) => element.id == tab.tab.id);
       if (!tabExist) {
         tabElements.remove(tab);
       }
@@ -259,18 +260,18 @@ class HomeViewController extends GetxController
       tabElements.add(realtimeIrlTabView);
     }
 
-    for (var tab in settings.value.browserTabs!) {
+    for (BrowserTab tab in settings.value.browserTabs!.tabs) {
       // first we check if the tab already exist
       bool tabExist = tabElements
           .whereType<WebPageView>()
-          .any((element) => element.id == tab['id']);
+          .any((element) => element.tab.id == tab.id);
       if (tabExist) {
         continue;
       }
 
-      if (tab['toggled'] == null || tab['toggled']) {
-        WebPageView page = WebPageView(tab['id'], tab['title'], tab['url']);
-        if (tab['iOSAudioSource'] == null || !tab['iOSAudioSource']) {
+      if (tab.toggled) {
+        WebPageView page = WebPageView(tab);
+        if (!tab.iOSAudioSource) {
           tabElements.add(page);
         } else {
           iOSAudioSources.add(page);
