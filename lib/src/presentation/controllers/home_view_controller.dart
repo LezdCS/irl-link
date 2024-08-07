@@ -19,6 +19,7 @@ import 'package:irllink/src/presentation/controllers/realtime_irl_view_controlle
 import 'package:irllink/src/presentation/controllers/store_controller.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/tts_controller.dart';
+import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:irllink/src/presentation/widgets/tabs/obs_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/tabs/realtime_irl_tab_view.dart';
@@ -176,7 +177,7 @@ class HomeViewController extends GetxController
       if (tab['toggled'] == null || tab['toggled']) {
         // Find the index of the tab in the tabElements list
         int indexInTabs = tabElements.indexWhere(
-          (element) => element is WebPageView && element.title == tab['title'],
+          (element) => element is WebPageView && element.id == tab['id'],
         );
         // Move the tab to the correct index
         tabElements.move(indexInTabs, index);
@@ -184,8 +185,8 @@ class HomeViewController extends GetxController
     });
   }
 
-  void removeTabs() {
-    // Check if WebTavs have to be removed
+  Future<void> removeTabs() async {
+    // Check if WebTabs have to be removed
     tabElements.whereType<WebPageView>().forEach((tab) {
       // Find in the settings if the tab exist based on the title and url
       bool tabExist =
@@ -198,60 +199,78 @@ class HomeViewController extends GetxController
     // Check if OBS have to be removed
     if (Get.isRegistered<ObsTabViewController>() &&
         !settings.value.isObsConnected!) {
-      Get.delete<ObsTabViewController>();
       tabElements.removeWhere((t) => t is ObsTabView);
+      await Get.delete<ObsTabViewController>();
     }
 
     // Check if StreamElements have to be removed
     if (Get.isRegistered<StreamelementsViewController>() &&
         (seCredentials.value == null)) {
-      Get.delete<StreamelementsViewController>();
       tabElements.removeWhere((t) => t is StreamelementsTabView);
+      await Get.delete<StreamelementsViewController>();
     }
 
     // Check if Realtime IRL have to be removed
     if (Get.isRegistered<RealtimeIrlViewController>() &&
         (settings.value.rtIrlPushKey == null ||
             settings.value.rtIrlPushKey!.isEmpty)) {
-      Get.delete<RealtimeIrlViewController>();
       tabElements.removeWhere((t) => t is RealtimeIrlTabView);
+      await Get.delete<RealtimeIrlViewController>();
     }
+
+    tabController = TabController(length: tabElements.length, vsync: this);
+    if (tabIndex.value > tabElements.length - 1) {
+      tabIndex.value = 0;
+    }
+    tabController.animateTo(tabIndex.value);
   }
 
   void addTabs() {
-    // Check if tabs need to be added
-  }
-
-  Future generateTabs() async {
-    TwitchTabView twitchPage = const TwitchTabView();
-    tabElements.add(twitchPage);
-
     bool isSubscribed = Get.find<StoreController>().isSubscribed();
-    if ((twitchData == null && isSubscribed) ||
-        isSubscribed && seCredentials.value != null) {
-      streamelementsViewController = Get.find<StreamelementsViewController>();
-      StreamelementsTabView streamelementsPage = const StreamelementsTabView();
-      tabElements.add(streamelementsPage);
+
+    if (!Get.isRegistered<TwitchTabViewController>()) {
+      TwitchTabView twitchPage = const TwitchTabView();
+      tabElements.add(twitchPage);
     }
 
-    if (settings.value.isObsConnected! || twitchData == null) {
+    // Check if OBS have to be added
+    if (!Get.isRegistered<ObsTabViewController>() &&
+        settings.value.isObsConnected!) {
       obsTabViewController = Get.find<ObsTabViewController>();
       ObsTabView obsPage = const ObsTabView();
       tabElements.add(obsPage);
     }
 
+    // Check if StreamElements have to be added
+    if (isSubscribed &&
+        seCredentials.value != null &&
+        !Get.isRegistered<StreamelementsViewController>()) {
+      streamelementsViewController = Get.find<StreamelementsViewController>();
+      StreamelementsTabView streamelementsPage = const StreamelementsTabView();
+      tabElements.add(streamelementsPage);
+    }
+
+    // Check if Realtime IRL have to be added
     if (settings.value.rtIrlPushKey != null &&
-        settings.value.rtIrlPushKey!.isNotEmpty) {
+        settings.value.rtIrlPushKey!.isNotEmpty &&
+        !Get.isRegistered<RealtimeIrlViewController>()) {
       realtimeIrlViewController = Get.find<RealtimeIrlViewController>();
       RealtimeIrlTabView realtimeIrlTabView = const RealtimeIrlTabView();
       tabElements.add(realtimeIrlTabView);
     }
 
-    for (var element in settings.value.browserTabs!) {
-      if (element['toggled'] == null || element['toggled']) {
-        WebPageView page =
-            WebPageView(element['id'], element['title'], element['url']);
-        if (element['iOSAudioSource'] == null || !element['iOSAudioSource']) {
+    for (var tab in settings.value.browserTabs!) {
+      // first we check if the tab already exist
+      bool tabExist = tabElements
+          .whereType<WebPageView>()
+          .any((element) => element.id == tab['id']);
+      if (tabExist) {
+        continue;
+      }
+
+      if (tab['toggled'] == null || tab['toggled']) {
+        WebPageView page = WebPageView(tab['id'], tab['title'], tab['url']);
+        if (tab['iOSAudioSource'] == null || !tab['iOSAudioSource']) {
           tabElements.add(page);
         } else {
           iOSAudioSources.add(page);
@@ -264,6 +283,12 @@ class HomeViewController extends GetxController
       tabIndex.value = 0;
     }
     tabController.animateTo(tabIndex.value);
+  }
+
+  Future generateTabs() async {
+    await removeTabs();
+    addTabs();
+    reorderTabs();
   }
 
   void generateChats() {
