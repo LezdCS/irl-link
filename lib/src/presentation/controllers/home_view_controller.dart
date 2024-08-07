@@ -175,7 +175,7 @@ class HomeViewController extends GetxController
     // Reorder tabs
     List<BrowserTab> tabs = settings.value.browserTabs!.tabs;
     tabs.forEachIndexed((index, tab) {
-      if (tab.toggled ) {
+      if (tab.toggled) {
         // Find the index of the tab in the tabElements list
         int indexInTabs = tabElements.indexWhere(
           (element) => element is WebPageView && element.tab.id == tab.id,
@@ -188,12 +188,12 @@ class HomeViewController extends GetxController
 
   Future<void> removeTabs() async {
     // Check if WebTabs have to be removed
-    tabElements.whereType<WebPageView>().forEach((tab) {
+    tabElements.whereType<WebPageView>().forEach((tabElement) {
       // Find in the settings if the tab exist based on the title and url
-      bool tabExist =
-          settings.value.browserTabs!.tabs.any((element) => element.id == tab.tab.id);
+      bool tabExist = settings.value.browserTabs!.tabs
+          .any((settingsTab) => settingsTab.id == tabElement.tab.id);
       if (!tabExist) {
-        tabElements.remove(tab);
+        tabElements.remove(tabElement);
       }
     });
 
@@ -218,12 +218,6 @@ class HomeViewController extends GetxController
       tabElements.removeWhere((t) => t is RealtimeIrlTabView);
       await Get.delete<RealtimeIrlViewController>();
     }
-
-    tabController = TabController(length: tabElements.length, vsync: this);
-    if (tabIndex.value > tabElements.length - 1) {
-      tabIndex.value = 0;
-    }
-    tabController.animateTo(tabIndex.value);
   }
 
   void addTabs() {
@@ -278,18 +272,18 @@ class HomeViewController extends GetxController
         }
       }
     }
+  }
+
+  Future generateTabs() async {
+    await removeTabs();
+    addTabs();
+    // reorderTabs();
 
     tabController = TabController(length: tabElements.length, vsync: this);
     if (tabIndex.value > tabElements.length - 1) {
       tabIndex.value = 0;
     }
     tabController.animateTo(tabIndex.value);
-  }
-
-  Future generateTabs() async {
-    await removeTabs();
-    addTabs();
-    reorderTabs();
   }
 
   void generateChats() {
