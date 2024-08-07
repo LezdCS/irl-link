@@ -13,8 +13,9 @@ import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
 class WebPageView extends StatefulWidget {
-  const WebPageView(this.title, this.url, {super.key});
+  const WebPageView(this.id, this.title, this.url, {super.key});
 
+  final String id;
   final String title;
   final String url;
 

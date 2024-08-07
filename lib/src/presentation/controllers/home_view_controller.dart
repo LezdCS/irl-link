@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:irllink/src/core/utils/list_move.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
@@ -13,6 +15,7 @@ import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/domain/usecases/streamelements_usecase.dart';
 import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/realtime_irl_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/store_controller.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/tts_controller.dart';
@@ -60,6 +63,9 @@ class HomeViewController extends GetxController
   // Chat input
   late TextEditingController chatInputController;
   RxList<Emote> twitchEmotes = <Emote>[].obs;
+
+  // RealtimeIRL
+  RealtimeIrlViewController? realtimeIrlViewController;
 
   // Emote picker
   RxBool isPickingEmote = false.obs;
@@ -163,9 +169,60 @@ class HomeViewController extends GetxController
     );
   }
 
-  Future generateTabs() async {
-    tabElements.clear();
+  void reorderTabs() {
+    // Reorder tabs
+    List<dynamic> tabs = settings.value.browserTabs!;
+    tabs.forEachIndexed((index, tab) {
+      if (tab['toggled'] == null || tab['toggled']) {
+        // Find the index of the tab in the tabElements list
+        int indexInTabs = tabElements.indexWhere(
+          (element) => element is WebPageView && element.title == tab['title'],
+        );
+        // Move the tab to the correct index
+        tabElements.move(indexInTabs, index);
+      }
+    });
+  }
 
+  void removeTabs() {
+    // Check if WebTavs have to be removed
+    tabElements.whereType<WebPageView>().forEach((tab) {
+      // Find in the settings if the tab exist based on the title and url
+      bool tabExist =
+          settings.value.browserTabs!.any((element) => element['id'] == tab.id);
+      if (!tabExist) {
+        tabElements.remove(tab);
+      }
+    });
+
+    // Check if OBS have to be removed
+    if (Get.isRegistered<ObsTabViewController>() &&
+        !settings.value.isObsConnected!) {
+      Get.delete<ObsTabViewController>();
+      tabElements.removeWhere((t) => t is ObsTabView);
+    }
+
+    // Check if StreamElements have to be removed
+    if (Get.isRegistered<StreamelementsViewController>() &&
+        (seCredentials.value == null)) {
+      Get.delete<StreamelementsViewController>();
+      tabElements.removeWhere((t) => t is StreamelementsTabView);
+    }
+
+    // Check if Realtime IRL have to be removed
+    if (Get.isRegistered<RealtimeIrlViewController>() &&
+        (settings.value.rtIrlPushKey == null ||
+            settings.value.rtIrlPushKey!.isEmpty)) {
+      Get.delete<RealtimeIrlViewController>();
+      tabElements.removeWhere((t) => t is RealtimeIrlTabView);
+    }
+  }
+
+  void addTabs() {
+    // Check if tabs need to be added
+  }
+
+  Future generateTabs() async {
     TwitchTabView twitchPage = const TwitchTabView();
     tabElements.add(twitchPage);
 
@@ -183,27 +240,23 @@ class HomeViewController extends GetxController
       tabElements.add(obsPage);
     }
 
-    for (var element in settings.value.browserTabs!.where(
-        (tab) => tab['iOSAudioSource'] == null || !tab['iOSAudioSource'])) {
-      if (element['toggled'] == null || element['toggled']) {
-        WebPageView page = WebPageView(element['title'], element['url']);
-        tabElements.add(page);
-      }
-    }
-
-    for (var element in settings.value.browserTabs!.where(
-        (tab) => tab['iOSAudioSource'] != null && tab['iOSAudioSource'])) {
-      if (element['toggled'] == null || element['toggled']) {
-        WebPageView page = WebPageView(element['title'], element['url']);
-        iOSAudioSources.add(page);
-      }
-    }
-
     if (settings.value.rtIrlPushKey != null &&
         settings.value.rtIrlPushKey!.isNotEmpty) {
-      streamelementsViewController = Get.find<StreamelementsViewController>();
+      realtimeIrlViewController = Get.find<RealtimeIrlViewController>();
       RealtimeIrlTabView realtimeIrlTabView = const RealtimeIrlTabView();
       tabElements.add(realtimeIrlTabView);
+    }
+
+    for (var element in settings.value.browserTabs!) {
+      if (element['toggled'] == null || element['toggled']) {
+        WebPageView page =
+            WebPageView(element['id'], element['title'], element['url']);
+        if (element['iOSAudioSource'] == null || !element['iOSAudioSource']) {
+          tabElements.add(page);
+        } else {
+          iOSAudioSources.add(page);
+        }
+      }
     }
 
     tabController = TabController(length: tabElements.length, vsync: this);

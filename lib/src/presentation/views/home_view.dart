@@ -497,6 +497,7 @@ class HomeView extends GetView<HomeViewController> {
                 }
                 controller.obsTabViewController?.applySettings();
                 controller.streamelementsViewController?.applySettings();
+                controller.realtimeIrlViewController?.applySettings();
                 if (controller.selectedChatIndex != null) {
                   controller.chatTabsController
                       .animateTo(controller.selectedChatIndex!);
