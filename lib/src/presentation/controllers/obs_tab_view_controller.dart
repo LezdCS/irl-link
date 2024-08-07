@@ -51,8 +51,12 @@ class ObsTabViewController extends GetxController {
   /// Connect to the OBS websocket at [url] with optional [password]
   void connectWs(String url, String password) async {
     try {
-      if(!url.startsWith('ws://') && !url.startsWith('wss://')) {
-        url = 'ws://$url';
+      if (!url.startsWith('ws://') && !url.startsWith('wss://')) {
+        if (url.startsWith('https')) {
+          url = 'wss://$url';
+        } else {
+          url = 'ws://$url';
+        }
       }
       globals.talker?.info("Connecting to OBS at $url...");
       obsWebSocket = await ObsWebSocket.connect(
