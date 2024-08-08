@@ -205,13 +205,20 @@ class HomeViewController extends GetxController
   Future<void> removeTabs() async {
     // Check if WebTabs have to be removed
     tabElements.whereType<WebPageView>().forEach((tabElement) {
-      // Find in the settings if the tab exist based on the title and url
       bool tabExist = settings.value.browserTabs!.tabs
           .any((settingsTab) => settingsTab.id == tabElement.tab.id);
       if (!tabExist) {
         tabElements.remove(tabElement);
       }
     });
+
+    for (var tabElement in iOSAudioSources) {
+      bool tabExist = settings.value.browserTabs!.tabs
+          .any((settingsTab) => settingsTab.id == tabElement.tab.id);
+      if (!tabExist) {
+        iOSAudioSources.remove(tabElement);
+      }
+    }
 
     // Check if OBS have to be removed
     if (Get.isRegistered<ObsTabViewController>() &&
@@ -277,7 +284,9 @@ class HomeViewController extends GetxController
       bool tabExist = tabElements
           .whereType<WebPageView>()
           .any((element) => element.tab.id == tab.id);
-      if (tabExist) {
+      bool tabExistIniOSAudioSources =
+          iOSAudioSources.any((element) => element.tab.id == tab.id);
+      if (tabExist || tabExistIniOSAudioSources) {
         continue;
       }
 
