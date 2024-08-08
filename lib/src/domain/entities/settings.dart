@@ -73,6 +73,7 @@ class Settings extends Equatable {
       redemptions: true,
     ),
     this.chatSettings = const ChatSettings(
+      permanentFirstGroup: [],
       chatGroups: [],
       hideDeletedMessages: true,
     ),

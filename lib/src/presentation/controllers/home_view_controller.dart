@@ -20,7 +20,6 @@ import 'package:irllink/src/presentation/controllers/realtime_irl_view_controlle
 import 'package:irllink/src/presentation/controllers/store_controller.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/tts_controller.dart';
-import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:irllink/src/presentation/widgets/tabs/obs_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/tabs/realtime_irl_tab_view.dart';
@@ -249,11 +248,6 @@ class HomeViewController extends GetxController
   void addTabs() {
     bool isSubscribed = Get.find<StoreController>().isSubscribed();
 
-    if (!Get.isRegistered<TwitchTabViewController>()) {
-      TwitchTabView twitchPage = const TwitchTabView();
-      tabElements.add(twitchPage);
-    }
-
     // Check if OBS have to be added
     if (obsTabViewController == null && settings.value.isObsConnected!) {
       obsTabViewController = Get.find<ObsTabViewController>();
@@ -279,6 +273,7 @@ class HomeViewController extends GetxController
       tabElements.insert(1, realtimeIrlTabView);
     }
 
+    // Check if WebTabs have to be added
     for (BrowserTab tab in settings.value.browserTabs!.tabs) {
       // first we check if the tab already exist
       bool tabExist = tabElements
@@ -336,12 +331,11 @@ class HomeViewController extends GetxController
       );
     }
 
+    // first loop to delete the chatGroups that are not in the settings anymore
     for (var temp in chatViews) {
-      if (temp.chatGroup.id == '1') {
-        continue;
-      }
-      ChatView view = channels
-          .firstWhere((element) => element.chatGroup.id == temp.chatGroup.id);
+      ChatView view = channels.firstWhere(
+        (element) => element.chatGroup.id == temp.chatGroup.id,
+      );
 
       ChatGroup group = view.chatGroup;
       if (settings.value.chatSettings!.chatGroups
@@ -362,6 +356,7 @@ class HomeViewController extends GetxController
       Get.delete<ChatViewController>(tag: group.id);
     }
 
+    // second loop to add the chatGroups that are in the settings but not in the channels
     for (ChatGroup chatGroup in settings.value.chatSettings!.chatGroups) {
       if (channels.firstWhereOrNull(
               (channel) => channel.chatGroup.id == chatGroup.id) ==
@@ -460,13 +455,18 @@ class HomeViewController extends GetxController
 
   Future applySettings(Settings settings) async {
     {
-      await generateTabs();
-      Get.find<DashboardController>();
+      generateTabs();
       generateChats();
+
+      Get.find<DashboardController>();
       Get.find<TtsController>().initTts(settings);
+
+      // DARK MODE
       if (!settings.generalSettings!.isDarkMode) {
         Get.changeThemeMode(ThemeMode.light);
       }
+
+      // SPEAKER SETTING 
       if (settings.generalSettings!.keepSpeakerOn) {
         const path = "../lib/assets/blank.mp3";
         timerKeepSpeakerOn = Timer.periodic(
@@ -476,11 +476,8 @@ class HomeViewController extends GetxController
       } else {
         timerKeepSpeakerOn?.cancel();
       }
-      Locale locale = Locale(
-        settings.generalSettings!.appLanguage["languageCode"],
-        settings.generalSettings!.appLanguage["countryCode"],
-      );
-      Get.updateLocale(locale);
+
+      // SPLIT VIEW
       splitViewController?.weights = settings.generalSettings!.splitViewWeights;
     }
   }

@@ -235,7 +235,10 @@ class ChatsJoined extends GetView<SettingsViewController> {
   }
 
   Widget _addChannelToGroupButton(
-      context, channelTextController, ChatGroup chatGroup) {
+    context,
+    channelTextController,
+    ChatGroup chatGroup,
+  ) {
     Rx<Platform?> selectedPlatform = Platform.values.first.obs;
 
     return InkWell(
