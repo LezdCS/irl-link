@@ -251,7 +251,7 @@ class HomeViewController extends GetxController
     if (obsTabViewController == null && settings.value.isObsConnected!) {
       obsTabViewController = Get.find<ObsTabViewController>();
       ObsTabView obsPage = const ObsTabView();
-      tabElements.add(obsPage);
+      tabElements.insert(1, obsPage);
     }
 
     // Check if StreamElements have to be added
@@ -260,7 +260,7 @@ class HomeViewController extends GetxController
         streamelementsViewController == null) {
       streamelementsViewController = Get.find<StreamelementsViewController>();
       StreamelementsTabView streamelementsPage = const StreamelementsTabView();
-      tabElements.add(streamelementsPage);
+      tabElements.insert(1, streamelementsPage);
     }
 
     // Check if Realtime IRL have to be added
@@ -269,7 +269,7 @@ class HomeViewController extends GetxController
         realtimeIrlViewController == null) {
       realtimeIrlViewController = Get.find<RealtimeIrlViewController>();
       RealtimeIrlTabView realtimeIrlTabView = const RealtimeIrlTabView();
-      tabElements.add(realtimeIrlTabView);
+      tabElements.insert(1, realtimeIrlTabView);
     }
 
     for (BrowserTab tab in settings.value.browserTabs!.tabs) {
