@@ -226,7 +226,8 @@ class HomeView extends GetView<HomeViewController> {
                               : controller.tabElements[index] is WebPageView
                                   ? (controller.tabElements[index]
                                           as WebPageView)
-                                      .tab.title
+                                      .tab
+                                      .title
                                   : "",
             ),
           ),
@@ -519,11 +520,10 @@ class HomeView extends GetView<HomeViewController> {
     return Expanded(
       child: Container(
         color: Theme.of(context).colorScheme.surface,
-        child: IndexedStack(
-          index: controller.tabIndex.value,
-          children: List<Widget>.generate(
-            controller.tabElements.length,
-            (int index) => controller.tabElements[index],
+        child: Obx(
+          () => IndexedStack(
+            index: controller.tabIndex.value,
+            children: controller.tabElements,
           ),
         ),
       ),

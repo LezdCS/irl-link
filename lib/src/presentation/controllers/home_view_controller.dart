@@ -172,8 +172,8 @@ class HomeViewController extends GetxController
   }
 
   void reorderTabs() {
-    // Reorder tabs
     List<BrowserTab> tabs = settings.value.browserTabs!.tabs;
+    int diff = tabElements.length - tabElements.whereType<WebPageView>().length;
     tabs.forEachIndexed((index, tab) {
       if (tab.toggled) {
         // Find the index of the tab in the tabElements list
@@ -181,9 +181,10 @@ class HomeViewController extends GetxController
           (element) => element is WebPageView && element.tab.id == tab.id,
         );
         // Move the tab to the correct index
-        tabElements.move(indexInTabs, index);
+        tabElements.move(indexInTabs, index + diff);
       }
     });
+    tabElements.refresh();
   }
 
   Future<void> removeTabs() async {
@@ -277,7 +278,7 @@ class HomeViewController extends GetxController
   Future generateTabs() async {
     await removeTabs();
     addTabs();
-    // reorderTabs();
+    reorderTabs();
 
     tabController = TabController(length: tabElements.length, vsync: this);
     if (tabIndex.value > tabElements.length - 1) {
