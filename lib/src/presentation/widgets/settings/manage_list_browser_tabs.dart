@@ -294,21 +294,31 @@ Widget _addDialog(context, SettingsViewController controller) {
       ),
       Visibility(
         visible: Platform.isIOS,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
           children: [
-            const Text(
-              "Is an audio source",
-              style: TextStyle(
-                fontSize: 18,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "Is an audio source",
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+                Obx(
+                  () => Switch(
+                    value: controller.addBrowserAudioSourceToggled.value,
+                    onChanged: (value) {
+                      controller.addBrowserAudioSourceToggled.value = value;
+                    },
+                  ),
+                ),
+              ],
             ),
-            Obx(
-              () => Switch(
-                value: controller.addBrowserAudioSourceToggled.value,
-                onChanged: (value) {
-                  controller.addBrowserAudioSourceToggled.value = value;
-                },
+            const Text(
+              "On iOS we have limitations with the tabs, only the focused one can play audio, so to bypass this issue you can select this option to make this as an audio source. You wont be able to interact with this tab, but it will play audio.",
+              style: TextStyle(
+                color: Colors.grey,
               ),
             ),
           ],
