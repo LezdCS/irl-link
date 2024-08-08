@@ -11,8 +11,7 @@ class ChatSettingsDTO extends ChatSettings {
 
   @override
   Map toJson() => {
-        'permanentFirstGroup':
-            permanentFirstGroup.map((e) => e.toJson()).toList(),
+        'permanentFirstGroup': permanentFirstGroup.toJson(),
         'chatGroups': chatGroups.map((e) => e.toJson()).toList(),
         'hideDeletedMessages': hideDeletedMessages,
       };
@@ -23,12 +22,11 @@ class ChatSettingsDTO extends ChatSettings {
       gDto.add(ChatGroupDTO.fromJson(chatGroup));
     }
 
-    List<ChatGroup> pfgDto = [];
-    for (dynamic chatGroup in map['permanentFirstGroup'] ?? []) {
-      pfgDto.add(ChatGroupDTO.fromJson(chatGroup));
-    }
     return ChatSettingsDTO(
-      permanentFirstGroup: pfgDto,
+      permanentFirstGroup: ChatGroupDTO.fromJson(
+        map['permanentFirstGroup'] ??
+            const Settings.defaultSettings().chatSettings!.permanentFirstGroup,
+      ),
       chatGroups: gDto,
       hideDeletedMessages: map['hideDeletedMessages'] ??
           const Settings.defaultSettings().chatSettings!.hideDeletedMessages,

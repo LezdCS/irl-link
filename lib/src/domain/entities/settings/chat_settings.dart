@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 
 class ChatSettings extends Equatable {
-  final List<ChatGroup> permanentFirstGroup;
+  final ChatGroup permanentFirstGroup;
   final List<ChatGroup> chatGroups;
   final bool hideDeletedMessages;
 
@@ -22,7 +22,7 @@ class ChatSettings extends Equatable {
   }
 
   Map toJson() => {
-        'permanentFirstGroup': permanentFirstGroup.map((e) => e.toJson()).toList(),
+        'permanentFirstGroup': permanentFirstGroup.toJson(),
         'chatGroups': chatGroups.map((e) => e.toJson()).toList(),
         'hideDeletedMessages': hideDeletedMessages,
       };
@@ -31,7 +31,7 @@ class ChatSettings extends Equatable {
   bool get stringify => true;
 
   ChatSettings copyWith({
-    List<ChatGroup>? permanentFirstGroup,
+    ChatGroup? permanentFirstGroup,
     List<ChatGroup>? chatGroups,
     bool? hideDeletedMessages,
   }) {

@@ -37,6 +37,7 @@ import '../widgets/tabs/streamelements_tab_view.dart';
 import '../widgets/web_page_view.dart';
 import 'chat_view_controller.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
+import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 
 class HomeViewController extends GetxController
     with GetTickerProviderStateMixin {
@@ -313,22 +314,25 @@ class HomeViewController extends GetxController
     }
 
     RxList<ChatView> groupsViews = RxList<ChatView>.from(channels);
-    
+
     // 1. Find the groups that are in the groupsViews but not in the settings to remove them
     List<ChatGroup> settingsGroups = settings.value.chatSettings!.chatGroups;
     List<ChatGroup> groupsToRemove = groupsViews
-        .where((groupView) => !settingsGroups.any((sGroup) => sGroup.id == groupView.chatGroup.id))
+        .where((groupView) => !settingsGroups
+            .any((sGroup) => sGroup.id == groupView.chatGroup.id))
         .map((groupView) => groupView.chatGroup)
         .toList();
     for (var group in groupsToRemove) {
-      ChatView groupView = groupsViews.firstWhere((g) => g.chatGroup.id == group.id);
+      ChatView groupView =
+          groupsViews.firstWhere((g) => g.chatGroup.id == group.id);
       channels.remove(groupView);
       Get.delete<ChatViewController>(tag: group.id);
     }
 
     // 2. Find the groups that are in the settings but not in the groupsViews to add them
     List<ChatGroup> groupsToAdd = settingsGroups
-        .where((sGroup) => !groupsViews.any((groupView) => groupView.chatGroup.id == sGroup.id))
+        .where((sGroup) => !groupsViews
+            .any((groupView) => groupView.chatGroup.id == sGroup.id))
         .toList();
     for (var group in groupsToAdd) {
       ChatView groupView = ChatView(
@@ -338,9 +342,36 @@ class HomeViewController extends GetxController
       channels.add(groupView);
     }
 
+    // 3. We add the 'Permanent First Group' from the settings to the first position if it does not exist yet in the channels
+    ChatGroup? permanentFirstGroup =
+        settings.value.chatSettings!.permanentFirstGroup;
+    // if the permanentFirstGroup is not in the channels, we add it
+    if (!channels
+        .any((groupView) => groupView.chatGroup.id == permanentFirstGroup?.id)) {
+      // We add the Twitch Chat of the user to the first position of the channels of this group
+      List<Channel> updatedChannels = List.from(permanentFirstGroup.channels);
+      updatedChannels.insert(
+        0,
+        Channel(
+            platform: Platform.twitch,
+            channel: twitchData!.twitchUser.login,
+            enabled: true),
+      );
+      permanentFirstGroup = permanentFirstGroup.copyWith(
+        channels: updatedChannels,
+      );
+
+      ChatView groupView = ChatView(
+        chatGroup: permanentFirstGroup,
+      );
+      lazyPutChat(permanentFirstGroup);
+      channels.insert(0, groupView);
+    }
+
     // 3. Call the createChats function for each group to update the chats inside
-    for (var group in settingsGroups) {
-      ChatViewController? chatController = Get.find<ChatViewController>(tag: group.id);
+    for (var c in channels) {
+      ChatViewController? chatController =
+          Get.find<ChatViewController>(tag: c.chatGroup.id);
       chatController.createChats();
     }
 
@@ -439,7 +470,7 @@ class HomeViewController extends GetxController
         Get.changeThemeMode(ThemeMode.light);
       }
 
-      // SPEAKER SETTING 
+      // SPEAKER SETTING
       if (settings.generalSettings!.keepSpeakerOn) {
         const path = "../lib/assets/blank.mp3";
         timerKeepSpeakerOn = Timer.periodic(
