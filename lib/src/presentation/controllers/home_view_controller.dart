@@ -338,6 +338,12 @@ class HomeViewController extends GetxController
       channels.add(groupView);
     }
 
+    // 3. Call the createChats function for each group to update the chats inside
+    for (var group in settingsGroups) {
+      ChatViewController? chatController = Get.find<ChatViewController>(tag: group.id);
+      chatController.createChats();
+    }
+
     chatTabsController = TabController(length: channels.length, vsync: this);
     if (channels.isEmpty) {
       selectedChatIndex = null;

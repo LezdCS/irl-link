@@ -235,10 +235,10 @@ class ChatViewController extends GetxController
 
   Future applySettings() async {
     isAutoScrolldown.value = true;
-    createChats(chatGroup.channels);
+    createChats();
   }
 
-  void createChats(List<Channel> channels) {
+  void createChats() {
     List<Channel> twitchChannels =
         chatGroup.channels.where((e) => e.platform == Platform.twitch).toList();
     List<Channel> kickChannels =
