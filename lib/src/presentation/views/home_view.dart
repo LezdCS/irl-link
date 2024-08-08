@@ -90,17 +90,7 @@ class HomeView extends GetView<HomeViewController> {
                                 : SplitViewMode.Horizontal,
                             isActive: true,
                           ),
-                          onWeightChanged: (weight) {
-                            controller.settings.value =
-                                controller.settings.value.copyWith(
-                              generalSettings: controller
-                                  .settings.value.generalSettings
-                                  ?.copyWith(
-                                splitViewWeights: [weight[0]!, weight[1]!],
-                              ),
-                            );
-                            controller.saveSettings();
-                          },
+                          onWeightChanged: controller.onSplitResized,
                           children: [
                             controller.tabElements.isNotEmpty
                                 ? _top(context, height, width)
@@ -226,6 +216,7 @@ class HomeView extends GetView<HomeViewController> {
                               : controller.tabElements[index] is WebPageView
                                   ? (controller.tabElements[index]
                                           as WebPageView)
+                                      .tab
                                       .title
                                   : "",
             ),
@@ -380,10 +371,6 @@ class HomeView extends GetView<HomeViewController> {
                                       () => poll(
                                         context,
                                         Get.find<TwitchTabViewController>(),
-                                        Get.find<TwitchTabViewController>()
-                                            .twitchEventSub!
-                                            .currentPoll
-                                            .value,
                                       ),
                                     ),
                                   ],
@@ -431,10 +418,6 @@ class HomeView extends GetView<HomeViewController> {
                                       () => prediction(
                                         context,
                                         Get.find<TwitchTabViewController>(),
-                                        Get.find<TwitchTabViewController>()
-                                            .twitchEventSub!
-                                            .currentPrediction
-                                            .value,
                                       ),
                                     ),
                                   ],
@@ -497,6 +480,7 @@ class HomeView extends GetView<HomeViewController> {
                 }
                 controller.obsTabViewController?.applySettings();
                 controller.streamelementsViewController?.applySettings();
+                controller.realtimeIrlViewController?.applySettings();
                 if (controller.selectedChatIndex != null) {
                   controller.chatTabsController
                       .animateTo(controller.selectedChatIndex!);
@@ -518,11 +502,10 @@ class HomeView extends GetView<HomeViewController> {
     return Expanded(
       child: Container(
         color: Theme.of(context).colorScheme.surface,
-        child: IndexedStack(
-          index: controller.tabIndex.value,
-          children: List<Widget>.generate(
-            controller.tabElements.length,
-            (int index) => controller.tabElements[index],
+        child: Obx(
+          () => IndexedStack(
+            index: controller.tabIndex.value,
+            children: controller.tabElements,
           ),
         ),
       ),

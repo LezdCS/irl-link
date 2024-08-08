@@ -44,19 +44,22 @@ class HomeBindings extends Bindings {
     Get.lazyPut<TtsController>(() => TtsController());
     Get.find<TtsController>();
 
-    Get.lazyPut<ObsTabViewController>(() => ObsTabViewController(
-          homeEvents: HomeEvents(
-            twitchUseCase: TwitchUseCase(
-              twitchRepository: TwitchRepositoryImpl(),
-            ),
-            settingsUseCase: SettingsUseCase(
-              settingsRepository: SettingsRepositoryImpl(),
-            ),
-            streamelementsUseCase: StreamelementsUseCase(
-              streamelementsRepository: StreamelementsRepositoryImpl(),
-            ),
+    Get.lazyPut<ObsTabViewController>(
+      () => ObsTabViewController(
+        homeEvents: HomeEvents(
+          twitchUseCase: TwitchUseCase(
+            twitchRepository: TwitchRepositoryImpl(),
           ),
-        ));
+          settingsUseCase: SettingsUseCase(
+            settingsRepository: SettingsRepositoryImpl(),
+          ),
+          streamelementsUseCase: StreamelementsUseCase(
+            streamelementsRepository: StreamelementsRepositoryImpl(),
+          ),
+        ),
+      ),
+      fenix: true,
+    );
 
     Get.lazyPut<StreamelementsViewController>(
       () => StreamelementsViewController(
@@ -69,24 +72,30 @@ class HomeBindings extends Bindings {
           ),
         ),
       ),
+      fenix: true,
     );
 
-    Get.lazyPut<TwitchTabViewController>(() => TwitchTabViewController(
-          homeEvents: HomeEvents(
-            twitchUseCase: TwitchUseCase(
-              twitchRepository: TwitchRepositoryImpl(),
-            ),
-            settingsUseCase: SettingsUseCase(
-              settingsRepository: SettingsRepositoryImpl(),
-            ),
-            streamelementsUseCase: StreamelementsUseCase(
-              streamelementsRepository: StreamelementsRepositoryImpl(),
-            ),
+    Get.lazyPut<TwitchTabViewController>(
+      () => TwitchTabViewController(
+        homeEvents: HomeEvents(
+          twitchUseCase: TwitchUseCase(
+            twitchRepository: TwitchRepositoryImpl(),
           ),
-        ));
+          settingsUseCase: SettingsUseCase(
+            settingsRepository: SettingsRepositoryImpl(),
+          ),
+          streamelementsUseCase: StreamelementsUseCase(
+            streamelementsRepository: StreamelementsRepositoryImpl(),
+          ),
+        ),
+      ),
+    );
     Get.find<TwitchTabViewController>();
 
     Get.lazyPut<DashboardController>(() => DashboardController());
-    Get.lazyPut<RealtimeIrlViewController>(() => RealtimeIrlViewController());
+    Get.lazyPut<RealtimeIrlViewController>(
+      () => RealtimeIrlViewController(),
+      fenix: true,
+    );
   }
 }

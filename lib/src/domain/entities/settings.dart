@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_events_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/settings/dashboard_settings.dart';
@@ -23,7 +24,7 @@ class Settings extends Equatable {
   final bool? isObsConnected;
   final String? obsWebsocketUrl;
   final String? obsWebsocketPassword;
-  final List? browserTabs;
+  final BrowserTabSettings? browserTabs;
   final List? obsConnectionsHistory;
   final StreamElementsSettings? streamElementsSettings;
   final String? rtIrlPushKey;
@@ -93,7 +94,9 @@ class Settings extends Equatable {
     this.isObsConnected = false,
     this.obsWebsocketUrl = "",
     this.obsWebsocketPassword = "",
-    this.browserTabs = const [],
+    this.browserTabs = const BrowserTabSettings(
+      tabs: [],
+    ),
     this.obsConnectionsHistory = const [],
     this.streamElementsSettings = const StreamElementsSettings(
       showFollowerActivity: true,
@@ -197,7 +200,7 @@ class Settings extends Equatable {
           bool? isObsConnected,
           String? obsWebsocketUrl,
           String? obsWebsocketPassword,
-          List? browserTabs,
+          BrowserTabSettings? browserTabs,
           List? obsConnectionsHistory,
           StreamElementsSettings? streamElementsSettings,
           String? rtIrlPushKey,

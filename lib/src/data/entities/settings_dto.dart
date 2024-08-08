@@ -1,3 +1,4 @@
+import 'package:irllink/src/data/entities/settings/browser_tab_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/chat_events_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/chat_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/dashboard_settings_dto.dart';
@@ -5,6 +6,7 @@ import 'package:irllink/src/data/entities/settings/general_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/stream_elements_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/tts_settings_dto.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
+import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/settings/general_settings.dart';
 import 'package:irllink/src/domain/entities/settings/tts_settings.dart';
@@ -29,7 +31,7 @@ class SettingsDTO extends Settings {
     required bool isObsConnected,
     required String obsWebsocketUrl,
     required String obsWebsocketPassword,
-    required List browserTabs,
+    required BrowserTabSettings browserTabs,
     required List obsConnectionsHistory,
     required StreamElementsSettings streamElementsSettings,
     required String rtIrlPushKey,
@@ -73,7 +75,7 @@ class SettingsDTO extends Settings {
         'isObsConnected': isObsConnected,
         'obsWebsocketUrl': obsWebsocketUrl,
         'obsWebsocketPassword': obsWebsocketPassword,
-        'browserTabs': browserTabs,
+        'browserTabs': browserTabs?.toJson(),
         'obsConnectionsHistory': obsConnectionsHistory,
         'streamElementsSettings': streamElementsSettings?.toJson(),
         'rtIrlPushKey': rtIrlPushKey,
@@ -120,7 +122,9 @@ class SettingsDTO extends Settings {
           ? map['obsWebsocketPassword'] as String
           : const Settings.defaultSettings().obsWebsocketPassword!,
       browserTabs: map['browserTabs'] != null
-          ? map['browserTabs'] as List
+          ? map['browserTabs'] is List<dynamic>
+              ? BrowserTabSettingsDTO.fromList(map['browserTabs'])
+              : BrowserTabSettingsDTO.fromJson(map['browserTabs'])
           : const Settings.defaultSettings().browserTabs!,
       obsConnectionsHistory: map['obsConnectionsHistory'] != null
           ? map['obsConnectionsHistory'] as List

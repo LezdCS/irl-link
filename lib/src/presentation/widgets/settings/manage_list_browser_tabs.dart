@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'dart:io';
 
 import '../../controllers/settings_view_controller.dart';
@@ -52,8 +53,8 @@ class ManageListBrowserTabs extends GetView {
           child: Column(
             children: [
               Container(
-                child: controller
-                        .homeViewController.settings.value.browserTabs!.isEmpty
+                child: controller.homeViewController.settings.value.browserTabs!
+                        .tabs.isEmpty
                     ? Container(
                         padding: const EdgeInsets.only(top: 20),
                         child: const Text(
@@ -65,32 +66,32 @@ class ManageListBrowserTabs extends GetView {
                         padding: const EdgeInsets.only(
                             top: 8, left: 18, right: 18, bottom: 8),
                         itemCount: controller.homeViewController.settings.value
-                            .browserTabs!.length,
+                            .browserTabs!.tabs.length,
                         onReorder: (int oldIndex, int newIndex) {
                           if (newIndex > oldIndex) {
                             newIndex -= 1;
                           }
-                          final element = controller
-                              .homeViewController.settings.value.browserTabs!
+                          final element = controller.homeViewController.settings
+                              .value.browserTabs!.tabs
                               .removeAt(oldIndex);
-                          controller
-                              .homeViewController.settings.value.browserTabs!
+                          controller.homeViewController.settings.value
+                              .browserTabs!.tabs
                               .insert(newIndex, element);
                           controller.saveSettings();
                         },
                         itemBuilder: (BuildContext context, int index) {
                           var elem = controller.homeViewController.settings
-                              .value.browserTabs![index];
+                              .value.browserTabs!.tabs[index];
                           return Container(
                             key: ValueKey(controller.homeViewController.settings
-                                .value.browserTabs![index]),
+                                .value.browserTabs!.tabs[index]),
                             color: controller.browserTabsSelected.contains(elem)
                                 ? Colors.red[800]
                                 : Theme.of(context).colorScheme.secondary,
                             margin: const EdgeInsets.only(bottom: 8),
                             child: ListTile(
                               title: Text(
-                                elem['title'],
+                                elem.title,
                               ),
                               trailing: !controller.browserTabsSelected
                                       .contains(elem)
@@ -105,7 +106,10 @@ class ManageListBrowserTabs extends GetView {
                                           onTap: () {
                                             Get.defaultDialog(
                                               content: _editDialog(
-                                                  context, controller, elem),
+                                                context,
+                                                controller,
+                                                elem,
+                                              ),
                                               title: 'Edit',
                                               textCancel: "cancel".tr,
                                               textConfirm: "confirm".tr,
@@ -290,21 +294,31 @@ Widget _addDialog(context, SettingsViewController controller) {
       ),
       Visibility(
         visible: Platform.isIOS,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
           children: [
-            const Text(
-              "Is an audio source",
-              style: TextStyle(
-                fontSize: 18,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "Is an audio source",
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+                Obx(
+                  () => Switch(
+                    value: controller.addBrowserAudioSourceToggled.value,
+                    onChanged: (value) {
+                      controller.addBrowserAudioSourceToggled.value = value;
+                    },
+                  ),
+                ),
+              ],
             ),
-            Obx(
-              () => Switch(
-                value: controller.addBrowserAudioSourceToggled.value,
-                onChanged: (value) {
-                  controller.addBrowserAudioSourceToggled.value = value;
-                },
+            const Text(
+              "On iOS we have limitations with the tabs, only the focused one can play audio, so to bypass this issue you can select this option to make this as an audio source. You wont be able to interact with this tab, but it will play audio.",
+              style: TextStyle(
+                color: Colors.grey,
               ),
             ),
           ],
@@ -314,12 +328,15 @@ Widget _addDialog(context, SettingsViewController controller) {
   );
 }
 
-Widget _editDialog(context, SettingsViewController controller, elem) {
-  controller.addBrowserUrlController.text = elem['url'];
-  controller.addBrowserTitleController.text = elem['title'];
-  controller.addBrowserToggled.value = elem['toggled'] ?? true;
-  controller.addBrowserAudioSourceToggled.value =
-      elem['iOSAudioSource'] ?? false;
+Widget _editDialog(
+  context,
+  SettingsViewController controller,
+  BrowserTab elem,
+) {
+  controller.addBrowserUrlController.text = elem.url;
+  controller.addBrowserTitleController.text = elem.title;
+  controller.addBrowserToggled.value = elem.toggled;
+  controller.addBrowserAudioSourceToggled.value = elem.iOSAudioSource;
   return Column(
     mainAxisSize: MainAxisSize.min,
     children: [
