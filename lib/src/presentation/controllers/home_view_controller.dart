@@ -46,8 +46,10 @@ class HomeViewController extends GetxController
 
   final HomeEvents homeEvents;
 
-  SplitViewController? splitViewController =
-      SplitViewController(limits: [null, WeightLimit(min: 0.12, max: 0.92)]);
+  SplitViewController? splitViewController = SplitViewController(
+    limits: [null, WeightLimit(min: 0.12, max: 0.92)],
+  );
+  Timer? debounceSplitResize;
 
   // Tabs
   late TabController tabController;
@@ -129,9 +131,22 @@ class HomeViewController extends GetxController
 
   @override
   void onClose() {
+    debounceSplitResize?.cancel();
     timerRefreshToken?.cancel();
     timerKeepSpeakerOn?.cancel();
     super.onClose();
+  }
+
+  void onSplitResized(UnmodifiableListView<double?> weight) {
+    if (debounceSplitResize?.isActive ?? false) debounceSplitResize?.cancel();
+    debounceSplitResize = Timer(const Duration(milliseconds: 500), () {
+      settings.value = settings.value.copyWith(
+        generalSettings: settings.value.generalSettings?.copyWith(
+          splitViewWeights: [weight[0]!, weight[1]!],
+        ),
+      );
+      saveSettings();
+    });
   }
 
   Future<void> setStreamElementsCredentials() async {
