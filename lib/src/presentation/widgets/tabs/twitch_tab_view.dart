@@ -275,7 +275,6 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                     ? prediction(
                         context,
                         controller,
-                        controller.twitchEventSub!.currentPrediction.value,
                       )
                     : Container(),
                 const Divider(
@@ -285,7 +284,6 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                     ? poll(
                         context,
                         controller,
-                        controller.twitchEventSub!.currentPoll.value,
                       )
                     : Container(),
               ],

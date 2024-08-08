@@ -202,6 +202,7 @@ class HomeViewController extends GetxController
     if (Get.isRegistered<ObsTabViewController>() &&
         !settings.value.isObsConnected!) {
       tabElements.removeWhere((t) => t is ObsTabView);
+      obsTabViewController = null;
       await Get.delete<ObsTabViewController>();
     }
 
@@ -209,6 +210,7 @@ class HomeViewController extends GetxController
     if (Get.isRegistered<StreamelementsViewController>() &&
         (seCredentials.value == null)) {
       tabElements.removeWhere((t) => t is StreamelementsTabView);
+      streamelementsViewController = null;
       await Get.delete<StreamelementsViewController>();
     }
 
@@ -217,6 +219,7 @@ class HomeViewController extends GetxController
         (settings.value.rtIrlPushKey == null ||
             settings.value.rtIrlPushKey!.isEmpty)) {
       tabElements.removeWhere((t) => t is RealtimeIrlTabView);
+      realtimeIrlViewController = null;
       await Get.delete<RealtimeIrlViewController>();
     }
   }
@@ -230,8 +233,7 @@ class HomeViewController extends GetxController
     }
 
     // Check if OBS have to be added
-    if (!Get.isRegistered<ObsTabViewController>() &&
-        settings.value.isObsConnected!) {
+    if (obsTabViewController == null && settings.value.isObsConnected!) {
       obsTabViewController = Get.find<ObsTabViewController>();
       ObsTabView obsPage = const ObsTabView();
       tabElements.add(obsPage);
@@ -240,7 +242,7 @@ class HomeViewController extends GetxController
     // Check if StreamElements have to be added
     if (isSubscribed &&
         seCredentials.value != null &&
-        !Get.isRegistered<StreamelementsViewController>()) {
+        streamelementsViewController == null) {
       streamelementsViewController = Get.find<StreamelementsViewController>();
       StreamelementsTabView streamelementsPage = const StreamelementsTabView();
       tabElements.add(streamelementsPage);
@@ -249,7 +251,7 @@ class HomeViewController extends GetxController
     // Check if Realtime IRL have to be added
     if (settings.value.rtIrlPushKey != null &&
         settings.value.rtIrlPushKey!.isNotEmpty &&
-        !Get.isRegistered<RealtimeIrlViewController>()) {
+        realtimeIrlViewController == null) {
       realtimeIrlViewController = Get.find<RealtimeIrlViewController>();
       RealtimeIrlTabView realtimeIrlTabView = const RealtimeIrlTabView();
       tabElements.add(realtimeIrlTabView);
