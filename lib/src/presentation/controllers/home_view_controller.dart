@@ -323,6 +323,7 @@ class HomeViewController extends GetxController
     for (var group in groupsToRemove) {
       ChatView groupView = groupsViews.firstWhere((g) => g.chatGroup.id == group.id);
       channels.remove(groupView);
+      Get.delete<ChatViewController>(tag: group.id);
     }
 
     // 2. Find the groups that are in the settings but not in the groupsViews to add them
