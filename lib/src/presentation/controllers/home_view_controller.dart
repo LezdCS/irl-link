@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/utils/list_move.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
-import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
@@ -313,65 +312,32 @@ class HomeViewController extends GetxController
       return;
     }
 
-    RxList<ChatView> chatViews = RxList<ChatView>.from(channels);
-    if (channels.firstWhereOrNull((element) => element.chatGroup.id == '1') ==
-        null) {
-      ChatGroup chatGroupSelf = ChatGroup(id: '1', channels: [
-        Channel(
-          platform: Platform.twitch,
-          channel: twitchData?.twitchUser.login ?? '',
-          enabled: true,
-        )
-      ]);
-      lazyPutChat(chatGroupSelf);
-      channels.add(
-        ChatView(
-          chatGroup: chatGroupSelf,
-        ),
-      );
+    RxList<ChatView> groupsViews = RxList<ChatView>.from(channels);
+    
+    // 1. Find the groups that are in the groupsViews but not in the settings to remove them
+    List<ChatGroup> settingsGroups = settings.value.chatSettings!.chatGroups;
+    List<ChatGroup> groupsToRemove = groupsViews
+        .where((groupView) => !settingsGroups.any((sGroup) => sGroup.id == groupView.chatGroup.id))
+        .map((groupView) => groupView.chatGroup)
+        .toList();
+    for (var group in groupsToRemove) {
+      ChatView groupView = groupsViews.firstWhere((g) => g.chatGroup.id == group.id);
+      channels.remove(groupView);
     }
 
-    // first loop to delete the chatGroups that are not in the settings anymore
-    for (var temp in chatViews) {
-      ChatView view = channels.firstWhere(
-        (element) => element.chatGroup.id == temp.chatGroup.id,
+    // 2. Find the groups that are in the settings but not in the groupsViews to add them
+    List<ChatGroup> groupsToAdd = settingsGroups
+        .where((sGroup) => !groupsViews.any((groupView) => groupView.chatGroup.id == sGroup.id))
+        .toList();
+    for (var group in groupsToAdd) {
+      ChatView groupView = ChatView(
+        chatGroup: group,
       );
-
-      ChatGroup group = view.chatGroup;
-      if (settings.value.chatSettings!.chatGroups
-          .map((e) => e.id)
-          .contains(group.id)) {
-        continue;
-      }
-
-      if (selectedChatGroup.value == group) {
-        selectedChatGroup.value = channels.isNotEmpty
-            ? Get.find<ChatViewController>(tag: channels[0].chatGroup.id)
-                .chatGroup
-            : null;
-        selectedChatIndex = channels.isNotEmpty ? 0 : null;
-      }
-
-      channels.remove(view);
-      Get.delete<ChatViewController>(tag: group.id);
-    }
-
-    // second loop to add the chatGroups that are in the settings but not in the channels
-    for (ChatGroup chatGroup in settings.value.chatSettings!.chatGroups) {
-      if (channels.firstWhereOrNull(
-              (channel) => channel.chatGroup.id == chatGroup.id) ==
-          null) {
-        lazyPutChat(chatGroup);
-        channels.add(
-          ChatView(
-            chatGroup: chatGroup,
-          ),
-        );
-      }
+      lazyPutChat(group);
+      channels.add(groupView);
     }
 
     chatTabsController = TabController(length: channels.length, vsync: this);
-
     if (channels.isEmpty) {
       selectedChatIndex = null;
       selectedChatGroup.value = null;
