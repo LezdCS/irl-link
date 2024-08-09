@@ -323,6 +323,10 @@ class HomeViewController extends GetxController
         .map((groupView) => groupView.chatGroup)
         .toList();
     for (var group in groupsToRemove) {
+      // We do not remove the 'Permanent First Group'
+      if(group.id == 'permanentFirstGroup') {
+        continue;
+      }
       ChatView groupView =
           groupsViews.firstWhere((g) => g.chatGroup.id == group.id);
       channels.remove(groupView);
