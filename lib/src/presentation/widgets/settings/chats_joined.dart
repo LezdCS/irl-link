@@ -48,8 +48,8 @@ class ChatsJoined extends GetView<SettingsViewController> {
                   top: 10,
                 ),
                 margin: const EdgeInsets.only(
-                  bottom: 10,
-                  top: 15,
+                  bottom: 0,
+                  top: 12,
                 ),
                 child: Column(
                   children: [
@@ -89,11 +89,11 @@ class ChatsJoined extends GetView<SettingsViewController> {
                 shrinkWrap: true,
                 itemCount: chatGroups.length,
                 separatorBuilder: (context, index) => const SizedBox(
-                  height: 20,
+                  height: 12,
                 ),
                 padding: const EdgeInsets.only(
-                  bottom: 20,
-                  top: 10,
+                  bottom: 12,
+                  top: 12,
                 ),
                 //   onReorder: (int oldIndex, int newIndex) {
                 //     if (newIndex > oldIndex) {
@@ -315,7 +315,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
       },
       child: Container(
         padding:
-            const EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
+            const EdgeInsets.only(left: 20, right: 20, bottom: 12, top: 12),
         margin: const EdgeInsets.only(bottom: 5, top: 5, left: 12, right: 12),
         decoration: BoxDecoration(
           // dotted border
