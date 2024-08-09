@@ -324,7 +324,7 @@ class HomeViewController extends GetxController
         .toList();
     for (var group in groupsToRemove) {
       // We do not remove the 'Permanent First Group'
-      if(group.id == 'permanentFirstGroup') {
+      if (group.id == 'permanentFirstGroup') {
         continue;
       }
       ChatView groupView =
@@ -350,8 +350,8 @@ class HomeViewController extends GetxController
     ChatGroup? permanentFirstGroup =
         settings.value.chatSettings!.permanentFirstGroup;
     // if the permanentFirstGroup is not in the channels, we add it
-    if (!channels
-        .any((groupView) => groupView.chatGroup.id == permanentFirstGroup?.id)) {
+    if (!channels.any(
+        (groupView) => groupView.chatGroup.id == permanentFirstGroup?.id)) {
       // We add the Twitch Chat of the user to the first position of the channels of this group
       List<Channel> updatedChannels = List.from(permanentFirstGroup.channels);
       updatedChannels.insert(
@@ -457,8 +457,8 @@ class HomeViewController extends GetxController
       return DataFailed('');
     }
     settings.value = settingsResult.data!;
-    await applySettings(settingsResult.data!);
-    return DataSuccess(settingsResult.data!);
+    await applySettings(settings.value);
+    return DataSuccess(settings.value);
   }
 
   Future applySettings(Settings settings) async {
