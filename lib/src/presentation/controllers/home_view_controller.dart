@@ -350,8 +350,8 @@ class HomeViewController extends GetxController
     ChatGroup? permanentFirstGroup =
         settings.value.chatSettings!.permanentFirstGroup.copyWith();
     // if the permanentFirstGroup is not in the channels, we add it
-    if (!chatsViews
-        .any((groupView) => groupView.chatGroup.id == permanentFirstGroup?.id)) {
+    if (!chatsViews.any(
+        (groupView) => groupView.chatGroup.id == permanentFirstGroup?.id)) {
       // We add the Twitch Chat of the user to the first position of the channels of this group
       List<Channel> updatedChannels = List.from(permanentFirstGroup.channels);
       updatedChannels.insert(
@@ -378,7 +378,10 @@ class HomeViewController extends GetxController
       ChatViewController? chatController =
           Get.find<ChatViewController>(tag: c.chatGroup.id);
       if (c.chatGroup.id == permanentFirstGroup.id) {
-        chatController.updateChannels(permanentFirstGroup.channels,twitchData!.twitchUser.login);
+        chatController.updateChannels(
+          permanentFirstGroup.channels,
+          twitchData!.twitchUser.login,
+        );
       } else {
         ChatGroup group =
             settingsGroups.firstWhere((g) => g.id == c.chatGroup.id);
