@@ -344,18 +344,12 @@ class ChatsJoined extends GetView<SettingsViewController> {
           id: uuid.v4(),
           channels: const [],
         );
-        List<ChatGroup> groups = [];
-        groups.addAll(controller
-                .homeViewController.settings.value.chatSettings?.chatGroups ??
-            []);
-        groups.add(newGroup);
-        controller.homeViewController.settings.value =
-            controller.homeViewController.settings.value.copyWith(
-          chatSettings: controller
-              .homeViewController.settings.value.chatSettings
-              ?.copyWith(chatGroups: groups),
-        );
+
+        controller.homeViewController.settings.value.chatSettings?.chatGroups
+            .add(newGroup);
+
         controller.saveSettings();
+        controller.homeViewController.settings.refresh();
       },
       child: Container(
         padding:
