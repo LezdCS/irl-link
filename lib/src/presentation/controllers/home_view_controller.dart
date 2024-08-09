@@ -348,10 +348,10 @@ class HomeViewController extends GetxController
 
     // 3. We add the 'Permanent First Group' from the settings to the first position if it does not exist yet in the channels
     ChatGroup? permanentFirstGroup =
-        settings.value.chatSettings!.permanentFirstGroup;
+        settings.value.chatSettings!.permanentFirstGroup.copyWith();
     // if the permanentFirstGroup is not in the channels, we add it
-    if (!chatsViews.any(
-        (groupView) => groupView.chatGroup.id == permanentFirstGroup?.id)) {
+    if (!chatsViews
+        .any((groupView) => groupView.chatGroup.id == permanentFirstGroup?.id)) {
       // We add the Twitch Chat of the user to the first position of the channels of this group
       List<Channel> updatedChannels = List.from(permanentFirstGroup.channels);
       updatedChannels.insert(
@@ -377,6 +377,13 @@ class HomeViewController extends GetxController
     for (var c in chatsViews) {
       ChatViewController? chatController =
           Get.find<ChatViewController>(tag: c.chatGroup.id);
+      if (c.chatGroup.id == permanentFirstGroup.id) {
+        chatController.updateChannels(permanentFirstGroup.channels,twitchData!.twitchUser.login);
+      } else {
+        ChatGroup group =
+            settingsGroups.firstWhere((g) => g.id == c.chatGroup.id);
+        chatController.updateChatGroup(group);
+      }
       chatController.createChats();
     }
 
@@ -458,8 +465,6 @@ class HomeViewController extends GetxController
       return DataFailed('');
     }
     settings.value = settingsResult.data!;
-    debugPrint(
-        'Settings: ${settings.value.chatSettings?.permanentFirstGroup.channels.map((c) => c.channel).toList()}');
     await applySettings(settings.value);
     return DataSuccess(settings.value);
   }
