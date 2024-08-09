@@ -150,19 +150,8 @@ class ChatsJoined extends GetView<SettingsViewController> {
         // If the user swipes to the left
         if (direction == DismissDirection.endToStart) {
           // Remove the group from the list of groups in the settings
-          List<ChatGroup> groups = [];
-          groups.addAll(controller
-                  .homeViewController.settings.value.chatSettings?.chatGroups ??
-              []);
-          groups.remove(group);
-
-          // Update the settings
-          controller.homeViewController.settings.value =
-              controller.homeViewController.settings.value.copyWith(
-                  chatSettings: controller
-                      .homeViewController.settings.value.chatSettings
-                      ?.copyWith(chatGroups: groups));
-
+          controller.homeViewController.settings.value.chatSettings?.chatGroups
+              .remove(group);
           // Save the settings and refresh the UI
           controller.saveSettings();
           controller.homeViewController.settings.refresh();
@@ -226,17 +215,6 @@ class ChatsJoined extends GetView<SettingsViewController> {
         if (direction == DismissDirection.endToStart) {
           // Remove the channel from the group
           group.channels.remove(channel);
-
-          // List<ChatGroup>? groups = [];
-          // groups.addAll(controller
-          //         .homeViewController.settings.value.chatSettings?.chatGroups ??
-          //     []);
-          // controller.homeViewController.settings.value =
-          //     controller.homeViewController.settings.value.copyWith(
-          //         chatSettings: controller
-          //             .homeViewController.settings.value.chatSettings
-          //             ?.copyWith(chatGroups: groups));
-
           // Save the settings and refresh the UI
           controller.saveSettings();
           controller.homeViewController.settings.refresh();
