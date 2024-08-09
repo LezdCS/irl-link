@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/utils/list_move.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
-import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
@@ -20,7 +19,6 @@ import 'package:irllink/src/presentation/controllers/realtime_irl_view_controlle
 import 'package:irllink/src/presentation/controllers/store_controller.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/tts_controller.dart';
-import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:irllink/src/presentation/widgets/tabs/obs_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/tabs/realtime_irl_tab_view.dart';
@@ -39,6 +37,7 @@ import '../widgets/tabs/streamelements_tab_view.dart';
 import '../widgets/web_page_view.dart';
 import 'chat_view_controller.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
+import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 
 class HomeViewController extends GetxController
     with GetTickerProviderStateMixin {
@@ -84,7 +83,7 @@ class HomeViewController extends GetxController
   RxBool displayDashboard = false.obs;
 
   // Chats
-  RxList<ChatView> channels = <ChatView>[].obs;
+  RxList<ChatView> chatsViews = <ChatView>[].obs;
   Rxn<ChatGroup> selectedChatGroup = Rxn<ChatGroup>();
   int? selectedChatIndex;
 
@@ -249,11 +248,6 @@ class HomeViewController extends GetxController
   void addTabs() {
     bool isSubscribed = Get.find<StoreController>().isSubscribed();
 
-    if (!Get.isRegistered<TwitchTabViewController>()) {
-      TwitchTabView twitchPage = const TwitchTabView();
-      tabElements.add(twitchPage);
-    }
-
     // Check if OBS have to be added
     if (obsTabViewController == null && settings.value.isObsConnected!) {
       obsTabViewController = Get.find<ObsTabViewController>();
@@ -279,6 +273,7 @@ class HomeViewController extends GetxController
       tabElements.insert(1, realtimeIrlTabView);
     }
 
+    // Check if WebTabs have to be added
     for (BrowserTab tab in settings.value.browserTabs!.tabs) {
       // first we check if the tab already exist
       bool tabExist = tabElements
@@ -318,66 +313,85 @@ class HomeViewController extends GetxController
       return;
     }
 
-    RxList<ChatView> chatViews = RxList<ChatView>.from(channels);
-    if (channels.firstWhereOrNull((element) => element.chatGroup.id == '1') ==
-        null) {
-      ChatGroup chatGroupSelf = ChatGroup(id: '1', channels: [
-        Channel(
-          platform: Platform.twitch,
-          channel: twitchData?.twitchUser.login ?? '',
-          enabled: true,
-        )
-      ]);
-      lazyPutChat(chatGroupSelf);
-      channels.add(
-        ChatView(
-          chatGroup: chatGroupSelf,
-        ),
-      );
-    }
+    RxList<ChatView> groupsViews = RxList<ChatView>.from(chatsViews);
 
-    for (var temp in chatViews) {
-      if (temp.chatGroup.id == '1') {
+    // 1. Find the groups that are in the groupsViews but not in the settings to remove them
+    List<ChatGroup> settingsGroups = settings.value.chatSettings!.chatGroups;
+    List<ChatGroup> groupsToRemove = groupsViews
+        .where((groupView) => !settingsGroups
+            .any((sGroup) => sGroup.id == groupView.chatGroup.id))
+        .map((groupView) => groupView.chatGroup)
+        .toList();
+    for (var group in groupsToRemove) {
+      // We do not remove the 'Permanent First Group'
+      if (group.id == 'permanentFirstGroup') {
         continue;
       }
-      ChatView view = channels
-          .firstWhere((element) => element.chatGroup.id == temp.chatGroup.id);
-
-      ChatGroup group = view.chatGroup;
-      if (settings.value.chatSettings!.chatGroups
-          .map((e) => e.id)
-          .contains(group.id)) {
-        continue;
-      }
-
-      if (selectedChatGroup.value == group) {
-        selectedChatGroup.value = channels.isNotEmpty
-            ? Get.find<ChatViewController>(tag: channels[0].chatGroup.id)
-                .chatGroup
-            : null;
-        selectedChatIndex = channels.isNotEmpty ? 0 : null;
-      }
-
-      channels.remove(view);
+      ChatView groupView =
+          groupsViews.firstWhere((g) => g.chatGroup.id == group.id);
+      chatsViews.remove(groupView);
       Get.delete<ChatViewController>(tag: group.id);
     }
 
-    for (ChatGroup chatGroup in settings.value.chatSettings!.chatGroups) {
-      if (channels.firstWhereOrNull(
-              (channel) => channel.chatGroup.id == chatGroup.id) ==
-          null) {
-        lazyPutChat(chatGroup);
-        channels.add(
-          ChatView(
-            chatGroup: chatGroup,
-          ),
-        );
-      }
+    // 2. Find the groups that are in the settings but not in the groupsViews to add them
+    List<ChatGroup> groupsToAdd = settingsGroups
+        .where((sGroup) => !groupsViews
+            .any((groupView) => groupView.chatGroup.id == sGroup.id))
+        .toList();
+    for (var group in groupsToAdd) {
+      ChatView groupView = ChatView(
+        chatGroup: group,
+      );
+      lazyPutChat(group);
+      chatsViews.add(groupView);
     }
 
-    chatTabsController = TabController(length: channels.length, vsync: this);
+    // 3. We add the 'Permanent First Group' from the settings to the first position if it does not exist yet in the channels
+    ChatGroup? permanentFirstGroup =
+        settings.value.chatSettings!.permanentFirstGroup.copyWith();
+    // if the permanentFirstGroup is not in the channels, we add it
+    if (!chatsViews.any(
+        (groupView) => groupView.chatGroup.id == permanentFirstGroup?.id)) {
+      // We add the Twitch Chat of the user to the first position of the channels of this group
+      List<Channel> updatedChannels = List.from(permanentFirstGroup.channels);
+      updatedChannels.insert(
+        0,
+        Channel(
+          platform: Platform.twitch,
+          channel: twitchData!.twitchUser.login,
+          enabled: true,
+        ),
+      );
+      permanentFirstGroup = permanentFirstGroup.copyWith(
+        channels: updatedChannels,
+      );
 
-    if (channels.isEmpty) {
+      ChatView groupView = ChatView(
+        chatGroup: permanentFirstGroup,
+      );
+      lazyPutChat(permanentFirstGroup);
+      chatsViews.insert(0, groupView);
+    }
+
+    // 3. Call the createChats function for each group to update the chats inside
+    for (var c in chatsViews) {
+      ChatViewController? chatController =
+          Get.find<ChatViewController>(tag: c.chatGroup.id);
+      if (c.chatGroup.id == permanentFirstGroup.id) {
+        chatController.updateChannels(
+          permanentFirstGroup.channels,
+          twitchData!.twitchUser.login,
+        );
+      } else {
+        ChatGroup group =
+            settingsGroups.firstWhere((g) => g.id == c.chatGroup.id);
+        chatController.updateChatGroup(group);
+      }
+      chatController.createChats();
+    }
+
+    chatTabsController = TabController(length: chatsViews.length, vsync: this);
+    if (chatsViews.isEmpty) {
       selectedChatIndex = null;
       selectedChatGroup.value = null;
     }
@@ -454,19 +468,24 @@ class HomeViewController extends GetxController
       return DataFailed('');
     }
     settings.value = settingsResult.data!;
-    await applySettings(settingsResult.data!);
-    return DataSuccess(settingsResult.data!);
+    await applySettings(settings.value);
+    return DataSuccess(settings.value);
   }
 
   Future applySettings(Settings settings) async {
     {
-      await generateTabs();
-      Get.find<DashboardController>();
+      generateTabs();
       generateChats();
+
+      Get.find<DashboardController>();
       Get.find<TtsController>().initTts(settings);
+
+      // DARK MODE
       if (!settings.generalSettings!.isDarkMode) {
         Get.changeThemeMode(ThemeMode.light);
       }
+
+      // SPEAKER SETTING
       if (settings.generalSettings!.keepSpeakerOn) {
         const path = "../lib/assets/blank.mp3";
         timerKeepSpeakerOn = Timer.periodic(
@@ -476,11 +495,8 @@ class HomeViewController extends GetxController
       } else {
         timerKeepSpeakerOn?.cancel();
       }
-      Locale locale = Locale(
-        settings.generalSettings!.appLanguage["languageCode"],
-        settings.generalSettings!.appLanguage["countryCode"],
-      );
-      Get.updateLocale(locale);
+
+      // SPLIT VIEW
       splitViewController?.weights = settings.generalSettings!.splitViewWeights;
     }
   }

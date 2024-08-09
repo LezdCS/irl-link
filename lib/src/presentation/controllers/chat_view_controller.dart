@@ -235,10 +235,40 @@ class ChatViewController extends GetxController
 
   Future applySettings() async {
     isAutoScrolldown.value = true;
-    createChats(chatGroup.channels);
+    createChats();
   }
 
-  void createChats(List<Channel> channels) {
+  void updateChatGroup(ChatGroup chatGroup) {
+    this.chatGroup = chatGroup;
+  }
+
+  void updateChannels(List<Channel> channels, twitchUsername) {
+    // check chatGroup channels not existings in channels and remove them
+    List<Channel> channelsToRemove = [];
+    for (var channel in chatGroup.channels) {
+      if (channel.channel == twitchUsername) {
+        continue;
+      }
+      if (channels.firstWhereOrNull((e) => e.channel == channel.channel) ==
+          null) {
+        channelsToRemove.add(channel);
+      }
+    }
+    for (var channel in channelsToRemove) {
+      chatGroup.channels.removeWhere((e) => e.channel == channel.channel);
+    }
+
+    // check channels not existing in chatGroup channels and add them
+    for (var channel in channels) {
+      if (chatGroup.channels
+              .firstWhereOrNull((e) => e.channel == channel.channel) ==
+          null) {
+        chatGroup.channels.add(channel);
+      }
+    }
+  }
+
+  void createChats() {
     List<Channel> twitchChannels =
         chatGroup.channels.where((e) => e.platform == Platform.twitch).toList();
     List<Channel> kickChannels =
@@ -294,16 +324,19 @@ class ChatViewController extends GetxController
         .toList();
 
     for (TwitchChat t in twitchChatToRemove) {
+      globals.talker?.info('Removing chat: ${t.channel}');
       t.close();
       twitchChats.removeWhere((tc) => tc.channelId == t.channelId);
     }
 
     for (KickChat k in kickChatToRemove) {
+      globals.talker?.info('Removing chat: ${k.username}');
       k.close();
       kickChats.removeWhere((kc) => kc.username == k.username);
     }
 
     for (YoutubeChat y in youtubeChatToRemove) {
+      globals.talker?.info('Removing chat: ${y.videoId}');
       y.closeStream();
       youtubeChats.removeWhere((yc) => yc.videoId == y.videoId);
     }

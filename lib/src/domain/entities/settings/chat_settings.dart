@@ -2,10 +2,12 @@ import 'package:equatable/equatable.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 
 class ChatSettings extends Equatable {
+  final ChatGroup permanentFirstGroup;
   final List<ChatGroup> chatGroups;
   final bool hideDeletedMessages;
 
   const ChatSettings({
+    required this.permanentFirstGroup,
     required this.chatGroups,
     required this.hideDeletedMessages,
   });
@@ -13,12 +15,14 @@ class ChatSettings extends Equatable {
   @override
   List<Object?> get props {
     return [
+      permanentFirstGroup,
       chatGroups,
       hideDeletedMessages,
     ];
   }
 
   Map toJson() => {
+        'permanentFirstGroup': permanentFirstGroup.toJson(),
         'chatGroups': chatGroups.map((e) => e.toJson()).toList(),
         'hideDeletedMessages': hideDeletedMessages,
       };
@@ -27,10 +31,12 @@ class ChatSettings extends Equatable {
   bool get stringify => true;
 
   ChatSettings copyWith({
+    ChatGroup? permanentFirstGroup,
     List<ChatGroup>? chatGroups,
     bool? hideDeletedMessages,
   }) {
     return ChatSettings(
+      permanentFirstGroup: permanentFirstGroup ?? this.permanentFirstGroup,
       chatGroups: chatGroups ?? this.chatGroups,
       hideDeletedMessages: hideDeletedMessages ?? this.hideDeletedMessages,
     );

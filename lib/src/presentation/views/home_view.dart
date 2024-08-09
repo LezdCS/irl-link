@@ -145,7 +145,7 @@ class HomeView extends GetView<HomeViewController> {
             onPointerUp: (_) => {
               controller.isPickingEmote.value = false,
             },
-            child: controller.channels.isNotEmpty
+            child: controller.chatsViews.isNotEmpty
                 ? Column(
                     children: [
                       Visibility(
@@ -160,7 +160,7 @@ class HomeView extends GetView<HomeViewController> {
                         ),
                       ),
                       Visibility(
-                        visible: controller.channels.length > 1,
+                        visible: controller.chatsViews.length > 1,
                         child: _tabBarChats(context),
                       ),
                       _chats(context),
@@ -463,7 +463,7 @@ class HomeView extends GetView<HomeViewController> {
                 );
                 await controller.getSettings();
                 if (controller.twitchData != null) {
-                  for (var chan in controller.channels) {
+                  for (var chan in controller.chatsViews) {
                     if (Get.isRegistered<ChatViewController>(
                         tag: chan.chatGroup.id)) {
                       ChatViewController c =
@@ -513,38 +513,43 @@ class HomeView extends GetView<HomeViewController> {
   }
 
   Widget _tabBarChats(BuildContext context) {
-    return TabBar(
-      controller: controller.chatTabsController,
-      isScrollable: true,
-      labelColor: Theme.of(context).colorScheme.tertiary,
-      unselectedLabelColor: Theme.of(context).textTheme.bodyLarge!.color,
-      indicatorColor: Theme.of(context).colorScheme.tertiary,
-      labelPadding: const EdgeInsets.symmetric(horizontal: 30),
-      indicatorSize: TabBarIndicatorSize.tab,
-      indicatorWeight: 0.01,
-      dividerColor: Colors.transparent,
-      onTap: (int i) {
-        if (Get.isRegistered<ChatViewController>(
-            tag: controller.channels[i].chatGroup.id)) {
-          ChatViewController c = Get.find<ChatViewController>(
-              tag: controller.channels[i].chatGroup.id);
-          c.scrollToBottom();
-          controller.selectedChatGroup.value = c.chatGroup;
-        }
-        controller.selectedMessage.value = null;
-        controller.selectedChatIndex = i;
-      },
-      tabs: List<Tab>.generate(
-        controller.channels.length,
-        (int index) => Tab(
-          height: 30,
-          child: Text(
-            controller.channels[index].chatGroup.channels
-                .map((e) => e.channel)
-                .join(", "),
+    return Obx(
+      () {
+        int tabsLength = controller.chatsViews.length;
+        return TabBar(
+          controller: controller.chatTabsController,
+          isScrollable: true,
+          indicatorColor: Theme.of(context).colorScheme.tertiary,
+          labelPadding: const EdgeInsets.symmetric(horizontal: 30),
+          indicatorSize: TabBarIndicatorSize.tab,
+          onTap: (int i) {
+            if (Get.isRegistered<ChatViewController>(
+                tag: controller.chatsViews[i].chatGroup.id)) {
+              ChatViewController c = Get.find<ChatViewController>(
+                tag: controller.chatsViews[i].chatGroup.id,
+              );
+              c.scrollToBottom();
+              controller.selectedChatGroup.value = c.chatGroup;
+            }
+            controller.selectedMessage.value = null;
+            controller.selectedChatIndex = i;
+          },
+          tabs: List<Tab>.generate(
+            tabsLength,
+            (int index) {
+              String tabName = controller.chatsViews[index].chatGroup.channels
+                  .map((e) => e.channel)
+                  .join(", ");
+              return Tab(
+                height: 30,
+                child: Text(
+                  tabName,
+                ),
+              );
+            },
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -556,10 +561,10 @@ class HomeView extends GetView<HomeViewController> {
           physics: const NeverScrollableScrollPhysics(),
           controller: controller.chatTabsController,
           children: List<Widget>.generate(
-            controller.channels.length,
+            controller.chatsViews.length,
             (int index) => KeepAlive(
-              chat: controller.channels[index],
-              key: ValueKey(controller.channels[index]),
+              chat: controller.chatsViews[index],
+              key: ValueKey(controller.chatsViews[index]),
             ),
           ),
         ),
