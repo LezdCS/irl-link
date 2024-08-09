@@ -83,7 +83,7 @@ class HomeViewController extends GetxController
   RxBool displayDashboard = false.obs;
 
   // Chats
-  RxList<ChatView> channels = <ChatView>[].obs;
+  RxList<ChatView> chatsViews = <ChatView>[].obs;
   Rxn<ChatGroup> selectedChatGroup = Rxn<ChatGroup>();
   int? selectedChatIndex;
 
@@ -313,7 +313,7 @@ class HomeViewController extends GetxController
       return;
     }
 
-    RxList<ChatView> groupsViews = RxList<ChatView>.from(channels);
+    RxList<ChatView> groupsViews = RxList<ChatView>.from(chatsViews);
 
     // 1. Find the groups that are in the groupsViews but not in the settings to remove them
     List<ChatGroup> settingsGroups = settings.value.chatSettings!.chatGroups;
@@ -329,7 +329,7 @@ class HomeViewController extends GetxController
       }
       ChatView groupView =
           groupsViews.firstWhere((g) => g.chatGroup.id == group.id);
-      channels.remove(groupView);
+      chatsViews.remove(groupView);
       Get.delete<ChatViewController>(tag: group.id);
     }
 
@@ -343,23 +343,24 @@ class HomeViewController extends GetxController
         chatGroup: group,
       );
       lazyPutChat(group);
-      channels.add(groupView);
+      chatsViews.add(groupView);
     }
 
     // 3. We add the 'Permanent First Group' from the settings to the first position if it does not exist yet in the channels
     ChatGroup? permanentFirstGroup =
         settings.value.chatSettings!.permanentFirstGroup;
     // if the permanentFirstGroup is not in the channels, we add it
-    if (!channels.any(
+    if (!chatsViews.any(
         (groupView) => groupView.chatGroup.id == permanentFirstGroup?.id)) {
       // We add the Twitch Chat of the user to the first position of the channels of this group
       List<Channel> updatedChannels = List.from(permanentFirstGroup.channels);
       updatedChannels.insert(
         0,
         Channel(
-            platform: Platform.twitch,
-            channel: twitchData!.twitchUser.login,
-            enabled: true),
+          platform: Platform.twitch,
+          channel: twitchData!.twitchUser.login,
+          enabled: true,
+        ),
       );
       permanentFirstGroup = permanentFirstGroup.copyWith(
         channels: updatedChannels,
@@ -369,18 +370,18 @@ class HomeViewController extends GetxController
         chatGroup: permanentFirstGroup,
       );
       lazyPutChat(permanentFirstGroup);
-      channels.insert(0, groupView);
+      chatsViews.insert(0, groupView);
     }
 
     // 3. Call the createChats function for each group to update the chats inside
-    for (var c in channels) {
+    for (var c in chatsViews) {
       ChatViewController? chatController =
           Get.find<ChatViewController>(tag: c.chatGroup.id);
       chatController.createChats();
     }
 
-    chatTabsController = TabController(length: channels.length, vsync: this);
-    if (channels.isEmpty) {
+    chatTabsController = TabController(length: chatsViews.length, vsync: this);
+    if (chatsViews.isEmpty) {
       selectedChatIndex = null;
       selectedChatGroup.value = null;
     }
@@ -457,6 +458,8 @@ class HomeViewController extends GetxController
       return DataFailed('');
     }
     settings.value = settingsResult.data!;
+    debugPrint(
+        'Settings: ${settings.value.chatSettings?.permanentFirstGroup.channels.map((c) => c.channel).toList()}');
     await applySettings(settings.value);
     return DataSuccess(settings.value);
   }
