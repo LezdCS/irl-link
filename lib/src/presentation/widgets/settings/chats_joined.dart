@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/utils/string_casing_extension.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 
@@ -13,8 +14,11 @@ class ChatsJoined extends GetView<SettingsViewController> {
   Widget build(BuildContext context) {
     TextEditingController channelTextController = TextEditingController();
 
-    return Obx(
-      () => Scaffold(
+    return Obx(() {
+      List<ChatGroup> chatGroups = controller
+              .homeViewController.settings.value.chatSettings?.chatGroups ??
+          [];
+      return Scaffold(
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(
@@ -44,43 +48,52 @@ class ChatsJoined extends GetView<SettingsViewController> {
                   top: 10,
                 ),
                 margin: const EdgeInsets.only(
-                  bottom: 5,
-                  top: 5,
+                  bottom: 10,
+                  top: 15,
                 ),
-                child: InkWell(
-                  onTap: () {},
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Image(
-                        width: 18,
-                        height: 18,
-                        image: AssetImage(
-                          "lib/assets/twitch/twitch_logo.png",
+                child: Column(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Image(
+                          width: 18,
+                          height: 18,
+                          image: AssetImage(
+                            "lib/assets/twitch/twitch_logo.png",
+                          ),
+                          filterQuality: FilterQuality.high,
                         ),
-                        filterQuality: FilterQuality.high,
-                      ),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      Text(
-                        controller.homeViewController.twitchData?.twitchUser
-                                .displayName ??
-                            '',
-                        style: const TextStyle(
-                          fontSize: 20,
+                        const SizedBox(
+                          width: 8,
                         ),
-                      ),
-                    ],
-                  ),
+                        Text(
+                          controller.homeViewController.twitchData?.twitchUser
+                                  .displayName ??
+                              '',
+                          style: const TextStyle(
+                            fontSize: 20,
+                          ),
+                        ),
+                      ],
+                    ),
+                    _addChannelToGroupButton(
+                        context,
+                        channelTextController,
+                        controller.homeViewController.settings.value
+                            .chatSettings!.permanentFirstGroup),
+                  ],
                 ),
               ),
               ListView.separated(
                 shrinkWrap: true,
-                itemCount: controller.homeViewController.settings.value
-                    .chatSettings!.chatGroups.length,
+                itemCount: chatGroups.length,
                 separatorBuilder: (context, index) => const SizedBox(
-                  height: 10,
+                  height: 20,
+                ),
+                padding: const EdgeInsets.only(
+                  bottom: 20,
+                  top: 10,
                 ),
                 //   onReorder: (int oldIndex, int newIndex) {
                 //     if (newIndex > oldIndex) {
@@ -94,8 +107,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
                 //         .insert(newIndex, element);
                 //   },
                 itemBuilder: (BuildContext context, int index) {
-                  ChatGroup group = controller.homeViewController.settings.value
-                      .chatSettings!.chatGroups[index];
+                  ChatGroup group = chatGroups[index];
                   return Container(
                     key: ValueKey(
                       group,
@@ -108,8 +120,8 @@ class ChatsJoined extends GetView<SettingsViewController> {
             ],
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   Widget _group(context, channelTextController, ChatGroup group) {
@@ -121,17 +133,23 @@ class ChatsJoined extends GetView<SettingsViewController> {
         child: const Icon(Icons.delete),
       ),
       onDismissed: (direction) {
+        // If the user swipes to the left
         if (direction == DismissDirection.endToStart) {
-          List<ChatGroup>? groups = [];
+          // Remove the group from the list of groups in the settings
+          List<ChatGroup> groups = [];
           groups.addAll(controller
                   .homeViewController.settings.value.chatSettings?.chatGroups ??
               []);
-          groups.removeWhere((element) => element.id == group.id);
+          groups.remove(group);
+
+          // Update the settings
           controller.homeViewController.settings.value =
               controller.homeViewController.settings.value.copyWith(
                   chatSettings: controller
                       .homeViewController.settings.value.chatSettings
                       ?.copyWith(chatGroups: groups));
+
+          // Save the settings and refresh the UI
           controller.saveSettings();
           controller.homeViewController.settings.refresh();
         }
@@ -155,76 +173,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
               itemCount: group.channels.length,
               itemBuilder: (BuildContext context, int index) {
                 Channel channel = group.channels[index];
-                String badge = '';
-                switch (channel.platform) {
-                  case Platform.twitch:
-                    badge = "lib/assets/twitch/twitch_logo.png";
-                    break;
-                  case Platform.kick:
-                    badge = "lib/assets/kick/kickLogo.png";
-                    break;
-                  case Platform.youtube:
-                    badge = "lib/assets/youtube/youtubeLogo.png";
-                    break;
-                }
-                return Dismissible(
-                  direction: DismissDirection.endToStart,
-                  background: Container(
-                    color: Colors.red,
-                    child: const Icon(Icons.delete),
-                  ),
-                  confirmDismiss: (direction) => Future.value(true),
-                  onDismissed: (direction) {
-                    if (direction == DismissDirection.endToStart) {
-                      group.channels.removeAt(index);
-
-                      List<ChatGroup>? groups = [];
-                      groups.addAll(controller.homeViewController.settings.value
-                              .chatSettings?.chatGroups ??
-                          []);
-                      controller.homeViewController.settings.value =
-                          controller.homeViewController.settings.value.copyWith(
-                              chatSettings: controller.homeViewController
-                                  .settings.value.chatSettings
-                                  ?.copyWith(chatGroups: groups));
-
-                      controller.saveSettings();
-                      controller.homeViewController.settings.refresh();
-                    }
-                  },
-                  onUpdate: (DismissUpdateDetails details) {
-                    if (details.direction == DismissDirection.startToEnd) {
-                      group.channels.removeAt(index);
-                      controller.saveSettings();
-                      controller.homeViewController.settings.refresh();
-                    }
-                  },
-                  key: ValueKey(channel),
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 10),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Image(
-                          width: 18,
-                          height: 18,
-                          image: AssetImage(
-                            badge,
-                          ),
-                          filterQuality: FilterQuality.high,
-                        ),
-                        const Padding(padding: EdgeInsets.only(right: 8)),
-                        Flexible(
-                          child: Text(
-                            channel.channel,
-                            style: const TextStyle(fontSize: 18),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
+                return _channel(channel, group);
               },
             ),
             _addChannelToGroupButton(context, channelTextController, group),
@@ -234,9 +183,78 @@ class ChatsJoined extends GetView<SettingsViewController> {
     );
   }
 
+  Widget _channel(Channel channel, ChatGroup group) {
+    String badge = '';
+    switch (channel.platform) {
+      case Platform.twitch:
+        badge = "lib/assets/twitch/twitch_logo.png";
+        break;
+      case Platform.kick:
+        badge = "lib/assets/kick/kickLogo.png";
+        break;
+      case Platform.youtube:
+        badge = "lib/assets/youtube/youtubeLogo.png";
+        break;
+    }
+    return Dismissible(
+      direction: DismissDirection.endToStart,
+      background: Container(
+        color: Colors.red,
+        child: const Icon(Icons.delete),
+      ),
+      confirmDismiss: (direction) => Future.value(true),
+      onDismissed: (direction) {
+        // If the user swipes to the left
+        if (direction == DismissDirection.endToStart) {
+          // Remove the channel from the group
+          group.channels.remove(channel);
+
+          List<ChatGroup>? groups = [];
+          groups.addAll(controller
+                  .homeViewController.settings.value.chatSettings?.chatGroups ??
+              []);
+          controller.homeViewController.settings.value =
+              controller.homeViewController.settings.value.copyWith(
+                  chatSettings: controller
+                      .homeViewController.settings.value.chatSettings
+                      ?.copyWith(chatGroups: groups));
+
+          // Save the settings and refresh the UI
+          controller.saveSettings();
+          controller.homeViewController.settings.refresh();
+        }
+      },
+      key: ValueKey(channel),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image(
+              width: 18,
+              height: 18,
+              image: AssetImage(
+                badge,
+              ),
+              filterQuality: FilterQuality.high,
+            ),
+            const Padding(padding: EdgeInsets.only(right: 8)),
+            Flexible(
+              child: Text(
+                channel.channel,
+                style: const TextStyle(fontSize: 18),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _addChannelToGroupButton(
     context,
-    channelTextController,
+    TextEditingController channelTextController,
     ChatGroup chatGroup,
   ) {
     Rx<Platform?> selectedPlatform = Platform.values.first.obs;
@@ -257,13 +275,18 @@ class ChatsJoined extends GetView<SettingsViewController> {
           confirmTextColor: Colors.white,
           radius: 10,
           onConfirm: () {
+            // Create the new channel
             Channel newChan = Channel(
               platform: selectedPlatform.value!,
               channel: channelTextController.text.trim(),
               enabled: true,
             );
+
+            // Add the new channel to the selected group
             List<Channel> channels = [...chatGroup.channels, newChan];
             chatGroup = chatGroup.copyWith(channels: channels);
+
+            // Replace the group in the list
             List<ChatGroup>? groups = [];
             groups.addAll(controller.homeViewController.settings.value
                     .chatSettings?.chatGroups ??
@@ -271,12 +294,16 @@ class ChatsJoined extends GetView<SettingsViewController> {
             int indexToReplace = groups.indexWhere((g) => g.id == chatGroup.id);
             groups.removeAt(indexToReplace);
             groups.insert(indexToReplace, chatGroup);
+
+            // Update the settings
             controller.homeViewController.settings.value =
                 controller.homeViewController.settings.value.copyWith(
               chatSettings: controller
                   .homeViewController.settings.value.chatSettings
                   ?.copyWith(chatGroups: groups),
             );
+
+            // Save and close dialog
             controller.saveSettings();
             channelTextController.text = '';
             Get.back();
@@ -314,7 +341,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
           id: uuid.v4(),
           channels: const [],
         );
-        List<ChatGroup>? groups = [];
+        List<ChatGroup> groups = [];
         groups.addAll(controller
                 .homeViewController.settings.value.chatSettings?.chatGroups ??
             []);
@@ -328,8 +355,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
         controller.saveSettings();
       },
       child: Container(
-        padding:
-            const EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
+        padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
         margin: const EdgeInsets.only(left: 12, right: 12),
         decoration: BoxDecoration(
           border: Border.all(
@@ -457,13 +483,4 @@ class ChatsJoined extends GetView<SettingsViewController> {
         return '';
     }
   }
-}
-
-extension StringCasingExtension on String {
-  String toCapitalized() =>
-      length > 0 ? '${this[0].toUpperCase()}${substring(1).toLowerCase()}' : '';
-  String toTitleCase() => replaceAll(RegExp(' +'), ' ')
-      .split(' ')
-      .map((str) => str.toCapitalized())
-      .join(' ');
 }
