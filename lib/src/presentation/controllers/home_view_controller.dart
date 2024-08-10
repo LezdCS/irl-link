@@ -65,13 +65,15 @@ class HomeViewController extends GetxController
 
   // Chat input
   late TextEditingController chatInputController;
-  RxList<Emote> twitchEmotes = <Emote>[].obs;
 
   // RealtimeIRL
   RealtimeIrlViewController? realtimeIrlViewController;
 
   // Emote picker
   RxBool isPickingEmote = false.obs;
+  late TabController emotesTabController;
+  RxInt emotesTabIndex = 0.obs;
+
   ObsTabViewController? obsTabViewController;
 
   late Rx<Settings> settings = const Settings.defaultSettings().obs;
@@ -94,7 +96,7 @@ class HomeViewController extends GetxController
   void onInit() async {
     chatInputController = TextEditingController();
     chatTabsController = TabController(length: 0, vsync: this);
-
+    emotesTabController = TabController(length: 4, vsync: this);
     if (Get.arguments != null) {
       TwitchTabView twitchPage = const TwitchTabView();
       tabElements.add(twitchPage);
@@ -424,37 +426,7 @@ class HomeViewController extends GetxController
   }
 
   void getEmotes() {
-    ChatViewController? chatController =
-        Get.find<ChatViewController>(tag: selectedChatGroup.value?.id);
-    for (TwitchChat twitchChat in chatController.twitchChats) {
-      List<Emote> emotes = List.from(twitchChat.emotes)
-        ..addAll(twitchChat.emotesFromSets)
-        ..addAll(twitchChat.thirdPartEmotes);
-      twitchEmotes
-        ..clear()
-        ..addAll(emotes);
-    }
-
     isPickingEmote.toggle();
-  }
-
-  void searchEmote(String input) {
-    ChatViewController? chatController =
-        Get.find<ChatViewController>(tag: selectedChatGroup.value?.id);
-
-    for (TwitchChat twitchChat in chatController.twitchChats) {
-      List<Emote> emotes = List.from(twitchChat.emotes)
-        ..addAll(twitchChat.emotesFromSets)
-        ..addAll(twitchChat.thirdPartEmotes);
-      emotes = emotes
-          .where(
-            (emote) => emote.name.toLowerCase().contains(input.toLowerCase()),
-          )
-          .toList();
-      twitchEmotes
-        ..clear()
-        ..addAll(emotes);
-    }
   }
 
   void login() {
