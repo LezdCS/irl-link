@@ -238,10 +238,6 @@ class ChatViewController extends GetxController
     createChats();
   }
 
-  void updateChatGroup(ChatGroup chatGroup) {
-    this.chatGroup = chatGroup;
-  }
-
   void updateChannels(List<Channel> channels, twitchUsername) {
     // check chatGroup channels not existings in channels and remove them
     List<Channel> channelsToRemove = [];

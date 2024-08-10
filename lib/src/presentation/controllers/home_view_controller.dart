@@ -385,7 +385,10 @@ class HomeViewController extends GetxController
       } else {
         ChatGroup group =
             settingsGroups.firstWhere((g) => g.id == c.chatGroup.id);
-        chatController.updateChatGroup(group);
+        chatController.updateChannels(
+          group.channels,
+          twitchData!.twitchUser.login,
+        );
       }
       chatController.createChats();
     }
