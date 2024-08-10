@@ -19,7 +19,12 @@ class EmotePickerView extends GetView {
       tag: homeViewController.selectedChatGroup.value?.id,
     );
 
-    List<Emote> globalEmotes = chatController.twitchChats[0].emotes;
+    List<Emote> globalEmotes = chatController.twitchChats[0].globalEmotes;
+    List<Emote> userSetEmotes = chatController.twitchChats[0].emotesFromSets.where((e) => e.emoteType != EmoteType.global).toList();
+    List<Emote> thirdPartEmotes = [];
+    for(var chat in chatController.twitchChats){
+      thirdPartEmotes.addAll(chat.thirdPartEmotes);
+    }
 
     return Container(
       decoration: BoxDecoration(
@@ -38,15 +43,32 @@ class EmotePickerView extends GetView {
       ),
       child: Column(
         children: [
-          _tabBar(),
-          _tabs(context, globalEmotes),
+          _tabBar(chatController),
+          _tabs(context, globalEmotes, userSetEmotes, thirdPartEmotes),
         ],
       ),
     );
   }
 
-  Widget _tabBar() {
-    // Twitch globals, 7TV, FFZ, Twitch subs emotes
+  Widget _tabBar(ChatViewController chatController) {
+    List<Tab> tabs = [
+      const Tab(
+        child: Image(
+          image: AssetImage("lib/assets/twitch/twitch_logo.png"),
+          width: 16,
+        ),
+      ),
+       const Tab(
+        child: Icon(Icons.star),
+      ),
+      const Tab(
+        child: Icon(Icons.cable),
+      ),
+    ];
+
+    homeViewController.emotesTabController =
+        TabController(length: tabs.length, vsync: homeViewController);
+
     return TabBar(
       isScrollable: true,
       labelPadding: const EdgeInsets.symmetric(horizontal: 10),
@@ -55,21 +77,11 @@ class EmotePickerView extends GetView {
       onTap: (index) {
         homeViewController.emotesTabIndex.value = index;
       },
-      tabs: const [
-        Tab(
-          child: Image(
-            image: AssetImage("lib/assets/twitch/twitch_logo.png"),
-            width: 16,
-          ),
-        ),
-        Tab(child: Text("7TV")),
-        Tab(child: Text("FFZ")),
-        Tab(child: Text("Twitch Subs")),
-      ],
+      tabs: tabs,
     );
   }
 
-  Widget _tabs(BuildContext context, List<Emote> twitchEmotes) {
+  Widget _tabs(BuildContext context, List<Emote> globalEmotes, List<Emote> userSetEmotes, List<Emote> thirdPartEmotes) {
     return Expanded(
       child: Container(
         color: Theme.of(context).colorScheme.surface,
@@ -77,21 +89,48 @@ class EmotePickerView extends GetView {
           () => IndexedStack(
             index: homeViewController.emotesTabIndex.value,
             children: [
-              Expanded(
-                flex: 4,
-                child: Container(
-                  padding: const EdgeInsets.only(left: 5, right: 5),
-                  color: const Color(0xFF121212),
-                  child: GridView.builder(
-                    padding: const EdgeInsets.only(top: 5),
-                    itemCount: twitchEmotes.length,
-                    itemBuilder: (context, i) {
-                      return _emote(twitchEmotes[i]);
-                    },
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 5,
-                    ),
+              Container(
+                padding: const EdgeInsets.only(left: 5, right: 5),
+                color: const Color(0xFF121212),
+                child: GridView.builder(
+                  padding: const EdgeInsets.only(top: 5),
+                  itemCount: globalEmotes.length,
+                  itemBuilder: (context, i) {
+                    return _emote(globalEmotes[i]);
+                  },
+                  gridDelegate:
+                      const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 5,
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.only(left: 5, right: 5),
+                color: const Color(0xFF121212),
+                child: GridView.builder(
+                  padding: const EdgeInsets.only(top: 5),
+                  itemCount: userSetEmotes.length,
+                  itemBuilder: (context, i) {
+                    return _emote(userSetEmotes[i]);
+                  },
+                  gridDelegate:
+                      const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 5,
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.only(left: 5, right: 5),
+                color: const Color(0xFF121212),
+                child: GridView.builder(
+                  padding: const EdgeInsets.only(top: 5),
+                  itemCount: thirdPartEmotes.length,
+                  itemBuilder: (context, i) {
+                    return _emote(thirdPartEmotes[i]);
+                  },
+                  gridDelegate:
+                      const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 5,
                   ),
                 ),
               ),

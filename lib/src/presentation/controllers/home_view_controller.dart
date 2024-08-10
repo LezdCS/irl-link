@@ -96,7 +96,7 @@ class HomeViewController extends GetxController
   void onInit() async {
     chatInputController = TextEditingController();
     chatTabsController = TabController(length: 0, vsync: this);
-    emotesTabController = TabController(length: 4, vsync: this);
+    emotesTabController = TabController(length: 0, vsync: this);
     if (Get.arguments != null) {
       TwitchTabView twitchPage = const TwitchTabView();
       tabElements.add(twitchPage);
@@ -426,6 +426,7 @@ class HomeViewController extends GetxController
   }
 
   void getEmotes() {
+    emotesTabIndex.value = 0;
     isPickingEmote.toggle();
   }
 
