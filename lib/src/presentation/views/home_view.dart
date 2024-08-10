@@ -513,43 +513,40 @@ class HomeView extends GetView<HomeViewController> {
   }
 
   Widget _tabBarChats(BuildContext context) {
-    return Obx(
-      () {
-        int tabsLength = controller.chatsViews.length;
-        return TabBar(
-          controller: controller.chatTabsController,
-          isScrollable: true,
-          indicatorColor: Theme.of(context).colorScheme.tertiary,
-          labelPadding: const EdgeInsets.symmetric(horizontal: 30),
-          indicatorSize: TabBarIndicatorSize.tab,
-          onTap: (int i) {
-            if (Get.isRegistered<ChatViewController>(
-                tag: controller.chatsViews[i].chatGroup.id)) {
-              ChatViewController c = Get.find<ChatViewController>(
-                tag: controller.chatsViews[i].chatGroup.id,
-              );
-              c.scrollToBottom();
-              controller.selectedChatGroup.value = c.chatGroup;
-            }
-            controller.selectedMessage.value = null;
-            controller.selectedChatIndex = i;
-          },
-          tabs: List<Tab>.generate(
-            tabsLength,
-            (int index) {
-              String tabName = controller.chatsViews[index].chatGroup.channels
-                  .map((e) => e.channel)
-                  .join(", ");
-              return Tab(
-                height: 30,
-                child: Text(
-                  tabName,
-                ),
-              );
-            },
-          ),
-        );
+    int tabsLength = controller.chatsViews.length;
+
+    return TabBar(
+      controller: controller.chatTabsController,
+      isScrollable: true,
+      indicatorColor: Theme.of(context).colorScheme.tertiary,
+      labelPadding: const EdgeInsets.symmetric(horizontal: 30),
+      indicatorSize: TabBarIndicatorSize.tab,
+      onTap: (int i) {
+        if (Get.isRegistered<ChatViewController>(
+            tag: controller.chatsViews[i].chatGroup.id)) {
+          ChatViewController c = Get.find<ChatViewController>(
+            tag: controller.chatsViews[i].chatGroup.id,
+          );
+          c.scrollToBottom();
+          controller.selectedChatGroup.value = c.chatGroup;
+        }
+        controller.selectedMessage.value = null;
+        controller.selectedChatIndex = i;
       },
+      tabs: List<Tab>.generate(
+        tabsLength,
+        (int index) {
+          String tabName = controller.chatsViews[index].chatGroup.channels
+              .map((e) => e.channel)
+              .join(", ");
+          return Tab(
+            height: 30,
+            child: Text(
+              tabName,
+            ),
+          );
+        },
+      ),
     );
   }
 
