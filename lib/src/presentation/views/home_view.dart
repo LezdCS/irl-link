@@ -194,9 +194,6 @@ class HomeView extends GetView<HomeViewController> {
       () => TabBar(
         controller: controller.tabController,
         isScrollable: true,
-        indicatorColor: Theme.of(context).colorScheme.tertiary,
-        labelPadding: const EdgeInsets.symmetric(horizontal: 30),
-        indicatorSize: TabBarIndicatorSize.tab,
         indicatorWeight: 0.01,
         onTap: (index) {
           controller.tabIndex.value = index;
@@ -518,9 +515,6 @@ class HomeView extends GetView<HomeViewController> {
     return TabBar(
       controller: controller.chatTabsController,
       isScrollable: true,
-      indicatorColor: Theme.of(context).colorScheme.tertiary,
-      labelPadding: const EdgeInsets.symmetric(horizontal: 30),
-      indicatorSize: TabBarIndicatorSize.tab,
       onTap: (int i) {
         if (Get.isRegistered<ChatViewController>(
             tag: controller.chatsViews[i].chatGroup.id)) {
