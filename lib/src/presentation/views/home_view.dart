@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
+import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
@@ -512,6 +513,19 @@ class HomeView extends GetView<HomeViewController> {
   Widget _tabBarChats(BuildContext context) {
     int tabsLength = controller.chatsViews.length;
 
+    Color? getPlatformColor(Platform platform) {
+      switch (platform) {
+        case Platform.twitch:
+          return Colors.deepPurpleAccent[200];
+        case Platform.kick:
+          return const Color.fromARGB(255, 0, 231, 1);
+        case Platform.youtube:
+          return const Color.fromARGB(255, 255, 0, 0);
+        default:
+          return Colors.grey;
+      }
+    }
+
     return TabBar(
       controller: controller.chatTabsController,
       isScrollable: true,
@@ -530,13 +544,31 @@ class HomeView extends GetView<HomeViewController> {
       tabs: List<Tab>.generate(
         tabsLength,
         (int index) {
-          String tabName = controller.chatsViews[index].chatGroup.channels
-              .map((e) => e.channel)
-              .join(", ");
+          List<Channel> channels =
+              controller.chatsViews[index].chatGroup.channels;
           return Tab(
             height: 30,
-            child: Text(
-              tabName,
+            child: Text.rich(
+              TextSpan(
+                children: List<TextSpan>.generate(
+                  channels.length,
+                  (int i) => TextSpan(
+                    children: [
+                      TextSpan(
+                        text: i == (channels.length - 1) ? '' : ', ',
+                        style: TextStyle(
+                          color:
+                              Theme.of(Get.context!).textTheme.bodyLarge!.color,
+                        ),
+                      ),
+                    ],
+                    text: channels[i].channel,
+                    style: TextStyle(
+                      color: getPlatformColor(channels[i].platform),
+                    ),
+                  ),
+                ),
+              ),
             ),
           );
         },
