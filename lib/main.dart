@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:irllink/routes/app_pages.dart';
@@ -39,6 +40,7 @@ void main() async {
   globals.packageName = packageInfo.packageName;
   globals.talker = talker;
   AppTranslations.initLanguages();
+  FlutterForegroundTask.initCommunicationPort();
   runApp(Main(
     talker: talker,
   ));
