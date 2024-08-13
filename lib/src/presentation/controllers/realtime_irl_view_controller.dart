@@ -11,7 +11,6 @@ import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 
 class RealtimeIrlViewController extends GetxController {
-  late Timer timerRtIrl;
   late RealtimeIrl realtimeIrl;
 
   late HomeViewController homeViewController;
@@ -27,7 +26,6 @@ class RealtimeIrlViewController extends GetxController {
   }
 
   Future stop() async {
-    timerRtIrl.cancel();
     return await realtimeIrl.stopTracking();
   }
 
@@ -66,18 +64,7 @@ class RealtimeIrlViewController extends GetxController {
       );
       return;
     }
-    realtimeIrl.status.value = RtIrlStatus.updating;
-
-    timerRtIrl = Timer.periodic(const Duration(seconds: 4), (Timer t) async {
-      if (p is DataSuccess &&
-          realtimeIrl.status.value == RtIrlStatus.updating) {
-        DataState updateResult = await realtimeIrl.updatePosition(p.data!);
-        if (updateResult is DataFailed) {
-          realtimeIrl.status.value = RtIrlStatus.stopped;
-          await stop();
-        }
-      }
-    });
+    realtimeIrl.startTracking();
   }
 
   Future applySettings() async {
