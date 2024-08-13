@@ -8,8 +8,8 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 Widget poll(
   BuildContext context,
   TwitchTabViewController controller,
-  TwitchPoll poll,
 ) {
+  TwitchPoll poll = controller.twitchEventSub!.currentPoll.value;
   if (poll.status == PollStatus.empty) {
     return const Row(
       crossAxisAlignment: CrossAxisAlignment.center,

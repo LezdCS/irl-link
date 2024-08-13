@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
+import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
@@ -90,17 +91,7 @@ class HomeView extends GetView<HomeViewController> {
                                 : SplitViewMode.Horizontal,
                             isActive: true,
                           ),
-                          onWeightChanged: (weight) {
-                            controller.settings.value =
-                                controller.settings.value.copyWith(
-                              generalSettings: controller
-                                  .settings.value.generalSettings
-                                  ?.copyWith(
-                                splitViewWeights: [weight[0]!, weight[1]!],
-                              ),
-                            );
-                            controller.saveSettings();
-                          },
+                          onWeightChanged: controller.onSplitResized,
                           children: [
                             controller.tabElements.isNotEmpty
                                 ? _top(context, height, width)
@@ -155,7 +146,7 @@ class HomeView extends GetView<HomeViewController> {
             onPointerUp: (_) => {
               controller.isPickingEmote.value = false,
             },
-            child: controller.channels.isNotEmpty
+            child: controller.chatsViews.isNotEmpty
                 ? Column(
                     children: [
                       Visibility(
@@ -170,7 +161,7 @@ class HomeView extends GetView<HomeViewController> {
                         ),
                       ),
                       Visibility(
-                        visible: controller.channels.length > 1,
+                        visible: controller.chatsViews.length > 1,
                         child: _tabBarChats(context),
                       ),
                       _chats(context),
@@ -204,9 +195,6 @@ class HomeView extends GetView<HomeViewController> {
       () => TabBar(
         controller: controller.tabController,
         isScrollable: true,
-        indicatorColor: Theme.of(context).colorScheme.tertiary,
-        labelPadding: const EdgeInsets.symmetric(horizontal: 30),
-        indicatorSize: TabBarIndicatorSize.tab,
         indicatorWeight: 0.01,
         onTap: (index) {
           controller.tabIndex.value = index;
@@ -226,6 +214,7 @@ class HomeView extends GetView<HomeViewController> {
                               : controller.tabElements[index] is WebPageView
                                   ? (controller.tabElements[index]
                                           as WebPageView)
+                                      .tab
                                       .title
                                   : "",
             ),
@@ -380,10 +369,6 @@ class HomeView extends GetView<HomeViewController> {
                                       () => poll(
                                         context,
                                         Get.find<TwitchTabViewController>(),
-                                        Get.find<TwitchTabViewController>()
-                                            .twitchEventSub!
-                                            .currentPoll
-                                            .value,
                                       ),
                                     ),
                                   ],
@@ -431,10 +416,6 @@ class HomeView extends GetView<HomeViewController> {
                                       () => prediction(
                                         context,
                                         Get.find<TwitchTabViewController>(),
-                                        Get.find<TwitchTabViewController>()
-                                            .twitchEventSub!
-                                            .currentPrediction
-                                            .value,
                                       ),
                                     ),
                                   ],
@@ -480,7 +461,7 @@ class HomeView extends GetView<HomeViewController> {
                 );
                 await controller.getSettings();
                 if (controller.twitchData != null) {
-                  for (var chan in controller.channels) {
+                  for (var chan in controller.chatsViews) {
                     if (Get.isRegistered<ChatViewController>(
                         tag: chan.chatGroup.id)) {
                       ChatViewController c =
@@ -497,6 +478,7 @@ class HomeView extends GetView<HomeViewController> {
                 }
                 controller.obsTabViewController?.applySettings();
                 controller.streamelementsViewController?.applySettings();
+                controller.realtimeIrlViewController?.applySettings();
                 if (controller.selectedChatIndex != null) {
                   controller.chatTabsController
                       .animateTo(controller.selectedChatIndex!);
@@ -518,11 +500,10 @@ class HomeView extends GetView<HomeViewController> {
     return Expanded(
       child: Container(
         color: Theme.of(context).colorScheme.surface,
-        child: IndexedStack(
-          index: controller.tabIndex.value,
-          children: List<Widget>.generate(
-            controller.tabElements.length,
-            (int index) => controller.tabElements[index],
+        child: Obx(
+          () => IndexedStack(
+            index: controller.tabIndex.value,
+            children: controller.tabElements,
           ),
         ),
       ),
@@ -530,21 +511,30 @@ class HomeView extends GetView<HomeViewController> {
   }
 
   Widget _tabBarChats(BuildContext context) {
+    int tabsLength = controller.chatsViews.length;
+
+    Color? getPlatformColor(Platform platform) {
+      switch (platform) {
+        case Platform.twitch:
+          return Colors.deepPurpleAccent[200];
+        case Platform.kick:
+          return const Color.fromARGB(255, 0, 231, 1);
+        case Platform.youtube:
+          return const Color.fromARGB(255, 255, 0, 0);
+        default:
+          return Colors.grey;
+      }
+    }
+
     return TabBar(
       controller: controller.chatTabsController,
       isScrollable: true,
-      labelColor: Theme.of(context).colorScheme.tertiary,
-      unselectedLabelColor: Theme.of(context).textTheme.bodyLarge!.color,
-      indicatorColor: Theme.of(context).colorScheme.tertiary,
-      labelPadding: const EdgeInsets.symmetric(horizontal: 30),
-      indicatorSize: TabBarIndicatorSize.tab,
-      indicatorWeight: 0.01,
-      dividerColor: Colors.transparent,
       onTap: (int i) {
         if (Get.isRegistered<ChatViewController>(
-            tag: controller.channels[i].chatGroup.id)) {
+            tag: controller.chatsViews[i].chatGroup.id)) {
           ChatViewController c = Get.find<ChatViewController>(
-              tag: controller.channels[i].chatGroup.id);
+            tag: controller.chatsViews[i].chatGroup.id,
+          );
           c.scrollToBottom();
           controller.selectedChatGroup.value = c.chatGroup;
         }
@@ -552,15 +542,36 @@ class HomeView extends GetView<HomeViewController> {
         controller.selectedChatIndex = i;
       },
       tabs: List<Tab>.generate(
-        controller.channels.length,
-        (int index) => Tab(
-          height: 30,
-          child: Text(
-            controller.channels[index].chatGroup.channels
-                .map((e) => e.channel)
-                .join(", "),
-          ),
-        ),
+        tabsLength,
+        (int index) {
+          List<Channel> channels =
+              controller.chatsViews[index].chatGroup.channels;
+          return Tab(
+            height: 30,
+            child: Text.rich(
+              TextSpan(
+                children: List<TextSpan>.generate(
+                  channels.length,
+                  (int i) => TextSpan(
+                    children: [
+                      TextSpan(
+                        text: i == (channels.length - 1) ? '' : ', ',
+                        style: TextStyle(
+                          color:
+                              Theme.of(Get.context!).textTheme.bodyLarge!.color,
+                        ),
+                      ),
+                    ],
+                    text: channels[i].channel,
+                    style: TextStyle(
+                      color: getPlatformColor(channels[i].platform),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -573,10 +584,10 @@ class HomeView extends GetView<HomeViewController> {
           physics: const NeverScrollableScrollPhysics(),
           controller: controller.chatTabsController,
           children: List<Widget>.generate(
-            controller.channels.length,
+            controller.chatsViews.length,
             (int index) => KeepAlive(
-              chat: controller.channels[index],
-              key: ValueKey(controller.channels[index]),
+              chat: controller.chatsViews[index],
+              key: ValueKey(controller.chatsViews[index]),
             ),
           ),
         ),

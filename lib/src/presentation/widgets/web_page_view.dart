@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // Import for Android features.
@@ -13,10 +14,9 @@ import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
 class WebPageView extends StatefulWidget {
-  const WebPageView(this.title, this.url, {super.key});
+  const WebPageView(this.tab, {super.key});
 
-  final String title;
-  final String url;
+  final BrowserTab tab;
 
   @override
   State<WebPageView> createState() => _WebPageViewState();
@@ -43,7 +43,7 @@ class _WebPageViewState extends State<WebPageView>
     }
 
     //create an Uri based on an url that can have a scheme or not
-    Uri uri = Uri.parse(widget.url);
+    Uri uri = Uri.parse(widget.tab.url);
     if (uri.scheme.isEmpty) {
       uri = uri.replace(scheme: 'https');
     }

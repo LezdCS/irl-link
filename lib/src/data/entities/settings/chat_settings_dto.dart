@@ -4,12 +4,14 @@ import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 
 class ChatSettingsDTO extends ChatSettings {
   const ChatSettingsDTO({
+    required super.permanentFirstGroup,
     required super.chatGroups,
     required super.hideDeletedMessages,
   });
 
   @override
   Map toJson() => {
+        'permanentFirstGroup': permanentFirstGroup.toJson(),
         'chatGroups': chatGroups.map((e) => e.toJson()).toList(),
         'hideDeletedMessages': hideDeletedMessages,
       };
@@ -19,7 +21,12 @@ class ChatSettingsDTO extends ChatSettings {
     for (dynamic chatGroup in map['chatGroups'] ?? []) {
       gDto.add(ChatGroupDTO.fromJson(chatGroup));
     }
+
     return ChatSettingsDTO(
+      permanentFirstGroup: ChatGroupDTO.fromJson(
+        map['permanentFirstGroup'] ??
+            const Settings.defaultSettings().chatSettings!.permanentFirstGroup,
+      ),
       chatGroups: gDto,
       hideDeletedMessages: map['hideDeletedMessages'] ??
           const Settings.defaultSettings().chatSettings!.hideDeletedMessages,

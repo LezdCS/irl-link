@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/web_page_view.dart';
+import 'package:uuid/uuid.dart';
 
 class SeOverlays extends GetView {
   @override
@@ -44,7 +46,15 @@ Widget _overlayRow(StreamelementsViewController controller, SeOverlay overlay,
   if (controller.overlayToken != null && isMuted == false) {
     overlayUrl =
         'https://streamelements.com/overlay/${overlay.id}/${controller.overlayToken}';
-    webpage = WebPageView(overlay.name, overlayUrl);
+    var uuid = const Uuid();
+    BrowserTab tab = BrowserTab(
+      id: uuid.v4(),
+      title: overlay.name,
+      url: overlayUrl,
+      toggled: true,
+      iOSAudioSource: false,
+    );
+    webpage = WebPageView(tab);
   }
   return Container(
     decoration: BoxDecoration(
