@@ -444,25 +444,25 @@ class HomeViewController extends GetxController
       return DataFailed('');
     }
     settings.value = settingsResult.data!;
-    await applySettings(settings.value);
+    await applySettings();
     return DataSuccess(settings.value);
   }
 
-  Future applySettings(Settings settings) async {
+  Future applySettings() async {
     {
       generateTabs();
       generateChats();
 
       Get.find<DashboardController>();
-      Get.find<TtsController>().initTts(settings);
+      Get.find<TtsController>().initTts(settings.value);
 
       // DARK MODE
-      if (!settings.generalSettings!.isDarkMode) {
+      if (!settings.value.generalSettings!.isDarkMode) {
         Get.changeThemeMode(ThemeMode.light);
       }
 
       // SPEAKER SETTING
-      if (settings.generalSettings!.keepSpeakerOn) {
+      if (settings.value.generalSettings!.keepSpeakerOn) {
         const path = "../lib/assets/blank.mp3";
         timerKeepSpeakerOn = Timer.periodic(
           const Duration(minutes: 5),
@@ -473,7 +473,7 @@ class HomeViewController extends GetxController
       }
 
       // SPLIT VIEW
-      splitViewController?.weights = settings.generalSettings!.splitViewWeights;
+      splitViewController?.weights = settings.value.generalSettings!.splitViewWeights;
     }
   }
 }
