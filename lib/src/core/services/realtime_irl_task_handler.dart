@@ -1,6 +1,6 @@
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 
-class MyTaskHandler extends TaskHandler {
+class RealtimeIrlTaskHandler extends TaskHandler {
   // Called when the task is started.
   @override
   void onStart(DateTime timestamp) {

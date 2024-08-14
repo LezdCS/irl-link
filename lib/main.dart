@@ -6,7 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:irllink/routes/app_pages.dart';
 import 'package:irllink/src/bindings/login_bindings.dart';
 import 'package:irllink/src/core/resources/themes.dart';
-import 'package:irllink/src/core/services/foreground_service.dart';
+import 'package:irllink/src/core/services/realtime_irl_task_handler.dart';
 import 'package:irllink/src/core/utils/crashlytics_talker_observer.dart';
 import 'package:irllink/src/presentation/views/login_view.dart';
 import 'package:kick_chat/kick_chat.dart';
@@ -48,7 +48,7 @@ void main() async {
 @pragma('vm:entry-point')
 void startCallback() {
   // The setTaskHandler function must be called to handle the task in the background.
-  FlutterForegroundTask.setTaskHandler(MyTaskHandler());
+  FlutterForegroundTask.setTaskHandler(RealtimeIrlTaskHandler());
 }
 
 class Main extends StatelessWidget {
