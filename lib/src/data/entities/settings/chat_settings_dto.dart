@@ -22,11 +22,20 @@ class ChatSettingsDTO extends ChatSettings {
       gDto.add(ChatGroupDTO.fromJson(chatGroup));
     }
 
-    return ChatSettingsDTO(
-      permanentFirstGroup: ChatGroupDTO.fromJson(
+    ChatGroup? permanentFirstGroup;
+
+    if (map['permanentFirstGroup'] is ChatGroup) {
+      permanentFirstGroup = map['permanentFirstGroup'];
+    } else {
+      permanentFirstGroup = ChatGroupDTO.fromJson(
         map['permanentFirstGroup'] ??
             const Settings.defaultSettings().chatSettings!.permanentFirstGroup,
-      ),
+      );
+    }
+
+    return ChatSettingsDTO(
+      permanentFirstGroup: permanentFirstGroup ??
+          const Settings.defaultSettings().chatSettings!.permanentFirstGroup,
       chatGroups: gDto,
       hideDeletedMessages: map['hideDeletedMessages'] ??
           const Settings.defaultSettings().chatSettings!.hideDeletedMessages,

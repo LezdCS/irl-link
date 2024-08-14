@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:irllink/main.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/services/realtime_irl.dart';
 import 'package:irllink/src/core/utils/determine_position.dart';
@@ -11,7 +13,6 @@ import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 
 class RealtimeIrlViewController extends GetxController {
-  late Timer timerRtIrl;
   late RealtimeIrl realtimeIrl;
 
   late HomeViewController homeViewController;
@@ -23,11 +24,56 @@ class RealtimeIrlViewController extends GetxController {
     realtimeIrl =
         RealtimeIrl(homeViewController.settings.value.rtIrlPushKey ?? '');
 
+    FlutterForegroundTask.addTaskDataCallback(realtimeIrl.onReceiveTaskData);
+    _initService();
     super.onInit();
   }
 
+  @override
+  void onClose() {
+    FlutterForegroundTask.removeTaskDataCallback(realtimeIrl.onReceiveTaskData);
+    super.onClose();
+  }
+
+  Future<void> _initService() async {
+    FlutterForegroundTask.init(
+      androidNotificationOptions: AndroidNotificationOptions(
+        channelId: 'foreground_service',
+        channelName: 'Foreground Service Notification',
+        channelDescription:
+            'This notification appears when the foreground service is running.',
+        channelImportance: NotificationChannelImportance.LOW,
+        priority: NotificationPriority.LOW,
+      ),
+      iosNotificationOptions: const IOSNotificationOptions(
+        showNotification: true,
+        playSound: false,
+      ),
+      foregroundTaskOptions: const ForegroundTaskOptions(
+        interval: 5000,
+        isOnceEvent: false,
+      ),
+    );
+  }
+
+  Future<ServiceRequestResult> _startService() async {
+    if (await FlutterForegroundTask.isRunningService) {
+      return FlutterForegroundTask.restartService();
+    } else {
+      return FlutterForegroundTask.startService(
+        serviceId: 256,
+        notificationTitle: 'Foreground Service is running',
+        notificationText: 'Tap to return to the app',
+        notificationIcon: null,
+        notificationButtons: [
+          const NotificationButton(id: 'rtirl_stop', text: 'Stop sharing'),
+        ],
+        callback: startCallback,
+      );
+    }
+  }
+
   Future stop() async {
-    timerRtIrl.cancel();
     return await realtimeIrl.stopTracking();
   }
 
@@ -53,6 +99,7 @@ class RealtimeIrlViewController extends GetxController {
         );
       }
     }
+
     DataState<Position> p = await determinePosition();
 
     if (p.error != null) {
@@ -66,18 +113,8 @@ class RealtimeIrlViewController extends GetxController {
       );
       return;
     }
-    realtimeIrl.status.value = RtIrlStatus.updating;
-
-    timerRtIrl = Timer.periodic(const Duration(seconds: 4), (Timer t) async {
-      if (p is DataSuccess &&
-          realtimeIrl.status.value == RtIrlStatus.updating) {
-        DataState updateResult = await realtimeIrl.updatePosition(p.data!);
-        if (updateResult is DataFailed) {
-          realtimeIrl.status.value = RtIrlStatus.stopped;
-          await stop();
-        }
-      }
-    });
+  
+    _startService();
   }
 
   Future applySettings() async {
