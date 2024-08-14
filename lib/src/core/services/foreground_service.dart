@@ -1,33 +1,4 @@
-
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
-
-class ForegroundTaskService{
-  static init(){
-    FlutterForegroundTask.init(
-      androidNotificationOptions: AndroidNotificationOptions(
-        channelId: 'foreground_service',
-        channelName: 'Foreground Service Notification',
-        channelDescription: 'This notification appears when the foreground service is running.',
-        channelImportance: NotificationChannelImportance.LOW,
-        priority: NotificationPriority.LOW,
-
-      ),
-      iosNotificationOptions: const IOSNotificationOptions(
-        showNotification: true,
-        playSound: false,
-      ),
-      foregroundTaskOptions:const ForegroundTaskOptions(
-        isOnceEvent: true,
-      ),
-    );
-  }
-}
-// The callback function should always be a top-level function.
-@pragma('vm:entry-point')
-void startCallback() {
-  // The setTaskHandler function must be called to handle the task in the background.
-  FlutterForegroundTask.setTaskHandler(MyTaskHandler());
-}
 
 class MyTaskHandler extends TaskHandler {
   // Called when the task is started.

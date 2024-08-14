@@ -9,10 +9,6 @@
     <!-- ACCESS_FINE_LOCATION and FOREGROUND_SERVICE_LOCATION for Geolocator -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" /> 
-    <service 
-        android:name="com.pravera.flutter_foreground_task.service.ForegroundService"
-        android:foregroundServiceType="location"
-        android:exported="false" />
     <queries>
         <intent>
             <action android:name="android.intent.action.VIEW" />
@@ -33,11 +29,11 @@
         android:label="IRL Link"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
-        <!-- <service
-          android:name=".MyMediaPlaybackService"
-          android:foregroundServiceType="mediaPlayback"
-          android:exported="false">
-      </service> -->
+         <service 
+            android:name="com.pravera.flutter_foreground_task.service.ForegroundService"
+            android:foregroundServiceType="location"
+            android:exported="false" 
+        />
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -59,11 +55,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- flutter_background_service -->
-        <service
-            android:name="id.flutter.flutter_background_service.BackgroundService"
-            android:foregroundServiceType="mediaPlayback"
-        />
         <activity
             android:name="com.linusu.flutter_web_auth.CallbackActivity"
             android:exported="true"

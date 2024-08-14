@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:irllink/main.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/services/realtime_irl.dart';
 import 'package:irllink/src/core/utils/determine_position.dart';
@@ -22,10 +24,68 @@ class RealtimeIrlViewController extends GetxController {
     realtimeIrl =
         RealtimeIrl(homeViewController.settings.value.rtIrlPushKey ?? '');
 
+    FlutterForegroundTask.addTaskDataCallback(_onReceiveTaskData);
+    _initService();
     super.onInit();
   }
 
+  @override
+  void onClose() {
+    FlutterForegroundTask.removeTaskDataCallback(_onReceiveTaskData);
+    super.onClose();
+  }
+
+  Future<void> _initService() async {
+  FlutterForegroundTask.init(
+    androidNotificationOptions: AndroidNotificationOptions(
+      channelId: 'foreground_service',
+      channelName: 'Foreground Service Notification',
+      channelDescription:
+          'This notification appears when the foreground service is running.',
+      channelImportance: NotificationChannelImportance.LOW,
+      priority: NotificationPriority.LOW,
+    ),
+    iosNotificationOptions: const IOSNotificationOptions(
+      showNotification: true,
+      playSound: false,
+    ),
+    foregroundTaskOptions: const ForegroundTaskOptions(
+      interval: 5000,
+      isOnceEvent: false,
+    ),
+  );
+}
+
+  void _onReceiveTaskData(dynamic data) {
+    if (data is Map<String, dynamic>) {
+      final dynamic timestampMillis = data["timestampMillis"];
+      if (timestampMillis != null) {
+        final DateTime timestamp =
+            DateTime.fromMillisecondsSinceEpoch(timestampMillis, isUtc: true);
+        debugPrint('timestamp foregroung: ${timestamp.toString()}');
+      }
+    }
+  }
+
+  Future<ServiceRequestResult> _startService() async {
+    if (await FlutterForegroundTask.isRunningService) {
+      return FlutterForegroundTask.restartService();
+    } else {
+      return FlutterForegroundTask.startService(
+        serviceId: 256,
+        notificationTitle: 'Foreground Service is running',
+        notificationText: 'Tap to return to the app',
+        notificationIcon: null,
+        notificationButtons: [
+          const NotificationButton(id: 'btn_hello', text: 'hello'),
+        ],
+        callback: startCallback,
+      );
+    }
+  }
+
   Future stop() async {
+    FlutterForegroundTask.stopService();
     return await realtimeIrl.stopTracking();
   }
 
@@ -51,6 +111,8 @@ class RealtimeIrlViewController extends GetxController {
         );
       }
     }
+    _startService();
+
     DataState<Position> p = await determinePosition();
 
     if (p.error != null) {
