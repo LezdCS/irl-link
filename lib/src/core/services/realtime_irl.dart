@@ -25,20 +25,27 @@ class RealtimeIrl {
 
   Future<void> onReceiveTaskData(dynamic data) async {
     if (data is Map<String, dynamic>) {
-      final dynamic timestampMillis = data["timestampMillis"];
-      if (timestampMillis != null) {
-        status.value = RtIrlStatus.updating;
-        DataState<Position> p = await determinePosition();
-        if (p is DataSuccess && status.value == RtIrlStatus.updating) {
-          globals.talker?.info(
-            "Updating position on RTIRL: ${p.data!.latitude}, ${p.data!.longitude} at $timestampMillis",
-          );
-          DataState updateResult = await updatePosition(p.data!);
-          if (updateResult is DataFailed) {
-            status.value = RtIrlStatus.stopped;
-            await stopTracking();
+      final dynamic action = data["action"];
+      switch (action) {
+        case 'repeat':
+          status.value = RtIrlStatus.updating;
+          DataState<Position> p = await determinePosition();
+          if (p is DataSuccess && status.value == RtIrlStatus.updating) {
+            globals.talker?.info(
+              "Updating position on RTIRL: ${p.data!.latitude}, ${p.data!.longitude} at ${data['timestampMillis']}",
+            );
+            DataState updateResult = await updatePosition(p.data!);
+            if (updateResult is DataFailed) {
+              status.value = RtIrlStatus.stopped;
+              await stopTracking();
+            }
           }
-        }
+          break;
+        case 'rtirl_stop':
+          await stopTracking();
+          break;
+        default:
+          globals.talker?.info("Unknown action: $action");
       }
     }
   }

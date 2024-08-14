@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 
 class RealtimeIrlTaskHandler extends TaskHandler {
@@ -12,7 +13,8 @@ class RealtimeIrlTaskHandler extends TaskHandler {
   void onRepeatEvent(DateTime timestamp) {
     // Send data to main isolate.
     final Map<String, dynamic> data = {
-      "timestampMillis": timestamp.millisecondsSinceEpoch,
+      "action": 'repeat',
+      'timestampMillis': timestamp.millisecondsSinceEpoch,
     };
     FlutterForegroundTask.sendDataToMain(data);
   }
@@ -20,19 +22,23 @@ class RealtimeIrlTaskHandler extends TaskHandler {
   // Called when the task is destroyed.
   @override
   void onDestroy(DateTime timestamp) {
-    print('onDestroy');
+    debugPrint('onDestroy');
   }
 
   // Called when data is sent using [FlutterForegroundTask.sendDataToTask].
   @override
   void onReceiveData(Object data) {
-    print('onReceiveData: $data');
+    debugPrint('onReceiveData: $data');
   }
 
   // Called when the notification button is pressed.
   @override
   void onNotificationButtonPressed(String id) {
-    print('onNotificationButtonPressed: $id');
+    final Map<String, dynamic> data = {
+      "action": id,
+    };
+    FlutterForegroundTask.sendDataToMain(data);
+    debugPrint('onNotificationButtonPressed: $id');
   }
 
   // Called when the notification itself is pressed.
@@ -42,7 +48,7 @@ class RealtimeIrlTaskHandler extends TaskHandler {
   @override
   void onNotificationPressed() {
     FlutterForegroundTask.launchApp('/');
-    print('onNotificationPressed');
+    debugPrint('onNotificationPressed');
   }
 
   // Called when the notification itself is dismissed.
@@ -51,6 +57,6 @@ class RealtimeIrlTaskHandler extends TaskHandler {
   // iOS: only work iOS 10+
   @override
   void onNotificationDismissed() {
-    print('onNotificationDismissed');
+    debugPrint('onNotificationDismissed');
   }
 }

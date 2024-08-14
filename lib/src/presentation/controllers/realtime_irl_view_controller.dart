@@ -66,7 +66,7 @@ class RealtimeIrlViewController extends GetxController {
         notificationText: 'Tap to return to the app',
         notificationIcon: null,
         notificationButtons: [
-          const NotificationButton(id: 'btn_hello', text: 'hello'),
+          const NotificationButton(id: 'rtirl_stop', text: 'Stop sharing'),
         ],
         callback: startCallback,
       );
