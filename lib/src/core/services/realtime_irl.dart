@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
@@ -16,24 +18,28 @@ class RealtimeIrl {
   String key;
 
   Rx<RtIrlStatus> status = RtIrlStatus.stopped.obs;
-  late Timer timerRtIrl;
 
   RealtimeIrl(
     this.key,
   );
 
-  Future startTracking() async {
-    status.value = RtIrlStatus.updating;
-    timerRtIrl = Timer.periodic(const Duration(seconds: 4), (Timer t) async {
-      DataState<Position> p = await determinePosition();
-      if (p is DataSuccess && status.value == RtIrlStatus.updating) {
-        DataState updateResult = await updatePosition(p.data!);
-        if (updateResult is DataFailed) {
-          status.value = RtIrlStatus.stopped;
-          await stopTracking();
+  Future<void> onReceiveTaskData(dynamic data) async {
+    if (data is Map<String, dynamic>) {
+      final dynamic timestampMillis = data["timestampMillis"];
+      if (timestampMillis != null) {
+        status.value = RtIrlStatus.updating;
+        DataState<Position> p = await determinePosition();
+        if (p is DataSuccess && status.value == RtIrlStatus.updating) {
+          debugPrint(
+              "Updating position on RTIRL: ${p.data!.latitude}, ${p.data!.longitude}");
+          DataState updateResult = await updatePosition(p.data!);
+          if (updateResult is DataFailed) {
+            status.value = RtIrlStatus.stopped;
+            await stopTracking();
+          }
         }
       }
-    });
+    }
   }
 
   Future<DataState> updatePosition(Position p) async {
@@ -60,7 +66,7 @@ class RealtimeIrl {
 
   Future<DataState> stopTracking() async {
     try {
-      timerRtIrl.cancel();
+      FlutterForegroundTask.stopService();
       Response response;
       Dio dio = initDio();
       status.value = RtIrlStatus.stopped;
