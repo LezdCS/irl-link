@@ -31,6 +31,7 @@ class RealtimeIrlViewController extends GetxController {
 
   @override
   void onClose() {
+    FlutterForegroundTask.stopService();
     FlutterForegroundTask.removeTaskDataCallback(realtimeIrl.onReceiveTaskData);
     super.onClose();
   }
@@ -62,9 +63,9 @@ class RealtimeIrlViewController extends GetxController {
     } else {
       return FlutterForegroundTask.startService(
         serviceId: 256,
-        notificationTitle: 'Foreground Service is running',
-        notificationText: 'Tap to return to the app',
-        notificationIcon: null,
+        notificationTitle: 'IRL Link',
+        notificationText: 'Your location is being shared with RealtimeIRL.',
+        notificationIcon: const NotificationIconData(resType: ResourceType.drawable, resPrefix: ResourcePrefix.ic, name: 'bg_service_small'),
         notificationButtons: [
           const NotificationButton(id: 'rtirl_stop', text: 'Stop sharing'),
         ],
@@ -113,7 +114,7 @@ class RealtimeIrlViewController extends GetxController {
       );
       return;
     }
-  
+
     _startService();
   }
 
