@@ -286,7 +286,6 @@ class ChatViewController extends GetxController
       if (alreadyCreated) {
         return;
       }
-      debugPrint('yahoooo'+kc.channel);
 
       createKickChat(kc);
     }
