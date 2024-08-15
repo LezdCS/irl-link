@@ -235,7 +235,6 @@ class ChatViewController extends GetxController
 
   Future applySettings() async {
     isAutoScrolldown.value = true;
-    createChats();
   }
 
   void updateChannels(List<Channel> channels, twitchUsername) {
@@ -287,6 +286,8 @@ class ChatViewController extends GetxController
       if (alreadyCreated) {
         return;
       }
+      debugPrint('yahoooo'+kc.channel);
+
       createKickChat(kc);
     }
 
@@ -443,11 +444,11 @@ class ChatViewController extends GetxController
         globals.talker?.error('error on kick chat'),
       },
     );
+    kickChats.add(kickChat);
     await kickChat.connect();
     for (var e in kickChat.seventvEmotes) {
       thirdPartEmotes.add(ChatEmote.fromKick(e));
     }
-    kickChats.add(kickChat);
     isChatConnected.value = true;
     kickChat.chatStream.listen((message) {
       final KickEvent? kickEvent = eventParser(message);
