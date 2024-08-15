@@ -65,7 +65,7 @@ class RealtimeIrlViewController extends GetxController {
         serviceId: 256,
         notificationTitle: 'IRL Link',
         notificationText: 'Your location is being shared with RealtimeIRL.',
-        notificationIcon: null,
+        notificationIcon: const NotificationIconData(resType: ResourceType.drawable, resPrefix: ResourcePrefix.ic, name: 'bg_service_small'),
         notificationButtons: [
           const NotificationButton(id: 'rtirl_stop', text: 'Stop sharing'),
         ],
