@@ -197,30 +197,38 @@ class SettingsViewController extends GetxController {
     Get.back();
   }
 
-  void editBrowserTab(elem) {
+  void editBrowserTab(BrowserTab tab) {
     bool isValid = false;
     isValid = addBrowserTitleKey.currentState!.validate();
     isValid = addBrowserUrlKey.currentState!.validate();
     if (!isValid) {
       return;
     }
-
     String title = addBrowserTitleController.text;
     String url = addBrowserUrlController.text;
     bool toggled = addBrowserToggled.value;
     bool audioSourceToggled = addBrowserAudioSourceToggled.value;
-    elem["title"] = title;
-    elem["url"] = url;
-    elem["toggled"] = toggled;
-    elem["iOSAudioSource"] = audioSourceToggled;
+    BrowserTab newTab = BrowserTab(
+      id: tab.id,
+      title: title,
+      url: url,
+      toggled: toggled,
+      iOSAudioSource: audioSourceToggled,
+    );
+
     List<BrowserTab> tabs = homeViewController.settings.value.browserTabs!.tabs;
+    int index = tabs.indexWhere((element) => element.id == tab.id);
+    tabs[index] = newTab;
     homeViewController.settings.value =
         homeViewController.settings.value.copyWith(
       browserTabs:
           homeViewController.settings.value.browserTabs?.copyWith(tabs: tabs),
     );
+    
     saveSettings();
     homeViewController.settings.refresh();
+
+    // Close the dialog
     Get.back();
   }
 
