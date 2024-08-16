@@ -205,13 +205,15 @@ class HomeViewController extends GetxController
 
   Future<void> removeTabs() async {
     // Check if WebTabs have to be removed
+    List webTabsToRemove = [];
     tabElements.whereType<WebPageView>().forEach((tabElement) {
       bool tabExist = settings.value.browserTabs!.tabs
           .any((settingsTab) => settingsTab.id == tabElement.tab.id);
       if (!tabExist) {
-        tabElements.remove(tabElement);
+        webTabsToRemove.add(tabElement);
       }
     });
+    tabElements.removeWhere((t) => webTabsToRemove.contains(t));
 
     for (var tabElement in iOSAudioSources) {
       bool tabExist = settings.value.browserTabs!.tabs
