@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
+import 'package:irllink/src/domain/entities/stream_elements/se_credentials.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_song.dart';
@@ -25,7 +26,8 @@ class StreamelementsViewController extends GetxController
   RxList<SeActivity> activities = <SeActivity>[].obs;
   late ScrollController activitiesScrollController;
 
-  SeMe? userSeProfile;
+  Rxn<SeCredentials> seCredentials = Rxn<SeCredentials>();
+  Rxn<SeMe> userSeProfile = Rxn<SeMe>();
 
   // Song Requests
   RxList<SeSong> songRequestQueue = <SeSong>[].obs;
@@ -51,6 +53,17 @@ class StreamelementsViewController extends GetxController
     activitiesScrollController = ScrollController();
     songRequestScrollController = ScrollController();
 
+    await setStreamElementsCredentials();
+    if (seCredentials.value != null) {
+      streamelementsEvents
+          .refreshSeAccessToken(seCredentials: seCredentials.value!)
+          .then(
+            (value) => {
+              if (value is DataSuccess) {seCredentials.value = value.data}
+            },
+          );
+    }
+
     streamelementsEvents.getSettings().then((value) => applySettings());
 
     super.onInit();
@@ -62,18 +75,35 @@ class StreamelementsViewController extends GetxController
     super.onClose();
   }
 
+  Future<void> setStreamElementsCredentials() async {
+    DataState<SeCredentials> seCreds =
+        await streamelementsEvents.getSeCredentialsFromLocal();
+    if (seCreds is DataSuccess) {
+      seCredentials.value = seCreds.data;
+      await setSeMe(seCredentials.value!);
+    }
+  }
+
+  Future<void> setSeMe(SeCredentials seCreds) async {
+    DataState<SeMe> seMeResult =
+        await streamelementsEvents.getSeMe(seCredentials.value!.accessToken);
+    if (seMeResult is DataSuccess) {
+      userSeProfile.value = seMeResult.data;
+    }
+  }
+
   void replayEvent(SeActivity activity) {
-    String accessToken = homeViewController.seCredentials.value!.accessToken;
+    String accessToken = seCredentials.value!.accessToken;
     streamelementsEvents.replayActivity(accessToken, activity);
   }
 
   Future<void> applySettings() async {
-    if (homeViewController.seCredentials.value == null) return;
+    if (seCredentials.value == null) return;
     Settings settings = homeViewController.settings.value;
     jwt = settings.streamElementsSettings?.jwt;
     overlayToken = settings.streamElementsSettings?.overlayToken;
-    if (homeViewController.seMe.value != null) {
-      handleGetMe(homeViewController.seMe.value!);
+    if (userSeProfile.value != null) {
+      handleGetMe(userSeProfile.value!);
     }
     if (!isSocketConnected.value) {
       connectWebsocket();
@@ -81,8 +111,8 @@ class StreamelementsViewController extends GetxController
   }
 
   Future<void> handleGetMe(SeMe me) async {
-    userSeProfile = me;
-    String? accessToken = homeViewController.seCredentials.value?.accessToken;
+    userSeProfile.value = me;
+    String? accessToken = seCredentials.value?.accessToken;
     if (accessToken == null) {
       globals.talker?.error('There is no accessToken to use for SE api calls.');
       return;
@@ -108,23 +138,23 @@ class StreamelementsViewController extends GetxController
   }
 
   void updatePlayerState(String state) {
-    if (userSeProfile == null || jwt == null) return;
-    streamelementsEvents.updatePlayerState(jwt!, userSeProfile!.id, state);
+    if (userSeProfile.value == null || jwt == null) return;
+    streamelementsEvents.updatePlayerState(jwt!, userSeProfile.value!.id, state);
   }
 
   void nextSong() {
-    if (userSeProfile == null || jwt == null) return;
-    streamelementsEvents.nextSong(jwt!, userSeProfile!.id);
+    if (userSeProfile.value == null || jwt == null) return;
+    streamelementsEvents.nextSong(jwt!, userSeProfile.value!.id);
   }
 
   void removeSong(SeSong song) {
-    if (userSeProfile == null || jwt == null) return;
-    streamelementsEvents.removeSong(jwt!, userSeProfile!.id, song.id);
+    if (userSeProfile.value == null || jwt == null) return;
+    streamelementsEvents.removeSong(jwt!, userSeProfile.value!.id, song.id);
   }
 
   void resetQueue() {
-    if (userSeProfile == null || jwt == null) return;
-    streamelementsEvents.resetQueue(jwt!, userSeProfile!.id);
+    if (userSeProfile.value == null || jwt == null) return;
+    streamelementsEvents.resetQueue(jwt!, userSeProfile.value!.id);
   }
 
   /// Connect to WebSocket
@@ -206,7 +236,7 @@ class StreamelementsViewController extends GetxController
   }
 
   Future<void> onConnect() async {
-    String? accessToken = homeViewController.seCredentials.value?.accessToken;
+    String? accessToken = seCredentials.value?.accessToken;
     if (accessToken != null) {
       socket?.emit('authenticate', {"method": 'oauth2', "token": accessToken});
     } else {

@@ -2,8 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
-import 'package:irllink/src/domain/entities/stream_elements/se_credentials.dart';
-import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
@@ -46,21 +44,6 @@ class HomeEvents {
     required TwitchCredentials twitchData,
   }) {
     return twitchUseCase.refreshAccessToken(twitchData: twitchData);
-  }
-
-  Future<DataState<SeCredentials>> refreshSeAccessToken({
-    required SeCredentials seCredentials,
-  }) {
-    return streamelementsUseCase.refreshAccessToken(
-        seCredentials: seCredentials);
-  }
-
-  Future<DataState<SeCredentials>> getSeCredentialsFromLocal() {
-    return streamelementsUseCase.getSeCredentialsFromLocal();
-  }
-
-  Future<DataState<SeMe>> getSeMe(String token) {
-    return streamelementsUseCase.getMe(token);
   }
 
   Future<DataState<TwitchStreamInfos>> getStreamInfo(

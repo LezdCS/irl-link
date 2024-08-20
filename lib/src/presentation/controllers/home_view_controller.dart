@@ -3,14 +3,13 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/utils/list_move.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
-import 'package:irllink/src/domain/entities/stream_elements/se_credentials.dart';
-import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/domain/usecases/streamelements_usecase.dart';
 import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
@@ -59,8 +58,6 @@ class HomeViewController extends GetxController
   TwitchCredentials? twitchData;
 
   // StreamElements
-  Rxn<SeCredentials> seCredentials = Rxn<SeCredentials>();
-  Rxn<SeMe> seMe = Rxn<SeMe>();
   StreamelementsViewController? streamelementsViewController;
 
   // Chat input
@@ -105,8 +102,6 @@ class HomeViewController extends GetxController
 
       twitchData = Get.arguments[0];
 
-      await setStreamElementsCredentials();
-
       timerRefreshToken =
           Timer.periodic(const Duration(seconds: 13000), (Timer t) {
         homeEvents.refreshAccessToken(twitchData: twitchData!).then(
@@ -114,16 +109,6 @@ class HomeViewController extends GetxController
                 if (value is DataSuccess) {twitchData = value.data}
               },
             );
-
-        if (seCredentials.value != null) {
-          homeEvents
-              .refreshSeAccessToken(seCredentials: seCredentials.value!)
-              .then(
-                (value) => {
-                  if (value is DataSuccess) {seCredentials.value = value.data}
-                },
-              );
-        }
       });
     }
     await getSettings();
@@ -152,23 +137,6 @@ class HomeViewController extends GetxController
       );
       saveSettings();
     });
-  }
-
-  Future<void> setStreamElementsCredentials() async {
-    DataState<SeCredentials> seCreds =
-        await homeEvents.getSeCredentialsFromLocal();
-    if (seCreds is DataSuccess) {
-      seCredentials.value = seCreds.data;
-      await setSeMe(seCredentials.value!);
-    }
-  }
-
-  Future<void> setSeMe(SeCredentials seCreds) async {
-    DataState<SeMe> seMeResult =
-        await homeEvents.getSeMe(seCredentials.value!.accessToken);
-    if (seMeResult is DataSuccess) {
-      seMe.value = seMeResult.data;
-    }
   }
 
   void lazyPutChat(ChatGroup chatGroup) {
@@ -244,8 +212,11 @@ class HomeViewController extends GetxController
     }
 
     // Check if StreamElements have to be removed
-    if (Get.isRegistered<StreamelementsViewController>() &&
-        (seCredentials.value == null)) {
+    if (streamelementsViewController != null) {
+      StreamelementsViewController sc =
+          Get.find<StreamelementsViewController>();
+      if (sc.seCredentials.value != null) return;
+
       tabElements.removeWhere((t) => t is StreamelementsTabView);
       streamelementsViewController = null;
       await Get.delete<StreamelementsViewController>();
@@ -272,12 +243,15 @@ class HomeViewController extends GetxController
     }
 
     // Check if StreamElements have to be added
-    if (isSubscribed &&
-        seCredentials.value != null &&
-        streamelementsViewController == null) {
-      streamelementsViewController = Get.find<StreamelementsViewController>();
-      StreamelementsTabView streamelementsPage = const StreamelementsTabView();
-      tabElements.insert(1, streamelementsPage);
+    if (isSubscribed && streamelementsViewController == null) {
+      final box = GetStorage();
+      var seCredentialsString = box.read('seCredentials');
+      if (seCredentialsString != null) {
+        streamelementsViewController = Get.find<StreamelementsViewController>();
+        StreamelementsTabView streamelementsPage =
+            const StreamelementsTabView();
+        tabElements.insert(1, streamelementsPage);
+      }
     }
 
     // Check if Realtime IRL have to be added

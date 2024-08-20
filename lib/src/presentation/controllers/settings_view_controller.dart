@@ -119,9 +119,12 @@ class SettingsViewController extends GetxController {
           borderColor: Colors.red,
         );
       } else {
-        homeViewController.setStreamElementsCredentials();
-        homeViewController.seCredentials.refresh();
-        homeViewController.seMe.refresh();
+        homeViewController.streamelementsViewController
+            ?.setStreamElementsCredentials();
+        homeViewController.streamelementsViewController?.seCredentials
+            .refresh();
+        homeViewController.streamelementsViewController?.userSeProfile
+            .refresh();
         Get.snackbar(
           "StreamElements",
           "Login successfull",
@@ -135,14 +138,18 @@ class SettingsViewController extends GetxController {
   }
 
   Future<void> disconnectStreamElements() async {
-    if (homeViewController.seCredentials.value == null) return;
-    DataState<void> result = await streamelementsEvents
-        .disconnect(homeViewController.seCredentials.value!.accessToken);
+    if (homeViewController.streamelementsViewController?.seCredentials.value ==
+        null) return;
+    DataState<void> result = await streamelementsEvents.disconnect(
+        homeViewController
+            .streamelementsViewController!.seCredentials.value!.accessToken);
     if (result is DataSuccess) {
-      homeViewController.seCredentials.value = null;
-      homeViewController.seMe.value = null;
-      homeViewController.seCredentials.refresh();
-      homeViewController.seMe.refresh();
+      homeViewController.streamelementsViewController?.seCredentials.value =
+          null;
+      homeViewController.streamelementsViewController?.userSeProfile.value =
+          null;
+      homeViewController.streamelementsViewController?.seCredentials.refresh();
+      homeViewController.streamelementsViewController?.userSeProfile.refresh();
       Get.snackbar(
         "StreamElements",
         "Successfully disconnected.",
@@ -224,7 +231,7 @@ class SettingsViewController extends GetxController {
       browserTabs:
           homeViewController.settings.value.browserTabs?.copyWith(tabs: tabs),
     );
-    
+
     saveSettings();
     homeViewController.settings.refresh();
 

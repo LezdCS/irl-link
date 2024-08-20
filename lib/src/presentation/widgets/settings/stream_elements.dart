@@ -61,196 +61,198 @@ class StreamElements extends GetView {
             ),
             color: Theme.of(context).colorScheme.secondary,
           ),
-          child: Obx(
-            () => Column(
-              children: [
-                controller.homeViewController.seCredentials.value != null &&
-                        controller.homeViewController.seMe.value != null
-                    ? Column(
-                        children: [
-                          _profile(
-                            controller.homeViewController.seMe.value!,
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                flex: 7,
-                                child: TextFormField(
-                                  controller: controller.seJwtInputController,
-                                  obscureText: !controller.seJwtShow.value,
-                                  onChanged: (value) {
-                                    controller
-                                            .homeViewController.settings.value =
-                                        controller
-                                            .homeViewController.settings.value
-                                            .copyWith(
-                                      streamElementsSettings: controller
-                                          .homeViewController
-                                          .settings
-                                          .value
-                                          .streamElementsSettings!
-                                          .copyWith(jwt: value),
-                                    );
-                                    controller.saveSettings();
-                                  },
-                                  decoration: InputDecoration(
-                                    isDense: true,
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 7),
-                                    hintText: 'JWT',
-                                    labelText: 'JWT',
-                                    labelStyle: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .tertiary,
-                                    ),
-                                    suffixIcon: IconButton(
-                                      icon: Icon(controller.seJwtShow.value
-                                          ? Icons.visibility
-                                          : Icons.visibility_off),
-                                      color: Theme.of(context)
-                                          .primaryIconTheme
-                                          .color,
-                                      onPressed: () {
-                                        controller.seJwtShow.value =
-                                            !controller.seJwtShow.value;
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          _jwtExplanation(context),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                flex: 7,
-                                child: TextFormField(
-                                  controller:
-                                      controller.seOverlayTokenInputController,
-                                  obscureText:
-                                      !controller.seOverlayTokenShow.value,
-                                  onChanged: (value) {
-                                    controller
-                                            .homeViewController.settings.value =
-                                        controller
-                                            .homeViewController.settings.value
-                                            .copyWith(
-                                      streamElementsSettings: controller
-                                          .homeViewController
-                                          .settings
-                                          .value
-                                          .streamElementsSettings!
-                                          .copyWith(overlayToken: value),
-                                    );
-                                    controller.saveSettings();
-                                  },
-                                  decoration: InputDecoration(
-                                    isDense: true,
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 7),
-                                    hintText: 'Token',
-                                    labelText: 'Overlay Token',
-                                    labelStyle: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .tertiary,
-                                    ),
-                                    suffixIcon: IconButton(
-                                      icon: Icon(
-                                          controller.seOverlayTokenShow.value
-                                              ? Icons.visibility
-                                              : Icons.visibility_off),
-                                      color: Theme.of(context)
-                                          .primaryIconTheme
-                                          .color,
-                                      onPressed: () {
-                                        controller.seOverlayTokenShow.value =
-                                            !controller
-                                                .seOverlayTokenShow.value;
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const Text(
-                            'Same as above for the overlay token',
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(8),
-                              ),
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .tertiaryContainer,
-                            ),
-                            padding: const EdgeInsets.only(top: 8, bottom: 8),
-                            child: InkWell(
-                              onTap: (() =>
-                                  {controller.disconnectStreamElements()}),
-                              child: const Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image(
-                                    image: AssetImage(
-                                      "lib/assets/streamelements/seLogo.png",
-                                    ),
-                                    width: 30,
-                                  ),
-                                  SizedBox(
-                                    width: 12,
-                                  ),
-                                  Text(
-                                    'Logout',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    : InkWell(
-                        onTap: (() => {controller.loginStreamElements()}),
-                        child: const Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
+          child: Column(
+            children: [
+              controller.homeViewController.streamelementsViewController != null
+                  ? Column(
+                      children: [
+                        controller
+                                    .homeViewController
+                                    .streamelementsViewController!
+                                    .userSeProfile
+                                    .value !=
+                                null
+                            ? _profile(
+                                controller
+                                    .homeViewController
+                                    .streamelementsViewController!
+                                    .userSeProfile
+                                    .value!,
+                              )
+                            : Container(),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Image(
-                              image: AssetImage(
-                                  "lib/assets/streamelements/seLogo.png"),
-                              width: 30,
-                            ),
-                            SizedBox(
-                              width: 12,
-                            ),
-                            Text(
-                              'Login with StreamElements',
-                              style: TextStyle(fontSize: 16),
+                            Expanded(
+                              flex: 7,
+                              child: TextFormField(
+                                controller: controller.seJwtInputController,
+                                obscureText: !controller.seJwtShow.value,
+                                onChanged: (value) {
+                                  controller.homeViewController.settings.value =
+                                      controller
+                                          .homeViewController.settings.value
+                                          .copyWith(
+                                    streamElementsSettings: controller
+                                        .homeViewController
+                                        .settings
+                                        .value
+                                        .streamElementsSettings!
+                                        .copyWith(jwt: value),
+                                  );
+                                  controller.saveSettings();
+                                },
+                                decoration: InputDecoration(
+                                  isDense: true,
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 7),
+                                  hintText: 'JWT',
+                                  labelText: 'JWT',
+                                  labelStyle: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.tertiary,
+                                  ),
+                                  suffixIcon: IconButton(
+                                    icon: Icon(controller.seJwtShow.value
+                                        ? Icons.visibility
+                                        : Icons.visibility_off),
+                                    color: Theme.of(context)
+                                        .primaryIconTheme
+                                        .color,
+                                    onPressed: () {
+                                      controller.seJwtShow.value =
+                                          !controller.seJwtShow.value;
+                                    },
+                                  ),
+                                ),
+                              ),
                             ),
                           ],
                         ),
+                        _jwtExplanation(context),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              flex: 7,
+                              child: TextFormField(
+                                controller:
+                                    controller.seOverlayTokenInputController,
+                                obscureText:
+                                    !controller.seOverlayTokenShow.value,
+                                onChanged: (value) {
+                                  controller.homeViewController.settings.value =
+                                      controller
+                                          .homeViewController.settings.value
+                                          .copyWith(
+                                    streamElementsSettings: controller
+                                        .homeViewController
+                                        .settings
+                                        .value
+                                        .streamElementsSettings!
+                                        .copyWith(overlayToken: value),
+                                  );
+                                  controller.saveSettings();
+                                },
+                                decoration: InputDecoration(
+                                  isDense: true,
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 7),
+                                  hintText: 'Token',
+                                  labelText: 'Overlay Token',
+                                  labelStyle: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.tertiary,
+                                  ),
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                        controller.seOverlayTokenShow.value
+                                            ? Icons.visibility
+                                            : Icons.visibility_off),
+                                    color: Theme.of(context)
+                                        .primaryIconTheme
+                                        .color,
+                                    onPressed: () {
+                                      controller.seOverlayTokenShow.value =
+                                          !controller.seOverlayTokenShow.value;
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Text(
+                          'Same as above for the overlay token',
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(8),
+                            ),
+                            color:
+                                Theme.of(context).colorScheme.tertiaryContainer,
+                          ),
+                          padding: const EdgeInsets.only(top: 8, bottom: 8),
+                          child: InkWell(
+                            onTap: (() =>
+                                {controller.disconnectStreamElements()}),
+                            child: const Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image(
+                                  image: AssetImage(
+                                    "lib/assets/streamelements/seLogo.png",
+                                  ),
+                                  width: 30,
+                                ),
+                                SizedBox(
+                                  width: 12,
+                                ),
+                                Text(
+                                  'Logout',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : InkWell(
+                      onTap: (() => {controller.loginStreamElements()}),
+                      child: const Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image(
+                            image: AssetImage(
+                                "lib/assets/streamelements/seLogo.png"),
+                            width: 30,
+                          ),
+                          SizedBox(
+                            width: 12,
+                          ),
+                          Text(
+                            'Login with StreamElements',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ],
                       ),
-              ],
-            ),
+                    ),
+            ],
           ),
         ),
       ],
