@@ -218,7 +218,7 @@ class HomeViewController extends GetxController
       if (tabExist == null) {
         // if the tab does not exist in the settings anymore, we remove it
         webTabsToRemove.add(tabElement);
-      } else if (!tabExist.toggled) {
+      } else if (!tabExist.toggled || tabExist.iOSAudioSource) {
         // if the tab exist in the tabElements but is not toggled anymore, we remove it
         webTabsToRemove.add(tabElement);
       }
@@ -233,7 +233,7 @@ class HomeViewController extends GetxController
           (settingsTab) => settingsTab.id == tabElement.tab.id);
       if (tabExist == null) {
         audioSourcesToRemove.add(tabElement);
-      } else if (!tabExist.toggled) {
+      } else if (!tabExist.toggled || !tabExist.iOSAudioSource) {
         audioSourcesToRemove.add(tabElement);
       }
     }
