@@ -218,22 +218,26 @@ class HomeViewController extends GetxController
       if (tabExist == null) {
         // if the tab does not exist in the settings anymore, we remove it
         webTabsToRemove.add(tabElement);
-      } else {
+      } else if (!tabExist.toggled) {
         // if the tab exist in the tabElements but is not toggled anymore, we remove it
-        if (!tabExist.toggled) {
-          webTabsToRemove.add(tabElement);
-        }
+        webTabsToRemove.add(tabElement);
       }
     });
     tabElements.removeWhere((t) => webTabsToRemove.contains(t));
 
+    // Now we remove the audio sources that does no longer exist in the settings
+    // We also remove them if they got untoggled
+    List audioSourcesToRemove = [];
     for (var tabElement in iOSAudioSources) {
-      bool tabExist = settings.value.browserTabs!.tabs
-          .any((settingsTab) => settingsTab.id == tabElement.tab.id);
-      if (!tabExist) {
-        iOSAudioSources.remove(tabElement);
+      BrowserTab? tabExist = settings.value.browserTabs!.tabs.firstWhereOrNull(
+          (settingsTab) => settingsTab.id == tabElement.tab.id);
+      if (tabExist == null) {
+        audioSourcesToRemove.add(tabElement);
+      } else if (!tabExist.toggled) {
+        audioSourcesToRemove.add(tabElement);
       }
     }
+    iOSAudioSources.removeWhere((a) => audioSourcesToRemove.contains(a));
 
     // Check if OBS have to be removed
     if (Get.isRegistered<ObsTabViewController>() &&
