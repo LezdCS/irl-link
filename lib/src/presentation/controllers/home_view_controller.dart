@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -109,16 +110,20 @@ class HomeViewController extends GetxController
 
       timerRefreshToken =
           Timer.periodic(const Duration(seconds: 13000), (Timer t) {
-        homeEvents.refreshAccessToken(twitchData: twitchData!).then((value) => {
-              if (value is DataSuccess) {twitchData = value.data}
-            });
+        homeEvents.refreshAccessToken(twitchData: twitchData!).then(
+              (value) => {
+                if (value is DataSuccess) {twitchData = value.data}
+              },
+            );
 
         if (seCredentials.value != null) {
           homeEvents
               .refreshSeAccessToken(seCredentials: seCredentials.value!)
-              .then((value) => {
-                    if (value is DataSuccess) {seCredentials.value = value.data}
-                  });
+              .then(
+                (value) => {
+                  if (value is DataSuccess) {seCredentials.value = value.data}
+                },
+              );
         }
       });
     }
@@ -188,17 +193,18 @@ class HomeViewController extends GetxController
   }
 
   void reorderTabs() {
-    List<BrowserTab> tabs = settings.value.browserTabs!.tabs;
-    int diff = tabElements.length - tabElements.whereType<WebPageView>().length;
+    List<BrowserTab> tabs = settings.value.browserTabs!.tabs
+        .where((t) => t.toggled && !t.iOSAudioSource)
+        .toList();
+    int diff = tabElements.length - tabs.length;
     tabs.forEachIndexed((index, tab) {
-      if (tab.toggled) {
-        // Find the index of the tab in the tabElements list
-        int indexInTabs = tabElements.indexWhere(
-          (element) => element is WebPageView && element.tab.id == tab.id,
-        );
-        // Move the tab to the correct index
-        tabElements.move(indexInTabs, index + diff);
-      }
+      // Find the index of the tab in the tabElements list
+      int indexInTabs = tabElements.indexWhere(
+        (element) => element is WebPageView && element.tab.id == tab.id,
+      );
+      if (indexInTabs == -1) return;
+      // Move the tab to the correct index
+      tabElements.move(indexInTabs, index + diff);
     });
     tabElements.refresh();
   }
@@ -207,21 +213,32 @@ class HomeViewController extends GetxController
     // Check if WebTabs have to be removed
     List webTabsToRemove = [];
     tabElements.whereType<WebPageView>().forEach((tabElement) {
-      bool tabExist = settings.value.browserTabs!.tabs
-          .any((settingsTab) => settingsTab.id == tabElement.tab.id);
-      if (!tabExist) {
+      BrowserTab? tabExist = settings.value.browserTabs!.tabs.firstWhereOrNull(
+        (settingsTab) => settingsTab.id == tabElement.tab.id,
+      );
+      if (tabExist == null) {
+        // if the tab does not exist in the settings anymore, we remove it
+        webTabsToRemove.add(tabElement);
+      } else if (!tabExist.toggled || tabExist.iOSAudioSource) {
+        // if the tab exist in the tabElements but is not toggled anymore, we remove it
         webTabsToRemove.add(tabElement);
       }
     });
     tabElements.removeWhere((t) => webTabsToRemove.contains(t));
 
+    // Now we remove the audio sources that does no longer exist in the settings
+    // We also remove them if they got untoggled
+    List audioSourcesToRemove = [];
     for (var tabElement in iOSAudioSources) {
-      bool tabExist = settings.value.browserTabs!.tabs
-          .any((settingsTab) => settingsTab.id == tabElement.tab.id);
-      if (!tabExist) {
-        iOSAudioSources.remove(tabElement);
+      BrowserTab? tabExist = settings.value.browserTabs!.tabs.firstWhereOrNull(
+          (settingsTab) => settingsTab.id == tabElement.tab.id);
+      if (tabExist == null) {
+        audioSourcesToRemove.add(tabElement);
+      } else if (!tabExist.toggled || !tabExist.iOSAudioSource) {
+        audioSourcesToRemove.add(tabElement);
       }
     }
+    iOSAudioSources.removeWhere((a) => audioSourcesToRemove.contains(a));
 
     // Check if OBS have to be removed
     if (Get.isRegistered<ObsTabViewController>() &&
@@ -279,6 +296,7 @@ class HomeViewController extends GetxController
 
     // Check if WebTabs have to be added
     for (BrowserTab tab in settings.value.browserTabs!.tabs) {
+      if (!tab.toggled) continue;
       // first we check if the tab already exist
       bool tabExist = tabElements
           .whereType<WebPageView>()
@@ -289,13 +307,11 @@ class HomeViewController extends GetxController
         continue;
       }
 
-      if (tab.toggled) {
-        WebPageView page = WebPageView(tab);
-        if (!tab.iOSAudioSource) {
-          tabElements.add(page);
-        } else {
-          iOSAudioSources.add(page);
-        }
+      WebPageView page = WebPageView(tab);
+      if (!tab.iOSAudioSource) {
+        tabElements.add(page);
+      } else {
+        iOSAudioSources.add(page);
       }
     }
   }
@@ -475,7 +491,8 @@ class HomeViewController extends GetxController
       }
 
       // SPLIT VIEW
-      splitViewController?.weights = settings.value.generalSettings!.splitViewWeights;
+      splitViewController?.weights =
+          settings.value.generalSettings!.splitViewWeights;
     }
   }
 }
