@@ -58,7 +58,7 @@ class HomeViewController extends GetxController
   TwitchCredentials? twitchData;
 
   // StreamElements
-  StreamelementsViewController? streamelementsViewController;
+  Rxn<StreamelementsViewController> streamelementsViewController = Rxn<StreamelementsViewController>();
 
   // Chat input
   late TextEditingController chatInputController;
@@ -212,13 +212,13 @@ class HomeViewController extends GetxController
     }
 
     // Check if StreamElements have to be removed
-    if (streamelementsViewController != null) {
+    if (streamelementsViewController.value != null) {
       StreamelementsViewController sc =
           Get.find<StreamelementsViewController>();
       if (sc.seCredentials.value != null) return;
 
       tabElements.removeWhere((t) => t is StreamelementsTabView);
-      streamelementsViewController = null;
+      streamelementsViewController.value = null;
       await Get.delete<StreamelementsViewController>();
     }
 
@@ -243,11 +243,11 @@ class HomeViewController extends GetxController
     }
 
     // Check if StreamElements have to be added
-    if (isSubscribed && streamelementsViewController == null) {
+    if (isSubscribed && streamelementsViewController.value == null) {
       final box = GetStorage();
       var seCredentialsString = box.read('seCredentials');
       if (seCredentialsString != null) {
-        streamelementsViewController = Get.find<StreamelementsViewController>();
+        streamelementsViewController.value = Get.find<StreamelementsViewController>();
         StreamelementsTabView streamelementsPage =
             const StreamelementsTabView();
         tabElements.insert(1, streamelementsPage);

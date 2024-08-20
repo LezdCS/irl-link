@@ -119,12 +119,7 @@ class SettingsViewController extends GetxController {
           borderColor: Colors.red,
         );
       } else {
-        homeViewController.streamelementsViewController
-            ?.setStreamElementsCredentials();
-        homeViewController.streamelementsViewController?.seCredentials
-            .refresh();
-        homeViewController.streamelementsViewController?.userSeProfile
-            .refresh();
+        homeViewController.generateTabs();
         Get.snackbar(
           "StreamElements",
           "Login successfull",
@@ -138,18 +133,12 @@ class SettingsViewController extends GetxController {
   }
 
   Future<void> disconnectStreamElements() async {
-    if (homeViewController.streamelementsViewController?.seCredentials.value ==
+    if (homeViewController.streamelementsViewController.value?.seCredentials.value ==
         null) return;
     DataState<void> result = await streamelementsEvents.disconnect(
         homeViewController
-            .streamelementsViewController!.seCredentials.value!.accessToken);
+            .streamelementsViewController.value!.seCredentials.value!.accessToken);
     if (result is DataSuccess) {
-      homeViewController.streamelementsViewController?.seCredentials.value =
-          null;
-      homeViewController.streamelementsViewController?.userSeProfile.value =
-          null;
-      homeViewController.streamelementsViewController?.seCredentials.refresh();
-      homeViewController.streamelementsViewController?.userSeProfile.refresh();
       Get.snackbar(
         "StreamElements",
         "Successfully disconnected.",
@@ -158,6 +147,16 @@ class SettingsViewController extends GetxController {
         borderWidth: 1,
         borderColor: Colors.green,
       );
+      homeViewController.generateTabs();
+    } else {
+      Get.snackbar(
+          "Error",
+          "Logout failed: ${result.error}",
+          snackPosition: SnackPosition.BOTTOM,
+          icon: const Icon(Icons.error_outline, color: Colors.red),
+          borderWidth: 1,
+          borderColor: Colors.red,
+        );
     }
   }
 

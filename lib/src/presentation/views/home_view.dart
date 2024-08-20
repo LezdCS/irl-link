@@ -477,7 +477,7 @@ class HomeView extends GetView<HomeViewController> {
                   }
                 }
                 controller.obsTabViewController?.applySettings();
-                controller.streamelementsViewController?.applySettings();
+                controller.streamelementsViewController.value?.applySettings();
                 controller.realtimeIrlViewController?.applySettings();
                 if (controller.selectedChatIndex != null) {
                   controller.chatTabsController
