@@ -213,13 +213,13 @@ class HomeViewController extends GetxController
 
     // Check if StreamElements have to be removed
     if (streamelementsViewController.value != null) {
-      StreamelementsViewController sc =
-          Get.find<StreamelementsViewController>();
-      if (sc.seCredentials.value != null) return;
-
-      tabElements.removeWhere((t) => t is StreamelementsTabView);
-      streamelementsViewController.value = null;
-      await Get.delete<StreamelementsViewController>();
+      final box = GetStorage();
+      var seCredentialsString = box.read('seCredentials');
+      if (seCredentialsString == null) {
+        tabElements.removeWhere((t) => t is StreamelementsTabView);
+        streamelementsViewController.value = null;
+        await Get.delete<StreamelementsViewController>();
+      }
     }
 
     // Check if Realtime IRL have to be removed

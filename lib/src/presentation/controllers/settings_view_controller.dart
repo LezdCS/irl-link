@@ -133,11 +133,13 @@ class SettingsViewController extends GetxController {
   }
 
   Future<void> disconnectStreamElements() async {
-    if (homeViewController.streamelementsViewController.value?.seCredentials.value ==
+    if (homeViewController
+            .streamelementsViewController.value?.seCredentials.value ==
         null) return;
     DataState<void> result = await streamelementsEvents.disconnect(
-        homeViewController
-            .streamelementsViewController.value!.seCredentials.value!.accessToken);
+      homeViewController
+          .streamelementsViewController.value!.seCredentials.value!.accessToken,
+    );
     if (result is DataSuccess) {
       Get.snackbar(
         "StreamElements",
@@ -150,13 +152,13 @@ class SettingsViewController extends GetxController {
       homeViewController.generateTabs();
     } else {
       Get.snackbar(
-          "Error",
-          "Logout failed: ${result.error}",
-          snackPosition: SnackPosition.BOTTOM,
-          icon: const Icon(Icons.error_outline, color: Colors.red),
-          borderWidth: 1,
-          borderColor: Colors.red,
-        );
+        "Error",
+        "Logout failed: ${result.error}",
+        snackPosition: SnackPosition.BOTTOM,
+        icon: const Icon(Icons.error_outline, color: Colors.red),
+        borderWidth: 1,
+        borderColor: Colors.red,
+      );
     }
   }
 
