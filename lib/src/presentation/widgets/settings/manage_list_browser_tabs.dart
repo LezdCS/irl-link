@@ -90,8 +90,24 @@ class ManageListBrowserTabs extends GetView {
                                 : Theme.of(context).colorScheme.secondary,
                             margin: const EdgeInsets.only(bottom: 8),
                             child: ListTile(
-                              title: Text(
-                                elem.title,
+                              title: Wrap(
+                                children: [
+                                  Text(
+                                    elem.title,
+                                  ),
+                                  const SizedBox(
+                                    width: 6,
+                                  ),
+                                  Visibility(
+                                    visible: elem.iOSAudioSource,
+                                    child: Badge(
+                                      backgroundColor: Theme.of(context)
+                                          .colorScheme
+                                          .tertiary,
+                                      label: const Text('iOS audio only'),
+                                    ),
+                                  ),
+                                ],
                               ),
                               trailing: !controller.browserTabsSelected
                                       .contains(elem)
