@@ -439,7 +439,7 @@ class HomeViewController extends GetxController
 
   Future applySettings() async {
     {
-      generateTabs();
+      // generateTabs();
       generateChats();
 
       Get.find<DashboardController>();

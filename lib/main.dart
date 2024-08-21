@@ -8,6 +8,7 @@ import 'package:irllink/src/bindings/login_bindings.dart';
 import 'package:irllink/src/core/resources/themes.dart';
 import 'package:irllink/src/core/services/realtime_irl_task_handler.dart';
 import 'package:irllink/src/core/utils/crashlytics_talker_observer.dart';
+import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/presentation/views/login_view.dart';
 import 'package:kick_chat/kick_chat.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -22,7 +23,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final crashlyticsTalkerObserver = CrashlyticsTalkerObserver();
   final talker = TalkerFlutter.init(
-    settings: TalkerSettings(),
+    settings:
+        TalkerSettings(colors: {TalkerLogType.debug: AnsiPen()..yellow()}),
     observer: crashlyticsTalkerObserver,
   );
   await GetStorage.init();
@@ -78,6 +80,30 @@ class Main extends StatelessWidget {
       navigatorObservers: [
         TalkerRouteObserver(talker),
       ],
+      logWriterCallback: localLogWriter,
     );
+  }
+
+  void localLogWriter(String text, {bool isError = false}) {
+    if (isError) {
+      globals.talker?.error(text);
+    } else {
+      if (text.startsWith('Instance')) {
+        talker.logTyped(GetxInstanceLog(text, false));
+        return;
+      }
+      if(text.endsWith('onDelete() called') || text.endsWith('deleted from memory')) {
+        talker.logTyped(GetxInstanceLog(text, true));
+        return;
+      }
+      if (text.contains('GOING TO ROUTE')) {
+        return;
+      }
+      if(text.startsWith('REMOVING ROUTE')) {
+        talker.logTyped(RouterLog(text));
+        return;
+      }
+      globals.talker?.log(text);
+    }
   }
 }

@@ -275,7 +275,6 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       );
 
       me = SeMeDTO.fromJson(response.data);
-      globals.talker?.debug('SE me: $me');
 
       return DataSuccess(me);
     } on DioException catch (e) {
