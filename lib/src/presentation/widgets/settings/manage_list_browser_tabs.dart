@@ -1,9 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
-import 'dart:io';
-
-import '../../controllers/settings_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 
 class ManageListBrowserTabs extends GetView {
   const ManageListBrowserTabs({
@@ -90,8 +90,24 @@ class ManageListBrowserTabs extends GetView {
                                 : Theme.of(context).colorScheme.secondary,
                             margin: const EdgeInsets.only(bottom: 8),
                             child: ListTile(
-                              title: Text(
-                                elem.title,
+                              title: Wrap(
+                                children: [
+                                  Text(
+                                    elem.title,
+                                  ),
+                                  const SizedBox(
+                                    width: 6,
+                                  ),
+                                  Visibility(
+                                    visible: elem.iOSAudioSource,
+                                    child: Badge(
+                                      backgroundColor: Theme.of(context)
+                                          .colorScheme
+                                          .tertiary,
+                                      label: const Text('iOS audio only'),
+                                    ),
+                                  ),
+                                ],
                               ),
                               trailing: !controller.browserTabsSelected
                                       .contains(elem)

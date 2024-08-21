@@ -20,9 +20,11 @@ class EmotePickerView extends GetView {
     );
 
     List<Emote> globalEmotes = chatController.twitchChats[0].globalEmotes;
-    List<Emote> userSetEmotes = chatController.twitchChats[0].emotesFromSets.where((e) => e.emoteType != EmoteType.global).toList();
+    List<Emote> userSetEmotes = chatController.twitchChats[0].emotesFromSets
+        .where((e) => e.emoteType != EmoteType.global)
+        .toList();
     List<Emote> thirdPartEmotes = [];
-    for(var chat in chatController.twitchChats){
+    for (var chat in chatController.twitchChats) {
       thirdPartEmotes.addAll(chat.thirdPartEmotes);
     }
 
@@ -58,7 +60,7 @@ class EmotePickerView extends GetView {
           width: 16,
         ),
       ),
-       const Tab(
+      const Tab(
         child: Icon(Icons.star),
       ),
       const Tab(
@@ -81,7 +83,8 @@ class EmotePickerView extends GetView {
     );
   }
 
-  Widget _tabs(BuildContext context, List<Emote> globalEmotes, List<Emote> userSetEmotes, List<Emote> thirdPartEmotes) {
+  Widget _tabs(BuildContext context, List<Emote> globalEmotes,
+      List<Emote> userSetEmotes, List<Emote> thirdPartEmotes) {
     return Expanded(
       child: Container(
         color: Theme.of(context).colorScheme.surface,
@@ -98,8 +101,7 @@ class EmotePickerView extends GetView {
                   itemBuilder: (context, i) {
                     return _emote(globalEmotes[i]);
                   },
-                  gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 5,
                   ),
                 ),
@@ -113,8 +115,7 @@ class EmotePickerView extends GetView {
                   itemBuilder: (context, i) {
                     return _emote(userSetEmotes[i]);
                   },
-                  gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 5,
                   ),
                 ),
@@ -128,8 +129,7 @@ class EmotePickerView extends GetView {
                   itemBuilder: (context, i) {
                     return _emote(thirdPartEmotes[i]);
                   },
-                  gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 5,
                   ),
                 ),
