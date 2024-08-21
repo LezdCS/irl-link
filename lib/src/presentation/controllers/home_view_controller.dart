@@ -15,9 +15,9 @@ import 'package:irllink/src/domain/usecases/streamelements_usecase.dart';
 import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/realtime_irl_view_controller.dart';
-import 'package:irllink/src/presentation/controllers/store_controller.dart';
+import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
-import 'package:irllink/src/presentation/controllers/tts_controller.dart';
+import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:irllink/src/presentation/widgets/tabs/obs_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/tabs/realtime_irl_tab_view.dart';
@@ -92,6 +92,7 @@ class HomeViewController extends GetxController
 
   @override
   void onInit() async {
+
     chatInputController = TextEditingController();
     chatTabsController = TabController(length: 0, vsync: this);
     emotesTabController = TabController(length: 0, vsync: this);
@@ -234,7 +235,7 @@ class HomeViewController extends GetxController
   }
 
   void addTabs() {
-    bool isSubscribed = Get.find<StoreController>().isSubscribed();
+    bool isSubscribed = Get.find<StoreService>().isSubscribed();
 
     // Check if OBS have to be added
     if (obsTabViewController == null && settings.value.isObsConnected!) {
@@ -443,7 +444,7 @@ class HomeViewController extends GetxController
       generateChats();
 
       Get.find<DashboardController>();
-      Get.find<TtsController>().initTts(settings.value);
+      Get.find<TtsService>().initTts(settings.value);
 
       // DARK MODE
       if (!settings.value.generalSettings!.isDarkMode) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/presentation/controllers/store_controller.dart';
+import 'package:irllink/src/core/services/store_service.dart';
 
 import '../../../controllers/settings_view_controller.dart';
 
@@ -8,7 +8,7 @@ Widget inAppPurchaseDialog(
   BuildContext context,
   SettingsViewController controller,
 ) {
-  String price = Get.find<StoreController>().getSubscriptionPrice();
+  String price = Get.find<StoreService>().getSubscriptionPrice();
   return AlertDialog(
     contentPadding: EdgeInsets.zero,
     content: Container(
@@ -149,7 +149,7 @@ Widget inAppPurchaseDialog(
               const SizedBox(width: 10),
               TextButton(
                 onPressed: () {
-                  controller.storeController.purchase();
+                  controller.storeService.purchase();
                 },
                 style: TextButton.styleFrom(
                   backgroundColor: Colors.deepPurpleAccent,

@@ -10,7 +10,7 @@ import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
-import 'package:irllink/src/presentation/controllers/tts_controller.dart';
+import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:kick_chat/kick_chat.dart';
 import 'package:twitch_chat/twitch_chat.dart';
@@ -47,7 +47,7 @@ class ChatViewController extends GetxController
   Timer? chatDemoTimer;
 
   late HomeViewController homeViewController;
-  late TtsController ttsController;
+  late TtsService ttsService;
 
   List<TwitchChat> twitchChats = [];
   List<KickChat> kickChats = [];
@@ -56,7 +56,7 @@ class ChatViewController extends GetxController
   @override
   void onInit() async {
     homeViewController = Get.find<HomeViewController>();
-    ttsController = Get.find<TtsController>();
+    ttsService = Get.find<TtsService>();
 
     scrollController = ScrollController();
     banDurationInputController = TextEditingController();
@@ -131,7 +131,7 @@ class ChatViewController extends GetxController
 
   @override
   void onClose() {
-    Get.find<TtsController>().flutterTts.stop();
+    Get.find<TtsService>().flutterTts.stop();
     chatDemoTimer?.cancel();
     super.onDelete;
     super.onClose();
@@ -403,7 +403,7 @@ class ChatViewController extends GetxController
         return;
       }
       if (homeViewController.settings.value.ttsSettings!.ttsEnabled) {
-        ttsController.readTts(message);
+        ttsService.readTts(message);
       }
       entity.ChatMessage twitchMessage =
           entity.ChatMessage.fromTwitch(message, twitchChat.channelId ?? '');

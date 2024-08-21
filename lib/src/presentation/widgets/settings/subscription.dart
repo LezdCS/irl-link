@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
-import 'package:irllink/src/presentation/controllers/store_controller.dart';
+import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/presentation/widgets/settings/dialogs/in_app_purchase_dialog.dart';
 
 class Subscription extends StatelessWidget {
@@ -11,8 +11,8 @@ class Subscription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? price = Get.find<StoreController>().getSubscriptionPrice();
-    bool isSubscribed = Get.find<StoreController>().isSubscribed();
+    String? price = Get.find<StoreService>().getSubscriptionPrice();
+    bool isSubscribed = Get.find<StoreService>().isSubscribed();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

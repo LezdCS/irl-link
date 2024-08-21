@@ -6,26 +6,26 @@ import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 
-class TtsController extends GetxController {
+class TtsService extends GetxService {
   late FlutterTts flutterTts;
   RxList ttsLanguages = [].obs;
   RxList ttsVoices = [].obs;
 
   late HomeViewController homeViewController;
 
-  @override
-  void onInit() {
-    homeViewController = Get.find<HomeViewController>();
+  Future<TtsService> init() async {
     flutterTts = FlutterTts();
     if (Platform.isAndroid) {
       flutterTts.setEngine(flutterTts.getDefaultEngine.toString());
     }
     getTtsVoices();
     getTtsLanguages();
-    super.onInit();
+    return this;
   }
 
   void initTts(Settings settings) async {
+    homeViewController = Get.find<HomeViewController>();
+
     //  The following setup allows background music and in-app audio session to continue simultaneously:
     await flutterTts.setIosAudioCategory(
       IosTextToSpeechAudioCategory.ambient,
@@ -122,6 +122,6 @@ class TtsController extends GetxController {
     if (homeViewController.settings.value.ttsSettings!.ttsMuteViewerName) {
       text = message.message;
     }
-    Get.find<TtsController>().flutterTts.speak(text);
+    Get.find<TtsService>().flutterTts.speak(text);
   }
 }

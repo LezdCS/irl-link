@@ -5,8 +5,8 @@ import 'package:irllink/src/core/params/streamelements_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
-import 'package:irllink/src/presentation/controllers/store_controller.dart';
-import 'package:irllink/src/presentation/controllers/tts_controller.dart';
+import 'package:irllink/src/core/services/store_service.dart';
+import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/presentation/events/settings_events.dart';
 import 'package:irllink/src/presentation/events/streamelements_events.dart';
 import 'package:uuid/uuid.dart';
@@ -49,14 +49,14 @@ class SettingsViewController extends GetxController {
   Rx<Color> nothingJustToRefreshDialog = Colors.grey.obs;
 
   late HomeViewController homeViewController;
-  late TtsController ttsController;
-  late StoreController storeController;
+  late TtsService ttsService;
+  late StoreService storeService;
 
   @override
   void onInit() {
     homeViewController = Get.find<HomeViewController>();
-    ttsController = Get.find<TtsController>();
-    storeController = Get.find<StoreController>();
+    ttsService = Get.find<TtsService>();
+    storeService = Get.find<StoreService>();
 
     obsWebsocketUrlFieldController = TextEditingController();
     obsWebsocketPasswordFieldController = TextEditingController();

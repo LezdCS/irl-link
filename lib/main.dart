@@ -7,6 +7,8 @@ import 'package:irllink/routes/app_pages.dart';
 import 'package:irllink/src/bindings/login_bindings.dart';
 import 'package:irllink/src/core/resources/themes.dart';
 import 'package:irllink/src/core/services/realtime_irl_task_handler.dart';
+import 'package:irllink/src/core/services/store_service.dart';
+import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/core/utils/crashlytics_talker_observer.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/presentation/views/login_view.dart';
@@ -41,6 +43,10 @@ void main() async {
   globals.talker = talker;
   AppTranslations.initLanguages();
   FlutterForegroundTask.initCommunicationPort();
+
+  await Get.putAsync(() => StoreService().init());
+  await Get.putAsync(() => TtsService().init());
+
   runApp(Main(
     talker: talker,
   ));
@@ -92,14 +98,15 @@ class Main extends StatelessWidget {
         talker.logTyped(GetxInstanceLog(text, false));
         return;
       }
-      if(text.endsWith('onDelete() called') || text.endsWith('deleted from memory')) {
+      if (text.endsWith('onDelete() called') ||
+          text.endsWith('deleted from memory')) {
         talker.logTyped(GetxInstanceLog(text, true));
         return;
       }
       if (text.contains('GOING TO ROUTE')) {
         return;
       }
-      if(text.startsWith('REMOVING ROUTE')) {
+      if (text.startsWith('REMOVING ROUTE')) {
         talker.logTyped(RouterLog(text));
         return;
       }

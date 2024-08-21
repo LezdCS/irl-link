@@ -9,7 +9,7 @@ import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
-import 'package:irllink/src/presentation/controllers/store_controller.dart';
+import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_view.dart';
 import 'package:irllink/src/presentation/widgets/chats/select_channel_dialog.dart';
@@ -36,7 +36,7 @@ class HomeView extends GetView<HomeViewController> {
     final double width = MediaQuery.of(context).size.width;
 
     return PopScope(
-      onPopInvoked: (bool invoked) async {
+      onPopInvokedWithResult: (bool invoked, dynamic d) async {
         if (invoked) {
           MoveToBackground.moveTaskToBack();
         }
@@ -109,7 +109,7 @@ class HomeView extends GetView<HomeViewController> {
                       ),
                       Visibility(
                         visible:
-                            Get.find<StoreController>().purchasePending.value,
+                            Get.find<StoreService>().purchasePending.value,
                         child: CircularProgressIndicator(
                           color: context.theme.colorScheme.tertiary,
                         ),
