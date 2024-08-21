@@ -4,10 +4,12 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/services/youtube_chat.dart';
 import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
+import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/core/services/tts_service.dart';
@@ -77,6 +79,8 @@ class ChatViewController extends GetxController
       isChatConnected.value = false;
       isAlertProgress.value = false;
     }
+
+    createChats();
     super.onInit();
   }
 
@@ -197,25 +201,22 @@ class ChatViewController extends GetxController
   /// Hide every future messages from an user (only on this application, not on Twitch)
   void hideUser(entity.ChatMessage message) {
     if (twitchData == null) return;
+    Settings settings = Get.find<SettingsService>().settings.value;
 
     List hiddenUsersIds =
-        homeViewController.settings.value.hiddenUsersIds! != const []
-            ? homeViewController.settings.value.hiddenUsersIds!
-            : [];
+        settings.hiddenUsersIds! != const [] ? settings.hiddenUsersIds! : [];
     if (hiddenUsersIds
             .firstWhereOrNull((userId) => userId == message.authorId) ==
         null) {
       //add user
       hiddenUsersIds.add(message.authorId);
-      homeViewController.settings.value = homeViewController.settings.value
-          .copyWith(hiddenUsersIds: hiddenUsersIds);
+      Get.find<SettingsService>().settings.value = settings.copyWith(hiddenUsersIds: hiddenUsersIds);
     } else {
       //remove user
       hiddenUsersIds.remove(message.authorId);
-      homeViewController.settings.value = homeViewController.settings.value
-          .copyWith(hiddenUsersIds: hiddenUsersIds);
+      Get.find<SettingsService>().settings.value = settings.copyWith(hiddenUsersIds: hiddenUsersIds);
     }
-    saveSettings();
+    Get.find<SettingsService>().saveSettings();
     homeViewController.selectedMessage.refresh();
   }
 
@@ -227,10 +228,6 @@ class ChatViewController extends GetxController
         scrollController.position.maxScrollExtent,
       );
     }
-  }
-
-  void saveSettings() {
-    homeEvents.setSettings(settings: homeViewController.settings.value);
   }
 
   Future applySettings() async {
@@ -388,6 +385,8 @@ class ChatViewController extends GetxController
       }
     });
 
+    Settings settings = Get.find<SettingsService>().settings.value;
+
     twitchChat.chatStream.listen((message) {
       if (cheerEmotes.isEmpty) {
         cheerEmotes.value =
@@ -398,11 +397,10 @@ class ChatViewController extends GetxController
             .map((e) => ChatEmote.fromTwitch(e))
             .toList();
       }
-      if (homeViewController.settings.value.hiddenUsersIds!
-          .contains(message.authorId)) {
+      if (settings.hiddenUsersIds!.contains(message.authorId)) {
         return;
       }
-      if (homeViewController.settings.value.ttsSettings!.ttsEnabled) {
+      if (settings.ttsSettings!.ttsEnabled) {
         ttsService.readTts(message);
       }
       entity.ChatMessage twitchMessage =

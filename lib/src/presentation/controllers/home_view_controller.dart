@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/utils/list_move.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
@@ -12,7 +13,6 @@ import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/domain/usecases/streamelements_usecase.dart';
-import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/realtime_irl_view_controller.dart';
 import 'package:irllink/src/core/services/store_service.dart';
@@ -74,8 +74,6 @@ class HomeViewController extends GetxController
 
   ObsTabViewController? obsTabViewController;
 
-  late Rx<Settings> settings = const Settings.defaultSettings().obs;
-
   Timer? timerRefreshToken;
   Timer? timerKeepSpeakerOn;
   AudioPlayer audioPlayer = AudioPlayer();
@@ -92,7 +90,6 @@ class HomeViewController extends GetxController
 
   @override
   void onInit() async {
-
     chatInputController = TextEditingController();
     chatTabsController = TabController(length: 0, vsync: this);
     emotesTabController = TabController(length: 0, vsync: this);
@@ -113,7 +110,7 @@ class HomeViewController extends GetxController
             );
       });
     }
-    await getSettings();
+    await applySettings();
 
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
@@ -130,19 +127,21 @@ class HomeViewController extends GetxController
   }
 
   void onSplitResized(UnmodifiableListView<double?> weight) {
+    Settings settings = Get.find<SettingsService>().settings.value;
+
     if (debounceSplitResize?.isActive ?? false) debounceSplitResize?.cancel();
     debounceSplitResize = Timer(const Duration(milliseconds: 500), () {
-      settings.value = settings.value.copyWith(
-        generalSettings: settings.value.generalSettings?.copyWith(
+      Get.find<SettingsService>().settings.value = settings.copyWith(
+        generalSettings: settings.generalSettings?.copyWith(
           splitViewWeights: [weight[0]!, weight[1]!],
         ),
       );
-      saveSettings();
+      Get.find<SettingsService>().saveSettings();
     });
   }
 
   void lazyPutChat(ChatGroup chatGroup) {
-    Get.lazyPut(
+    Get.lazyPut<ChatViewController>(
       () => ChatViewController(
         homeEvents: HomeEvents(
           twitchUseCase: TwitchUseCase(
@@ -162,7 +161,9 @@ class HomeViewController extends GetxController
   }
 
   void reorderTabs() {
-    List<BrowserTab> tabs = settings.value.browserTabs!.tabs
+    Settings settings = Get.find<SettingsService>().settings.value;
+
+    List<BrowserTab> tabs = settings.browserTabs!.tabs
         .where((t) => t.toggled && !t.iOSAudioSource)
         .toList();
     int diff = tabElements.length - tabs.length;
@@ -179,10 +180,12 @@ class HomeViewController extends GetxController
   }
 
   Future<void> removeTabs() async {
+    Settings settings = Get.find<SettingsService>().settings.value;
+
     // Check if WebTabs have to be removed
     List webTabsToRemove = [];
     tabElements.whereType<WebPageView>().forEach((tabElement) {
-      BrowserTab? tabExist = settings.value.browserTabs!.tabs.firstWhereOrNull(
+      BrowserTab? tabExist = settings.browserTabs!.tabs.firstWhereOrNull(
         (settingsTab) => settingsTab.id == tabElement.tab.id,
       );
       if (tabExist == null) {
@@ -198,7 +201,7 @@ class HomeViewController extends GetxController
     tabElements.removeWhere((t) => webTabsToRemove.contains(t));
 
     for (var tabElement in iOSAudioSources) {
-      bool tabExist = settings.value.browserTabs!.tabs
+      bool tabExist = settings.browserTabs!.tabs
           .any((settingsTab) => settingsTab.id == tabElement.tab.id);
       if (!tabExist) {
         iOSAudioSources.remove(tabElement);
@@ -206,8 +209,7 @@ class HomeViewController extends GetxController
     }
 
     // Check if OBS have to be removed
-    if (Get.isRegistered<ObsTabViewController>() &&
-        !settings.value.isObsConnected!) {
+    if (Get.isRegistered<ObsTabViewController>() && !settings.isObsConnected!) {
       tabElements.removeWhere((t) => t is ObsTabView);
       obsTabViewController = null;
       await Get.delete<ObsTabViewController>();
@@ -226,8 +228,7 @@ class HomeViewController extends GetxController
 
     // Check if Realtime IRL have to be removed
     if (Get.isRegistered<RealtimeIrlViewController>() &&
-        (settings.value.rtIrlPushKey == null ||
-            settings.value.rtIrlPushKey!.isEmpty)) {
+        (settings.rtIrlPushKey == null || settings.rtIrlPushKey!.isEmpty)) {
       tabElements.removeWhere((t) => t is RealtimeIrlTabView);
       realtimeIrlViewController = null;
       await Get.delete<RealtimeIrlViewController>();
@@ -236,9 +237,10 @@ class HomeViewController extends GetxController
 
   void addTabs() {
     bool isSubscribed = Get.find<StoreService>().isSubscribed();
+    Settings settings = Get.find<SettingsService>().settings.value;
 
     // Check if OBS have to be added
-    if (obsTabViewController == null && settings.value.isObsConnected!) {
+    if (obsTabViewController == null && settings.isObsConnected!) {
       obsTabViewController = Get.find<ObsTabViewController>();
       ObsTabView obsPage = const ObsTabView();
       tabElements.insert(1, obsPage);
@@ -258,8 +260,8 @@ class HomeViewController extends GetxController
     }
 
     // Check if Realtime IRL have to be added
-    if (settings.value.rtIrlPushKey != null &&
-        settings.value.rtIrlPushKey!.isNotEmpty &&
+    if (settings.rtIrlPushKey != null &&
+        settings.rtIrlPushKey!.isNotEmpty &&
         realtimeIrlViewController == null) {
       realtimeIrlViewController = Get.find<RealtimeIrlViewController>();
       RealtimeIrlTabView realtimeIrlTabView = const RealtimeIrlTabView();
@@ -267,7 +269,7 @@ class HomeViewController extends GetxController
     }
 
     // Check if WebTabs have to be added
-    for (BrowserTab tab in settings.value.browserTabs!.tabs) {
+    for (BrowserTab tab in settings.browserTabs!.tabs) {
       if (!tab.toggled) continue;
       // first we check if the tab already exist
       bool tabExist = tabElements
@@ -304,11 +306,13 @@ class HomeViewController extends GetxController
     if (twitchData == null) {
       return;
     }
+    Settings settings = Get.find<SettingsService>().settings.value;
 
     RxList<ChatView> groupsViews = RxList<ChatView>.from(chatsViews);
 
     // 1. Find the groups that are in the groupsViews but not in the settings to remove them
-    List<ChatGroup> settingsGroups = settings.value.chatSettings!.chatGroups;
+    List<ChatGroup> settingsGroups =
+        settings.chatSettings!.copyWith().chatGroups;
     List<ChatGroup> groupsToRemove = groupsViews
         .where((groupView) => !settingsGroups
             .any((sGroup) => sGroup.id == groupView.chatGroup.id))
@@ -340,7 +344,7 @@ class HomeViewController extends GetxController
 
     // 3. We add the 'Permanent First Group' from the settings to the first position if it does not exist yet in the channels
     ChatGroup? permanentFirstGroup =
-        settings.value.chatSettings!.permanentFirstGroup.copyWith();
+        settings.chatSettings!.permanentFirstGroup.copyWith();
     // if the permanentFirstGroup is not in the channels, we add it
     if (!chatsViews.any(
         (groupView) => groupView.chatGroup.id == permanentFirstGroup?.id)) {
@@ -365,25 +369,25 @@ class HomeViewController extends GetxController
       chatsViews.insert(0, groupView);
     }
 
-    // 3. Call the createChats function for each group to update the chats inside
-    for (var c in chatsViews) {
-      ChatViewController? chatController =
-          Get.find<ChatViewController>(tag: c.chatGroup.id);
-      if (c.chatGroup.id == permanentFirstGroup.id) {
-        chatController.updateChannels(
-          permanentFirstGroup.channels,
-          twitchData!.twitchUser.login,
-        );
-      } else {
-        ChatGroup group =
-            settingsGroups.firstWhere((g) => g.id == c.chatGroup.id);
-        chatController.updateChannels(
-          group.channels,
-          twitchData!.twitchUser.login,
-        );
-      }
-      chatController.createChats();
-    }
+    // 4. Call the createChats function for each group to update the chats inside
+    // for (ChatView c in chatsViews) {
+    //   ChatViewController? chatController =
+    //       Get.find<ChatViewController>(tag: c.chatGroup.id);
+    //   if (c.chatGroup.id == permanentFirstGroup.id) {
+    //     chatController.updateChannels(
+    //       permanentFirstGroup.channels,
+    //       twitchData!.twitchUser.login,
+    //     );
+    //   } else {
+    //     ChatGroup group =
+    //         settingsGroups.firstWhere((g) => g.id == c.chatGroup.id);
+    //     chatController.updateChannels(
+    //       group.channels,
+    //       twitchData!.twitchUser.login,
+    //     );
+    //   }
+    //   chatController.createChats();
+    // }
 
     chatTabsController = TabController(length: chatsViews.length, vsync: this);
     if (chatsViews.isEmpty) {
@@ -424,35 +428,22 @@ class HomeViewController extends GetxController
     Get.offAllNamed(Routes.login);
   }
 
-  void saveSettings() {
-    homeEvents.setSettings(settings: settings.value);
-  }
-
-  Future<DataState<Settings>> getSettings() async {
-    DataState<Settings> settingsResult = await homeEvents.getSettings();
-    if (settings is DataFailed) {
-      return DataFailed('');
-    }
-    settings.value = settingsResult.data!;
-    await applySettings();
-    return DataSuccess(settings.value);
-  }
-
   Future applySettings() async {
     {
+      Settings settings = Get.find<SettingsService>().settings.value;
+
       generateTabs();
       generateChats();
 
-      Get.find<DashboardController>();
-      Get.find<TtsService>().initTts(settings.value);
+      Get.find<TtsService>().initTts(settings);
 
       // DARK MODE
-      if (!settings.value.generalSettings!.isDarkMode) {
+      if (!settings.generalSettings!.isDarkMode) {
         Get.changeThemeMode(ThemeMode.light);
       }
 
       // SPEAKER SETTING
-      if (settings.value.generalSettings!.keepSpeakerOn) {
+      if (settings.generalSettings!.keepSpeakerOn) {
         const path = "../lib/assets/blank.mp3";
         timerKeepSpeakerOn = Timer.periodic(
           const Duration(minutes: 5),
@@ -463,8 +454,7 @@ class HomeViewController extends GetxController
       }
 
       // SPLIT VIEW
-      splitViewController?.weights =
-          settings.value.generalSettings!.splitViewWeights;
+      splitViewController?.weights = settings.generalSettings!.splitViewWeights;
     }
   }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/domain/entities/settings.dart';
 
 import '../../controllers/settings_view_controller.dart';
 
@@ -14,6 +16,8 @@ class ManageListHiddenUsers extends GetView {
 
   @override
   Widget build(BuildContext context) {
+    Settings settings = Get.find<SettingsService>().settings.value;
+
     return Obx(
       () => Scaffold(
         appBar: AppBar(
@@ -37,8 +41,7 @@ class ManageListHiddenUsers extends GetView {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                child: controller.homeViewController.settings.value
-                        .hiddenUsersIds!.isEmpty
+                child: settings.hiddenUsersIds!.isEmpty
                     ? Container(
                         padding: const EdgeInsets.only(top: 20),
                         child: const Text(
@@ -47,8 +50,7 @@ class ManageListHiddenUsers extends GetView {
                         ),
                       )
                     : controller.usernamesHiddenUsers.length !=
-                            controller.homeViewController.settings.value
-                                .hiddenUsersIds!.length
+                            settings.hiddenUsersIds!.length
                         ? Container(
                             padding: const EdgeInsets.only(top: 20),
                             child: const Column(
@@ -72,16 +74,13 @@ class ManageListHiddenUsers extends GetView {
                               if (newIndex > oldIndex) {
                                 newIndex -= 1;
                               }
-                              final element = controller.homeViewController
-                                  .settings.value.hiddenUsersIds!
-                                  .removeAt(oldIndex);
-                              controller.homeViewController.settings.value
-                                  .hiddenUsersIds!
+                              final element =
+                                  settings.hiddenUsersIds!.removeAt(oldIndex);
+                              settings.hiddenUsersIds!
                                   .insert(newIndex, element);
                             },
                             itemBuilder: (BuildContext context, int index) {
-                              var elem = controller.homeViewController.settings
-                                  .value.hiddenUsersIds![index];
+                              var elem = settings.hiddenUsersIds![index];
 
                               return Container(
                                 key: ValueKey(

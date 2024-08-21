@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
+import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
@@ -108,8 +110,7 @@ class HomeView extends GetView<HomeViewController> {
                         child: const Dashboard(),
                       ),
                       Visibility(
-                        visible:
-                            Get.find<StoreService>().purchasePending.value,
+                        visible: Get.find<StoreService>().purchasePending.value,
                         child: CircularProgressIndicator(
                           color: context.theme.colorScheme.tertiary,
                         ),
@@ -225,6 +226,8 @@ class HomeView extends GetView<HomeViewController> {
   }
 
   Widget _bottomNavBar(double height, double width, BuildContext context) {
+    Settings settings = Get.find<SettingsService>().settings.value;
+
     return Container(
       padding: const EdgeInsets.only(left: 10),
       height: height * 0.06,
@@ -287,7 +290,7 @@ class HomeView extends GetView<HomeViewController> {
                           maxLines: 1,
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintText: controller.settings.value.generalSettings!
+                            hintText: settings.generalSettings!
                                     .displayViewerCount
                                 ? '${Get.find<TwitchTabViewController>().twitchStreamInfos.value.viewerCount} viewers'
                                 : 'send_message'.tr,
@@ -436,7 +439,7 @@ class HomeView extends GetView<HomeViewController> {
                 )
               : Container(),
           Visibility(
-            visible: controller.settings.value.dashboardSettings!.activated,
+            visible: settings.dashboardSettings!.activated,
             child: Expanded(
               flex: 1,
               child: InkWell(
@@ -459,15 +462,14 @@ class HomeView extends GetView<HomeViewController> {
                 await Get.toNamed(
                   Routes.settings,
                 );
-                await controller.getSettings();
+                //TODO: check if usefull or not:  await controller.getSettings();
                 if (controller.twitchData != null) {
                   for (var chan in controller.chatsViews) {
                     if (Get.isRegistered<ChatViewController>(
                         tag: chan.chatGroup.id)) {
                       ChatViewController c =
                           Get.find<ChatViewController>(tag: chan.chatGroup.id);
-                      ChatGroup? chatGroupUpdated = controller
-                          .settings.value.chatSettings?.chatGroups
+                      ChatGroup? chatGroupUpdated = settings.chatSettings?.chatGroups
                           .firstWhereOrNull((cg) => cg.id == chan.chatGroup.id);
                       if (chatGroupUpdated != null) {
                         c.chatGroup = chatGroupUpdated;

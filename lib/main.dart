@@ -7,10 +7,16 @@ import 'package:irllink/routes/app_pages.dart';
 import 'package:irllink/src/bindings/login_bindings.dart';
 import 'package:irllink/src/core/resources/themes.dart';
 import 'package:irllink/src/core/services/realtime_irl_task_handler.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/core/utils/crashlytics_talker_observer.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
+import 'package:irllink/src/data/repositories/settings_repository_impl.dart';
+import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
+import 'package:irllink/src/domain/usecases/settings_usecase.dart';
+import 'package:irllink/src/domain/usecases/twitch_usecase.dart';
+import 'package:irllink/src/presentation/events/settings_events.dart';
 import 'package:irllink/src/presentation/views/login_view.dart';
 import 'package:kick_chat/kick_chat.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -44,8 +50,21 @@ void main() async {
   AppTranslations.initLanguages();
   FlutterForegroundTask.initCommunicationPort();
 
-  await Get.putAsync(() => StoreService().init());
-  await Get.putAsync(() => TtsService().init());
+  await Get.putAsync(
+    () => SettingsService(
+      settingsEvents: SettingsEvents(
+        twitchUseCase: TwitchUseCase(
+          twitchRepository: TwitchRepositoryImpl(),
+        ),
+        settingsUseCase: SettingsUseCase(
+          settingsRepository: SettingsRepositoryImpl(),
+        ),
+      ),
+    ).init(),
+    permanent: true,
+  );
+  await Get.putAsync(() => StoreService().init(), permanent: true);
+  await Get.putAsync(() => TtsService().init(), permanent: true);
 
   runApp(Main(
     talker: talker,

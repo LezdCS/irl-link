@@ -14,11 +14,6 @@ SettingsService({required this.settingsEvents});
     return this;
   }
 
-  Future<Settings> updateSettings() async {
-    settings.value = await getSettings();
-    return settings.value;
-  }
-
   Future<Settings> getSettings() async {
     DataState<Settings> settingsResult = await settingsEvents.getSettings();
     if (settings is DataFailed) {
@@ -29,6 +24,7 @@ SettingsService({required this.settingsEvents});
   }
 
   Future<void> saveSettings() async {
+    settings.refresh();
     settingsEvents.setSettings(settings: settings.value);
   }
 }

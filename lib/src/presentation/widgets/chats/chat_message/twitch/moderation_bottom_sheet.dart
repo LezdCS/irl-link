@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
+import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../controllers/chat_view_controller.dart';
@@ -19,6 +21,8 @@ class ModerationBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ChatMessage message = controller.homeViewController.selectedMessage.value!;
+    Settings settings = Get.find<SettingsService>().settings.value;
+
     return Container(
       padding: const EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
       decoration: BoxDecoration(
@@ -122,13 +126,12 @@ class ModerationBottomSheet extends StatelessWidget {
               const SizedBox(width: 10),
               InkWell(
                 onTap: () => controller.hideUser(
-                    controller.homeViewController.selectedMessage.value!),
-                child: (controller
-                            .homeViewController.settings.value.hiddenUsersIds!
-                            .firstWhereOrNull((userId) =>
-                                controller.homeViewController.selectedMessage
-                                    .value!.authorId ==
-                                userId) !=
+                  controller.homeViewController.selectedMessage.value!,
+                ),
+                child: (settings.hiddenUsersIds!.firstWhereOrNull((userId) =>
+                            controller.homeViewController.selectedMessage.value!
+                                .authorId ==
+                            userId) !=
                         null)
                     ? moderationViewButton(Icons.visibility, "Unhide user")
                     : moderationViewButton(Icons.visibility_off, "Hide user"),

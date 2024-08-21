@@ -7,6 +7,9 @@ Widget hypeTrain(
   BuildContext context,
   TwitchTabViewController controller,
 ) {
+  if (controller.twitchEventSub == null) {
+    return Container();
+  }
   return ValueListenableBuilder(
     valueListenable: controller.twitchEventSub!.currentHypeTrain,
     builder: (context, hypetrain, child) {

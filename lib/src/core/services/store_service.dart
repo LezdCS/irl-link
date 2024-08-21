@@ -149,7 +149,7 @@ class StoreService extends GetxService {
   Future<void> deliverProduct(PurchaseDetails purchaseDetails) async {
     purchases.add(purchaseDetails);
     purchasePending.value = false;
-    Get.find<HomeViewController>().getSettings();
+    // Get.find<HomeViewController>().applySettings();
 
     if (purchaseDetails.status == PurchaseStatus.purchased) {
       Get.back();

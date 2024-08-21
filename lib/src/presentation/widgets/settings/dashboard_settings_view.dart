@@ -3,17 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/utils/dashboard_events.dart';
 import 'package:irllink/src/domain/entities/dashboard_event.dart';
+import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 
-class DashboardSettingsView extends GetView<SettingsViewController> {
+class DashboardSettingsView extends GetView<DashboardController> {
   const DashboardSettingsView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    DashboardController dashboardController = Get.find<DashboardController>();
+    SettingsViewController settingsViewController = Get.find<SettingsViewController>();
+    Settings settings = Get.find<SettingsService>().settings.value;
+
     return Obx(
       () => Scaffold(
         appBar: AppBar(
@@ -30,18 +34,14 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
               activeColor: Colors.white,
               inactiveTrackColor:
                   Theme.of(context).colorScheme.tertiaryContainer,
-              value: controller.homeViewController.settings.value
-                  .dashboardSettings!.activated,
+              value: settings.dashboardSettings!.activated,
               onChanged: (value) {
-                controller.homeViewController.settings.value =
-                    controller.homeViewController.settings.value.copyWith(
-                  dashboardSettings: controller
-                      .homeViewController.settings.value.dashboardSettings!
-                      .copyWith(
+                Get.find<SettingsService>().settings.value = settings.copyWith(
+                  dashboardSettings: settings.dashboardSettings!.copyWith(
                     activated: value,
                   ),
                 );
-                controller.saveSettings();
+                Get.find<SettingsService>().saveSettings();
               },
             ),
           ],
@@ -59,11 +59,10 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: dashboardController.homeViewController.settings.value
-                    .dashboardSettings!.userEvents.length,
+                itemCount: settings.dashboardSettings!.userEvents.length,
                 itemBuilder: (context, index) {
-                  DashboardEvent event = dashboardController.homeViewController
-                      .settings.value.dashboardSettings!.userEvents[index];
+                  DashboardEvent event =
+                      settings.dashboardSettings!.userEvents[index];
                   ExistingDashboardEvent? eventDetails =
                       dashboardEvents[event.event];
                   return Slidable(
@@ -89,7 +88,7 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
                           backgroundColor:
                               Theme.of(context).colorScheme.surface,
                           onPressed: (context) {
-                            dashboardController.removeDashboardEvent(event);
+                            controller.removeDashboardEvent(event);
                           },
                           icon: Icons.delete,
                           label: 'Delete',
@@ -133,7 +132,7 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
                   );
                 },
               ),
-              _addGroupButton(context, dashboardController, controller),
+              _addGroupButton(context, controller, settingsViewController),
             ],
           ),
         ),
@@ -145,7 +144,7 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
 Widget _addGroupButton(
     BuildContext context,
     DashboardController dashboardController,
-    SettingsViewController controller) {
+    SettingsViewController settingsViewController) {
   return InkWell(
     onTap: () {
       Get.defaultDialog(
@@ -159,7 +158,7 @@ Widget _addGroupButton(
         confirmTextColor: Colors.white,
         radius: 10,
         onConfirm: () {
-          controller.addBrowserTab();
+          settingsViewController.addBrowserTab();
         },
       );
     },

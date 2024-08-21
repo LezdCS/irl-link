@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'dart:io';
 
@@ -16,6 +18,8 @@ class ManageListBrowserTabs extends GetView {
 
   @override
   Widget build(BuildContext context) {
+    Settings settings = Get.find<SettingsService>().settings.value;
+
     return Obx(
       () => Scaffold(
         appBar: AppBar(
@@ -53,8 +57,7 @@ class ManageListBrowserTabs extends GetView {
           child: Column(
             children: [
               Container(
-                child: controller.homeViewController.settings.value.browserTabs!
-                        .tabs.isEmpty
+                child: settings.browserTabs!.tabs.isEmpty
                     ? Container(
                         padding: const EdgeInsets.only(top: 20),
                         child: const Text(
@@ -65,26 +68,20 @@ class ManageListBrowserTabs extends GetView {
                         shrinkWrap: true,
                         padding: const EdgeInsets.only(
                             top: 8, left: 18, right: 18, bottom: 8),
-                        itemCount: controller.homeViewController.settings.value
-                            .browserTabs!.tabs.length,
+                        itemCount: settings.browserTabs!.tabs.length,
                         onReorder: (int oldIndex, int newIndex) {
                           if (newIndex > oldIndex) {
                             newIndex -= 1;
                           }
-                          final element = controller.homeViewController.settings
-                              .value.browserTabs!.tabs
-                              .removeAt(oldIndex);
-                          controller.homeViewController.settings.value
-                              .browserTabs!.tabs
-                              .insert(newIndex, element);
-                          controller.saveSettings();
+                          final element =
+                              settings.browserTabs!.tabs.removeAt(oldIndex);
+                          settings.browserTabs!.tabs.insert(newIndex, element);
+                          Get.find<SettingsService>().saveSettings();
                         },
                         itemBuilder: (BuildContext context, int index) {
-                          var elem = controller.homeViewController.settings
-                              .value.browserTabs!.tabs[index];
+                          BrowserTab elem = settings.browserTabs!.tabs[index];
                           return Container(
-                            key: ValueKey(controller.homeViewController.settings
-                                .value.browserTabs!.tabs[index]),
+                            key: ValueKey(settings.browserTabs!.tabs[index]),
                             color: controller.browserTabsSelected.contains(elem)
                                 ? Colors.red[800]
                                 : Theme.of(context).colorScheme.secondary,

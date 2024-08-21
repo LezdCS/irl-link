@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/event_container.dart';
@@ -13,6 +15,8 @@ class ChatEvents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Settings settings = Get.find<SettingsService>().settings.value;
+
     return Obx(
       () => Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
@@ -66,19 +70,15 @@ class ChatEvents extends StatelessWidget {
                           ),
                         ),
                         Switch(
-                          value: controller.homeViewController.settings.value
-                              .chatEventsSettings!.firstsMessages,
+                          value: settings.chatEventsSettings!.firstsMessages,
                           onChanged: (value) {
-                            controller.homeViewController.settings.value =
-                                controller.homeViewController.settings.value
-                                    .copyWith(
-                              chatEventsSettings: controller.homeViewController
-                                  .settings.value.chatEventsSettings!
-                                  .copyWith(
+                            Get.find<SettingsService>().settings.value = settings.copyWith(
+                              chatEventsSettings:
+                                  settings.chatEventsSettings!.copyWith(
                                 firstsMessages: value,
                               ),
                             );
-                            controller.saveSettings();
+                            Get.find<SettingsService>().saveSettings();
                           },
                         ),
                       ],
@@ -113,19 +113,15 @@ class ChatEvents extends StatelessWidget {
                           ),
                         ),
                         Switch(
-                          value: controller.homeViewController.settings.value
-                              .chatEventsSettings!.subscriptions,
+                          value: settings.chatEventsSettings!.subscriptions,
                           onChanged: (value) {
-                            controller.homeViewController.settings.value =
-                                controller.homeViewController.settings.value
-                                    .copyWith(
-                              chatEventsSettings: controller.homeViewController
-                                  .settings.value.chatEventsSettings!
-                                  .copyWith(
+                            Get.find<SettingsService>().settings.value = settings.copyWith(
+                              chatEventsSettings:
+                                  settings.chatEventsSettings!.copyWith(
                                 subscriptions: value,
                               ),
                             );
-                            controller.saveSettings();
+                            Get.find<SettingsService>().saveSettings();
                           },
                         ),
                       ],
@@ -160,19 +156,15 @@ class ChatEvents extends StatelessWidget {
                           ),
                         ),
                         Switch(
-                          value: controller.homeViewController.settings.value
-                              .chatEventsSettings!.bitsDonations,
+                          value: settings.chatEventsSettings!.bitsDonations,
                           onChanged: (value) {
-                            controller.homeViewController.settings.value =
-                                controller.homeViewController.settings.value
-                                    .copyWith(
-                              chatEventsSettings: controller.homeViewController
-                                  .settings.value.chatEventsSettings!
-                                  .copyWith(
+                            Get.find<SettingsService>().settings.value = settings.copyWith(
+                              chatEventsSettings:
+                                  settings.chatEventsSettings!.copyWith(
                                 bitsDonations: value,
                               ),
                             );
-                            controller.saveSettings();
+                            Get.find<SettingsService>().saveSettings();
                           },
                         ),
                       ],
@@ -207,19 +199,15 @@ class ChatEvents extends StatelessWidget {
                           ),
                         ),
                         Switch(
-                          value: controller.homeViewController.settings.value
-                              .chatEventsSettings!.announcements,
+                          value: settings.chatEventsSettings!.announcements,
                           onChanged: (value) {
-                            controller.homeViewController.settings.value =
-                                controller.homeViewController.settings.value
-                                    .copyWith(
-                              chatEventsSettings: controller.homeViewController
-                                  .settings.value.chatEventsSettings!
-                                  .copyWith(
+                            Get.find<SettingsService>().settings.value = settings.copyWith(
+                              chatEventsSettings:
+                                  settings.chatEventsSettings!.copyWith(
                                 announcements: value,
                               ),
                             );
-                            controller.saveSettings();
+                            Get.find<SettingsService>().saveSettings();
                           },
                         ),
                       ],
@@ -254,19 +242,15 @@ class ChatEvents extends StatelessWidget {
                           ),
                         ),
                         Switch(
-                          value: controller.homeViewController.settings.value
-                              .chatEventsSettings!.incomingRaids,
+                          value: settings.chatEventsSettings!.incomingRaids,
                           onChanged: (value) {
-                            controller.homeViewController.settings.value =
-                                controller.homeViewController.settings.value
-                                    .copyWith(
-                              chatEventsSettings: controller.homeViewController
-                                  .settings.value.chatEventsSettings!
-                                  .copyWith(
+                            Get.find<SettingsService>().settings.value = settings.copyWith(
+                              chatEventsSettings:
+                                  settings.chatEventsSettings!.copyWith(
                                 incomingRaids: value,
                               ),
                             );
-                            controller.saveSettings();
+                            Get.find<SettingsService>().saveSettings();
                           },
                         ),
                       ],
@@ -301,19 +285,15 @@ class ChatEvents extends StatelessWidget {
                           ),
                         ),
                         Switch(
-                          value: controller.homeViewController.settings.value
-                              .chatEventsSettings!.redemptions,
+                          value: settings.chatEventsSettings!.redemptions,
                           onChanged: (value) {
-                            controller.homeViewController.settings.value =
-                                controller.homeViewController.settings.value
-                                    .copyWith(
-                              chatEventsSettings: controller.homeViewController
-                                  .settings.value.chatEventsSettings!
-                                  .copyWith(
+                            Get.find<SettingsService>().settings.value = settings.copyWith(
+                              chatEventsSettings:
+                                  settings.chatEventsSettings!.copyWith(
                                 redemptions: value,
                               ),
                             );
-                            controller.saveSettings();
+                            Get.find<SettingsService>().saveSettings();
                           },
                         ),
                       ],

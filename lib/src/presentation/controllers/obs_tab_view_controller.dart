@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:obs_websocket/obs_websocket.dart';
@@ -119,9 +120,9 @@ class ObsTabViewController extends GetxController {
 
       alertMessage.value = "Connected.";
       isConnected.value = true;
+      Settings settings = Get.find<SettingsService>().settings.value;
 
-      List obsConnectionsHistory =
-          homeViewController.settings.value.obsConnectionsHistory!;
+      List obsConnectionsHistory = settings.obsConnectionsHistory!;
       if (obsConnectionsHistory.firstWhereOrNull(
             (element) =>
                 element['url'] == url && element['password'] == password,
@@ -132,9 +133,9 @@ class ObsTabViewController extends GetxController {
           "password": password,
         });
 
-        homeViewController.settings.value = homeViewController.settings.value
-            .copyWith(obsConnectionsHistory: obsConnectionsHistory);
-        homeEvents.setSettings(settings: homeViewController.settings.value);
+        settings =
+            settings.copyWith(obsConnectionsHistory: obsConnectionsHistory);
+        homeEvents.setSettings(settings: settings);
       }
 
       getSceneList();
@@ -258,7 +259,8 @@ class ObsTabViewController extends GetxController {
   }
 
   Future applySettings() async {
-    Settings settings = homeViewController.settings.value;
+    Settings settings = Get.find<SettingsService>().settings.value;
+
     if (obsWebSocket != null) {
       obsWebSocket!.close();
     }

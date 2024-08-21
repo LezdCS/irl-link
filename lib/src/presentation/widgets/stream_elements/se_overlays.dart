@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
@@ -40,9 +42,10 @@ Widget _overlayRow(StreamelementsViewController controller, SeOverlay overlay,
     BuildContext context) {
   String? overlayUrl;
   Widget? webpage;
-  bool isMuted = controller
-      .homeViewController.settings.value.streamElementsSettings!.mutedOverlays
-      .contains(overlay.id);
+  Settings settings = Get.find<SettingsService>().settings.value;
+
+  bool isMuted =
+      settings.streamElementsSettings!.mutedOverlays.contains(overlay.id);
   if (controller.overlayToken != null && isMuted == false) {
     overlayUrl =
         'https://streamelements.com/overlay/${overlay.id}/${controller.overlayToken}';
@@ -95,19 +98,18 @@ Widget _overlayRow(StreamelementsViewController controller, SeOverlay overlay,
             ),
             InkWell(
               onTap: () {
-                List<String> mutedList = controller.homeViewController.settings
-                    .value.streamElementsSettings!.mutedOverlays;
+                Settings settings = Get.find<SettingsService>().settings.value;
+                List<String> mutedList =
+                    settings.streamElementsSettings!.mutedOverlays;
                 if (isMuted) {
                   mutedList.removeWhere((element) => element == overlay.id);
                 } else {
                   mutedList.add(overlay.id);
                 }
-                controller.homeViewController.settings.value =
-                    controller.homeViewController.settings.value.copyWith(
-                        streamElementsSettings: controller.homeViewController
-                            .settings.value.streamElementsSettings!
-                            .copyWith(mutedOverlays: mutedList));
-                controller.homeViewController.saveSettings();
+                Get.find<SettingsService>().settings.value = settings.copyWith(
+                    streamElementsSettings: settings.streamElementsSettings!
+                        .copyWith(mutedOverlays: mutedList));
+                Get.find<SettingsService>().saveSettings();
                 controller.overlays.refresh();
               },
               child: Icon(isMuted ? Icons.volume_mute : Icons.volume_up),

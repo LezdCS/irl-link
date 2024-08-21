@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:irllink/main.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/services/realtime_irl.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/utils/determine_position.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
@@ -20,9 +21,9 @@ class RealtimeIrlViewController extends GetxController {
   @override
   void onInit() {
     homeViewController = Get.find<HomeViewController>();
+    Settings settings = Get.find<SettingsService>().settings.value;
 
-    realtimeIrl =
-        RealtimeIrl(homeViewController.settings.value.rtIrlPushKey ?? '');
+    realtimeIrl = RealtimeIrl(settings.rtIrlPushKey ?? '');
 
     FlutterForegroundTask.addTaskDataCallback(realtimeIrl.onReceiveTaskData);
     _initService();
@@ -65,7 +66,10 @@ class RealtimeIrlViewController extends GetxController {
         serviceId: 256,
         notificationTitle: 'IRL Link',
         notificationText: 'Your location is being shared with RealtimeIRL.',
-        notificationIcon: const NotificationIconData(resType: ResourceType.drawable, resPrefix: ResourcePrefix.ic, name: 'bg_service_small'),
+        notificationIcon: const NotificationIconData(
+            resType: ResourceType.drawable,
+            resPrefix: ResourcePrefix.ic,
+            name: 'bg_service_small'),
         notificationButtons: [
           const NotificationButton(id: 'rtirl_stop', text: 'Stop sharing'),
         ],
@@ -119,7 +123,7 @@ class RealtimeIrlViewController extends GetxController {
   }
 
   Future applySettings() async {
-    Settings settings = homeViewController.settings.value;
+    Settings settings = Get.find<SettingsService>().settings.value;
     realtimeIrl.key = settings.rtIrlPushKey ?? '';
   }
 }

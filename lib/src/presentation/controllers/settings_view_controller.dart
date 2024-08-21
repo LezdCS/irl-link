@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/core/services/store_service.dart';
@@ -76,18 +78,15 @@ class SettingsViewController extends GetxController {
 
   @override
   void onReady() {
+    Settings settings = Get.find<SettingsService>().settings.value;
+
     if (homeViewController.twitchData != null) {
-      obsWebsocketUrlFieldController.text =
-          homeViewController.settings.value.obsWebsocketUrl!;
-      obsWebsocketPasswordFieldController.text =
-          homeViewController.settings.value.obsWebsocketPassword!;
-      seJwtInputController.text =
-          homeViewController.settings.value.streamElementsSettings!.jwt ?? '';
-      seOverlayTokenInputController.text = homeViewController
-              .settings.value.streamElementsSettings!.overlayToken ??
-          '';
-      rtIrlInputController.text =
-          homeViewController.settings.value.rtIrlPushKey ?? '';
+      obsWebsocketUrlFieldController.text = settings.obsWebsocketUrl!;
+      obsWebsocketPasswordFieldController.text = settings.obsWebsocketPassword!;
+      seJwtInputController.text = settings.streamElementsSettings!.jwt ?? '';
+      seOverlayTokenInputController.text =
+          settings.streamElementsSettings!.overlayToken ?? '';
+      rtIrlInputController.text = settings.rtIrlPushKey ?? '';
       getUsernames();
     }
 
@@ -163,12 +162,13 @@ class SettingsViewController extends GetxController {
   }
 
   void removeHiddenUser(userId) {
-    List hiddenUsersIds = homeViewController.settings.value.hiddenUsersIds!;
+    Settings settings = Get.find<SettingsService>().settings.value;
+
+    List hiddenUsersIds = settings.hiddenUsersIds!;
     hiddenUsersIds.remove(userId);
-    homeViewController.settings.value = homeViewController.settings.value
-        .copyWith(hiddenUsersIds: hiddenUsersIds);
-    saveSettings();
-    homeViewController.settings.refresh();
+    Get.find<SettingsService>().settings.value =
+        settings.copyWith(hiddenUsersIds: hiddenUsersIds);
+    Get.find<SettingsService>().saveSettings();
   }
 
   void addBrowserTab() {
@@ -193,15 +193,15 @@ class SettingsViewController extends GetxController {
       toggled: toggled,
       iOSAudioSource: audioSourceToggled,
     );
-    List<BrowserTab> tabs = homeViewController.settings.value.browserTabs!.tabs;
+    Settings settings = Get.find<SettingsService>().settings.value;
+
+    List<BrowserTab> tabs = settings.browserTabs!.tabs;
     tabs.add(tab);
-    homeViewController.settings.value =
-        homeViewController.settings.value.copyWith(
-      browserTabs:
-          homeViewController.settings.value.browserTabs?.copyWith(tabs: tabs),
+    Get.find<SettingsService>().settings.value = settings.copyWith(
+      browserTabs: settings.browserTabs?.copyWith(tabs: tabs),
     );
-    saveSettings();
-    homeViewController.settings.refresh();
+    Get.find<SettingsService>().saveSettings();
+
     Get.back();
   }
 
@@ -224,46 +224,42 @@ class SettingsViewController extends GetxController {
       iOSAudioSource: audioSourceToggled,
     );
 
-    List<BrowserTab> tabs = homeViewController.settings.value.browserTabs!.tabs;
+    Settings settings = Get.find<SettingsService>().settings.value;
+
+    List<BrowserTab> tabs = settings.browserTabs!.tabs;
     int index = tabs.indexWhere((element) => element.id == tab.id);
     tabs[index] = newTab;
-    homeViewController.settings.value =
-        homeViewController.settings.value.copyWith(
-      browserTabs:
-          homeViewController.settings.value.browserTabs?.copyWith(tabs: tabs),
+    Get.find<SettingsService>().settings.value = settings.copyWith(
+      browserTabs: settings.browserTabs?.copyWith(tabs: tabs),
     );
 
-    saveSettings();
-    homeViewController.settings.refresh();
+    Get.find<SettingsService>().saveSettings();
 
     // Close the dialog
     Get.back();
   }
 
   void removeBrowserTab(tab) {
-    List<BrowserTab> tabs = homeViewController.settings.value.browserTabs!.tabs;
+    Settings settings = Get.find<SettingsService>().settings.value;
+
+    List<BrowserTab> tabs = settings.browserTabs!.tabs;
     tabs.remove(tab);
 
-    homeViewController.settings.value =
-        homeViewController.settings.value.copyWith(
-      browserTabs:
-          homeViewController.settings.value.browserTabs?.copyWith(tabs: tabs),
+    Get.find<SettingsService>().settings.value = settings.copyWith(
+      browserTabs: settings.browserTabs?.copyWith(tabs: tabs),
     );
-    saveSettings();
-    homeViewController.settings.refresh();
-    Get.back();
-  }
+    Get.find<SettingsService>().saveSettings();
 
-  void saveSettings() {
-    settingsEvents.setSettings(settings: homeViewController.settings.value);
+    Get.back();
   }
 
   Future getUsernames() async {
     List<TwitchUser> users = [];
+    Settings settings = Get.find<SettingsService>().settings.value;
 
     await settingsEvents
         .getTwitchUsers(
-            ids: homeViewController.settings.value.hiddenUsersIds!,
+            ids: settings.hiddenUsersIds!,
             accessToken: homeViewController.twitchData!.accessToken)
         .then((value) => users = value.data!);
 
