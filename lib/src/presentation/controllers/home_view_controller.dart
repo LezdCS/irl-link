@@ -58,7 +58,8 @@ class HomeViewController extends GetxController
   TwitchCredentials? twitchData;
 
   // StreamElements
-  Rxn<StreamelementsViewController> streamelementsViewController = Rxn<StreamelementsViewController>();
+  Rxn<StreamelementsViewController> streamelementsViewController =
+      Rxn<StreamelementsViewController>();
 
   // Chat input
   late TextEditingController chatInputController;
@@ -247,7 +248,8 @@ class HomeViewController extends GetxController
       final box = GetStorage();
       var seCredentialsString = box.read('seCredentials');
       if (seCredentialsString != null) {
-        streamelementsViewController.value = Get.find<StreamelementsViewController>();
+        streamelementsViewController.value =
+            Get.find<StreamelementsViewController>();
         StreamelementsTabView streamelementsPage =
             const StreamelementsTabView();
         tabElements.insert(1, streamelementsPage);
