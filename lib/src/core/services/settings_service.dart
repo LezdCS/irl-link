@@ -7,16 +7,16 @@ class SettingsService extends GetxService {
 SettingsService({required this.settingsEvents});
   final SettingsEvents settingsEvents;
 
-  Settings settings = const Settings.defaultSettings();
+  Rx<Settings> settings = const Settings.defaultSettings().obs;
 
   Future<SettingsService> init() async {
-    settings = await getSettings();
+    settings.value = await getSettings();
     return this;
   }
 
   Future<Settings> updateSettings() async {
-    settings = await getSettings();
-    return settings;
+    settings.value = await getSettings();
+    return settings.value;
   }
 
   Future<Settings> getSettings() async {
@@ -24,11 +24,11 @@ SettingsService({required this.settingsEvents});
     if (settings is DataFailed) {
       return const Settings.defaultSettings();
     }
-    settings = settingsResult.data!;
-    return settings;
+    settings.value = settingsResult.data!;
+    return settings.value;
   }
 
   Future<void> saveSettings() async {
-    settingsEvents.setSettings(settings: settings);
+    settingsEvents.setSettings(settings: settings.value);
   }
 }
