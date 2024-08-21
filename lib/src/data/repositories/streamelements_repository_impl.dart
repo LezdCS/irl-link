@@ -140,6 +140,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       );
       GetStorage box = GetStorage();
       box.remove('seCredentials');
+      globals.talker?.info('SE creds removed from local');
       return DataSuccess(null);
     } on DioException catch (e) {
       return DataFailed("Unable to revoke StreamElements token: ${e.message}");
@@ -359,15 +360,18 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
         'https://api.streamelements.com/kappa/v2/songrequest/$userId/playing',
       );
 
-      SeSong song = SeSong(
-        channel: response.data['channel'],
-        duration: response.data['duration'],
-        id: response.data['_id'],
-        title: response.data['title'],
-        videoId: response.data['videoId'],
-      );
-
-      return DataSuccess(song);
+      if (response.data != null) {
+        SeSong song = SeSong(
+          channel: response.data['channel'],
+          duration: response.data['duration'],
+          id: response.data['_id'],
+          title: response.data['title'],
+          videoId: response.data['videoId'],
+        );
+        return DataSuccess(song);
+      } else {
+        return DataFailed('There is no playing song for this user.');
+      }
     } on DioException catch (e) {
       return DataFailed(e.toString());
     }
