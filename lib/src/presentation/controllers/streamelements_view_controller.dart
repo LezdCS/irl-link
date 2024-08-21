@@ -246,18 +246,18 @@ class StreamelementsViewController extends GetxController
 
   Future<void> onError() async {
     isSocketConnected.value = false;
-    globals.talker?.error('Error on StreamElements websocket');
+    globals.talker?.error('StreamElements WebSocket error.');
   }
 
   Future<void> onDisconnect() async {
     isSocketConnected.value = false;
-    globals.talker?.warning('Disconnected from StreamElements websocket');
+    globals.talker?.warning('StreamElements WebSocket disconnected.');
   }
 
   Future<void> onAuthenticated(data) async {
     isSocketConnected.value = true;
     // socket?.emit('subscribe', {"room": 'songrequest::611168252645244a6f16ab67'});
-    globals.talker?.info('SE WebSocket authenticated.');
+    globals.talker?.info('StreamElements WebSocket authenticated.');
   }
 
   void onAddSongQueue(data) {

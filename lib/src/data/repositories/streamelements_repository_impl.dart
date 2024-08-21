@@ -103,9 +103,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
 
   Future<void> storeCredentials(SeCredentials seCredentials) async {
     GetStorage box = GetStorage();
-    globals.talker?.info('Encoding SE credentials into a String');
     String jsonData = jsonEncode(seCredentials);
-    globals.talker?.info('Successfully encoded SE creds: $jsonData');
     await box.write('seCredentials', jsonData);
     globals.talker?.info('SE creds saved in local');
   }
@@ -117,12 +115,13 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       dio.options.headers["authorization"] = "OAuth $accessToken";
       response =
           await dio.get('https://api.streamelements.com/oauth2/validate');
-      globals.talker?.info('Token validated: ${response.data}');
+      globals.talker?.info('StreamElements token validated.');
       return DataSuccess(response.data);
     } on DioException catch (e) {
       globals.talker?.error(e.message);
       return DataFailed(
-          "Unable to validate StreamElements token: ${e.message}");
+        "Unable to validate StreamElements token: ${e.message}",
+      );
     }
   }
 
@@ -163,10 +162,10 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
   @override
   Future<DataState<SeCredentials>> getSeCredentialsFromLocal() async {
     final box = GetStorage();
-    globals.talker?.info('Getting SE creds from local storage');
+    globals.talker
+        ?.info('Getting StreamElements credentials from local storage.');
 
     var seCredentialsString = box.read('seCredentials');
-    globals.talker?.info(seCredentialsString);
 
     if (seCredentialsString != null) {
       Map<String, dynamic> seCredentialsJson = jsonDecode(seCredentialsString);
@@ -174,7 +173,6 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       SeCredentials seCredentials =
           SeCredentialsDTO.fromJson(seCredentialsJson);
 
-      globals.talker?.info('Checking if Scopes changed.');
       StreamelementsAuthParams params = const StreamelementsAuthParams();
       List paramsScopesList = params.scopes.split(' ');
       paramsScopesList.sort((a, b) {
@@ -187,11 +185,11 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       });
       String savedScopesOrdered = savedScopesList.join(' ');
       if (savedScopesOrdered != paramsScopesOrdered) {
-        globals.talker?.info('Scopes changed, user need to relogin to SE.');
+        globals.talker
+            ?.info('StreamElements scopes changed, user need to relogin.');
         disconnect(seCredentials.accessToken);
         return DataFailed("Scopes have been updated, please login again.");
       }
-      globals.talker?.info('Scopes are the same: OK');
 
       //refresh the access token to be sure the token is going to be valid after starting the app
       DataState<SeCredentials> creds = await refreshAccessToken(seCredentials);
@@ -201,7 +199,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
         return DataFailed("Error refreshing SE Token");
       }
 
-      globals.talker?.info('SE token refreshed.');
+      globals.talker?.info('StreamElements token refreshed.');
 
       return DataSuccess(seCredentials);
     } else {
