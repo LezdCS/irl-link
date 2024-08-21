@@ -14,11 +14,27 @@ import 'package:irllink/src/presentation/controllers/realtime_irl_view_controlle
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
+import 'package:irllink/src/presentation/events/settings_events.dart';
 import 'package:irllink/src/presentation/events/streamelements_events.dart';
+
+import '../core/services/settings_service.dart';
 
 class HomeBindings extends Bindings {
   @override
-  void dependencies() {
+  Future<void> dependencies() async {
+    Get.put(
+      () => SettingsService(
+        settingsEvents: SettingsEvents(
+          twitchUseCase: TwitchUseCase(
+            twitchRepository: TwitchRepositoryImpl(),
+          ),
+          settingsUseCase: SettingsUseCase(
+            settingsRepository: SettingsRepositoryImpl(),
+          ),
+        ),
+      ).init(),
+    );
+
     Get.lazyPut<HomeViewController>(
       () => HomeViewController(
         homeEvents: HomeEvents(
