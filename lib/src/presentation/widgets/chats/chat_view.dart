@@ -32,7 +32,7 @@ class ChatView extends GetView {
 
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
-    
+
     bool multiplePlatform = atLeastTwoNotEmpty([
       controller.kickChats,
       controller.twitchChats,
@@ -138,16 +138,18 @@ class ChatView extends GetView {
                         );
                       },
                     )
-                  : Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Text(
-                        "Welcome to ${controller?.chatGroup.channels.first.channel} chatroom!",
-                        style: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ),
+                  : (controller?.chatGroup.channels.length ?? 0) > 0
+                      ? Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Text(
+                            "Welcome to ${controller?.chatGroup.channels.first.channel} chatroom!",
+                            style: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 13,
+                            ),
+                          ),
+                        )
+                      : Container(),
             ),
           ),
           Positioned(
