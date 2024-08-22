@@ -88,6 +88,9 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
         queryParameters: {'refresh_token': seCredentials.refreshToken},
       );
 
+      globals.talker?.logTyped(
+        StreamElementsLog('StreamElements token refreshed.'));
+
       SeCredentials newSeCredentials = SeCredentials(
         accessToken: response.data['access_token'],
         refreshToken: response.data['refresh_token'],
@@ -208,10 +211,6 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       } else {
         return DataFailed("Error refreshing SE Token");
       }
-
-      globals.talker?.logTyped(
-        StreamElementsLog('StreamElements token refreshed.'),
-      );
 
       return DataSuccess(seCredentials);
     } else {
