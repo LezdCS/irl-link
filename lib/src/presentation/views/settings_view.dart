@@ -25,12 +25,7 @@ import '../widgets/settings/obs_settings.dart';
 import '../widgets/settings/subscription.dart';
 
 class SettingsView extends GetView<SettingsViewController> {
-  @override
-  final SettingsViewController controller = Get.find<SettingsViewController>();
-
-  SettingsView({super.key});
-
-  final StoreService storeService = Get.find<StoreService>();
+  const SettingsView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -428,6 +423,7 @@ class SettingsView extends GetView<SettingsViewController> {
 
   Widget connectionsSettings(BuildContext context, double width) {
     Settings settings = Get.find<SettingsService>().settings.value;
+    StoreService storeService = Get.find<StoreService>();
 
     return Container(
       color: Theme.of(context).colorScheme.surface,
