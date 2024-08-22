@@ -26,11 +26,13 @@ class ChatView extends GetView {
       controller = Get.find<ChatViewController>(tag: chatGroup.id);
     }
 
-    final double height = MediaQuery.of(context).size.height;
-    final double width = MediaQuery.of(context).size.width;
     if (controller == null) {
       return Container();
     }
+
+    final double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.width;
+    
     bool multiplePlatform = atLeastTwoNotEmpty([
       controller.kickChats,
       controller.twitchChats,
@@ -188,8 +190,7 @@ class ChatView extends GetView {
               child: Visibility(
                 visible: controller != null &&
                     controller.homeViewController.selectedMessage.value != null,
-                child: ModerationBottomSheet(
-                    controller: controller!, width: width),
+                child: ModerationBottomSheet(controller: controller!),
               ),
             ),
           ),
