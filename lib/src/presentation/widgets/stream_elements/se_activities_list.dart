@@ -94,9 +94,7 @@ class SeActivitiesList extends GetView {
                     streamElementsSettings: settings.streamElementsSettings!
                         .copyWith(showFollowerActivity: value),
                   );
-                  controller.homeViewController.homeEvents.setSettings(
-                    settings: settings,
-                  );
+                  Get.find<SettingsService>().saveSettings();
                 },
               ),
             ),
@@ -113,9 +111,7 @@ class SeActivitiesList extends GetView {
                     streamElementsSettings: settings.streamElementsSettings!
                         .copyWith(showSubscriberActivity: value),
                   );
-                  controller.homeViewController.homeEvents.setSettings(
-                    settings: settings,
-                  );
+                  Get.find<SettingsService>().saveSettings();
                 },
               ),
             ),
@@ -132,9 +128,7 @@ class SeActivitiesList extends GetView {
                     streamElementsSettings: settings.streamElementsSettings!
                         .copyWith(showCheerActivity: value),
                   );
-                  controller.homeViewController.homeEvents.setSettings(
-                    settings: settings,
-                  );
+                  Get.find<SettingsService>().saveSettings();
                 },
               ),
             ),
@@ -151,9 +145,7 @@ class SeActivitiesList extends GetView {
                     streamElementsSettings: settings.streamElementsSettings!
                         .copyWith(showDonationActivity: value),
                   );
-                  controller.homeViewController.homeEvents.setSettings(
-                    settings: settings,
-                  );
+                  Get.find<SettingsService>().saveSettings();
                 },
               ),
             ),
@@ -170,9 +162,7 @@ class SeActivitiesList extends GetView {
                     streamElementsSettings: settings.streamElementsSettings!
                         .copyWith(showRaidActivity: value),
                   );
-                  controller.homeViewController.homeEvents.setSettings(
-                    settings: settings,
-                  );
+                  Get.find<SettingsService>().saveSettings();
                 },
               ),
             ),
@@ -189,9 +179,7 @@ class SeActivitiesList extends GetView {
                     streamElementsSettings: settings.streamElementsSettings!
                         .copyWith(showHostActivity: value),
                   );
-                  controller.homeViewController.homeEvents.setSettings(
-                    settings: settings,
-                  );
+                  Get.find<SettingsService>().saveSettings();
                 },
               ),
             ),

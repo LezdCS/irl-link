@@ -25,9 +25,6 @@ class HomeBindings extends Bindings {
           twitchUseCase: TwitchUseCase(
             twitchRepository: TwitchRepositoryImpl(),
           ),
-          settingsUseCase: SettingsUseCase(
-            settingsRepository: SettingsRepositoryImpl(),
-          ),
           streamelementsUseCase: StreamelementsUseCase(
             streamelementsRepository: StreamelementsRepositoryImpl(),
           ),
@@ -41,9 +38,6 @@ class HomeBindings extends Bindings {
         homeEvents: HomeEvents(
           twitchUseCase: TwitchUseCase(
             twitchRepository: TwitchRepositoryImpl(),
-          ),
-          settingsUseCase: SettingsUseCase(
-            settingsRepository: SettingsRepositoryImpl(),
           ),
           streamelementsUseCase: StreamelementsUseCase(
             streamelementsRepository: StreamelementsRepositoryImpl(),
@@ -72,9 +66,6 @@ class HomeBindings extends Bindings {
         homeEvents: HomeEvents(
           twitchUseCase: TwitchUseCase(
             twitchRepository: TwitchRepositoryImpl(),
-          ),
-          settingsUseCase: SettingsUseCase(
-            settingsRepository: SettingsRepositoryImpl(),
           ),
           streamelementsUseCase: StreamelementsUseCase(
             streamelementsRepository: StreamelementsRepositoryImpl(),

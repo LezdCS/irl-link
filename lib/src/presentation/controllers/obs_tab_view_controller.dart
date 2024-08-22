@@ -135,7 +135,7 @@ class ObsTabViewController extends GetxController {
 
         settings =
             settings.copyWith(obsConnectionsHistory: obsConnectionsHistory);
-        homeEvents.setSettings(settings: settings);
+        Get.find<SettingsService>().saveSettings();
       }
 
       getSceneList();

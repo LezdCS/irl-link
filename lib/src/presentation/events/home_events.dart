@@ -1,25 +1,22 @@
 import 'package:dio/dio.dart';
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
-import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
-import 'package:irllink/src/domain/usecases/settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch_usecase.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 
 class HomeEvents {
   final TwitchUseCase twitchUseCase;
-  final SettingsUseCase settingsUseCase;
   final StreamelementsUseCase streamelementsUseCase;
 
-  HomeEvents(
-      {required this.twitchUseCase,
-      required this.settingsUseCase,
-      required this.streamelementsUseCase});
+  HomeEvents({
+    required this.twitchUseCase,
+    required this.streamelementsUseCase,
+  });
 
   Future<DataState<TwitchCredentials>> getTwitchFromLocal() {
     return twitchUseCase.getTwitchFromLocal();
@@ -60,14 +57,6 @@ class HomeEvents {
   Future<DataState<void>> setStreamTitle(
       String accessToken, String broadcasterId, String title) {
     return twitchUseCase.setStreamTitle(accessToken, broadcasterId, title);
-  }
-
-  Future<DataState<Settings>> getSettings() {
-    return settingsUseCase.getSettings();
-  }
-
-  Future<void> setSettings({required Settings settings}) {
-    return settingsUseCase.setSettings(settings: settings);
   }
 
   Future<void>? createPoll(

@@ -27,9 +27,7 @@ import 'package:twitch_chat/twitch_chat.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import '../../../routes/app_routes.dart';
 import '../../core/utils/constants.dart';
-import '../../data/repositories/settings_repository_impl.dart';
 import '../../data/repositories/twitch_repository_impl.dart';
-import '../../domain/usecases/settings_usecase.dart';
 import '../../domain/usecases/twitch_usecase.dart';
 import '../widgets/chats/chat_view.dart';
 import '../widgets/tabs/streamelements_tab_view.dart';
@@ -146,9 +144,6 @@ class HomeViewController extends GetxController
         homeEvents: HomeEvents(
           twitchUseCase: TwitchUseCase(
             twitchRepository: TwitchRepositoryImpl(),
-          ),
-          settingsUseCase: SettingsUseCase(
-            settingsRepository: SettingsRepositoryImpl(),
           ),
           streamelementsUseCase: StreamelementsUseCase(
             streamelementsRepository: StreamelementsRepositoryImpl(),
