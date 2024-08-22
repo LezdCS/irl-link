@@ -3,9 +3,10 @@ import 'package:talker_flutter/talker_flutter.dart';
 class GetxInstanceLog extends TalkerLog {
   bool isDeleteAction;
   GetxInstanceLog(String super.message, this.isDeleteAction);
+
   /// Your custom log title
   @override
-  String get title =>'GetX Instance ${isDeleteAction ? '🔴': '🟢'}';
+  String get title => 'GetX Instance ${isDeleteAction ? '🔴' : '🟢'}';
 
   /// Your custom log color
   @override
@@ -36,3 +37,14 @@ class RouterLog extends TalkerLog {
   AnsiPen get pen => AnsiPen()..xterm(135);
 }
 
+class StreamElementsLog extends TalkerLog {
+  StreamElementsLog(String super.message);
+
+  /// Your custom log title
+  @override
+  String get title => 'StreamElements 🚀';
+
+  /// Your custom log color
+  @override
+  AnsiPen get pen => AnsiPen()..rgb(r: 0, g: 63, b: 222);
+}

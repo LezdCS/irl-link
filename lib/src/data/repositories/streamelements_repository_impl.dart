@@ -9,6 +9,7 @@ import 'package:irllink/src/core/params/streamelements_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/init_dio.dart';
+import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_activity_dto.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_credentials_dto.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_me_dto.dart';
@@ -44,7 +45,9 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       String refreshToken = Uri.parse(result).queryParameters['refresh_token']!;
       int expiresIn =
           int.parse(Uri.parse(result).queryParameters['expires_in']!);
-      globals.talker?.info('StreamElements login successful');
+      globals.talker?.logTyped(
+        StreamElementsLog('StreamElements login successful.'),
+      );
 
       DataState tokenInfos = await validateToken(accessToken);
       final String scopes = tokenInfos.data['scopes'].join(' ');
@@ -105,7 +108,8 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
     GetStorage box = GetStorage();
     String jsonData = jsonEncode(seCredentials);
     await box.write('seCredentials', jsonData);
-    globals.talker?.info('SE creds saved in local');
+    globals.talker?.logTyped(
+        StreamElementsLog('StreamElements credentials saved in local.'));
   }
 
   Future<DataState<dynamic>> validateToken(String accessToken) async {
@@ -115,7 +119,9 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       dio.options.headers["authorization"] = "OAuth $accessToken";
       response =
           await dio.get('https://api.streamelements.com/oauth2/validate');
-      globals.talker?.info('StreamElements token validated.');
+      globals.talker
+          ?.logTyped(StreamElementsLog('StreamElements token validated.'));
+
       return DataSuccess(response.data);
     } on DioException catch (e) {
       globals.talker?.error(e.message);
@@ -139,7 +145,8 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       );
       GetStorage box = GetStorage();
       box.remove('seCredentials');
-      globals.talker?.info('SE creds removed from local');
+      globals.talker?.logTyped(
+          StreamElementsLog('StreamElements credentials removed from local.'));
       return DataSuccess(null);
     } on DioException catch (e) {
       return DataFailed("Unable to revoke StreamElements token: ${e.message}");
@@ -162,9 +169,10 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
   @override
   Future<DataState<SeCredentials>> getSeCredentialsFromLocal() async {
     final box = GetStorage();
-    globals.talker
-        ?.info('Getting StreamElements credentials from local storage.');
-
+    globals.talker?.logTyped(
+      StreamElementsLog(
+          'Getting StreamElements credentials from local storage.'),
+    );
     var seCredentialsString = box.read('seCredentials');
 
     if (seCredentialsString != null) {
@@ -185,8 +193,10 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       });
       String savedScopesOrdered = savedScopesList.join(' ');
       if (savedScopesOrdered != paramsScopesOrdered) {
-        globals.talker
-            ?.info('StreamElements scopes changed, user need to relogin.');
+        globals.talker?.logTyped(
+          StreamElementsLog(
+              'StreamElements scopes changed, user need to relogin.'),
+        );
         disconnect(seCredentials.accessToken);
         return DataFailed("Scopes have been updated, please login again.");
       }
@@ -199,7 +209,9 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
         return DataFailed("Error refreshing SE Token");
       }
 
-      globals.talker?.info('StreamElements token refreshed.');
+      globals.talker?.logTyped(
+        StreamElementsLog('StreamElements token refreshed.'),
+      );
 
       return DataSuccess(seCredentials);
     } else {

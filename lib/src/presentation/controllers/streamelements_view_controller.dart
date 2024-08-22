@@ -197,7 +197,12 @@ class StreamelementsViewController extends GetxController
     );
 
     socket!.onAny(
-      (event, data) => globals.talker?.debug(data),
+      (event, data) => {
+        if (data != null)
+          {
+            globals.talker?.debug(data),
+          }
+      },
     );
 
     socket!.on(
