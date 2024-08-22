@@ -476,7 +476,8 @@ class HomeViewController extends GetxController
       }
 
       // SPLIT VIEW
-      splitViewController?.weights = settings.value.generalSettings!.splitViewWeights;
+      splitViewController?.weights =
+          settings.value.generalSettings!.splitViewWeights;
     }
   }
 }
