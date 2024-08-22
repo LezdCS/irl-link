@@ -290,8 +290,8 @@ class HomeView extends GetView<HomeViewController> {
                           maxLines: 1,
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintText: settings.generalSettings!
-                                    .displayViewerCount
+                            hintText: settings
+                                    .generalSettings!.displayViewerCount
                                 ? '${Get.find<TwitchTabViewController>().twitchStreamInfos.value.viewerCount} viewers'
                                 : 'send_message'.tr,
                             hintStyle: TextStyle(
@@ -462,22 +462,7 @@ class HomeView extends GetView<HomeViewController> {
                 await Get.toNamed(
                   Routes.settings,
                 );
-                //TODO: check if usefull or not:  await controller.getSettings();
-                if (controller.twitchData != null) {
-                  for (var chan in controller.chatsViews) {
-                    if (Get.isRegistered<ChatViewController>(
-                        tag: chan.chatGroup.id)) {
-                      ChatViewController c =
-                          Get.find<ChatViewController>(tag: chan.chatGroup.id);
-                      ChatGroup? chatGroupUpdated = settings.chatSettings?.chatGroups
-                          .firstWhereOrNull((cg) => cg.id == chan.chatGroup.id);
-                      if (chatGroupUpdated != null) {
-                        c.chatGroup = chatGroupUpdated;
-                      }
-                      c.applySettings();
-                    }
-                  }
-                }
+                controller.applySettings();
                 controller.obsTabViewController?.applySettings();
                 controller.streamelementsViewController.value?.applySettings();
                 controller.realtimeIrlViewController?.applySettings();
@@ -513,8 +498,6 @@ class HomeView extends GetView<HomeViewController> {
   }
 
   Widget _tabBarChats(BuildContext context) {
-    int tabsLength = controller.chatsViews.length;
-
     Color? getPlatformColor(Platform platform) {
       switch (platform) {
         case Platform.twitch:
@@ -528,54 +511,60 @@ class HomeView extends GetView<HomeViewController> {
       }
     }
 
-    return TabBar(
-      controller: controller.chatTabsController,
-      isScrollable: true,
-      onTap: (int i) {
-        if (Get.isRegistered<ChatViewController>(
-            tag: controller.chatsViews[i].chatGroup.id)) {
-          ChatViewController c = Get.find<ChatViewController>(
-            tag: controller.chatsViews[i].chatGroup.id,
-          );
-          c.scrollToBottom();
-          controller.selectedChatGroup.value = c.chatGroup;
-        }
-        controller.selectedMessage.value = null;
-        controller.selectedChatIndex = i;
-      },
-      tabs: List<Tab>.generate(
-        tabsLength,
-        (int index) {
-          List<Channel> channels =
-              controller.chatsViews[index].chatGroup.channels;
-          return Tab(
-            height: 30,
-            child: Text.rich(
-              TextSpan(
-                children: List<TextSpan>.generate(
-                  channels.length,
-                  (int i) => TextSpan(
-                    children: [
-                      TextSpan(
-                        text: i == (channels.length - 1) ? '' : ', ',
-                        style: TextStyle(
-                          color:
-                              Theme.of(Get.context!).textTheme.bodyLarge!.color,
+    return Obx(() {
+      int tabsLength = controller.chatsViews.length;
+
+      return TabBar(
+        controller: controller.chatTabsController,
+        isScrollable: true,
+        onTap: (int i) {
+          if (Get.isRegistered<ChatViewController>(
+              tag: controller.chatsViews[i].chatGroup.id)) {
+            ChatViewController c = Get.find<ChatViewController>(
+              tag: controller.chatsViews[i].chatGroup.id,
+            );
+            c.scrollToBottom();
+            controller.selectedChatGroup.value = c.chatGroup;
+          }
+          controller.selectedMessage.value = null;
+          controller.selectedChatIndex = i;
+        },
+        tabs: List<Tab>.generate(
+          tabsLength,
+          (int index) {
+            List<Channel> channels =
+                controller.chatsViews[index].chatGroup.channels;
+            return Tab(
+              height: 30,
+              child: Text.rich(
+                TextSpan(
+                  children: List<TextSpan>.generate(
+                    channels.length,
+                    (int i) => TextSpan(
+                      children: [
+                        TextSpan(
+                          text: i == (channels.length - 1) ? '' : ', ',
+                          style: TextStyle(
+                            color: Theme.of(Get.context!)
+                                .textTheme
+                                .bodyLarge!
+                                .color,
+                          ),
                         ),
+                      ],
+                      text: channels[i].channel,
+                      style: TextStyle(
+                        color: getPlatformColor(channels[i].platform),
                       ),
-                    ],
-                    text: channels[i].channel,
-                    style: TextStyle(
-                      color: getPlatformColor(channels[i].platform),
                     ),
                   ),
                 ),
               ),
-            ),
-          );
-        },
-      ),
-    );
+            );
+          },
+        ),
+      );
+    });
   }
 
   Widget _chats(BuildContext context) {
