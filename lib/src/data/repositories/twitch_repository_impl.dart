@@ -9,9 +9,11 @@ import 'package:get_storage/get_storage.dart';
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/utils/constants.dart';
+import 'package:irllink/src/core/utils/globals.dart' as globals;
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_credentials_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_decoded_idtoken_dto.dart';
+import 'package:irllink/src/data/entities/twitch/twitch_poll_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_stream_infos_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_user_dto.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
@@ -21,9 +23,6 @@ import 'package:irllink/src/domain/repositories/twitch_repository.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:quiver/iterables.dart';
 import 'package:twitch_chat/twitch_chat.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
-
-import '../entities/twitch/twitch_poll_dto.dart';
 
 class TwitchRepositoryImpl extends TwitchRepository {
   @override

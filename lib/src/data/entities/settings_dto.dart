@@ -7,13 +7,12 @@ import 'package:irllink/src/data/entities/settings/stream_elements_settings_dto.
 import 'package:irllink/src/data/entities/settings/tts_settings_dto.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
+import 'package:irllink/src/domain/entities/settings/chat_events_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
+import 'package:irllink/src/domain/entities/settings/dashboard_settings.dart';
 import 'package:irllink/src/domain/entities/settings/general_settings.dart';
+import 'package:irllink/src/domain/entities/settings/stream_elements_settings.dart';
 import 'package:irllink/src/domain/entities/settings/tts_settings.dart';
-
-import '../../domain/entities/settings/chat_events_settings.dart';
-import '../../domain/entities/settings/dashboard_settings.dart';
-import '../../domain/entities/settings/stream_elements_settings.dart';
 
 class SettingsDTO extends Settings {
   const SettingsDTO({

@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 
 class Tts extends StatelessWidget {
   final SettingsViewController controller;

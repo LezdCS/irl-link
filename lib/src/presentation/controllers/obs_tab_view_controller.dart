@@ -3,12 +3,11 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/utils/globals.dart' as globals;
 import 'package:irllink/src/domain/entities/settings.dart';
+import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:obs_websocket/obs_websocket.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
-
-import 'home_view_controller.dart';
 
 class ObsTabViewController extends GetxController {
   ObsTabViewController({required this.homeEvents});

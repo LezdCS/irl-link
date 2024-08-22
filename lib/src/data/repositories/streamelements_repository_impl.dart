@@ -8,6 +8,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/utils/constants.dart';
+import 'package:irllink/src/core/utils/globals.dart' as globals;
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_activity_dto.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_credentials_dto.dart';
@@ -18,8 +19,6 @@ import 'package:irllink/src/domain/entities/stream_elements/se_credentials.dart'
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_song.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
-
 import 'package:irllink/src/domain/repositories/streamelements_repository.dart';
 
 class StreamelementsRepositoryImpl extends StreamelementsRepository {

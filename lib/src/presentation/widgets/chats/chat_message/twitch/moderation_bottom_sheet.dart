@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
+import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../../../../controllers/chat_view_controller.dart';
 
 class ModerationBottomSheet extends StatelessWidget {
   final ChatViewController controller;

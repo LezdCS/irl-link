@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:html/dom.dart';
-import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as parser;
+import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:irllink/src/core/utils/globals.dart' as globals;
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';

@@ -3,16 +3,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:irllink/src/core/utils/globals.dart' as globals;
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_song.dart';
+import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/events/streamelements_events.dart';
 import 'package:socket_io_client/socket_io_client.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
-
-import 'home_view_controller.dart';
 
 class StreamelementsViewController extends GetxController
     with GetTickerProviderStateMixin {

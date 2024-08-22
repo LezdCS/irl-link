@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/store_controller.dart';
-
-import '../../../controllers/settings_view_controller.dart';
 
 Widget inAppPurchaseDialog(
   BuildContext context,

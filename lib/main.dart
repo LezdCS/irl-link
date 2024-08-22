@@ -3,20 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:irllink/firebase_options.dart';
 import 'package:irllink/routes/app_pages.dart';
 import 'package:irllink/src/bindings/login_bindings.dart';
+import 'package:irllink/src/core/resources/app_translations.dart';
 import 'package:irllink/src/core/resources/themes.dart';
 import 'package:irllink/src/core/services/realtime_irl_task_handler.dart';
 import 'package:irllink/src/core/utils/crashlytics_talker_observer.dart';
+import 'package:irllink/src/core/utils/globals.dart' as globals;
 import 'package:irllink/src/presentation/views/login_view.dart';
 import 'package:kick_chat/kick_chat.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
-import 'firebase_options.dart';
-import 'src/core/resources/app_translations.dart';
-import 'src/core/utils/globals.dart' as globals;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

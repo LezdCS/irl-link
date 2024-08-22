@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../controllers/twitch_tab_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 
 Widget slowModeDialog(
   BuildContext context,

@@ -2,9 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
+import 'package:irllink/src/presentation/widgets/alert_message_view.dart';
 import 'package:obs_websocket/obs_websocket.dart';
-
-import '../alert_message_view.dart';
 
 class ObsTabView extends GetView<ObsTabViewController> {
   const ObsTabView({super.key});

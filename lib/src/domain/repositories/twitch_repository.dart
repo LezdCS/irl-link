@@ -2,11 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
 import 'package:twitch_chat/twitch_chat.dart';
-
-import '../entities/twitch/twitch_poll.dart';
 
 abstract class TwitchRepository {
   Future<DataState<TwitchCredentials>> getTwitchOauth(

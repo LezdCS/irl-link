@@ -1,14 +1,13 @@
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_credentials.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_song.dart';
+import 'package:irllink/src/domain/usecases/settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements_usecase.dart';
-
-import '../../domain/entities/settings.dart';
-import '../../domain/usecases/settings_usecase.dart';
 
 class StreamelementsEvents {
   final StreamelementsUseCase streamelementsUseCase;

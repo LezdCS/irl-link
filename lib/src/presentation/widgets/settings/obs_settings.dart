@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-
-import '../../controllers/settings_view_controller.dart';
 
 class ObsSettings extends StatelessWidget {
   final SettingsViewController controller;

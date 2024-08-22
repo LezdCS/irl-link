@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../../domain/entities/twitch/twitch_prediction.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 
 class TwitchPredictionDTO extends TwitchPrediction {
   const TwitchPredictionDTO({

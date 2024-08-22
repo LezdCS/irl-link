@@ -27,7 +27,6 @@
   "ignored_users": "Ignored users",
   "ignored_users_details": "Users that will not be read aloud.",
   "user_said_message": "@authorName said @message",
-
   "offline": "Offline",
   "live": "Live",
   "viewers": "viewers",
@@ -38,9 +37,7 @@
   "subscriber_only": "Subscriber only",
   "emote_only": "Emote only",
   "slow_mode": "Slow mode",
-
   "send_message": "Send a message",
-
   "start_stream": "Start stream",
   "stop_stream": "Stop stream",
   "start_recording": "Start recording",
@@ -48,7 +45,6 @@
   "preview_scene": "Preview scene",
   "scenes": "Scenes",
   "sources": "Sources (long press for details)",
-
   "return": "Return",
   "cancel": "Cancel",
   "close": "Close",

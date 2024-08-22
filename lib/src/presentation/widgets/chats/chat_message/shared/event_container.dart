@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
-
-import 'message_row.dart';
+import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/message_row.dart';
 
 class EventContainer extends StatelessWidget {
   final ChatMessage message;

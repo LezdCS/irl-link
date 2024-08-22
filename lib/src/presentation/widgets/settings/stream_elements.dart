@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
+import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import '../../controllers/settings_view_controller.dart';
 
 class StreamElements extends GetView {
   const StreamElements({

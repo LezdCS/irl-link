@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../controllers/settings_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 
 class RealtimeIrl extends GetView {
   const RealtimeIrl({

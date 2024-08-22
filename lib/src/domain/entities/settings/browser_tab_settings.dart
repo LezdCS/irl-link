@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-
 class BrowserTabSettings extends Equatable {
   final List<BrowserTab> tabs;
 

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/chat/chat_badge.dart';
@@ -7,14 +7,13 @@ import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/kick/kick_emote.dart';
+import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/author_name.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/third_part_emote.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/timestamp.dart';
-import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/author_name.dart';
-import 'package:irllink/src/presentation/widgets/chats/chat_message/twitch/twitch_emote.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/word.dart';
+import 'package:irllink/src/presentation/widgets/chats/chat_message/twitch/cheer_emote.dart';
+import 'package:irllink/src/presentation/widgets/chats/chat_message/twitch/twitch_emote.dart';
 import 'package:twitch_chat/twitch_chat.dart';
-
-import '../twitch/cheer_emote.dart';
 
 class MessageRow extends StatelessWidget {
   final entity.ChatMessage message;

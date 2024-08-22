@@ -4,14 +4,13 @@ import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/store_controller.dart';
 import 'package:irllink/src/presentation/controllers/tts_controller.dart';
 import 'package:irllink/src/presentation/events/settings_events.dart';
 import 'package:irllink/src/presentation/events/streamelements_events.dart';
 import 'package:uuid/uuid.dart';
-
-import '../../domain/entities/twitch/twitch_user.dart';
 
 class SettingsViewController extends GetxController {
   SettingsViewController(
