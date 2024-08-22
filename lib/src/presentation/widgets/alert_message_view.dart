@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
 
-class AlertMessageView extends GetView {
+class AlertMessageView extends StatelessWidget {
   final Color color;
   final String message;
   final bool isProgress;

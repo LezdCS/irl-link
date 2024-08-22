@@ -7,13 +7,9 @@ import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
 // import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 
-class SeActivitiesList extends GetView {
-  @override
-  final StreamelementsViewController controller;
-
+class SeActivitiesList extends GetView<StreamelementsViewController> {
   const SeActivitiesList({
     super.key,
-    required this.controller,
   });
 
   @override

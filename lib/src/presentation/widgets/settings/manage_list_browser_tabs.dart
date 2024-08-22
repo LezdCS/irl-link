@@ -7,14 +7,10 @@ import 'dart:io';
 
 import '../../controllers/settings_view_controller.dart';
 
-class ManageListBrowserTabs extends GetView {
+class ManageListBrowserTabs extends GetView<SettingsViewController> {
   const ManageListBrowserTabs({
     super.key,
-    required this.controller,
   });
-
-  @override
-  final SettingsViewController controller;
 
   @override
   Widget build(BuildContext context) {

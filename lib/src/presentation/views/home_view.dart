@@ -172,12 +172,12 @@ class HomeView extends GetView<HomeViewController> {
           ),
           Visibility(
             visible: controller.isPickingEmote.value,
-            child: Positioned(
+            child: const Positioned(
               bottom: 50,
               top: 50,
               left: 10,
               right: 150,
-              child: EmotePickerView(homeViewController: controller),
+              child: EmotePickerView(),
             ),
           ),
           Positioned(

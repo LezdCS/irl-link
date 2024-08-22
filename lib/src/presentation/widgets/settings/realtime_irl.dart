@@ -4,14 +4,10 @@ import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import '../../controllers/settings_view_controller.dart';
 
-class RealtimeIrl extends GetView {
+class RealtimeIrl extends GetView<SettingsViewController> {
   const RealtimeIrl({
     super.key,
-    required this.controller,
   });
-
-  @override
-  final SettingsViewController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +41,8 @@ class RealtimeIrl extends GetView {
                   controller: controller.rtIrlInputController,
                   obscureText: !controller.rtIrlKeyShow.value,
                   onChanged: (value) {
-                    Get.find<SettingsService>().settings.value = settings.copyWith(
+                    Get.find<SettingsService>().settings.value =
+                        settings.copyWith(
                       rtIrlPushKey: value,
                     );
                     Get.find<SettingsService>().saveSettings();

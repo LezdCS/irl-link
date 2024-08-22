@@ -7,14 +7,10 @@ import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../controllers/settings_view_controller.dart';
 
-class StreamElements extends GetView {
+class StreamElements extends GetView<SettingsViewController> {
   const StreamElements({
     super.key,
-    required this.controller,
   });
-
-  @override
-  final SettingsViewController controller;
 
   @override
   Widget build(BuildContext context) {

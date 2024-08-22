@@ -8,13 +8,10 @@ import 'package:irllink/src/presentation/controllers/streamelements_view_control
 import 'package:irllink/src/presentation/widgets/web_page_view.dart';
 import 'package:uuid/uuid.dart';
 
-class SeOverlays extends GetView {
-  @override
-  final StreamelementsViewController controller;
+class SeOverlays extends GetView<StreamelementsViewController> {
 
   const SeOverlays({
     super.key,
-    required this.controller,
   });
 
   @override

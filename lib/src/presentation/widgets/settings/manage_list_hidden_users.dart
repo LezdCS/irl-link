@@ -5,14 +5,10 @@ import 'package:irllink/src/domain/entities/settings.dart';
 
 import '../../controllers/settings_view_controller.dart';
 
-class ManageListHiddenUsers extends GetView {
+class ManageListHiddenUsers extends GetView<SettingsViewController> {
   const ManageListHiddenUsers({
     super.key,
-    required this.controller,
   });
-
-  @override
-  final SettingsViewController controller;
 
   @override
   Widget build(BuildContext context) {
