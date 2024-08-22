@@ -14,162 +14,172 @@ class ManageListBrowserTabs extends GetView<SettingsViewController> {
 
   @override
   Widget build(BuildContext context) {
-    Settings settings = Get.find<SettingsService>().settings.value;
-
     return Obx(
-      () => Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Theme.of(context).textTheme.bodyLarge!.color,
-            ),
-            onPressed: () => Get.back(),
-          ),
-          actions: controller.browserTabsSelected.isNotEmpty
-              ? [
-                  IconButton(
-                    icon: const Icon(
-                      Icons.delete,
-                      color: Colors.red,
-                    ),
-                    onPressed: () {
-                      for (var tab in controller.browserTabsSelected) {
-                        controller.removeBrowserTab(tab);
-                      }
-                      controller.browserTabsSelected.value = [];
-                    },
-                  )
-                ]
-              : const [],
-          title: const Text(
-            "Manage browser tabs",
-          ),
-        ),
-        body: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-          ),
-          child: Column(
-            children: [
-              Container(
-                child: settings.browserTabs!.tabs.isEmpty
-                    ? Container(
-                        padding: const EdgeInsets.only(top: 20),
-                        child: const Text(
-                          "Nothing in the list!",
-                        ),
-                      )
-                    : ReorderableListView.builder(
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.only(
-                            top: 8, left: 18, right: 18, bottom: 8),
-                        itemCount: settings.browserTabs!.tabs.length,
-                        onReorder: (int oldIndex, int newIndex) {
-                          if (newIndex > oldIndex) {
-                            newIndex -= 1;
-                          }
-                          final element =
-                              settings.browserTabs!.tabs.removeAt(oldIndex);
-                          settings.browserTabs!.tabs.insert(newIndex, element);
-                          Get.find<SettingsService>().saveSettings();
-                        },
-                        itemBuilder: (BuildContext context, int index) {
-                          BrowserTab elem = settings.browserTabs!.tabs[index];
-                          return Container(
-                            key: ValueKey(settings.browserTabs!.tabs[index]),
-                            color: controller.browserTabsSelected.contains(elem)
-                                ? Colors.red[800]
-                                : Theme.of(context).colorScheme.secondary,
-                            margin: const EdgeInsets.only(bottom: 8),
-                            child: ListTile(
-                              title: Text(
-                                elem.title,
-                              ),
-                              trailing: !controller.browserTabsSelected
-                                      .contains(elem)
-                                  ? Wrap(
-                                      children: [
-                                        InkWell(
-                                          child: const Icon(
-                                            Icons.edit,
-                                            color: Colors.orange,
-                                            size: 22,
-                                          ),
-                                          onTap: () {
-                                            Get.defaultDialog(
-                                              content: _editDialog(
-                                                context,
-                                                controller,
-                                                elem,
-                                              ),
-                                              title: 'Edit',
-                                              textCancel: "cancel".tr,
-                                              textConfirm: "confirm".tr,
-                                              backgroundColor: Theme.of(context)
-                                                  .colorScheme
-                                                  .surface,
-                                              buttonColor:
-                                                  const Color(0xFF9147ff),
-                                              cancelTextColor:
-                                                  const Color(0xFF9147ff),
-                                              confirmTextColor: Colors.white,
-                                              radius: 10,
-                                              onConfirm: () {
-                                                controller.editBrowserTab(elem);
-                                              },
-                                            );
-                                          },
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        InkWell(
-                                          onTap: () => {
-                                            Get.defaultDialog(
-                                              content: Container(),
-                                              title: 'Delete',
-                                              textCancel: "cancel".tr,
-                                              textConfirm: "confirm".tr,
-                                              backgroundColor: Theme.of(context)
-                                                  .colorScheme
-                                                  .surface,
-                                              buttonColor:
-                                                  const Color(0xFF9147ff),
-                                              cancelTextColor:
-                                                  const Color(0xFF9147ff),
-                                              confirmTextColor: Colors.white,
-                                              radius: 10,
-                                              onConfirm: () {
-                                                controller
-                                                    .removeBrowserTab(elem);
-                                              },
-                                            )
-                                          },
-                                          child: const Icon(Icons.close),
-                                        ),
-                                      ],
-                                    )
-                                  : null,
-                              selected: false,
-                              iconColor: Colors.red[800],
-                              onTap: () => {
-                                if (controller.browserTabsSelected
-                                    .contains(elem))
-                                  {controller.browserTabsSelected.remove(elem)}
-                                else
-                                  {controller.browserTabsSelected.add(elem)}
-                              },
-                            ),
-                          );
-                        },
-                      ),
+      () {
+        Settings settings = Get.find<SettingsService>().settings.value;
+
+        return Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: Theme.of(context).textTheme.bodyLarge!.color,
               ),
-              _addGroupButton(context, controller),
-            ],
+              onPressed: () => Get.back(),
+            ),
+            actions: controller.browserTabsSelected.isNotEmpty
+                ? [
+                    IconButton(
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
+                      onPressed: () {
+                        for (var tab in controller.browserTabsSelected) {
+                          controller.removeBrowserTab(tab);
+                        }
+                        controller.browserTabsSelected.value = [];
+                      },
+                    )
+                  ]
+                : const [],
+            title: const Text(
+              "Manage browser tabs",
+            ),
           ),
-        ),
-      ),
+          body: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+            ),
+            child: Column(
+              children: [
+                Container(
+                  child: settings.browserTabs!.tabs.isEmpty
+                      ? Container(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: const Text(
+                            "Nothing in the list!",
+                          ),
+                        )
+                      : ReorderableListView.builder(
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.only(
+                              top: 8, left: 18, right: 18, bottom: 8),
+                          itemCount: settings.browserTabs!.tabs.length,
+                          onReorder: (int oldIndex, int newIndex) {
+                            if (newIndex > oldIndex) {
+                              newIndex -= 1;
+                            }
+                            final element =
+                                settings.browserTabs!.tabs.removeAt(oldIndex);
+                            settings.browserTabs!.tabs
+                                .insert(newIndex, element);
+                            Get.find<SettingsService>().saveSettings();
+                          },
+                          itemBuilder: (BuildContext context, int index) {
+                            BrowserTab elem = settings.browserTabs!.tabs[index];
+                            return Container(
+                              key: ValueKey(settings.browserTabs!.tabs[index]),
+                              color:
+                                  controller.browserTabsSelected.contains(elem)
+                                      ? Colors.red[800]
+                                      : Theme.of(context).colorScheme.secondary,
+                              margin: const EdgeInsets.only(bottom: 8),
+                              child: ListTile(
+                                title: Text(
+                                  elem.title,
+                                ),
+                                trailing: !controller.browserTabsSelected
+                                        .contains(elem)
+                                    ? Wrap(
+                                        children: [
+                                          InkWell(
+                                            child: const Icon(
+                                              Icons.edit,
+                                              color: Colors.orange,
+                                              size: 22,
+                                            ),
+                                            onTap: () {
+                                              Get.defaultDialog(
+                                                content: _editDialog(
+                                                  context,
+                                                  controller,
+                                                  elem,
+                                                ),
+                                                title: 'Edit',
+                                                textCancel: "cancel".tr,
+                                                textConfirm: "confirm".tr,
+                                                backgroundColor:
+                                                    Theme.of(context)
+                                                        .colorScheme
+                                                        .surface,
+                                                buttonColor:
+                                                    const Color(0xFF9147ff),
+                                                cancelTextColor:
+                                                    const Color(0xFF9147ff),
+                                                confirmTextColor: Colors.white,
+                                                radius: 10,
+                                                onConfirm: () {
+                                                  controller
+                                                      .editBrowserTab(elem);
+                                                },
+                                              );
+                                            },
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          InkWell(
+                                            onTap: () => {
+                                              Get.defaultDialog(
+                                                content: Container(),
+                                                title: 'Delete',
+                                                textCancel: "cancel".tr,
+                                                textConfirm: "confirm".tr,
+                                                backgroundColor:
+                                                    Theme.of(context)
+                                                        .colorScheme
+                                                        .surface,
+                                                buttonColor:
+                                                    const Color(0xFF9147ff),
+                                                cancelTextColor:
+                                                    const Color(0xFF9147ff),
+                                                confirmTextColor: Colors.white,
+                                                radius: 10,
+                                                onConfirm: () {
+                                                  controller
+                                                      .removeBrowserTab(elem);
+                                                },
+                                              )
+                                            },
+                                            child: const Icon(Icons.close),
+                                          ),
+                                        ],
+                                      )
+                                    : null,
+                                selected: false,
+                                iconColor: Colors.red[800],
+                                onTap: () => {
+                                  if (controller.browserTabsSelected
+                                      .contains(elem))
+                                    {
+                                      controller.browserTabsSelected
+                                          .remove(elem)
+                                    }
+                                  else
+                                    {controller.browserTabsSelected.add(elem)}
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                ),
+                _addGroupButton(context, controller),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
