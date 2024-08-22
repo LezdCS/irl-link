@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:obs_websocket/obs_websocket.dart';
@@ -59,7 +60,7 @@ class ObsTabViewController extends GetxController {
           url = 'ws://$url';
         }
       }
-      globals.talker?.info("Connecting to OBS at $url...");
+      globals.talker?.logTyped(ObsLog("Connecting to OBS at $url..."));
       obsWebSocket = await ObsWebSocket.connect(
         url,
         password: password,

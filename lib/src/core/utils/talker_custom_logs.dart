@@ -48,3 +48,16 @@ class StreamElementsLog extends TalkerLog {
   @override
   AnsiPen get pen => AnsiPen()..rgb(r: 0, g: 63, b: 222);
 }
+
+class ObsLog extends TalkerLog {
+  ObsLog(String super.message);
+
+  /// Your custom log title
+  @override
+  String get title => 'OBS 💻';
+
+  /// Your custom log color
+  @override
+  AnsiPen get pen => AnsiPen()..rgb(r: 51, g: 102, b: 204);
+}
+
