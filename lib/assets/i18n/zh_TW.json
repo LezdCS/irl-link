@@ -27,7 +27,6 @@
   "ignored_users": "被忽略的使用者",
   "ignored_users_details": "不會被朗讀的使用者。",
   "user_said_message": "@authorName 說 @message",
-
   "offline": "離線",
   "live": "直播中",
   "viewers": "個觀眾",
@@ -38,9 +37,7 @@
   "subscriber_only": "僅限訂閱者",
   "emote_only": "僅限表情符號",
   "slow_mode": "慢速模式",
-
   "send_message": "發送訊息",
-
   "start_stream": "開始直播",
   "stop_stream": "停止直播",
   "start_recording": "開始錄影",
@@ -48,7 +45,6 @@
   "preview_scene": "預覽場景",
   "scenes": "場景",
   "sources": "來源（長按以獲取詳細資訊）",
-
   "return": "返回",
   "cancel": "取消",
   "close": "關閉",
