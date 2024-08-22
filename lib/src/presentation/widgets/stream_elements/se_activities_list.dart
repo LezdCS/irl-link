@@ -24,23 +24,6 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
               _activitiesSettings(),
             ],
           ),
-          // Expanded(
-          //   child: Obx(
-          //     () => ListView.builder(
-          //       shrinkWrap: true,
-          //       itemCount: controller.overlays.length,
-          //       scrollDirection: Axis.horizontal,
-          //       itemBuilder: (BuildContext context, int index) {
-          //         SeOverlay overlay = controller
-          //             .overlays[controller.overlays.length - 1 - index];
-          //         return TextButton(
-          //           child: Text(overlay.name),
-          //           onPressed: () => {},
-          //         );
-          //       },
-          //     ),
-          //   ),
-          // ),
           Expanded(
             child: Obx(
               () => ListView.builder(
@@ -68,34 +51,35 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
   }
 
   Widget _activitiesSettings() {
-    return Obx(
-      () {
-        Settings settings = Get.find<SettingsService>().settings.value;
-
-        return PopupMenuButton(
-          offset: const Offset(30, 10),
-          color: Theme.of(Get.context!).colorScheme.secondary,
-          child: const Icon(Icons.settings),
-          itemBuilder: (context) => [
-            PopupMenuItem(
-              child: CheckboxListTile(
-                controlAffinity: ListTileControlAffinity.leading,
-                title: const Text(
-                  "Followers",
-                ),
-                value: settings.streamElementsSettings!.showFollowerActivity,
-                onChanged: (bool? value) {
-                  Get.find<SettingsService>().settings.value =
-                      settings.copyWith(
-                    streamElementsSettings: settings.streamElementsSettings!
-                        .copyWith(showFollowerActivity: value),
-                  );
-                  Get.find<SettingsService>().saveSettings();
-                },
+    return PopupMenuButton(
+      offset: const Offset(30, 10),
+      color: Theme.of(Get.context!).colorScheme.secondary,
+      child: const Icon(Icons.settings),
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          child: Obx(() {
+            Settings settings = Get.find<SettingsService>().settings.value;
+            return CheckboxListTile(
+              controlAffinity: ListTileControlAffinity.leading,
+              title: const Text(
+                "Followers",
               ),
-            ),
-            PopupMenuItem(
-              child: CheckboxListTile(
+              value: settings.streamElementsSettings!.showFollowerActivity,
+              onChanged: (bool? value) {
+                Get.find<SettingsService>().settings.value = settings.copyWith(
+                  streamElementsSettings: settings.streamElementsSettings!
+                      .copyWith(showFollowerActivity: value),
+                );
+                Get.find<SettingsService>().saveSettings();
+              },
+            );
+          }),
+        ),
+        PopupMenuItem(
+          child: Obx(
+            () {
+              Settings settings = Get.find<SettingsService>().settings.value;
+              return CheckboxListTile(
                 controlAffinity: ListTileControlAffinity.leading,
                 title: const Text(
                   "Subscriptions",
@@ -109,27 +93,34 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                   );
                   Get.find<SettingsService>().saveSettings();
                 },
+              );
+            },
+          ),
+        ),
+        PopupMenuItem(child: Obx(
+          () {
+            Settings settings = Get.find<SettingsService>().settings.value;
+            return CheckboxListTile(
+              controlAffinity: ListTileControlAffinity.leading,
+              title: const Text(
+                "Bits",
               ),
-            ),
-            PopupMenuItem(
-              child: CheckboxListTile(
-                controlAffinity: ListTileControlAffinity.leading,
-                title: const Text(
-                  "Bits",
-                ),
-                value: settings.streamElementsSettings!.showCheerActivity,
-                onChanged: (bool? value) {
-                  Get.find<SettingsService>().settings.value =
-                      settings.copyWith(
-                    streamElementsSettings: settings.streamElementsSettings!
-                        .copyWith(showCheerActivity: value),
-                  );
-                  Get.find<SettingsService>().saveSettings();
-                },
-              ),
-            ),
-            PopupMenuItem(
-              child: CheckboxListTile(
+              value: settings.streamElementsSettings!.showCheerActivity,
+              onChanged: (bool? value) {
+                Get.find<SettingsService>().settings.value = settings.copyWith(
+                  streamElementsSettings: settings.streamElementsSettings!
+                      .copyWith(showCheerActivity: value),
+                );
+                Get.find<SettingsService>().saveSettings();
+              },
+            );
+          },
+        )),
+        PopupMenuItem(
+          child: Obx(
+            () {
+              Settings settings = Get.find<SettingsService>().settings.value;
+              return CheckboxListTile(
                 controlAffinity: ListTileControlAffinity.leading,
                 title: const Text(
                   "Donations",
@@ -143,10 +134,15 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                   );
                   Get.find<SettingsService>().saveSettings();
                 },
-              ),
-            ),
-            PopupMenuItem(
-              child: CheckboxListTile(
+              );
+            },
+          ),
+        ),
+        PopupMenuItem(
+          child: Obx(
+            () {
+              Settings settings = Get.find<SettingsService>().settings.value;
+              return CheckboxListTile(
                 controlAffinity: ListTileControlAffinity.leading,
                 title: const Text(
                   "Raids",
@@ -160,10 +156,15 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                   );
                   Get.find<SettingsService>().saveSettings();
                 },
-              ),
-            ),
-            PopupMenuItem(
-              child: CheckboxListTile(
+              );
+            },
+          ),
+        ),
+        PopupMenuItem(
+          child: Obx(
+            () {
+              Settings settings = Get.find<SettingsService>().settings.value;
+              return CheckboxListTile(
                 controlAffinity: ListTileControlAffinity.leading,
                 title: const Text(
                   "Hosts",
@@ -177,11 +178,11 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                   );
                   Get.find<SettingsService>().saveSettings();
                 },
-              ),
-            ),
-          ],
-        );
-      },
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 
