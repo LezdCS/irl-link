@@ -27,7 +27,6 @@
   "ignored_users": "Utilisateurs ignorés",
   "ignored_users_details": "Les utilisateurs qui ne seront pas lus à haute voix.",
   "user_said_message": "@authorName a dit @message",
-
   "offline": "Hors-ligne",
   "live": "En direct",
   "viewers": "spectateurs",
@@ -38,9 +37,7 @@
   "subscriber_only": "Subscriber only",
   "emote_only": "Emote only",
   "slow_mode": "Slow mode",
-
   "send_message": "Envoyer un message",
-
   "start_stream": "Lancer le stream",
   "stop_stream": "Arrêter le stream",
   "start_recording": "Lancer l'enregistrement",
@@ -48,7 +45,6 @@
   "preview_scene": "Prévisualiser la scène",
   "scenes": "Scènes",
   "sources": "Sources (appuis long pour détails)",
-
   "return": "Retour",
   "cancel": "Annuler",
   "close": "Fermer",
