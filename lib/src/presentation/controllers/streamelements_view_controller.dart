@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_credentials.dart';
@@ -265,7 +266,9 @@ class StreamelementsViewController extends GetxController
   Future<void> onAuthenticated(data) async {
     isSocketConnected.value = true;
     // socket?.emit('subscribe', {"room": 'songrequest::611168252645244a6f16ab67'});
-    globals.talker?.info('StreamElements WebSocket authenticated.');
+    globals.talker?.logTyped(
+      StreamElementsLog('StreamElements WebSocket authenticated.'),
+    );
   }
 
   void onAddSongQueue(data) {
