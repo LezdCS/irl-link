@@ -11,7 +11,7 @@ import 'package:irllink/src/presentation/widgets/chats/chat_message/twitch/moder
 import 'package:twitch_chat/twitch_chat.dart' as twitch_chat;
 import '../alert_message_view.dart';
 
-class ChatView extends GetView {
+class ChatView extends GetView<ChatViewController> {
   const ChatView({
     super.key,
     required this.chatGroup,
@@ -20,16 +20,11 @@ class ChatView extends GetView {
   final ChatGroup chatGroup;
 
   @override
+  ChatViewController get controller =>
+      Get.find<ChatViewController>(tag: chatGroup.id);
+
+  @override
   Widget build(BuildContext context) {
-    ChatViewController? controller;
-    if (Get.isRegistered<ChatViewController>(tag: chatGroup.id)) {
-      controller = Get.find<ChatViewController>(tag: chatGroup.id);
-    }
-
-    if (controller == null) {
-      return Container();
-    }
-
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
 
@@ -46,9 +41,8 @@ class ChatView extends GetView {
         return Stack(children: [
           GestureDetector(
             onTap: () {
-              if (controller?.homeViewController.selectedMessage.value !=
-                  null) {
-                controller?.homeViewController.selectedMessage.value = null;
+              if (controller.homeViewController.selectedMessage.value != null) {
+                controller.homeViewController.selectedMessage.value = null;
               }
               FocusScope.of(context).unfocus();
             },
@@ -65,7 +59,7 @@ class ChatView extends GetView {
                 buttonColor: Theme.of(context).colorScheme.tertiary,
                 onConfirm: () {
                   for (twitch_chat.TwitchChat twitchChat
-                      in controller!.twitchChats) {
+                      in controller.twitchChats) {
                     twitchChat.close();
                     twitchChat.connect();
                   }
@@ -83,12 +77,12 @@ class ChatView extends GetView {
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
               ),
-              child: (controller?.chatMessages.length ?? 0) > 0
+              child: controller.chatMessages.isNotEmpty
                   ? ListView.builder(
-                      controller: controller?.scrollController,
-                      itemCount: controller?.chatMessages.length,
+                      controller: controller.scrollController,
+                      itemCount: controller.chatMessages.length,
                       itemBuilder: (BuildContext context, int index) {
-                        ChatMessage message = controller!.chatMessages[index];
+                        ChatMessage message = controller.chatMessages[index];
                         return Container(
                           padding: const EdgeInsets.only(top: 1, bottom: 1),
                           child: InkWell(
@@ -96,11 +90,11 @@ class ChatView extends GetView {
                               if (FocusScope.of(context).isFirstFocus) {
                                 FocusScope.of(context).unfocus();
                               }
-                              controller!.homeViewController.selectedMessage
+                              controller.homeViewController.selectedMessage
                                   .value = null;
                             },
                             onLongPress: () {
-                              controller!.homeViewController.selectedMessage
+                              controller.homeViewController.selectedMessage
                                   .value ??= message;
                             },
                             child: message.eventType != null
@@ -138,11 +132,11 @@ class ChatView extends GetView {
                         );
                       },
                     )
-                  : (controller?.chatGroup.channels.length ?? 0) > 0
+                  : controller.chatGroup.channels.isNotEmpty
                       ? Padding(
                           padding: const EdgeInsets.only(left: 8.0),
                           child: Text(
-                            "Welcome to ${controller?.chatGroup.channels.first.channel} chatroom!",
+                            "Welcome to ${controller.chatGroup.channels.first.channel} chatroom!",
                             style: const TextStyle(
                               color: Colors.grey,
                               fontSize: 13,
@@ -157,13 +151,13 @@ class ChatView extends GetView {
             left: 0,
             right: 0,
             child: Visibility(
-              visible: controller != null && !controller.isAutoScrolldown.value,
+              visible: !controller.isAutoScrolldown.value,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   InkWell(
                     onTap: () {
-                      controller!.scrollToBottom();
+                      controller.scrollToBottom();
                     },
                     child: Container(
                       padding: const EdgeInsets.only(left: 20, right: 20),
@@ -185,14 +179,14 @@ class ChatView extends GetView {
             right: 0,
             child: AnimatedSlide(
               offset:
-                  controller?.homeViewController.selectedMessage.value != null
+                  controller.homeViewController.selectedMessage.value != null
                       ? Offset.zero
                       : const Offset(0, 1),
               duration: const Duration(milliseconds: 200),
               child: Visibility(
-                visible: controller != null &&
+                visible:
                     controller.homeViewController.selectedMessage.value != null,
-                child: ModerationBottomSheet(controller: controller!),
+                child: ModerationBottomSheet(controller: controller),
               ),
             ),
           ),
