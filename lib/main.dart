@@ -50,7 +50,7 @@ void main() async {
   AppTranslations.initLanguages();
   FlutterForegroundTask.initCommunicationPort();
 
-  await Get.putAsync(
+  SettingsService settingsService = await Get.putAsync(
     () => SettingsService(
       settingsEvents: SettingsEvents(
         twitchUseCase: TwitchUseCase(
@@ -64,7 +64,13 @@ void main() async {
     permanent: true,
   );
   await Get.putAsync(() => StoreService().init(), permanent: true);
-  await Get.putAsync(() => TtsService().init(), permanent: true);
+  TtsService ttsService =
+      await Get.putAsync(() => TtsService().init(), permanent: true);
+
+  if (!settingsService.settings.value.generalSettings!.isDarkMode) {
+    Get.changeThemeMode(ThemeMode.light);
+  }
+  ttsService.initTts(settingsService.settings.value);
 
   runApp(Main(
     talker: talker,

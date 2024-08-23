@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
@@ -12,11 +11,6 @@ class SettingsService extends GetxService {
 
   Future<SettingsService> init() async {
     settings.value = await getSettings();
-
-    // DARK MODE
-    if (!settings.value.generalSettings!.isDarkMode) {
-      Get.changeThemeMode(ThemeMode.light);
-    }
     return this;
   }
 
