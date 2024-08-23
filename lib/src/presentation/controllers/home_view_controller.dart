@@ -437,11 +437,6 @@ class HomeViewController extends GetxController
 
       Get.find<TtsService>().initTts(settings);
 
-      // DARK MODE
-      if (!settings.generalSettings!.isDarkMode) {
-        Get.changeThemeMode(ThemeMode.light);
-      }
-
       // SPEAKER SETTING
       if (settings.generalSettings!.keepSpeakerOn) {
         const path = "../lib/assets/blank.mp3";

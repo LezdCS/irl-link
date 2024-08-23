@@ -1,10 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/events/settings_events.dart';
 
 class SettingsService extends GetxService {
-SettingsService({required this.settingsEvents});
+  SettingsService({required this.settingsEvents});
   final SettingsEvents settingsEvents;
 
   Rx<Settings> settings = const Settings.defaultSettings().obs;
@@ -20,6 +21,12 @@ SettingsService({required this.settingsEvents});
       return const Settings.defaultSettings();
     }
     settings.value = settingsResult.data!;
+
+    // DARK MODE
+    if (!settings.value.generalSettings!.isDarkMode) {
+      Get.changeThemeMode(ThemeMode.light);
+    }
+
     return settings.value;
   }
 

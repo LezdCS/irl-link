@@ -155,7 +155,6 @@ class ChatsJoined extends GetView<SettingsViewController> {
           settings.chatSettings?.chatGroups.remove(group);
           // Save the settings and refresh the UI
           Get.find<SettingsService>().saveSettings();
-          
         }
       },
       child: Container(
@@ -218,7 +217,6 @@ class ChatsJoined extends GetView<SettingsViewController> {
           group.channels.remove(channel);
           // Save the settings and refresh the UI
           Get.find<SettingsService>().saveSettings();
-          
         }
       },
       key: ValueKey(channel),
@@ -304,7 +302,6 @@ class ChatsJoined extends GetView<SettingsViewController> {
 
             // Save and close dialog
             Get.find<SettingsService>().saveSettings();
-            
 
             channelTextController.text = '';
             Get.back();
@@ -346,7 +343,6 @@ class ChatsJoined extends GetView<SettingsViewController> {
         settings.chatSettings?.chatGroups.add(newGroup);
 
         Get.find<SettingsService>().saveSettings();
-        
       },
       child: Container(
         padding:
@@ -411,6 +407,10 @@ class ChatsJoined extends GetView<SettingsViewController> {
                             Platform.values[index].name
                                 .toString()
                                 .toCapitalized(),
+                            style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyLarge!.color,
+                            ),
                           ),
                         ],
                       ),
