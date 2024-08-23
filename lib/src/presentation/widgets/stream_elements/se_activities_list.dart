@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
+import 'package:irllink/src/domain/entities/settings/stream_elements_settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
-// import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 
 class SeActivitiesList extends GetView<StreamelementsViewController> {
@@ -58,18 +58,22 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
       itemBuilder: (context) => [
         PopupMenuItem(
           child: Obx(() {
-            Settings settings = Get.find<SettingsService>().settings.value;
+            StreamElementsSettings? seSettings = Get.find<SettingsService>()
+                .settings
+                .value
+                .streamElementsSettings;
             return CheckboxListTile(
               controlAffinity: ListTileControlAffinity.leading,
               title: const Text(
                 "Followers",
               ),
-              value: settings.streamElementsSettings!.showFollowerActivity,
+              value: seSettings?.showFollowerActivity,
               onChanged: (bool? value) {
-                Get.find<SettingsService>().settings.value = settings.copyWith(
-                  streamElementsSettings: settings.streamElementsSettings!
-                      .copyWith(showFollowerActivity: value),
-                );
+                Get.find<SettingsService>().settings.value =
+                    Get.find<SettingsService>().settings.value.copyWith(
+                          streamElementsSettings:
+                              seSettings!.copyWith(showFollowerActivity: value),
+                        );
                 Get.find<SettingsService>().saveSettings();
               },
             );

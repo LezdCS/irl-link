@@ -40,8 +40,6 @@ class StreamelementsViewController extends GetxController
   RxList<SeOverlay> overlays = <SeOverlay>[].obs;
 
   Socket? socket;
-  late String? jwt;
-  late String? overlayToken;
 
   RxBool isSocketConnected = false.obs;
 
@@ -100,21 +98,22 @@ class StreamelementsViewController extends GetxController
   }
 
   Future<void> applySettings() async {
-    Settings settings = Get.find<SettingsService>().settings.value;
-
-    if (seCredentials.value == null) return;
-    jwt = settings.streamElementsSettings?.jwt;
-    overlayToken = settings.streamElementsSettings?.overlayToken;
     if (userSeProfile.value != null) {
-      handleGetMe(userSeProfile.value!);
+      handleGetMe();
     }
     if (!isSocketConnected.value) {
       connectWebsocket();
     }
   }
 
-  Future<void> handleGetMe(SeMe me) async {
-    userSeProfile.value = me;
+  Future<void> handleGetMe() async {
+    String? jwt =
+        Get.find<SettingsService>().settings.value.streamElementsSettings?.jwt;
+    SeMe? me = userSeProfile.value;
+    if (me == null) {
+      globals.talker?.error('User profile was not found.');
+      return;
+    }
     String? accessToken = seCredentials.value?.accessToken;
     if (accessToken == null) {
       globals.talker?.error('There is no accessToken to use for SE api calls.');
@@ -133,43 +132,44 @@ class StreamelementsViewController extends GetxController
 
     if (jwt != null) {
       DataState<List<SeSong>> songQueue =
-          await streamelementsEvents.getSongQueue(jwt!, me.id);
+          await streamelementsEvents.getSongQueue(jwt, me.id);
       if (songQueue is DataSuccess) {
         songRequestQueue.value = songQueue.data ?? [];
       }
     }
   }
 
-  void updatePlayerState(String state) {
-    if (userSeProfile.value == null || jwt == null) return;
+  void updatePlayerState(String state, String jwt) {
+    if (userSeProfile.value == null) return;
     streamelementsEvents.updatePlayerState(
-        jwt!, userSeProfile.value!.id, state);
+      jwt,
+      userSeProfile.value!.id,
+      state,
+    );
   }
 
-  void nextSong() {
-    if (userSeProfile.value == null || jwt == null) return;
-    streamelementsEvents.nextSong(jwt!, userSeProfile.value!.id);
+  void nextSong(String jwt) {
+    if (userSeProfile.value == null) return;
+    streamelementsEvents.nextSong(jwt, userSeProfile.value!.id);
   }
 
-  void removeSong(SeSong song) {
-    if (userSeProfile.value == null || jwt == null) return;
-    streamelementsEvents.removeSong(jwt!, userSeProfile.value!.id, song.id);
+  void removeSong(SeSong song, String jwt) {
+    if (userSeProfile.value == null) return;
+    streamelementsEvents.removeSong(jwt, userSeProfile.value!.id, song.id);
   }
 
-  void resetQueue() {
-    if (userSeProfile.value == null || jwt == null) return;
-    streamelementsEvents.resetQueue(jwt!, userSeProfile.value!.id);
+  void resetQueue(String jwt) {
+    if (userSeProfile.value == null) return;
+    streamelementsEvents.resetQueue(jwt, userSeProfile.value!.id);
   }
 
   /// Connect to WebSocket
   Future<void> connectWebsocket() async {
     socket = io(
-        'https://realtime.streamelements.com',
-        OptionBuilder().setTransports(['websocket'])
-            // .disableAutoConnect()
-            .build());
+      'https://realtime.streamelements.com',
+      OptionBuilder().setTransports(['websocket']).build(),
+    );
 
-    // socket!.connect();
     socket!.on('connect_error', (data) => onError());
     socket!.on('connect', (data) => onConnect());
     socket!.on('disconnect', (data) => onDisconnect());

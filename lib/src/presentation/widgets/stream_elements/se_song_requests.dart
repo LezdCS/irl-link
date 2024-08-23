@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_song.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 
 class SeSongRequests extends GetView<StreamelementsViewController> {
-
   const SeSongRequests({
     super.key,
   });
@@ -12,91 +12,105 @@ class SeSongRequests extends GetView<StreamelementsViewController> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Container(
-        margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
-        child: Column(
-          children: [
-            Visibility(
-              visible: controller.jwt != null,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Wrap(
-                    children: [
-                      // const Icon(Icons.skip_previous),
-                      InkWell(
-                        onTap: () {
-                          controller.updatePlayerState(
-                              controller.isPlaying.value ? 'pause' : 'play');
-                        },
-                        child: controller.isPlaying.value
-                            ? const Icon(Icons.pause)
-                            : const Icon(Icons.play_arrow_outlined),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          controller.nextSong();
-                        },
-                        child: const Icon(Icons.skip_next),
-                      ),
-                    ],
-                  ),
-                  InkWell(
-                    onTap: () {
-                      controller.resetQueue();
-                    },
-                    child: const Icon(Icons.delete),
-                  ),
-                ],
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.only(top: 10),
-            ),
-            const Text(
-              'Now Playing',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            controller.currentSong.value != null
-                ? _songRow(context, controller.currentSong.value!, false)
-                : const Text("No song playing."),
-            const Padding(
-              padding: EdgeInsets.only(bottom: 15),
-            ),
-            Text.rich(
-              overflow: TextOverflow.ellipsis,
-              TextSpan(children: [
-                const TextSpan(
-                  text: "Queue ",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
+      () {
+        String? jwt = Get.find<SettingsService>()
+            .settings
+            .value
+            .streamElementsSettings
+            ?.jwt;
+        return Container(
+          margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
+          child: Column(
+            children: [
+              Visibility(
+                visible: jwt != null,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Wrap(
+                      children: [
+                        // const Icon(Icons.skip_previous),
+                        InkWell(
+                          onTap: () {
+                            controller.updatePlayerState(
+                              controller.isPlaying.value ? 'pause' : 'play',
+                              jwt!,
+                            );
+                          },
+                          child: controller.isPlaying.value
+                              ? const Icon(Icons.pause)
+                              : const Icon(Icons.play_arrow_outlined),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            controller.nextSong(jwt!);
+                          },
+                          child: const Icon(Icons.skip_next),
+                        ),
+                      ],
+                    ),
+                    InkWell(
+                      onTap: () {
+                        controller.resetQueue(jwt!);
+                      },
+                      child: const Icon(Icons.delete),
+                    ),
+                  ],
                 ),
-                TextSpan(
-                  text: "(${controller.songRequestQueue.length} videos)",
-                ),
-              ]),
-            ),
-            Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                controller: controller.songRequestScrollController,
-                itemCount: controller.songRequestQueue.length,
-                itemBuilder: (BuildContext context, int index) {
-                  SeSong song = controller.songRequestQueue[index];
-                  return _songRow(context, song, true);
-                },
               ),
-            ),
-          ],
-        ),
-      ),
+              const Padding(
+                padding: EdgeInsets.only(top: 10),
+              ),
+              const Text(
+                'Now Playing',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              controller.currentSong.value != null
+                  ? _songRow(context, controller.currentSong.value!, false, jwt)
+                  : const Text("No song playing."),
+              const Padding(
+                padding: EdgeInsets.only(bottom: 15),
+              ),
+              Text.rich(
+                overflow: TextOverflow.ellipsis,
+                TextSpan(children: [
+                  const TextSpan(
+                    text: "Queue ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TextSpan(
+                    text: "(${controller.songRequestQueue.length} videos)",
+                  ),
+                ]),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  controller: controller.songRequestScrollController,
+                  itemCount: controller.songRequestQueue.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    SeSong song = controller.songRequestQueue[index];
+                    return _songRow(context, song, true, jwt);
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
-  Widget _songRow(BuildContext context, SeSong song, bool removable) {
+  Widget _songRow(
+    BuildContext context,
+    SeSong song,
+    bool removable,
+    String? jwt,
+  ) {
     return Container(
       padding: const EdgeInsets.only(left: 8, right: 8, top: 5, bottom: 5),
       decoration: BoxDecoration(
@@ -156,10 +170,10 @@ class SeSongRequests extends GetView<StreamelementsViewController> {
             ),
           ),
           Visibility(
-            visible: controller.jwt != null && removable,
+            visible: jwt != null && removable,
             child: InkWell(
               onTap: () {
-                controller.removeSong(song);
+                controller.removeSong(song, jwt!);
               },
               child: const Icon(
                 Icons.close,

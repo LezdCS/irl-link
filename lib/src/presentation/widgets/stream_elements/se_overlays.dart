@@ -9,7 +9,6 @@ import 'package:irllink/src/presentation/widgets/web_page_view.dart';
 import 'package:uuid/uuid.dart';
 
 class SeOverlays extends GetView<StreamelementsViewController> {
-
   const SeOverlays({
     super.key,
   });
@@ -40,12 +39,13 @@ Widget _overlayRow(StreamelementsViewController controller, SeOverlay overlay,
   String? overlayUrl;
   Widget? webpage;
   Settings settings = Get.find<SettingsService>().settings.value;
+  String? overlayToken = settings.streamElementsSettings?.overlayToken;
 
   bool isMuted =
       settings.streamElementsSettings!.mutedOverlays.contains(overlay.id);
-  if (controller.overlayToken != null && isMuted == false) {
+  if (overlayToken != null && isMuted == false) {
     overlayUrl =
-        'https://streamelements.com/overlay/${overlay.id}/${controller.overlayToken}';
+        'https://streamelements.com/overlay/${overlay.id}/$overlayToken';
     var uuid = const Uuid();
     BrowserTab tab = BrowserTab(
       id: uuid.v4(),
@@ -113,7 +113,7 @@ Widget _overlayRow(StreamelementsViewController controller, SeOverlay overlay,
             ),
           ],
         ),
-        controller.overlayToken != null
+        overlayToken != null
             ? SizedBox(width: 0, height: 0, child: webpage)
             : Container(),
       ],
