@@ -135,6 +135,9 @@ class Themes {
       textColor: Colors.white,
     ),
     checkboxTheme: CheckboxThemeData(
+      side: const BorderSide(
+        color: Colors.white,
+      ),
       checkColor: WidgetStateProperty.all(Colors.deepPurple[600]),
     ),
   );
@@ -273,6 +276,9 @@ class Themes {
       textColor: Colors.black,
     ),
     checkboxTheme: CheckboxThemeData(
+      side: const BorderSide(
+        color: Colors.black,
+      ),
       checkColor: WidgetStateProperty.all(Colors.deepPurple[600]),
     ),
   );
