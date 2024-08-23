@@ -12,6 +12,11 @@ class SettingsService extends GetxService {
 
   Future<SettingsService> init() async {
     settings.value = await getSettings();
+
+    // DARK MODE
+    if (!settings.value.generalSettings!.isDarkMode) {
+      Get.changeThemeMode(ThemeMode.light);
+    }
     return this;
   }
 
@@ -21,11 +26,6 @@ class SettingsService extends GetxService {
       return const Settings.defaultSettings();
     }
     settings.value = settingsResult.data!;
-
-    // DARK MODE
-    if (!settings.value.generalSettings!.isDarkMode) {
-      Get.changeThemeMode(ThemeMode.light);
-    }
 
     return settings.value;
   }
