@@ -1,11 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
-import 'dart:io';
-
-import '../../controllers/settings_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 
 class ManageListBrowserTabs extends GetView<SettingsViewController> {
   const ManageListBrowserTabs({
