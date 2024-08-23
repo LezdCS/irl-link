@@ -198,7 +198,7 @@ class HomeViewController extends GetxController
     // We also remove them if they got untoggled
     List audioSourcesToRemove = [];
     for (var tabElement in iOSAudioSources) {
-      BrowserTab? tabExist = settings.value.browserTabs!.tabs.firstWhereOrNull(
+      BrowserTab? tabExist = settings.browserTabs!.tabs.firstWhereOrNull(
           (settingsTab) => settingsTab.id == tabElement.tab.id);
       if (tabExist == null) {
         audioSourcesToRemove.add(tabElement);
