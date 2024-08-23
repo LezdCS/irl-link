@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/utils/string_casing_extension.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
+import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 
 import '../../controllers/settings_view_controller.dart';
@@ -15,11 +17,9 @@ class ChatsJoined extends GetView<SettingsViewController> {
     TextEditingController channelTextController = TextEditingController();
 
     return Obx(() {
-      List<ChatGroup> chatGroups = controller
-              .homeViewController.settings.value.chatSettings?.chatGroups ??
-          [];
-      ChatGroup firstGroup = controller
-          .homeViewController.settings.value.chatSettings!.permanentFirstGroup;
+      Settings settings = Get.find<SettingsService>().settings.value;
+      List<ChatGroup> chatGroups = settings.chatSettings?.chatGroups ?? [];
+      ChatGroup firstGroup = settings.chatSettings!.permanentFirstGroup;
       return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -92,10 +92,10 @@ class ChatsJoined extends GetView<SettingsViewController> {
                       },
                     ),
                     _addChannelToGroupButton(
-                        context,
-                        channelTextController,
-                        controller.homeViewController.settings.value
-                            .chatSettings!.permanentFirstGroup),
+                      context,
+                      channelTextController,
+                      settings.chatSettings!.permanentFirstGroup,
+                    ),
                   ],
                 ),
               ),
@@ -149,12 +149,13 @@ class ChatsJoined extends GetView<SettingsViewController> {
       onDismissed: (direction) {
         // If the user swipes to the left
         if (direction == DismissDirection.endToStart) {
+          Settings settings = Get.find<SettingsService>().settings.value;
+
           // Remove the group from the list of groups in the settings
-          controller.homeViewController.settings.value.chatSettings?.chatGroups
-              .remove(group);
+          settings.chatSettings?.chatGroups.remove(group);
           // Save the settings and refresh the UI
-          controller.saveSettings();
-          controller.homeViewController.settings.refresh();
+          Get.find<SettingsService>().saveSettings();
+          
         }
       },
       child: Container(
@@ -216,8 +217,8 @@ class ChatsJoined extends GetView<SettingsViewController> {
           // Remove the channel from the group
           group.channels.remove(channel);
           // Save the settings and refresh the UI
-          controller.saveSettings();
-          controller.homeViewController.settings.refresh();
+          Get.find<SettingsService>().saveSettings();
+          
         }
       },
       key: ValueKey(channel),
@@ -251,6 +252,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
     ChatGroup chatGroup,
   ) {
     Rx<Platform?> selectedPlatform = Platform.values.first.obs;
+    Settings settings = Get.find<SettingsService>().settings.value;
 
     return InkWell(
       onTap: () {
@@ -280,34 +282,30 @@ class ChatsJoined extends GetView<SettingsViewController> {
             chatGroup = chatGroup.copyWith(channels: channels);
 
             if (chatGroup.id == 'permanentFirstGroup') {
-              controller.homeViewController.settings.value =
-                  controller.homeViewController.settings.value.copyWith(
-                chatSettings: controller
-                    .homeViewController.settings.value.chatSettings
+              Get.find<SettingsService>().settings.value = settings.copyWith(
+                chatSettings: settings.chatSettings
                     ?.copyWith(permanentFirstGroup: chatGroup),
               );
             } else {
               // Replace the group in the list
               List<ChatGroup>? groups = [];
-              groups.addAll(controller.homeViewController.settings.value
-                      .chatSettings?.chatGroups ??
-                  []);
+              groups.addAll(settings.chatSettings?.chatGroups ?? []);
               int indexToReplace =
                   groups.indexWhere((g) => g.id == chatGroup.id);
               groups.removeAt(indexToReplace);
               groups.insert(indexToReplace, chatGroup);
 
               // Update the settings
-              controller.homeViewController.settings.value =
-                  controller.homeViewController.settings.value.copyWith(
-                chatSettings: controller
-                    .homeViewController.settings.value.chatSettings
-                    ?.copyWith(chatGroups: groups),
+              Get.find<SettingsService>().settings.value = settings.copyWith(
+                chatSettings:
+                    settings.chatSettings?.copyWith(chatGroups: groups),
               );
             }
 
             // Save and close dialog
-            controller.saveSettings();
+            Get.find<SettingsService>().saveSettings();
+            
+
             channelTextController.text = '';
             Get.back();
           },
@@ -344,12 +342,11 @@ class ChatsJoined extends GetView<SettingsViewController> {
           id: uuid.v4(),
           channels: const [],
         );
+        Settings settings = Get.find<SettingsService>().settings.value;
+        settings.chatSettings?.chatGroups.add(newGroup);
 
-        controller.homeViewController.settings.value.chatSettings?.chatGroups
-            .add(newGroup);
-
-        controller.saveSettings();
-        controller.homeViewController.settings.refresh();
+        Get.find<SettingsService>().saveSettings();
+        
       },
       child: Container(
         padding:

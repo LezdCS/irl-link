@@ -11,7 +11,7 @@ import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/core/utils/globals.dart' as globals;
 
-class StoreController extends GetxController {
+class StoreService extends GetxService {
   late StreamSubscription<List<PurchaseDetails>> subscription;
   List<ProductDetails> products = [];
   RxBool purchasePending = false.obs;
@@ -20,12 +20,11 @@ class StoreController extends GetxController {
 
   Set<String> kIds = <String>{'irl_premium_subscription'};
 
-  @override
-  Future<void> onInit() async {
+  Future<StoreService> init() async {
     await getStore();
     await getStoreProducts();
     initListeningStorePurchase();
-    super.onInit();
+    return this;
   }
 
   //Function isSubscribed
@@ -150,7 +149,7 @@ class StoreController extends GetxController {
   Future<void> deliverProduct(PurchaseDetails purchaseDetails) async {
     purchases.add(purchaseDetails);
     purchasePending.value = false;
-    Get.find<HomeViewController>().getSettings();
+    Get.find<HomeViewController>().applySettings();
 
     if (purchaseDetails.status == PurchaseStatus.purchased) {
       Get.back();

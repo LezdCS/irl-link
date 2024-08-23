@@ -1,21 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../controllers/settings_view_controller.dart';
 
-class StreamElements extends GetView {
+class StreamElements extends GetView<SettingsViewController> {
   const StreamElements({
     super.key,
-    required this.controller,
   });
 
   @override
-  final SettingsViewController controller;
-
-  @override
   Widget build(BuildContext context) {
+    Settings settings = Get.find<SettingsService>().settings.value;
+
     return Column(
       children: [
         Row(
@@ -64,15 +64,29 @@ class StreamElements extends GetView {
           child: Obx(
             () => Column(
               children: [
-                controller.homeViewController.seCredentials.value != null &&
-                        controller.homeViewController.seMe.value != null
+                controller.homeViewController.streamelementsViewController
+                            .value !=
+                        null
                     ? Column(
                         children: [
-                          _profile(
-                            controller.homeViewController.seMe.value!,
-                          ),
+                          controller
+                                      .homeViewController
+                                      .streamelementsViewController
+                                      .value!
+                                      .userSeProfile
+                                      .value !=
+                                  null
+                              ? _profile(
+                                  controller
+                                      .homeViewController
+                                      .streamelementsViewController
+                                      .value!
+                                      .userSeProfile
+                                      .value!,
+                                )
+                              : Container(),
                           const SizedBox(
-                            height: 8,
+                            height: 12,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -83,19 +97,12 @@ class StreamElements extends GetView {
                                   controller: controller.seJwtInputController,
                                   obscureText: !controller.seJwtShow.value,
                                   onChanged: (value) {
-                                    controller
-                                            .homeViewController.settings.value =
-                                        controller
-                                            .homeViewController.settings.value
-                                            .copyWith(
-                                      streamElementsSettings: controller
-                                          .homeViewController
-                                          .settings
-                                          .value
+                                    Get.find<SettingsService>().settings.value = settings.copyWith(
+                                      streamElementsSettings: settings
                                           .streamElementsSettings!
                                           .copyWith(jwt: value),
                                     );
-                                    controller.saveSettings();
+                                    Get.find<SettingsService>().saveSettings();
                                   },
                                   decoration: InputDecoration(
                                     isDense: true,
@@ -140,19 +147,12 @@ class StreamElements extends GetView {
                                   obscureText:
                                       !controller.seOverlayTokenShow.value,
                                   onChanged: (value) {
-                                    controller
-                                            .homeViewController.settings.value =
-                                        controller
-                                            .homeViewController.settings.value
-                                            .copyWith(
-                                      streamElementsSettings: controller
-                                          .homeViewController
-                                          .settings
-                                          .value
+                                    Get.find<SettingsService>().settings.value = settings.copyWith(
+                                      streamElementsSettings: settings
                                           .streamElementsSettings!
                                           .copyWith(overlayToken: value),
                                     );
-                                    controller.saveSettings();
+                                    Get.find<SettingsService>().saveSettings();
                                   },
                                   decoration: InputDecoration(
                                     isDense: true,
@@ -262,7 +262,7 @@ class StreamElements extends GetView {
       children: [
         CircleAvatar(
           foregroundImage: NetworkImage(me.avatar),
-          radius: 20,
+          radius: 18,
         ),
         const SizedBox(
           width: 8,

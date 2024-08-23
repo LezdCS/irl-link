@@ -13,7 +13,7 @@ Dio initDio() {
         requestFilter: (RequestOptions options) =>
             !options.path.contains('api.twitch.tv'),
         printRequestHeaders: true,
-        // responseFilter: (response) => ![200, 202].contains(response.statusCode),
+        responseFilter: (response) => ![200, 202].contains(response.statusCode),
       ),
     ),
   );

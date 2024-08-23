@@ -78,28 +78,29 @@ class MessageRow extends StatelessWidget {
           ),
           for (ChatBadge badge in badges)
             Container(
-                padding: const EdgeInsets.only(right: 4, top: 3),
-                child: Uri.parse(badge.imageUrl1x).isAbsolute
-                    ? Image(
-                        width: 18,
-                        height: 18,
-                        image: NetworkImage(badge.imageUrl1x),
-                        filterQuality: FilterQuality.high,
-                      )
-                    : badge.imageUrl1x.endsWith('.svg')
-                        ? SvgPicture.asset(
+              padding: const EdgeInsets.only(right: 4, top: 3),
+              child: Uri.parse(badge.imageUrl1x).isAbsolute
+                  ? Image(
+                      width: 18,
+                      height: 18,
+                      image: NetworkImage(badge.imageUrl1x),
+                      filterQuality: FilterQuality.high,
+                    )
+                  : badge.imageUrl1x.endsWith('.svg')
+                      ? SvgPicture.asset(
+                          badge.imageUrl1x,
+                          width: 18,
+                          height: 18,
+                        )
+                      : Image(
+                          width: 18,
+                          height: 18,
+                          image: AssetImage(
                             badge.imageUrl1x,
-                            width: 18,
-                            height: 18,
-                          )
-                        : Image(
-                            width: 18,
-                            height: 18,
-                            image: AssetImage(
-                              badge.imageUrl1x,
-                            ),
-                            filterQuality: FilterQuality.high,
-                          )),
+                          ),
+                          filterQuality: FilterQuality.high,
+                        ),
+            ),
           AuthorName(
             isAction: message.isAction,
             username: message.username,

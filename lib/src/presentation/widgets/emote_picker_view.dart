@@ -5,18 +5,15 @@ import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 
-class EmotePickerView extends GetView {
-  final HomeViewController homeViewController;
-
+class EmotePickerView extends GetView<HomeViewController> {
   const EmotePickerView({
     super.key,
-    required this.homeViewController,
   });
 
   @override
   Widget build(BuildContext context) {
     ChatViewController? chatController = Get.find<ChatViewController>(
-      tag: homeViewController.selectedChatGroup.value?.id,
+      tag: controller.selectedChatGroup.value?.id,
     );
 
     List<Emote> globalEmotes = chatController.twitchChats[0].globalEmotes;
@@ -68,16 +65,16 @@ class EmotePickerView extends GetView {
       ),
     ];
 
-    homeViewController.emotesTabController =
-        TabController(length: tabs.length, vsync: homeViewController);
+    controller.emotesTabController =
+        TabController(length: tabs.length, vsync: controller);
 
     return TabBar(
       isScrollable: true,
       labelPadding: const EdgeInsets.symmetric(horizontal: 10),
       tabAlignment: TabAlignment.start,
-      controller: homeViewController.emotesTabController,
+      controller: controller.emotesTabController,
       onTap: (index) {
-        homeViewController.emotesTabIndex.value = index;
+        controller.emotesTabIndex.value = index;
       },
       tabs: tabs,
     );
@@ -90,7 +87,7 @@ class EmotePickerView extends GetView {
         color: Theme.of(context).colorScheme.surface,
         child: Obx(
           () => IndexedStack(
-            index: homeViewController.emotesTabIndex.value,
+            index: controller.emotesTabIndex.value,
             children: [
               Container(
                 padding: const EdgeInsets.only(left: 5, right: 5),
@@ -144,10 +141,10 @@ class EmotePickerView extends GetView {
   Widget _emote(Emote emote) {
     return InkWell(
       onTap: () {
-        String text = homeViewController.chatInputController.text;
+        String text = controller.chatInputController.text;
         bool isLastCharSpace =
             text.isNotEmpty ? text[text.length - 1] == " " : false;
-        homeViewController.chatInputController.text =
+        controller.chatInputController.text =
             "$text${isLastCharSpace ? "" : " "}${emote.name} ";
       },
       child: FadeInImage.memoryNetwork(

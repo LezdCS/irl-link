@@ -9,6 +9,7 @@ import 'package:irllink/src/core/params/streamelements_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/init_dio.dart';
+import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_activity_dto.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_credentials_dto.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_me_dto.dart';
@@ -44,7 +45,9 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       String refreshToken = Uri.parse(result).queryParameters['refresh_token']!;
       int expiresIn =
           int.parse(Uri.parse(result).queryParameters['expires_in']!);
-      globals.talker?.info('StreamElements login successful');
+      globals.talker?.logTyped(
+        StreamElementsLog('StreamElements login successful.'),
+      );
 
       DataState tokenInfos = await validateToken(accessToken);
       final String scopes = tokenInfos.data['scopes'].join(' ');
@@ -85,6 +88,9 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
         queryParameters: {'refresh_token': seCredentials.refreshToken},
       );
 
+      globals.talker?.logTyped(
+        StreamElementsLog('StreamElements token refreshed.'));
+
       SeCredentials newSeCredentials = SeCredentials(
         accessToken: response.data['access_token'],
         refreshToken: response.data['refresh_token'],
@@ -103,11 +109,10 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
 
   Future<void> storeCredentials(SeCredentials seCredentials) async {
     GetStorage box = GetStorage();
-    globals.talker?.info('Encoding SE credentials into a String');
     String jsonData = jsonEncode(seCredentials);
-    globals.talker?.info('Successfully encoded SE creds: $jsonData');
     await box.write('seCredentials', jsonData);
-    globals.talker?.info('SE creds saved in local');
+    globals.talker?.logTyped(
+        StreamElementsLog('StreamElements credentials saved in local.'));
   }
 
   Future<DataState<dynamic>> validateToken(String accessToken) async {
@@ -117,12 +122,15 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       dio.options.headers["authorization"] = "OAuth $accessToken";
       response =
           await dio.get('https://api.streamelements.com/oauth2/validate');
-      globals.talker?.info('Token validated: ${response.data}');
+      globals.talker
+          ?.logTyped(StreamElementsLog('StreamElements token validated.'));
+
       return DataSuccess(response.data);
     } on DioException catch (e) {
       globals.talker?.error(e.message);
       return DataFailed(
-          "Unable to validate StreamElements token: ${e.message}");
+        "Unable to validate StreamElements token: ${e.message}",
+      );
     }
   }
 
@@ -140,6 +148,8 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       );
       GetStorage box = GetStorage();
       box.remove('seCredentials');
+      globals.talker?.logTyped(
+          StreamElementsLog('StreamElements credentials removed from local.'));
       return DataSuccess(null);
     } on DioException catch (e) {
       return DataFailed("Unable to revoke StreamElements token: ${e.message}");
@@ -162,10 +172,11 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
   @override
   Future<DataState<SeCredentials>> getSeCredentialsFromLocal() async {
     final box = GetStorage();
-    globals.talker?.info('Getting SE creds from local storage');
-
+    globals.talker?.logTyped(
+      StreamElementsLog(
+          'Getting StreamElements credentials from local storage.'),
+    );
     var seCredentialsString = box.read('seCredentials');
-    globals.talker?.info(seCredentialsString);
 
     if (seCredentialsString != null) {
       Map<String, dynamic> seCredentialsJson = jsonDecode(seCredentialsString);
@@ -173,7 +184,6 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       SeCredentials seCredentials =
           SeCredentialsDTO.fromJson(seCredentialsJson);
 
-      globals.talker?.info('Checking if Scopes changed.');
       StreamelementsAuthParams params = const StreamelementsAuthParams();
       List paramsScopesList = params.scopes.split(' ');
       paramsScopesList.sort((a, b) {
@@ -186,11 +196,13 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       });
       String savedScopesOrdered = savedScopesList.join(' ');
       if (savedScopesOrdered != paramsScopesOrdered) {
-        globals.talker?.info('Scopes changed, user need to relogin to SE.');
+        globals.talker?.logTyped(
+          StreamElementsLog(
+              'StreamElements scopes changed, user need to relogin.'),
+        );
         disconnect(seCredentials.accessToken);
         return DataFailed("Scopes have been updated, please login again.");
       }
-      globals.talker?.info('Scopes are the same: OK');
 
       //refresh the access token to be sure the token is going to be valid after starting the app
       DataState<SeCredentials> creds = await refreshAccessToken(seCredentials);
@@ -199,8 +211,6 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       } else {
         return DataFailed("Error refreshing SE Token");
       }
-
-      globals.talker?.info('SE token refreshed.');
 
       return DataSuccess(seCredentials);
     } else {
@@ -274,7 +284,6 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       );
 
       me = SeMeDTO.fromJson(response.data);
-      globals.talker?.debug('SE me: $me');
 
       return DataSuccess(me);
     } on DioException catch (e) {
@@ -359,15 +368,18 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
         'https://api.streamelements.com/kappa/v2/songrequest/$userId/playing',
       );
 
-      SeSong song = SeSong(
-        channel: response.data['channel'],
-        duration: response.data['duration'],
-        id: response.data['_id'],
-        title: response.data['title'],
-        videoId: response.data['videoId'],
-      );
-
-      return DataSuccess(song);
+      if (response.data != null) {
+        SeSong song = SeSong(
+          channel: response.data['channel'],
+          duration: response.data['duration'],
+          id: response.data['_id'],
+          title: response.data['title'],
+          videoId: response.data['videoId'],
+        );
+        return DataSuccess(song);
+      } else {
+        return DataFailed('There is no playing song for this user.');
+      }
     } on DioException catch (e) {
       return DataFailed(e.toString());
     }
