@@ -139,9 +139,9 @@ class HomeViewController extends GetxController
     });
   }
 
-  void lazyPutChat(ChatGroup chatGroup) {
-    Get.lazyPut<ChatViewController>(
-      () => ChatViewController(
+  Future<void> putChat(ChatGroup chatGroup) async {
+    await Get.putAsync<ChatViewController>(() async {
+      final controller = ChatViewController(
         homeEvents: HomeEvents(
           twitchUseCase: TwitchUseCase(
             twitchRepository: TwitchRepositoryImpl(),
@@ -151,9 +151,9 @@ class HomeViewController extends GetxController
           ),
         ),
         chatGroup: chatGroup,
-      ),
-      tag: chatGroup.id,
-    );
+      );
+      return controller;
+    }, tag: chatGroup.id);
   }
 
   void reorderTabs() {
@@ -302,7 +302,7 @@ class HomeViewController extends GetxController
     tabController.animateTo(tabIndex.value);
   }
 
-  void generateChats() {
+  Future<void> generateChats() async {
     if (twitchData == null) {
       return;
     }
@@ -338,7 +338,7 @@ class HomeViewController extends GetxController
       ChatView groupView = ChatView(
         chatGroup: group,
       );
-      lazyPutChat(group);
+      await putChat(group);
       chatsViews.add(groupView);
     }
 
@@ -365,29 +365,27 @@ class HomeViewController extends GetxController
       ChatView groupView = ChatView(
         chatGroup: permanentFirstGroup,
       );
-      lazyPutChat(permanentFirstGroup);
+      await putChat(permanentFirstGroup);
       chatsViews.insert(0, groupView);
     }
 
     // 4. Call the createChats function for each group to update the chats inside
-    // for (ChatView c in chatsViews) {
-    //   ChatViewController? chatController =
-    //       Get.find<ChatViewController>(tag: c.chatGroup.id);
-    //   if (c.chatGroup.id == permanentFirstGroup.id) {
-    //     chatController.updateChannels(
-    //       permanentFirstGroup.channels,
-    //       twitchData!.twitchUser.login,
-    //     );
-    //   } else {
-    //     ChatGroup group =
-    //         settingsGroups.firstWhere((g) => g.id == c.chatGroup.id);
-    //     chatController.updateChannels(
-    //       group.channels,
-    //       twitchData!.twitchUser.login,
-    //     );
-    //   }
-    //   chatController.createChats();
-    // }
+    for (ChatView c in chatsViews) {
+      if (c.chatGroup.id == permanentFirstGroup.id) {
+        c.controller.updateChannels(
+          permanentFirstGroup.channels,
+          twitchData!.twitchUser.login,
+        );
+      } else {
+        ChatGroup group =
+            settingsGroups.firstWhere((g) => g.id == c.chatGroup.id);
+        c.controller.updateChannels(
+          group.channels,
+          twitchData!.twitchUser.login,
+        );
+      }
+      c.controller.createChats();
+    }
 
     chatTabsController = TabController(length: chatsViews.length, vsync: this);
     if (chatsViews.isEmpty) {
@@ -396,6 +394,9 @@ class HomeViewController extends GetxController
     }
 
     if (selectedChatIndex != null) {
+      if(selectedChatIndex! >= chatsViews.length) {
+        selectedChatIndex = 0;
+      }
       chatTabsController.animateTo(selectedChatIndex!);
     }
   }
