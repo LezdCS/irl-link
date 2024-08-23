@@ -394,6 +394,10 @@ class HomeViewController extends GetxController
       selectedChatIndex = null;
       selectedChatGroup.value = null;
     }
+
+    if (selectedChatIndex != null) {
+      chatTabsController.animateTo(selectedChatIndex!);
+    }
   }
 
   void sendChatMessage(String message, String channel) {
