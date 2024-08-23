@@ -124,6 +124,7 @@ class HomeViewController extends GetxController
     super.onClose();
   }
 
+  // This is a debounce function to avoid spamming save settings when resizing the split view
   void onSplitResized(UnmodifiableListView<double?> weight) {
     Settings settings = Get.find<SettingsService>().settings.value;
 
