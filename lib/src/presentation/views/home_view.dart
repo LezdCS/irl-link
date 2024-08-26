@@ -162,7 +162,7 @@ class HomeView extends GetView<HomeViewController> {
                         ),
                       ),
                       Visibility(
-                        visible: controller.chatsViews.length > 1,
+                        visible: controller.chatsViews.length > 1 || controller.chatsViews.first.chatGroup.channels.length > 1,
                         child: _tabBarChats(context),
                       ),
                       _chats(context),
