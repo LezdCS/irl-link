@@ -83,52 +83,49 @@ class ChatView extends GetView<ChatViewController> {
                       itemCount: controller.chatMessages.length,
                       itemBuilder: (BuildContext context, int index) {
                         ChatMessage message = controller.chatMessages[index];
-                        return Container(
-                          padding: const EdgeInsets.only(top: 1, bottom: 1),
-                          child: InkWell(
-                            onTap: () {
-                              if (FocusScope.of(context).isFirstFocus) {
-                                FocusScope.of(context).unfocus();
-                              }
-                              controller.homeViewController.selectedMessage
-                                  .value = null;
-                            },
-                            onLongPress: () {
-                              controller.homeViewController.selectedMessage
-                                  .value ??= message;
-                            },
-                            child: message.eventType != null
-                                ? EventContainer(
-                                    message: message,
-                                    selectedMessage: controller
-                                        .homeViewController
-                                        .selectedMessage
-                                        .value,
-                                    displayTimestamp:
-                                        settings.displayTimestamp!,
-                                    textSize: settings.textSize!,
-                                    hideDeletedMessages: settings
-                                        .chatSettings!.hideDeletedMessages,
-                                    cheerEmotes: controller.cheerEmotes,
-                                    thirdPartEmotes: controller.thirdPartEmotes,
-                                    showPlatformBadge: multiplePlatform,
-                                  )
-                                : MessageContainer(
-                                    selectedMessage: controller
-                                        .homeViewController
-                                        .selectedMessage
-                                        .value,
-                                    message: message,
-                                    displayTimestamp:
-                                        settings.displayTimestamp!,
-                                    textSize: settings.textSize!,
-                                    hideDeletedMessages: settings
-                                        .chatSettings!.hideDeletedMessages,
-                                    cheerEmotes: controller.cheerEmotes,
-                                    thirdPartEmotes: controller.thirdPartEmotes,
-                                    showPlatformBadge: multiplePlatform,
-                                  ),
-                          ),
+                        return InkWell(
+                          onTap: () {
+                            if (FocusScope.of(context).isFirstFocus) {
+                              FocusScope.of(context).unfocus();
+                            }
+                            controller.homeViewController.selectedMessage
+                                .value = null;
+                          },
+                          onLongPress: () {
+                            controller.homeViewController.selectedMessage
+                                .value ??= message;
+                          },
+                          child: message.eventType != null
+                              ? EventContainer(
+                                  message: message,
+                                  selectedMessage: controller
+                                      .homeViewController
+                                      .selectedMessage
+                                      .value,
+                                  displayTimestamp:
+                                      settings.displayTimestamp!,
+                                  textSize: settings.textSize!,
+                                  hideDeletedMessages: settings
+                                      .chatSettings!.hideDeletedMessages,
+                                  cheerEmotes: controller.cheerEmotes,
+                                  thirdPartEmotes: controller.thirdPartEmotes,
+                                  showPlatformBadge: multiplePlatform,
+                                )
+                              : MessageContainer(
+                                  selectedMessage: controller
+                                      .homeViewController
+                                      .selectedMessage
+                                      .value,
+                                  message: message,
+                                  displayTimestamp:
+                                      settings.displayTimestamp!,
+                                  textSize: settings.textSize!,
+                                  hideDeletedMessages: settings
+                                      .chatSettings!.hideDeletedMessages,
+                                  cheerEmotes: controller.cheerEmotes,
+                                  thirdPartEmotes: controller.thirdPartEmotes,
+                                  showPlatformBadge: multiplePlatform,
+                                ),
                         );
                       },
                     )
