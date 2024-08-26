@@ -55,13 +55,12 @@ class StreamelementsViewController extends GetxController
 
     await setStreamElementsCredentials();
     if (seCredentials.value != null) {
-      streamelementsEvents
-          .refreshSeAccessToken(seCredentials: seCredentials.value!)
-          .then(
-            (value) => {
-              if (value is DataSuccess) {seCredentials.value = value.data}
-            },
-          );
+       DataState<SeCredentials> tokenResult = await streamelementsEvents
+          .refreshSeAccessToken(seCredentials: seCredentials.value!);
+
+      if (tokenResult.data != null) {
+        seCredentials.value = tokenResult.data;
+      }
     }
 
     streamelementsEvents.getSettings().then((value) => applySettings());
@@ -72,6 +71,7 @@ class StreamelementsViewController extends GetxController
   @override
   void onClose() {
     socket?.close();
+    isSocketConnected.value = false;
     super.onClose();
   }
 
@@ -165,6 +165,7 @@ class StreamelementsViewController extends GetxController
 
   /// Connect to WebSocket
   Future<void> connectWebsocket() async {
+    globals.talker?.debug('Trying to connect to websocket');
     socket = io(
       'https://realtime.streamelements.com',
       OptionBuilder().setTransports(['websocket']).build(),
@@ -265,7 +266,6 @@ class StreamelementsViewController extends GetxController
 
   Future<void> onAuthenticated(data) async {
     isSocketConnected.value = true;
-    // socket?.emit('subscribe', {"room": 'songrequest::611168252645244a6f16ab67'});
     globals.talker?.logTyped(
       StreamElementsLog('StreamElements WebSocket authenticated.'),
     );
