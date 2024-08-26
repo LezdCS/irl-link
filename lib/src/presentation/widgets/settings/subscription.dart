@@ -11,8 +11,15 @@ class Subscription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? price = Get.find<StoreService>().getSubscriptionPrice();
+    String price = Get.find<StoreService>().getSubscriptionPrice();
     bool isSubscribed = Get.find<StoreService>().isSubscribed();
+    RxBool storeFound = Get.find<StoreService>().storeFound;
+
+
+    if(storeFound.value == false || price == "") {
+      return const Text('Error loading the subscription module.');
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
