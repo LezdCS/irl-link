@@ -128,7 +128,7 @@ class Main extends StatelessWidget {
         talker.logTyped(GetxInstanceLog(text, true));
         return;
       }
-      if (text.contains('GOING TO ROUTE')) {
+      if (text.contains('GOING TO ROUTE') || text.contains('CLOSE TO ROUTE')) {
         return;
       }
       if (text.startsWith('REMOVING ROUTE')) {
