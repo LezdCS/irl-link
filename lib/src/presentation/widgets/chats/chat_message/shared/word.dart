@@ -20,36 +20,38 @@ class Word extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isWordLink = Uri.tryParse(word)?.hasAbsolutePath ?? false;
-    return !isWordLink
-        ? Text(
-            "$word ",
-            style: TextStyle(
-              color: isAction
-                  ? Color(int.parse(color.replaceAll('#', '0xff')))
-                  : Theme.of(Get.context!).textTheme.bodyLarge!.color,
-              fontSize: textSize,
-              fontStyle: isAction ? FontStyle.italic : FontStyle.normal,
-            ),
-          )
-        : Text.rich(
-            TextSpan(
-              text: "$word ",
-              style: TextStyle(
-                color: Colors.lightBlue,
-                decoration: TextDecoration.underline,
-                fontSize: textSize,
-                fontStyle: isAction ? FontStyle.italic : FontStyle.normal,
-              ),
-              recognizer: TapGestureRecognizer()
-                ..onTap = () {
-                  if (isWordLink) {
-                    launchUrl(
-                      Uri.parse(word),
-                      mode: LaunchMode.externalApplication,
-                    );
-                  }
-                },
-            ),
-          );
+    if (isWordLink) {
+      return Text.rich(
+        TextSpan(
+          text: "$word ",
+          style: TextStyle(
+            color: Colors.lightBlue,
+            decoration: TextDecoration.underline,
+            fontSize: textSize,
+            fontStyle: isAction ? FontStyle.italic : FontStyle.normal,
+          ),
+          recognizer: TapGestureRecognizer()
+            ..onTap = () {
+              if (isWordLink) {
+                launchUrl(
+                  Uri.parse(word),
+                  mode: LaunchMode.externalApplication,
+                );
+              }
+            },
+        ),
+      );
+    }
+    
+    return Text(
+      "$word ",
+      style: TextStyle(
+        color: isAction
+            ? Color(int.parse(color.replaceAll('#', '0xff')))
+            : Theme.of(Get.context!).textTheme.bodyLarge!.color,
+        fontSize: textSize,
+        fontStyle: isAction ? FontStyle.italic : FontStyle.normal,
+      ),
+    );
   }
 }
