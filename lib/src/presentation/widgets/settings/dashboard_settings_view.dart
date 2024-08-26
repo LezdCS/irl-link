@@ -59,7 +59,9 @@ class DashboardSettingsView extends GetView<DashboardController> {
             ),
             child: Column(
               children: [
+                _addGroupButton(context, controller, settingsViewController),
                 ListView.builder(
+                  reverse: true,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: settings.dashboardSettings!.userEvents.length,
@@ -70,19 +72,6 @@ class DashboardSettingsView extends GetView<DashboardController> {
                         dashboardEvents[event.event];
                     return Slidable(
                       key: Key('${event.title}-$index'),
-                      // startActionPane: ActionPane(
-                      //   motion: const ScrollMotion(),
-                      //   extentRatio: 0.25,
-                      //   children: [
-                      //     SlidableAction(
-                      //       backgroundColor:
-                      //           Theme.of(context).colorScheme.background,
-                      //       onPressed: (context) {},
-                      //       icon: Icons.edit,
-                      //       label: 'Edit',
-                      //     ),
-                      //   ],
-                      // ),
                       endActionPane: ActionPane(
                         motion: const ScrollMotion(),
                         extentRatio: 0.25,
@@ -135,7 +124,6 @@ class DashboardSettingsView extends GetView<DashboardController> {
                     );
                   },
                 ),
-                _addGroupButton(context, controller, settingsViewController),
               ],
             ),
           ),
@@ -168,7 +156,7 @@ Widget _addGroupButton(
     },
     child: Container(
       padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
-      margin: const EdgeInsets.only(left: 12, right: 12),
+      margin: const EdgeInsets.only(left: 4, right: 4, bottom: 4),
       decoration: BoxDecoration(
         border: Border.all(
           color: Theme.of(context).colorScheme.secondary,

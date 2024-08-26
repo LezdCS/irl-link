@@ -75,7 +75,7 @@ class HomeBindings extends Bindings {
     );
     Get.find<TwitchTabViewController>();
 
-    Get.lazyPut<DashboardController>(() => DashboardController());
+    Get.lazyPut<DashboardController>(() => DashboardController(), fenix: true);
     Get.lazyPut<RealtimeIrlViewController>(
       () => RealtimeIrlViewController(),
       fenix: true,
