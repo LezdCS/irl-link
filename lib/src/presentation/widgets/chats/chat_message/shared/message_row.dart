@@ -186,6 +186,7 @@ class MessageRow extends StatelessWidget {
           Wrap(
             children: [
               TwitchEmote(
+                height: textSize,
                 emote: emote,
               ),
               const Text(' '),
@@ -198,6 +199,7 @@ class MessageRow extends StatelessWidget {
             children: [
               ThirdPartEmote(
                 emote: thirdPartyEmote,
+                height: textSize,
               ),
               const Text(' '),
             ],
@@ -210,6 +212,7 @@ class MessageRow extends StatelessWidget {
               kickEmotesIds.length,
               (index) => KickEmote(
                 emoteId: kickEmotesIds[index],
+                height: textSize,
               ),
             ),
           ),
