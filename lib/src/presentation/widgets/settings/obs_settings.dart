@@ -282,6 +282,7 @@ class ObsSettings extends StatelessWidget {
 
     return SizedBox(
       height: 200,
+      width: 300,
       child: ListView.builder(
         itemCount: settings.obsConnectionsHistory!.length,
         itemBuilder: (context, index) {
