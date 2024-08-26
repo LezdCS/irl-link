@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/presentation/controllers/login_view_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:irllink/src/core/utils/globals.dart' as globals;
@@ -81,9 +82,27 @@ class LoginView extends GetView<LoginViewController> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        const Image(
-          image: AssetImage("lib/assets/irl_link_dark_trans_logo.png"),
-          width: 200,
+        Column(
+          children: [
+            const Image(
+              image: AssetImage("lib/assets/irl_link_dark_trans_logo.png"),
+              width: 200,
+            ),
+            Visibility(
+              visible: Get.find<StoreService>().isSubscribed(),
+              child: Container(
+                padding:
+                    const EdgeInsets.only(left: 10, right: 10, top: 4, bottom: 4),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.tertiary,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(8),
+                  ),
+                ),
+                child: const Text('PRO'),
+              ),
+            ),
+          ],
         ),
         content,
         Container(),

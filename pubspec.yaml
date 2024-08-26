@@ -45,7 +45,7 @@ dependencies:
   get_storage: ^2.1.1
   html: ^0.15.4
   http: ^1.2.2
-  in_app_purchase: ^3.1.13
+  in_app_purchase: ^3.2.0
   instant: ^0.5.1
   intl: ^0.19.0
   jwt_decoder: ^2.0.1

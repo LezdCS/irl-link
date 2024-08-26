@@ -18,7 +18,7 @@ class StoreService extends GetxService {
   RxList<PurchaseDetails> purchases = <PurchaseDetails>[].obs;
   RxBool storeFound = false.obs;
 
-  Set<String> kIds = <String>{'irl_premium_subscription'};
+  Set<String> kIds = <String>{'irl_premium_subscription', 'irl_premium'};
 
   Future<StoreService> init() async {
     await getStore();
@@ -29,19 +29,14 @@ class StoreService extends GetxService {
 
   //Function isSubscribed
   bool isSubscribed() {
-    return Platform.isIOS ||
-        kDebugMode ||
-        purchases.firstWhereOrNull(
-              (element) => element.productID == kIds.first,
-            ) !=
-            null;
+    return purchases.any((p) => kIds.contains(p.productID));
   }
 
   // Function get subscription price
   String getSubscriptionPrice() {
     return products
             .firstWhereOrNull(
-              (element) => element.id == kIds.first,
+              (p) => kIds.contains(p.id),
             )
             ?.price ??
         "";
@@ -121,6 +116,10 @@ class StoreService extends GetxService {
   }
 
   Future<bool> verifyPurchase(PurchaseDetails purchaseDetails) async {
+    if (Platform.isIOS) {
+      return Future<bool>.value(true);
+    }
+
     String? pruchaseToken =
         purchaseDetails.verificationData.serverVerificationData;
     HomeViewController homeViewController = Get.find<HomeViewController>();
