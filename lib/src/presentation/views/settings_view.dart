@@ -1,13 +1,9 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
-import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/presentation/widgets/settings/chat_events.dart';
 import 'package:irllink/src/presentation/widgets/settings/dashboard_settings_view.dart';
 import 'package:irllink/src/presentation/widgets/settings/realtime_irl.dart';
@@ -423,7 +419,6 @@ class SettingsView extends GetView<SettingsViewController> {
 
   Widget connectionsSettings(BuildContext context, double width) {
     Settings settings = Get.find<SettingsService>().settings.value;
-    StoreService storeService = Get.find<StoreService>();
 
     return Container(
       color: Theme.of(context).colorScheme.surface,
@@ -476,13 +471,7 @@ class SettingsView extends GetView<SettingsViewController> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                Visibility(
-                  visible: Platform.isIOS ||
-                      kDebugMode ||
-                      storeService.storeFound.value &&
-                          storeService.products.isNotEmpty,
-                  child: const StreamElements(),
-                ),
+                const StreamElements(),
                 const SizedBox(height: 10),
                 const RealtimeIrl(),
               ],

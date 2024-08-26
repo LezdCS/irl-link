@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/presentation/controllers/login_view_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:irllink/src/core/utils/globals.dart' as globals;
@@ -10,7 +11,6 @@ class LoginView extends GetView<LoginViewController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.find<LoginViewController>();
     return Scaffold(
       body: Container(
         color: Theme.of(context).colorScheme.surface,
@@ -62,18 +62,36 @@ class LoginView extends GetView<LoginViewController> {
   }
 
   Widget _loadingCircle(context) {
-    return Column(
-      children: [
-        const CircularProgressIndicator(),
-        Container(
-          padding: const EdgeInsets.only(top: 10),
-          child: Obx(
-            () => Text(
-              controller.loadingMessage.value,
+    return Obx(
+      () => Column(
+        children: [
+          const CircularProgressIndicator(),
+          const SizedBox(
+            height: 20,
+          ),
+          Visibility(
+            visible: controller.twitchCredentials.value != null,
+            child: CircleAvatar(
+              foregroundImage: NetworkImage(controller
+                      .twitchCredentials.value?.twitchUser.profileImageUrl ??
+                  ""),
+              radius: 36,
             ),
           ),
-        ),
-      ],
+          Visibility(
+            visible: controller.twitchCredentials.value != null,
+            child: Text(
+              'Hey ${controller.twitchCredentials.value?.twitchUser.displayName ?? ""}',
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            controller.loadingMessage.value,
+          ),
+        ],
+      ),
     );
   }
 
@@ -81,9 +99,27 @@ class LoginView extends GetView<LoginViewController> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        const Image(
-          image: AssetImage("lib/assets/irl_link_dark_trans_logo.png"),
-          width: 200,
+        Column(
+          children: [
+            const Image(
+              image: AssetImage("lib/assets/irl_link_dark_trans_logo.png"),
+              width: 200,
+            ),
+            Visibility(
+              visible: Get.find<StoreService>().isSubscribed(),
+              child: Container(
+                padding: const EdgeInsets.only(
+                    left: 10, right: 10, top: 4, bottom: 4),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.tertiary,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(8),
+                  ),
+                ),
+                child: const Text('PRO'),
+              ),
+            ),
+          ],
         ),
         content,
         Container(),

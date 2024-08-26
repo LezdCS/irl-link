@@ -87,7 +87,10 @@ class ModerationBottomSheet extends GetView {
               Clipboard.setData(
                 ClipboardData(text: message.message),
               );
-              Get.snackbar("Copied", "Message copied to clipboard");
+              Get.snackbar(
+                "Copied",
+                "Message copied to clipboard",
+              );
             },
             child: Text(
               message.message,
