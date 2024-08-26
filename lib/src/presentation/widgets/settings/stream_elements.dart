@@ -97,7 +97,8 @@ class StreamElements extends GetView<SettingsViewController> {
                                   controller: controller.seJwtInputController,
                                   obscureText: !controller.seJwtShow.value,
                                   onChanged: (value) {
-                                    Get.find<SettingsService>().settings.value = settings.copyWith(
+                                    Get.find<SettingsService>().settings.value =
+                                        settings.copyWith(
                                       streamElementsSettings: settings
                                           .streamElementsSettings!
                                           .copyWith(jwt: value),
@@ -147,7 +148,8 @@ class StreamElements extends GetView<SettingsViewController> {
                                   obscureText:
                                       !controller.seOverlayTokenShow.value,
                                   onChanged: (value) {
-                                    Get.find<SettingsService>().settings.value = settings.copyWith(
+                                    Get.find<SettingsService>().settings.value =
+                                        settings.copyWith(
                                       streamElementsSettings: settings
                                           .streamElementsSettings!
                                           .copyWith(overlayToken: value),

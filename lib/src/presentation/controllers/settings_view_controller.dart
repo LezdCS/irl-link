@@ -106,6 +106,17 @@ class SettingsViewController extends GetxController {
   }
 
   Future<void> loginStreamElements() async {
+    if(Get.find<StoreService>().isSubscribed() == false) {
+      Get.snackbar(
+          "Error",
+          "You are not subscribed",
+          snackPosition: SnackPosition.BOTTOM,
+          icon: const Icon(Icons.error_outline, color: Colors.red),
+          borderWidth: 1,
+          borderColor: Colors.red,
+        );
+        return;
+    }
     StreamelementsAuthParams params = const StreamelementsAuthParams();
     await streamelementsEvents.login(params: params).then((value) {
       if (value is DataFailed) {
