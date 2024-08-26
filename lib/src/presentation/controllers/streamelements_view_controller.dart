@@ -165,7 +165,6 @@ class StreamelementsViewController extends GetxController
 
   /// Connect to WebSocket
   Future<void> connectWebsocket() async {
-    globals.talker?.debug('Trying to connect to websocket');
     socket = io(
       'https://realtime.streamelements.com',
       OptionBuilder().setTransports(['websocket']).build(),
