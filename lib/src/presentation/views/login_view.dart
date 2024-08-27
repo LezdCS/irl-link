@@ -116,7 +116,7 @@ class LoginView extends GetView<LoginViewController> {
                     Radius.circular(8),
                   ),
                 ),
-                child: const Text('PRO'),
+                child: const Text('Premium'),
               ),
             ),
           ],
