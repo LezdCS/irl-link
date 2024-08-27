@@ -31,7 +31,6 @@ class HomeBindings extends Bindings {
         ),
       ),
     );
-    Get.find<HomeViewController>();
 
     Get.lazyPut<ObsTabViewController>(
       () => ObsTabViewController(
@@ -73,7 +72,6 @@ class HomeBindings extends Bindings {
         ),
       ),
     );
-    Get.find<TwitchTabViewController>();
 
     Get.lazyPut<DashboardController>(() => DashboardController(), fenix: true);
     Get.lazyPut<RealtimeIrlViewController>(
