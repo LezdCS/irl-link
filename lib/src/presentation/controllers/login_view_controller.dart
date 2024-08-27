@@ -48,6 +48,8 @@ class LoginViewController extends GetxController {
       }
     }
 
+    isLoading.value = false;
+
     super.onReady();
   }
 
