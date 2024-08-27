@@ -34,6 +34,8 @@ class TwitchEventSub {
     this.accessToken,
   );
 
+  bool get isConnected => _streamSubscription != null;
+
   void connect() async {
     _broadcasterId = await _getChannelId();
 

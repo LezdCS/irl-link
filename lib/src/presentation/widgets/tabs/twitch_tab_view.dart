@@ -36,36 +36,68 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                   ),
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
-                      width: 14,
-                      height: 14,
-                      child: CircularProgressIndicator(
-                        value: controller.myDuration.value.inSeconds / 15,
-                        backgroundColor:
-                            Theme.of(context).colorScheme.secondary,
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                            Theme.of(context).colorScheme.tertiary),
-                        strokeWidth: 2,
-                        strokeCap: StrokeCap.round,
-                        semanticsLabel:
-                            'Progress indicator for twitch data refresh',
-                        semanticsValue:
-                            (controller.myDuration.value.inSeconds / 15)
-                                .toString(),
-                      ),
+                    Wrap(
+                      children: [
+                        SizedBox(
+                          width: 14,
+                          height: 14,
+                          child: CircularProgressIndicator(
+                            value: controller.myDuration.value.inSeconds / 15,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.secondary,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                Theme.of(context).colorScheme.tertiary),
+                            strokeWidth: 2,
+                            strokeCap: StrokeCap.round,
+                            semanticsLabel:
+                                'Progress indicator for twitch data refresh',
+                            semanticsValue:
+                                (controller.myDuration.value.inSeconds / 15)
+                                    .toString(),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        const Text(
+                          'Refresh data',
+                          style: TextStyle(
+                            fontSize: 10,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    const Text(
-                      'Refresh data',
-                      style: TextStyle(
-                        fontSize: 10,
-                      ),
+                    Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        const Text(
+                          'Status Event Sub:',
+                          style: TextStyle(
+                            fontSize: 10,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        Icon(
+                          controller.twitchEventSub != null &&
+                                  controller.twitchEventSub!.isConnected
+                              ? Icons.stream_sharp
+                              : Icons.close,
+                          size: 12,
+                          color: controller.twitchEventSub != null &&
+                                  controller.twitchEventSub!.isConnected
+                              ? Colors.green
+                              : Colors.red
+                        ),
+                      ],
                     ),
                   ],
+                ),
+                const SizedBox(
+                  height: 4,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -160,7 +192,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                   ],
                 ),
                 const Divider(
-                  height: 40,
+                  height: 30,
                 ),
                 Text(
                   "shortcuts".tr,
@@ -217,7 +249,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                   ],
                 ),
                 const Divider(
-                  height: 40,
+                  height: 30,
                 ),
                 _shortcutButton(
                   onTap: () {
@@ -273,7 +305,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                   isOn: false,
                 ),
                 const Divider(
-                  height: 40,
+                  height: 30,
                 ),
                 Visibility(
                   visible: controller.twitchEventSub != null,
@@ -283,7 +315,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                   ),
                 ),
                 const Divider(
-                  height: 40,
+                  height: 30,
                 ),
                 Visibility(
                   visible: controller.twitchEventSub != null,
