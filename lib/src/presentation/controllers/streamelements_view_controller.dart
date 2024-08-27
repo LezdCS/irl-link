@@ -55,7 +55,7 @@ class StreamelementsViewController extends GetxController
 
     await setStreamElementsCredentials();
     if (seCredentials.value != null) {
-       DataState<SeCredentials> tokenResult = await streamelementsEvents
+      DataState<SeCredentials> tokenResult = await streamelementsEvents
           .refreshSeAccessToken(seCredentials: seCredentials.value!);
 
       if (tokenResult.data != null) {
@@ -72,6 +72,7 @@ class StreamelementsViewController extends GetxController
   void onClose() {
     socket?.close();
     isSocketConnected.value = false;
+    socket = null;
     super.onClose();
   }
 
@@ -101,7 +102,7 @@ class StreamelementsViewController extends GetxController
     if (userSeProfile.value != null) {
       handleGetMe();
     }
-    if (!isSocketConnected.value) {
+    if (!isSocketConnected.value && socket == null) {
       connectWebsocket();
     }
   }
@@ -168,36 +169,36 @@ class StreamelementsViewController extends GetxController
     socket = io(
       'https://realtime.streamelements.com',
       OptionBuilder().setTransports(['websocket']).build(),
-    );
+    ).connect();
 
-    socket!.on('connect_error', (data) => onError());
-    socket!.on('connect', (data) => onConnect());
-    socket!.on('disconnect', (data) => onDisconnect());
-    socket!.on('authenticated', (data) => onAuthenticated(data));
-    socket!.on(
+    socket?.on('connect_error', (data) => onError());
+    socket?.on('connect', (data) => onConnect());
+    socket?.on('disconnect', (data) => onDisconnect());
+    socket?.on('authenticated', (data) => onAuthenticated(data));
+    socket?.on(
       'event:test',
       (data) => {
         parseTestEvent(data),
       },
     );
-    socket!.on('event', (data) {
+    socket?.on('event', (data) {
       // Structure as on https://dev.streamelements.com/docs/widgets/6707a030af0b9-custom-widget-events
       parseEvent(data);
     });
-    socket!.on(
+    socket?.on(
       'event:update',
       (data) => {
         // debugPrint(data.toString())
       },
     );
-    socket!.on(
+    socket?.on(
       'event:reset',
       (data) => {
         // debugPrint(data.toString())
       },
     );
 
-    socket!.onAny(
+    socket?.onAny(
       (event, data) => {
         if (data != null)
           {
@@ -206,39 +207,39 @@ class StreamelementsViewController extends GetxController
       },
     );
 
-    socket!.on(
+    socket?.on(
       'songrequest:song:next',
       (data) => onNextSong(data),
     );
 
-    socket!.on(
+    socket?.on(
       'songrequest:song:previous',
       (data) => onPreviousSong(data),
     );
 
-    socket!.on(
+    socket?.on(
       'songrequest:queue:add',
       (data) => onAddSongQueue(data),
     );
 
-    socket!.on(
+    socket?.on(
       'songrequest:queue:remove',
       (data) => onRemoveSongQueue(data),
     );
 
-    socket!.on(
+    socket?.on(
       'songrequest:queue:clear',
       (data) => {
         songRequestQueue.clear(),
       },
     );
 
-    socket!.on(
+    socket?.on(
       'songrequest:play',
       (data) => {isPlaying.value = true},
     );
 
-    socket!.on(
+    socket?.on(
       'songrequest:pause',
       (data) => {isPlaying.value = false},
     );
