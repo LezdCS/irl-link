@@ -94,7 +94,11 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                           .substring(0, 7)),
                     ),
                     Visibility(
-                      visible: Get.find<SettingsService>().settings.value.generalSettings!.displayViewerCount,
+                      visible: Get.find<SettingsService>()
+                          .settings
+                          .value
+                          .generalSettings!
+                          .displayViewerCount,
                       child: Row(
                         children: [
                           const Icon(Icons.person_outline, color: Colors.red),
@@ -271,21 +275,23 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                 const Divider(
                   height: 40,
                 ),
-                Get.find<TwitchTabViewController>().twitchEventSub != null
-                    ? prediction(
-                        context,
-                        controller,
-                      )
-                    : Container(),
+                Visibility(
+                  visible: controller.twitchEventSub != null,
+                  child: prediction(
+                    context,
+                    controller,
+                  ),
+                ),
                 const Divider(
                   height: 40,
                 ),
-                controller.twitchEventSub != null
-                    ? poll(
-                        context,
-                        controller,
-                      )
-                    : Container(),
+                Visibility(
+                  visible: controller.twitchEventSub != null,
+                  child: poll(
+                    context,
+                    controller,
+                  ),
+                ),
               ],
             ),
           ),
