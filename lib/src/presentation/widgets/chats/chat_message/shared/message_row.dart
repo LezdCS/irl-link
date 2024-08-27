@@ -78,7 +78,7 @@ class MessageRow extends StatelessWidget {
           ),
           for (ChatBadge badge in badges)
             Container(
-              padding: const EdgeInsets.only(right: 4, top: 3),
+              padding: const EdgeInsets.only(right: 4),
               child: Uri.parse(badge.imageUrl1x).isAbsolute
                   ? Image(
                       width: textSize,
