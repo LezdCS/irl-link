@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/utils/dashboard_events.dart';
 import 'package:irllink/src/domain/entities/dashboard_event.dart';
+import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
@@ -14,6 +16,8 @@ class Dashboard extends GetView<DashboardController> {
 
   @override
   Widget build(BuildContext context) {
+    Settings settings = Get.find<SettingsService>().settings.value;
+
     return Positioned(
       top: MediaQuery.of(context).size.height / 2 - 250,
       left: MediaQuery.of(context).size.width / 2 - 150,
@@ -27,18 +31,16 @@ class Dashboard extends GetView<DashboardController> {
             Radius.circular(8),
           ),
         ),
-        child: controller.homeViewController.settings.value.dashboardSettings!
-                .userEvents.isNotEmpty
+        child: settings.dashboardSettings!.userEvents.isNotEmpty
             ? GridView.builder(
-                itemCount: controller.homeViewController.settings.value
-                    .dashboardSettings!.userEvents.length,
+                itemCount: settings.dashboardSettings!.userEvents.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 3 / 1.8,
                 ),
                 itemBuilder: (BuildContext context, int index) {
-                  DashboardEvent event = controller.homeViewController.settings
-                      .value.dashboardSettings!.userEvents[index];
+                  DashboardEvent event =
+                      settings.dashboardSettings!.userEvents[index];
                   // Check if the event is still supported
                   if (event.event == SupportedEvents.none) {
                     return _disabledServiceEvent(

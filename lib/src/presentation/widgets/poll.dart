@@ -9,7 +9,12 @@ Widget poll(
   BuildContext context,
   TwitchTabViewController controller,
 ) {
-  TwitchPoll poll = controller.twitchEventSub!.currentPoll.value;
+  TwitchPoll? poll = controller.twitchEventSub?.currentPoll.value;
+
+  if (poll == null) {
+    return Container();
+  }
+
   if (poll.status == PollStatus.empty) {
     return const Row(
       crossAxisAlignment: CrossAxisAlignment.center,

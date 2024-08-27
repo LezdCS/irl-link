@@ -44,6 +44,21 @@ class StreamelementsEvents {
     return streamelementsUseCase.getMe(token);
   }
 
+  Future<DataState<SeCredentials>> getSeCredentialsFromLocal() {
+    return streamelementsUseCase.getSeCredentialsFromLocal();
+  }
+
+  Future<DataState<SeMe>> getSeMe(String token) {
+    return streamelementsUseCase.getMe(token);
+  }
+
+  Future<DataState<SeCredentials>> refreshSeAccessToken({
+    required SeCredentials seCredentials,
+  }) {
+    return streamelementsUseCase.refreshAccessToken(
+        seCredentials: seCredentials);
+  }
+
   Future<DataState<Settings>> getSettings() {
     return settingsUseCase.getSettings();
   }

@@ -3,141 +3,132 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/utils/dashboard_events.dart';
 import 'package:irllink/src/domain/entities/dashboard_event.dart';
+import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 
-class DashboardSettingsView extends GetView<SettingsViewController> {
+class DashboardSettingsView extends GetView<DashboardController> {
   const DashboardSettingsView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    DashboardController dashboardController = Get.find<DashboardController>();
+    SettingsViewController settingsViewController =
+        Get.find<SettingsViewController>();
+
     return Obx(
-      () => Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Theme.of(context).textTheme.bodyLarge!.color,
+      () {
+        Settings settings = Get.find<SettingsService>().settings.value;
+        return Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: Theme.of(context).textTheme.bodyLarge!.color,
+              ),
+              onPressed: () => Get.back(),
             ),
-            onPressed: () => Get.back(),
-          ),
-          actions: [
-            Switch(
-              activeTrackColor: Theme.of(context).colorScheme.tertiary,
-              activeColor: Colors.white,
-              inactiveTrackColor:
-                  Theme.of(context).colorScheme.tertiaryContainer,
-              value: controller.homeViewController.settings.value
-                  .dashboardSettings!.activated,
-              onChanged: (value) {
-                controller.homeViewController.settings.value =
-                    controller.homeViewController.settings.value.copyWith(
-                  dashboardSettings: controller
-                      .homeViewController.settings.value.dashboardSettings!
-                      .copyWith(
-                    activated: value,
-                  ),
-                );
-                controller.saveSettings();
-              },
-            ),
-          ],
-          title: const Text(
-            "Dashboard events",
-          ),
-        ),
-        body: Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-          ),
-          child: Column(
-            children: [
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: dashboardController.homeViewController.settings.value
-                    .dashboardSettings!.userEvents.length,
-                itemBuilder: (context, index) {
-                  DashboardEvent event = dashboardController.homeViewController
-                      .settings.value.dashboardSettings!.userEvents[index];
-                  ExistingDashboardEvent? eventDetails =
-                      dashboardEvents[event.event];
-                  return Slidable(
-                    key: Key('${event.title}-$index'),
-                    // startActionPane: ActionPane(
-                    //   motion: const ScrollMotion(),
-                    //   extentRatio: 0.25,
-                    //   children: [
-                    //     SlidableAction(
-                    //       backgroundColor:
-                    //           Theme.of(context).colorScheme.background,
-                    //       onPressed: (context) {},
-                    //       icon: Icons.edit,
-                    //       label: 'Edit',
-                    //     ),
-                    //   ],
-                    // ),
-                    endActionPane: ActionPane(
-                      motion: const ScrollMotion(),
-                      extentRatio: 0.25,
-                      children: [
-                        SlidableAction(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.surface,
-                          onPressed: (context) {
-                            dashboardController.removeDashboardEvent(event);
-                          },
-                          icon: Icons.delete,
-                          label: 'Delete',
-                          foregroundColor: Colors.red,
-                        ),
-                      ],
+            actions: [
+              Switch(
+                activeTrackColor: Theme.of(context).colorScheme.tertiary,
+                activeColor: Colors.white,
+                inactiveTrackColor:
+                    Theme.of(context).colorScheme.tertiaryContainer,
+                value: settings.dashboardSettings!.activated,
+                onChanged: (value) {
+                  Get.find<SettingsService>().settings.value =
+                      settings.copyWith(
+                    dashboardSettings: settings.dashboardSettings!.copyWith(
+                      activated: value,
                     ),
-                    child: Container(
-                      margin: const EdgeInsets.all(4),
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: event.color,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(8),
-                        ),
-                      ),
-                      alignment: Alignment.center,
-                      child: Column(
+                  );
+                  Get.find<SettingsService>().saveSettings();
+                },
+              ),
+            ],
+            title: const Text(
+              "Dashboard events",
+            ),
+          ),
+          body: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+            ),
+            child: Column(
+              children: [
+                _addGroupButton(context, controller, settingsViewController),
+                ListView.builder(
+                  reverse: true,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: settings.dashboardSettings!.userEvents.length,
+                  itemBuilder: (context, index) {
+                    DashboardEvent event =
+                        settings.dashboardSettings!.userEvents[index];
+                    ExistingDashboardEvent? eventDetails =
+                        dashboardEvents[event.event];
+                    return Slidable(
+                      key: Key('${event.title}-$index'),
+                      endActionPane: ActionPane(
+                        motion: const ScrollMotion(),
+                        extentRatio: 0.25,
                         children: [
-                          Text(
-                            event.title,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 13,
-                            ),
-                          ),
-                          Text(
-                            getDashboardActionProviderString(
-                              eventDetails?.provider,
-                            ),
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 13,
-                            ),
+                          SlidableAction(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.surface,
+                            onPressed: (context) {
+                              controller.removeDashboardEvent(event);
+                            },
+                            icon: Icons.delete,
+                            label: 'Delete',
+                            foregroundColor: Colors.red,
                           ),
                         ],
                       ),
-                    ),
-                  );
-                },
-              ),
-              _addGroupButton(context, dashboardController, controller),
-            ],
+                      child: Container(
+                        margin: const EdgeInsets.all(4),
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: event.color,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(8),
+                          ),
+                        ),
+                        alignment: Alignment.center,
+                        child: Column(
+                          children: [
+                            Text(
+                              event.title,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                              ),
+                            ),
+                            Text(
+                              getDashboardActionProviderString(
+                                eventDetails?.provider,
+                              ),
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
@@ -145,7 +136,7 @@ class DashboardSettingsView extends GetView<SettingsViewController> {
 Widget _addGroupButton(
     BuildContext context,
     DashboardController dashboardController,
-    SettingsViewController controller) {
+    SettingsViewController settingsViewController) {
   return InkWell(
     onTap: () {
       Get.defaultDialog(
@@ -159,13 +150,13 @@ Widget _addGroupButton(
         confirmTextColor: Colors.white,
         radius: 10,
         onConfirm: () {
-          controller.addBrowserTab();
+          settingsViewController.addBrowserTab();
         },
       );
     },
     child: Container(
       padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
-      margin: const EdgeInsets.only(left: 12, right: 12),
+      margin: const EdgeInsets.only(left: 4, right: 4, bottom: 4),
       decoration: BoxDecoration(
         border: Border.all(
           color: Theme.of(context).colorScheme.secondary,

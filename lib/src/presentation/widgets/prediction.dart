@@ -11,7 +11,12 @@ Widget prediction(
   TwitchTabViewController controller,
 ) {
   TwitchPrediction? prediction =
-      controller.twitchEventSub!.currentPrediction.value;
+      controller.twitchEventSub?.currentPrediction.value;
+
+  if (prediction == null) {
+    return Container();
+  }
+
   if (prediction.status == PredictionStatus.empty) {
     return const Row(
       crossAxisAlignment: CrossAxisAlignment.center,

@@ -201,15 +201,6 @@ class TwitchRepositoryImpl extends TwitchRepository {
         return DataFailed("Scopes have been updated, please login again.");
       }
 
-      //refresh the access token to be sure the token is going to be valid after starting the app
-      DataState<TwitchCredentials> refreshTokenResult =
-          await refreshAccessToken(twitchData);
-      if (refreshTokenResult is DataFailed) {
-        return refreshTokenResult;
-      } else {
-        twitchData = refreshTokenResult.data!;
-      }
-
       return DataSuccess(twitchData);
     } else {
       return DataFailed("No Twitch Data in local storage");

@@ -3,7 +3,9 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/utils/globals.dart' as globals;
+import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
@@ -57,7 +59,7 @@ class ObsTabViewController extends GetxController {
           url = 'ws://$url';
         }
       }
-      globals.talker?.info("Connecting to OBS at $url...");
+      globals.talker?.logTyped(ObsLog("Connecting to OBS at $url..."));
       obsWebSocket = await ObsWebSocket.connect(
         url,
         password: password,
@@ -118,9 +120,9 @@ class ObsTabViewController extends GetxController {
 
       alertMessage.value = "Connected.";
       isConnected.value = true;
+      Settings settings = Get.find<SettingsService>().settings.value;
 
-      List obsConnectionsHistory =
-          homeViewController.settings.value.obsConnectionsHistory!;
+      List obsConnectionsHistory = settings.obsConnectionsHistory!;
       if (obsConnectionsHistory.firstWhereOrNull(
             (element) =>
                 element['url'] == url && element['password'] == password,
@@ -131,9 +133,9 @@ class ObsTabViewController extends GetxController {
           "password": password,
         });
 
-        homeViewController.settings.value = homeViewController.settings.value
-            .copyWith(obsConnectionsHistory: obsConnectionsHistory);
-        homeEvents.setSettings(settings: homeViewController.settings.value);
+        settings =
+            settings.copyWith(obsConnectionsHistory: obsConnectionsHistory);
+        Get.find<SettingsService>().saveSettings();
       }
 
       getSceneList();
@@ -257,7 +259,8 @@ class ObsTabViewController extends GetxController {
   }
 
   Future applySettings() async {
-    Settings settings = homeViewController.settings.value;
+    Settings settings = Get.find<SettingsService>().settings.value;
+
     if (obsWebSocket != null) {
       obsWebSocket!.close();
     }

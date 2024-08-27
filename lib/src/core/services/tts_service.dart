@@ -2,27 +2,23 @@ import 'dart:io';
 
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
-import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 
-class TtsController extends GetxController {
+class TtsService extends GetxService {
   late FlutterTts flutterTts;
   RxList ttsLanguages = [].obs;
   RxList ttsVoices = [].obs;
 
-  late HomeViewController homeViewController;
-
-  @override
-  void onInit() {
-    homeViewController = Get.find<HomeViewController>();
+  Future<TtsService> init() async {
     flutterTts = FlutterTts();
     if (Platform.isAndroid) {
       flutterTts.setEngine(flutterTts.getDefaultEngine.toString());
     }
     getTtsVoices();
     getTtsLanguages();
-    super.onInit();
+    return this;
   }
 
   void initTts(Settings settings) async {
@@ -75,42 +71,37 @@ class TtsController extends GetxController {
   }
 
   void readTts(ChatMessage message) {
+    Settings settings = Get.find<SettingsService>().settings.value;
+
     // If the user is in the ignore list, we don't read the message
-    if (homeViewController.settings.value.ttsSettings!.ttsUsersToIgnore
-        .contains(message.displayName)) {
+    if (settings.ttsSettings!.ttsUsersToIgnore.contains(message.displayName)) {
       return;
     }
 
     // If we allow only vip to be read, we don't read the message if the user is not a vip
-    if (homeViewController.settings.value.ttsSettings!.ttsOnlyVip &&
-        !message.isVip) {
+    if (settings.ttsSettings!.ttsOnlyVip && !message.isVip) {
       return;
     }
 
     // If we allow only vip to be read, we don't read the message if the user is not a vip
-    if (homeViewController.settings.value.ttsSettings!.ttsOnlyMod &&
-        !message.isModerator) {
+    if (settings.ttsSettings!.ttsOnlyMod && !message.isModerator) {
       return;
     }
 
     // If we allow only vip to be read, we don't read the message if the user is not a vip
-    if (homeViewController.settings.value.ttsSettings!.ttsOnlySubscriber &&
-        !message.isSubscriber) {
+    if (settings.ttsSettings!.ttsOnlySubscriber && !message.isSubscriber) {
       return;
     }
 
     // If the prefix is in the ignore list, we don't read the message
-    for (String prefix
-        in homeViewController.settings.value.ttsSettings!.prefixsToIgnore) {
+    for (String prefix in settings.ttsSettings!.prefixsToIgnore) {
       if (message.message.startsWith(prefix)) {
         return;
       }
     }
     // If the list of prefixs to use TTS only is not empty, we only read the message if it starts with one of the prefixs
-    if (homeViewController
-        .settings.value.ttsSettings!.prefixsToUseTtsOnly.isNotEmpty) {
-      for (String prefix in homeViewController
-          .settings.value.ttsSettings!.prefixsToUseTtsOnly) {
+    if (settings.ttsSettings!.prefixsToUseTtsOnly.isNotEmpty) {
+      for (String prefix in settings.ttsSettings!.prefixsToUseTtsOnly) {
         if (message.message.startsWith(prefix) == false) {
           return;
         }
@@ -119,9 +110,9 @@ class TtsController extends GetxController {
     String text = "user_said_message".trParams(
       {'authorName': message.displayName, 'message': message.message},
     );
-    if (homeViewController.settings.value.ttsSettings!.ttsMuteViewerName) {
+    if (settings.ttsSettings!.ttsMuteViewerName) {
       text = message.message;
     }
-    Get.find<TtsController>().flutterTts.speak(text);
+    Get.find<TtsService>().flutterTts.speak(text);
   }
 }

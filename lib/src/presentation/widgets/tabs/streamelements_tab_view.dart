@@ -37,16 +37,10 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
                     ),
                     child: TabBarView(
                       controller: controller.tabController,
-                      children: [
-                        SeActivitiesList(
-                          controller: controller,
-                        ),
-                        SeSongRequests(
-                          controller: controller,
-                        ),
-                        SeOverlays(
-                          controller: controller,
-                        ),
+                      children: const [
+                        SeActivitiesList(),
+                        SeSongRequests(),
+                        SeOverlays(),
                       ],
                     ),
                   ),

@@ -33,14 +33,24 @@ class TwitchEventSub {
     this.accessToken,
   );
 
+  bool get isConnected => _streamSubscription != null;
+
   void connect() async {
     _broadcasterId = await _getChannelId();
 
-    _webSocketChannel =
-        IOWebSocketChannel.connect("wss://eventsub.wss.twitch.tv/ws");
-
+    String url = "wss://eventsub.wss.twitch.tv/ws";
     if (kDebugMode) {
-      _webSocketChannel = IOWebSocketChannel.connect("ws://localhost:8080/ws");
+      url = "ws://localhost:8080/ws";
+    }
+
+    _webSocketChannel = IOWebSocketChannel.connect(url);
+
+    try {
+      await _webSocketChannel?.ready;
+    } catch (e) {
+      globals.talker
+          ?.warning('Failed to connect to the Twitch EventSub Websocket.');
+      return;
     }
 
     _streamSubscription = _webSocketChannel?.stream.listen(
