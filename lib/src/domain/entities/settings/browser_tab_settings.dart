@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-
 class BrowserTabSettings extends Equatable {
   final List<BrowserTab> tabs;
 
@@ -11,7 +10,7 @@ class BrowserTabSettings extends Equatable {
   @override
   List<Object?> get props {
     return [
-     tabs,
+      tabs,
     ];
   }
 
@@ -30,7 +29,6 @@ class BrowserTabSettings extends Equatable {
     );
   }
 }
-
 
 class BrowserTab extends Equatable {
   final String id;

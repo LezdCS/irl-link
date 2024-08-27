@@ -3,13 +3,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
+import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
-import 'package:irllink/src/presentation/controllers/store_controller.dart';
+import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_view.dart';
 import 'package:irllink/src/presentation/widgets/chats/select_channel_dialog.dart';
@@ -36,7 +38,7 @@ class HomeView extends GetView<HomeViewController> {
     final double width = MediaQuery.of(context).size.width;
 
     return PopScope(
-      onPopInvoked: (bool invoked) async {
+      onPopInvokedWithResult: (bool invoked, dynamic d) async {
         if (invoked) {
           MoveToBackground.moveTaskToBack();
         }
@@ -108,8 +110,7 @@ class HomeView extends GetView<HomeViewController> {
                         child: const Dashboard(),
                       ),
                       Visibility(
-                        visible:
-                            Get.find<StoreController>().purchasePending.value,
+                        visible: Get.find<StoreService>().purchasePending.value,
                         child: CircularProgressIndicator(
                           color: context.theme.colorScheme.tertiary,
                         ),
@@ -161,7 +162,7 @@ class HomeView extends GetView<HomeViewController> {
                         ),
                       ),
                       Visibility(
-                        visible: controller.chatsViews.length > 1,
+                        visible: controller.chatsViews.length > 1 || controller.chatsViews.first.chatGroup.channels.length > 1,
                         child: _tabBarChats(context),
                       ),
                       _chats(context),
@@ -171,12 +172,12 @@ class HomeView extends GetView<HomeViewController> {
           ),
           Visibility(
             visible: controller.isPickingEmote.value,
-            child: Positioned(
+            child: const Positioned(
               bottom: 50,
               top: 50,
               left: 10,
               right: 150,
-              child: EmotePickerView(homeViewController: controller),
+              child: EmotePickerView(),
             ),
           ),
           Positioned(
@@ -225,6 +226,8 @@ class HomeView extends GetView<HomeViewController> {
   }
 
   Widget _bottomNavBar(double height, double width, BuildContext context) {
+    Settings settings = Get.find<SettingsService>().settings.value;
+
     return Container(
       padding: const EdgeInsets.only(left: 10),
       height: height * 0.06,
@@ -232,112 +235,109 @@ class HomeView extends GetView<HomeViewController> {
         children: [
           Expanded(
             flex: 5,
-            child: Stack(
-              alignment: AlignmentDirectional.center,
-              children: [
-                SvgPicture.asset(
-                  './lib/assets/chatinput.svg',
-                  semanticsLabel: 'chat input',
-                  fit: BoxFit.fitWidth,
-                ),
-                Container(
-                  padding: const EdgeInsets.only(left: 5, right: 5),
-                  child: Row(
-                    children: [
-                      InkWell(
-                        onTap: () => controller.getEmotes(),
-                        child: const Image(
-                          image: AssetImage("lib/assets/twitchSmileEmoji.png"),
-                          width: 30,
-                        ),
-                      ),
-                      Expanded(
-                        child: TextField(
-                          controller: controller.chatInputController,
-                          onSubmitted: (String value) {
-                            if (controller.selectedChatGroup.value == null) {
-                              return;
-                            }
-                            ChatViewController chatViewController =
-                                Get.find<ChatViewController>(
-                                    tag:
-                                        controller.selectedChatGroup.value?.id);
-                            List<TwitchChat> twitchChats = [];
-                            twitchChats.addAll(
-                                chatViewController.twitchChats.toList());
-                            if (twitchChats.length == 1) {
-                              controller.sendChatMessage(
-                                  value, twitchChats.first.channel);
-                              controller.chatInputController.text = '';
-                              FocusScope.of(context).unfocus();
-                            } else {
-                              selectChatToSend(
-                                context,
-                                controller,
-                                twitchChats,
-                                value,
-                              );
-                            }
-                          },
-                          onTap: () {
-                            controller.selectedMessage.value = null;
-                            controller.isPickingEmote.value = false;
-                          },
-                          textInputAction: TextInputAction.send,
-                          maxLines: 1,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: controller.settings.value.generalSettings!
-                                    .displayViewerCount
-                                ? '${Get.find<TwitchTabViewController>().twitchStreamInfos.value.viewerCount} viewers'
-                                : 'send_message'.tr,
-                            hintStyle: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color!,
-                            ),
-                            isDense: true,
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            contentPadding: const EdgeInsets.only(left: 5),
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          if (controller.selectedChatGroup.value == null) {
-                            return;
-                          }
-                          ChatViewController chatViewController =
-                              Get.find<ChatViewController>(
-                                  tag: controller.selectedChatGroup.value?.id);
-                          List<TwitchChat> twitchChats = [];
-                          twitchChats
-                              .addAll(chatViewController.twitchChats.toList());
-                          if (twitchChats.length == 1) {
-                            controller.sendChatMessage(
-                                controller.chatInputController.text,
-                                twitchChats.first.channel);
-                            controller.chatInputController.text = '';
-                            FocusScope.of(context).unfocus();
-                          } else {
-                            selectChatToSend(
-                              context,
-                              controller,
-                              twitchChats,
-                              controller.chatInputController.text,
-                            );
-                          }
-                        },
-                        child: Icon(
-                          Icons.send,
-                          color: Theme.of(context).primaryIconTheme.color,
-                          size: 21,
-                        ),
-                      ),
-                    ],
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(colors: [
+                  Color.fromARGB(255, 45, 2, 53),
+                  Color.fromARGB(255, 81, 16, 93),
+                ]),
+                borderRadius: BorderRadius.all(Radius.circular(8))
+              ),
+              padding: const EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
+              child: Row(
+                children: [
+                  InkWell(
+                    onTap: () => controller.getEmotes(),
+                    child: const Image(
+                      image: AssetImage("lib/assets/twitchSmileEmoji.png"),
+                      width: 30,
+                    ),
                   ),
-                ),
-              ],
+                  Expanded(
+                    child: TextField(
+                      controller: controller.chatInputController,
+                      onSubmitted: (String value) {
+                        if (controller.selectedChatGroup.value == null) {
+                          return;
+                        }
+                        ChatViewController chatViewController =
+                            Get.find<ChatViewController>(
+                                tag:
+                                    controller.selectedChatGroup.value?.id);
+                        List<TwitchChat> twitchChats = [];
+                        twitchChats.addAll(
+                            chatViewController.twitchChats.toList());
+                        if (twitchChats.length == 1) {
+                          controller.sendChatMessage(
+                              value, twitchChats.first.channel);
+                          controller.chatInputController.text = '';
+                          FocusScope.of(context).unfocus();
+                        } else {
+                          selectChatToSend(
+                            context,
+                            controller,
+                            twitchChats,
+                            value,
+                          );
+                        }
+                      },
+                      onTap: () {
+                        controller.selectedMessage.value = null;
+                        controller.isPickingEmote.value = false;
+                      },
+                      textInputAction: TextInputAction.send,
+                      maxLines: 1,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: settings
+                                .generalSettings!.displayViewerCount
+                            ? '${Get.find<TwitchTabViewController>().twitchStreamInfos.value.viewerCount} viewers'
+                            : 'send_message'.tr,
+                        hintStyle: TextStyle(
+                          color:
+                              Theme.of(context).textTheme.bodyLarge!.color!,
+                        ),
+                        isDense: true,
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        contentPadding: const EdgeInsets.only(left: 5),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      if (controller.selectedChatGroup.value == null) {
+                        return;
+                      }
+                      ChatViewController chatViewController =
+                          Get.find<ChatViewController>(
+                              tag: controller.selectedChatGroup.value?.id);
+                      List<TwitchChat> twitchChats = [];
+                      twitchChats
+                          .addAll(chatViewController.twitchChats.toList());
+                      if (twitchChats.length == 1) {
+                        controller.sendChatMessage(
+                            controller.chatInputController.text,
+                            twitchChats.first.channel);
+                        controller.chatInputController.text = '';
+                        FocusScope.of(context).unfocus();
+                      } else {
+                        selectChatToSend(
+                          context,
+                          controller,
+                          twitchChats,
+                          controller.chatInputController.text,
+                        );
+                      }
+                    },
+                    child: Icon(
+                      Icons.send,
+                      color: Theme.of(context).primaryIconTheme.color,
+                      size: 21,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           Get.find<TwitchTabViewController>().twitchEventSub != null
@@ -436,7 +436,7 @@ class HomeView extends GetView<HomeViewController> {
                 )
               : Container(),
           Visibility(
-            visible: controller.settings.value.dashboardSettings!.activated,
+            visible: settings.dashboardSettings!.activated,
             child: Expanded(
               flex: 1,
               child: InkWell(
@@ -459,30 +459,10 @@ class HomeView extends GetView<HomeViewController> {
                 await Get.toNamed(
                   Routes.settings,
                 );
-                await controller.getSettings();
-                if (controller.twitchData != null) {
-                  for (var chan in controller.chatsViews) {
-                    if (Get.isRegistered<ChatViewController>(
-                        tag: chan.chatGroup.id)) {
-                      ChatViewController c =
-                          Get.find<ChatViewController>(tag: chan.chatGroup.id);
-                      ChatGroup? chatGroupUpdated = controller
-                          .settings.value.chatSettings?.chatGroups
-                          .firstWhereOrNull((cg) => cg.id == chan.chatGroup.id);
-                      if (chatGroupUpdated != null) {
-                        c.chatGroup = chatGroupUpdated;
-                      }
-                      c.applySettings();
-                    }
-                  }
-                }
+                controller.applySettings();
                 controller.obsTabViewController?.applySettings();
-                controller.streamelementsViewController?.applySettings();
+                controller.streamelementsViewController.value?.applySettings();
                 controller.realtimeIrlViewController?.applySettings();
-                if (controller.selectedChatIndex != null) {
-                  controller.chatTabsController
-                      .animateTo(controller.selectedChatIndex!);
-                }
               },
               child: Icon(
                 Icons.settings,
@@ -511,8 +491,6 @@ class HomeView extends GetView<HomeViewController> {
   }
 
   Widget _tabBarChats(BuildContext context) {
-    int tabsLength = controller.chatsViews.length;
-
     Color? getPlatformColor(Platform platform) {
       switch (platform) {
         case Platform.twitch:
@@ -526,54 +504,60 @@ class HomeView extends GetView<HomeViewController> {
       }
     }
 
-    return TabBar(
-      controller: controller.chatTabsController,
-      isScrollable: true,
-      onTap: (int i) {
-        if (Get.isRegistered<ChatViewController>(
-            tag: controller.chatsViews[i].chatGroup.id)) {
-          ChatViewController c = Get.find<ChatViewController>(
-            tag: controller.chatsViews[i].chatGroup.id,
-          );
-          c.scrollToBottom();
-          controller.selectedChatGroup.value = c.chatGroup;
-        }
-        controller.selectedMessage.value = null;
-        controller.selectedChatIndex = i;
-      },
-      tabs: List<Tab>.generate(
-        tabsLength,
-        (int index) {
-          List<Channel> channels =
-              controller.chatsViews[index].chatGroup.channels;
-          return Tab(
-            height: 30,
-            child: Text.rich(
-              TextSpan(
-                children: List<TextSpan>.generate(
-                  channels.length,
-                  (int i) => TextSpan(
-                    children: [
-                      TextSpan(
-                        text: i == (channels.length - 1) ? '' : ', ',
-                        style: TextStyle(
-                          color:
-                              Theme.of(Get.context!).textTheme.bodyLarge!.color,
+    return Obx(() {
+      int tabsLength = controller.chatsViews.length;
+
+      return TabBar(
+        controller: controller.chatTabsController,
+        isScrollable: true,
+        onTap: (int i) {
+          if (Get.isRegistered<ChatViewController>(
+              tag: controller.chatsViews[i].chatGroup.id)) {
+            ChatViewController c = Get.find<ChatViewController>(
+              tag: controller.chatsViews[i].chatGroup.id,
+            );
+            c.scrollToBottom();
+            controller.selectedChatGroup.value = c.chatGroup;
+          }
+          controller.selectedMessage.value = null;
+          controller.selectedChatIndex = i;
+        },
+        tabs: List<Tab>.generate(
+          tabsLength,
+          (int index) {
+            List<Channel> channels =
+                controller.chatsViews[index].chatGroup.channels;
+            return Tab(
+              height: 30,
+              child: Text.rich(
+                TextSpan(
+                  children: List<TextSpan>.generate(
+                    channels.length,
+                    (int i) => TextSpan(
+                      children: [
+                        TextSpan(
+                          text: i == (channels.length - 1) ? '' : ', ',
+                          style: TextStyle(
+                            color: Theme.of(Get.context!)
+                                .textTheme
+                                .bodyLarge!
+                                .color,
+                          ),
                         ),
+                      ],
+                      text: channels[i].channel,
+                      style: TextStyle(
+                        color: getPlatformColor(channels[i].platform),
                       ),
-                    ],
-                    text: channels[i].channel,
-                    style: TextStyle(
-                      color: getPlatformColor(channels[i].platform),
                     ),
                   ),
                 ),
               ),
-            ),
-          );
-        },
-      ),
-    );
+            );
+          },
+        ),
+      );
+    });
   }
 
   Widget _chats(BuildContext context) {

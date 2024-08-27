@@ -11,38 +11,32 @@ import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/core/utils/globals.dart' as globals;
 
-class StoreController extends GetxController {
+class StoreService extends GetxService {
   late StreamSubscription<List<PurchaseDetails>> subscription;
   List<ProductDetails> products = [];
   RxBool purchasePending = false.obs;
   RxList<PurchaseDetails> purchases = <PurchaseDetails>[].obs;
   RxBool storeFound = false.obs;
 
-  Set<String> kIds = <String>{'irl_premium_subscription'};
+  Set<String> kIds = <String>{'irl_premium_subscription', 'irl_premium'};
 
-  @override
-  Future<void> onInit() async {
+  Future<StoreService> init() async {
     await getStore();
     await getStoreProducts();
     initListeningStorePurchase();
-    super.onInit();
+    return this;
   }
 
   //Function isSubscribed
   bool isSubscribed() {
-    return Platform.isIOS ||
-        kDebugMode ||
-        purchases.firstWhereOrNull(
-              (element) => element.productID == kIds.first,
-            ) !=
-            null;
+    return purchases.any((p) => kIds.contains(p.productID));
   }
 
   // Function get subscription price
   String getSubscriptionPrice() {
     return products
             .firstWhereOrNull(
-              (element) => element.id == kIds.first,
+              (p) => kIds.contains(p.id),
             )
             ?.price ??
         "";
@@ -122,6 +116,10 @@ class StoreController extends GetxController {
   }
 
   Future<bool> verifyPurchase(PurchaseDetails purchaseDetails) async {
+    if (Platform.isIOS) {
+      return Future<bool>.value(true);
+    }
+
     String? pruchaseToken =
         purchaseDetails.verificationData.serverVerificationData;
     HomeViewController homeViewController = Get.find<HomeViewController>();
@@ -150,7 +148,7 @@ class StoreController extends GetxController {
   Future<void> deliverProduct(PurchaseDetails purchaseDetails) async {
     purchases.add(purchaseDetails);
     purchasePending.value = false;
-    Get.find<HomeViewController>().getSettings();
+    Get.find<HomeViewController>().applySettings();
 
     if (purchaseDetails.status == PurchaseStatus.purchased) {
       Get.back();

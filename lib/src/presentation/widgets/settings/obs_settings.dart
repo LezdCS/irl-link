@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -12,6 +14,8 @@ class ObsSettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Settings settings = Get.find<SettingsService>().settings.value;
+
     return Obx(
       () => Container(
         padding: const EdgeInsets.all(10),
@@ -32,10 +36,8 @@ class ObsSettings extends StatelessWidget {
                     controller: controller.obsWebsocketUrlFieldController,
                     obscureText: !controller.obsWebsocketUrlShow.value,
                     onChanged: (value) {
-                      controller.homeViewController.settings.value = controller
-                          .homeViewController.settings.value
-                          .copyWith(obsWebsocketUrl: value);
-                      controller.saveSettings();
+                      Get.find<SettingsService>().settings.value = settings.copyWith(obsWebsocketUrl: value);
+                      Get.find<SettingsService>().saveSettings();
                     },
                     decoration: InputDecoration(
                       isDense: true,
@@ -70,10 +72,8 @@ class ObsSettings extends StatelessWidget {
                     controller: controller.obsWebsocketPasswordFieldController,
                     obscureText: !controller.obsWebsocketPasswordShow.value,
                     onChanged: (value) {
-                      controller.homeViewController.settings.value = controller
-                          .homeViewController.settings.value
-                          .copyWith(obsWebsocketPassword: value);
-                      controller.saveSettings();
+                      Get.find<SettingsService>().settings.value = settings.copyWith(obsWebsocketPassword: value);
+                      Get.find<SettingsService>().saveSettings();
                     },
                     decoration: InputDecoration(
                       isDense: true,
@@ -204,6 +204,8 @@ class ObsSettings extends StatelessWidget {
       width: 250,
       height: 250,
     );
+    Settings settings = Get.find<SettingsService>().settings.value;
+
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -219,15 +221,11 @@ class ObsSettings extends StatelessWidget {
               controller.obsWebsocketPasswordFieldController.text = password;
               controller.obsWebsocketUrlFieldController.text = url;
 
-              controller.homeViewController.settings.value = controller
-                  .homeViewController.settings.value
-                  .copyWith(obsWebsocketUrl: url);
+              Get.find<SettingsService>().settings.value = settings.copyWith(obsWebsocketUrl: url);
 
-              controller.homeViewController.settings.value = controller
-                  .homeViewController.settings.value
-                  .copyWith(obsWebsocketPassword: password);
+              Get.find<SettingsService>().settings.value = settings.copyWith(obsWebsocketPassword: password);
 
-              controller.saveSettings();
+              Get.find<SettingsService>().saveSettings();
               Get.back();
             }
           },
@@ -280,26 +278,25 @@ class ObsSettings extends StatelessWidget {
   }
 
   Widget _obsHistory(SettingsViewController controller) {
+    Settings settings = Get.find<SettingsService>().settings.value;
+
     return SizedBox(
       height: 200,
+      width: 300,
       child: ListView.builder(
-        itemCount: controller
-            .homeViewController.settings.value.obsConnectionsHistory!.length,
+        itemCount: settings.obsConnectionsHistory!.length,
         itemBuilder: (context, index) {
-          String url = controller.homeViewController.settings.value
-              .obsConnectionsHistory![index]['url']!;
-          String password = controller.homeViewController.settings.value
-              .obsConnectionsHistory![index]['password']!;
+          String url = settings.obsConnectionsHistory![index]['url']!;
+          String password = settings.obsConnectionsHistory![index]['password']!;
 
           return ListTile(
             title: Text(url),
             onTap: () {
               controller.obsWebsocketUrlFieldController.text = url;
               controller.obsWebsocketPasswordFieldController.text = password;
-              controller.homeViewController.settings.value =
-                  controller.homeViewController.settings.value.copyWith(
-                      obsWebsocketUrl: url, obsWebsocketPassword: password);
-              controller.saveSettings();
+              Get.find<SettingsService>().settings.value = settings.copyWith(
+                  obsWebsocketUrl: url, obsWebsocketPassword: password);
+              Get.find<SettingsService>().saveSettings();
               Get.back();
             },
           );

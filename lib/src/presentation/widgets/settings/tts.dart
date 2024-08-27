@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:get/get.dart';
 
@@ -12,393 +14,484 @@ class Tts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Theme.of(context).textTheme.bodyLarge!.color,
+      () {
+        Settings settings = Get.find<SettingsService>().settings.value;
+        return Scaffold(
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          appBar: AppBar(
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: Theme.of(context).textTheme.bodyLarge!.color,
+              ),
+              onPressed: () => Get.back(),
             ),
-            onPressed: () => Get.back(),
+            actions: const [],
+            title: Text(
+              "text_to_speech".tr,
+            ),
           ),
-          actions: const [],
-          title: Text(
-            "text_to_speech".tr,
-          ),
-        ),
-        body: SingleChildScrollView(
-          child: Container(
-            padding:
-                const EdgeInsets.only(top: 8, left: 10, right: 10, bottom: 8),
-            color: Theme.of(context).colorScheme.surface,
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "enable_tts".tr,
-                      style: const TextStyle(
-                        fontSize: 18,
+          body: SingleChildScrollView(
+            child: Container(
+              padding:
+                  const EdgeInsets.only(top: 8, left: 10, right: 10, bottom: 8),
+              color: Theme.of(context).colorScheme.surface,
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "enable_tts".tr,
+                        style: const TextStyle(
+                          fontSize: 18,
+                        ),
                       ),
-                    ),
-                    Switch(
-                      value: controller.homeViewController.settings.value
-                          .ttsSettings!.ttsEnabled,
-                      onChanged: (value) {
-                        controller.homeViewController.settings.value =
-                            controller.homeViewController.settings.value
-                                .copyWith(
-                          ttsSettings: controller
-                              .homeViewController.settings.value.ttsSettings
-                              ?.copyWith(ttsEnabled: value),
-                        );
-                        controller.saveSettings();
-                      },
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "language".tr,
-                      style: const TextStyle(
-                        fontSize: 18,
+                      Switch(
+                        value: settings.ttsSettings!.ttsEnabled,
+                        onChanged: (value) {
+                          Get.find<SettingsService>().settings.value =
+                              settings.copyWith(
+                            ttsSettings: settings.ttsSettings
+                                ?.copyWith(ttsEnabled: value),
+                          );
+                          Get.find<SettingsService>().saveSettings();
+                        },
                       ),
-                    ),
-                    DropdownButton(
-                      value: controller.ttsController.ttsLanguages.firstWhere(
-                        (element) =>
-                            element ==
-                            controller.homeViewController.settings.value
-                                .ttsSettings!.language,
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "language".tr,
+                        style: const TextStyle(
+                          fontSize: 18,
+                        ),
                       ),
-                      onChanged: (value) {
-                        controller.homeViewController.settings.value =
-                            controller.homeViewController.settings.value
-                                .copyWith(
-                          ttsSettings: controller
-                              .homeViewController.settings.value.ttsSettings
-                              ?.copyWith(language: value.toString()),
-                        );
-                        controller.saveSettings();
-                      },
-                      items: List.generate(
-                        controller.ttsController.ttsLanguages.length,
-                        (index) => DropdownMenuItem(
-                          value: controller.ttsController.ttsLanguages[index],
-                          child: Text(
-                            controller.ttsController.ttsLanguages[index],
+                      DropdownButton(
+                        value: controller.ttsService.ttsLanguages.firstWhere(
+                          (element) =>
+                              element == settings.ttsSettings!.language,
+                        ),
+                        onChanged: (value) {
+                          Get.find<SettingsService>().settings.value =
+                              settings.copyWith(
+                            ttsSettings: settings.ttsSettings
+                                ?.copyWith(language: value.toString()),
+                          );
+                          Get.find<SettingsService>().saveSettings();
+                        },
+                        items: List.generate(
+                          controller.ttsService.ttsLanguages.length,
+                          (index) => DropdownMenuItem(
+                            value: controller.ttsService.ttsLanguages[index],
+                            child: Text(
+                              controller.ttsService.ttsLanguages[index],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                Platform.isAndroid
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "voice".tr,
-                            style: const TextStyle(
-                              fontSize: 18,
-                            ),
-                          ),
-                          DropdownButton(
-                            value:
-                                controller.ttsController.ttsVoices.firstWhere(
-                              (element) =>
-                                  element["name"] ==
-                                  controller.homeViewController.settings.value
-                                      .ttsSettings!.voice["name"],
-                            ),
-                            onChanged: (Object? value) {
-                              Map<String, String> voice = {
-                                "name": (value as Map)["name"],
-                                "locale": (value)["locale"],
-                              };
-                              controller.homeViewController.settings.value =
-                                  controller.homeViewController.settings.value
-                                      .copyWith(
-                                ttsSettings: controller.homeViewController
-                                    .settings.value.ttsSettings
-                                    ?.copyWith(voice: voice),
-                              );
-                              controller.saveSettings();
-                            },
-                            items: List.generate(
-                              controller.ttsController.ttsVoices.length,
-                              (index) => DropdownMenuItem(
-                                value:
-                                    controller.ttsController.ttsVoices[index],
-                                child: Text(controller
-                                    .ttsController.ttsVoices[index]["name"]),
+                    ],
+                  ),
+                  Platform.isAndroid
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "voice".tr,
+                              style: const TextStyle(
+                                fontSize: 18,
                               ),
                             ),
-                          ),
-                        ],
+                            DropdownButton(
+                              value: controller.ttsService.ttsVoices.firstWhere(
+                                (element) =>
+                                    element["name"] ==
+                                    settings.ttsSettings!.voice["name"],
+                              ),
+                              onChanged: (Object? value) {
+                                Map<String, String> voice = {
+                                  "name": (value as Map)["name"],
+                                  "locale": (value)["locale"],
+                                };
+                                Get.find<SettingsService>().settings.value =
+                                    settings.copyWith(
+                                  ttsSettings: settings.ttsSettings
+                                      ?.copyWith(voice: voice),
+                                );
+                                Get.find<SettingsService>().saveSettings();
+                              },
+                              items: List.generate(
+                                controller.ttsService.ttsVoices.length,
+                                (index) => DropdownMenuItem(
+                                  value: controller.ttsService.ttsVoices[index],
+                                  child: Text(controller
+                                      .ttsService.ttsVoices[index]["name"]),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : Container(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Volume",
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                      Slider(
+                        value: settings.ttsSettings!.volume,
+                        onChanged: (value) {
+                          Get.find<SettingsService>().settings.value =
+                              settings.copyWith(
+                            ttsSettings:
+                                settings.ttsSettings?.copyWith(volume: value),
+                          );
+                          Get.find<SettingsService>().saveSettings();
+                        },
+                        max: 1,
+                        min: 0,
                       )
-                    : Container(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "Volume",
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                    Slider(
-                      value: controller.homeViewController.settings.value
-                          .ttsSettings!.volume,
-                      onChanged: (value) {
-                        controller.homeViewController.settings.value =
-                            controller.homeViewController.settings.value
-                                .copyWith(
-                          ttsSettings: controller
-                              .homeViewController.settings.value.ttsSettings
-                              ?.copyWith(volume: value),
-                        );
-                        controller.saveSettings();
-                      },
-                      max: 1,
-                      min: 0,
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "speech_rate".tr,
-                      style: const TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                    Slider(
-                      value: controller
-                          .homeViewController.settings.value.ttsSettings!.rate,
-                      onChanged: (value) {
-                        controller.homeViewController.settings.value =
-                            controller.homeViewController.settings.value
-                                .copyWith(
-                          ttsSettings: controller
-                              .homeViewController.settings.value.ttsSettings
-                              ?.copyWith(rate: value),
-                        );
-                        controller.saveSettings();
-                      },
-                      max: 1,
-                      min: 0,
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "pitch".tr,
-                      style: const TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                    Slider(
-                      value: controller
-                          .homeViewController.settings.value.ttsSettings!.pitch,
-                      onChanged: (value) {
-                        controller.homeViewController.settings.value =
-                            controller.homeViewController.settings.value
-                                .copyWith(
-                          ttsSettings: controller
-                              .homeViewController.settings.value.ttsSettings
-                              ?.copyWith(pitch: value),
-                        );
-                        controller.saveSettings();
-                      },
-                      max: 1,
-                      min: 0,
-                    )
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "Mute viewer name",
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                    Switch(
-                      value: controller.homeViewController.settings.value
-                          .ttsSettings!.ttsMuteViewerName,
-                      onChanged: (value) {
-                        controller.homeViewController.settings.value =
-                            controller.homeViewController.settings.value
-                                .copyWith(
-                          ttsSettings: controller
-                              .homeViewController.settings.value.ttsSettings
-                              ?.copyWith(ttsMuteViewerName: value),
-                        );
-                        controller.saveSettings();
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "Only read VIP messages",
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                    Switch(
-                      value: controller.homeViewController.settings.value
-                          .ttsSettings!.ttsOnlyVip,
-                      onChanged: (value) {
-                        controller.homeViewController.settings.value =
-                            controller.homeViewController.settings.value
-                                .copyWith(
-                          ttsSettings: controller
-                              .homeViewController.settings.value.ttsSettings
-                              ?.copyWith(ttsOnlyVip: value),
-                        );
-                        controller.saveSettings();
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "Only read Moderators messages",
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                    Switch(
-                      value: controller.homeViewController.settings.value
-                          .ttsSettings!.ttsOnlyMod,
-                      onChanged: (value) {
-                        controller.homeViewController.settings.value =
-                            controller.homeViewController.settings.value
-                                .copyWith(
-                          ttsSettings: controller
-                              .homeViewController.settings.value.ttsSettings
-                              ?.copyWith(ttsOnlyMod: value),
-                        );
-                        controller.saveSettings();
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "Only read Subscriber messages",
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                    Switch(
-                      value: controller.homeViewController.settings.value
-                          .ttsSettings!.ttsOnlySubscriber,
-                      onChanged: (value) {
-                        controller.homeViewController.settings.value =
-                            controller.homeViewController.settings.value
-                                .copyWith(
-                          ttsSettings: controller
-                              .homeViewController.settings.value.ttsSettings
-                              ?.copyWith(ttsOnlySubscriber: value),
-                        );
-                        controller.saveSettings();
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                InkWell(
-                  onTap: () {
-                    _ttsDialog(
-                      title: 'Ignored prefixs',
-                      description:
-                          'Message starting with these prefixs will not be read aloud.',
-                      textFieldHint: 'Prefix',
-                      list: controller.homeViewController.settings.value
-                          .ttsSettings!.prefixsToIgnore,
-                      onDeleted: (index) {
-                        controller.homeViewController.settings.value
-                            .ttsSettings!.prefixsToIgnore
-                            .removeAt(index);
-                        controller.homeViewController.settings.value =
-                            controller.homeViewController.settings.value
-                                .copyWith(
-                          ttsSettings: controller
-                              .homeViewController.settings.value.ttsSettings
-                              ?.copyWith(
-                                  prefixsToIgnore: controller
-                                      .homeViewController
-                                      .settings
-                                      .value
-                                      .ttsSettings!
-                                      .prefixsToIgnore),
-                        );
-                        controller.saveSettings();
-                        controller.nothingJustToRefreshDialog.refresh();
-                      },
-                      controller: controller,
-                      textFieldController:
-                          controller.addTtsIgnoredPrefixsController,
-                      onAdd: () {
-                        controller.homeViewController.settings.value
-                            .ttsSettings!.prefixsToIgnore
-                            .add(controller.addTtsIgnoredPrefixsController.text
-                                .trim());
-                        controller.homeViewController.settings.value =
-                            controller.homeViewController.settings.value
-                                .copyWith(
-                          ttsSettings: controller
-                              .homeViewController.settings.value.ttsSettings
-                              ?.copyWith(
-                                  prefixsToIgnore: controller
-                                      .homeViewController
-                                      .settings
-                                      .value
-                                      .ttsSettings!
-                                      .prefixsToIgnore),
-                        );
-                        controller.addTtsIgnoredPrefixsController.clear();
-                        controller.saveSettings();
-                        controller.nothingJustToRefreshDialog.refresh();
-                      },
-                    );
-                  },
-                  child: Row(
+                    ],
+                  ),
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(
-                        child: Column(
+                      Text(
+                        "speech_rate".tr,
+                        style: const TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                      Slider(
+                        value: settings.ttsSettings!.rate,
+                        onChanged: (value) {
+                          Get.find<SettingsService>().settings.value =
+                              settings.copyWith(
+                            ttsSettings:
+                                settings.ttsSettings?.copyWith(rate: value),
+                          );
+                          Get.find<SettingsService>().saveSettings();
+                        },
+                        max: 1,
+                        min: 0,
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "pitch".tr,
+                        style: const TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                      Slider(
+                        value: settings.ttsSettings!.pitch,
+                        onChanged: (value) {
+                          Get.find<SettingsService>().settings.value =
+                              settings.copyWith(
+                            ttsSettings:
+                                settings.ttsSettings?.copyWith(pitch: value),
+                          );
+                          Get.find<SettingsService>().saveSettings();
+                        },
+                        max: 1,
+                        min: 0,
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Mute viewer name",
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                      Switch(
+                        value: settings.ttsSettings!.ttsMuteViewerName,
+                        onChanged: (value) {
+                          Get.find<SettingsService>().settings.value =
+                              settings.copyWith(
+                            ttsSettings: settings.ttsSettings
+                                ?.copyWith(ttsMuteViewerName: value),
+                          );
+                          Get.find<SettingsService>().saveSettings();
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Only read VIP messages",
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                      Switch(
+                        value: settings.ttsSettings!.ttsOnlyVip,
+                        onChanged: (value) {
+                          Get.find<SettingsService>().settings.value =
+                              settings.copyWith(
+                            ttsSettings: settings.ttsSettings
+                                ?.copyWith(ttsOnlyVip: value),
+                          );
+                          Get.find<SettingsService>().saveSettings();
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Only read Moderators messages",
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                      Switch(
+                        value: settings.ttsSettings!.ttsOnlyMod,
+                        onChanged: (value) {
+                          Get.find<SettingsService>().settings.value =
+                              settings.copyWith(
+                            ttsSettings: settings.ttsSettings
+                                ?.copyWith(ttsOnlyMod: value),
+                          );
+                          Get.find<SettingsService>().saveSettings();
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Only read Subscriber messages",
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                      Switch(
+                        value: settings.ttsSettings!.ttsOnlySubscriber,
+                        onChanged: (value) {
+                          Get.find<SettingsService>().settings.value =
+                              settings.copyWith(
+                            ttsSettings: settings.ttsSettings
+                                ?.copyWith(ttsOnlySubscriber: value),
+                          );
+                          Get.find<SettingsService>().saveSettings();
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  InkWell(
+                    onTap: () {
+                      _ttsDialog(
+                        title: 'Ignored prefixs',
+                        description:
+                            'Message starting with these prefixs will not be read aloud.',
+                        textFieldHint: 'Prefix',
+                        list: settings.ttsSettings!.prefixsToIgnore,
+                        onDeleted: (index) {
+                          settings.ttsSettings!.prefixsToIgnore.removeAt(index);
+                          Get.find<SettingsService>().settings.value =
+                              settings.copyWith(
+                            ttsSettings: settings.ttsSettings?.copyWith(
+                                prefixsToIgnore:
+                                    settings.ttsSettings!.prefixsToIgnore),
+                          );
+                          Get.find<SettingsService>().saveSettings();
+                          controller.nothingJustToRefreshDialog.refresh();
+                        },
+                        controller: controller,
+                        textFieldController:
+                            controller.addTtsIgnoredPrefixsController,
+                        onAdd: () {
+                          settings.ttsSettings!.prefixsToIgnore.add(controller
+                              .addTtsIgnoredPrefixsController.text
+                              .trim());
+                          Get.find<SettingsService>().settings.value =
+                              settings.copyWith(
+                            ttsSettings: settings.ttsSettings?.copyWith(
+                                prefixsToIgnore:
+                                    settings.ttsSettings!.prefixsToIgnore),
+                          );
+                          controller.addTtsIgnoredPrefixsController.clear();
+                          Get.find<SettingsService>().saveSettings();
+                          controller.nothingJustToRefreshDialog.refresh();
+                        },
+                      );
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "prefixs_ignored".tr,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                ),
+                              ),
+                              Text(
+                                "prefixs_ignored_details".tr,
+                                style: TextStyle(
+                                  color: Colors.grey[400],
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          color: Theme.of(context).primaryIconTheme.color,
+                          size: 18,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  InkWell(
+                    onTap: () {
+                      _ttsDialog(
+                        title: 'Allowed prefixs',
+                        description:
+                            'Only messages starting with these prefixs will be read aloud.',
+                        textFieldHint: 'Prefix',
+                        list: settings.ttsSettings!.prefixsToUseTtsOnly,
+                        onDeleted: (index) {
+                          settings.ttsSettings!.prefixsToUseTtsOnly
+                              .removeAt(index);
+                          Get.find<SettingsService>().settings.value =
+                              settings.copyWith(
+                            ttsSettings: settings.ttsSettings?.copyWith(
+                                prefixsToUseTtsOnly:
+                                    settings.ttsSettings!.prefixsToUseTtsOnly),
+                          );
+                          controller.nothingJustToRefreshDialog.refresh();
+                          Get.find<SettingsService>().saveSettings();
+                        },
+                        controller: controller,
+                        textFieldController:
+                            controller.addTtsAllowedPrefixsController,
+                        onAdd: () {
+                          settings.ttsSettings!.prefixsToUseTtsOnly.add(
+                              controller.addTtsAllowedPrefixsController.text
+                                  .trim());
+                          Get.find<SettingsService>().settings.value =
+                              settings.copyWith(
+                            ttsSettings: settings.ttsSettings?.copyWith(
+                                prefixsToUseTtsOnly:
+                                    settings.ttsSettings!.prefixsToUseTtsOnly),
+                          );
+                          controller.nothingJustToRefreshDialog.refresh();
+                          controller.addTtsAllowedPrefixsController.clear();
+                          Get.find<SettingsService>().saveSettings();
+                        },
+                      );
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "prefixs_allowed".tr,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                ),
+                              ),
+                              Text(
+                                "prefixs_allowed_details".tr,
+                                style: TextStyle(
+                                  color: Colors.grey[400],
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          color: Theme.of(context).primaryIconTheme.color,
+                          size: 18,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  InkWell(
+                    onTap: () {
+                      _ttsDialog(
+                        title: 'Ignored users',
+                        description: 'Users that will not be read aloud.',
+                        textFieldHint: 'Username',
+                        list: settings.ttsSettings!.ttsUsersToIgnore,
+                        onDeleted: (index) {
+                          settings.ttsSettings!.ttsUsersToIgnore
+                              .removeAt(index);
+                          Get.find<SettingsService>().settings.value =
+                              settings.copyWith(
+                            ttsSettings: settings.ttsSettings?.copyWith(
+                                ttsUsersToIgnore:
+                                    settings.ttsSettings!.ttsUsersToIgnore),
+                          );
+                          Get.find<SettingsService>().saveSettings();
+                          controller.nothingJustToRefreshDialog.refresh();
+                        },
+                        controller: controller,
+                        textFieldController:
+                            controller.addTtsIgnoredUsersController,
+                        onAdd: () {
+                          settings.ttsSettings!.ttsUsersToIgnore.add(controller
+                              .addTtsIgnoredUsersController.text
+                              .trim());
+                          Get.find<SettingsService>().settings.value =
+                              settings.copyWith(
+                            ttsSettings: settings.ttsSettings?.copyWith(
+                                ttsUsersToIgnore:
+                                    settings.ttsSettings!.ttsUsersToIgnore),
+                          );
+                          controller.addTtsIgnoredUsersController.clear();
+                          Get.find<SettingsService>().saveSettings();
+                          controller.nothingJustToRefreshDialog.refresh();
+                        },
+                      );
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "prefixs_ignored".tr,
+                              "ignored_users".tr,
                               style: const TextStyle(
                                 fontSize: 18,
                               ),
                             ),
                             Text(
-                              "prefixs_ignored_details".tr,
+                              "ignored_users_details".tr,
                               style: TextStyle(
                                 color: Colors.grey[400],
                                 fontSize: 14,
@@ -406,193 +499,20 @@ class Tts extends StatelessWidget {
                             ),
                           ],
                         ),
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        color: Theme.of(context).primaryIconTheme.color,
-                        size: 18,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 20),
-                InkWell(
-                  onTap: () {
-                    _ttsDialog(
-                      title: 'Allowed prefixs',
-                      description:
-                          'Only messages starting with these prefixs will be read aloud.',
-                      textFieldHint: 'Prefix',
-                      list: controller.homeViewController.settings.value
-                          .ttsSettings!.prefixsToUseTtsOnly,
-                      onDeleted: (index) {
-                        controller.homeViewController.settings.value
-                            .ttsSettings!.prefixsToUseTtsOnly
-                            .removeAt(index);
-                        controller.homeViewController.settings.value =
-                            controller.homeViewController.settings.value
-                                .copyWith(
-                          ttsSettings: controller
-                              .homeViewController.settings.value.ttsSettings
-                              ?.copyWith(
-                                  prefixsToUseTtsOnly: controller
-                                      .homeViewController
-                                      .settings
-                                      .value
-                                      .ttsSettings!
-                                      .prefixsToUseTtsOnly),
-                        );
-                        controller.nothingJustToRefreshDialog.refresh();
-                        controller.saveSettings();
-                      },
-                      controller: controller,
-                      textFieldController:
-                          controller.addTtsAllowedPrefixsController,
-                      onAdd: () {
-                        controller.homeViewController.settings.value
-                            .ttsSettings!.prefixsToUseTtsOnly
-                            .add(controller.addTtsAllowedPrefixsController.text
-                                .trim());
-                        controller.homeViewController.settings.value =
-                            controller.homeViewController.settings.value
-                                .copyWith(
-                          ttsSettings: controller
-                              .homeViewController.settings.value.ttsSettings
-                              ?.copyWith(
-                                  prefixsToUseTtsOnly: controller
-                                      .homeViewController
-                                      .settings
-                                      .value
-                                      .ttsSettings!
-                                      .prefixsToUseTtsOnly),
-                        );
-                        controller.nothingJustToRefreshDialog.refresh();
-                        controller.addTtsAllowedPrefixsController.clear();
-                        controller.saveSettings();
-                      },
-                    );
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "prefixs_allowed".tr,
-                              style: const TextStyle(
-                                fontSize: 18,
-                              ),
-                            ),
-                            Text(
-                              "prefixs_allowed_details".tr,
-                              style: TextStyle(
-                                color: Colors.grey[400],
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          color: Theme.of(context).primaryIconTheme.color,
+                          size: 18,
                         ),
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        color: Theme.of(context).primaryIconTheme.color,
-                        size: 18,
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 20),
-                InkWell(
-                  onTap: () {
-                    _ttsDialog(
-                      title: 'Ignored users',
-                      description: 'Users that will not be read aloud.',
-                      textFieldHint: 'Username',
-                      list: controller.homeViewController.settings.value
-                          .ttsSettings!.ttsUsersToIgnore,
-                      onDeleted: (index) {
-                        controller.homeViewController.settings.value
-                            .ttsSettings!.ttsUsersToIgnore
-                            .removeAt(index);
-                        controller.homeViewController.settings.value =
-                            controller.homeViewController.settings.value
-                                .copyWith(
-                          ttsSettings: controller
-                              .homeViewController.settings.value.ttsSettings
-                              ?.copyWith(
-                                  ttsUsersToIgnore: controller
-                                      .homeViewController
-                                      .settings
-                                      .value
-                                      .ttsSettings!
-                                      .ttsUsersToIgnore),
-                        );
-                        controller.saveSettings();
-                        controller.nothingJustToRefreshDialog.refresh();
-                      },
-                      controller: controller,
-                      textFieldController:
-                          controller.addTtsIgnoredUsersController,
-                      onAdd: () {
-                        controller.homeViewController.settings.value
-                            .ttsSettings!.ttsUsersToIgnore
-                            .add(controller.addTtsIgnoredUsersController.text
-                                .trim());
-                        controller.homeViewController.settings.value =
-                            controller.homeViewController.settings.value
-                                .copyWith(
-                          ttsSettings: controller
-                              .homeViewController.settings.value.ttsSettings
-                              ?.copyWith(
-                                  ttsUsersToIgnore: controller
-                                      .homeViewController
-                                      .settings
-                                      .value
-                                      .ttsSettings!
-                                      .ttsUsersToIgnore),
-                        );
-                        controller.addTtsIgnoredUsersController.clear();
-                        controller.saveSettings();
-                        controller.nothingJustToRefreshDialog.refresh();
-                      },
-                    );
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "ignored_users".tr,
-                            style: const TextStyle(
-                              fontSize: 18,
-                            ),
-                          ),
-                          Text(
-                            "ignored_users_details".tr,
-                            style: TextStyle(
-                              color: Colors.grey[400],
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        color: Theme.of(context).primaryIconTheme.color,
-                        size: 18,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 

@@ -1,24 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
+import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../controllers/chat_view_controller.dart';
 
-class ModerationBottomSheet extends StatelessWidget {
+class ModerationBottomSheet extends GetView {
+  @override
   final ChatViewController controller;
-  final double width;
 
   const ModerationBottomSheet({
     super.key,
     required this.controller,
-    required this.width,
   });
 
   @override
   Widget build(BuildContext context) {
-    ChatMessage message = controller.homeViewController.selectedMessage.value!;
+    ChatMessage? message = controller.homeViewController.selectedMessage.value;
+    Settings settings = Get.find<SettingsService>().settings.value;
+
+    if (message == null) {
+      return Container();
+    }
+
     return Container(
       padding: const EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
       decoration: BoxDecoration(
@@ -36,9 +43,7 @@ class ModerationBottomSheet extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                controller.homeViewController.selectedMessage.value
-                        ?.displayName ??
-                    "",
+                message.displayName,
                 style: const TextStyle(
                     color: Colors.white,
                     fontSize: 20,
@@ -79,15 +84,16 @@ class ModerationBottomSheet extends StatelessWidget {
           const SizedBox(height: 10),
           GestureDetector(
             onLongPress: () {
-              Clipboard.setData(ClipboardData(
-                  text: controller
-                          .homeViewController.selectedMessage.value?.message ??
-                      ""));
-              Get.snackbar("Copied", "Message copied to clipboard");
+              Clipboard.setData(
+                ClipboardData(text: message.message),
+              );
+              Get.snackbar(
+                "Copied",
+                "Message copied to clipboard",
+              );
             },
             child: Text(
-              controller.homeViewController.selectedMessage.value?.message ??
-                  "",
+              message.message,
               style: const TextStyle(
                 color: Color(0xFF575757),
                 fontStyle: FontStyle.italic,
@@ -99,7 +105,7 @@ class ModerationBottomSheet extends StatelessWidget {
             visible: message.platform == Platform.twitch,
             child: InkWell(
               onTap: () => controller.deleteMessageInstruction(
-                controller.homeViewController.selectedMessage.value!,
+                message,
               ),
               child: moderationViewButton(null, "Delete message"),
             ),
@@ -110,7 +116,7 @@ class ModerationBottomSheet extends StatelessWidget {
             child: Row(children: [
               InkWell(
                 onTap: () => controller.banMessageInstruction(
-                  controller.homeViewController.selectedMessage.value!,
+                  message,
                 ),
                 child: moderationViewButton(Icons.stop, "Ban"),
               ),
@@ -122,13 +128,11 @@ class ModerationBottomSheet extends StatelessWidget {
               const SizedBox(width: 10),
               InkWell(
                 onTap: () => controller.hideUser(
-                    controller.homeViewController.selectedMessage.value!),
-                child: (controller
-                            .homeViewController.settings.value.hiddenUsersIds!
-                            .firstWhereOrNull((userId) =>
-                                controller.homeViewController.selectedMessage
-                                    .value!.authorId ==
-                                userId) !=
+                  message,
+                ),
+                child: (settings.hiddenUsersIds!.firstWhereOrNull(
+                          (userId) => message.authorId == userId,
+                        ) !=
                         null)
                     ? moderationViewButton(Icons.visibility, "Unhide user")
                     : moderationViewButton(Icons.visibility_off, "Hide user"),

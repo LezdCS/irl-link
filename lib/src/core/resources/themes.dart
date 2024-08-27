@@ -43,7 +43,7 @@ class Themes {
       labelColor: Colors.deepPurpleAccent[200],
       unselectedLabelColor: Colors.white,
       dividerColor: Colors.transparent,
-      indicatorColor:Colors.deepPurpleAccent[200],
+      indicatorColor: Colors.deepPurpleAccent[200],
       labelPadding: const EdgeInsets.symmetric(horizontal: 30),
       indicatorSize: TabBarIndicatorSize.tab,
     ),
@@ -135,6 +135,9 @@ class Themes {
       textColor: Colors.white,
     ),
     checkboxTheme: CheckboxThemeData(
+      side: const BorderSide(
+        color: Colors.white,
+      ),
       checkColor: WidgetStateProperty.all(Colors.deepPurple[600]),
     ),
   );
@@ -181,7 +184,7 @@ class Themes {
       labelColor: Colors.deepPurpleAccent[200],
       unselectedLabelColor: Colors.black,
       dividerColor: Colors.transparent,
-      indicatorColor:Colors.deepPurpleAccent[200],
+      indicatorColor: Colors.deepPurpleAccent[200],
       labelPadding: const EdgeInsets.symmetric(horizontal: 30),
       indicatorSize: TabBarIndicatorSize.tab,
     ),
@@ -273,6 +276,9 @@ class Themes {
       textColor: Colors.black,
     ),
     checkboxTheme: CheckboxThemeData(
+      side: const BorderSide(
+        color: Colors.black,
+      ),
       checkColor: WidgetStateProperty.all(Colors.deepPurple[600]),
     ),
   );

@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/web_page_view.dart';
 import 'package:uuid/uuid.dart';
 
-class SeOverlays extends GetView {
-  @override
-  final StreamelementsViewController controller;
-
+class SeOverlays extends GetView<StreamelementsViewController> {
   const SeOverlays({
     super.key,
-    required this.controller,
   });
 
   @override
@@ -40,12 +38,14 @@ Widget _overlayRow(StreamelementsViewController controller, SeOverlay overlay,
     BuildContext context) {
   String? overlayUrl;
   Widget? webpage;
-  bool isMuted = controller
-      .homeViewController.settings.value.streamElementsSettings!.mutedOverlays
-      .contains(overlay.id);
-  if (controller.overlayToken != null && isMuted == false) {
+  Settings settings = Get.find<SettingsService>().settings.value;
+  String? overlayToken = settings.streamElementsSettings?.overlayToken;
+
+  bool isMuted =
+      settings.streamElementsSettings!.mutedOverlays.contains(overlay.id);
+  if (overlayToken != null && isMuted == false) {
     overlayUrl =
-        'https://streamelements.com/overlay/${overlay.id}/${controller.overlayToken}';
+        'https://streamelements.com/overlay/${overlay.id}/$overlayToken';
     var uuid = const Uuid();
     BrowserTab tab = BrowserTab(
       id: uuid.v4(),
@@ -95,26 +95,25 @@ Widget _overlayRow(StreamelementsViewController controller, SeOverlay overlay,
             ),
             InkWell(
               onTap: () {
-                List<String> mutedList = controller.homeViewController.settings
-                    .value.streamElementsSettings!.mutedOverlays;
+                Settings settings = Get.find<SettingsService>().settings.value;
+                List<String> mutedList =
+                    settings.streamElementsSettings!.mutedOverlays;
                 if (isMuted) {
                   mutedList.removeWhere((element) => element == overlay.id);
                 } else {
                   mutedList.add(overlay.id);
                 }
-                controller.homeViewController.settings.value =
-                    controller.homeViewController.settings.value.copyWith(
-                        streamElementsSettings: controller.homeViewController
-                            .settings.value.streamElementsSettings!
-                            .copyWith(mutedOverlays: mutedList));
-                controller.homeViewController.saveSettings();
+                Get.find<SettingsService>().settings.value = settings.copyWith(
+                    streamElementsSettings: settings.streamElementsSettings!
+                        .copyWith(mutedOverlays: mutedList));
+                Get.find<SettingsService>().saveSettings();
                 controller.overlays.refresh();
               },
               child: Icon(isMuted ? Icons.volume_mute : Icons.volume_up),
             ),
           ],
         ),
-        controller.overlayToken != null
+        overlayToken != null
             ? SizedBox(width: 0, height: 0, child: webpage)
             : Container(),
       ],

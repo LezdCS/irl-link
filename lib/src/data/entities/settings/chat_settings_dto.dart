@@ -22,7 +22,8 @@ class ChatSettingsDTO extends ChatSettings {
       gDto.add(ChatGroupDTO.fromJson(chatGroup));
     }
 
-    ChatGroup permanentFirstGroup = const Settings.defaultSettings().chatSettings!.permanentFirstGroup;
+    ChatGroup permanentFirstGroup =
+        const Settings.defaultSettings().chatSettings!.permanentFirstGroup;
 
     if (map['permanentFirstGroup'] is ChatGroup) {
       permanentFirstGroup = map['permanentFirstGroup'];

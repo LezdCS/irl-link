@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/presentation/controllers/store_controller.dart';
+import 'package:irllink/src/core/services/store_service.dart';
+import 'dart:io';
 
 import '../../../controllers/settings_view_controller.dart';
 
@@ -8,7 +9,8 @@ Widget inAppPurchaseDialog(
   BuildContext context,
   SettingsViewController controller,
 ) {
-  String price = Get.find<StoreController>().getSubscriptionPrice();
+  String price = Get.find<StoreService>().getSubscriptionPrice();
+  String storeText = Platform.isAndroid ? 'Google Play Store' : 'App Store';
   return AlertDialog(
     contentPadding: EdgeInsets.zero,
     content: Container(
@@ -123,7 +125,7 @@ Widget inAppPurchaseDialog(
             ],
           ),
           Text(
-            'You will be billed $price every month. \n You can cancel your subscription anytime from your Google Play Store application.',
+            'You will be billed $price every month. \n You can cancel your subscription anytime from your $storeText application.',
             style: const TextStyle(fontSize: 13, color: Colors.grey),
             textAlign: TextAlign.center,
           ),
@@ -149,7 +151,7 @@ Widget inAppPurchaseDialog(
               const SizedBox(width: 10),
               TextButton(
                 onPressed: () {
-                  controller.storeController.purchase();
+                  controller.storeService.purchase();
                 },
                 style: TextButton.styleFrom(
                   backgroundColor: Colors.deepPurpleAccent,

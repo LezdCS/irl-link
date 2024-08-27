@@ -24,7 +24,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.settings,
-      page: () => SettingsView(),
+      page: () => const SettingsView(),
       binding: SettingsBindings(),
     ),
   ];

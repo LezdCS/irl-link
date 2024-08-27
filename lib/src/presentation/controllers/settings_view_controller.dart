@@ -3,10 +3,12 @@ import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
-import 'package:irllink/src/presentation/controllers/store_controller.dart';
-import 'package:irllink/src/presentation/controllers/tts_controller.dart';
+import 'package:irllink/src/core/services/store_service.dart';
+import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/presentation/events/settings_events.dart';
 import 'package:irllink/src/presentation/events/streamelements_events.dart';
 import 'package:uuid/uuid.dart';
@@ -49,14 +51,14 @@ class SettingsViewController extends GetxController {
   Rx<Color> nothingJustToRefreshDialog = Colors.grey.obs;
 
   late HomeViewController homeViewController;
-  late TtsController ttsController;
-  late StoreController storeController;
+  late TtsService ttsService;
+  late StoreService storeService;
 
   @override
   void onInit() {
     homeViewController = Get.find<HomeViewController>();
-    ttsController = Get.find<TtsController>();
-    storeController = Get.find<StoreController>();
+    ttsService = Get.find<TtsService>();
+    storeService = Get.find<StoreService>();
 
     obsWebsocketUrlFieldController = TextEditingController();
     obsWebsocketPasswordFieldController = TextEditingController();
@@ -76,18 +78,15 @@ class SettingsViewController extends GetxController {
 
   @override
   void onReady() {
+    Settings settings = Get.find<SettingsService>().settings.value;
+
     if (homeViewController.twitchData != null) {
-      obsWebsocketUrlFieldController.text =
-          homeViewController.settings.value.obsWebsocketUrl!;
-      obsWebsocketPasswordFieldController.text =
-          homeViewController.settings.value.obsWebsocketPassword!;
-      seJwtInputController.text =
-          homeViewController.settings.value.streamElementsSettings!.jwt ?? '';
-      seOverlayTokenInputController.text = homeViewController
-              .settings.value.streamElementsSettings!.overlayToken ??
-          '';
-      rtIrlInputController.text =
-          homeViewController.settings.value.rtIrlPushKey ?? '';
+      obsWebsocketUrlFieldController.text = settings.obsWebsocketUrl!;
+      obsWebsocketPasswordFieldController.text = settings.obsWebsocketPassword!;
+      seJwtInputController.text = settings.streamElementsSettings!.jwt ?? '';
+      seOverlayTokenInputController.text =
+          settings.streamElementsSettings!.overlayToken ?? '';
+      rtIrlInputController.text = settings.rtIrlPushKey ?? '';
       getUsernames();
     }
 
@@ -107,6 +106,17 @@ class SettingsViewController extends GetxController {
   }
 
   Future<void> loginStreamElements() async {
+    if(Get.find<StoreService>().isSubscribed() == false) {
+      Get.snackbar(
+          "Error",
+          "You are not subscribed",
+          snackPosition: SnackPosition.BOTTOM,
+          icon: const Icon(Icons.error_outline, color: Colors.red),
+          borderWidth: 1,
+          borderColor: Colors.red,
+        );
+        return;
+    }
     StreamelementsAuthParams params = const StreamelementsAuthParams();
     await streamelementsEvents.login(params: params).then((value) {
       if (value is DataFailed) {
@@ -119,9 +129,7 @@ class SettingsViewController extends GetxController {
           borderColor: Colors.red,
         );
       } else {
-        homeViewController.setStreamElementsCredentials();
-        homeViewController.seCredentials.refresh();
-        homeViewController.seMe.refresh();
+        homeViewController.generateTabs();
         Get.snackbar(
           "StreamElements",
           "Login successfull",
@@ -135,14 +143,14 @@ class SettingsViewController extends GetxController {
   }
 
   Future<void> disconnectStreamElements() async {
-    if (homeViewController.seCredentials.value == null) return;
-    DataState<void> result = await streamelementsEvents
-        .disconnect(homeViewController.seCredentials.value!.accessToken);
+    if (homeViewController
+            .streamelementsViewController.value?.seCredentials.value ==
+        null) return;
+    DataState<void> result = await streamelementsEvents.disconnect(
+      homeViewController
+          .streamelementsViewController.value!.seCredentials.value!.accessToken,
+    );
     if (result is DataSuccess) {
-      homeViewController.seCredentials.value = null;
-      homeViewController.seMe.value = null;
-      homeViewController.seCredentials.refresh();
-      homeViewController.seMe.refresh();
       Get.snackbar(
         "StreamElements",
         "Successfully disconnected.",
@@ -151,16 +159,27 @@ class SettingsViewController extends GetxController {
         borderWidth: 1,
         borderColor: Colors.green,
       );
+      homeViewController.generateTabs();
+    } else {
+      Get.snackbar(
+        "Error",
+        "Logout failed: ${result.error}",
+        snackPosition: SnackPosition.BOTTOM,
+        icon: const Icon(Icons.error_outline, color: Colors.red),
+        borderWidth: 1,
+        borderColor: Colors.red,
+      );
     }
   }
 
   void removeHiddenUser(userId) {
-    List hiddenUsersIds = homeViewController.settings.value.hiddenUsersIds!;
+    Settings settings = Get.find<SettingsService>().settings.value;
+
+    List hiddenUsersIds = settings.hiddenUsersIds!;
     hiddenUsersIds.remove(userId);
-    homeViewController.settings.value = homeViewController.settings.value
-        .copyWith(hiddenUsersIds: hiddenUsersIds);
-    saveSettings();
-    homeViewController.settings.refresh();
+    Get.find<SettingsService>().settings.value =
+        settings.copyWith(hiddenUsersIds: hiddenUsersIds);
+    Get.find<SettingsService>().saveSettings();
   }
 
   void addBrowserTab() {
@@ -185,69 +204,73 @@ class SettingsViewController extends GetxController {
       toggled: toggled,
       iOSAudioSource: audioSourceToggled,
     );
-    List<BrowserTab> tabs = homeViewController.settings.value.browserTabs!.tabs;
+    Settings settings = Get.find<SettingsService>().settings.value;
+
+    List<BrowserTab> tabs = settings.browserTabs!.tabs;
     tabs.add(tab);
-    homeViewController.settings.value =
-        homeViewController.settings.value.copyWith(
-      browserTabs:
-          homeViewController.settings.value.browserTabs?.copyWith(tabs: tabs),
+    Get.find<SettingsService>().settings.value = settings.copyWith(
+      browserTabs: settings.browserTabs?.copyWith(tabs: tabs),
     );
-    saveSettings();
-    homeViewController.settings.refresh();
+    Get.find<SettingsService>().saveSettings();
+
     Get.back();
   }
 
-  void editBrowserTab(elem) {
+  void editBrowserTab(BrowserTab tab) {
     bool isValid = false;
     isValid = addBrowserTitleKey.currentState!.validate();
     isValid = addBrowserUrlKey.currentState!.validate();
     if (!isValid) {
       return;
     }
-
     String title = addBrowserTitleController.text;
     String url = addBrowserUrlController.text;
     bool toggled = addBrowserToggled.value;
     bool audioSourceToggled = addBrowserAudioSourceToggled.value;
-    elem["title"] = title;
-    elem["url"] = url;
-    elem["toggled"] = toggled;
-    elem["iOSAudioSource"] = audioSourceToggled;
-    List<BrowserTab> tabs = homeViewController.settings.value.browserTabs!.tabs;
-    homeViewController.settings.value =
-        homeViewController.settings.value.copyWith(
-      browserTabs:
-          homeViewController.settings.value.browserTabs?.copyWith(tabs: tabs),
+    BrowserTab newTab = BrowserTab(
+      id: tab.id,
+      title: title,
+      url: url,
+      toggled: toggled,
+      iOSAudioSource: audioSourceToggled,
     );
-    saveSettings();
-    homeViewController.settings.refresh();
+
+    Settings settings = Get.find<SettingsService>().settings.value;
+
+    List<BrowserTab> tabs = settings.browserTabs!.tabs;
+    int index = tabs.indexWhere((element) => element.id == tab.id);
+    tabs[index] = newTab;
+    Get.find<SettingsService>().settings.value = settings.copyWith(
+      browserTabs: settings.browserTabs?.copyWith(tabs: tabs),
+    );
+
+    Get.find<SettingsService>().saveSettings();
+
+    // Close the dialog
     Get.back();
   }
 
   void removeBrowserTab(tab) {
-    List<BrowserTab> tabs = homeViewController.settings.value.browserTabs!.tabs;
+    Settings settings = Get.find<SettingsService>().settings.value;
+
+    List<BrowserTab> tabs = settings.browserTabs!.tabs;
     tabs.remove(tab);
 
-    homeViewController.settings.value =
-        homeViewController.settings.value.copyWith(
-      browserTabs:
-          homeViewController.settings.value.browserTabs?.copyWith(tabs: tabs),
+    Get.find<SettingsService>().settings.value = settings.copyWith(
+      browserTabs: settings.browserTabs?.copyWith(tabs: tabs),
     );
-    saveSettings();
-    homeViewController.settings.refresh();
-    Get.back();
-  }
+    Get.find<SettingsService>().saveSettings();
 
-  void saveSettings() {
-    settingsEvents.setSettings(settings: homeViewController.settings.value);
+    Get.back();
   }
 
   Future getUsernames() async {
     List<TwitchUser> users = [];
+    Settings settings = Get.find<SettingsService>().settings.value;
 
     await settingsEvents
         .getTwitchUsers(
-            ids: homeViewController.settings.value.hiddenUsersIds!,
+            ids: settings.hiddenUsersIds!,
             accessToken: homeViewController.twitchData!.accessToken)
         .then((value) => users = value.data!);
 
