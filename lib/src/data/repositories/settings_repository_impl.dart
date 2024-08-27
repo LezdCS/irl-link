@@ -1,11 +1,12 @@
+import 'dart:convert';
+
+import 'package:get_storage/get_storage.dart';
+import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:irllink/src/core/utils/globals.dart' as globals;
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/entities/settings_dto.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
-import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/domain/repositories/settings_repository.dart';
-import 'package:get_storage/get_storage.dart';
-import 'dart:convert';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
 
 class SettingsRepositoryImpl extends SettingsRepository {
   @override

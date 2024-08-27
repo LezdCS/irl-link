@@ -21,7 +21,7 @@ class DashboardController extends GetxController {
           settings.dashboardSettings!.copyWith(userEvents: events),
     );
     Get.find<SettingsService>().saveSettings();
-    
+
     Get.back();
   }
 
@@ -36,6 +36,5 @@ class DashboardController extends GetxController {
           settings.dashboardSettings!.copyWith(userEvents: events),
     );
     Get.find<SettingsService>().saveSettings();
-    
   }
 }

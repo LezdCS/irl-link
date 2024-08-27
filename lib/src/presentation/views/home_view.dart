@@ -162,7 +162,10 @@ class HomeView extends GetView<HomeViewController> {
                         ),
                       ),
                       Visibility(
-                        visible: controller.chatsViews.length > 1 || controller.chatsViews.first.chatGroup.channels.length > 1,
+                        visible: controller.chatsViews.length > 1 ||
+                            controller.chatsViews.first.chatGroup.channels
+                                    .length >
+                                1,
                         child: _tabBarChats(context),
                       ),
                       _chats(context),
@@ -237,13 +240,13 @@ class HomeView extends GetView<HomeViewController> {
             flex: 5,
             child: Container(
               decoration: const BoxDecoration(
-                gradient: LinearGradient(colors: [
-                  Color.fromARGB(255, 45, 2, 53),
-                  Color.fromARGB(255, 81, 16, 93),
-                ]),
-                borderRadius: BorderRadius.all(Radius.circular(8))
-              ),
-              padding: const EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
+                  gradient: LinearGradient(colors: [
+                    Color.fromARGB(255, 45, 2, 53),
+                    Color.fromARGB(255, 81, 16, 93),
+                  ]),
+                  borderRadius: BorderRadius.all(Radius.circular(8))),
+              padding:
+                  const EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
               child: Row(
                 children: [
                   InkWell(
@@ -262,11 +265,10 @@ class HomeView extends GetView<HomeViewController> {
                         }
                         ChatViewController chatViewController =
                             Get.find<ChatViewController>(
-                                tag:
-                                    controller.selectedChatGroup.value?.id);
+                                tag: controller.selectedChatGroup.value?.id);
                         List<TwitchChat> twitchChats = [];
-                        twitchChats.addAll(
-                            chatViewController.twitchChats.toList());
+                        twitchChats
+                            .addAll(chatViewController.twitchChats.toList());
                         if (twitchChats.length == 1) {
                           controller.sendChatMessage(
                               value, twitchChats.first.channel);
@@ -289,13 +291,11 @@ class HomeView extends GetView<HomeViewController> {
                       maxLines: 1,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: settings
-                                .generalSettings!.displayViewerCount
+                        hintText: settings.generalSettings!.displayViewerCount
                             ? '${Get.find<TwitchTabViewController>().twitchStreamInfos.value.viewerCount} viewers'
                             : 'send_message'.tr,
                         hintStyle: TextStyle(
-                          color:
-                              Theme.of(context).textTheme.bodyLarge!.color!,
+                          color: Theme.of(context).textTheme.bodyLarge!.color!,
                         ),
                         isDense: true,
                         enabledBorder: InputBorder.none,

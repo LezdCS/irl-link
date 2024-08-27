@@ -11,7 +11,8 @@ class LoginEvents {
     return twitchUseCase.getTwitchFromLocal();
   }
 
-  Future<DataState<TwitchCredentials>> refreshAccessToken(TwitchCredentials twitchCredentials) {
+  Future<DataState<TwitchCredentials>> refreshAccessToken(
+      TwitchCredentials twitchCredentials) {
     return twitchUseCase.refreshAccessToken(twitchData: twitchCredentials);
   }
 

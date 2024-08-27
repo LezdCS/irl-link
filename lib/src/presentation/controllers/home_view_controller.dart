@@ -2,39 +2,39 @@ import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:collection/collection.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/core/services/store_service.dart';
+import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/list_move.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
+import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
+import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
+import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/domain/usecases/streamelements_usecase.dart';
+import 'package:irllink/src/domain/usecases/twitch_usecase.dart';
+import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/realtime_irl_view_controller.dart';
-import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
+import 'package:irllink/src/presentation/widgets/chats/chat_view.dart';
 import 'package:irllink/src/presentation/widgets/tabs/obs_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/tabs/realtime_irl_tab_view.dart';
+import 'package:irllink/src/presentation/widgets/tabs/streamelements_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/tabs/twitch_tab_view.dart';
+import 'package:irllink/src/presentation/widgets/web_page_view.dart';
 import 'package:split_view/split_view.dart';
 import 'package:twitch_chat/twitch_chat.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import '../../../routes/app_routes.dart';
-import '../../core/utils/constants.dart';
-import '../../data/repositories/twitch_repository_impl.dart';
-import '../../domain/usecases/twitch_usecase.dart';
-import '../widgets/chats/chat_view.dart';
-import '../widgets/tabs/streamelements_tab_view.dart';
-import '../widgets/web_page_view.dart';
-import 'chat_view_controller.dart';
-import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
-import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 
 class HomeViewController extends GetxController
     with GetTickerProviderStateMixin {
@@ -394,7 +394,7 @@ class HomeViewController extends GetxController
     }
 
     if (selectedChatIndex != null) {
-      if(selectedChatIndex! >= chatsViews.length) {
+      if (selectedChatIndex! >= chatsViews.length) {
         selectedChatIndex = 0;
       }
       chatTabsController.animateTo(selectedChatIndex!);

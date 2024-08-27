@@ -42,7 +42,7 @@ class Word extends StatelessWidget {
         ),
       );
     }
-    
+
     return Text(
       "$word ",
       style: TextStyle(

@@ -5,8 +5,7 @@ import 'package:irllink/src/core/utils/string_casing_extension.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
-
-import '../../controllers/settings_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:uuid/uuid.dart';
 
 class ChatsJoined extends GetView<SettingsViewController> {

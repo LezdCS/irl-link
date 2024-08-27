@@ -6,14 +6,13 @@ import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/presentation/events/settings_events.dart';
 import 'package:irllink/src/presentation/events/streamelements_events.dart';
 import 'package:uuid/uuid.dart';
-
-import '../../domain/entities/twitch/twitch_user.dart';
 
 class SettingsViewController extends GetxController {
   SettingsViewController(
@@ -106,16 +105,16 @@ class SettingsViewController extends GetxController {
   }
 
   Future<void> loginStreamElements() async {
-    if(Get.find<StoreService>().isSubscribed() == false) {
+    if (Get.find<StoreService>().isSubscribed() == false) {
       Get.snackbar(
-          "Error",
-          "You are not subscribed",
-          snackPosition: SnackPosition.BOTTOM,
-          icon: const Icon(Icons.error_outline, color: Colors.red),
-          borderWidth: 1,
-          borderColor: Colors.red,
-        );
-        return;
+        "Error",
+        "You are not subscribed",
+        snackPosition: SnackPosition.BOTTOM,
+        icon: const Icon(Icons.error_outline, color: Colors.red),
+        borderWidth: 1,
+        borderColor: Colors.red,
+      );
+      return;
     }
     StreamelementsAuthParams params = const StreamelementsAuthParams();
     await streamelementsEvents.login(params: params).then((value) {

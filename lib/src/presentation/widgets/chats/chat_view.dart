@@ -5,11 +5,11 @@ import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
+import 'package:irllink/src/presentation/widgets/alert_message_view.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/event_container.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/message_container.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/twitch/moderation_bottom_sheet.dart';
 import 'package:twitch_chat/twitch_chat.dart' as twitch_chat;
-import '../alert_message_view.dart';
 
 class ChatView extends GetView<ChatViewController> {
   const ChatView({
@@ -99,11 +99,8 @@ class ChatView extends GetView<ChatViewController> {
                               ? EventContainer(
                                   message: message,
                                   selectedMessage: controller
-                                      .homeViewController
-                                      .selectedMessage
-                                      .value,
-                                  displayTimestamp:
-                                      settings.displayTimestamp!,
+                                      .homeViewController.selectedMessage.value,
+                                  displayTimestamp: settings.displayTimestamp!,
                                   textSize: settings.textSize!,
                                   hideDeletedMessages: settings
                                       .chatSettings!.hideDeletedMessages,
@@ -113,12 +110,9 @@ class ChatView extends GetView<ChatViewController> {
                                 )
                               : MessageContainer(
                                   selectedMessage: controller
-                                      .homeViewController
-                                      .selectedMessage
-                                      .value,
+                                      .homeViewController.selectedMessage.value,
                                   message: message,
-                                  displayTimestamp:
-                                      settings.displayTimestamp!,
+                                  displayTimestamp: settings.displayTimestamp!,
                                   textSize: settings.textSize!,
                                   hideDeletedMessages: settings
                                       .chatSettings!.hideDeletedMessages,

@@ -60,4 +60,3 @@ class ObsLog extends TalkerLog {
   @override
   AnsiPen get pen => AnsiPen()..rgb(r: 51, g: 102, b: 204);
 }
-

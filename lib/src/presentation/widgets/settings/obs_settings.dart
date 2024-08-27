@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
+import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-
-import '../../controllers/settings_view_controller.dart';
 
 class ObsSettings extends StatelessWidget {
   final SettingsViewController controller;
@@ -36,7 +35,8 @@ class ObsSettings extends StatelessWidget {
                     controller: controller.obsWebsocketUrlFieldController,
                     obscureText: !controller.obsWebsocketUrlShow.value,
                     onChanged: (value) {
-                      Get.find<SettingsService>().settings.value = settings.copyWith(obsWebsocketUrl: value);
+                      Get.find<SettingsService>().settings.value =
+                          settings.copyWith(obsWebsocketUrl: value);
                       Get.find<SettingsService>().saveSettings();
                     },
                     decoration: InputDecoration(
@@ -72,7 +72,8 @@ class ObsSettings extends StatelessWidget {
                     controller: controller.obsWebsocketPasswordFieldController,
                     obscureText: !controller.obsWebsocketPasswordShow.value,
                     onChanged: (value) {
-                      Get.find<SettingsService>().settings.value = settings.copyWith(obsWebsocketPassword: value);
+                      Get.find<SettingsService>().settings.value =
+                          settings.copyWith(obsWebsocketPassword: value);
                       Get.find<SettingsService>().saveSettings();
                     },
                     decoration: InputDecoration(
@@ -221,9 +222,11 @@ class ObsSettings extends StatelessWidget {
               controller.obsWebsocketPasswordFieldController.text = password;
               controller.obsWebsocketUrlFieldController.text = url;
 
-              Get.find<SettingsService>().settings.value = settings.copyWith(obsWebsocketUrl: url);
+              Get.find<SettingsService>().settings.value =
+                  settings.copyWith(obsWebsocketUrl: url);
 
-              Get.find<SettingsService>().settings.value = settings.copyWith(obsWebsocketPassword: password);
+              Get.find<SettingsService>().settings.value =
+                  settings.copyWith(obsWebsocketPassword: password);
 
               Get.find<SettingsService>().saveSettings();
               Get.back();

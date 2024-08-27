@@ -11,7 +11,6 @@ class TtsService extends GetxService {
   RxList ttsLanguages = [].obs;
   RxList ttsVoices = [].obs;
 
-
   Future<TtsService> init() async {
     flutterTts = FlutterTts();
     if (Platform.isAndroid) {
@@ -23,7 +22,6 @@ class TtsService extends GetxService {
   }
 
   void initTts(Settings settings) async {
-
     //  The following setup allows background music and in-app audio session to continue simultaneously:
     await flutterTts.setIosAudioCategory(
       IosTextToSpeechAudioCategory.ambient,

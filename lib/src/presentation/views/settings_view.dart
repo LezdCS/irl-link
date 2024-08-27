@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/resources/app_translations.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/core/utils/globals.dart' as globals;
 import 'package:irllink/src/domain/entities/settings.dart';
+import 'package:irllink/src/presentation//widgets/settings/chats_joined.dart';
+import 'package:irllink/src/presentation//widgets/settings/manage_list_browser_tabs.dart';
+import 'package:irllink/src/presentation//widgets/settings/manage_list_hidden_users.dart';
+import 'package:irllink/src/presentation//widgets/settings/obs_settings.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/settings/chat_events.dart';
 import 'package:irllink/src/presentation/widgets/settings/dashboard_settings_view.dart';
 import 'package:irllink/src/presentation/widgets/settings/realtime_irl.dart';
 import 'package:irllink/src/presentation/widgets/settings/stream_elements.dart';
+import 'package:irllink/src/presentation/widgets/settings/subscription.dart';
 import 'package:irllink/src/presentation/widgets/settings/talker_screen.dart';
 import 'package:irllink/src/presentation/widgets/settings/tts.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
-
-import '../../core/resources/app_translations.dart';
-import '../widgets/settings/chats_joined.dart';
-import '../widgets/settings/manage_list_hidden_users.dart';
-import '../widgets/settings/manage_list_browser_tabs.dart';
-import '../widgets/settings/obs_settings.dart';
-import '../widgets/settings/subscription.dart';
 
 class SettingsView extends GetView<SettingsViewController> {
   const SettingsView({super.key});

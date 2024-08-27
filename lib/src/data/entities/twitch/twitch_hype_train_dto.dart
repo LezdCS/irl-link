@@ -1,6 +1,5 @@
 import 'package:intl/intl.dart';
-
-import '../../../domain/entities/twitch/twitch_hype_train.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_hype_train.dart';
 
 class TwitchHypeTrainDTO extends TwitchHypeTrain {
   const TwitchHypeTrainDTO({

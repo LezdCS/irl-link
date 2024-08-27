@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
-import 'package:get/get.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/event_container.dart';
 import 'package:twitch_chat/twitch_chat.dart';
-
-import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
 
 class ChatEvents extends StatelessWidget {
   final SettingsViewController controller;

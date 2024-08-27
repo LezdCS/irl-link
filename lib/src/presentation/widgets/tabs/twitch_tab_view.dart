@@ -82,16 +82,15 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                           width: 8,
                         ),
                         Icon(
-                          controller.twitchEventSub != null &&
-                                  controller.twitchEventSub!.isConnected
-                              ? Icons.stream_sharp
-                              : Icons.close,
-                          size: 12,
-                          color: controller.twitchEventSub != null &&
-                                  controller.twitchEventSub!.isConnected
-                              ? Colors.green
-                              : Colors.red
-                        ),
+                            controller.twitchEventSub != null &&
+                                    controller.twitchEventSub!.isConnected
+                                ? Icons.stream_sharp
+                                : Icons.close,
+                            size: 12,
+                            color: controller.twitchEventSub != null &&
+                                    controller.twitchEventSub!.isConnected
+                                ? Colors.green
+                                : Colors.red),
                       ],
                     ),
                   ],

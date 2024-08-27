@@ -1,25 +1,25 @@
 import 'dart:async';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
-import 'package:irllink/src/core/utils/constants.dart';
+import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/core/services/youtube_chat.dart';
+import 'package:irllink/src/core/utils/constants.dart';
+import 'package:irllink/src/core/utils/globals.dart' as globals;
 import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
+import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
-import 'package:irllink/src/core/services/tts_service.dart';
+import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:kick_chat/kick_chat.dart';
 import 'package:twitch_chat/twitch_chat.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
-
-import 'home_view_controller.dart';
-import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
 
 class ChatViewController extends GetxController
     with GetTickerProviderStateMixin {
@@ -210,11 +210,13 @@ class ChatViewController extends GetxController
         null) {
       //add user
       hiddenUsersIds.add(message.authorId);
-      Get.find<SettingsService>().settings.value = settings.copyWith(hiddenUsersIds: hiddenUsersIds);
+      Get.find<SettingsService>().settings.value =
+          settings.copyWith(hiddenUsersIds: hiddenUsersIds);
     } else {
       //remove user
       hiddenUsersIds.remove(message.authorId);
-      Get.find<SettingsService>().settings.value = settings.copyWith(hiddenUsersIds: hiddenUsersIds);
+      Get.find<SettingsService>().settings.value =
+          settings.copyWith(hiddenUsersIds: hiddenUsersIds);
     }
     Get.find<SettingsService>().saveSettings();
     homeViewController.selectedMessage.refresh();

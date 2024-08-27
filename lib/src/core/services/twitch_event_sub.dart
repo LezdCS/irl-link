@@ -4,7 +4,10 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/utils/constants.dart';
+import 'package:irllink/src/core/utils/globals.dart' as globals;
 import 'package:irllink/src/core/utils/init_dio.dart';
+import 'package:irllink/src/data/entities/twitch/twitch_hype_train_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_poll_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_prediction_dto.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_hype_train.dart';
@@ -12,10 +15,6 @@ import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 import 'package:web_socket_channel/io.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
-
-import '../../data/entities/twitch/twitch_hype_train_dto.dart';
-import '../utils/constants.dart';
 
 class TwitchEventSub {
   String accessToken;
@@ -49,7 +48,8 @@ class TwitchEventSub {
     try {
       await _webSocketChannel?.ready;
     } catch (e) {
-      globals.talker?.warning('Failed to connect to the Twitch EventSub Websocket.');
+      globals.talker
+          ?.warning('Failed to connect to the Twitch EventSub Websocket.');
       return;
     }
 

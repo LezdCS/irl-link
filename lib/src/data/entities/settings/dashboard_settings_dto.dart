@@ -1,6 +1,5 @@
+import 'package:irllink/src/data/entities/dashboard_event_dto.dart';
 import 'package:irllink/src/domain/entities/settings/dashboard_settings.dart';
-
-import '../dashboard_event_dto.dart';
 
 class DashboardSettingsDTO extends DashboardSettings {
   const DashboardSettingsDTO({
