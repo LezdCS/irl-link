@@ -53,7 +53,8 @@ class StoreService extends GetxService {
     final ProductDetailsResponse response =
         await InAppPurchase.instance.queryProductDetails(kIds);
     if (response.notFoundIDs.isNotEmpty) {
-      // Handle the error.
+      globals.talker?.debug('Products not found: ${response.notFoundIDs}');
+      globals.talker?.debug('Products found: ${response.productDetails.map((e) => e.id)}');
     }
     products = response.productDetails;
   }
