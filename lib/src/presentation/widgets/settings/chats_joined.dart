@@ -339,8 +339,12 @@ class ChatsJoined extends GetView<SettingsViewController> {
           channels: const [],
         );
         Settings settings = Get.find<SettingsService>().settings.value;
-        settings.chatSettings?.chatGroups.add(newGroup);
-
+        List<ChatGroup> chatGroups =
+            List.from(settings.chatSettings!.chatGroups);
+        chatGroups.add(newGroup);
+        Get.find<SettingsService>().settings.value = settings.copyWith(
+          chatSettings: settings.chatSettings!.copyWith(chatGroups: chatGroups),
+        );
         Get.find<SettingsService>().saveSettings();
       },
       child: Container(
