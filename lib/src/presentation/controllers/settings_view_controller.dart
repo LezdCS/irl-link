@@ -205,7 +205,7 @@ class SettingsViewController extends GetxController {
     );
     Settings settings = Get.find<SettingsService>().settings.value;
 
-    List<BrowserTab> tabs = settings.browserTabs!.tabs;
+    List<BrowserTab> tabs = List.from(settings.browserTabs!.tabs);
     tabs.add(tab);
     Get.find<SettingsService>().settings.value = settings.copyWith(
       browserTabs: settings.browserTabs?.copyWith(tabs: tabs),

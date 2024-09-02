@@ -99,6 +99,10 @@ class HomeViewController extends GetxController
 
       twitchData = Get.arguments[0];
 
+      await FirebaseCrashlytics.instance.setUserIdentifier(
+        twitchData!.twitchUser.id,
+      );
+
       timerRefreshToken =
           Timer.periodic(const Duration(seconds: 13000), (Timer t) {
         homeEvents.refreshAccessToken(twitchData: twitchData!).then(
