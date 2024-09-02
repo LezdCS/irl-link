@@ -136,7 +136,7 @@ class SettingsDTO extends Settings {
           : const Settings.defaultSettings().rtIrlPushKey!,
       //TTS SETTINGS
       ttsSettings: map['ttsSettings'] != null
-          ? TtsSettingsDTO.fromJson(map['ttsSettings'])
+          ? TtsSettingsDTO.fromJson(map['ttsSettings']) as TtsSettings
           : const Settings.defaultSettings().ttsSettings!,
     );
   }
