@@ -6,57 +6,30 @@ import 'package:irllink/src/data/entities/settings/general_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/stream_elements_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/tts_settings_dto.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
-import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
-import 'package:irllink/src/domain/entities/settings/chat_events_settings.dart';
-import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
-import 'package:irllink/src/domain/entities/settings/dashboard_settings.dart';
-import 'package:irllink/src/domain/entities/settings/general_settings.dart';
-import 'package:irllink/src/domain/entities/settings/stream_elements_settings.dart';
-import 'package:irllink/src/domain/entities/settings/tts_settings.dart';
 
 class SettingsDTO extends Settings {
   const SettingsDTO({
     //CHAT SETTINGS
-    required bool isEmotes,
-    required double textSize,
-    required bool displayTimestamp,
-    required List hiddenUsersIds,
-    required ChatEventsSettings chatEventsSettings,
-    required ChatSettings chatSettings,
+    required super.isEmotes,
+    required super.textSize,
+    required super.displayTimestamp,
+    required super.hiddenUsersIds,
+    required super.chatEventsSettings,
+    required super.chatSettings,
     //GENERAL SETTINGS
-    required GeneralSettings generalSettings,
-    required DashboardSettings dashboardSettings,
+    required super.generalSettings,
+    required super.dashboardSettings,
     //CONNECTIONS SETTINGS
-    required bool isObsConnected,
-    required String obsWebsocketUrl,
-    required String obsWebsocketPassword,
-    required BrowserTabSettings browserTabs,
-    required List obsConnectionsHistory,
-    required StreamElementsSettings streamElementsSettings,
-    required String rtIrlPushKey,
+    required super.isObsConnected,
+    required super.obsWebsocketUrl,
+    required super.obsWebsocketPassword,
+    required super.browserTabs,
+    required super.obsConnectionsHistory,
+    required super.streamElementsSettings,
+    required super.rtIrlPushKey,
     //TTS SETTINGS
-    required TtsSettings ttsSettings,
-  }) : super(
-            //CHAT SETTINGS
-            isEmotes: isEmotes,
-            textSize: textSize,
-            displayTimestamp: displayTimestamp,
-            hiddenUsersIds: hiddenUsersIds,
-            chatEventsSettings: chatEventsSettings,
-            chatSettings: chatSettings,
-            //GENERAL SETTINGS
-            generalSettings: generalSettings,
-            dashboardSettings: dashboardSettings,
-            //CONNECTIONS SETTINGS
-            obsWebsocketUrl: obsWebsocketUrl,
-            obsWebsocketPassword: obsWebsocketPassword,
-            isObsConnected: isObsConnected,
-            browserTabs: browserTabs,
-            obsConnectionsHistory: obsConnectionsHistory,
-            streamElementsSettings: streamElementsSettings,
-            rtIrlPushKey: rtIrlPushKey,
-            //TTS SETTINGS
-            ttsSettings: ttsSettings);
+    required super.ttsSettings,
+  });
 
   @override
   Map toJson() => {
@@ -136,7 +109,7 @@ class SettingsDTO extends Settings {
           : const Settings.defaultSettings().rtIrlPushKey!,
       //TTS SETTINGS
       ttsSettings: map['ttsSettings'] != null
-          ? TtsSettingsDTO.fromJson(map['ttsSettings']) as TtsSettings
+          ? TtsSettingsDTO.fromJson(map['ttsSettings'])
           : const Settings.defaultSettings().ttsSettings!,
     );
   }
