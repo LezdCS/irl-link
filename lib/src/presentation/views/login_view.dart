@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/store_service.dart';
+import 'package:irllink/src/core/utils/globals.dart' as globals;
 import 'package:irllink/src/presentation/controllers/login_view_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
 
 class LoginView extends GetView<LoginViewController> {
   const LoginView({super.key});
@@ -31,29 +31,32 @@ class LoginView extends GetView<LoginViewController> {
   Widget _loginButton(context) {
     return Column(
       children: [
-        Container(
-          padding: const EdgeInsets.only(left: 10, right: 10),
-          child: InkWell(
-            onTap: () {
-              controller.login();
-            },
-            child: const Image(
-              image: AssetImage("lib/assets/login.png"),
+        const SizedBox(height: 200),
+        ElevatedButton(
+          onPressed: () {
+            controller.login();
+          },
+          child: const Text(
+            "Sign in with Twitch",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
           ),
         ),
-        InkWell(
-          onTap: () {
+        Text("or",
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium
+                ?.copyWith(color: Colors.white)),
+        ElevatedButton(
+          onPressed: () {
             controller.homeWitoutLogin();
           },
-          child: Container(
-            padding: const EdgeInsets.only(top: 10),
-            child: const Text(
-              "Maybe later",
-              style: TextStyle(
-                fontSize: 13,
-                color: Colors.grey,
-              ),
+          child: const Text(
+            "Continue as Guest",
+            style: TextStyle(
+              color: Colors.white,
             ),
           ),
         ),

@@ -54,7 +54,8 @@ class StoreService extends GetxService {
         await InAppPurchase.instance.queryProductDetails(kIds);
     if (response.notFoundIDs.isNotEmpty) {
       globals.talker?.debug('Products not found: ${response.notFoundIDs}');
-      globals.talker?.debug('Products found: ${response.productDetails.map((e) => e.id)}');
+      globals.talker?.debug(
+          'Products found: ${response.productDetails.map((e) => e.id)}');
     }
     products = response.productDetails;
   }
@@ -149,7 +150,7 @@ class StoreService extends GetxService {
   Future<void> deliverProduct(PurchaseDetails purchaseDetails) async {
     purchases.add(purchaseDetails);
     purchasePending.value = false;
-    if(Get.isRegistered<HomeViewController>()){
+    if (Get.isRegistered<HomeViewController>()) {
       Get.find<HomeViewController>().applySettings();
     }
 
