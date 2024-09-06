@@ -19,6 +19,7 @@ import 'package:irllink/src/data/repositories/settings_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/usecases/settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch_usecase.dart';
+import 'package:irllink/src/presentation/events/login_events.dart';
 import 'package:irllink/src/presentation/events/settings_events.dart';
 import 'package:irllink/src/presentation/views/login_view.dart';
 import 'package:kick_chat/kick_chat.dart';
@@ -63,7 +64,13 @@ void main() async {
     ).init(),
     permanent: true,
   );
-  await Get.putAsync(() => StoreService().init(), permanent: true);
+  await Get.putAsync(() => StoreService(
+    loginEvents: LoginEvents(
+      twitchUseCase: TwitchUseCase(
+        twitchRepository: TwitchRepositoryImpl(),
+      ),
+    ),
+  ).init(), permanent: true);
   TtsService ttsService =
       await Get.putAsync(() => TtsService().init(), permanent: true);
 
