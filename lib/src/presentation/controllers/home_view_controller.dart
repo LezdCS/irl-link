@@ -4,6 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:collection/collection.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:irllink/routes/app_routes.dart';
@@ -113,6 +114,9 @@ class HomeViewController extends GetxController
       });
     }
     await applySettings();
+
+    const platform = MethodChannel('watch_connectivity_channel');
+    await platform.invokeMethod('sendMessageToWatch', {'message': 'test'});
 
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
