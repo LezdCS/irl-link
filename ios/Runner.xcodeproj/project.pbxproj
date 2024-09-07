@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		331C808B294A63AB00263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C807B294A618700263BE5 /* RunnerTests.swift */; };
-		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		48089297A9CB34E17AF3011B /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF632BF852D8C6FBE6F0482 /* Pods_Runner.framework */; };
 		6E6093C42C8C36F500832AA1 /* irl_link_watch_osApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6093C32C8C36F500832AA1 /* irl_link_watch_osApp.swift */; };
 		6E6093C62C8C36F500832AA1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6093C52C8C36F500832AA1 /* ContentView.swift */; };
@@ -18,9 +17,9 @@
 		6E6093D52C8C36F800832AA1 /* irl_link_watch_os_Watch_AppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6093D42C8C36F800832AA1 /* irl_link_watch_os_Watch_AppTests.swift */; };
 		6E6093DF2C8C36F800832AA1 /* irl_link_watch_os_Watch_AppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6093DE2C8C36F800832AA1 /* irl_link_watch_os_Watch_AppUITests.swift */; };
 		6E6093E12C8C36F800832AA1 /* irl_link_watch_os_Watch_AppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6093E02C8C36F800832AA1 /* irl_link_watch_os_Watch_AppUITestsLaunchTests.swift */; };
-		6E6093E42C8C36F800832AA1 /* irl-link-watch-os Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 6E6093C12C8C36F500832AA1 /* irl-link-watch-os Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		6E6093F32C8C377800832AA1 /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E6093F22C8C377800832AA1 /* WatchConnectivity.framework */; };
-		6E6093F42C8C378A00832AA1 /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E6093F22C8C377800832AA1 /* WatchConnectivity.framework */; };
+		6E6094032C8C416A00832AA1 /* irl-link-watch-os Watch App.app in Resources */ = {isa = PBXBuildFile; fileRef = 6E6093C12C8C36F500832AA1 /* irl-link-watch-os Watch App.app */; };
+		6E6094042C8C41C900832AA1 /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E6093F22C8C377800832AA1 /* WatchConnectivity.framework */; };
+		6E6094052C8C41D000832AA1 /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E6093F22C8C377800832AA1 /* WatchConnectivity.framework */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
@@ -66,7 +65,6 @@
 			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
 			dstSubfolderSpec = 16;
 			files = (
-				6E6093E42C8C36F800832AA1 /* irl-link-watch-os Watch App.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -103,6 +101,7 @@
 		6E6093DE2C8C36F800832AA1 /* irl_link_watch_os_Watch_AppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = irl_link_watch_os_Watch_AppUITests.swift; sourceTree = "<group>"; };
 		6E6093E02C8C36F800832AA1 /* irl_link_watch_os_Watch_AppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = irl_link_watch_os_Watch_AppUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		6E6093F22C8C377800832AA1 /* WatchConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = System/Library/Frameworks/WatchConnectivity.framework; sourceTree = SDKROOT; };
+		6E6093F72C8C3C9D00832AA1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Flutter/Release.xcconfig; sourceTree = "<group>"; };
@@ -127,7 +126,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E6093F32C8C377800832AA1 /* WatchConnectivity.framework in Frameworks */,
+				6E6094042C8C41C900832AA1 /* WatchConnectivity.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,7 +148,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E6093F42C8C378A00832AA1 /* WatchConnectivity.framework in Frameworks */,
+				6E6094052C8C41D000832AA1 /* WatchConnectivity.framework in Frameworks */,
 				48089297A9CB34E17AF3011B /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -180,6 +179,7 @@
 				6E6093C52C8C36F500832AA1 /* ContentView.swift */,
 				6E6093C72C8C36F700832AA1 /* Assets.xcassets */,
 				6E6093C92C8C36F700832AA1 /* Preview Content */,
+				6E6093F72C8C3C9D00832AA1 /* Info.plist */,
 			);
 			path = "irl-link-watch-os Watch App";
 			sourceTree = "<group>";
@@ -477,8 +477,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
-				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
+				6E6094032C8C416A00832AA1 /* irl-link-watch-os Watch App.app in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -581,7 +581,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$PODS_ROOT/FirebaseCrashlytics/upload-symbols\" --flutter-project \"$PROJECT_DIR/firebase_app_id_file.json\" ";
+			shellScript = "\"$PODS_ROOT/FirebaseCrashlytics/upload-symbols\" --flutter-project \"$PROJECT_DIR/firebase_app_id_file.json\" \n";
 		};
 		9740EEB61CF901F6004384FC /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -596,7 +596,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
 		};
 		DDC91F41B021A2A0E9EFE5E0 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -854,7 +854,8 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "irl-link-watch-os Watch App/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "irl-link-watch-os";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.irllink;
@@ -899,7 +900,8 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "irl-link-watch-os Watch App/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "irl-link-watch-os";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.irllink;
@@ -941,7 +943,8 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "irl-link-watch-os Watch App/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "irl-link-watch-os";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.irllink;

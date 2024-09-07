@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+   Info.plist
+   Runner
+
+   Created by Julien on 2024/09/07.
+   Copyright (c) 2024 . All rights reserved.
+-->
+<plist version="1.0">
+   <dict>
+      <key>CFBundleDisplayName</key>
+      <string>Your Watch App</string>
+      <key>CFBundleIdentifier</key>
+      <string>com.irllink.watchkitapp</string>
+      <key>CFBundleVersion</key>
+      <string>1.0</string>
+      <key>WKCompanionAppBundleIdentifier</key>
+      <string>com.irllink</string>
+  </dict>
+</plist>
