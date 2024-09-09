@@ -89,6 +89,18 @@ class HomeViewController extends GetxController
 
   @override
   void onInit() async {
+    const channel = MethodChannel('com.irllink');
+    channel.setMethodCallHandler((call) async {
+      // Receive data from Native
+      switch (call.method) {
+        case "sendCounterToFlutter":
+          debugPrint('Data from watch: ${call.arguments}');
+          break;
+        default:
+          break;
+      }
+    });
+
     chatInputController = TextEditingController();
     chatTabsController = TabController(length: 0, vsync: this);
     emotesTabController = TabController(length: 0, vsync: this);
@@ -115,8 +127,7 @@ class HomeViewController extends GetxController
     }
     await applySettings();
 
-    const platform = MethodChannel('watch_connectivity_channel');
-    await platform.invokeMethod('sendMessageToWatch', {'message': 'test'});
+
 
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;

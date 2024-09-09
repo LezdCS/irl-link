@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/services.dart';
+
 import 'home_view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -166,6 +168,9 @@ class TwitchTabViewController extends GetxController {
   }
 
   void refreshData() {
+    const platform = MethodChannel('com.irllink');
+    platform.invokeMethod(
+        "flutterToWatch", {"method": "sendCounterToNative", "data": 5});
     myDuration.value = const Duration(seconds: 15);
     if (homeViewController.twitchData == null) return;
     getStreamInfos();
