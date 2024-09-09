@@ -111,6 +111,6 @@ class TtsService extends GetxService {
     if (settings.ttsSettings!.ttsMuteViewerName) {
       text = message.message;
     }
-    Get.find<TtsService>().flutterTts.speak(text);
+    flutterTts.speak(text);
   }
 }
