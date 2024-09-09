@@ -14,14 +14,14 @@ class TtsService extends GetxService {
   Future<TtsService> init() async {
     flutterTts = FlutterTts();
     if (Platform.isAndroid) {
-      flutterTts.setEngine(flutterTts.getDefaultEngine.toString());
+      await flutterTts.setEngine(flutterTts.getDefaultEngine.toString());
     }
-    getTtsVoices();
-    getTtsLanguages();
+    await getTtsVoices();
+    await getTtsLanguages();
     return this;
   }
 
-  void initTts(Settings settings) async {
+  Future<void> initTts(Settings settings) async {
     //  The following setup allows background music and in-app audio session to continue simultaneously:
     await flutterTts.setIosAudioCategory(
       IosTextToSpeechAudioCategory.ambient,
@@ -50,9 +50,8 @@ class TtsService extends GetxService {
     }
   }
 
-  void getTtsVoices() {
-    FlutterTts flutterTts = FlutterTts();
-    flutterTts.getVoices.then(
+  Future<void> getTtsVoices() async {
+    await flutterTts.getVoices.then(
       (value) => {
         ttsVoices.value = value,
         ttsVoices.sort((a, b) => a['name'].compareTo(b['name']))
@@ -60,9 +59,8 @@ class TtsService extends GetxService {
     );
   }
 
-  void getTtsLanguages() {
-    FlutterTts flutterTts = FlutterTts();
-    flutterTts.getLanguages.then(
+  Future<void> getTtsLanguages() async {
+    await flutterTts.getLanguages.then(
       (value) => {
         ttsLanguages.value = value,
         ttsLanguages.sort((a, b) => a.compareTo(b))

@@ -73,11 +73,11 @@ void main() async {
   ).init(), permanent: true);
   TtsService ttsService =
       await Get.putAsync(() => TtsService().init(), permanent: true);
+  await ttsService.initTts(settingsService.settings.value);
 
   if (!settingsService.settings.value.generalSettings!.isDarkMode) {
     Get.changeThemeMode(ThemeMode.light);
   }
-  ttsService.initTts(settingsService.settings.value);
 
   runApp(Main(
     talker: talker,
