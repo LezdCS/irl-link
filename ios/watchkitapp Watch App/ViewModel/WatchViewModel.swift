@@ -13,7 +13,7 @@ class WatchViewModel: NSObject, ObservableObject {
     var session: WCSession
     @Published var messages: [Message] = [
         Message(username: "Lezd_", message: "No wayyyyyy", color: "#eb4634", badges: [
-            "https://static-cdn.jtvnw.net/badges/v1/743a0f3b-84b3-450b-96a0-503d7f4a9764/3"
+            "https://static-cdn.jtvnw.net/badges/v1/b817aba4-fad8-49e2-b88a-7cc744dfa6ec/3"
         ]),
         Message(username: "Julien", message: "This is a longer message haha I am very long!", color: "#73fc03", badges: []),
     ]

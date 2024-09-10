@@ -11,6 +11,7 @@ struct ContentView: View {
     @ObservedObject var viewModel: WatchViewModel = WatchViewModel()
     
     var body: some View {
+        TabView {
             List(viewModel.messages, id: \.self) { message in
                 VStack {
                     HStack {
@@ -33,6 +34,21 @@ struct ContentView: View {
                         .font(.system(size: 14, design: .default))
                 }
             }
+//            .containerBackground(Color.purple.gradient, for: .tabView)
+            VStack{
+                Text("ok")
+            }.toolbar {
+                ToolbarItemGroup(placement: .bottomBar) {
+                    Spacer()
+                    Button {
+//                       TODO: open menu?
+                    } label : {
+                        Label("Add", systemImage: "plus")
+                    }
+                }
+            }
+        }
+        .tabViewStyle(.verticalPage)
     }
 }
 
