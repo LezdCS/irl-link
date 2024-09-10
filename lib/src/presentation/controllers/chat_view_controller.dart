@@ -4,6 +4,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/tts_service.dart';
@@ -408,6 +409,10 @@ class ChatViewController extends GetxController
       entity.ChatMessage twitchMessage =
           entity.ChatMessage.fromTwitch(message, twitchChat.channelId ?? '');
       chatMessages.add(twitchMessage);
+
+      const platform = MethodChannel('com.irllink');
+      platform.invokeMethod(
+        "flutterToWatch", {"method": "sendChatMessageToNative", "data": twitchMessage.message});
       scrollChatToBottom();
     });
   }

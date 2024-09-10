@@ -12,12 +12,8 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-            Text("Counter: \(viewModel.counter)")
-                .padding()
-            Button(action: {
-                viewModel.sendDataMessage(for: .sendCounterToFlutter, data: ["counter": viewModel.counter + 1])
-            }) {
-                Text("+ by 2")
+            List(viewModel.messages, id: \.self) { message in
+                Text(message)
             }
         }
         .padding()

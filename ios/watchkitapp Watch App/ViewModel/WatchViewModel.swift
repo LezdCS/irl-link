@@ -3,11 +3,11 @@ import WatchConnectivity
 
 class WatchViewModel: NSObject, ObservableObject {
     var session: WCSession
-    @Published var counter = 0
+    @Published var messages: [String] = ["test"]
     
     // Add more cases if you have more receive method
     enum WatchReceiveMethod: String {
-        case sendCounterToNative
+        case sendChatMessageToNative
     }
     
     // Add more cases if you have more sending method
@@ -43,8 +43,9 @@ extension WatchViewModel: WCSessionDelegate {
             }
             
             switch enumMethod {
-            case .sendCounterToNative:
-                self.counter = (message["data"] as? Int) ?? 0
+            case .sendChatMessageToNative:
+                self.messages.append(message["data"] as? String ?? "error")
+//                if(self.messages.)
             }
         }
     }
