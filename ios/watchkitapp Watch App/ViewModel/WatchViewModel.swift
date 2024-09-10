@@ -1,9 +1,19 @@
 import Foundation
 import WatchConnectivity
 
+struct Message: Identifiable, Hashable {
+    let id = UUID()
+    let username: String
+    let message: String
+    let color: String
+}
+
 class WatchViewModel: NSObject, ObservableObject {
     var session: WCSession
-    @Published var messages: [String] = ["test"]
+    @Published var messages: [Message] = [
+        Message(username: "Lezd_", message: "No wayyyyyy", color: "#eb4634"),
+        Message(username: "Julien", message: "This is a longer message haha I am very long!", color: "#73fc03"),
+    ]
     
     // Add more cases if you have more receive method
     enum WatchReceiveMethod: String {
@@ -44,7 +54,7 @@ extension WatchViewModel: WCSessionDelegate {
             
             switch enumMethod {
             case .sendChatMessageToNative:
-                self.messages.append(message["data"] as? String ?? "error")
+                self.messages.append(message["data"] as? Message ?? Message(username: "error", message: "wrong data type received", color: "#FFFFFF"))
 //                if(self.messages.)
             }
         }
