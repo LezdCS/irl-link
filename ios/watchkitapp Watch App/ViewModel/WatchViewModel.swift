@@ -58,7 +58,9 @@ extension WatchViewModel: WCSessionDelegate {
             switch enumMethod {
             case .sendChatMessageToNative:
                 self.messages.append(message["data"] as? Message ?? Message(username: "error", message: "wrong data type received", color: "#FFFFFF", badges: []))
-//                if(self.messages.)
+                if(self.messages.count > 10) {
+                    self.messages.removeFirst()
+                }
             }
         }
     }
