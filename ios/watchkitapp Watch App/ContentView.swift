@@ -13,10 +13,21 @@ struct ContentView: View {
     var body: some View {
             List(viewModel.messages, id: \.self) { message in
                 VStack {
-                    Text(message.username)
-                        .foregroundColor(Color(hex: message.color))
-                        .font(.system(size: 14, weight: .bold, design: .default))
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    HStack {
+                        ForEach(message.badges, id: \.self) { badge in
+                            AsyncImage(url: URL(string: badge)) { image in
+                                image.resizable()
+                            } placeholder: {
+                                Color.red
+                            }
+                            .frame(width: 12, height: 12)
+                        }
+                        Text(message.username)
+                            .foregroundColor(Color(hex: message.color))
+                            .font(.system(size: 14, weight: .bold, design: .default))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    
                     Text(message.message)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .font(.system(size: 14, design: .default))
