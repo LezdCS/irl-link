@@ -13,10 +13,10 @@
 		6E3AF5712C8F4F04002B6ADB /* watchkitappApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3AF5702C8F4F04002B6ADB /* watchkitappApp.swift */; };
 		6E3AF5752C8F4F06002B6ADB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E3AF5742C8F4F06002B6ADB /* Assets.xcassets */; };
 		6E3AF5782C8F4F06002B6ADB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E3AF5772C8F4F06002B6ADB /* Preview Assets.xcassets */; };
-		6E3AF5832C8F4F50002B6ADB /* WatchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3AF5802C8F4F50002B6ADB /* WatchViewModel.swift */; };
-		6E3AF5842C8F4F50002B6ADB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3AF5822C8F4F50002B6ADB /* ContentView.swift */; };
 		6E3AF5852C8F4F87002B6ADB /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E6093F22C8C377800832AA1 /* WatchConnectivity.framework */; };
 		6E3AF5862C8F5021002B6ADB /* watchkitapp Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 6E3AF56E2C8F4F04002B6ADB /* watchkitapp Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6E3DCC672C901C7A00292914 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3DCC662C901C7A00292914 /* ContentView.swift */; };
+		6E3DCC682C901CAB00292914 /* WatchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3DCC642C901C3400292914 /* WatchViewModel.swift */; };
 		6E6094052C8C41D000832AA1 /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E6093F22C8C377800832AA1 /* WatchConnectivity.framework */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
@@ -79,8 +79,8 @@
 		6E3AF5702C8F4F04002B6ADB /* watchkitappApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = watchkitappApp.swift; sourceTree = "<group>"; };
 		6E3AF5742C8F4F06002B6ADB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6E3AF5772C8F4F06002B6ADB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		6E3AF5802C8F4F50002B6ADB /* WatchViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchViewModel.swift; sourceTree = "<group>"; };
-		6E3AF5822C8F4F50002B6ADB /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = "../../../../Documents/irllink content/temp watch/ContentView.swift"; sourceTree = "<group>"; };
+		6E3DCC642C901C3400292914 /* WatchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchViewModel.swift; sourceTree = "<group>"; };
+		6E3DCC662C901C7A00292914 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		6E6093F22C8C377800832AA1 /* WatchConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = System/Library/Frameworks/WatchConnectivity.framework; sourceTree = SDKROOT; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -141,11 +141,11 @@
 		6E3AF56F2C8F4F04002B6ADB /* watchkitapp Watch App */ = {
 			isa = PBXGroup;
 			children = (
-				6E3AF5822C8F4F50002B6ADB /* ContentView.swift */,
-				6E3AF5812C8F4F50002B6ADB /* ViewModel */,
+				6E3DCC632C901C2400292914 /* ViewModel */,
 				6E3AF5702C8F4F04002B6ADB /* watchkitappApp.swift */,
 				6E3AF5742C8F4F06002B6ADB /* Assets.xcassets */,
 				6E3AF5762C8F4F06002B6ADB /* Preview Content */,
+				6E3DCC662C901C7A00292914 /* ContentView.swift */,
 			);
 			path = "watchkitapp Watch App";
 			sourceTree = "<group>";
@@ -158,13 +158,12 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		6E3AF5812C8F4F50002B6ADB /* ViewModel */ = {
+		6E3DCC632C901C2400292914 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				6E3AF5802C8F4F50002B6ADB /* WatchViewModel.swift */,
+				6E3DCC642C901C3400292914 /* WatchViewModel.swift */,
 			);
-			name = ViewModel;
-			path = "../../../../Documents/irllink content/temp watch/ViewModel";
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		928ABBACC74175FD3C21BB06 /* Pods */ = {
@@ -524,9 +523,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E3DCC682C901CAB00292914 /* WatchViewModel.swift in Sources */,
 				6E3AF5712C8F4F04002B6ADB /* watchkitappApp.swift in Sources */,
-				6E3AF5842C8F4F50002B6ADB /* ContentView.swift in Sources */,
-				6E3AF5832C8F4F50002B6ADB /* WatchViewModel.swift in Sources */,
+				6E3DCC672C901C7A00292914 /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
