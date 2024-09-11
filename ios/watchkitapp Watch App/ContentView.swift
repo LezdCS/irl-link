@@ -38,6 +38,7 @@ struct ContentView: View {
 //                .listRowPlatterColor(Color.green)
             }
             .environment(\.defaultMinListRowHeight, 10)
+            .ignoresSafeArea(edges: .top)
 //            .containerBackground(Color.purple.gradient, for: .tabView)
             VStack{
                 Text("ok")
