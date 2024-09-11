@@ -32,6 +32,9 @@ struct ContentView: View {
                         .frame(alignment: .leading)
                         .font(.system(size: 14, design: .default))
                 }
+                .listRowInsets(EdgeInsets())
+//                .listRowBackground(Color.clear)
+//                .listRowPlatterColor(Color.green)
             }
 //            .containerBackground(Color.purple.gradient, for: .tabView)
             VStack{
