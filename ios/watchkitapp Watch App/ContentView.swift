@@ -29,13 +29,15 @@ struct ContentView: View {
                             .frame(alignment: .leading)
                     }
                     Text(message.message)
-                        .frame(alignment: .leading)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                         .font(.system(size: 14, design: .default))
+                        .fixedSize(horizontal: false, vertical: true)
                 }
                 .listRowInsets(EdgeInsets())
-//                .listRowBackground(Color.clear)
+                .listRowBackground(Color.clear)
 //                .listRowPlatterColor(Color.green)
             }
+            .environment(\.defaultMinListRowHeight, 10)
 //            .containerBackground(Color.purple.gradient, for: .tabView)
             VStack{
                 Text("ok")
