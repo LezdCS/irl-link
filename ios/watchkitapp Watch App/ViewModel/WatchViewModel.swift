@@ -17,6 +17,8 @@ class WatchViewModel: NSObject, ObservableObject {
         ]),
         Message(username: "Julien", message: "This is a longer message haha I am very long!", color: "#73fc03", badges: []),
     ]
+    @Published var viewers: Int = 0
+    @Published var isLive: Bool = false
     
     // Add more cases if you have more receive method
     enum WatchReceiveMethod: String {
