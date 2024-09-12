@@ -18,17 +18,21 @@ struct ContentView: View {
             .tag(0)
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
-                    Spacer()
-                    Button {
-                        selectedTab = 1
-                    } label : {
-                        Label("SE", systemImage: "minus")
+                    HStack {
+                        Text("\(viewModel.viewers)")
+                        Image(systemName: "person")
+                            .font(.system(size: 15))
+                            .foregroundColor(.red)
                     }
-                    Button {
-                    } label : {
-                        Label("OBS", systemImage: "plus")
+                    HStack {
+                        Button("OBS") {
+                            selectedTab = 1
+                        }
+                        .frame(width: 50)
+//                        Button("SE") {
+//                            selectedTab = 2
+//                        }
                     }
-                    Spacer()
                 }
             }
             .ignoresSafeArea(edges: .top)
@@ -46,6 +50,8 @@ struct ContentView: View {
         "https://static-cdn.jtvnw.net/badges/v1/b817aba4-fad8-49e2-b88a-7cc744dfa6ec/3"
     ]))
     viewModel.messages.append(Message(username: "Julien", message: "This is a longer message haha I am very long!", color: "#73fc03", badges: []))
+    viewModel.viewers = 123
+    viewModel.isLive = true
     return ContentView(viewModel: viewModel)
 }
 
