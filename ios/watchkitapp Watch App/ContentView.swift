@@ -13,38 +13,7 @@ struct ContentView: View {
     
     var body: some View {
         TabView(selection: $selectedTab) {
-            VStack {
-                HStack {
-                    Text("\(viewModel.viewers) viewers")
-                    Spacer()
-                    Text(viewModel.isLive ? "Online" : "Offline")
-                }.padding()
-                List(viewModel.messages, id: \.self) { message in
-                    HStack(alignment: .top) {
-                        HStack {
-                            ForEach(message.badges, id: \.self) { badge in
-                                AsyncImage(url: URL(string: badge)) { image in
-                                    image.resizable()
-                                } placeholder: {
-                                    Color.red
-                                }
-                                .frame(width: 12, height: 12)
-                            }
-                            Text(message.username)
-                                .foregroundColor(Color(hex: message.color))
-                                .font(.system(size: 14, weight: .bold, design: .default))
-                                .frame(alignment: .leading)
-                        }
-                        Text(message.message)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .font(.system(size: 14, design: .default))
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                    .listRowInsets(EdgeInsets())
-                    .listRowBackground(Color.clear)
-                    //                .listRowPlatterColor(Color.green)
-                }
-            }
+            ChatView(viewModel: viewModel)
             .environment(\.defaultMinListRowHeight, 10)
             .tag(0)
             .toolbar {
@@ -64,19 +33,7 @@ struct ContentView: View {
             }
             .ignoresSafeArea(edges: .top)
 //            .containerBackground(Color.purple.gradient, for: .tabView)
-            VStack{
-                Text("ok")
-            }
-            .toolbar {
-                ToolbarItemGroup(placement: .bottomBar) {
-                    Spacer()
-                    Button {
-//                       TODO: go to OBS tab
-                    } label : {
-                        Label("idk", systemImage: "plus")
-                    }
-                }
-            }
+            ObsView(selectedTab: $selectedTab)
             .tag(1)
         }
         .tabViewStyle(.verticalPage)
