@@ -1,13 +1,44 @@
 import Foundation
 import WatchConnectivity
 
-struct Message: Identifiable, Hashable {
-    let id = UUID()
-    let username: String
-    let message: String
-    let color: String
-    let badges: Array<String>
+struct Message: Identifiable, Hashable, Decodable {
+    var id = UUID()
+    var username: String
+    var message: String
+    var color: String
+    var badges: Array<String>
+    
+    enum CodingKeys: String, CodingKey {
+        case badges, color, message, username
+    }
+    
+    init(username: String, message: String, color: String, badges: [String] ) {
+        self.username = username
+        self.message = message
+        self.color = color
+        self.badges = badges
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        // Decode the badges field as a string first
+        let badgesString = try container.decode(String.self, forKey: .badges)
+        
+        // Convert the badges string (which is JSON format) to an actual array of strings
+        if let data = badgesString.data(using: .utf8) {
+            self.badges = (try? JSONDecoder().decode([String].self, from: data)) ?? []
+        } else {
+            self.badges = []
+        }
+        
+        // Decode other fields
+        self.color = try container.decode(String.self, forKey: .color)
+        self.message = try container.decode(String.self, forKey: .message)
+        self.username = try container.decode(String.self, forKey: .username)
+    }
 }
+
 
 class WatchViewModel: NSObject, ObservableObject {
     var session: WCSession
@@ -47,16 +78,27 @@ extension WatchViewModel: WCSessionDelegate {
     // Receive message From AppDelegate.swift that send from iOS devices
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
         DispatchQueue.main.async {
-            print("receiving")
             guard let method = message["method"] as? String, let enumMethod = WatchReceiveMethod(rawValue: method) else {
                 return
             }
             
             switch enumMethod {
             case .sendChatMessageToNative:
-                self.messages.append(message["data"] as? Message ?? Message(username: "error", message: "wrong data type received", color: "#FFFFFF", badges: []))
-                if(self.messages.count > 10) {
-                    self.messages.removeFirst()
+                do {
+                    let jsonData = try JSONSerialization.data(withJSONObject: message["data"]!, options: [])
+                    do {
+                        let msg = try JSONDecoder().decode(Message.self, from: jsonData)
+                        self.messages.append(msg)
+                        if(self.messages.count > 10) {
+                            self.messages.removeFirst()
+                        }
+                    } catch {
+                        // Handle error
+                        print("Error occurred: \(error)")
+                    }
+                } catch {
+                    // Handle error
+                    print("Error occurred: \(error)")
                 }
             }
         }

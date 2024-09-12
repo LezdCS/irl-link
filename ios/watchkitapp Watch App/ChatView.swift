@@ -10,10 +10,9 @@ import SwiftUI
 
 
 struct ChatView: View {
-    var viewModel: WatchViewModel
+    @ObservedObject var viewModel: WatchViewModel
     
     var body: some View {
-        
         VStack {
             HStack {
                 HStack {

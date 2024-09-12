@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:irllink/src/domain/entities/chat/chat_badge.dart';
@@ -353,6 +355,13 @@ class ChatMessage extends Equatable
         'badgesList': badgesList,
         'emotes': emotes,
         'platform': platform,
+      };
+
+  Map toJsonForWatch() => {
+        'username': username,
+        'message': message,
+        'color': color,
+        'badges': jsonEncode(badgesList.map((badge) => badge.imageUrl1x).toList()),
       };
 
   @override
