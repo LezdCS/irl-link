@@ -13,32 +13,10 @@ struct ContentView: View {
     
     var body: some View {
         TabView(selection: $selectedTab) {
-            ChatView(viewModel: viewModel)
-            .environment(\.defaultMinListRowHeight, 10)
-            .tag(0)
-            .toolbar {
-                ToolbarItemGroup(placement: .bottomBar) {
-                    HStack {
-                        Text("\(viewModel.viewers)")
-                        Image(systemName: "person")
-                            .font(.system(size: 15))
-                            .foregroundColor(.red)
-                    }
-                    HStack {
-                        Button("OBS") {
-                            selectedTab = 1
-                        }
-                        .frame(width: 50)
-//                        Button("SE") {
-//                            selectedTab = 2
-//                        }
-                    }
-                }
-            }
-            .ignoresSafeArea(edges: .top)
-//            .containerBackground(Color.purple.gradient, for: .tabView)
+            ChatView(viewModel: viewModel, selectedTab: $selectedTab)
+                .tag(0)
             ObsView(selectedTab: $selectedTab)
-            .tag(1)
+                .tag(1)
         }
         .tabViewStyle(.verticalPage)
     }

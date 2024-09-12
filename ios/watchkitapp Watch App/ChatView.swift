@@ -11,6 +11,7 @@ import SwiftUI
 
 struct ChatView: View {
     @ObservedObject var viewModel: WatchViewModel
+    @Binding var selectedTab: Int
     
     var body: some View {
         VStack {
@@ -47,6 +48,26 @@ struct ChatView: View {
                 //                .listRowPlatterColor(Color.green)
             }
         }
-        
+        .toolbar {
+            ToolbarItemGroup(placement: .bottomBar) {
+                HStack {
+                    Text("\(viewModel.viewers)")
+                    Image(systemName: "person")
+                        .font(.system(size: 15))
+                        .foregroundColor(.red)
+                }
+                HStack {
+                    Button("OBS") {
+                        selectedTab = 1
+                    }
+                    .frame(width: 50)
+//                        Button("SE") {
+//                            selectedTab = 2
+//                        }
+                }
+            }
+        }
+        .environment(\.defaultMinListRowHeight, 10)
+        .ignoresSafeArea(edges: .top)
     }
 }
