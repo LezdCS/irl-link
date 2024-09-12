@@ -9,10 +9,16 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var viewModel: WatchViewModel = WatchViewModel()
+    @State private var selectedTab: Int = 0
     
     var body: some View {
-        TabView {
+        TabView(selection: $selectedTab) {
             VStack {
+                HStack {
+                    Text("\(viewModel.viewers) viewers")
+                    Spacer()
+                    Text(viewModel.isLive ? "Online" : "Offline")
+                }.padding()
                 List(viewModel.messages, id: \.self) { message in
                     HStack(alignment: .top) {
                         HStack {
@@ -38,34 +44,52 @@ struct ContentView: View {
                     .listRowBackground(Color.clear)
                     //                .listRowPlatterColor(Color.green)
                 }
-                HStack {
-                    Text("\(viewModel.viewers) viewers")
-                    Spacer()
-                    Text(viewModel.isLive ? "Online" : "Offline")
-                }
             }
             .environment(\.defaultMinListRowHeight, 10)
-//            .ignoresSafeArea(edges: .top)
-//            .containerBackground(Color.purple.gradient, for: .tabView)
-            VStack{
-                Text("ok")
-            }.toolbar {
+            .tag(0)
+            .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
                     Spacer()
                     Button {
-//                       TODO: open menu?
+                        selectedTab = 1
                     } label : {
-                        Label("Add", systemImage: "plus")
+                        Label("SE", systemImage: "minus")
+                    }
+                    Button {
+                    } label : {
+                        Label("OBS", systemImage: "plus")
+                    }
+                    Spacer()
+                }
+            }
+            .ignoresSafeArea(edges: .top)
+//            .containerBackground(Color.purple.gradient, for: .tabView)
+            VStack{
+                Text("ok")
+            }
+            .toolbar {
+                ToolbarItemGroup(placement: .bottomBar) {
+                    Spacer()
+                    Button {
+//                       TODO: go to OBS tab
+                    } label : {
+                        Label("idk", systemImage: "plus")
                     }
                 }
             }
+            .tag(1)
         }
         .tabViewStyle(.verticalPage)
     }
 }
 
 #Preview {
-    ContentView()
+    let viewModel: WatchViewModel = WatchViewModel()
+    viewModel.messages.append(Message(username: "Lezd_", message: "No wayyyyyy", color: "#eb4634", badges: [
+        "https://static-cdn.jtvnw.net/badges/v1/b817aba4-fad8-49e2-b88a-7cc744dfa6ec/3"
+    ]))
+    viewModel.messages.append(Message(username: "Julien", message: "This is a longer message haha I am very long!", color: "#73fc03", badges: []))
+    return ContentView(viewModel: viewModel)
 }
 
 extension Color {
