@@ -16,8 +16,13 @@ struct ChatView: View {
         
         VStack {
             HStack {
-                Text("\(viewModel.viewers) viewers")
-                Text(viewModel.isLive ? "Online" : "Offline")
+                HStack {
+                    Text("\(viewModel.viewers)")
+                    Image(systemName: "person")
+                        .font(.system(size: 15))
+                        .foregroundColor(.red)
+                }
+                Text(viewModel.isLive ? "Live" : "Not live")
                 Spacer()
             }.padding()
             List(viewModel.messages, id: \.self) { message in
