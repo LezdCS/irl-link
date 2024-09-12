@@ -49,6 +49,8 @@ class WatchViewModel: NSObject, ObservableObject {
     // Add more cases if you have more receive method
     enum WatchReceiveMethod: String {
         case sendChatMessageToNative
+        case sendViewersToNative
+        case sendLiveStatusToNative
     }
     
     // Add more cases if you have more sending method
@@ -100,6 +102,10 @@ extension WatchViewModel: WCSessionDelegate {
                     // Handle error
                     print("Error occurred: \(error)")
                 }
+            case .sendViewersToNative:
+                self.viewers = message["data"] as! Int
+            case .sendLiveStatusToNative:
+                self.isLive = message["data"] as! Bool
             }
         }
     }
