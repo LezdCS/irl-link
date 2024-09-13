@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/utils/globals.dart' as globals;
@@ -37,6 +37,25 @@ class ObsTabViewController extends GetxController {
   @override
   Future<void> onReady() async {
     await applySettings();
+
+    isConnected.listen((value) {
+      // Send to watchOS
+      const platform = MethodChannel('com.irllink');
+      platform.invokeMethod("flutterToWatch", {
+        "method": "sendUpdateObsConnecteToNative",
+        "data": value,
+      });
+    });
+
+    currentScene.listen((value) {
+      // Send to watchOS
+      const platform = MethodChannel('com.irllink');
+      platform.invokeMethod("flutterToWatch", {
+        "method": "sendSelectedObsSceneToNative",
+        "data": value,
+      });
+    });
+
     super.onReady();
   }
 
@@ -44,11 +63,7 @@ class ObsTabViewController extends GetxController {
   void connectWs(String url, String password) async {
     try {
       if (!url.startsWith('ws://') && !url.startsWith('wss://')) {
-        if (url.startsWith('https')) {
-          url = 'wss://$url';
-        } else {
-          url = 'ws://$url';
-        }
+        url = 'ws://$url';
       }
       globals.talker?.logTyped(ObsLog("Connecting to OBS at $url..."));
       obsWebSocket = await ObsWebSocket.connect(

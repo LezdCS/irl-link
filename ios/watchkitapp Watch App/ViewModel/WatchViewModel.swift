@@ -46,16 +46,25 @@ class WatchViewModel: NSObject, ObservableObject {
     @Published var viewers: Int = 0
     @Published var isLive: Bool = false
     
+    @Published var obsConnected: Bool = false
+    @Published var selectedScene: String = ""
+    @Published var scenes: [String] = []
+    @Published var sources: [String] = []
+    
     // Add more cases if you have more receive method
     enum WatchReceiveMethod: String {
         case sendChatMessageToNative
         case sendViewersToNative
         case sendLiveStatusToNative
+        case sendUpdateObsConnecteToNative
+        case sendSelectedObsSceneToNative
     }
     
     // Add more cases if you have more sending method
     enum WatchSendMethod: String {
         case sendCounterToFlutter
+        case sendChangeObsSceneToFlutter
+        case sendToggleObsSourceToFlutter
     }
     
     init(session: WCSession = .default) {
@@ -106,6 +115,10 @@ extension WatchViewModel: WCSessionDelegate {
                 self.viewers = message["data"] as! Int
             case .sendLiveStatusToNative:
                 self.isLive = message["data"] as! Bool
+            case .sendUpdateObsConnecteToNative:
+                self.obsConnected = message["data"] as! Bool
+            case .sendSelectedObsSceneToNative:
+                self.selectedScene = message["data"] as! String
             }
         }
     }

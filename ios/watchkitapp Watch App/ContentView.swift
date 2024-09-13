@@ -15,7 +15,7 @@ struct ContentView: View {
         TabView(selection: $selectedTab) {
             ChatView(viewModel: viewModel, selectedTab: $selectedTab)
                 .tag(0)
-            ObsView(selectedTab: $selectedTab)
+            ObsView(selectedTab: $selectedTab, viewModel: viewModel)
                 .tag(1)
         }
         .tabViewStyle(.verticalPage)

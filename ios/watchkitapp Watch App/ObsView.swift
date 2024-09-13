@@ -11,10 +11,39 @@ import SwiftUI
 
 struct ObsView: View {
     @Binding var selectedTab: Int
+    @ObservedObject var viewModel: WatchViewModel
+    
+    let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+    ]
     
     var body: some View {
         VStack{
-            Text("ok")
+            Text(viewModel.selectedScene)
+            if(viewModel.obsConnected) {
+                VStack {
+                    ScrollView(.horizontal) {
+                        LazyHStack(spacing: 20) {
+                            ForEach(viewModel.scenes, id: \.self) { scene in
+                                Text(scene)
+                            }
+                        }
+                        .padding()
+                    }
+                    
+                    ScrollView {
+                        LazyVGrid(columns: columns, spacing: 20) {
+                            ForEach(viewModel.sources, id: \.self) { item in
+                                Text("Item \(item)")
+                            }
+                        }
+                        .padding()
+                    }
+                }
+            } else {
+                Text("OBS disconnected")
+            }
         }
         .toolbar {
             ToolbarItemGroup(placement: .bottomBar) {
@@ -22,7 +51,7 @@ struct ObsView: View {
                 Button {
                     selectedTab = 0
                 } label : {
-                    Label("idk", systemImage: "arrow.up")
+                    Label("Back to top", systemImage: "arrow.up")
                 }
             }
         }
