@@ -23,7 +23,7 @@ struct ObsView: View {
             if(viewModel.obsConnected) {
                 VStack {
                     ScrollView(.horizontal) {
-                        LazyHStack(spacing: 20) {
+                        LazyHStack(spacing: 10) {
                             ForEach(viewModel.scenes, id: \.self) { scene in
                                 Button(action: {
                                     viewModel.sendDataMessage(for: .sendChangeObsSceneToFlutter, data: ["scene": scene])
@@ -38,10 +38,11 @@ struct ObsView: View {
                                         }
                                         .mask(Text(scene))
                                 }
+                                .frame(width: 90)
                             }
                         }
-                        .padding()
                     }
+                    Divider()
                     ScrollView {
                         LazyVGrid(columns: columns, spacing: 20) {
                             ForEach(viewModel.sources, id: \.self) { item in
