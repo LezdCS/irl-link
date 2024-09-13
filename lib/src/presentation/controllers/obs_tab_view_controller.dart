@@ -19,7 +19,7 @@ class ObsTabViewController extends GetxController {
   RxBool isConnected = false.obs;
   RxString alertMessage = "Failed to connect to OBS".obs;
 
-  RxList scenesList = RxList();
+  RxList<String> scenesList = RxList();
   RxString currentScene = RxString("");
 
   RxList<SceneItemDetail> sourcesList = RxList();
@@ -52,6 +52,15 @@ class ObsTabViewController extends GetxController {
       const platform = MethodChannel('com.irllink');
       platform.invokeMethod("flutterToWatch", {
         "method": "sendSelectedObsSceneToNative",
+        "data": value,
+      });
+    });
+
+    scenesList.listen((value) {
+      // Send to watchOS
+      const platform = MethodChannel('com.irllink');
+      platform.invokeMethod("flutterToWatch", {
+        "method": "sendObsScenesToNative",
         "data": value,
       });
     });

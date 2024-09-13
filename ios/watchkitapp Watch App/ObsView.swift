@@ -20,18 +20,24 @@ struct ObsView: View {
     
     var body: some View {
         VStack{
-            Text(viewModel.selectedScene)
             if(viewModel.obsConnected) {
                 VStack {
                     ScrollView(.horizontal) {
                         LazyHStack(spacing: 20) {
                             ForEach(viewModel.scenes, id: \.self) { scene in
                                 Text(scene)
+                                    .overlay {
+                                        LinearGradient(
+                                            colors: scene == viewModel.selectedScene ? [.purple, .blue] : [],
+                                            startPoint: .leading,
+                                            endPoint: .trailing
+                                        )
+                                    }
+                                    .mask(Text(scene))
                             }
                         }
                         .padding()
                     }
-                    
                     ScrollView {
                         LazyVGrid(columns: columns, spacing: 20) {
                             ForEach(viewModel.sources, id: \.self) { item in

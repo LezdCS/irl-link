@@ -58,6 +58,7 @@ class WatchViewModel: NSObject, ObservableObject {
         case sendLiveStatusToNative
         case sendUpdateObsConnecteToNative
         case sendSelectedObsSceneToNative
+        case sendObsScenesToNative
     }
     
     // Add more cases if you have more sending method
@@ -119,6 +120,8 @@ extension WatchViewModel: WCSessionDelegate {
                 self.obsConnected = message["data"] as! Bool
             case .sendSelectedObsSceneToNative:
                 self.selectedScene = message["data"] as! String
+            case .sendObsScenesToNative:
+                self.scenes = message["data"] as! [String]
             }
         }
     }
