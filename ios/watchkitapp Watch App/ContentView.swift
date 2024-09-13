@@ -30,6 +30,9 @@ struct ContentView: View {
     viewModel.messages.append(Message(username: "Julien", message: "This is a longer message haha I am very long!", color: "#73fc03", badges: []))
     viewModel.viewers = 123
     viewModel.isLive = true
+    viewModel.obsConnected = true
+    viewModel.scenes = ["test1", "test2"]
+    viewModel.selectedScene = "test2"
     return ContentView(viewModel: viewModel)
 }
 

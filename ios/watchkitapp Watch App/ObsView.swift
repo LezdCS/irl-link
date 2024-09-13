@@ -25,15 +25,19 @@ struct ObsView: View {
                     ScrollView(.horizontal) {
                         LazyHStack(spacing: 20) {
                             ForEach(viewModel.scenes, id: \.self) { scene in
-                                Text(scene)
-                                    .overlay {
-                                        LinearGradient(
-                                            colors: scene == viewModel.selectedScene ? [.purple, .blue] : [],
-                                            startPoint: .leading,
-                                            endPoint: .trailing
-                                        )
-                                    }
-                                    .mask(Text(scene))
+                                Button(action: {
+                                    viewModel.sendDataMessage(for: .sendChangeObsSceneToFlutter, data: ["scene": scene])
+                                }) {
+                                    Text(scene)
+                                        .overlay {
+                                            LinearGradient(
+                                                colors: scene == viewModel.selectedScene ? [.purple, .blue] : [],
+                                                startPoint: .leading,
+                                                endPoint: .trailing
+                                            )
+                                        }
+                                        .mask(Text(scene))
+                                }
                             }
                         }
                         .padding()

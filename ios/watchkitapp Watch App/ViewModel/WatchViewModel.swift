@@ -63,7 +63,6 @@ class WatchViewModel: NSObject, ObservableObject {
     
     // Add more cases if you have more sending method
     enum WatchSendMethod: String {
-        case sendCounterToFlutter
         case sendChangeObsSceneToFlutter
         case sendToggleObsSourceToFlutter
     }

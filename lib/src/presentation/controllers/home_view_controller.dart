@@ -93,8 +93,11 @@ class HomeViewController extends GetxController
     channel.setMethodCallHandler((call) async {
       // Receive data from Native
       switch (call.method) {
-        case "sendCounterToFlutter":
+        case "sendChangeObsSceneToFlutter":
           debugPrint('Data from watch: ${call.arguments}');
+          if (obsTabViewController != null) {
+            obsTabViewController!.setCurrentScene(call.arguments['data']['scene']);
+          }
           break;
         default:
           break;
