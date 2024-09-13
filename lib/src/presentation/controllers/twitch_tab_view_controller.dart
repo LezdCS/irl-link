@@ -44,6 +44,20 @@ class TwitchTabViewController extends GetxController {
   void onInit() {
     homeViewController = Get.find<HomeViewController>();
     titleFormController = TextEditingController();
+
+    twitchStreamInfos.listen((value) {
+      // Send to watchOS
+      const platform = MethodChannel('com.irllink');
+      platform.invokeMethod("flutterToWatch", {
+        "method": "sendViewersToNative",
+        "data": value.viewerCount,
+      });
+      platform.invokeMethod("flutterToWatch", {
+        "method": "sendLiveStatusToNative",
+        "data": value.isOnline,
+      });
+    });
+
     super.onInit();
   }
 
@@ -181,17 +195,6 @@ class TwitchTabViewController extends GetxController {
     if (!focus.hasFocus) {
       titleFormController.text = twitchStreamInfos.value.title!;
     }
-
-    // Send to watchOS
-    const platform = MethodChannel('com.irllink');
-    platform.invokeMethod("flutterToWatch", {
-      "method": "sendViewersToNative",
-      "data": twitchStreamInfos.value.viewerCount
-    });
-    platform.invokeMethod("flutterToWatch", {
-      "method": "sendLiveStatusToNative",
-      "data": twitchStreamInfos.value.isOnline
-    });
   }
 
   void toggleFollowerOnly() {
