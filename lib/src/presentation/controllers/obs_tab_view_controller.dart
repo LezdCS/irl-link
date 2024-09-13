@@ -7,7 +7,6 @@ import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/utils/globals.dart' as globals;
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
-import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 
@@ -33,15 +32,7 @@ class ObsTabViewController extends GetxController {
 
   Rxn<StatsResponse> statsResponse = Rxn<StatsResponse>();
 
-  late HomeViewController homeViewController;
   late Timer statsTimer;
-
-  @override
-  void onInit() {
-    homeViewController = Get.find<HomeViewController>();
-
-    super.onInit();
-  }
 
   @override
   Future<void> onReady() async {

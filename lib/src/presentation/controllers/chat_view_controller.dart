@@ -411,8 +411,10 @@ class ChatViewController extends GetxController
       chatMessages.add(twitchMessage);
 
       const platform = MethodChannel('com.irllink');
-      platform.invokeMethod(
-        "flutterToWatch", {"method": "sendChatMessageToNative", "data": twitchMessage.toJsonForWatch()});
+      platform.invokeMethod("flutterToWatch", {
+        "method": "sendChatMessageToNative",
+        "data": twitchMessage.toJsonForWatch(),
+      });
       scrollChatToBottom();
     });
   }

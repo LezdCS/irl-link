@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:flutter/services.dart';
+import 'package:irllink/src/core/resources/data_state.dart';
+
 import 'home_view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -165,10 +168,30 @@ class TwitchTabViewController extends GetxController {
     });
   }
 
-  void refreshData() {
+  Future<void> refreshData() async {
     myDuration.value = const Duration(seconds: 15);
     if (homeViewController.twitchData == null) return;
-    getStreamInfos();
+    DataState<TwitchStreamInfos> streamInfos = await homeEvents.getStreamInfo(
+      homeViewController.twitchData!.accessToken,
+      homeViewController.twitchData!.twitchUser.id,
+    );
+    if (streamInfos is DataSuccess) {
+      twitchStreamInfos.value = streamInfos.data!;
+    }
+    if (!focus.hasFocus) {
+      titleFormController.text = twitchStreamInfos.value.title!;
+    }
+
+    // Send to watchOS
+    const platform = MethodChannel('com.irllink');
+    platform.invokeMethod("flutterToWatch", {
+      "method": "sendViewersToNative",
+      "data": twitchStreamInfos.value.viewerCount
+    });
+    platform.invokeMethod("flutterToWatch", {
+      "method": "sendLiveStatusToNative",
+      "data": twitchStreamInfos.value.isOnline
+    });
   }
 
   void toggleFollowerOnly() {
@@ -246,25 +269,5 @@ class TwitchTabViewController extends GetxController {
       status,
       winningOutcomeId,
     );
-  }
-
-  void getStreamInfos() {
-    homeEvents
-        .getStreamInfo(
-          homeViewController.twitchData!.accessToken,
-          homeViewController.twitchData!.twitchUser.id,
-        )
-        .then(
-          (value) => {
-            if (value.data != null)
-              {
-                twitchStreamInfos.value = value.data!,
-                if (!focus.hasFocus)
-                  {
-                    titleFormController.text = twitchStreamInfos.value.title!,
-                  }
-              },
-          },
-        );
   }
 }

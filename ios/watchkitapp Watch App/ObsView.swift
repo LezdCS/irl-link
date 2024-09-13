@@ -26,6 +26,5 @@ struct ObsView: View {
                 }
             }
         }
-        
     }
 }
