@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
@@ -62,6 +63,17 @@ class ObsTabViewController extends GetxController {
       platform.invokeMethod("flutterToWatch", {
         "method": "sendObsScenesToNative",
         "data": value,
+      });
+    });
+
+    sourcesList.listen((value) {
+      List data = value.map((e) => e.toJson()).toList();
+      debugPrint("sourcesList: $data");
+      // Send to watchOS
+      const platform = MethodChannel('com.irllink');
+      platform.invokeMethod("flutterToWatch", {
+        "method": "sendObsSourcesToNative",
+        "data": data,
       });
     });
 

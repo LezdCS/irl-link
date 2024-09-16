@@ -46,7 +46,7 @@ struct ObsView: View {
                     ScrollView {
                         LazyVGrid(columns: columns, spacing: 20) {
                             ForEach(viewModel.sources, id: \.self) { item in
-                                Text("Item \(item)")
+                                Text(item.sourceName)
                             }
                         }
                         .padding()
