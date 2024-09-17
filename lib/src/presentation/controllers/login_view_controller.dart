@@ -44,7 +44,7 @@ class LoginViewController extends GetxController {
       isLoading.value = false;
 
       if (refreshResult is DataSuccess) {
-        Get.offAllNamed(Routes.home, arguments: [twitchCredsResult.data]);
+        Get.offAllNamed(Routes.home, arguments: [refreshResult.data]);
       }
     }
 
