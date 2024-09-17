@@ -7,11 +7,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/utils/globals.dart' as globals;
 import 'package:irllink/src/core/utils/init_dio.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
+import 'package:irllink/src/presentation/events/login_events.dart';
 
 class StoreService extends GetxService {
+  StoreService({required this.loginEvents});
+  final LoginEvents loginEvents;
+
   late StreamSubscription<List<PurchaseDetails>> subscription;
   List<ProductDetails> products = [];
   RxBool purchasePending = false.obs;
@@ -121,9 +127,19 @@ class StoreService extends GetxService {
       return Future<bool>.value(true);
     }
 
+    TwitchCredentials? twitchCredentials;
+    await loginEvents.getTwitchFromLocal().then((value) {
+      if (value is DataSuccess) {
+        twitchCredentials = value.data;
+      }
+    });
+
+    if(twitchCredentials == null){
+      return Future<bool>.value(false);
+    }
+
     String? pruchaseToken =
         purchaseDetails.verificationData.serverVerificationData;
-    HomeViewController homeViewController = Get.find<HomeViewController>();
     final remoteConfig = FirebaseRemoteConfig.instance;
     await remoteConfig.fetchAndActivate();
     String url = remoteConfig.getString('verify_android_purchase');
@@ -136,7 +152,7 @@ class StoreService extends GetxService {
         url,
         data: {
           'purchaseToken': pruchaseToken,
-          'twitchId': homeViewController.twitchData?.twitchUser.id,
+          'twitchId': twitchCredentials!.twitchUser.id,
         },
       );
       return Future<bool>.value(true);
