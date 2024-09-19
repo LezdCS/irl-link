@@ -358,10 +358,12 @@ class ChatMessage extends Equatable
       };
 
   Map toJsonForWatch() => {
+        'id': id,
         'username': username,
         'message': message,
         'color': color,
-        'badges': jsonEncode(badgesList.map((badge) => badge.imageUrl1x).toList()),
+        'badges':
+            jsonEncode(badgesList.map((badge) => badge.imageUrl1x).toList()),
       };
 
   @override

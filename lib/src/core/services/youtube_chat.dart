@@ -11,8 +11,8 @@ import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 class YoutubeChat {
   String videoId;
 
-  final StreamController _chatStreamController = StreamController.broadcast();
-  Stream get chatStream => _chatStreamController.stream;
+  final StreamController<ChatMessage> _chatStreamController = StreamController<ChatMessage>.broadcast();
+  Stream<ChatMessage> get chatStream => _chatStreamController.stream;
 
   YoutubeChat(
     this.videoId,

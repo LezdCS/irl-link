@@ -24,15 +24,22 @@ struct ContentView: View {
 
 #Preview {
     let viewModel: WatchViewModel = WatchViewModel()
-    viewModel.messages.append(Message(username: "Lezd_", message: "No wayyyyyy", color: "#eb4634", badges: [
-        "https://static-cdn.jtvnw.net/badges/v1/b817aba4-fad8-49e2-b88a-7cc744dfa6ec/3"
-    ]))
-    viewModel.messages.append(Message(username: "Julien", message: "This is a longer message haha I am very long!", color: "#73fc03", badges: []))
+    viewModel.messages = [
+        Message(id: "1", username: "Julien", message: "Ok", color: "#73fc03", badges: []),
+        Message(id: "2",username: "Julien", message: "Tesst", color: "#73fc03", badges: []),
+        Message(id:" 3", username: "Lezd_", message: "No wayyyyyy", color: "#eb4634", badges: [
+            "https://static-cdn.jtvnw.net/badges/v1/b817aba4-fad8-49e2-b88a-7cc744dfa6ec/3"
+        ]),
+    ]
     viewModel.viewers = 123
     viewModel.isLive = true
     viewModel.obsConnected = true
     viewModel.scenes = ["test1", "test2"]
     viewModel.selectedScene = "test2"
+    viewModel.sources = [
+        ObsSource(sceneItemId: 1, sceneItemEnabled: true, sourceName: "Source 1"),
+        ObsSource(sceneItemId: 2, sceneItemEnabled: false, sourceName: "Source 2"),
+    ]
     return ContentView(viewModel: viewModel)
 }
 
