@@ -92,11 +92,17 @@ class HomeViewController extends GetxController
     const channel = MethodChannel('com.irllink');
     channel.setMethodCallHandler((call) async {
       // Receive data from Native
+      debugPrint('Data from watch: ${call.arguments}');
+      dynamic data = call.arguments['data'];
       switch (call.method) {
         case "sendChangeObsSceneToFlutter":
-          debugPrint('Data from watch: ${call.arguments}');
           if (obsTabViewController != null) {
-            obsTabViewController!.setCurrentScene(call.arguments['data']['scene']);
+            obsTabViewController!.setCurrentScene(data['scene']);
+          }
+          break;
+        case "sendToggleObsSourceToFlutter":
+          if (obsTabViewController != null) {
+            obsTabViewController!.setSourceVisibleState(data['sourceItemId'], data['sceneItemEnabled']);
           }
           break;
         default:

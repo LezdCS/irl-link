@@ -44,9 +44,16 @@ struct ObsView: View {
                     }
                     Divider()
                     ScrollView {
-                        LazyVGrid(columns: columns, spacing: 20) {
-                            ForEach(viewModel.sources, id: \.self) { item in
-                                Text(item.sourceName)
+                        LazyVGrid(columns: columns, spacing: 10) {
+                            ForEach(viewModel.sources, id: \.self) { source in
+                                Button(action: {
+                                    viewModel.sendDataMessage(for: .sendToggleObsSourceToFlutter, data: ["sourceItemId": source.sceneItemId, "sceneItemEnabled": source.sceneItemEnabled])
+                                }) {
+                                    Text(source.sourceName)
+                                }
+                                .buttonStyle(.bordered)
+//                                .buttonStyle(.borderedProminent)
+                                .tint(source.sceneItemEnabled ? .green : .red)
                             }
                         }
                         .padding()

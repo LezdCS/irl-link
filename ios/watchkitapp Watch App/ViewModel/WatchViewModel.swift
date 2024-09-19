@@ -1,7 +1,7 @@
 import Foundation
 import WatchConnectivity
 
-struct ObsSource: Hashable {
+struct ObsSource: Hashable, Decodable {
     var sceneItemId: Int
     var sceneItemEnabled: Bool
     var sourceName: String
@@ -90,8 +90,15 @@ extension WatchViewModel: WCSessionDelegate {
             case .sendObsScenesToNative:
                 self.scenes = message["data"] as! [String]
             case .sendObsSourcesToNative:
-                print(message["data"]!)
-                self.sources = message["data"] as! [ObsSource]
+                do {
+                    let jsonString = message["data"] as! String
+                    let jsonData = jsonString.data(using: .utf8)!
+                    let obsSources = try JSONDecoder().decode([ObsSource].self, from: jsonData)
+                    self.sources = obsSources
+                } catch {
+                    print("Error encoding string to JSON: \(error)")
+                }
+                
             }
         }
     }

@@ -67,7 +67,7 @@ class ObsTabViewController extends GetxController {
     });
 
     sourcesList.listen((value) {
-      List data = value.map((e) => e.toJson()).toList();
+      String data = jsonEncode(value.map((e) => e.toJson()).toList());
       debugPrint("sourcesList: $data");
       // Send to watchOS
       const platform = MethodChannel('com.irllink');
@@ -260,12 +260,12 @@ class ObsTabViewController extends GetxController {
   }
 
   /// Show or hide the source named [sourceName] according to the [sceneItemEnabled]
-  void setSourceVisibleState(SceneItemDetail source) {
+  void setSourceVisibleState(int sceneItemId, bool sceneItemEnabled) {
     obsWebSocket!.sceneItems.setEnabled(
       SceneItemEnableStateChanged(
         sceneName: currentScene.value,
-        sceneItemId: source.sceneItemId,
-        sceneItemEnabled: !source.sceneItemEnabled,
+        sceneItemId: sceneItemId,
+        sceneItemEnabled: !sceneItemEnabled,
       ),
     );
   }

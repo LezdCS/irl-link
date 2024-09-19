@@ -284,7 +284,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
         double? sourceVolume = controller.sourcesVolumesMap[source.sourceName];
         return GestureDetector(
           onTap: () {
-            controller.setSourceVisibleState(source);
+            controller.setSourceVisibleState(source.sceneItemId, source.sceneItemEnabled);
           },
           onLongPress: () {
             Get.defaultDialog(
