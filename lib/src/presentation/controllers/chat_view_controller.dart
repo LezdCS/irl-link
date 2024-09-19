@@ -81,7 +81,6 @@ class ChatViewController extends GetxController
       isAlertProgress.value = false;
     }
 
-    createChats();
     super.onInit();
   }
 
@@ -283,20 +282,17 @@ class ChatViewController extends GetxController
     for (Channel kc in kickChannels) {
       bool alreadyCreated =
           kickChats.firstWhereOrNull((k) => k.username == kc.channel) != null;
-      if (alreadyCreated) {
-        return;
+      if (!alreadyCreated) {
+        createKickChat(kc);
       }
-
-      createKickChat(kc);
     }
 
     for (Channel kc in youtubeChannels) {
       bool alreadyCreated =
           kickChats.firstWhereOrNull((k) => k.username == kc.channel) != null;
-      if (alreadyCreated) {
-        return;
+      if (!alreadyCreated) {
+        createYoutubeChat(kc.channel);
       }
-      createYoutubeChat(kc.channel);
     }
 
     // Remove
