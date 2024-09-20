@@ -80,6 +80,14 @@ class ObsTabViewController extends GetxController {
     super.onReady();
   }
 
+  @override
+  void onClose() {
+    isConnected.value = false;
+    statsTimer.cancel();
+    obsWebSocket?.close();
+    super.onClose();
+  }
+
   /// Connect to the OBS websocket at [url] with optional [password]
   void connectWs(String url, String password) async {
     try {

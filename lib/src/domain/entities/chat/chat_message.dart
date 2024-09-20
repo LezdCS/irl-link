@@ -362,8 +362,9 @@ class ChatMessage extends Equatable
         'username': username,
         'message': message,
         'color': color,
-        'badges':
-            jsonEncode(badgesList.map((badge) => badge.imageUrl1x).toList()),
+        'badges': jsonEncode(
+          badgesList.map((badge) => badge.imageUrl1x.startsWith('http') ? badge.imageUrl1x : '').toList(),
+        ),
       };
 
   @override
