@@ -18,13 +18,22 @@ struct SeView: View {
                 Text("StreamElements not connected")
             }
             List(viewModel.seActivities, id: \.self) { activity in
-                HStack {
-                    Circle()
-                        .fill(Color(argb: activity.colors[0]))
-                        .frame(width: 10, height: 10)
-                    Text(activity.message)
-                    Text(activity.username)
-                        .foregroundColor(Color(argb: activity.colors[0]))
+                VStack {
+                    HStack {
+                        Circle()
+                            .fill(Color(argb: activity.colors[0]))
+                            .frame(width: 10, height: 10)
+                        Text(activity.text)
+                            .font(.system(size: 14, design: .default))
+                        Text(activity.username)
+                            .font(.system(size: 14, design: .default))
+                            .foregroundColor(Color(argb: activity.colors[0]))
+                        
+                    }
+                    if(activity.message != "") {
+                        Text(activity.message!)
+                            .font(.system(size: 14, design: .default))
+                    }
                 }
                 .listRowPlatterColor(Color(argb: activity.colors[1]))
             }

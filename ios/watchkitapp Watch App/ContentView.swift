@@ -44,7 +44,7 @@ struct ContentView: View {
     ]
     viewModel.seConnected = true
     viewModel.seActivities = [
-        SeActivity(id: "1", message: "Follow", username: "Lezd_", colors: [
+        SeActivity(id: "1", message: "", text: "Follow", username: "Lezd_", colors: [
             4279998688, 4279445821
         ])
     ]

@@ -54,7 +54,8 @@ class SeActivity extends Equatable {
 
   Map toJsonForWatch() => {
         'id': id,
-        'message': textFromEnum(),
+        'message': message ?? "",
+        'text': textFromEnum(),
         'username': username,
         'colors': colorsForEnum().map((Color e) => e.value).toList(),
       };

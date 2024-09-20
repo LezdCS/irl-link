@@ -10,6 +10,7 @@ struct ObsSource: Hashable, Decodable {
 struct SeActivity: Hashable, Decodable {
     var id: String
     var message: String
+    var text: String
     var username: String
     var colors: Array<Int>
 }
