@@ -42,6 +42,12 @@ struct ContentView: View {
         ObsSource(sceneItemId: 1, sceneItemEnabled: true, sourceName: "Source 1"),
         ObsSource(sceneItemId: 2, sceneItemEnabled: false, sourceName: "Source 2"),
     ]
+    viewModel.seConnected = true
+    viewModel.seActivities = [
+        SeActivity(id: "1", message: "Follow", username: "Lezd_", colors: [
+            4279998688, 4279445821
+        ])
+    ]
     return ContentView(viewModel: viewModel)
 }
 
@@ -69,5 +75,14 @@ extension Color {
             blue:  Double(b) / 255,
             opacity: Double(a) / 255
         )
+    }
+    
+    init(argb: Int) {
+        let a = Double((argb >> 24) & 0xFF) / 255.0
+        let r = Double((argb >> 16) & 0xFF) / 255.0
+        let g = Double((argb >> 8) & 0xFF) / 255.0
+        let b = Double(argb & 0xFF) / 255.0
+        
+        self = Color(red: r, green: g, blue: b, opacity: a)
     }
 }

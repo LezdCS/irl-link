@@ -21,7 +21,9 @@ struct SeView: View {
                 HStack {
                     Text(activity.message)
                     Text(activity.username)
+                        .foregroundColor(Color(argb: activity.colors[0]))
                 }
+                .listRowPlatterColor(Color(argb: activity.colors[1]))
             }
         }
         .toolbar {
