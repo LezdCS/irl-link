@@ -44,12 +44,13 @@ struct ChatView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .font(.system(size: 14, design: .default))
                     }
+                    .id(message)
                     .listRowInsets(.init(top: -2, leading: 0, bottom: -2, trailing: 0))
                     .listRowBackground(Color.clear)
 //                    .listRowPlatterColor(Color.green)
                 }
                 .onChange(of: viewModel.messages) {
-                    proxy.scrollTo(viewModel.messages.last, anchor: .top)
+                    proxy.scrollTo(viewModel.messages.last, anchor: .bottom)
                 }
             }
         }
