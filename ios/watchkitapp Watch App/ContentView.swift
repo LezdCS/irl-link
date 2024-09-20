@@ -26,7 +26,7 @@ struct ContentView: View {
     let viewModel: WatchViewModel = WatchViewModel()
     viewModel.messages = [
         Message(id: "1", username: "Julien", message: "Ok", color: "#73fc03", badges: []),
-        Message(id: "2",username: "Julien", message: "Tesst", color: "#73fc03", badges: []),
+        Message(id: "2",username: "Julien", message: "Tesst long message omg looooooong", color: "#73fc03", badges: []),
         Message(id:" 3", username: "Lezd_", message: "No wayyyyyy", color: "#eb4634", badges: [
             "https://static-cdn.jtvnw.net/badges/v1/b817aba4-fad8-49e2-b88a-7cc744dfa6ec/3"
         ]),

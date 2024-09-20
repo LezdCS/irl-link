@@ -23,32 +23,33 @@ struct ChatView: View {
             }.padding()
             ScrollViewReader { proxy in
                 List(viewModel.messages, id: \.self) { message in
-                    HStack(alignment: .top) {
-                        HStack {
-                            ForEach(message.badges, id: \.self) { badge in
-                                AsyncImage(url: URL(string: badge)) { image in
-                                    image.resizable()
-                                } placeholder: {
-                                    Color.red
-                                }
-                                .frame(width: 12, height: 12)
+                    HStack(alignment: .top, spacing: 0) {
+                        ForEach(message.badges, id: \.self) { badge in
+                            AsyncImage(url: URL(string: badge)) { image in
+                                image.resizable()
+                            } placeholder: {
+                                Color.red
                             }
-                            Text(message.username)
-                                .foregroundColor(Color(hex: message.color))
-                                .font(.system(size: 14, weight: .bold, design: .default))
-                                .frame(alignment: .leading)
+                            .frame(width: 12, height: 12)
+                            .padding(.trailing, 4)
+                            .padding(.top, 2)
                         }
+                        Text(message.username)
+                            .foregroundColor(Color(hex: message.color))
+                            .font(.system(size: 14, weight: .bold, design: .default))
+                        Text(":")
+                            .font(.system(size: 14, design: .default))
+                            .padding(.trailing, 4)
                         Text(message.message)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .font(.system(size: 14, design: .default))
-                            .fixedSize(horizontal: false, vertical: true)
                     }
-                    .listRowInsets(EdgeInsets())
+                    .listRowInsets(.init(top: -2, leading: 0, bottom: -2, trailing: 0))
                     .listRowBackground(Color.clear)
 //                    .listRowPlatterColor(Color.green)
-                    .onChange(of: viewModel.messages) {
-                        proxy.scrollTo(viewModel.messages.last, anchor: .top)
-                    }
+                }
+                .onChange(of: viewModel.messages) {
+                    proxy.scrollTo(viewModel.messages.last, anchor: .top)
                 }
             }
         }
