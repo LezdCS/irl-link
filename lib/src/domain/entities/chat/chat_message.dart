@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:irllink/src/domain/entities/chat/chat_badge.dart';
 import 'package:kick_chat/kick_chat.dart';
 import 'package:twitch_chat/twitch_chat.dart' as twitch;
+import 'package:uuid/uuid.dart';
 
 enum EventType {
   firstTimeChatter,
@@ -358,10 +359,10 @@ class ChatMessage extends Equatable
       };
 
   Map toJsonForWatch() => {
-        'id': id,
+        'id': id == '' ? const Uuid().v4() : id,
         'username': username == '' ? displayName : username,
         'message': message,
-        'color': color,
+        'color': color == '' ? '#FFFFFF' : color,
         'badges': jsonEncode(
           badgesList.map((badge) => badge.imageUrl1x.startsWith('http') ? badge.imageUrl1x : '').toList(),
         ),
