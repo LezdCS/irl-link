@@ -19,6 +19,9 @@ struct SeView: View {
             }
             List(viewModel.seActivities, id: \.self) { activity in
                 HStack {
+                    Circle()
+                        .fill(Color(argb: activity.colors[0]))
+                        .frame(width: 10, height: 10)
                     Text(activity.message)
                     Text(activity.username)
                         .foregroundColor(Color(argb: activity.colors[0]))
