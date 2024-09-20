@@ -35,7 +35,7 @@ struct ChatView: View {
                             .padding(.top, 2)
                         }
                         Text(message.username)
-                            .foregroundColor(Color(hex: message.color))
+                            .foregroundColor(Color(hex: message.color == "" ? "#FFFFFF" : message.color))
                             .font(.system(size: 14, weight: .bold, design: .default))
                         Text(":")
                             .font(.system(size: 14, design: .default))

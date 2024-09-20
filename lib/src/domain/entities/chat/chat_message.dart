@@ -359,7 +359,7 @@ class ChatMessage extends Equatable
 
   Map toJsonForWatch() => {
         'id': id,
-        'username': username,
+        'username': username == '' ? displayName : username,
         'message': message,
         'color': color,
         'badges': jsonEncode(

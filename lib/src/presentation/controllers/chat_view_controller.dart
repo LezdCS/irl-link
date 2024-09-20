@@ -80,6 +80,15 @@ class ChatViewController extends GetxController
       isAlertProgress.value = false;
     }
 
+    chatMessages.listen((value) {
+      // Send to watchOS
+      const platform = MethodChannel('com.irllink');
+      platform.invokeMethod("flutterToWatch", {
+        "method": "sendChatMessageToNative",
+        "data": value.last.toJsonForWatch(),
+      });
+    });
+
     super.onInit();
   }
 
@@ -404,12 +413,6 @@ class ChatViewController extends GetxController
       ChatMessage twitchMessage =
           ChatMessage.fromTwitch(message, twitchChat.channelId ?? '');
       chatMessages.add(twitchMessage);
-
-      const platform = MethodChannel('com.irllink');
-      platform.invokeMethod("flutterToWatch", {
-        "method": "sendChatMessageToNative",
-        "data": twitchMessage.toJsonForWatch(),
-      });
       scrollChatToBottom();
     });
   }
@@ -426,11 +429,6 @@ class ChatViewController extends GetxController
     );
     youtubeChat.startFetchingChat();
     youtubeChat.chatStream.listen((ChatMessage message) {
-      const platform = MethodChannel('com.irllink');
-      platform.invokeMethod("flutterToWatch", {
-        "method": "sendChatMessageToNative",
-        "data": message.toJsonForWatch(),
-      });
       chatMessages.add(message);
       scrollChatToBottom();
     });
@@ -465,11 +463,6 @@ class ChatViewController extends GetxController
             kickChat.userDetails!.userId.toString(),
             kickChat.userDetails!.subBadges,
           );
-          const platform = MethodChannel('com.irllink');
-          platform.invokeMethod("flutterToWatch", {
-            "method": "sendChatMessageToNative",
-            "data": kickMessage.toJsonForWatch(),
-          });
           chatMessages.add(kickMessage);
           break;
         case TypeEvent.followersUpdated:
