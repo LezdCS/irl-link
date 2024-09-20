@@ -7,6 +7,13 @@ struct ObsSource: Hashable, Decodable {
     var sourceName: String
 }
 
+struct SeActivity: Hashable, Decodable {
+    var id: String
+    var message: String
+    var username: String
+    var colors: Array<Int>
+}
+
 class WatchViewModel: NSObject, ObservableObject {
     var session: WCSession
     @Published var messages: [Message] = []
@@ -18,15 +25,22 @@ class WatchViewModel: NSObject, ObservableObject {
     @Published var scenes: [String] = []
     @Published var sources: [ObsSource] = []
     
+    @Published var seConnected: Bool = false
+    @Published var seActivities: [SeActivity] = []
+    
     // Add more cases if you have more receive method
     enum WatchReceiveMethod: String {
         case sendChatMessageToNative
         case sendViewersToNative
         case sendLiveStatusToNative
+        
         case sendUpdateObsConnecteToNative
         case sendSelectedObsSceneToNative
         case sendObsScenesToNative
         case sendObsSourcesToNative
+        
+        case sendSeConnectedToNative
+        case sendSeActivityToNative
     }
     
     // Add more cases if you have more sending method
@@ -93,12 +107,31 @@ extension WatchViewModel: WCSessionDelegate {
                 do {
                     let jsonString = message["data"] as! String
                     let jsonData = jsonString.data(using: .utf8)!
-                    let obsSources = try JSONDecoder().decode([ObsSource].self, from: jsonData)
+                    let obsSources: [ObsSource] = try JSONDecoder().decode([ObsSource].self, from: jsonData)
                     self.sources = obsSources
                 } catch {
                     print("Error encoding string to JSON: \(error)")
                 }
                 
+            case .sendSeConnectedToNative:
+                self.seConnected = message["data"] as! Bool
+            case .sendSeActivityToNative:
+                do {
+                    let jsonData = try JSONSerialization.data(withJSONObject: message["data"]!, options: [])
+                    do {
+                        let seActivity = try JSONDecoder().decode(SeActivity.self, from: jsonData)
+                        if(self.seActivities.contains(seActivity)) {
+                            return
+                        }
+                        self.seActivities.append(seActivity)
+                    } catch {
+                        // Handle error
+                        print("Error occurred: \(error)")
+                    }
+                } catch {
+                    // Handle error
+                    print("Error occurred: \(error)")
+                }
             }
         }
     }

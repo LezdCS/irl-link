@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
@@ -63,6 +64,24 @@ class StreamelementsViewController extends GetxController
     }
 
     streamelementsEvents.getSettings().then((value) => applySettings());
+
+    isSocketConnected.listen((value) {
+      // Send to watchOS
+      const platform = MethodChannel('com.irllink');
+      platform.invokeMethod("flutterToWatch", {
+        "method": "sendSeConnectedToNative",
+        "data": isSocketConnected.value,
+      });
+    });
+
+    activities.listen((value) {
+      // Send to watchOS
+      const platform = MethodChannel('com.irllink');
+      platform.invokeMethod("flutterToWatch", {
+        "method": "sendSeActivityToNative",
+        "data": value.last.toJsonForWatch(),
+      });
+    });
 
     super.onInit();
   }

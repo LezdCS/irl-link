@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -20,6 +20,7 @@
 		6E3DCC6A2C92FA1600292914 /* ObsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3DCC692C92FA1600292914 /* ObsView.swift */; };
 		6E3DCC6C2C92FCBA00292914 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3DCC6B2C92FCBA00292914 /* ChatView.swift */; };
 		6E4347EE2C94BFF50023E0C7 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4347ED2C94BFF50023E0C7 /* Message.swift */; };
+		6E5B63182C9DA9920098595F /* SeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5B63172C9DA9920098595F /* SeView.swift */; };
 		6E6094052C8C41D000832AA1 /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E6093F22C8C377800832AA1 /* WatchConnectivity.framework */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
@@ -87,6 +88,7 @@
 		6E3DCC692C92FA1600292914 /* ObsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObsView.swift; sourceTree = "<group>"; };
 		6E3DCC6B2C92FCBA00292914 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		6E4347ED2C94BFF50023E0C7 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		6E5B63172C9DA9920098595F /* SeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeView.swift; sourceTree = "<group>"; };
 		6E6093F22C8C377800832AA1 /* WatchConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = System/Library/Frameworks/WatchConnectivity.framework; sourceTree = SDKROOT; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -155,6 +157,7 @@
 				6E3DCC662C901C7A00292914 /* ContentView.swift */,
 				6E3DCC692C92FA1600292914 /* ObsView.swift */,
 				6E3DCC6B2C92FCBA00292914 /* ChatView.swift */,
+				6E5B63172C9DA9920098595F /* SeView.swift */,
 			);
 			path = "watchkitapp Watch App";
 			sourceTree = "<group>";
@@ -542,6 +545,7 @@
 			files = (
 				6E3DCC682C901CAB00292914 /* WatchViewModel.swift in Sources */,
 				6E3AF5712C8F4F04002B6ADB /* watchkitappApp.swift in Sources */,
+				6E5B63182C9DA9920098595F /* SeView.swift in Sources */,
 				6E3DCC6C2C92FCBA00292914 /* ChatView.swift in Sources */,
 				6E4347EE2C94BFF50023E0C7 /* Message.swift in Sources */,
 				6E3DCC672C901C7A00292914 /* ContentView.swift in Sources */,

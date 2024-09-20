@@ -364,7 +364,10 @@ class ChatMessage extends Equatable
         'message': message,
         'color': color == '' ? '#FFFFFF' : color,
         'badges': jsonEncode(
-          badgesList.map((badge) => badge.imageUrl1x.startsWith('http') ? badge.imageUrl1x : '').toList(),
+          badgesList
+              .map((badge) =>
+                  badge.imageUrl1x.startsWith('http') ? badge.imageUrl1x : '')
+              .toList(),
         ),
       };
 

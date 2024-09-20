@@ -17,6 +17,8 @@ struct ContentView: View {
                 .tag(0)
             ObsView(selectedTab: $selectedTab, viewModel: viewModel)
                 .tag(1)
+            SeView(viewModel: viewModel, selectedTab: $selectedTab)
+                .tag(2)
         }
         .tabViewStyle(.verticalPage)
     }
@@ -59,7 +61,7 @@ extension Color {
         default:
             (a, r, g, b) = (1, 1, 1, 0)
         }
-
+        
         self.init(
             .sRGB,
             red: Double(r) / 255,

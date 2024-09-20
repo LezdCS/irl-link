@@ -67,6 +67,10 @@ struct ChatView: View {
                         selectedTab = 1
                     }
                     .frame(width: 50)
+                    Button("SE") {
+                        selectedTab = 2
+                    }
+                    .frame(width: 50)
                 }
             }
         }
