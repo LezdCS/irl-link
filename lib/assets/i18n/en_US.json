@@ -51,9 +51,16 @@
   "confirm": "Confirm",
   "add": "Add",
 
+  "welcome_to_chat": "Welcome to @channel chatroom!",
+  "reconnect_question": "Reconnect to chat ?",
+  "message_deleted": "<message deleted>",
+
   "chat_events": "Chat events",
   "first_time_chatter": "First time chatter",
   "subscriptions": "Subscriptions",
+  "subscription": "Subscription",
+  "subscribed": "You are subscribed.",
+  "not_subscribed": "You are not subscribed.",
   "bits_donations": "Bits donations",
   "announcements": "Announcements",
   "incoming_raids": "Incoming raids",
@@ -61,6 +68,7 @@
 
   "chats_joined": "Chats joined",
   "scan_qr_code": "Scan QR code",
+  "channel_qr_code": "Channel QR code",
   "push_key": "Push key",
 
   "dashboard_events": "Dashboard events",
@@ -72,6 +80,9 @@
   "type_input": "Type of input",
   "pick_color": "Pick a color",
   "background_color": "Background color",
+  "service_disabled": "Service disabled",
+  "event_discontinued": "This event has been discontinued",
+  "events_empty": "No events created",
 
   "edit": "Edit",
   "submit": "Submit",
@@ -82,6 +93,11 @@
   "locks": "Locks",
   "prediction": "Prediction",
   "prediction_empty": "No prediction running",
-  "predition_winner": "Winner: @outcome"
+  "predition_winner": "Winner: @outcome",
 
+  "hype_train": "Hype train",
+  "poll": "Poll",
+  "poll_empty": "No poll running",
+  "votes_total": "Votes: @total",
+  "ends_in": "Ends in @time"
 }

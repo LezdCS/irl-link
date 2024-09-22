@@ -182,8 +182,8 @@ void pickWinnerDialog(
     buttonColor: const Color(0xFF9147ff),
     cancelTextColor: const Color(0xFF9147ff),
     confirmTextColor: Colors.white,
-    textCancel: "Back",
-    textConfirm: "Confirm",
+    textCancel: "cancel".tr,
+    textConfirm: "confirm".tr,
     radius: 10,
     onCancel: () {
       controller.selectedOutcomeId.value = "-1";

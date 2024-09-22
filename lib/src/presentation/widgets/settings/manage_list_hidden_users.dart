@@ -24,8 +24,8 @@ class ManageListHiddenUsers extends GetView<SettingsViewController> {
               onPressed: () => Get.back(),
             ),
             actions: const [],
-            title: const Text(
-              "Manage hidden users",
+            title: Text(
+              "manage_hidden_users".tr,
             ),
           ),
           body: Container(

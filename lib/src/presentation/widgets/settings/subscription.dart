@@ -26,7 +26,7 @@ class Subscription extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Subscription",
+              "subscription".tr,
               style: TextStyle(
                   color: Theme.of(context).colorScheme.tertiary, fontSize: 20),
             ),
@@ -41,9 +41,7 @@ class Subscription extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          isSubscribed
-                              ? "You are subscribed."
-                              : "You are not subscribed.",
+                          isSubscribed ? "subscribed".tr : "not_subscribed".tr,
                           style: TextStyle(
                             color: isSubscribed
                                 ? Colors.green[400]
@@ -57,7 +55,9 @@ class Subscription extends StatelessWidget {
                             : Text(
                                 "Subscribe to unlock every features!",
                                 style: TextStyle(
-                                    color: Colors.grey[200], fontSize: 16),
+                                  color: Colors.grey[200],
+                                  fontSize: 16,
+                                ),
                               ),
                       ],
                     ),
@@ -75,7 +75,7 @@ class Subscription extends StatelessWidget {
                           backgroundColor: Colors.deepPurpleAccent,
                         ),
                         child: Text(
-                          "Only $price",
+                          price,
                           style: const TextStyle(fontSize: 13),
                           textAlign: TextAlign.center,
                         ),

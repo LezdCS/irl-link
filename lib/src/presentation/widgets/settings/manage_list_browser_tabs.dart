@@ -43,8 +43,8 @@ class ManageListBrowserTabs extends GetView<SettingsViewController> {
                     )
                   ]
                 : const [],
-            title: const Text(
-              "Manage browser tabs",
+            title: Text(
+              "manage_browser_tabs".tr,
             ),
           ),
           body: Container(

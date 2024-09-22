@@ -37,7 +37,7 @@ Widget hypeTrain(
               const SizedBox(
                 width: 10,
               ),
-              const Text('Hype Train'),
+              Text('hype_train'.tr),
             ],
           ),
           Text('${hypetrain.progress}%'),

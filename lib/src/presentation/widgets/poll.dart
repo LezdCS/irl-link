@@ -16,12 +16,12 @@ Widget poll(
   }
 
   if (poll.status == PollStatus.empty) {
-    return const Row(
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          "No poll running",
+          "poll_empty".tr,
         ),
       ],
     );
@@ -30,9 +30,9 @@ Widget poll(
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      const Text(
-        "Poll",
-        style: TextStyle(
+      Text(
+        "poll".tr,
+        style: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
@@ -42,7 +42,7 @@ Widget poll(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(poll.title),
-          Text('Votes: ${poll.totalVotes}'),
+          Text("votes_total".trParams({'total': poll.totalVotes.toString()})),
           const SizedBox(height: 10),
           ListView.builder(
             shrinkWrap: true,
@@ -76,7 +76,8 @@ Widget poll(
                         ? Colors.green
                         : Theme.of(context).colorScheme.tertiaryContainer,
                     center: Text(
-                        "${(percentage * 100).toStringAsFixed(2)} % (${choice.votes})"),
+                      "${(percentage * 100).toStringAsFixed(2)} % (${choice.votes})",
+                    ),
                   ),
                   const SizedBox(height: 10),
                 ],
@@ -85,7 +86,10 @@ Widget poll(
           ),
           Obx(
             (() => Text(
-                'Ends in ${printDuration(controller.remainingTimePoll.value)}')),
+                  "ends_in".trParams({
+                    "time": printDuration(controller.remainingTimePoll.value)
+                  }),
+                )),
           ),
           Visibility(
             visible: poll.status == PollStatus.active,
@@ -114,9 +118,9 @@ Widget poll(
                   onPressed: () {
                     controller.endPoll("TERMINATED");
                   },
-                  child: const Text(
-                    'End',
-                    style: TextStyle(
+                  child: Text(
+                    'end'.tr,
+                    style: const TextStyle(
                       color: Colors.white,
                     ),
                   ),
