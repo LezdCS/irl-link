@@ -4,6 +4,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/tts_service.dart';
@@ -11,7 +12,6 @@ import 'package:irllink/src/core/services/youtube_chat.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/globals.dart' as globals;
 import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
-import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
@@ -19,7 +19,7 @@ import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:kick_chat/kick_chat.dart';
-import 'package:twitch_chat/twitch_chat.dart';
+import 'package:twitch_chat/twitch_chat.dart' hide ChatMessage;
 
 class ChatViewController extends GetxController
     with GetTickerProviderStateMixin {
@@ -40,7 +40,7 @@ class ChatViewController extends GetxController
 
   RxString alertMessage = "Connecting...".obs;
   TwitchCredentials? twitchData;
-  RxList<entity.ChatMessage> chatMessages = <entity.ChatMessage>[].obs;
+  RxList<ChatMessage> chatMessages = <ChatMessage>[].obs;
   RxList<ChatEmote> cheerEmotes = <ChatEmote>[].obs;
   RxList<ChatEmote> thirdPartEmotes = <ChatEmote>[].obs;
 
@@ -79,6 +79,15 @@ class ChatViewController extends GetxController
       isChatConnected.value = false;
       isAlertProgress.value = false;
     }
+
+    chatMessages.listen((value) {
+      // Send to watchOS
+      const platform = MethodChannel('com.irllink');
+      platform.invokeMethod("flutterToWatch", {
+        "method": "sendChatMessageToNative",
+        "data": value.last.toJsonForWatch(),
+      });
+    });
 
     super.onInit();
   }
@@ -160,7 +169,7 @@ class ChatViewController extends GetxController
   }
 
   /// Delete [message] by his id
-  void deleteMessageInstruction(entity.ChatMessage message) {
+  void deleteMessageInstruction(ChatMessage message) {
     TwitchApi.deleteMessage(
       twitchData!.accessToken,
       message.channelId,
@@ -173,7 +182,7 @@ class ChatViewController extends GetxController
   }
 
   /// Ban user for specific [duration] based on the author name in the [message]
-  void timeoutMessageInstruction(entity.ChatMessage message, int duration) {
+  void timeoutMessageInstruction(ChatMessage message, int duration) {
     TwitchApi.banUser(
       twitchData!.accessToken,
       message.channelId,
@@ -186,7 +195,7 @@ class ChatViewController extends GetxController
   }
 
   /// Ban user based on the author name in the [message]
-  void banMessageInstruction(entity.ChatMessage message) {
+  void banMessageInstruction(ChatMessage message) {
     TwitchApi.banUser(
       twitchData!.accessToken,
       message.channelId,
@@ -198,7 +207,7 @@ class ChatViewController extends GetxController
   }
 
   /// Hide every future messages from an user (only on this application, not on Twitch)
-  void hideUser(entity.ChatMessage message) {
+  void hideUser(ChatMessage message) {
     if (twitchData == null) return;
     Settings settings = Get.find<SettingsService>().settings.value;
 
@@ -401,8 +410,8 @@ class ChatViewController extends GetxController
       if (settings.ttsSettings!.ttsEnabled) {
         ttsService.readTts(message);
       }
-      entity.ChatMessage twitchMessage =
-          entity.ChatMessage.fromTwitch(message, twitchChat.channelId ?? '');
+      ChatMessage twitchMessage =
+          ChatMessage.fromTwitch(message, twitchChat.channelId ?? '');
       chatMessages.add(twitchMessage);
       scrollChatToBottom();
     });
@@ -419,7 +428,7 @@ class ChatViewController extends GetxController
       videoId,
     );
     youtubeChat.startFetchingChat();
-    youtubeChat.chatStream.listen((message) {
+    youtubeChat.chatStream.listen((ChatMessage message) {
       chatMessages.add(message);
       scrollChatToBottom();
     });
@@ -449,7 +458,7 @@ class ChatViewController extends GetxController
       final KickEvent? kickEvent = eventParser(message);
       switch (kickEvent?.event) {
         case TypeEvent.message:
-          entity.ChatMessage kickMessage = entity.ChatMessage.fromKick(
+          ChatMessage kickMessage = ChatMessage.fromKick(
             kickEvent as KickMessage,
             kickChat.userDetails!.userId.toString(),
             kickChat.userDetails!.subBadges,
@@ -460,7 +469,7 @@ class ChatViewController extends GetxController
           // TODO: TBD
           break;
         case TypeEvent.streamHostEvent:
-          entity.ChatMessage kickMessage = entity.ChatMessage.kickHost(
+          ChatMessage kickMessage = ChatMessage.kickHost(
             kickEvent as KickStreamHost,
             kickChat.userDetails!.userId.toString(),
             kickChat.userDetails!.subBadges,
@@ -468,7 +477,7 @@ class ChatViewController extends GetxController
           chatMessages.add(kickMessage);
           break;
         case TypeEvent.subscriptionEvent:
-          entity.ChatMessage kickMessage = entity.ChatMessage.kickSub(
+          ChatMessage kickMessage = ChatMessage.kickSub(
             kickEvent as KickSubscription,
             kickChat.userDetails!.userId.toString(),
             kickChat.userDetails!.subBadges,
@@ -494,7 +503,7 @@ class ChatViewController extends GetxController
               .removeWhere((message) => message.channelId == event.channel);
           break;
         case TypeEvent.giftedSubscriptionsEvent:
-          entity.ChatMessage kickMessage = entity.ChatMessage.kickSubGift(
+          ChatMessage kickMessage = ChatMessage.kickSubGift(
             kickEvent as KickGiftedSubscriptions,
             kickChat.userDetails!.userId.toString(),
             kickChat.userDetails!.subBadges,

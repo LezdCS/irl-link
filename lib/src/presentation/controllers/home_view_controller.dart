@@ -4,6 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:collection/collection.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:irllink/routes/app_routes.dart';
@@ -88,6 +89,27 @@ class HomeViewController extends GetxController
 
   @override
   void onInit() async {
+    const channel = MethodChannel('com.irllink');
+    channel.setMethodCallHandler((call) async {
+      // Receive data from Native
+      debugPrint('Data from watch: ${call.arguments}');
+      dynamic data = call.arguments['data'];
+      switch (call.method) {
+        case "sendChangeObsSceneToFlutter":
+          if (obsTabViewController != null) {
+            obsTabViewController!.setCurrentScene(data['scene']);
+          }
+          break;
+        case "sendToggleObsSourceToFlutter":
+          if (obsTabViewController != null) {
+            obsTabViewController!.setSourceVisibleState(data['sourceItemId'], data['sceneItemEnabled']);
+          }
+          break;
+        default:
+          break;
+      }
+    });
+
     chatInputController = TextEditingController();
     chatTabsController = TabController(length: 0, vsync: this);
     emotesTabController = TabController(length: 0, vsync: this);
@@ -113,6 +135,8 @@ class HomeViewController extends GetxController
       });
     }
     await applySettings();
+
+
 
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
