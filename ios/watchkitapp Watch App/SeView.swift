@@ -31,7 +31,7 @@ struct SeView: View {
                         
                     }
                     if(activity.message != "") {
-                        Text(activity.message!)
+                        Text(activity.message)
                             .font(.system(size: 14, design: .default))
                     }
                 }
