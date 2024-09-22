@@ -49,5 +49,39 @@
   "cancel": "Cancel",
   "close": "Close",
   "confirm": "Confirm",
-  "add": "Add"
+  "add": "Add",
+
+  "chat_events": "Chat events",
+  "first_time_chatter": "First time chatter",
+  "subscriptions": "Subscriptions",
+  "bits_donations": "Bits donations",
+  "announcements": "Announcements",
+  "incoming_raids": "Incoming raids",
+  "channel_points_redemptions": "Channel points redemptions",
+
+  "chats_joined": "Chats joined",
+  "scan_qr_code": "Scan QR code",
+  "push_key": "Push key",
+
+  "dashboard_events": "Dashboard events",
+  "new_event": "New event",
+  "event_title": "Event title",
+  "please_enter_text": "Please enter some text",
+  "please_select_event": "Please select an event",
+  "your_message": "Your message",
+  "type_input": "Type of input",
+  "pick_color": "Pick a color",
+  "background_color": "Background color",
+
+  "edit": "Edit",
+  "submit": "Submit",
+  "delete": "Delete",
+  "end": "End",
+  "ends": "Ends",
+  "lock": "Lock",
+  "locks": "Locks",
+  "prediction": "Prediction",
+  "prediction_empty": "No prediction running",
+  "predition_winner": "Winner: @outcome"
+
 }

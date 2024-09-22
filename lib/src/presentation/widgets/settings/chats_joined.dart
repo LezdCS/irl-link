@@ -29,9 +29,8 @@ class ChatsJoined extends GetView<SettingsViewController> {
             onPressed: () => Get.back(),
           ),
           actions: const [],
-          title: const Text(
-            "Chats joined",
-            style: TextStyle(),
+          title: Text(
+            "chats_joined".tr,
           ),
         ),
         body: Container(

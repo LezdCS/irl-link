@@ -18,13 +18,12 @@ Widget prediction(
   }
 
   if (prediction.status == PredictionStatus.empty) {
-    return const Row(
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          "No prediction running",
-          style: TextStyle(),
+          "prediction_empty".tr,
         ),
       ],
     );
@@ -32,9 +31,9 @@ Widget prediction(
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      const Text(
-        "Prediction",
-        style: TextStyle(
+      Text(
+        "prediction".tr,
+        style: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
@@ -79,7 +78,9 @@ Widget prediction(
                         ),
                         Text(
                           prediction.status == PredictionStatus.resolved
-                              ? "Winner: ${outcome.title}"
+                              ? "predition_winner".trParams(
+                                  {"winner": outcome.title},
+                                )
                               : outcome.title,
                           style: TextStyle(
                             color: Theme.of(Get.context!)
@@ -113,7 +114,7 @@ Widget prediction(
           ),
           Obx(
             () => Text(
-                '${prediction.status == PredictionStatus.active ? 'Locks' : 'Ends'} in ${printDuration(controller.remainingTimePrediction.value)}'),
+                '${prediction.status == PredictionStatus.active ? 'locks'.tr : 'ends'.tr} in ${printDuration(controller.remainingTimePrediction.value)}'),
           ),
           Visibility(
             visible: prediction.status != PredictionStatus.resolved &&
@@ -152,8 +153,8 @@ Widget prediction(
                   },
                   child: Text(
                     prediction.status == PredictionStatus.active
-                        ? 'Lock'
-                        : 'End',
+                        ? 'lock'.tr
+                        : 'end'.tr,
                     style: const TextStyle(
                       color: Colors.white,
                     ),

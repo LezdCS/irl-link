@@ -168,7 +168,7 @@ class ObsSettings extends StatelessWidget {
             InkWell(
               onTap: () {
                 launchUrlString(
-                  "https://www.irllink.com/wiki/obs-websocket",
+                  "https://www.irllink.com/blog/setup-obs-websocket",
                   mode: LaunchMode.externalApplication,
                 );
               },
@@ -263,12 +263,12 @@ class ObsSettings extends StatelessWidget {
         Positioned(
           width: MediaQuery.of(context).size.width,
           top: 100,
-          child: const Row(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Scan your OBS QR code",
-                style: TextStyle(
+                "scan_qr_code".tr,
+                style: const TextStyle(
                     fontSize: 18,
                     color: Colors.white,
                     decoration: TextDecoration.none),
