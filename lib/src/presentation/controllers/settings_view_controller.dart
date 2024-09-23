@@ -104,6 +104,10 @@ class SettingsViewController extends GetxController {
     Get.offAllNamed(Routes.login);
   }
 
+  List<dynamic> getVoiceForLanguage(String language) {
+    return ttsService.ttsVoices.where((v) => v['locale'] == language ).toList();
+  }
+
   Future<void> loginStreamElements() async {
     if (Get.find<StoreService>().isSubscribed() == false) {
       Get.snackbar(

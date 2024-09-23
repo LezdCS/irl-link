@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 const List<Map<String, String>> supportedLanguages = [
   {"name": "English", "languageCode": "en", "countryCode": "US"},
   {"name": "Français ", "languageCode": "fr", "countryCode": "FR"},
-  {"name": " 廣東話", "languageCode": "zh", "countryCode": "TW"},
+  {"name": "繁體中文", "languageCode": "zh", "countryCode": "TW"},
   {"name": "Español", "languageCode": "es", "countryCode": "ES"},
 ];
 

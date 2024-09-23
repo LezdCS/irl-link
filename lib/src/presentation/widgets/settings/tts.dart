@@ -16,6 +16,7 @@ class Tts extends StatelessWidget {
     return Obx(
       () {
         Settings settings = Get.find<SettingsService>().settings.value;
+        List<dynamic> ttsVoicesFiltered = controller.getVoiceForLanguage(settings.ttsSettings?.language ?? "en-US");
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.surface,
           appBar: AppBar(
@@ -123,11 +124,13 @@ class Tts extends StatelessWidget {
                                 Get.find<SettingsService>().saveSettings();
                               },
                               items: List.generate(
-                                controller.ttsService.ttsVoices.length,
+                                ttsVoicesFiltered.length,
                                 (index) => DropdownMenuItem(
-                                  value: controller.ttsService.ttsVoices[index],
-                                  child: Text(controller
-                                      .ttsService.ttsVoices[index]["name"]),
+                                  value: ttsVoicesFiltered[index],
+                                  child: Text(
+                                    ttsVoicesFiltered[index]
+                                        ["name"],
+                                  ),
                                 ),
                               ),
                             ),
