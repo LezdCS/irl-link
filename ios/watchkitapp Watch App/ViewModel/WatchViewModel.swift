@@ -12,7 +12,7 @@ struct SeActivity: Hashable, Decodable {
     var message: String
     var text: String
     var username: String
-    var colors: Array<Int>
+    var colors: Array<Int64>
 }
 
 class WatchViewModel: NSObject, ObservableObject {
