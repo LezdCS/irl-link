@@ -50,6 +50,14 @@ class TtsService extends GetxService {
     }
   }
 
+  Future<void> updateSettings(Settings settings) async {
+    await flutterTts.setLanguage(settings.ttsSettings!.language);
+    await flutterTts.setSpeechRate(settings.ttsSettings!.rate);
+    await flutterTts.setVolume(settings.ttsSettings!.volume);
+    await flutterTts.setPitch(settings.ttsSettings!.pitch);
+    await flutterTts.setVoice(settings.ttsSettings!.voice);
+  }
+
   Future<void> getTtsVoices() async {
     await flutterTts.getVoices.then(
       (value) => {

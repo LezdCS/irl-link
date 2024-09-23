@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 
@@ -76,7 +77,7 @@ class Tts extends StatelessWidget {
                           (element) =>
                               element == settings.ttsSettings!.language,
                         ),
-                        onChanged: (value) {
+                        onChanged: (value) async {
                           dynamic firstVoiceForLanguage = controller
                               .getVoiceForLanguage(value.toString())
                               .first;
@@ -89,7 +90,8 @@ class Tts extends StatelessWidget {
                             ttsSettings: settings.ttsSettings?.copyWith(
                                 language: value.toString(), voice: voice),
                           );
-                          Get.find<SettingsService>().saveSettings();
+                          await Get.find<SettingsService>().saveSettings();
+                          Get.find<TtsService>().updateSettings(settings);
                         },
                         items: List.generate(
                           controller.ttsService.ttsLanguages.length,
@@ -119,7 +121,7 @@ class Tts extends StatelessWidget {
                                     element["name"] ==
                                     settings.ttsSettings!.voice["name"],
                               ),
-                              onChanged: (Object? value) {
+                              onChanged: (Object? value) async {
                                 Map<String, String> voice = {
                                   "name": (value as Map)["name"],
                                   "locale": value["locale"],
@@ -129,7 +131,8 @@ class Tts extends StatelessWidget {
                                   ttsSettings: settings.ttsSettings
                                       ?.copyWith(voice: voice),
                                 );
-                                Get.find<SettingsService>().saveSettings();
+                                await Get.find<SettingsService>().saveSettings();
+                                Get.find<TtsService>().updateSettings(settings);
                               },
                               items: List.generate(
                                 ttsVoicesFiltered.length,
@@ -155,13 +158,14 @@ class Tts extends StatelessWidget {
                       ),
                       Slider(
                         value: settings.ttsSettings!.volume,
-                        onChanged: (value) {
+                        onChanged: (value) async {
                           Get.find<SettingsService>().settings.value =
                               settings.copyWith(
                             ttsSettings:
                                 settings.ttsSettings?.copyWith(volume: value),
                           );
-                          Get.find<SettingsService>().saveSettings();
+                          await Get.find<SettingsService>().saveSettings();
+                          Get.find<TtsService>().updateSettings(settings);
                         },
                         max: 1,
                         min: 0,
@@ -179,13 +183,14 @@ class Tts extends StatelessWidget {
                       ),
                       Slider(
                         value: settings.ttsSettings!.rate,
-                        onChanged: (value) {
+                        onChanged: (value) async {
                           Get.find<SettingsService>().settings.value =
                               settings.copyWith(
                             ttsSettings:
                                 settings.ttsSettings?.copyWith(rate: value),
                           );
-                          Get.find<SettingsService>().saveSettings();
+                          await Get.find<SettingsService>().saveSettings();
+                          Get.find<TtsService>().updateSettings(settings);
                         },
                         max: 1,
                         min: 0,
@@ -203,13 +208,14 @@ class Tts extends StatelessWidget {
                       ),
                       Slider(
                         value: settings.ttsSettings!.pitch,
-                        onChanged: (value) {
+                        onChanged: (value) async {
                           Get.find<SettingsService>().settings.value =
                               settings.copyWith(
                             ttsSettings:
                                 settings.ttsSettings?.copyWith(pitch: value),
                           );
-                          Get.find<SettingsService>().saveSettings();
+                          await Get.find<SettingsService>().saveSettings();
+                          Get.find<TtsService>().updateSettings(settings);
                         },
                         max: 1,
                         min: 0,
