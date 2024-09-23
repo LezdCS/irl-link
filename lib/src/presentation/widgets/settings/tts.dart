@@ -73,10 +73,11 @@ class Tts extends StatelessWidget {
                         ),
                       ),
                       DropdownButton(
-                        value: controller.ttsService.ttsLanguages.firstWhere(
+                        value: controller.ttsService.ttsLanguages.firstWhereOrNull(
                           (element) =>
                               element == settings.ttsSettings!.language,
                         ),
+                        hint: const Text("Select a language"),
                         onChanged: (value) async {
                           dynamic firstVoiceForLanguage = controller
                               .getVoiceForLanguage(value.toString())
@@ -116,11 +117,12 @@ class Tts extends StatelessWidget {
                               ),
                             ),
                             DropdownButton(
-                              value: controller.ttsService.ttsVoices.firstWhere(
+                              value: controller.ttsService.ttsVoices.firstWhereOrNull(
                                 (element) =>
                                     element["name"] ==
                                     settings.ttsSettings!.voice["name"],
                               ),
+                              hint: const Text("Select a voice"),
                               onChanged: (Object? value) async {
                                 Map<String, String> voice = {
                                   "name": (value as Map)["name"],
