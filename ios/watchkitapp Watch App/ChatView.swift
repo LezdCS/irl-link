@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import CachedAsyncImage
 
 struct ChatView: View {
     @ObservedObject var viewModel: WatchViewModel
@@ -25,7 +26,7 @@ struct ChatView: View {
                 List(viewModel.messages, id: \.self) { message in
                     HStack(alignment: .top, spacing: 0) {
                         ForEach(message.badges, id: \.self) { badge in
-                            AsyncImage(url: URL(string: badge)) { image in
+                            CachedAsyncImage(url: URL(string: badge)) { image in
                                 image.resizable()
                             } placeholder: {
                                 Color.red

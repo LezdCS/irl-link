@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,7 +14,7 @@
 		6E3AF5752C8F4F06002B6ADB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E3AF5742C8F4F06002B6ADB /* Assets.xcassets */; };
 		6E3AF5782C8F4F06002B6ADB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E3AF5772C8F4F06002B6ADB /* Preview Assets.xcassets */; };
 		6E3AF5852C8F4F87002B6ADB /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E6093F22C8C377800832AA1 /* WatchConnectivity.framework */; };
-		6E3AF5862C8F5021002B6ADB /* watchkitapp Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 6E3AF56E2C8F4F04002B6ADB /* watchkitapp Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6E3AF5862C8F5021002B6ADB /* Watch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 6E3AF56E2C8F4F04002B6ADB /* Watch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6E3DCC672C901C7A00292914 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3DCC662C901C7A00292914 /* ContentView.swift */; };
 		6E3DCC682C901CAB00292914 /* WatchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3DCC642C901C3400292914 /* WatchViewModel.swift */; };
 		6E3DCC6A2C92FA1600292914 /* ObsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3DCC692C92FA1600292914 /* ObsView.swift */; };
@@ -22,6 +22,7 @@
 		6E4347EE2C94BFF50023E0C7 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4347ED2C94BFF50023E0C7 /* Message.swift */; };
 		6E5B63182C9DA9920098595F /* SeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5B63172C9DA9920098595F /* SeView.swift */; };
 		6E6094052C8C41D000832AA1 /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E6093F22C8C377800832AA1 /* WatchConnectivity.framework */; };
+		6EB12D192CA1917000F20F3C /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = 6EB12D182CA1917000F20F3C /* CachedAsyncImage */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
@@ -53,7 +54,7 @@
 			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
 			dstSubfolderSpec = 16;
 			files = (
-				6E3AF5862C8F5021002B6ADB /* watchkitapp Watch App.app in Embed Watch Content */,
+				6E3AF5862C8F5021002B6ADB /* Watch.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -79,7 +80,7 @@
 		331C8081294A63A400263BE5 /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		6C0F844C2C7C5951007E74EC /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
-		6E3AF56E2C8F4F04002B6ADB /* watchkitapp Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "watchkitapp Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E3AF56E2C8F4F04002B6ADB /* Watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Watch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E3AF5702C8F4F04002B6ADB /* watchkitappApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = watchkitappApp.swift; sourceTree = "<group>"; };
 		6E3AF5742C8F4F06002B6ADB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6E3AF5772C8F4F06002B6ADB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -115,6 +116,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E3AF5852C8F4F87002B6ADB /* WatchConnectivity.framework in Frameworks */,
+				6EB12D192CA1917000F20F3C /* CachedAsyncImage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,7 +231,7 @@
 			children = (
 				97C146EE1CF9000F007C117D /* Runner.app */,
 				331C8081294A63A400263BE5 /* RunnerTests.xctest */,
-				6E3AF56E2C8F4F04002B6ADB /* watchkitapp Watch App.app */,
+				6E3AF56E2C8F4F04002B6ADB /* Watch.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -282,9 +284,9 @@
 			productReference = 331C8081294A63A400263BE5 /* RunnerTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		6E3AF56D2C8F4F04002B6ADB /* watchkitapp Watch App */ = {
+		6E3AF56D2C8F4F04002B6ADB /* Watch */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6E3AF57C2C8F4F06002B6ADB /* Build configuration list for PBXNativeTarget "watchkitapp Watch App" */;
+			buildConfigurationList = 6E3AF57C2C8F4F06002B6ADB /* Build configuration list for PBXNativeTarget "Watch" */;
 			buildPhases = (
 				6E3AF56A2C8F4F04002B6ADB /* Sources */,
 				6E3AF56B2C8F4F04002B6ADB /* Frameworks */,
@@ -294,9 +296,12 @@
 			);
 			dependencies = (
 			);
-			name = "watchkitapp Watch App";
+			name = Watch;
+			packageProductDependencies = (
+				6EB12D182CA1917000F20F3C /* CachedAsyncImage */,
+			);
 			productName = "watchkitapp Watch App";
-			productReference = 6E3AF56E2C8F4F04002B6ADB /* watchkitapp Watch App.app */;
+			productReference = 6E3AF56E2C8F4F04002B6ADB /* Watch.app */;
 			productType = "com.apple.product-type.application";
 		};
 		97C146ED1CF9000F007C117D /* Runner */ = {
@@ -321,6 +326,8 @@
 				6E3AF57A2C8F4F06002B6ADB /* PBXTargetDependency */,
 			);
 			name = Runner;
+			packageProductDependencies = (
+			);
 			productName = Runner;
 			productReference = 97C146EE1CF9000F007C117D /* Runner.app */;
 			productType = "com.apple.product-type.application";
@@ -358,13 +365,16 @@
 				Base,
 			);
 			mainGroup = 97C146E51CF9000F007C117D;
+			packageReferences = (
+				6E212BB42CA18B9B00C66A0F /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
+			);
 			productRefGroup = 97C146EF1CF9000F007C117D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				97C146ED1CF9000F007C117D /* Runner */,
 				331C8080294A63A400263BE5 /* RunnerTests */,
-				6E3AF56D2C8F4F04002B6ADB /* watchkitapp Watch App */,
+				6E3AF56D2C8F4F04002B6ADB /* Watch */,
 			);
 		};
 /* End PBXProject section */
@@ -572,7 +582,7 @@
 		};
 		6E3AF57A2C8F4F06002B6ADB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 6E3AF56D2C8F4F04002B6ADB /* watchkitapp Watch App */;
+			target = 6E3AF56D2C8F4F04002B6ADB /* Watch */;
 			targetProxy = 6E3AF5792C8F4F06002B6ADB /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -736,6 +746,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -750,7 +761,8 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = watchkitapp;
+				INFOPLIST_FILE = "watchkitapp-Watch-App-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "IRL Link Watch";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.irllink;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -762,7 +774,7 @@
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.irllink.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.irllink.watch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -781,6 +793,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -795,7 +808,8 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = watchkitapp;
+				INFOPLIST_FILE = "watchkitapp-Watch-App-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "IRL Link Watch";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.irllink;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -806,7 +820,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.irllink.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.irllink.watch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -824,6 +838,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -838,7 +853,8 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = watchkitapp;
+				INFOPLIST_FILE = "watchkitapp-Watch-App-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "IRL Link Watch";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.irllink;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -849,7 +865,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.irllink.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.irllink.watch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -1042,7 +1058,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6E3AF57C2C8F4F06002B6ADB /* Build configuration list for PBXNativeTarget "watchkitapp Watch App" */ = {
+		6E3AF57C2C8F4F06002B6ADB /* Build configuration list for PBXNativeTarget "Watch" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6E3AF57D2C8F4F06002B6ADB /* Debug */,
@@ -1073,6 +1089,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6E212BB42CA18B9B00C66A0F /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lorenzofiamingo/swiftui-cached-async-image";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6EB12D182CA1917000F20F3C /* CachedAsyncImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E212BB42CA18B9B00C66A0F /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */;
+			productName = CachedAsyncImage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 97C146E61CF9000F007C117D /* Project object */;
 }

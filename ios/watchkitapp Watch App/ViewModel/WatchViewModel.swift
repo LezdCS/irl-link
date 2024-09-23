@@ -82,6 +82,9 @@ extension WatchViewModel: WCSessionDelegate {
                     let jsonData = try JSONSerialization.data(withJSONObject: message["data"]!, options: [])
                     do {
                         let msg = try JSONDecoder().decode(Message.self, from: jsonData)
+                        if(self.messages.contains(msg)) {
+                            return
+                        }
                         self.messages.append(msg)
                         if(self.messages.count > 10) {
                             self.messages.removeFirst()
