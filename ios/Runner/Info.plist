@@ -76,7 +76,7 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>WKAppBundleIdentifier</key>
-	<string>com.irllink.watchkitapp</string>
+	<string>com.irllink.irllinkwatch</string>
 	<key>io.flutter.embedded_views_preview</key>
 	<string>YES</string>
 </dict>
