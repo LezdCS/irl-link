@@ -22,7 +22,6 @@
 		6E4347EE2C94BFF50023E0C7 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4347ED2C94BFF50023E0C7 /* Message.swift */; };
 		6E5B63182C9DA9920098595F /* SeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5B63172C9DA9920098595F /* SeView.swift */; };
 		6E6094052C8C41D000832AA1 /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E6093F22C8C377800832AA1 /* WatchConnectivity.framework */; };
-		6EB12D172CA1916000F20F3C /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = 6EB12D162CA1916000F20F3C /* CachedAsyncImage */; };
 		6EB12D192CA1917000F20F3C /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = 6EB12D182CA1917000F20F3C /* CachedAsyncImage */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
@@ -125,7 +124,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6EB12D172CA1916000F20F3C /* CachedAsyncImage in Frameworks */,
 				6E6094052C8C41D000832AA1 /* WatchConnectivity.framework in Frameworks */,
 				48089297A9CB34E17AF3011B /* Pods_Runner.framework in Frameworks */,
 			);
@@ -329,7 +327,6 @@
 			);
 			name = Runner;
 			packageProductDependencies = (
-				6EB12D162CA1916000F20F3C /* CachedAsyncImage */,
 			);
 			productName = Runner;
 			productReference = 97C146EE1CF9000F007C117D /* Runner.app */;
@@ -1105,11 +1102,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		6EB12D162CA1916000F20F3C /* CachedAsyncImage */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6E212BB42CA18B9B00C66A0F /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */;
-			productName = CachedAsyncImage;
-		};
 		6EB12D182CA1917000F20F3C /* CachedAsyncImage */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6E212BB42CA18B9B00C66A0F /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */;
