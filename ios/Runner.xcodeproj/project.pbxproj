@@ -22,6 +22,8 @@
 		6E4347EE2C94BFF50023E0C7 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4347ED2C94BFF50023E0C7 /* Message.swift */; };
 		6E5B63182C9DA9920098595F /* SeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5B63172C9DA9920098595F /* SeView.swift */; };
 		6E6094052C8C41D000832AA1 /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E6093F22C8C377800832AA1 /* WatchConnectivity.framework */; };
+		6EB12D172CA1916000F20F3C /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = 6EB12D162CA1916000F20F3C /* CachedAsyncImage */; };
+		6EB12D192CA1917000F20F3C /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = 6EB12D182CA1917000F20F3C /* CachedAsyncImage */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
@@ -79,7 +81,6 @@
 		331C8081294A63A400263BE5 /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		6C0F844C2C7C5951007E74EC /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
-		6E212BB32CA181F500C66A0F /* watchkitapp-Watch-App-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "watchkitapp-Watch-App-Info.plist"; sourceTree = SOURCE_ROOT; };
 		6E3AF56E2C8F4F04002B6ADB /* Watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Watch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E3AF5702C8F4F04002B6ADB /* watchkitappApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = watchkitappApp.swift; sourceTree = "<group>"; };
 		6E3AF5742C8F4F06002B6ADB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -116,6 +117,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E3AF5852C8F4F87002B6ADB /* WatchConnectivity.framework in Frameworks */,
+				6EB12D192CA1917000F20F3C /* CachedAsyncImage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -123,6 +125,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6EB12D172CA1916000F20F3C /* CachedAsyncImage in Frameworks */,
 				6E6094052C8C41D000832AA1 /* WatchConnectivity.framework in Frameworks */,
 				48089297A9CB34E17AF3011B /* Pods_Runner.framework in Frameworks */,
 			);
@@ -150,7 +153,6 @@
 		6E3AF56F2C8F4F04002B6ADB /* watchkitapp Watch App */ = {
 			isa = PBXGroup;
 			children = (
-				6E212BB32CA181F500C66A0F /* watchkitapp-Watch-App-Info.plist */,
 				6E4347EC2C94BFE30023E0C7 /* Structures */,
 				6E3DCC632C901C2400292914 /* ViewModel */,
 				6E3AF5702C8F4F04002B6ADB /* watchkitappApp.swift */,
@@ -297,6 +299,9 @@
 			dependencies = (
 			);
 			name = Watch;
+			packageProductDependencies = (
+				6EB12D182CA1917000F20F3C /* CachedAsyncImage */,
+			);
 			productName = "watchkitapp Watch App";
 			productReference = 6E3AF56E2C8F4F04002B6ADB /* Watch.app */;
 			productType = "com.apple.product-type.application";
@@ -323,6 +328,9 @@
 				6E3AF57A2C8F4F06002B6ADB /* PBXTargetDependency */,
 			);
 			name = Runner;
+			packageProductDependencies = (
+				6EB12D162CA1916000F20F3C /* CachedAsyncImage */,
+			);
 			productName = Runner;
 			productReference = 97C146EE1CF9000F007C117D /* Runner.app */;
 			productType = "com.apple.product-type.application";
@@ -1095,6 +1103,19 @@
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6EB12D162CA1916000F20F3C /* CachedAsyncImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E212BB42CA18B9B00C66A0F /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */;
+			productName = CachedAsyncImage;
+		};
+		6EB12D182CA1917000F20F3C /* CachedAsyncImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E212BB42CA18B9B00C66A0F /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */;
+			productName = CachedAsyncImage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 97C146E61CF9000F007C117D /* Project object */;
 }
