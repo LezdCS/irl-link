@@ -16,7 +16,8 @@ class Tts extends StatelessWidget {
     return Obx(
       () {
         Settings settings = Get.find<SettingsService>().settings.value;
-        List<dynamic> ttsVoicesFiltered = controller.getVoiceForLanguage(settings.ttsSettings?.language ?? "en-US");
+        List<dynamic> ttsVoicesFiltered = controller
+            .getVoiceForLanguage(settings.ttsSettings?.language ?? "en-US");
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.surface,
           appBar: AppBar(
@@ -76,10 +77,17 @@ class Tts extends StatelessWidget {
                               element == settings.ttsSettings!.language,
                         ),
                         onChanged: (value) {
+                          dynamic firstVoiceForLanguage = controller
+                              .getVoiceForLanguage(value.toString())
+                              .first;
+                          Map<String, String> voice = {
+                            "name": firstVoiceForLanguage["name"],
+                            "locale": firstVoiceForLanguage["locale"],
+                          };
                           Get.find<SettingsService>().settings.value =
                               settings.copyWith(
-                            ttsSettings: settings.ttsSettings
-                                ?.copyWith(language: value.toString()),
+                            ttsSettings: settings.ttsSettings?.copyWith(
+                                language: value.toString(), voice: voice),
                           );
                           Get.find<SettingsService>().saveSettings();
                         },
@@ -114,7 +122,7 @@ class Tts extends StatelessWidget {
                               onChanged: (Object? value) {
                                 Map<String, String> voice = {
                                   "name": (value as Map)["name"],
-                                  "locale": (value)["locale"],
+                                  "locale": value["locale"],
                                 };
                                 Get.find<SettingsService>().settings.value =
                                     settings.copyWith(
@@ -128,8 +136,7 @@ class Tts extends StatelessWidget {
                                 (index) => DropdownMenuItem(
                                   value: ttsVoicesFiltered[index],
                                   child: Text(
-                                    ttsVoicesFiltered[index]
-                                        ["name"],
+                                    ttsVoicesFiltered[index]["name"],
                                   ),
                                 ),
                               ),
