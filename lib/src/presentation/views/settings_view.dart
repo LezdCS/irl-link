@@ -215,7 +215,7 @@ class SettingsView extends GetView<SettingsViewController> {
                 ),
                 settingsGoToRow(
                   context,
-                  "Chats joined",
+                  "chats_joined".tr,
                   Icons.wechat_sharp,
                   () {
                     Get.to(
@@ -225,7 +225,7 @@ class SettingsView extends GetView<SettingsViewController> {
                 ),
                 settingsGoToRow(
                   context,
-                  "Chat events",
+                  "chat_events".tr,
                   Icons.reviews,
                   () {
                     Get.to(
