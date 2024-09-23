@@ -233,7 +233,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
         width: 10,
       ),
       itemBuilder: (BuildContext context, int index) {
-        var elementAt = controller.scenesList.elementAt(index);
+        String elementAt = controller.scenesList.elementAt(index);
         return InkWell(
           onTap: () {
             controller.setCurrentScene(elementAt);
@@ -245,7 +245,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
             ),
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: controller.currentScene == elementAt
+              color: controller.currentScene.value == elementAt
                   ? Theme.of(context).colorScheme.tertiary
                   : Theme.of(context).colorScheme.tertiaryContainer,
               borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -284,7 +284,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
         double? sourceVolume = controller.sourcesVolumesMap[source.sourceName];
         return GestureDetector(
           onTap: () {
-            controller.setSourceVisibleState(source);
+            controller.setSourceVisibleState(source.sceneItemId, source.sceneItemEnabled);
           },
           onLongPress: () {
             Get.defaultDialog(

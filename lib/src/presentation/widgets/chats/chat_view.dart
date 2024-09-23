@@ -50,10 +50,10 @@ class ChatView extends GetView<ChatViewController> {
               // Open a confirmation dialog to reconnect to the chat
               Get.defaultDialog(
                 backgroundColor: Theme.of(context).colorScheme.surface,
-                title: "Confirmation",
-                middleText: "Do you want to reconnect ?",
-                textConfirm: "Yes",
-                textCancel: "No",
+                title: "confirm".tr,
+                middleText: "reconnect_question".tr,
+                textConfirm: "confirm".tr,
+                textCancel: "cancel".tr,
                 confirmTextColor: Theme.of(context).textTheme.bodyLarge!.color,
                 cancelTextColor: Theme.of(context).textTheme.bodyLarge!.color,
                 buttonColor: Theme.of(context).colorScheme.tertiary,
@@ -127,7 +127,12 @@ class ChatView extends GetView<ChatViewController> {
                       ? Padding(
                           padding: const EdgeInsets.only(left: 8.0),
                           child: Text(
-                            "Welcome to ${controller.chatGroup.channels.first.channel} chatroom!",
+                            "welcome_to_chat".trParams(
+                              {
+                                "channel":
+                                    controller.chatGroup.channels.first.channel,
+                              },
+                            ),
                             style: const TextStyle(
                               color: Colors.grey,
                               fontSize: 13,

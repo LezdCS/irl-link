@@ -43,8 +43,8 @@ class ManageListBrowserTabs extends GetView<SettingsViewController> {
                     )
                   ]
                 : const [],
-            title: const Text(
-              "Manage browser tabs",
+            title: Text(
+              "manage_browser_tabs".tr,
             ),
           ),
           body: Container(
@@ -95,7 +95,7 @@ class ManageListBrowserTabs extends GetView<SettingsViewController> {
                                           controller,
                                           elem,
                                         ),
-                                        title: 'Edit',
+                                        title: "edit".tr,
                                         textCancel: "cancel".tr,
                                         textConfirm: "confirm".tr,
                                         backgroundColor: Theme.of(context)
@@ -119,7 +119,7 @@ class ManageListBrowserTabs extends GetView<SettingsViewController> {
                                     onTap: () => {
                                       Get.defaultDialog(
                                         content: Container(),
-                                        title: 'Delete',
+                                        title: 'delete'.tr,
                                         textCancel: "cancel".tr,
                                         textConfirm: "confirm".tr,
                                         backgroundColor: Theme.of(context)

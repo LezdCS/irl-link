@@ -51,8 +51,8 @@ class RealtimeIrl extends GetView<SettingsViewController> {
                     isDense: true,
                     contentPadding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
-                    hintText: 'Push Key',
-                    labelText: 'Push Key',
+                    hintText: "push_key".tr,
+                    labelText: "push_key".tr,
                     labelStyle: TextStyle(
                       color: Theme.of(context).colorScheme.tertiary,
                     ),

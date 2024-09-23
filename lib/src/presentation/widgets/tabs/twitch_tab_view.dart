@@ -265,9 +265,9 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                const Text(
-                                  "Channel QR Code",
-                                  style: TextStyle(
+                                Text(
+                                  "channel_qr_code".tr,
+                                  style: const TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -299,7 +299,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                       ),
                     );
                   },
-                  text: "Channel QR Code",
+                  text: "channel_qr_code".tr,
                   context: context,
                   isOn: false,
                 ),

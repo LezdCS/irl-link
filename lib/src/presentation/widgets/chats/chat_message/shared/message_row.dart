@@ -110,7 +110,7 @@ class MessageRow extends StatelessWidget {
           ),
           if (message.isDeleted && hideDeletedMessages)
             Text(
-              "<message deleted>",
+              "message_deleted".tr,
               style: TextStyle(
                 color: Colors.grey,
                 fontSize: textSize,

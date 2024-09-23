@@ -139,11 +139,9 @@ class SeSongRequests extends GetView<StreamelementsViewController> {
                       ),
                       const TextSpan(
                         text: " - ",
-                        style: TextStyle(),
                       ),
                       TextSpan(
                         text: song.title,
-                        style: const TextStyle(),
                       )
                     ],
                   ),
@@ -153,7 +151,6 @@ class SeSongRequests extends GetView<StreamelementsViewController> {
                   TextSpan(children: [
                     const TextSpan(
                       text: "Duration: ",
-                      style: TextStyle(),
                     ),
                     TextSpan(
                       text: song.duration.toString(),

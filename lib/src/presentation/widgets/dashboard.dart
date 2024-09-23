@@ -44,12 +44,14 @@ class Dashboard extends GetView<DashboardController> {
                   // Check if the event is still supported
                   if (event.event == SupportedEvents.none) {
                     return _disabledServiceEvent(
-                        event, "Event not supported anymore");
+                      event,
+                      "event_discontinued".tr,
+                    );
                   }
                   // Check if the service is enabled
                   bool isServiceEnabled = isDashboardServiceEnabled(event);
                   if (!isServiceEnabled) {
-                    return _disabledServiceEvent(event, "Service disabled");
+                    return _disabledServiceEvent(event, "service_disabled".tr);
                   }
                   switch (event.dashboardActionsType) {
                     case DashboardActionsTypes.button:
@@ -63,19 +65,19 @@ class Dashboard extends GetView<DashboardController> {
                   }
                 },
               )
-            : const Center(
+            : Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "No events saved",
+                     "events_empty".tr,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.grey,
                         fontSize: 12,
                       ),
                     ),
-                    Text(
+                    const Text(
                       "Settings > General > Dashboard",
                       textAlign: TextAlign.center,
                       style: TextStyle(

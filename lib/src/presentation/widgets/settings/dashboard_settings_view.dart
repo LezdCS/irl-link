@@ -48,8 +48,8 @@ class DashboardSettingsView extends GetView<DashboardController> {
                 },
               ),
             ],
-            title: const Text(
-              "Dashboard events",
+            title: Text(
+              "dashboard_events".tr,
             ),
           ),
           body: Container(
@@ -83,7 +83,7 @@ class DashboardSettingsView extends GetView<DashboardController> {
                               controller.removeDashboardEvent(event);
                             },
                             icon: Icons.delete,
-                            label: 'Delete',
+                            label: "delete".tr,
                             foregroundColor: Colors.red,
                           ),
                         ],
@@ -141,7 +141,7 @@ Widget _addGroupButton(
     onTap: () {
       Get.defaultDialog(
         content: _addDialog(context, dashboardController),
-        title: "New event".tr,
+        title:  "new_event".tr,
         cancel: null,
         confirm: Container(),
         backgroundColor: Theme.of(context).colorScheme.surface,
@@ -164,11 +164,11 @@ Widget _addGroupButton(
         ),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('New event'),
-          Icon(Icons.add),
+          Text("new_event".tr),
+          const Icon(Icons.add),
         ],
       ),
     ),
@@ -197,12 +197,12 @@ Widget _addDialog(context, DashboardController dashboardController) {
               ),
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
-              hintText: 'Event title',
-              labelText: 'Event title',
+              hintText: "event_title".tr,
+              labelText: "event_title".tr,
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter some text';
+                return "please_enter_text".tr;
               }
               return null;
             },
@@ -235,7 +235,7 @@ Widget _addDialog(context, DashboardController dashboardController) {
             }).toList(),
             validator: (value) {
               if (value == SupportedEvents.none) {
-                return 'Please select an event';
+                return  "please_select_event".tr;
               }
               return null;
             },
@@ -254,7 +254,7 @@ Widget _addDialog(context, DashboardController dashboardController) {
             visible: selectedEvent.value != SupportedEvents.none,
             child: DropdownButtonFormField(
               isExpanded: true,
-              hint: const Text('Type of input'),
+              hint: Text("type_input".tr),
               value: dashboardEvents[dashboardEvents.keys.firstWhereOrNull(
                       (element) => element == selectedEvent.value)]
                   ?.actionsAllowed[0],
@@ -288,12 +288,12 @@ Widget _addDialog(context, DashboardController dashboardController) {
                   ),
                   contentPadding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
-                  hintText: 'Your message',
-                  labelText: 'Your message',
+                  hintText: "your_message".tr,
+                  labelText: "your_message".tr,
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter some text';
+                    return "please_enter_text".tr;
                   }
                   return null;
                 },
@@ -326,7 +326,7 @@ Widget _addDialog(context, DashboardController dashboardController) {
                 dashboardController.addDashboardEvent(newEvent);
               }
             },
-            child: const Text('Submit'),
+            child: Text("submit".tr),
           ),
         ],
       ),
@@ -338,7 +338,7 @@ Widget colorPickerPreview(Color color, Function(Color) onColorChanged) {
   return GestureDetector(
       onTap: () {
         Get.defaultDialog(
-          title: 'Pick a color!',
+          title: "pick_color".tr,
           backgroundColor: Theme.of(Get.context!).colorScheme.surface,
           content: BlockPicker(
             pickerColor: color,
@@ -349,7 +349,7 @@ Widget colorPickerPreview(Color color, Function(Color) onColorChanged) {
       // Row with circle showing currently selected color
       child: Row(
         children: [
-          const Text('Background color'),
+          Text("background_color".tr),
           const SizedBox(width: 10),
           Expanded(
             child: Container(

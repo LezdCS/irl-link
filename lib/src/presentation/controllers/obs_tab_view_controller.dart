@@ -2,12 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/utils/globals.dart' as globals;
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
-import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 
@@ -20,7 +20,7 @@ class ObsTabViewController extends GetxController {
   RxBool isConnected = false.obs;
   RxString alertMessage = "Failed to connect to OBS".obs;
 
-  RxList scenesList = RxList();
+  RxList<String> scenesList = RxList();
   RxString currentScene = RxString("");
 
   RxList<SceneItemDetail> sourcesList = RxList();
@@ -33,31 +33,66 @@ class ObsTabViewController extends GetxController {
 
   Rxn<StatsResponse> statsResponse = Rxn<StatsResponse>();
 
-  late HomeViewController homeViewController;
   late Timer statsTimer;
-
-  @override
-  void onInit() {
-    homeViewController = Get.find<HomeViewController>();
-
-    super.onInit();
-  }
 
   @override
   Future<void> onReady() async {
     await applySettings();
+
+    isConnected.listen((value) {
+      // Send to watchOS
+      const platform = MethodChannel('com.irllink');
+      platform.invokeMethod("flutterToWatch", {
+        "method": "sendUpdateObsConnecteToNative",
+        "data": value,
+      });
+    });
+
+    currentScene.listen((value) {
+      // Send to watchOS
+      const platform = MethodChannel('com.irllink');
+      platform.invokeMethod("flutterToWatch", {
+        "method": "sendSelectedObsSceneToNative",
+        "data": value,
+      });
+    });
+
+    scenesList.listen((value) {
+      // Send to watchOS
+      const platform = MethodChannel('com.irllink');
+      platform.invokeMethod("flutterToWatch", {
+        "method": "sendObsScenesToNative",
+        "data": value,
+      });
+    });
+
+    sourcesList.listen((value) {
+      String data = jsonEncode(value.map((e) => e.toJson()).toList());
+      debugPrint("sourcesList: $data");
+      // Send to watchOS
+      const platform = MethodChannel('com.irllink');
+      platform.invokeMethod("flutterToWatch", {
+        "method": "sendObsSourcesToNative",
+        "data": data,
+      });
+    });
+
     super.onReady();
+  }
+
+  @override
+  void onClose() {
+    isConnected.value = false;
+    statsTimer.cancel();
+    obsWebSocket?.close();
+    super.onClose();
   }
 
   /// Connect to the OBS websocket at [url] with optional [password]
   void connectWs(String url, String password) async {
     try {
       if (!url.startsWith('ws://') && !url.startsWith('wss://')) {
-        if (url.startsWith('https')) {
-          url = 'wss://$url';
-        } else {
-          url = 'ws://$url';
-        }
+        url = 'ws://$url';
       }
       globals.talker?.logTyped(ObsLog("Connecting to OBS at $url..."));
       obsWebSocket = await ObsWebSocket.connect(
@@ -233,12 +268,12 @@ class ObsTabViewController extends GetxController {
   }
 
   /// Show or hide the source named [sourceName] according to the [sceneItemEnabled]
-  void setSourceVisibleState(SceneItemDetail source) {
+  void setSourceVisibleState(int sceneItemId, bool sceneItemEnabled) {
     obsWebSocket!.sceneItems.setEnabled(
       SceneItemEnableStateChanged(
         sceneName: currentScene.value,
-        sceneItemId: source.sceneItemId,
-        sceneItemEnabled: !source.sceneItemEnabled,
+        sceneItemId: sceneItemId,
+        sceneItemEnabled: !sceneItemEnabled,
       ),
     );
   }

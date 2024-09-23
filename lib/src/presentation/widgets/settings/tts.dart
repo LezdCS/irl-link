@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 
@@ -16,6 +17,8 @@ class Tts extends StatelessWidget {
     return Obx(
       () {
         Settings settings = Get.find<SettingsService>().settings.value;
+        List<dynamic> ttsVoicesFiltered = controller
+            .getVoiceForLanguage(settings.ttsSettings?.language ?? "en-US");
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.surface,
           appBar: AppBar(
@@ -70,17 +73,26 @@ class Tts extends StatelessWidget {
                         ),
                       ),
                       DropdownButton(
-                        value: controller.ttsService.ttsLanguages.firstWhere(
+                        value: controller.ttsService.ttsLanguages.firstWhereOrNull(
                           (element) =>
                               element == settings.ttsSettings!.language,
                         ),
-                        onChanged: (value) {
+                        hint: const Text("Select a language"),
+                        onChanged: (value) async {
+                          dynamic firstVoiceForLanguage = controller
+                              .getVoiceForLanguage(value.toString())
+                              .first;
+                          Map<String, String> voice = {
+                            "name": firstVoiceForLanguage["name"],
+                            "locale": firstVoiceForLanguage["locale"],
+                          };
                           Get.find<SettingsService>().settings.value =
                               settings.copyWith(
-                            ttsSettings: settings.ttsSettings
-                                ?.copyWith(language: value.toString()),
+                            ttsSettings: settings.ttsSettings?.copyWith(
+                                language: value.toString(), voice: voice),
                           );
-                          Get.find<SettingsService>().saveSettings();
+                          await Get.find<SettingsService>().saveSettings();
+                          Get.find<TtsService>().updateSettings(settings);
                         },
                         items: List.generate(
                           controller.ttsService.ttsLanguages.length,
@@ -105,29 +117,32 @@ class Tts extends StatelessWidget {
                               ),
                             ),
                             DropdownButton(
-                              value: controller.ttsService.ttsVoices.firstWhere(
+                              value: controller.ttsService.ttsVoices.firstWhereOrNull(
                                 (element) =>
                                     element["name"] ==
                                     settings.ttsSettings!.voice["name"],
                               ),
-                              onChanged: (Object? value) {
+                              hint: const Text("Select a voice"),
+                              onChanged: (Object? value) async {
                                 Map<String, String> voice = {
                                   "name": (value as Map)["name"],
-                                  "locale": (value)["locale"],
+                                  "locale": value["locale"],
                                 };
                                 Get.find<SettingsService>().settings.value =
                                     settings.copyWith(
                                   ttsSettings: settings.ttsSettings
                                       ?.copyWith(voice: voice),
                                 );
-                                Get.find<SettingsService>().saveSettings();
+                                await Get.find<SettingsService>().saveSettings();
+                                Get.find<TtsService>().updateSettings(settings);
                               },
                               items: List.generate(
-                                controller.ttsService.ttsVoices.length,
+                                ttsVoicesFiltered.length,
                                 (index) => DropdownMenuItem(
-                                  value: controller.ttsService.ttsVoices[index],
-                                  child: Text(controller
-                                      .ttsService.ttsVoices[index]["name"]),
+                                  value: ttsVoicesFiltered[index],
+                                  child: Text(
+                                    ttsVoicesFiltered[index]["name"],
+                                  ),
                                 ),
                               ),
                             ),
@@ -145,13 +160,14 @@ class Tts extends StatelessWidget {
                       ),
                       Slider(
                         value: settings.ttsSettings!.volume,
-                        onChanged: (value) {
+                        onChanged: (value) async {
                           Get.find<SettingsService>().settings.value =
                               settings.copyWith(
                             ttsSettings:
                                 settings.ttsSettings?.copyWith(volume: value),
                           );
-                          Get.find<SettingsService>().saveSettings();
+                          await Get.find<SettingsService>().saveSettings();
+                          Get.find<TtsService>().updateSettings(settings);
                         },
                         max: 1,
                         min: 0,
@@ -169,13 +185,14 @@ class Tts extends StatelessWidget {
                       ),
                       Slider(
                         value: settings.ttsSettings!.rate,
-                        onChanged: (value) {
+                        onChanged: (value) async {
                           Get.find<SettingsService>().settings.value =
                               settings.copyWith(
                             ttsSettings:
                                 settings.ttsSettings?.copyWith(rate: value),
                           );
-                          Get.find<SettingsService>().saveSettings();
+                          await Get.find<SettingsService>().saveSettings();
+                          Get.find<TtsService>().updateSettings(settings);
                         },
                         max: 1,
                         min: 0,
@@ -193,13 +210,14 @@ class Tts extends StatelessWidget {
                       ),
                       Slider(
                         value: settings.ttsSettings!.pitch,
-                        onChanged: (value) {
+                        onChanged: (value) async {
                           Get.find<SettingsService>().settings.value =
                               settings.copyWith(
                             ttsSettings:
                                 settings.ttsSettings?.copyWith(pitch: value),
                           );
-                          Get.find<SettingsService>().saveSettings();
+                          await Get.find<SettingsService>().saveSettings();
+                          Get.find<TtsService>().updateSettings(settings);
                         },
                         max: 1,
                         min: 0,
