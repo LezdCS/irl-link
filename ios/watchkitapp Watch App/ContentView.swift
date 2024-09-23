@@ -77,7 +77,7 @@ extension Color {
         )
     }
     
-    init(argb: Int) {
+    init(argb: Int64) {
         let a = Double((argb >> 24) & 0xFF) / 255.0
         let r = Double((argb >> 16) & 0xFF) / 255.0
         let g = Double((argb >> 8) & 0xFF) / 255.0
