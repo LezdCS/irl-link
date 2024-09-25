@@ -14,7 +14,7 @@ class LoginViewController extends GetxController {
 
   final LoginEvents loginEvents;
   RxBool isLoading = true.obs;
-  RxString loadingMessage = "Retrieving your data...".obs;
+  RxString loadingMessage = "retrieving_data".tr.obs;
   Rxn<TwitchCredentials> twitchCredentials = Rxn<TwitchCredentials>();
 
   @override
@@ -36,7 +36,7 @@ class LoginViewController extends GetxController {
 
     if (twitchCredsResult is DataSuccess) {
       twitchCredentials.value = twitchCredsResult.data!;
-      loadingMessage.value = "We are refreshing your token...";
+      loadingMessage.value = "refreshing_token".tr;
 
       DataState<TwitchCredentials> refreshResult =
           await loginEvents.refreshAccessToken(twitchCredsResult.data!);

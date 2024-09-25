@@ -30,6 +30,7 @@
   "offline": "Offline",
   "live": "Live",
   "viewers": "viewers",
+  "viewers_number": "@number viewers",
   "stream_title": "Stream title",
   "change": "Change",
   "shortcuts": "Shortcuts",
@@ -127,5 +128,13 @@
   "only_read_vip": "Only read VIP messages",
   "only_read_mod": "Only read Moderators messages",
   "only_read_sub": "Only read Subscribers messages",
-  "maybe_later": "Maybe later"
+  "maybe_later": "Maybe later",
+  "show_stream": "Show stream",
+  "hide_stream": "Hide stream",
+  "refreshing_token": "We are refreshing your token...",
+  "retrieving_data": "Retrieving your data...",
+  "connecting_to_channel": "Connecting to @channel...",
+  "connected": "Connected",
+  "refresh_data": "Refresh data",
+  "new_group": "New group"
 }

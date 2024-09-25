@@ -30,6 +30,7 @@
   "offline": "離線",
   "live": "直播中",
   "viewers": "個觀眾",
+  "viewers_number": "@number 個觀眾",
   "stream_title": "直播標題",
   "change": "變更",
   "shortcuts": "快捷鍵",
@@ -127,5 +128,13 @@
   "only_read_vip": "僅閱讀VIP消息",
   "only_read_mod": "僅閱讀管理員消息",
   "only_read_sub": "僅閱讀訂閱者消息",
-  "maybe_later": "稍後再說"
+  "maybe_later": "稍後再說",
+  "show_stream": "顯示串流",
+  "hide_stream": "隱藏串流",
+  "refreshing_token": "我們正在刷新您的令牌...",
+  "retrieving_data": "正在檢索您的數據...",
+  "connecting_to_channel": "正在連接到 @channel...",
+  "connected": "已連接",
+  "refresh_data": "刷新數據",
+  "new_group": "新群組"
 }

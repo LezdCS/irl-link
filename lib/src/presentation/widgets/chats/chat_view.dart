@@ -201,7 +201,9 @@ class ChatView extends GetView<ChatViewController> {
                               : Colors.red,
                           message: value
                               ? "connected".tr
-                              : "Connecting to ${chat.channel}".tr,
+                              : "connecting_to_channel".trParams({
+                                  "channel": chat.channel,
+                                }),
                           isProgress: !value,
                         ),
                       );

@@ -292,7 +292,7 @@ class HomeView extends GetView<HomeViewController> {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: settings.generalSettings!.displayViewerCount
-                            ? '${Get.find<TwitchTabViewController>().twitchStreamInfos.value.viewerCount} viewers'
+                            ? "viewers_number".trParams({"number": Get.find<TwitchTabViewController>().twitchStreamInfos.value.viewerCount.toString()})
                             : 'send_message'.tr,
                         hintStyle: TextStyle(
                           color: Theme.of(context).textTheme.bodyLarge!.color!,

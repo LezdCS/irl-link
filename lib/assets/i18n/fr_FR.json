@@ -30,6 +30,7 @@
   "offline": "Hors-ligne",
   "live": "En direct",
   "viewers": "spectateurs",
+  "viewers_number": "@number spectateurs",
   "stream_title": "Titre du stream",
   "change": "Modifier",
   "shortcuts": "Raccourcis",
@@ -127,5 +128,13 @@
   "only_read_vip": "Lire uniquement les messages VIP",
   "only_read_mod": "Lire uniquement les messages des modérateurs",
   "only_read_sub": "Lire uniquement les messages des abonnés",
-  "maybe_later": "Peut-être plus tard"
+  "maybe_later": "Peut-être plus tard",
+  "show_stream": "Afficher le flux",
+  "hide_stream": "Masquer le flux",
+  "refreshing_token": "Nous rafraîchissons votre jeton...",
+  "retrieving_data": "Récupération de vos données...",
+  "connecting_to_channel": "Connexion à @channel...",
+  "connected": "Connecté",
+  "refresh_data": "Rafraîchit les données",
+  "new_group": "Nouveau groupe"
 }

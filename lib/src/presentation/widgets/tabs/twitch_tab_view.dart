@@ -54,9 +54,9 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         const SizedBox(
                           width: 10,
                         ),
-                        const Text(
-                          'Refresh data',
-                          style: TextStyle(
+                        Text(
+                          "refresh_data".tr,
+                          style: const TextStyle(
                             fontSize: 10,
                           ),
                         ),
@@ -302,8 +302,8 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                 _shortcutButton(
                   context: context,
                   text: controller.displayTwitchPlayer.value
-                      ? 'Hide my stream'
-                      : 'Show my stream',
+                      ? "hide_stream".tr
+                      : "show_stream".tr,
                   onTap: () => {
                     controller.displayTwitchPlayer.toggle(),
                   },
