@@ -357,11 +357,11 @@ class ChatsJoined extends GetView<SettingsViewController> {
           ),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: const Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('New group'),
-            Icon(Icons.add),
+            Text('new_group'.tr),
+            const Icon(Icons.add),
           ],
         ),
       ),
