@@ -78,16 +78,14 @@ class ChatViewController extends GetxController
   @override
   void onReady() {
     scrollController.addListener(scrollListener);
-    if (twitchData != null) {
-      Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-        for (TwitchChat twitchChat in twitchChats) {
-          if (!twitchChat.isConnected.value) {
-            twitchChat.close();
-            twitchChat.connect();
-          }
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      for (TwitchChat twitchChat in twitchChats) {
+        if (!twitchChat.isConnected.value) {
+          twitchChat.close();
+          twitchChat.connect();
         }
-      });
-    }
+      }
+    });
 
     super.onReady();
   }
