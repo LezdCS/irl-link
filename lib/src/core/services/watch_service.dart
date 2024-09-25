@@ -5,8 +5,6 @@ import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dar
 
 class WatchService extends GetxService {
   Future<WatchService> init() async {
-    ObsTabViewController obsTabViewController =
-        Get.find<ObsTabViewController>();
     const channel = MethodChannel('com.irllink');
     channel.setMethodCallHandler((call) async {
       // Receive data from Native
@@ -14,9 +12,13 @@ class WatchService extends GetxService {
       dynamic data = call.arguments['data'];
       switch (call.method) {
         case "sendChangeObsSceneToFlutter":
+          ObsTabViewController obsTabViewController =
+              Get.find<ObsTabViewController>();
           obsTabViewController.setCurrentScene(data['scene']);
           break;
         case "sendToggleObsSourceToFlutter":
+          ObsTabViewController obsTabViewController =
+              Get.find<ObsTabViewController>();
           obsTabViewController.setSourceVisibleState(
             data['sourceItemId'],
             data['sceneItemEnabled'],
