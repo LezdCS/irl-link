@@ -42,8 +42,6 @@ class ChatViewController extends GetxController
 
   late TextEditingController banDurationInputController;
 
-  Timer? chatDemoTimer;
-
   late HomeViewController homeViewController;
   late TtsService ttsService;
 
@@ -62,14 +60,6 @@ class ChatViewController extends GetxController
       twitchData = Get.arguments[0];
       await applySettings();
       homeViewController.selectedChatGroup.value = chatGroup;
-    } else {
-      chatDemoTimer = Timer.periodic(
-        const Duration(seconds: 3),
-        (Timer t) {
-          // chatMessages.add(ChatMessage.randomGeneration(null, null, null));
-          scrollChatToBottom();
-        },
-      );
     }
 
     chatMessages.listen((value) {
@@ -105,7 +95,6 @@ class ChatViewController extends GetxController
   @override
   void onClose() {
     Get.find<TtsService>().flutterTts.stop();
-    chatDemoTimer?.cancel();
     super.onDelete;
     super.onClose();
   }
