@@ -12,6 +12,7 @@ import 'package:irllink/src/core/services/realtime_irl_task_handler.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/core/services/tts_service.dart';
+import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/utils/crashlytics_talker_observer.dart';
 import 'package:irllink/src/core/utils/globals.dart' as globals;
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
@@ -74,6 +75,7 @@ void main() async {
   TtsService ttsService =
       await Get.putAsync(() => TtsService().init(), permanent: true);
   await ttsService.initTts(settingsService.settings.value);
+  await Get.putAsync(() => WatchService().init(), permanent: true);
 
   if (!settingsService.settings.value.generalSettings!.isDarkMode) {
     Get.changeThemeMode(ThemeMode.light);
