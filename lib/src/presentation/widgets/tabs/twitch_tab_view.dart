@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/alert_message_view.dart';
 import 'package:irllink/src/presentation/widgets/poll.dart';
 import 'package:irllink/src/presentation/widgets/prediction.dart';
 import 'package:irllink/src/presentation/widgets/tabs/dialogs/slow_mode_dialog.dart';
+import 'package:irllink/src/presentation/widgets/web_page_view.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class TwitchTabView extends GetView<TwitchTabViewController> {
@@ -303,6 +305,34 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                   context: context,
                   isOn: false,
                 ),
+                const Divider(
+                  height: 30,
+                ),
+                _shortcutButton(
+                  context: context,
+                  text: controller.displayTwitchPlayer.value
+                      ? 'Hide my stream'
+                      : 'Show my stream',
+                  onTap: () => {
+                    controller.displayTwitchPlayer.toggle(),
+                  },
+                  isOn: controller.twitchStreamInfos.value.isSlowMode!,
+                ),
+                controller.displayTwitchPlayer.value
+                    ? SizedBox(
+                        height: 200,
+                        width: double.infinity,
+                        child: WebPageView(
+                          BrowserTab(
+                              iOSAudioSource: false,
+                              id: '1',
+                              title: '',
+                              toggled: true,
+                              url:
+                                  'https://player.twitch.tv/?channel=${controller.homeViewController.twitchData?.twitchUser.login}&parent=www.irllink.com&muted=true'),
+                        ),
+                      )
+                    : const SizedBox(),
                 const Divider(
                   height: 30,
                 ),
