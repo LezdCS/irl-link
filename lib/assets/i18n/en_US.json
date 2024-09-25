@@ -136,5 +136,11 @@
   "connecting_to_channel": "Connecting to @channel...",
   "connected": "Connected",
   "refresh_data": "Refresh data",
-  "new_group": "New group"
+  "new_group": "New group",
+  "new_browser_tab": "New browser tab",
+  "delete_message": "Delete message",
+  "ban": "Ban",
+  "timeout": "Timeout",
+  "unhide_user": "Unhide user",
+  "hide_user": "Hide user"
 }

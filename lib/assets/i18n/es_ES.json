@@ -136,5 +136,11 @@
   "connecting_to_channel": "Conectando a @channel...",
   "connected": "Conectado",
   "refresh_data": "Actualizar datos",
-  "new_group": "Nuevo grupo"
+  "new_group": "Nuevo grupo",
+  "new_browser_tab": "Nueva pestaña del navegador",
+  "delete_message": "Eliminar mensaje",
+  "ban": "Prohibir",
+  "timeout": "Tiempo de espera",
+  "unhide_user": "Mostrar usuario",
+  "hide_user": "Ocultar usuario"
 }

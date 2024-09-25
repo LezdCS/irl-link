@@ -136,5 +136,11 @@
   "connecting_to_channel": "正在連接到 @channel...",
   "connected": "已連接",
   "refresh_data": "刷新數據",
-  "new_group": "新群組"
+  "new_group": "新群組",
+  "new_browser_tab": "新瀏覽器標籤",
+  "delete_message": "刪除訊息",
+  "ban": "禁止",
+  "timeout": "超時",
+  "unhide_user": "顯示使用者",
+  "hide_user": "隱藏使用者"
 }

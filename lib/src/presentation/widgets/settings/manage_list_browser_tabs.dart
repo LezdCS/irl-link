@@ -191,11 +191,11 @@ Widget _addGroupButton(
         ),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('New browser tab'),
-          Icon(Icons.add),
+          Text('new_browser_tab'.tr),
+          const Icon(Icons.add),
         ],
       ),
     ),
