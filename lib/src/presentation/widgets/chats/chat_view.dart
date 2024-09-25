@@ -186,14 +186,25 @@ class ChatView extends GetView<ChatViewController> {
               ),
             ),
           ),
-          AnimatedOpacity(
-            opacity: controller.isChatConnected.value ? 0.0 : 1.0,
-            duration: const Duration(milliseconds: 1000),
-            child: AlertMessageView(
-              color: controller.alertColor.value,
-              message: controller.alertMessage.value,
-              isProgress: controller.isAlertProgress.value,
-            ),
+          ListView.builder(
+            itemCount: controller.twitchChats.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ValueListenableBuilder<bool>(
+                valueListenable: controller.twitchChats[index].isConnected,
+                builder: (BuildContext context, bool value, Widget? child) {
+                  twitch_chat.TwitchChat twitchChat = controller.twitchChats[index];
+                  return AnimatedOpacity(
+                    opacity:  value ? 0.0 : 1.0,
+                    duration: const Duration(milliseconds: 2000),
+                    child: AlertMessageView(
+                      color: value ? const Color.fromARGB(255, 11, 135, 15) : Colors.red,
+                      message: value ? "connected".tr : "Connecting to ${twitchChat.channel}".tr,
+                      isProgress: !value,
+                    ),
+                  );
+                },
+              );
+            },
           ),
         ]);
       },

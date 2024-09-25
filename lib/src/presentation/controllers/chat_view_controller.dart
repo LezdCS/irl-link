@@ -22,7 +22,7 @@ import 'package:kick_chat/kick_chat.dart';
 import 'package:twitch_chat/twitch_chat.dart' hide ChatMessage;
 
 class ChatViewController extends GetxController
-    with GetTickerProviderStateMixin {
+    with GetTickerProviderStateMixin, WidgetsBindingObserver {
   ChatViewController({
     required this.homeEvents,
     required this.chatGroup,
@@ -34,11 +34,7 @@ class ChatViewController extends GetxController
   //CHAT
   late ScrollController scrollController;
   RxBool isAutoScrolldown = true.obs;
-  RxBool isChatConnected = false.obs;
-  RxBool isAlertProgress = true.obs;
-  Rx<Color> alertColor = const Color(0xFFEC7508).obs;
 
-  RxString alertMessage = "Connecting...".obs;
   TwitchCredentials? twitchData;
   RxList<ChatMessage> chatMessages = <ChatMessage>[].obs;
   RxList<ChatEmote> cheerEmotes = <ChatEmote>[].obs;
@@ -74,10 +70,6 @@ class ChatViewController extends GetxController
           scrollChatToBottom();
         },
       );
-      alertMessage.value = "DEMO";
-      alertColor.value = const Color(0xFF196DEE);
-      isChatConnected.value = false;
-      isAlertProgress.value = false;
     }
 
     chatMessages.listen((value) {
@@ -90,6 +82,7 @@ class ChatViewController extends GetxController
     });
 
     super.onInit();
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
@@ -97,43 +90,11 @@ class ChatViewController extends GetxController
     scrollController.addListener(scrollListener);
     if (twitchData != null) {
       Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-        switch (result) {
-          case ConnectivityResult.wifi:
-            for (TwitchChat twitchChat in twitchChats) {
-              if (!twitchChat.isConnected.value) {
-                twitchChat.close();
-                twitchChat.connect();
-              }
-            }
-            break;
-          case ConnectivityResult.mobile:
-            for (TwitchChat twitchChat in twitchChats) {
-              if (!twitchChat.isConnected.value) {
-                twitchChat.close();
-                twitchChat.connect();
-              }
-            }
-            break;
-          case ConnectivityResult.none:
-            alertMessage.value = "Network connectivity lost";
-            isChatConnected.value = false;
-            alertColor.value = const Color(0xFFEC7508);
-            isAlertProgress.value = true;
-            break;
-          case ConnectivityResult.ethernet:
-            break;
-          case ConnectivityResult.bluetooth:
-            break;
-          case ConnectivityResult.vpn:
-            break;
-          case ConnectivityResult.other:
-            for (TwitchChat twitchChat in twitchChats) {
-              if (!twitchChat.isConnected.value) {
-                twitchChat.close();
-                twitchChat.connect();
-              }
-            }
-            break;
+        for (TwitchChat twitchChat in twitchChats) {
+          if (!twitchChat.isConnected.value) {
+            twitchChat.close();
+            twitchChat.connect();
+          }
         }
       });
     }
@@ -147,6 +108,25 @@ class ChatViewController extends GetxController
     chatDemoTimer?.cancel();
     super.onDelete;
     super.onClose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.resumed) {
+      // The app is back to the foreground
+      debugPrint("App resumed");
+      for (TwitchChat twitchChat in twitchChats) {
+        if (!twitchChat.isConnected.value) {
+          twitchChat.close();
+          twitchChat.connect();
+        }
+      }
+    } else if (state == AppLifecycleState.paused) {
+      // The app is sent to the background
+      debugPrint("App paused");
+    }
   }
 
   void scrollListener() {
@@ -373,24 +353,12 @@ class ChatViewController extends GetxController
             .isDeleted = true;
         chatMessages.refresh();
       },
-      onDone: () {
-        TwitchChat? chat =
-            twitchChats.firstWhereOrNull((t) => t.channel == tc.channel);
-        chat?.connect();
-      },
+      onDone: () {},
       onError: () {},
       params: const TwitchChatParameters(addFirstMessages: true),
     );
     twitchChat.connect();
     twitchChats.add(twitchChat);
-    twitchChat.isConnected.addListener(() {
-      if (twitchChat.isConnected.value) {
-        isChatConnected.value = true;
-        isAlertProgress.value = false;
-        alertMessage.value = "CONNECTED";
-        alertColor.value = const Color(0xFF1DBF1D);
-      }
-    });
 
     Settings settings = Get.find<SettingsService>().settings.value;
 
@@ -433,7 +401,6 @@ class ChatViewController extends GetxController
       scrollChatToBottom();
     });
     youtubeChats.add(youtubeChat);
-    isChatConnected.value = true;
   }
 
   Future<void> createKickChat(Channel kc) async {
@@ -453,7 +420,6 @@ class ChatViewController extends GetxController
     for (var e in kickChat.seventvEmotes) {
       thirdPartEmotes.add(ChatEmote.fromKick(e));
     }
-    isChatConnected.value = true;
     kickChat.chatStream.listen((message) {
       final KickEvent? kickEvent = eventParser(message);
       switch (kickEvent?.event) {
