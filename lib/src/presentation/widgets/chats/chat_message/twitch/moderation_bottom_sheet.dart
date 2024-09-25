@@ -5,6 +5,7 @@ import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
+import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/badges.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ModerationBottomSheet extends GetView {
@@ -41,12 +42,21 @@ class ModerationBottomSheet extends GetView {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                message.displayName,
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
+              Row(
+                children: [
+                  //for every badge in message.badgesList, display the badge
+                  Badges(
+                    badges: message.badgesList,
+                    textSize: 20,
+                  ),
+                  Text(
+                    message.displayName,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
               Wrap(
                 children: [
@@ -134,7 +144,8 @@ class ModerationBottomSheet extends GetView {
                         ) !=
                         null)
                     ? moderationViewButton(Icons.visibility, "unhide_user".tr)
-                    : moderationViewButton(Icons.visibility_off, "hide_user".tr),
+                    : moderationViewButton(
+                        Icons.visibility_off, "hide_user".tr),
               ),
             ]),
           ),

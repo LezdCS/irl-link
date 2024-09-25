@@ -93,7 +93,7 @@ class ChatView extends GetView<ChatViewController> {
                           },
                           onLongPress: () {
                             controller.homeViewController.selectedMessage
-                                .value ??= message;
+                                .value = message;
                           },
                           child: message.eventType != null
                               ? EventContainer(
