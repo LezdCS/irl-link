@@ -19,7 +19,7 @@ class SelectChannelDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 200,
-      height: 60,
+      height: 100,
       child: ListView.separated(
         itemCount: twitchChats.length,
         separatorBuilder: (context, index) => const SizedBox(
@@ -27,14 +27,22 @@ class SelectChannelDialog extends StatelessWidget {
         ),
         itemBuilder: (context, i) {
           TwitchChat chat = twitchChats[i];
-          return InkWell(
-            onTap: () => {
-              controller.sendChatMessage(message, chat.channel),
-              controller.chatInputController.text = '',
-              FocusScope.of(context).unfocus(),
-              Get.back(),
-            },
-            child: Text(chat.channel),
+          return Material(
+            borderRadius: BorderRadius.circular(10),
+            color: Theme.of(context).colorScheme.surface,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(10),
+              onTap: () => {
+                controller.sendChatMessage(message, chat.channel),
+                controller.chatInputController.text = '',
+                FocusScope.of(context).unfocus(),
+                Get.back(),
+              },
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                child: Text(chat.channel),
+              ),
+            ),
           );
         },
       ),
