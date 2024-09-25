@@ -333,13 +333,7 @@ class ChatViewController extends GetxController
         chatMessages.clear();
       },
       onDeletedMessageByUserId: (String? userId) {
-        for (var message in chatMessages) {
-          if (message.authorId == userId) {
-            message.isDeleted = true;
-          }
-        }
-
-        for (var message in chatMessages.where(
+        for (ChatMessage message in chatMessages.where(
           (message) =>
               message.authorId == userId && message.platform == Platform.twitch,
         )) {
@@ -397,6 +391,10 @@ class ChatViewController extends GetxController
     );
     youtubeChat.startFetchingChat();
     youtubeChat.chatStream.listen((ChatMessage message) {
+      Settings settings = Get.find<SettingsService>().settings.value;
+      if (settings.ttsSettings!.ttsEnabled) {
+        ttsService.readTts(message);
+      }
       chatMessages.add(message);
       scrollChatToBottom();
     });
@@ -429,6 +427,10 @@ class ChatViewController extends GetxController
             kickChat.userDetails!.userId.toString(),
             kickChat.userDetails!.subBadges,
           );
+          Settings settings = Get.find<SettingsService>().settings.value;
+          if (settings.ttsSettings!.ttsEnabled) {
+            ttsService.readTts(message);
+          }
           chatMessages.add(kickMessage);
           break;
         case TypeEvent.followersUpdated:
