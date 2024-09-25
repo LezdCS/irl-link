@@ -186,25 +186,28 @@ class ChatView extends GetView<ChatViewController> {
               ),
             ),
           ),
-          ListView.builder(
-            itemCount: controller.twitchChats.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ValueListenableBuilder<bool>(
-                valueListenable: controller.twitchChats[index].isConnected,
-                builder: (BuildContext context, bool value, Widget? child) {
-                  twitch_chat.TwitchChat twitchChat = controller.twitchChats[index];
-                  return AnimatedOpacity(
-                    opacity:  value ? 0.0 : 1.0,
-                    duration: const Duration(milliseconds: 2000),
-                    child: AlertMessageView(
-                      color: value ? const Color.fromARGB(255, 11, 135, 15) : Colors.red,
-                      message: value ? "connected".tr : "Connecting to ${twitchChat.channel}".tr,
-                      isProgress: !value,
-                    ),
-                  );
-                },
-              );
-            },
+          IgnorePointer(
+            child: Column(
+              children: controller.twitchChats.map((chat) {
+                return ValueListenableBuilder<bool>(
+                    valueListenable: chat.isConnected,
+                    builder: (BuildContext context, bool value, Widget? child) {
+                      return AnimatedOpacity(
+                        opacity: value ? 0.0 : 1.0,
+                        duration: const Duration(milliseconds: 2000),
+                        child: AlertMessageView(
+                          color: value
+                              ? const Color.fromARGB(255, 11, 135, 15)
+                              : Colors.red,
+                          message: value
+                              ? "connected".tr
+                              : "Connecting to ${chat.channel}".tr,
+                          isProgress: !value,
+                        ),
+                      );
+                    });
+              }).toList(),
+            ),
           ),
         ]);
       },

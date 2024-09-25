@@ -76,14 +76,14 @@ class SeSongRequests extends GetView<StreamelementsViewController> {
               Text.rich(
                 overflow: TextOverflow.ellipsis,
                 TextSpan(children: [
-                  const TextSpan(
-                    text: "Queue ",
-                    style: TextStyle(
+                  TextSpan(
+                    text: "queue".tr,
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   TextSpan(
-                    text: "(${controller.songRequestQueue.length} videos)",
+                    text: " (${controller.songRequestQueue.length} videos)",
                   ),
                 ]),
               ),
