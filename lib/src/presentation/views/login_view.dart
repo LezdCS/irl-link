@@ -48,9 +48,9 @@ class LoginView extends GetView<LoginViewController> {
           },
           child: Container(
             padding: const EdgeInsets.only(top: 10),
-            child: const Text(
-              "Maybe later",
-              style: TextStyle(
+            child: Text(
+              "maybe_later".tr,
+              style: const TextStyle(
                 fontSize: 13,
                 color: Colors.grey,
               ),

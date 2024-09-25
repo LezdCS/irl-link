@@ -186,13 +186,29 @@ class ChatView extends GetView<ChatViewController> {
               ),
             ),
           ),
-          AnimatedOpacity(
-            opacity: controller.isChatConnected.value ? 0.0 : 1.0,
-            duration: const Duration(milliseconds: 1000),
-            child: AlertMessageView(
-              color: controller.alertColor.value,
-              message: controller.alertMessage.value,
-              isProgress: controller.isAlertProgress.value,
+          IgnorePointer(
+            child: Column(
+              children: controller.twitchChats.map((chat) {
+                return ValueListenableBuilder<bool>(
+                    valueListenable: chat.isConnected,
+                    builder: (BuildContext context, bool value, Widget? child) {
+                      return AnimatedOpacity(
+                        opacity: value ? 0.0 : 1.0,
+                        duration: const Duration(milliseconds: 2000),
+                        child: AlertMessageView(
+                          color: value
+                              ? const Color.fromARGB(255, 11, 135, 15)
+                              : Colors.red,
+                          message: value
+                              ? "connected".tr
+                              : "connecting_to_channel".trParams({
+                                  "channel": chat.channel,
+                                }),
+                          isProgress: !value,
+                        ),
+                      );
+                    });
+              }).toList(),
             ),
           ),
         ]);

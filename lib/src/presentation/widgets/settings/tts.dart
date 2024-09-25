@@ -73,7 +73,8 @@ class Tts extends StatelessWidget {
                         ),
                       ),
                       DropdownButton(
-                        value: controller.ttsService.ttsLanguages.firstWhereOrNull(
+                        value:
+                            controller.ttsService.ttsLanguages.firstWhereOrNull(
                           (element) =>
                               element == settings.ttsSettings!.language,
                         ),
@@ -117,7 +118,8 @@ class Tts extends StatelessWidget {
                               ),
                             ),
                             DropdownButton(
-                              value: controller.ttsService.ttsVoices.firstWhereOrNull(
+                              value: controller.ttsService.ttsVoices
+                                  .firstWhereOrNull(
                                 (element) =>
                                     element["name"] ==
                                     settings.ttsSettings!.voice["name"],
@@ -133,7 +135,8 @@ class Tts extends StatelessWidget {
                                   ttsSettings: settings.ttsSettings
                                       ?.copyWith(voice: voice),
                                 );
-                                await Get.find<SettingsService>().saveSettings();
+                                await Get.find<SettingsService>()
+                                    .saveSettings();
                                 Get.find<TtsService>().updateSettings(settings);
                               },
                               items: List.generate(
@@ -152,9 +155,9 @@ class Tts extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        "Volume",
-                        style: TextStyle(
+                      Text(
+                        "volume".tr,
+                        style: const TextStyle(
                           fontSize: 18,
                         ),
                       ),
@@ -228,9 +231,9 @@ class Tts extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        "Mute viewer name",
-                        style: TextStyle(
+                      Text(
+                        "mute_viewer_name".tr,
+                        style: const TextStyle(
                           fontSize: 18,
                         ),
                       ),
@@ -251,9 +254,9 @@ class Tts extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        "Only read VIP messages",
-                        style: TextStyle(
+                      Text(
+                        "only_read_vip".tr,
+                        style: const TextStyle(
                           fontSize: 18,
                         ),
                       ),
@@ -274,9 +277,9 @@ class Tts extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        "Only read Moderators messages",
-                        style: TextStyle(
+                      Text(
+                        "only_read_mod".tr,
+                        style: const TextStyle(
                           fontSize: 18,
                         ),
                       ),
@@ -297,9 +300,9 @@ class Tts extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        "Only read Subscriber messages",
-                        style: TextStyle(
+                      Text(
+                        "only_read_sub".tr,
+                        style: const TextStyle(
                           fontSize: 18,
                         ),
                       ),
@@ -549,7 +552,7 @@ class Tts extends StatelessWidget {
       titleStyle: Theme.of(Get.context!).textTheme.bodyLarge!,
       buttonColor: const Color(0xFF9147ff),
       cancelTextColor: const Color(0xFF9147ff),
-      textCancel: "Back",
+      textCancel: "cancel".tr,
       radius: 10,
       content: Obx(
         () => Column(

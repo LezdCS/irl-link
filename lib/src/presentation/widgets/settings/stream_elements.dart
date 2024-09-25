@@ -34,15 +34,15 @@ class StreamElements extends GetView<SettingsViewController> {
                 color: Theme.of(context).colorScheme.tertiary,
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: const Wrap(
+              child: Wrap(
                 children: [
                   Text(
-                    "Premium feature",
-                    style: TextStyle(
+                    "premium_feature".tr,
+                    style: const TextStyle(
                       fontSize: 12,
                     ),
                   ),
-                  Icon(
+                  const Icon(
                     CupertinoIcons.sparkles,
                     size: 12,
                     color: Colors.yellow,

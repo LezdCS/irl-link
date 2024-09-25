@@ -292,7 +292,7 @@ class HomeView extends GetView<HomeViewController> {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: settings.generalSettings!.displayViewerCount
-                            ? '${Get.find<TwitchTabViewController>().twitchStreamInfos.value.viewerCount} viewers'
+                            ? "viewers_number".trParams({"number": Get.find<TwitchTabViewController>().twitchStreamInfos.value.viewerCount.toString()})
                             : 'send_message'.tr,
                         hintStyle: TextStyle(
                           color: Theme.of(context).textTheme.bodyLarge!.color!,
@@ -592,7 +592,7 @@ void selectChatToSend(
     backgroundColor: const Color(0xFF282828),
     buttonColor: const Color(0xFF9147ff),
     cancelTextColor: const Color(0xFF9147ff),
-    textCancel: "Back",
+    textCancel: "cancel".tr,
     radius: 10,
     onCancel: () {
       Get.back();

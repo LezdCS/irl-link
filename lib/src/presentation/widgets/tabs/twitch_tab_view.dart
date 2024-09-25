@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
-import 'package:irllink/src/presentation/widgets/alert_message_view.dart';
 import 'package:irllink/src/presentation/widgets/poll.dart';
 import 'package:irllink/src/presentation/widgets/prediction.dart';
 import 'package:irllink/src/presentation/widgets/tabs/dialogs/slow_mode_dialog.dart';
+import 'package:irllink/src/presentation/widgets/web_page_view.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class TwitchTabView extends GetView<TwitchTabViewController> {
@@ -27,14 +28,6 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Visibility(
-                  visible: controller.homeViewController.twitchData == null,
-                  child: const AlertMessageView(
-                    color: Color(0xFF196DEE),
-                    message: "DEMO",
-                    isProgress: false,
-                  ),
-                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -61,9 +54,9 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         const SizedBox(
                           width: 10,
                         ),
-                        const Text(
-                          'Refresh data',
-                          style: TextStyle(
+                        Text(
+                          "refresh_data".tr,
+                          style: const TextStyle(
                             fontSize: 10,
                           ),
                         ),
@@ -303,6 +296,34 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                   context: context,
                   isOn: false,
                 ),
+                const Divider(
+                  height: 30,
+                ),
+                _shortcutButton(
+                  context: context,
+                  text: controller.displayTwitchPlayer.value
+                      ? "hide_stream".tr
+                      : "show_stream".tr,
+                  onTap: () => {
+                    controller.displayTwitchPlayer.toggle(),
+                  },
+                  isOn: controller.twitchStreamInfos.value.isSlowMode!,
+                ),
+                controller.displayTwitchPlayer.value
+                    ? SizedBox(
+                        height: 200,
+                        width: double.infinity,
+                        child: WebPageView(
+                          BrowserTab(
+                              iOSAudioSource: false,
+                              id: '1',
+                              title: '',
+                              toggled: true,
+                              url:
+                                  'https://player.twitch.tv/?channel=${controller.homeViewController.twitchData?.twitchUser.login}&parent=www.irllink.com&muted=true'),
+                        ),
+                      )
+                    : const SizedBox(),
                 const Divider(
                   height: 30,
                 ),

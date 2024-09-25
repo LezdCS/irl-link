@@ -64,8 +64,8 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                 .streamElementsSettings;
             return CheckboxListTile(
               controlAffinity: ListTileControlAffinity.leading,
-              title: const Text(
-                "Followers",
+              title: Text(
+                "followers".tr,
               ),
               value: seSettings?.showFollowerActivity,
               onChanged: (bool? value) {
@@ -85,8 +85,8 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
               Settings settings = Get.find<SettingsService>().settings.value;
               return CheckboxListTile(
                 controlAffinity: ListTileControlAffinity.leading,
-                title: const Text(
-                  "Subscriptions",
+                title: Text(
+                  "subscriptions".tr,
                 ),
                 value: settings.streamElementsSettings!.showSubscriberActivity,
                 onChanged: (bool? value) {
@@ -106,8 +106,8 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
             Settings settings = Get.find<SettingsService>().settings.value;
             return CheckboxListTile(
               controlAffinity: ListTileControlAffinity.leading,
-              title: const Text(
-                "Bits",
+              title: Text(
+                "bits".tr,
               ),
               value: settings.streamElementsSettings!.showCheerActivity,
               onChanged: (bool? value) {
@@ -126,8 +126,8 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
               Settings settings = Get.find<SettingsService>().settings.value;
               return CheckboxListTile(
                 controlAffinity: ListTileControlAffinity.leading,
-                title: const Text(
-                  "Donations",
+                title: Text(
+                  "donations".tr,
                 ),
                 value: settings.streamElementsSettings!.showDonationActivity,
                 onChanged: (bool? value) {
@@ -148,8 +148,8 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
               Settings settings = Get.find<SettingsService>().settings.value;
               return CheckboxListTile(
                 controlAffinity: ListTileControlAffinity.leading,
-                title: const Text(
-                  "Raids",
+                title: Text(
+                  "raids".tr,
                 ),
                 value: settings.streamElementsSettings!.showRaidActivity,
                 onChanged: (bool? value) {
@@ -170,8 +170,8 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
               Settings settings = Get.find<SettingsService>().settings.value;
               return CheckboxListTile(
                 controlAffinity: ListTileControlAffinity.leading,
-                title: const Text(
-                  "Hosts",
+                title: Text(
+                  "hosts".tr,
                 ),
                 value: settings.streamElementsSettings!.showHostActivity,
                 onChanged: (bool? value) {

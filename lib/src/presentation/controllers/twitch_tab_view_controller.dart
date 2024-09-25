@@ -40,6 +40,8 @@ class TwitchTabViewController extends GetxController {
   Rx<Duration> remainingTimePrediction = const Duration(seconds: 0).obs;
   Rx<Duration> remainingTimeHypeTrain = const Duration(seconds: 0).obs;
 
+  RxBool displayTwitchPlayer = false.obs;
+
   @override
   void onInit() {
     homeViewController = Get.find<HomeViewController>();

@@ -50,10 +50,9 @@ class Subscription extends StatelessWidget {
                           ),
                         ),
                         isSubscribed
-                            ? const Text(
-                                "You can access every features of IRL Link!")
+                            ? Text("subscribed_def".tr)
                             : Text(
-                                "Subscribe to unlock every features!",
+                                "not_subscribed_def".tr,
                                 style: TextStyle(
                                   color: Colors.grey[200],
                                   fontSize: 16,

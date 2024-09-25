@@ -106,7 +106,7 @@ class ModerationBottomSheet extends GetView {
               onTap: () => controller.deleteMessageInstruction(
                 message,
               ),
-              child: moderationViewButton(null, "Delete message"),
+              child: moderationViewButton(null, "delete_message".tr),
             ),
           ),
           const SizedBox(height: 15),
@@ -117,12 +117,12 @@ class ModerationBottomSheet extends GetView {
                 onTap: () => controller.banMessageInstruction(
                   message,
                 ),
-                child: moderationViewButton(Icons.stop, "Ban"),
+                child: moderationViewButton(Icons.stop, "ban".tr),
               ),
               const SizedBox(width: 10),
               InkWell(
                 onTap: () => timeoutDialog(),
-                child: moderationViewButton(Icons.timer, "Timeout"),
+                child: moderationViewButton(Icons.timer, "timeout".tr),
               ),
               const SizedBox(width: 10),
               InkWell(
@@ -133,8 +133,8 @@ class ModerationBottomSheet extends GetView {
                           (userId) => message.authorId == userId,
                         ) !=
                         null)
-                    ? moderationViewButton(Icons.visibility, "Unhide user")
-                    : moderationViewButton(Icons.visibility_off, "Hide user"),
+                    ? moderationViewButton(Icons.visibility, "unhide_user".tr)
+                    : moderationViewButton(Icons.visibility_off, "hide_user".tr),
               ),
             ]),
           ),

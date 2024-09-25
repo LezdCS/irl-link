@@ -191,11 +191,11 @@ Widget _addGroupButton(
         ),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('New browser tab'),
-          Icon(Icons.add),
+          Text('new_browser_tab'.tr),
+          const Icon(Icons.add),
         ],
       ),
     ),
@@ -257,9 +257,9 @@ Widget _addDialog(context, SettingsViewController controller) {
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
-            "Enabled",
-            style: TextStyle(
+          Text(
+            "enabled".tr,
+            style: const TextStyle(
               fontSize: 18,
             ),
           ),
@@ -280,9 +280,9 @@ Widget _addDialog(context, SettingsViewController controller) {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  "Is an audio source",
-                  style: TextStyle(
+                Text(
+                  "is_audio_source".tr,
+                  style: const TextStyle(
                     fontSize: 18,
                   ),
                 ),
@@ -368,9 +368,9 @@ Widget _editDialog(
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
-            "Enabled",
-            style: TextStyle(
+          Text(
+            "enabled".tr,
+            style: const TextStyle(
               fontSize: 18,
             ),
           ),
@@ -389,9 +389,9 @@ Widget _editDialog(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              "Is an audio source",
-              style: TextStyle(
+            Text(
+              "is_audio_source".tr,
+              style: const TextStyle(
                 fontSize: 18,
               ),
             ),
