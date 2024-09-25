@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
-import 'package:irllink/src/presentation/widgets/alert_message_view.dart';
 import 'package:irllink/src/presentation/widgets/poll.dart';
 import 'package:irllink/src/presentation/widgets/prediction.dart';
 import 'package:irllink/src/presentation/widgets/tabs/dialogs/slow_mode_dialog.dart';
@@ -29,14 +28,6 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Visibility(
-                  visible: controller.homeViewController.twitchData == null,
-                  child: const AlertMessageView(
-                    color: Color(0xFF196DEE),
-                    message: "DEMO",
-                    isProgress: false,
-                  ),
-                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
