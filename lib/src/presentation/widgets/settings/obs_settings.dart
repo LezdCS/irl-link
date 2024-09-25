@@ -140,7 +140,7 @@ class ObsSettings extends StatelessWidget {
                     ),
                     onPressed: () {
                       Get.defaultDialog(
-                        title: "History",
+                        title: "history".tr,
                         cancelTextColor:
                             Theme.of(context).textTheme.bodyLarge!.color,
                         textCancel: "cancel".tr,

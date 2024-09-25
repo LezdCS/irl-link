@@ -140,9 +140,9 @@ Widget inAppPurchaseDialog(
                   backgroundColor:
                       Theme.of(context).colorScheme.tertiaryContainer,
                 ),
-                child: const Text(
-                  "Cancel",
-                  style: TextStyle(
+                child: Text(
+                  "cancel".tr,
+                  style: const TextStyle(
                     fontSize: 13,
                   ),
                   textAlign: TextAlign.center,
@@ -157,7 +157,7 @@ Widget inAppPurchaseDialog(
                   backgroundColor: Colors.deepPurpleAccent,
                 ),
                 child: Text(
-                  "Subscribe for $price",
+                  "subscribe_for".trParams({'price': price}),
                   style: const TextStyle(
                     fontSize: 13,
                   ),

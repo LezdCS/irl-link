@@ -54,15 +54,15 @@ class SettingsView extends GetView<SettingsViewController> {
                 ),
                 child: Text(
                   controller.homeViewController.twitchData != null
-                      ? "Logout"
-                      : "Login",
+                      ? "logout".tr
+                      : "login".tr,
                   style: const TextStyle(color: Colors.white),
                 ),
               ),
             ),
           ],
-          title: const Text(
-            "Settings",
+          title: Text(
+            "settings".tr,
           ),
         ),
         body: Container(
@@ -125,7 +125,7 @@ class SettingsView extends GetView<SettingsViewController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Chat",
+            "chat".tr,
             style: TextStyle(
                 color: Theme.of(context).colorScheme.tertiary, fontSize: 20),
           ),
@@ -196,9 +196,9 @@ class SettingsView extends GetView<SettingsViewController> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      "Hide deleted messages",
-                      style: TextStyle(fontSize: 18),
+                    Text(
+                      "hide_deleted_messages".tr,
+                      style: const TextStyle(fontSize: 18),
                     ),
                     Switch(
                       onChanged: (value) {
@@ -274,7 +274,7 @@ class SettingsView extends GetView<SettingsViewController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "General",
+            "general".tr,
             style: TextStyle(
                 color: Theme.of(context).colorScheme.tertiary, fontSize: 20),
           ),
@@ -285,7 +285,7 @@ class SettingsView extends GetView<SettingsViewController> {
               children: [
                 settingsGoToRow(
                   context,
-                  "Dashboard",
+                  "dashboard".tr,
                   Icons.dashboard,
                   () {
                     Get.to(
@@ -346,10 +346,10 @@ class SettingsView extends GetView<SettingsViewController> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: Text(
-                        "Display viewer count",
-                        style: TextStyle(
+                        "display_viewer_count".tr,
+                        style: const TextStyle(
                           fontSize: 18,
                         ),
                       ),
@@ -488,7 +488,7 @@ class SettingsView extends GetView<SettingsViewController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Contact",
+            "contact".tr,
             style: TextStyle(
                 color: Theme.of(context).colorScheme.tertiary, fontSize: 20),
           ),

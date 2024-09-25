@@ -127,8 +127,8 @@ class ObsTabView extends GetView<ObsTabViewController> {
                                 ),
                               ),
                               padding: const EdgeInsets.all(8),
-                              child: const Text(
-                                "Preview scene",
+                              child: Text(
+                                "preview_scene".tr,
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -211,9 +211,9 @@ class ObsTabView extends GetView<ObsTabViewController> {
                           color: Theme.of(context).colorScheme.tertiary,
                           borderRadius: BorderRadius.circular(6),
                         ),
-                        child: const Text(
-                          "Retry connection",
-                          style: TextStyle(color: Colors.white),
+                        child: Text(
+                          "retry_connection".tr,
+                          style: const TextStyle(color: Colors.white),
                         ),
                       ),
                     ),

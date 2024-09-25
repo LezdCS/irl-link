@@ -592,7 +592,7 @@ void selectChatToSend(
     backgroundColor: const Color(0xFF282828),
     buttonColor: const Color(0xFF9147ff),
     cancelTextColor: const Color(0xFF9147ff),
-    textCancel: "Back",
+    textCancel: "cancel".tr,
     radius: 10,
     onCancel: () {
       Get.back();
