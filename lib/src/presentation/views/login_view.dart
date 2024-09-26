@@ -65,7 +65,9 @@ class LoginView extends GetView<LoginViewController> {
     return Obx(
       () => Column(
         children: [
-          const CircularProgressIndicator(),
+          CircularProgressIndicator(
+            color: Theme.of(context).colorScheme.tertiary,
+          ),
           const SizedBox(
             height: 20,
           ),
