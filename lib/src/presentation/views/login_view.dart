@@ -65,21 +65,22 @@ class LoginView extends GetView<LoginViewController> {
     return Obx(
       () => Column(
         children: [
-          CircularProgressIndicator(
-            color: Theme.of(context).colorScheme.tertiary,
-          ),
-          const SizedBox(
-            height: 20,
-          ),
           Visibility(
-            visible: controller.twitchCredentials.value != null,
-            child: CircleAvatar(
-              foregroundImage: NetworkImage(controller
-                      .twitchCredentials.value?.twitchUser.profileImageUrl ??
-                  ""),
-              radius: 36,
+            visible: controller.twitchCredentials.value == null,
+            child: CircularProgressIndicator(
+              color: Theme.of(context).colorScheme.tertiary,
             ),
           ),
+          controller.twitchCredentials.value != null
+              ? CircleAvatar(
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                  foregroundImage: NetworkImage(
+                    controller
+                        .twitchCredentials.value!.twitchUser.profileImageUrl,
+                  ),
+                  radius: 36,
+                )
+              : const SizedBox(),
           Visibility(
             visible: controller.twitchCredentials.value != null,
             child: Text(
