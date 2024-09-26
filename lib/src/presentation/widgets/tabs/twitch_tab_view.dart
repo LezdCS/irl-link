@@ -96,11 +96,42 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                   children: [
                     Row(
                       children: [
-                        Icon(
-                          Icons.circle,
-                          color: controller.twitchStreamInfos.value.isOnline!
-                              ? Colors.red
-                              : Theme.of(context).colorScheme.tertiaryContainer,
+                        AnimatedBuilder(
+                          animation: controller.circleShadowAnimation,
+                          builder: (context, child) {
+                            Color circleColor =
+                                controller.twitchStreamInfos.value.isOnline!
+                                    ? Colors.red
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .tertiaryContainer;
+                            Color shadowColor =
+                                controller.twitchStreamInfos.value.isOnline!
+                                    ? Colors.red.shade900.withOpacity(0.5)
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .tertiaryContainer
+                                        .withOpacity(0.5);
+                            return Container(
+                              width: 12,
+                              height: 12,
+                              decoration: BoxDecoration(
+                                color: circleColor,
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: shadowColor,
+                                    spreadRadius:
+                                        controller.circleShadowAnimation.value *
+                                            0.1,
+                                    blurRadius:
+                                        controller.circleShadowAnimation.value *
+                                            0.4,
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                         ),
                         const Padding(padding: EdgeInsets.only(right: 6.0)),
                         Text(

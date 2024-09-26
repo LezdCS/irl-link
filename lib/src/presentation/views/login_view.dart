@@ -18,9 +18,6 @@ class LoginView extends GetView<LoginViewController> {
           child: Obx(
             () => loginScreen(
               context,
-              controller.isLoading.value
-                  ? _loadingCircle(context)
-                  : _loginButton(context),
             ),
           ),
         ),
@@ -31,30 +28,55 @@ class LoginView extends GetView<LoginViewController> {
   Widget _loginButton(context) {
     return Column(
       children: [
-        Container(
-          padding: const EdgeInsets.only(left: 10, right: 10),
-          child: InkWell(
-            onTap: () {
-              controller.login();
-            },
-            child: const Image(
-              image: AssetImage("lib/assets/login.png"),
-            ),
+        TextButton.icon(
+          label: Text.rich(
+            TextSpan(
+                text: "Login with ",
+                style: const TextStyle(
+                  color: Colors.grey,
+                  fontSize: 20,
+                ),
+                children: [
+                  TextSpan(
+                    text: 'Twitch',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.tertiary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ]),
           ),
-        ),
-        InkWell(
-          onTap: () {
-            controller.homeWitoutLogin();
-          },
-          child: Container(
-            padding: const EdgeInsets.only(top: 10),
-            child: Text(
-              "maybe_later".tr,
-              style: const TextStyle(
-                fontSize: 13,
-                color: Colors.grey,
+          icon: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Image(
+              height: 24,
+              width: 24,
+              image: AssetImage(
+                'lib/assets/twitch/twitch_logo.png',
               ),
             ),
+          ),
+          style: TextButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.secondary,
+          ),
+          onPressed: () {
+            controller.login();
+          },
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        TextButton(
+          style: TextButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.secondary,
+          ),
+          onPressed: () {
+            controller.homeWitoutLogin();
+          },
+          child: Text(
+            "maybe_later".tr,
+            style: const TextStyle(color: Colors.grey),
           ),
         ),
       ],
@@ -65,19 +87,22 @@ class LoginView extends GetView<LoginViewController> {
     return Obx(
       () => Column(
         children: [
-          const CircularProgressIndicator(),
-          const SizedBox(
-            height: 20,
-          ),
           Visibility(
-            visible: controller.twitchCredentials.value != null,
-            child: CircleAvatar(
-              foregroundImage: NetworkImage(controller
-                      .twitchCredentials.value?.twitchUser.profileImageUrl ??
-                  ""),
-              radius: 36,
+            visible: controller.twitchCredentials.value == null,
+            child: CircularProgressIndicator(
+              color: Theme.of(context).colorScheme.tertiary,
             ),
           ),
+          controller.twitchCredentials.value != null
+              ? CircleAvatar(
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                  foregroundImage: NetworkImage(
+                    controller
+                        .twitchCredentials.value!.twitchUser.profileImageUrl,
+                  ),
+                  radius: 36,
+                )
+              : const SizedBox(),
           Visibility(
             visible: controller.twitchCredentials.value != null,
             child: Text(
@@ -95,7 +120,7 @@ class LoginView extends GetView<LoginViewController> {
     );
   }
 
-  Widget loginScreen(BuildContext context, Widget content) {
+  Widget loginScreen(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -121,8 +146,9 @@ class LoginView extends GetView<LoginViewController> {
             ),
           ],
         ),
-        content,
-        Container(),
+        controller.isLoading.value
+            ? _loadingCircle(context)
+            : _loginButton(context),
         Column(
           children: [
             const Text("Open Source Project by @LezdCS"),
