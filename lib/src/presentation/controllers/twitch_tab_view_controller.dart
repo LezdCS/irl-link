@@ -14,7 +14,7 @@ import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 
-class TwitchTabViewController extends GetxController {
+class TwitchTabViewController extends GetxController with GetSingleTickerProviderStateMixin {
   TwitchTabViewController({required this.homeEvents});
 
   final HomeEvents homeEvents;
@@ -28,6 +28,8 @@ class TwitchTabViewController extends GetxController {
 
   Rx<TwitchStreamInfos> twitchStreamInfos =
       const TwitchStreamInfos.defaultInfos().obs;
+  late AnimationController controllerLiveCircleAnimation;
+  late Animation<double> circleShadowAnimation;
 
   RxString selectedOutcomeId = "-1".obs;
 
@@ -59,6 +61,15 @@ class TwitchTabViewController extends GetxController {
         "data": value.isOnline,
       });
     });
+
+    controllerLiveCircleAnimation = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    )..repeat(reverse: true);
+
+    circleShadowAnimation = Tween<double>(begin: 3.0, end: 20.0).animate(
+      CurvedAnimation(parent: controllerLiveCircleAnimation, curve: Curves.easeInOut),
+    );
 
     super.onInit();
   }
@@ -97,6 +108,7 @@ class TwitchTabViewController extends GetxController {
 
   @override
   void onClose() {
+    controllerLiveCircleAnimation.dispose();
     refreshDataTimer?.cancel();
     refreshDataTimerProgressBar?.cancel();
     super.onClose();
