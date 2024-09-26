@@ -42,8 +42,6 @@ class ChatViewController extends GetxController
 
   late TextEditingController banDurationInputController;
 
-  Timer? chatDemoTimer;
-
   late HomeViewController homeViewController;
   late TtsService ttsService;
 
@@ -62,14 +60,6 @@ class ChatViewController extends GetxController
       twitchData = Get.arguments[0];
       await applySettings();
       homeViewController.selectedChatGroup.value = chatGroup;
-    } else {
-      chatDemoTimer = Timer.periodic(
-        const Duration(seconds: 3),
-        (Timer t) {
-          // chatMessages.add(ChatMessage.randomGeneration(null, null, null));
-          scrollChatToBottom();
-        },
-      );
     }
 
     chatMessages.listen((value) {
@@ -88,16 +78,14 @@ class ChatViewController extends GetxController
   @override
   void onReady() {
     scrollController.addListener(scrollListener);
-    if (twitchData != null) {
-      Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-        for (TwitchChat twitchChat in twitchChats) {
-          if (!twitchChat.isConnected.value) {
-            twitchChat.close();
-            twitchChat.connect();
-          }
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      for (TwitchChat twitchChat in twitchChats) {
+        if (!twitchChat.isConnected.value) {
+          twitchChat.close();
+          twitchChat.connect();
         }
-      });
-    }
+      }
+    });
 
     super.onReady();
   }
@@ -105,7 +93,6 @@ class ChatViewController extends GetxController
   @override
   void onClose() {
     Get.find<TtsService>().flutterTts.stop();
-    chatDemoTimer?.cancel();
     super.onDelete;
     super.onClose();
   }
@@ -333,13 +320,7 @@ class ChatViewController extends GetxController
         chatMessages.clear();
       },
       onDeletedMessageByUserId: (String? userId) {
-        for (var message in chatMessages) {
-          if (message.authorId == userId) {
-            message.isDeleted = true;
-          }
-        }
-
-        for (var message in chatMessages.where(
+        for (ChatMessage message in chatMessages.where(
           (message) =>
               message.authorId == userId && message.platform == Platform.twitch,
         )) {
@@ -397,6 +378,10 @@ class ChatViewController extends GetxController
     );
     youtubeChat.startFetchingChat();
     youtubeChat.chatStream.listen((ChatMessage message) {
+      Settings settings = Get.find<SettingsService>().settings.value;
+      if (settings.ttsSettings!.ttsEnabled) {
+        ttsService.readTts(message);
+      }
       chatMessages.add(message);
       scrollChatToBottom();
     });
@@ -429,6 +414,10 @@ class ChatViewController extends GetxController
             kickChat.userDetails!.userId.toString(),
             kickChat.userDetails!.subBadges,
           );
+          Settings settings = Get.find<SettingsService>().settings.value;
+          if (settings.ttsSettings!.ttsEnabled) {
+            ttsService.readTts(message);
+          }
           chatMessages.add(kickMessage);
           break;
         case TypeEvent.followersUpdated:
