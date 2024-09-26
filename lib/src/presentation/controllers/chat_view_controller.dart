@@ -416,7 +416,7 @@ class ChatViewController extends GetxController
           );
           Settings settings = Get.find<SettingsService>().settings.value;
           if (settings.ttsSettings!.ttsEnabled) {
-            ttsService.readTts(message);
+            ttsService.readTts(kickMessage);
           }
           chatMessages.add(kickMessage);
           break;
