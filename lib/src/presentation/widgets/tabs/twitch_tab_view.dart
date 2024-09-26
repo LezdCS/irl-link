@@ -36,19 +36,20 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         SizedBox(
                           width: 14,
                           height: 14,
-                          child: CircularProgressIndicator(
-                            value: controller.myDuration.value.inSeconds / 15,
-                            backgroundColor:
-                                Theme.of(context).colorScheme.secondary,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                Theme.of(context).colorScheme.tertiary),
-                            strokeWidth: 2,
-                            strokeCap: StrokeCap.round,
-                            semanticsLabel:
-                                'Progress indicator for twitch data refresh',
-                            semanticsValue:
-                                (controller.myDuration.value.inSeconds / 15)
-                                    .toString(),
+                          child: AnimatedBuilder(
+                            animation:
+                                controller.refreshDataAnimationController,
+                            builder: (context, child) {
+                              return CircularProgressIndicator(
+                                value: controller
+                                    .refreshDataAnimationController.value,
+                                strokeWidth: 2,
+                                color: Theme.of(context).colorScheme.tertiary,
+                                backgroundColor: Theme.of(context)
+                                    .colorScheme
+                                    .tertiaryContainer,
+                              );
+                            },
                           ),
                         ),
                         const SizedBox(

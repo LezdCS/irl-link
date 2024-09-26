@@ -23,7 +23,7 @@ class AuthorName extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text.rich(
       TextSpan(
-        text: username != displayName.toLowerCase() ? username : displayName,
+        text: username != displayName.toLowerCase() && username != "" ? username : displayName,
         style: TextStyle(
           color: Color(int.parse(color.replaceAll('#', '0xff'))),
           fontSize: textSize,
@@ -32,7 +32,7 @@ class AuthorName extends StatelessWidget {
         children: [
           TextSpan(
             text: username != displayName.toLowerCase() &&
-                    platform == Platform.twitch
+                    platform == Platform.twitch && username != ""
                 ? "($displayName)"
                 : "",
             style: TextStyle(

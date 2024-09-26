@@ -14,7 +14,8 @@ import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 
-class TwitchTabViewController extends GetxController with GetSingleTickerProviderStateMixin {
+class TwitchTabViewController extends GetxController
+    with GetTickerProviderStateMixin {
   TwitchTabViewController({required this.homeEvents});
 
   final HomeEvents homeEvents;
@@ -34,8 +35,7 @@ class TwitchTabViewController extends GetxController with GetSingleTickerProvide
   RxString selectedOutcomeId = "-1".obs;
 
   Timer? refreshDataTimer;
-  Timer? refreshDataTimerProgressBar;
-  Rx<Duration> myDuration = const Duration(seconds: 15).obs;
+  late AnimationController refreshDataAnimationController;
 
   TwitchEventSub? twitchEventSub;
   Rx<Duration> remainingTimePoll = const Duration(seconds: 0).obs;
@@ -68,7 +68,15 @@ class TwitchTabViewController extends GetxController with GetSingleTickerProvide
     )..repeat(reverse: true);
 
     circleShadowAnimation = Tween<double>(begin: 3.0, end: 20.0).animate(
-      CurvedAnimation(parent: controllerLiveCircleAnimation, curve: Curves.easeInOut),
+      CurvedAnimation(
+        parent: controllerLiveCircleAnimation,
+        curve: Curves.easeInOut,
+      ),
+    );
+
+    refreshDataAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 15),
     );
 
     super.onInit();
@@ -92,25 +100,14 @@ class TwitchTabViewController extends GetxController with GetSingleTickerProvide
       twitchEventSub!.connect();
     }
 
-    refreshDataTimerProgressBar =
-        Timer.periodic(const Duration(seconds: 1), (timer) {
-      const reduceSecondsBy = 1;
-      final seconds = myDuration.value.inSeconds - reduceSecondsBy;
-      if (seconds < 0) {
-        myDuration.value = const Duration(seconds: 15);
-      } else {
-        myDuration.value = Duration(seconds: seconds);
-      }
-    });
-
     super.onReady();
   }
 
   @override
   void onClose() {
     controllerLiveCircleAnimation.dispose();
+    refreshDataAnimationController.dispose();
     refreshDataTimer?.cancel();
-    refreshDataTimerProgressBar?.cancel();
     super.onClose();
   }
 
@@ -197,7 +194,7 @@ class TwitchTabViewController extends GetxController with GetSingleTickerProvide
   }
 
   Future<void> refreshData() async {
-    myDuration.value = const Duration(seconds: 15);
+    refreshDataAnimationController.reset();
     if (homeViewController.twitchData == null) return;
     DataState<TwitchStreamInfos> streamInfos = await homeEvents.getStreamInfo(
       homeViewController.twitchData!.accessToken,
@@ -209,6 +206,7 @@ class TwitchTabViewController extends GetxController with GetSingleTickerProvide
     if (!focus.hasFocus) {
       titleFormController.text = twitchStreamInfos.value.title!;
     }
+    refreshDataAnimationController.forward();
   }
 
   void toggleFollowerOnly() {
