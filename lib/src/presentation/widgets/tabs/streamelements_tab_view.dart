@@ -4,12 +4,30 @@ import 'package:irllink/src/presentation/controllers/streamelements_view_control
 import 'package:irllink/src/presentation/widgets/stream_elements/se_activities_list.dart';
 import 'package:irllink/src/presentation/widgets/stream_elements/se_overlays.dart';
 import 'package:irllink/src/presentation/widgets/stream_elements/se_song_requests.dart';
+import 'dart:io';
 
 class StreamelementsTabView extends GetView<StreamelementsViewController> {
   const StreamelementsTabView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> tabsTiles = [
+      const Text("Activities"),
+      const Text("Song Requests"),      
+    ];
+
+    if (!Platform.isIOS) {
+      tabsTiles.add(const Text("Overlays"));
+    }
+
+    List<Widget> tabs = [
+      const SeActivitiesList(),
+      const SeSongRequests(),
+    ];
+
+    if (!Platform.isIOS) {
+      tabs.add(const SeOverlays());
+    }
     return Obx(
       () => controller.isSocketConnected.value
           ? Column(
@@ -23,11 +41,7 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
                       border: null,
                     ),
                     tabAlignment: TabAlignment.center,
-                    tabs: const [
-                      Text("Activities"),
-                      Text("Song Requests"),
-                      Text("Overlays"),
-                    ],
+                    tabs: tabsTiles,
                   ),
                 ),
                 Expanded(
@@ -37,11 +51,7 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
                     ),
                     child: TabBarView(
                       controller: controller.tabController,
-                      children: const [
-                        SeActivitiesList(),
-                        SeSongRequests(),
-                        SeOverlays(),
-                      ],
+                      children: tabs,
                     ),
                   ),
                 ),

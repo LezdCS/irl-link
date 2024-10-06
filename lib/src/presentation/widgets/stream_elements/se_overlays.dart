@@ -15,35 +15,73 @@ class SeOverlays extends GetView<StreamelementsViewController> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(4),
-      child: Obx(
-        () => ListView.separated(
-          shrinkWrap: true,
-          itemCount: controller.overlays.length,
-          separatorBuilder: (context, index) => const SizedBox(
-            height: 8,
-          ),
-          itemBuilder: (BuildContext context, int index) {
-            SeOverlay overlay = controller.overlays[index];
-            return _overlayRow(controller, overlay, context);
-          },
+    Settings settings = Get.find<SettingsService>().settings.value;
+    String? overlayToken = settings.streamElementsSettings?.overlayToken;
+    return Column(
+      children: [
+        Visibility(
+          visible: overlayToken == null,
+          child: const Text('To unlock this feature, please enter your overlay token in the settings.'),
         ),
-      ),
+        Container(
+          padding: const EdgeInsets.all(4),
+          child: Obx(
+            () => ListView.separated(
+              shrinkWrap: true,
+              itemCount: controller.overlays.length,
+              separatorBuilder: (context, index) => const SizedBox(
+                height: 8,
+              ),
+              itemBuilder: (BuildContext context, int index) {
+                SeOverlay overlay = controller.overlays[index];
+                return _overlayRow(controller, overlay, context, overlayToken);
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
 
-Widget _overlayRow(StreamelementsViewController controller, SeOverlay overlay,
-    BuildContext context) {
+Widget _overlayRow(
+  StreamelementsViewController controller,
+  SeOverlay overlay,
+  BuildContext context,
+  String? overlayToken,
+) {
+  if (overlayToken == null) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.secondary,
+        borderRadius: const BorderRadius.all(
+          Radius.circular(8),
+        ),
+      ),
+      padding: const EdgeInsets.only(top: 6, left: 10, right: 10, bottom: 6),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(overlay.name),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Settings settings = Get.find<SettingsService>().settings.value;
+  bool isMuted =
+      settings.streamElementsSettings?.mutedOverlays.contains(overlay.id) ??
+          false;
   String? overlayUrl;
   Widget? webpage;
-  Settings settings = Get.find<SettingsService>().settings.value;
-  String? overlayToken = settings.streamElementsSettings?.overlayToken;
 
-  bool isMuted =
-      settings.streamElementsSettings!.mutedOverlays.contains(overlay.id);
-  if (overlayToken != null && isMuted == false) {
+  if (isMuted == false) {
     overlayUrl =
         'https://streamelements.com/overlay/${overlay.id}/$overlayToken';
     var uuid = const Uuid();
@@ -113,9 +151,6 @@ Widget _overlayRow(StreamelementsViewController controller, SeOverlay overlay,
             ),
           ],
         ),
-        overlayToken != null
-            ? SizedBox(width: 0, height: 0, child: webpage)
-            : Container(),
       ],
     ),
   );
