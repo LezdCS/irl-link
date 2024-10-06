@@ -79,12 +79,7 @@ class ChatViewController extends GetxController
   void onReady() {
     scrollController.addListener(scrollListener);
     Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      for (TwitchChat twitchChat in twitchChats) {
-        if (!twitchChat.isConnected.value) {
-          twitchChat.close();
-          twitchChat.connect();
-        }
-      }
+      reconnectAllChats();
     });
 
     super.onReady();
@@ -103,16 +98,25 @@ class ChatViewController extends GetxController
 
     if (state == AppLifecycleState.resumed) {
       // The app is back to the foreground
-      debugPrint("App resumed");
-      for (TwitchChat twitchChat in twitchChats) {
-        if (!twitchChat.isConnected.value) {
-          twitchChat.close();
-          twitchChat.connect();
-        }
-      }
+      reconnectAllChats();
     } else if (state == AppLifecycleState.paused) {
       // The app is sent to the background
-      debugPrint("App paused");
+    }
+  }
+
+  void reconnectAllChats() {
+    for (TwitchChat twitchChat in twitchChats) {
+      if (!twitchChat.isConnected.value) {
+        twitchChat.close();
+        twitchChat.connect();
+      }
+    }
+    for (KickChat kickChat in kickChats) {
+      kickChat.close();
+      kickChat.connect();
+    }
+    for (YoutubeChat youtubeChat in youtubeChats) {
+      youtubeChat.startFetchingChat();
     }
   }
 
