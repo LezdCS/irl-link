@@ -120,6 +120,14 @@ class ChatViewController extends GetxController
     }
   }
 
+  void addMessage(ChatMessage message) {
+    chatMessages.add(message);
+    if(chatMessages.length > 500) {
+      chatMessages.removeAt(0);
+    }
+    scrollChatToBottom();
+  }
+
   void scrollListener() {
     // if user scroll up -> disable auto scrolldown
     if (isAutoScrolldown.value &&
@@ -365,8 +373,7 @@ class ChatViewController extends GetxController
       }
       ChatMessage twitchMessage =
           ChatMessage.fromTwitch(message, twitchChat.channelId ?? '');
-      chatMessages.add(twitchMessage);
-      scrollChatToBottom();
+      addMessage(twitchMessage);
     });
   }
 
@@ -386,8 +393,7 @@ class ChatViewController extends GetxController
       if (settings.ttsSettings!.ttsEnabled) {
         ttsService.readTts(message);
       }
-      chatMessages.add(message);
-      scrollChatToBottom();
+      addMessage(message);
     });
     youtubeChats.add(youtubeChat);
   }
@@ -422,7 +428,7 @@ class ChatViewController extends GetxController
           if (settings.ttsSettings!.ttsEnabled) {
             ttsService.readTts(kickMessage);
           }
-          chatMessages.add(kickMessage);
+          addMessage(kickMessage);
           break;
         case TypeEvent.followersUpdated:
           // TODO: TBD
@@ -433,7 +439,7 @@ class ChatViewController extends GetxController
             kickChat.userDetails!.userId.toString(),
             kickChat.userDetails!.subBadges,
           );
-          chatMessages.add(kickMessage);
+          addMessage(kickMessage);
           break;
         case TypeEvent.subscriptionEvent:
           ChatMessage kickMessage = ChatMessage.kickSub(
@@ -441,7 +447,7 @@ class ChatViewController extends GetxController
             kickChat.userDetails!.userId.toString(),
             kickChat.userDetails!.subBadges,
           );
-          chatMessages.add(kickMessage);
+          addMessage(kickMessage);
           break;
         case TypeEvent.chatroomUpdatedEvent:
           // TODO: TBD
@@ -467,7 +473,7 @@ class ChatViewController extends GetxController
             kickChat.userDetails!.userId.toString(),
             kickChat.userDetails!.subBadges,
           );
-          chatMessages.add(kickMessage);
+          addMessage(kickMessage);
           break;
         case TypeEvent.pinnedMessageCreatedEvent:
           // TODO: event in chat (NOT CURRENTLY CODED IN THE APP, SAME FOR TWITCH)
@@ -485,8 +491,6 @@ class ChatViewController extends GetxController
         case null:
           break;
       }
-
-      scrollChatToBottom();
     });
   }
 
