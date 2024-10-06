@@ -10,11 +10,25 @@ class RealtimeIrlTabView extends GetView<RealtimeIrlViewController> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Obx(
-        () => Container(
-          alignment: Alignment.center,
-          child: controller.realtimeIrl.status.value == RtIrlStatus.updating
-              ? _stopUpdatingPosition()
-              : _startUpdatingPosition(),
+        () => Column(
+          children: [
+            Container(
+              alignment: Alignment.center,
+              child: controller.realtimeIrl.status.value == RtIrlStatus.updating
+                  ? _stopUpdatingPosition(title: 'Stop updating position', description: 'Your GPS location is currently shared with RealtimeIRL...')
+                  : _startUpdatingPosition(),
+            ),
+            Visibility(
+              visible:
+                  controller.realtimeIrl.status.value == RtIrlStatus.stopped,
+              child: Column(
+                children: [
+                  const Divider(),
+                  _stopUpdatingPosition(title: 'Emergency stop', description: 'In case your location is still visible on RealtimeIRL, you can stop the service immediately.'),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -49,13 +63,15 @@ class RealtimeIrlTabView extends GetView<RealtimeIrlViewController> {
     );
   }
 
-  Widget _stopUpdatingPosition() {
+  Widget _stopUpdatingPosition(
+    {required String title, required String description}
+  ) {
     return Column(
       children: [
         const SizedBox(height: 10),
-        const Text(
-          'Stop updating position',
-          style: TextStyle(
+        Text(
+          title,
+          style: const TextStyle(
             fontSize: 18,
           ),
         ),
@@ -70,8 +86,8 @@ class RealtimeIrlTabView extends GetView<RealtimeIrlViewController> {
           child: const Text('Stop'),
         ),
         const SizedBox(height: 10),
-        const Text(
-          'Your GPS location is currently shared with RealtimeIRL...',
+        Text(
+          description,
           textAlign: TextAlign.center,
         ),
       ],
