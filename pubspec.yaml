@@ -73,6 +73,7 @@ dependencies:
   webview_flutter: ^4.8.0
   webview_flutter_android: ^3.16.6
   webview_flutter_wkwebview: ^3.14.0
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
   flutter_test:

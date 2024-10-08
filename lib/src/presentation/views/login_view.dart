@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -94,13 +95,20 @@ class LoginView extends GetView<LoginViewController> {
             ),
           ),
           controller.twitchCredentials.value != null
-              ? CircleAvatar(
-                  backgroundColor: Theme.of(context).colorScheme.surface,
-                  foregroundImage: NetworkImage(
-                    controller
-                        .twitchCredentials.value!.twitchUser.profileImageUrl,
+              ? CachedNetworkImage(
+                  imageUrl: controller
+                      .twitchCredentials.value!.twitchUser.profileImageUrl,
+                  placeholder: (BuildContext context, String url) =>
+                      CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.tertiary,
                   ),
-                  radius: 36,
+                  errorWidget:
+                      (BuildContext context, String url, dynamic error) =>
+                          const Icon(Icons.error),
+                  imageBuilder: (context, imageProvider) => CircleAvatar(
+                    radius: 36,
+                    backgroundImage: imageProvider,
+                  ),
                 )
               : const SizedBox(),
           Visibility(

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class TwitchEmote extends StatelessWidget {
@@ -12,10 +13,14 @@ class TwitchEmote extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image(
+    return CachedNetworkImage(
+      imageUrl:
+          "https://static-cdn.jtvnw.net/emoticons/v2/${emote.key}/default/dark/1.0",
       height: height,
-      image: NetworkImage(
-          "https://static-cdn.jtvnw.net/emoticons/v2/${emote.key}/default/dark/1.0"),
+      placeholder: (BuildContext context, String url) =>
+          const CircularProgressIndicator(),
+      errorWidget: (BuildContext context, String url, dynamic error) =>
+          const Icon(Icons.error),
     );
   }
 }

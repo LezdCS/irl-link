@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class KickEmote extends StatelessWidget {
@@ -12,10 +13,14 @@ class KickEmote extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image(
-      height: height,
+    return CachedNetworkImage(
+      imageUrl: "https://files.kick.com/emotes/$emoteId/fullsize",
       width: height,
-      image: NetworkImage("https://files.kick.com/emotes/$emoteId/fullsize"),
+      height: height,
+      placeholder: (BuildContext context, String url) =>
+          const CircularProgressIndicator(),
+      errorWidget: (BuildContext context, String url, dynamic error) =>
+          const Icon(Icons.error),
     );
   }
 }
