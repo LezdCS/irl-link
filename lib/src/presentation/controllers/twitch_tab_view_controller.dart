@@ -7,10 +7,7 @@ import 'home_view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/twitch_event_sub.dart';
-import 'package:irllink/src/core/utils/convert_to_device_timezone.dart';
-import 'package:irllink/src/domain/entities/twitch/twitch_hype_train.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
-import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 
@@ -36,11 +33,6 @@ class TwitchTabViewController extends GetxController
 
   Timer? refreshDataTimer;
   late AnimationController refreshDataAnimationController;
-
-  TwitchEventSub? twitchEventSub;
-  Rx<Duration> remainingTimePoll = const Duration(seconds: 0).obs;
-  Rx<Duration> remainingTimePrediction = const Duration(seconds: 0).obs;
-  Rx<Duration> remainingTimeHypeTrain = const Duration(seconds: 0).obs;
 
   RxBool displayTwitchPlayer = false.obs;
 
@@ -89,15 +81,15 @@ class TwitchTabViewController extends GetxController
       refreshDataTimer = Timer.periodic(const Duration(seconds: 15), (timer) {
         refreshData();
       });
-      twitchEventSub = TwitchEventSub(
-        homeViewController.twitchData!.twitchUser.login,
-        homeViewController.twitchData!.accessToken,
-      );
-      listenToPoll();
-      listenToPrediction();
-      listenToHypeTrain();
 
-      twitchEventSub!.connect();
+      TwitchEventSubService subService = await Get.putAsync(
+        () => TwitchEventSubService().init(
+          token: homeViewController.twitchData!.accessToken,
+          channel: homeViewController.twitchData!.twitchUser.login,
+        ),
+        permanent: true,
+      );
+      subService.connect();
     }
 
     super.onReady();
@@ -109,88 +101,6 @@ class TwitchTabViewController extends GetxController
     refreshDataAnimationController.dispose();
     refreshDataTimer?.cancel();
     super.onClose();
-  }
-
-  void listenToPoll() {
-    Timer? timer;
-
-    twitchEventSub?.currentPoll.listen((poll) {
-      if (poll.status == PollStatus.active) {
-        if (timer != null) timer?.cancel();
-        remainingTimePoll =
-            convertToDeviceTimezone(twitchEventSub!.currentPoll.value.endsAt)
-                .difference(DateTime.now())
-                .obs;
-        if (remainingTimePoll.value.inSeconds > 0) {
-          // Every 1 second, refresh remaining time
-          timer = Timer.periodic(
-            const Duration(seconds: 1),
-            (timer) {
-              remainingTimePoll.value = convertToDeviceTimezone(poll.endsAt)
-                  .difference(DateTime.now());
-            },
-          );
-        }
-      } else {
-        timer?.cancel();
-      }
-    });
-  }
-
-  void listenToPrediction() {
-    Timer? timer;
-
-    twitchEventSub?.currentPrediction.listen((prediction) {
-      if (prediction.status == PredictionStatus.active) {
-        if (timer != null) timer?.cancel();
-        remainingTimePrediction =
-            convertToDeviceTimezone(prediction.remainingTime)
-                .difference(DateTime.now())
-                .obs;
-        if (remainingTimePrediction.value.inSeconds > 0) {
-          // Every 1 second, refresh remaining time
-          timer = Timer.periodic(
-            const Duration(seconds: 1),
-            (timer) {
-              remainingTimePrediction.value =
-                  convertToDeviceTimezone(prediction.remainingTime)
-                      .difference(DateTime.now());
-            },
-          );
-        }
-      } else {
-        timer?.cancel();
-      }
-    });
-  }
-
-  void listenToHypeTrain() {
-    Timer? timer;
-
-    twitchEventSub?.currentHypeTrain.addListener(() {
-      TwitchHypeTrain train =
-          twitchEventSub?.currentHypeTrain.value ?? TwitchHypeTrain.empty();
-
-      if (train.id == '') {
-        timer?.cancel();
-        return;
-      }
-
-      if (timer != null) timer?.cancel();
-
-      remainingTimeHypeTrain =
-          convertToDeviceTimezone(train.endsAt).difference(DateTime.now()).obs;
-      if (remainingTimeHypeTrain.value.inSeconds > 0) {
-        // Every 1 second, refresh remaining time
-        timer = Timer.periodic(
-          const Duration(seconds: 1),
-          (timer) {
-            remainingTimeHypeTrain.value = convertToDeviceTimezone(train.endsAt)
-                .difference(DateTime.now());
-          },
-        );
-      }
-    });
   }
 
   Future<void> refreshData() async {
@@ -268,7 +178,7 @@ class TwitchTabViewController extends GetxController
     homeEvents.endPoll(
       homeViewController.twitchData!.accessToken,
       homeViewController.twitchData!.twitchUser.id,
-      twitchEventSub!.currentPoll.value.id,
+      Get.find<TwitchEventSubService>().currentPoll.value.id,
       status,
     );
   }
@@ -280,7 +190,7 @@ class TwitchTabViewController extends GetxController
     homeEvents.endPrediction(
       homeViewController.twitchData!.accessToken,
       homeViewController.twitchData!.twitchUser.id,
-      twitchEventSub!.currentPrediction.value.id,
+      Get.find<TwitchEventSubService>().currentPrediction.value.id,
       status,
       winningOutcomeId,
     );

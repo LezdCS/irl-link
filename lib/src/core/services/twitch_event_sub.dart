@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/utils/constants.dart';
+import 'package:irllink/src/core/utils/convert_to_device_timezone.dart';
 import 'package:irllink/src/core/utils/globals.dart' as globals;
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_hype_train_dto.dart';
@@ -16,22 +17,32 @@ import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 import 'package:web_socket_channel/io.dart';
 
-class TwitchEventSub {
-  String accessToken;
-  String channelName;
+class TwitchEventSubService extends GetxService {
+  late String accessToken;
+  late String channelName;
   IOWebSocketChannel? _webSocketChannel;
   StreamSubscription? _streamSubscription;
   String? _broadcasterId;
 
   Rx<TwitchPoll> currentPoll = TwitchPoll.empty().obs;
-  Rx<TwitchPrediction> currentPrediction = TwitchPrediction.empty().obs;
-  ValueNotifier<TwitchHypeTrain> currentHypeTrain =
-      ValueNotifier<TwitchHypeTrain>(TwitchHypeTrain.empty());
+  Rx<Duration> remainingTimePoll = const Duration(seconds: 0).obs;
 
-  TwitchEventSub(
-    this.channelName,
-    this.accessToken,
-  );
+  Rx<TwitchPrediction> currentPrediction = TwitchPrediction.empty().obs;
+  Rx<Duration> remainingTimePrediction = const Duration(seconds: 0).obs;
+
+  Rx<TwitchHypeTrain> currentHypeTrain = TwitchHypeTrain.empty().obs;
+  Rx<Duration> remainingTimeHypeTrain = const Duration(seconds: 0).obs;
+
+  Future<TwitchEventSubService> init(
+      {required String token, required String channel}) async {
+    channelName = channel;
+    accessToken = token;
+
+    listenToPoll();
+    listenToPrediction();
+    listenToHypeTrain();
+    return this;
+  }
 
   bool get isConnected => _streamSubscription != null;
 
@@ -158,7 +169,10 @@ class TwitchEventSub {
 
   Future<String> _getChannelId() async {
     String? response = await TwitchApi.getTwitchUserChannelId(
-        channelName, accessToken, kTwitchAuthClientId);
+      channelName,
+      accessToken,
+      kTwitchAuthClientId,
+    );
     return response ?? '';
   }
 
@@ -179,5 +193,84 @@ class TwitchEventSub {
     } on DioException catch (e) {
       globals.talker?.error(e.response.toString());
     }
+  }
+
+  void listenToPoll() {
+    Timer? timer;
+
+    currentPoll.listen((poll) {
+      if (poll.status == PollStatus.active) {
+        if (timer != null) timer?.cancel();
+        remainingTimePoll = convertToDeviceTimezone(currentPoll.value.endsAt)
+            .difference(DateTime.now())
+            .obs;
+        if (remainingTimePoll.value.inSeconds > 0) {
+          // Every 1 second, refresh remaining time
+          timer = Timer.periodic(
+            const Duration(seconds: 1),
+            (timer) {
+              remainingTimePoll.value = convertToDeviceTimezone(poll.endsAt)
+                  .difference(DateTime.now());
+            },
+          );
+        }
+      } else {
+        timer?.cancel();
+      }
+    });
+  }
+
+  void listenToPrediction() {
+    Timer? timer;
+
+    currentPrediction.listen((prediction) {
+      if (prediction.status == PredictionStatus.active) {
+        if (timer != null) timer?.cancel();
+        remainingTimePrediction =
+            convertToDeviceTimezone(prediction.remainingTime)
+                .difference(DateTime.now())
+                .obs;
+        if (remainingTimePrediction.value.inSeconds > 0) {
+          // Every 1 second, refresh remaining time
+          timer = Timer.periodic(
+            const Duration(seconds: 1),
+            (timer) {
+              remainingTimePrediction.value =
+                  convertToDeviceTimezone(prediction.remainingTime)
+                      .difference(DateTime.now());
+            },
+          );
+        }
+      } else {
+        timer?.cancel();
+      }
+    });
+  }
+
+  void listenToHypeTrain() {
+    Timer? timer;
+
+    currentHypeTrain.listen((train) {
+
+      if (train.id == '') {
+        timer?.cancel();
+        return;
+      }
+
+      if (timer != null) timer?.cancel();
+
+      remainingTimeHypeTrain =
+          convertToDeviceTimezone(train.endsAt).difference(DateTime.now()).obs;
+      if (remainingTimeHypeTrain.value.inSeconds > 0) {
+        // Every 1 second, refresh remaining time
+        timer = Timer.periodic(
+          const Duration(seconds: 1),
+          (timer) {
+            remainingTimeHypeTrain.value = convertToDeviceTimezone(train.endsAt)
+                .difference(DateTime.now());
+          },
+        );
+      }
+    });
   }
 }

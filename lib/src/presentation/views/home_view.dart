@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/core/services/twitch_event_sub.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
@@ -151,14 +152,17 @@ class HomeView extends GetView<HomeViewController> {
                 ? Column(
                     children: [
                       Visibility(
-                        visible: Get.find<TwitchTabViewController>()
-                                .twitchEventSub !=
-                            null,
+                        visible: Get.isRegistered<TwitchEventSubService>(),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 8, right: 8, top: 4, bottom: 0),
                           child: hypeTrain(
-                              context, Get.find<TwitchTabViewController>()),
+                            context,
+                            Get.find<TwitchTabViewController>(),
+                            Get.find<TwitchEventSubService>()
+                                .currentHypeTrain
+                                .value,
+                          ),
                         ),
                       ),
                       Visibility(
@@ -292,7 +296,13 @@ class HomeView extends GetView<HomeViewController> {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: settings.generalSettings!.displayViewerCount
-                            ? "viewers_number".trParams({"number": Get.find<TwitchTabViewController>().twitchStreamInfos.value.viewerCount.toString()})
+                            ? "viewers_number".trParams({
+                                "number": Get.find<TwitchTabViewController>()
+                                    .twitchStreamInfos
+                                    .value
+                                    .viewerCount
+                                    .toString()
+                              })
                             : 'send_message'.tr,
                         hintStyle: TextStyle(
                           color: Theme.of(context).textTheme.bodyLarge!.color!,
@@ -340,11 +350,10 @@ class HomeView extends GetView<HomeViewController> {
               ),
             ),
           ),
-          Get.find<TwitchTabViewController>().twitchEventSub != null
+          Get.isRegistered<TwitchEventSubService>()
               ? Obx(
                   () => Visibility(
-                    visible: Get.find<TwitchTabViewController>()
-                            .twitchEventSub!
+                    visible: Get.find<TwitchEventSubService>()
                             .currentPoll
                             .value
                             .status !=
@@ -369,7 +378,9 @@ class HomeView extends GetView<HomeViewController> {
                                       () => poll(
                                         context,
                                         Get.find<TwitchTabViewController>(),
-                                        Get.find<TwitchTabViewController>().twitchEventSub?.currentPoll.value,
+                                        Get.find<TwitchEventSubService>()
+                                            .currentPoll
+                                            .value,
                                       ),
                                     ),
                                   ],
@@ -388,11 +399,10 @@ class HomeView extends GetView<HomeViewController> {
                   ),
                 )
               : Container(),
-          Get.find<TwitchTabViewController>().twitchEventSub != null
+          Get.isRegistered<TwitchEventSubService>()
               ? Obx(
                   () => Visibility(
-                    visible: Get.find<TwitchTabViewController>()
-                            .twitchEventSub!
+                    visible: Get.find<TwitchEventSubService>()
                             .currentPrediction
                             .value
                             .status !=
@@ -417,7 +427,9 @@ class HomeView extends GetView<HomeViewController> {
                                       () => prediction(
                                         context,
                                         Get.find<TwitchTabViewController>(),
-                                        Get.find<TwitchTabViewController>().twitchEventSub?.currentPrediction.value,
+                                        Get.find<TwitchEventSubService>()
+                                            .currentPrediction
+                                            .value,
                                       ),
                                     ),
                                   ],

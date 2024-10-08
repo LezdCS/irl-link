@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/core/services/twitch_event_sub.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/poll.dart';
@@ -78,13 +79,13 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         width: 8,
                       ),
                       Icon(
-                        controller.twitchEventSub != null &&
-                                controller.twitchEventSub!.isConnected
+                        Get.isRegistered<TwitchEventSubService>() &&
+                                Get.find<TwitchEventSubService>().isConnected
                             ? Icons.stream_sharp
                             : Icons.close,
                         size: 12,
-                        color: controller.twitchEventSub != null &&
-                                controller.twitchEventSub!.isConnected
+                        color: Get.isRegistered<TwitchEventSubService>() &&
+                                Get.find<TwitchEventSubService>().isConnected
                             ? Colors.green
                             : Colors.red,
                       ),
@@ -360,38 +361,39 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                       width: double.infinity,
                       child: WebPageView(
                         BrowserTab(
-                            iOSAudioSource: false,
-                            id: '1',
-                            title: '',
-                            toggled: true,
-                            url:
-                                'https://player.twitch.tv/?channel=${controller.homeViewController.twitchData?.twitchUser.login}&parent=www.irllink.com&muted=true'),
+                          iOSAudioSource: false,
+                          id: '1',
+                          title: '',
+                          toggled: true,
+                          url:
+                              'https://player.twitch.tv/?channel=${controller.homeViewController.twitchData?.twitchUser.login}&parent=www.irllink.com&muted=true',
+                        ),
                       ),
                     )),
               ),
               const Divider(
                 height: 30,
               ),
-              Obx(
-                () => Visibility(
-                  visible: controller.twitchEventSub != null,
-                  child: prediction(
+              Visibility(
+                visible: Get.isRegistered<TwitchEventSubService>(),
+                child: Obx(
+                  () => prediction(
                     context,
                     controller,
-                    controller.twitchEventSub?.currentPrediction.value,
+                    Get.find<TwitchEventSubService>().currentPrediction.value,
                   ),
                 ),
               ),
               const Divider(
                 height: 30,
               ),
-              Obx(
-                () => Visibility(
-                  visible: controller.twitchEventSub != null,
-                  child: poll(
+              Visibility(
+                visible: Get.isRegistered<TwitchEventSubService>(),
+                child: Obx(
+                  () => poll(
                     context,
                     controller,
-                    controller.twitchEventSub?.currentPoll.value,
+                    Get.find<TwitchEventSubService>().currentPoll.value,
                   ),
                 ),
               ),

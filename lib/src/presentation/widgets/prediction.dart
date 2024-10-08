@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/twitch_event_sub.dart';
 import 'package:irllink/src/core/utils/print_duration.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
@@ -112,7 +113,7 @@ Widget prediction(
           ),
           Obx(
             () => Text(
-                '${prediction.status == PredictionStatus.active ? 'locks'.tr : 'ends'.tr} in ${printDuration(controller.remainingTimePrediction.value)}'),
+                '${prediction.status == PredictionStatus.active ? 'locks'.tr : 'ends'.tr} in ${printDuration(Get.find<TwitchEventSubService>().remainingTimePrediction.value)}'),
           ),
           Visibility(
             visible: prediction.status != PredictionStatus.resolved &&
