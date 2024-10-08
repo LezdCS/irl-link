@@ -60,7 +60,11 @@ class TwitchEventSubService extends GetxService {
       await _webSocketChannel?.ready;
     } catch (e) {
       globals.talker
-          ?.warning('Failed to connect to the Twitch EventSub Websocket.');
+          ?.warning('Failed to connect to the Twitch EventSub Websocket. Retrying in 20 seconds.');
+
+      Future.delayed(const Duration(seconds: 20), () {
+        connect();
+      });
       return;
     }
 
