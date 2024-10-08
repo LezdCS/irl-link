@@ -141,10 +141,12 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         },
                       ),
                       const Padding(padding: EdgeInsets.only(right: 6.0)),
-                      Text(
-                        controller.twitchStreamInfos.value.isOnline!
-                            ? "live".tr
-                            : "offline".tr,
+                      Obx(
+                        () => Text(
+                          controller.twitchStreamInfos.value.isOnline!
+                              ? "live".tr
+                              : "offline".tr,
+                        ),
                       ),
                     ],
                   ),
