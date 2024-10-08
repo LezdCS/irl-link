@@ -9,10 +9,8 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 Widget prediction(
   BuildContext context,
   TwitchTabViewController controller,
+  TwitchPrediction? prediction,
 ) {
-  TwitchPrediction? prediction =
-      controller.twitchEventSub?.currentPrediction.value;
-
   if (prediction == null) {
     return Container();
   }
