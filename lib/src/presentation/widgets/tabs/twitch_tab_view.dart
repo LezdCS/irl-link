@@ -150,37 +150,41 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                       ),
                     ],
                   ),
-                  Visibility(
-                    visible: controller.twitchStreamInfos.value.isOnline!,
-                    child: Text(controller
-                        .twitchStreamInfos.value.startedAtDuration
-                        .toString()
-                        .substring(0, 7)),
+                  Obx(
+                    () => Visibility(
+                      visible: controller.twitchStreamInfos.value.isOnline!,
+                      child: Text(controller
+                          .twitchStreamInfos.value.startedAtDuration
+                          .toString()
+                          .substring(0, 7)),
+                    ),
                   ),
-                  Visibility(
-                    visible: Get.find<SettingsService>()
-                        .settings
-                        .value
-                        .generalSettings!
-                        .displayViewerCount,
-                    child: Row(
-                      children: [
-                        const Icon(Icons.person_outline, color: Colors.red),
-                        const SizedBox(
-                          width: 2,
-                        ),
-                        Text(
-                          controller.twitchStreamInfos.value.viewerCount
-                              .toString(),
-                          style: const TextStyle(color: Colors.red),
-                        ),
-                        const SizedBox(
-                          width: 6,
-                        ),
-                        Text(
-                          "viewers".tr,
-                        ),
-                      ],
+                  Obx(
+                    () => Visibility(
+                      visible: Get.find<SettingsService>()
+                          .settings
+                          .value
+                          .generalSettings!
+                          .displayViewerCount,
+                      child: Row(
+                        children: [
+                          const Icon(Icons.person_outline, color: Colors.red),
+                          const SizedBox(
+                            width: 2,
+                          ),
+                          Text(
+                            controller.twitchStreamInfos.value.viewerCount
+                                .toString(),
+                            style: const TextStyle(color: Colors.red),
+                          ),
+                          const SizedBox(
+                            width: 6,
+                          ),
+                          Text(
+                            "viewers".tr,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
