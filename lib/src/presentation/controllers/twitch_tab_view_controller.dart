@@ -6,8 +6,6 @@ import 'package:irllink/src/core/resources/data_state.dart';
 import 'home_view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/services/twitch_event_sub_service.dart';
-import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 
@@ -29,7 +27,6 @@ class TwitchTabViewController extends GetxController
   late AnimationController controllerLiveCircleAnimation;
   late Animation<double> circleShadowAnimation;
 
-  RxString selectedOutcomeId = "-1".obs;
 
   Timer? refreshDataTimer;
   late AnimationController refreshDataAnimationController;
@@ -148,43 +145,4 @@ class TwitchTabViewController extends GetxController
     );
   }
 
-  void createPoll(String question, List<Choice> choices) {
-    TwitchPoll newPoll = TwitchPoll(
-      id: "",
-      title: "",
-      choices: choices,
-      status: PollStatus.active,
-      totalVotes: 0,
-      endsAt: DateTime.now(),
-    );
-    homeEvents.createPoll(
-      homeViewController.twitchData!.accessToken,
-      homeViewController.twitchData!.twitchUser.id,
-      newPoll,
-    );
-  }
-
-  // status is either TERMINATED to end poll and display the result to viewer
-  // or ARCHIVED to end the poll and hide it
-  void endPoll(String status) {
-    homeEvents.endPoll(
-      homeViewController.twitchData!.accessToken,
-      homeViewController.twitchData!.twitchUser.id,
-      Get.find<TwitchEventSubService>().currentPoll.value.id,
-      status,
-    );
-  }
-
-  // status is either RESOLVED to end prediction with a winner (should provide winning_outcome_id)
-  // or CANCELED to end the prediction and refund
-  // or LOCKED to lock prediction so user can no longer make predictions
-  void endPrediction(String status, String? winningOutcomeId) {
-    homeEvents.endPrediction(
-      homeViewController.twitchData!.accessToken,
-      homeViewController.twitchData!.twitchUser.id,
-      Get.find<TwitchEventSubService>().currentPrediction.value.id,
-      status,
-      winningOutcomeId,
-    );
-  }
 }

@@ -3,12 +3,10 @@ import 'package:get/get.dart';
 import 'package:irllink/src/core/services/twitch_event_sub_service.dart';
 import 'package:irllink/src/core/utils/print_duration.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
-import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 Widget poll(
   BuildContext context,
-  TwitchTabViewController controller,
   TwitchPoll? poll,
 ) {
   if (poll == null) {
@@ -102,7 +100,7 @@ Widget poll(
                         Theme.of(context).colorScheme.tertiaryContainer,
                   ),
                   onPressed: () {
-                    controller.endPoll("ARCHIVED");
+                    Get.find<TwitchEventSubService>().endPoll("ARCHIVED");
                   },
                   child: Text(
                     "cancel".tr,
@@ -116,7 +114,7 @@ Widget poll(
                     backgroundColor: Colors.green,
                   ),
                   onPressed: () {
-                    controller.endPoll("TERMINATED");
+                    Get.find<TwitchEventSubService>().endPoll("TERMINATED");
                   },
                   child: Text(
                     'end'.tr,

@@ -101,9 +101,8 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                 children: [
                   Row(
                     children: [
-                      AnimatedBuilder(
-                        animation: controller.circleShadowAnimation,
-                        builder: (context, child) {
+                      Obx(
+                        () {
                           Color circleColor = controller
                                   .twitchStreamInfos.value.isOnline!
                               ? Colors.red
@@ -115,24 +114,29 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                                       .colorScheme
                                       .tertiaryContainer
                                       .withOpacity(0.5);
-                          return Container(
-                            width: 12,
-                            height: 12,
-                            decoration: BoxDecoration(
-                              color: circleColor,
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: shadowColor,
-                                  spreadRadius:
-                                      controller.circleShadowAnimation.value *
+                          return AnimatedBuilder(
+                            animation: controller.circleShadowAnimation,
+                            builder: (context, child) {
+                              return Container(
+                                width: 12,
+                                height: 12,
+                                decoration: BoxDecoration(
+                                  color: circleColor,
+                                  shape: BoxShape.circle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: shadowColor,
+                                      spreadRadius: controller
+                                              .circleShadowAnimation.value *
                                           0.1,
-                                  blurRadius:
-                                      controller.circleShadowAnimation.value *
+                                      blurRadius: controller
+                                              .circleShadowAnimation.value *
                                           0.4,
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              );
+                            },
                           );
                         },
                       ),
@@ -378,7 +382,6 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                 () => Get.find<TwitchEventSubService>().isConnected.value
                     ? prediction(
                         context,
-                        controller,
                         Get.find<TwitchEventSubService>()
                             .currentPrediction
                             .value,
@@ -392,7 +395,6 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                 () => Get.find<TwitchEventSubService>().isConnected.value
                     ? poll(
                         context,
-                        controller,
                         Get.find<TwitchEventSubService>().currentPoll.value,
                       )
                     : Container(),

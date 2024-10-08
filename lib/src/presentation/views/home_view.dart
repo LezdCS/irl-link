@@ -158,7 +158,6 @@ class HomeView extends GetView<HomeViewController> {
                               left: 8, right: 8, top: 4, bottom: 0),
                           child: hypeTrain(
                             context,
-                            Get.find<TwitchTabViewController>(),
                             Get.find<TwitchEventSubService>()
                                 .currentHypeTrain
                                 .value,
@@ -377,7 +376,6 @@ class HomeView extends GetView<HomeViewController> {
                                     Obx(
                                       () => poll(
                                         context,
-                                        Get.find<TwitchTabViewController>(),
                                         Get.find<TwitchEventSubService>()
                                             .currentPoll
                                             .value,
@@ -426,7 +424,6 @@ class HomeView extends GetView<HomeViewController> {
                                     Obx(
                                       () => prediction(
                                         context,
-                                        Get.find<TwitchTabViewController>(),
                                         Get.find<TwitchEventSubService>()
                                             .currentPrediction
                                             .value,

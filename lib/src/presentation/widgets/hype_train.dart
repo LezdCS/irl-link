@@ -3,11 +3,9 @@ import 'package:get/get.dart';
 import 'package:irllink/src/core/services/twitch_event_sub_service.dart';
 import 'package:irllink/src/core/utils/print_duration.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_hype_train.dart';
-import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 
 Widget hypeTrain(
   BuildContext context,
-  TwitchTabViewController controller,
   TwitchHypeTrain? hypetrain,
 ) {
   if (hypetrain == null || hypetrain.id == '') {

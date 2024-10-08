@@ -93,12 +93,21 @@ class HomeViewController extends GetxController
     chatTabsController = TabController(length: 0, vsync: this);
     emotesTabController = TabController(length: 0, vsync: this);
     if (Get.arguments != null) {
+      twitchData = Get.arguments[0];
+
+      TwitchEventSubService subService = await Get.putAsync(
+        () => TwitchEventSubService().init(
+          token: twitchData!.accessToken,
+          channel: twitchData!.twitchUser.login,
+        ),
+        permanent: true,
+      );
+      subService.connect();
+
       TwitchTabView twitchPage = const TwitchTabView();
       tabElements.add(twitchPage);
 
       tabController = TabController(length: tabElements.length, vsync: this);
-
-      twitchData = Get.arguments[0];
 
       await FirebaseCrashlytics.instance.setUserIdentifier(
         twitchData!.twitchUser.id,
@@ -112,15 +121,6 @@ class HomeViewController extends GetxController
               },
             );
       });
-
-      TwitchEventSubService subService = await Get.putAsync(
-        () => TwitchEventSubService().init(
-          token: twitchData!.accessToken,
-          channel: twitchData!.twitchUser.login,
-        ),
-        permanent: true,
-      );
-      subService.connect();
     }
     await applySettings();
 

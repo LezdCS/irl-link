@@ -4,12 +4,10 @@ import 'package:get/get.dart';
 import 'package:irllink/src/core/services/twitch_event_sub_service.dart';
 import 'package:irllink/src/core/utils/print_duration.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
-import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 Widget prediction(
   BuildContext context,
-  TwitchTabViewController controller,
   TwitchPrediction? prediction,
 ) {
   if (prediction == null) {
@@ -127,7 +125,7 @@ Widget prediction(
                         Theme.of(context).colorScheme.tertiaryContainer,
                   ),
                   onPressed: () {
-                    controller.endPrediction("CANCELED", null);
+                    Get.find<TwitchEventSubService>().endPrediction("CANCELED", null);
                   },
                   child: Text(
                     "cancel".tr,
@@ -142,12 +140,12 @@ Widget prediction(
                   ),
                   onPressed: () {
                     prediction.status == PredictionStatus.active
-                        ? controller.endPrediction("LOCKED", null)
+                        ? Get.find<TwitchEventSubService>().endPrediction("LOCKED", null)
                         : pickWinnerDialog(
                             context,
                             prediction,
-                            controller.endPrediction,
-                            controller,
+                            Get.find<TwitchEventSubService>().endPrediction,
+                            
                           );
                   },
                   child: Text(
@@ -172,7 +170,6 @@ void pickWinnerDialog(
   BuildContext context,
   TwitchPrediction prediction,
   Function endPrediction,
-  TwitchTabViewController controller,
 ) {
   Get.defaultDialog(
     title: prediction.title,
@@ -185,12 +182,12 @@ void pickWinnerDialog(
     textConfirm: "confirm".tr,
     radius: 10,
     onCancel: () {
-      controller.selectedOutcomeId.value = "-1";
+      Get.find<TwitchEventSubService>().selectedOutcomeId.value = "-1";
       Get.back();
     },
     onConfirm: () {
-      endPrediction('RESOLVED', controller.selectedOutcomeId.value);
-      controller.selectedOutcomeId.value = "-1";
+      endPrediction('RESOLVED', Get.find<TwitchEventSubService>().selectedOutcomeId.value);
+      Get.find<TwitchEventSubService>().selectedOutcomeId.value = "-1";
       Get.back();
     },
     content: Obx(
@@ -201,9 +198,9 @@ void pickWinnerDialog(
             title: Text(prediction.outcomes[index].title),
             leading: Radio(
               value: prediction.outcomes[index].id,
-              groupValue: controller.selectedOutcomeId.value,
+              groupValue: Get.find<TwitchEventSubService>().selectedOutcomeId.value,
               onChanged: (String? value) {
-                controller.selectedOutcomeId.value = value!;
+                Get.find<TwitchEventSubService>().selectedOutcomeId.value = value!;
               },
               activeColor: Colors.green,
             ),
