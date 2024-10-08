@@ -15,6 +15,8 @@ class TwitchTabViewController extends GetxController
     with GetTickerProviderStateMixin {
   TwitchTabViewController({required this.homeEvents});
 
+  final HomeViewController homeViewController = Get.find<HomeViewController>();
+
   final HomeEvents homeEvents;
 
   late TextEditingController titleFormController;
@@ -22,7 +24,6 @@ class TwitchTabViewController extends GetxController
 
   FocusNode focus = FocusNode();
 
-  late HomeViewController homeViewController;
 
   Rx<TwitchStreamInfos> twitchStreamInfos =
       const TwitchStreamInfos.defaultInfos().obs;
@@ -38,7 +39,6 @@ class TwitchTabViewController extends GetxController
 
   @override
   void onInit() {
-    homeViewController = Get.find<HomeViewController>();
     titleFormController = TextEditingController();
 
     twitchStreamInfos.listen((value) {

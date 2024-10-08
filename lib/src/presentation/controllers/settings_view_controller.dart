@@ -49,16 +49,12 @@ class SettingsViewController extends GetxController {
   late TextEditingController addTtsAllowedPrefixsController;
   Rx<Color> nothingJustToRefreshDialog = Colors.grey.obs;
 
-  late HomeViewController homeViewController;
-  late TtsService ttsService;
-  late StoreService storeService;
+  final HomeViewController homeViewController = Get.find<HomeViewController>();
+  final TtsService ttsService = Get.find<TtsService>();
+  final StoreService storeService = Get.find<StoreService>();
 
   @override
   void onInit() {
-    homeViewController = Get.find<HomeViewController>();
-    ttsService = Get.find<TtsService>();
-    storeService = Get.find<StoreService>();
-
     obsWebsocketUrlFieldController = TextEditingController();
     obsWebsocketPasswordFieldController = TextEditingController();
     addBrowserTitleController = TextEditingController();
