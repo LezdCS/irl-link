@@ -57,17 +57,19 @@ class SettingsViewController extends GetxController {
 
   @override
   void onInit() {
-    obsWebsocketUrlFieldController = TextEditingController();
-    obsWebsocketPasswordFieldController = TextEditingController();
+    Settings settings = settingsService.settings.value;
+
+    obsWebsocketUrlFieldController = TextEditingController(text: settings.obsWebsocketUrl);
+    obsWebsocketPasswordFieldController = TextEditingController(text: settings.obsWebsocketPassword);
     addBrowserTitleController = TextEditingController();
     addBrowserUrlController = TextEditingController();
     addHiddenUsernameController = TextEditingController();
     addTtsIgnoredUsersController = TextEditingController();
     addTtsIgnoredPrefixsController = TextEditingController();
     addTtsAllowedPrefixsController = TextEditingController();
-    seJwtInputController = TextEditingController();
-    seOverlayTokenInputController = TextEditingController();
-    rtIrlInputController = TextEditingController();
+    seJwtInputController = TextEditingController(text: settings.streamElementsSettings?.jwt);
+    seOverlayTokenInputController = TextEditingController(text: settings.streamElementsSettings?.overlayToken);
+    rtIrlInputController = TextEditingController(text: settings.rtIrlPushKey);
 
     usernamesHiddenUsers = <String>[].obs;
     super.onInit();
@@ -75,15 +77,7 @@ class SettingsViewController extends GetxController {
 
   @override
   void onReady() {
-    Settings settings = settingsService.settings.value;
-
     if (homeViewController.twitchData != null) {
-      obsWebsocketUrlFieldController.text = settings.obsWebsocketUrl!;
-      obsWebsocketPasswordFieldController.text = settings.obsWebsocketPassword!;
-      seJwtInputController.text = settings.streamElementsSettings!.jwt ?? '';
-      seOverlayTokenInputController.text =
-          settings.streamElementsSettings!.overlayToken ?? '';
-      rtIrlInputController.text = settings.rtIrlPushKey ?? '';
       getUsernames();
     }
 
