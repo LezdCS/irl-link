@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:irllink/src/domain/entities/chat/chat_badge.dart';
@@ -20,11 +21,15 @@ class Badges extends StatelessWidget {
           Container(
             padding: const EdgeInsets.only(right: 4),
             child: Uri.parse(badge.imageUrl1x).isAbsolute
-                ? Image(
+                ? CachedNetworkImage(
+                    imageUrl: badge.imageUrl1x,
                     width: textSize,
                     height: textSize,
-                    image: NetworkImage(badge.imageUrl1x),
-                    filterQuality: FilterQuality.high,
+                    placeholder: (BuildContext context, String url) =>
+                        const CircularProgressIndicator(),
+                    errorWidget:
+                        (BuildContext context, String url, dynamic error) =>
+                            const Icon(Icons.error),
                   )
                 : badge.imageUrl1x.endsWith('.svg')
                     ? SvgPicture.asset(

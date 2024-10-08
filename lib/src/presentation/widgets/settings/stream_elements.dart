@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -245,9 +246,16 @@ class StreamElements extends GetView<SettingsViewController> {
   Widget _profile(SeMe me) {
     return Row(
       children: [
-        CircleAvatar(
-          foregroundImage: NetworkImage(me.avatar),
-          radius: 18,
+        CachedNetworkImage(
+          imageUrl: me.avatar,
+          placeholder: (BuildContext context, String url) =>
+              const CircularProgressIndicator(),
+          errorWidget: (BuildContext context, String url, dynamic error) =>
+              const Icon(Icons.error),
+          imageBuilder: (context, imageProvider) => CircleAvatar(
+            radius: 18,
+            backgroundImage: imageProvider,
+          ),
         ),
         const SizedBox(
           width: 8,

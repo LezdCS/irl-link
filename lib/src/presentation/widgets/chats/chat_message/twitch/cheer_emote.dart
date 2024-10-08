@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
 
@@ -15,8 +16,12 @@ class CheerEmote extends StatelessWidget {
   Widget build(BuildContext context) {
     return Wrap(
       children: [
-        Image(
-          image: NetworkImage(cheerEmote.url1x),
+        CachedNetworkImage(
+          imageUrl: cheerEmote.url1x,
+          placeholder: (BuildContext context, String url) =>
+                const CircularProgressIndicator(),
+            errorWidget: (BuildContext context, String url, dynamic error) =>
+                const Icon(Icons.error),
         ),
         Text(
           '${cheerEmote.id} ',
