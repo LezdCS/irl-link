@@ -16,11 +16,10 @@ import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 class RealtimeIrlViewController extends GetxController {
   late RealtimeIrl realtimeIrl;
 
-  late HomeViewController homeViewController;
+  final HomeViewController homeViewController = Get.find<HomeViewController>();
 
   @override
   void onInit() {
-    homeViewController = Get.find<HomeViewController>();
     Settings settings = Get.find<SettingsService>().settings.value;
 
     realtimeIrl = RealtimeIrl(settings.rtIrlPushKey ?? '');

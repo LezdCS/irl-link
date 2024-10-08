@@ -14,9 +14,10 @@ class Tts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final SettingsService settingsService = Get.find<SettingsService>();
     return Obx(
       () {
-        Settings settings = Get.find<SettingsService>().settings.value;
+        Settings settings = settingsService.settings.value;
         List<dynamic> ttsVoicesFiltered = controller
             .getVoiceForLanguage(settings.ttsSettings?.language ?? "en-US");
         return Scaffold(
@@ -53,12 +54,12 @@ class Tts extends StatelessWidget {
                       Switch(
                         value: settings.ttsSettings!.ttsEnabled,
                         onChanged: (value) {
-                          Get.find<SettingsService>().settings.value =
+                          settingsService.settings.value =
                               settings.copyWith(
                             ttsSettings: settings.ttsSettings
                                 ?.copyWith(ttsEnabled: value),
                           );
-                          Get.find<SettingsService>().saveSettings();
+                          settingsService.saveSettings();
                         },
                       ),
                     ],
@@ -87,12 +88,12 @@ class Tts extends StatelessWidget {
                             "name": firstVoiceForLanguage["name"],
                             "locale": firstVoiceForLanguage["locale"],
                           };
-                          Get.find<SettingsService>().settings.value =
+                          settingsService.settings.value =
                               settings.copyWith(
                             ttsSettings: settings.ttsSettings?.copyWith(
                                 language: value.toString(), voice: voice),
                           );
-                          await Get.find<SettingsService>().saveSettings();
+                          await settingsService.saveSettings();
                           Get.find<TtsService>().updateSettings(settings);
                         },
                         items: List.generate(
@@ -130,12 +131,12 @@ class Tts extends StatelessWidget {
                                   "name": (value as Map)["name"],
                                   "locale": value["locale"],
                                 };
-                                Get.find<SettingsService>().settings.value =
+                                settingsService.settings.value =
                                     settings.copyWith(
                                   ttsSettings: settings.ttsSettings
                                       ?.copyWith(voice: voice),
                                 );
-                                await Get.find<SettingsService>()
+                                await settingsService
                                     .saveSettings();
                                 Get.find<TtsService>().updateSettings(settings);
                               },
@@ -164,12 +165,12 @@ class Tts extends StatelessWidget {
                       Slider(
                         value: settings.ttsSettings!.volume,
                         onChanged: (value) async {
-                          Get.find<SettingsService>().settings.value =
+                          settingsService.settings.value =
                               settings.copyWith(
                             ttsSettings:
                                 settings.ttsSettings?.copyWith(volume: value),
                           );
-                          await Get.find<SettingsService>().saveSettings();
+                          await settingsService.saveSettings();
                           Get.find<TtsService>().updateSettings(settings);
                         },
                         max: 1,
@@ -189,12 +190,12 @@ class Tts extends StatelessWidget {
                       Slider(
                         value: settings.ttsSettings!.rate,
                         onChanged: (value) async {
-                          Get.find<SettingsService>().settings.value =
+                          settingsService.settings.value =
                               settings.copyWith(
                             ttsSettings:
                                 settings.ttsSettings?.copyWith(rate: value),
                           );
-                          await Get.find<SettingsService>().saveSettings();
+                          await settingsService.saveSettings();
                           Get.find<TtsService>().updateSettings(settings);
                         },
                         max: 1,
@@ -214,12 +215,12 @@ class Tts extends StatelessWidget {
                       Slider(
                         value: settings.ttsSettings!.pitch,
                         onChanged: (value) async {
-                          Get.find<SettingsService>().settings.value =
+                          settingsService.settings.value =
                               settings.copyWith(
                             ttsSettings:
                                 settings.ttsSettings?.copyWith(pitch: value),
                           );
-                          await Get.find<SettingsService>().saveSettings();
+                          await settingsService.saveSettings();
                           Get.find<TtsService>().updateSettings(settings);
                         },
                         max: 1,
@@ -240,12 +241,12 @@ class Tts extends StatelessWidget {
                       Switch(
                         value: settings.ttsSettings!.ttsMuteViewerName,
                         onChanged: (value) {
-                          Get.find<SettingsService>().settings.value =
+                          settingsService.settings.value =
                               settings.copyWith(
                             ttsSettings: settings.ttsSettings
                                 ?.copyWith(ttsMuteViewerName: value),
                           );
-                          Get.find<SettingsService>().saveSettings();
+                          settingsService.saveSettings();
                         },
                       ),
                     ],
@@ -263,12 +264,12 @@ class Tts extends StatelessWidget {
                       Switch(
                         value: settings.ttsSettings!.ttsOnlyVip,
                         onChanged: (value) {
-                          Get.find<SettingsService>().settings.value =
+                          settingsService.settings.value =
                               settings.copyWith(
                             ttsSettings: settings.ttsSettings
                                 ?.copyWith(ttsOnlyVip: value),
                           );
-                          Get.find<SettingsService>().saveSettings();
+                          settingsService.saveSettings();
                         },
                       ),
                     ],
@@ -286,12 +287,12 @@ class Tts extends StatelessWidget {
                       Switch(
                         value: settings.ttsSettings!.ttsOnlyMod,
                         onChanged: (value) {
-                          Get.find<SettingsService>().settings.value =
+                          settingsService.settings.value =
                               settings.copyWith(
                             ttsSettings: settings.ttsSettings
                                 ?.copyWith(ttsOnlyMod: value),
                           );
-                          Get.find<SettingsService>().saveSettings();
+                          settingsService.saveSettings();
                         },
                       ),
                     ],
@@ -309,12 +310,12 @@ class Tts extends StatelessWidget {
                       Switch(
                         value: settings.ttsSettings!.ttsOnlySubscriber,
                         onChanged: (value) {
-                          Get.find<SettingsService>().settings.value =
+                          settingsService.settings.value =
                               settings.copyWith(
                             ttsSettings: settings.ttsSettings
                                 ?.copyWith(ttsOnlySubscriber: value),
                           );
-                          Get.find<SettingsService>().saveSettings();
+                          settingsService.saveSettings();
                         },
                       ),
                     ],
@@ -330,13 +331,13 @@ class Tts extends StatelessWidget {
                         list: settings.ttsSettings!.prefixsToIgnore,
                         onDeleted: (index) {
                           settings.ttsSettings!.prefixsToIgnore.removeAt(index);
-                          Get.find<SettingsService>().settings.value =
+                          settingsService.settings.value =
                               settings.copyWith(
                             ttsSettings: settings.ttsSettings?.copyWith(
                                 prefixsToIgnore:
                                     settings.ttsSettings!.prefixsToIgnore),
                           );
-                          Get.find<SettingsService>().saveSettings();
+                          settingsService.saveSettings();
                           controller.nothingJustToRefreshDialog.refresh();
                         },
                         controller: controller,
@@ -346,14 +347,14 @@ class Tts extends StatelessWidget {
                           settings.ttsSettings!.prefixsToIgnore.add(controller
                               .addTtsIgnoredPrefixsController.text
                               .trim());
-                          Get.find<SettingsService>().settings.value =
+                          settingsService.settings.value =
                               settings.copyWith(
                             ttsSettings: settings.ttsSettings?.copyWith(
                                 prefixsToIgnore:
                                     settings.ttsSettings!.prefixsToIgnore),
                           );
                           controller.addTtsIgnoredPrefixsController.clear();
-                          Get.find<SettingsService>().saveSettings();
+                          settingsService.saveSettings();
                           controller.nothingJustToRefreshDialog.refresh();
                         },
                       );
@@ -401,14 +402,14 @@ class Tts extends StatelessWidget {
                         onDeleted: (index) {
                           settings.ttsSettings!.prefixsToUseTtsOnly
                               .removeAt(index);
-                          Get.find<SettingsService>().settings.value =
+                          settingsService.settings.value =
                               settings.copyWith(
                             ttsSettings: settings.ttsSettings?.copyWith(
                                 prefixsToUseTtsOnly:
                                     settings.ttsSettings!.prefixsToUseTtsOnly),
                           );
                           controller.nothingJustToRefreshDialog.refresh();
-                          Get.find<SettingsService>().saveSettings();
+                          settingsService.saveSettings();
                         },
                         controller: controller,
                         textFieldController:
@@ -417,7 +418,7 @@ class Tts extends StatelessWidget {
                           settings.ttsSettings!.prefixsToUseTtsOnly.add(
                               controller.addTtsAllowedPrefixsController.text
                                   .trim());
-                          Get.find<SettingsService>().settings.value =
+                          settingsService.settings.value =
                               settings.copyWith(
                             ttsSettings: settings.ttsSettings?.copyWith(
                                 prefixsToUseTtsOnly:
@@ -425,7 +426,7 @@ class Tts extends StatelessWidget {
                           );
                           controller.nothingJustToRefreshDialog.refresh();
                           controller.addTtsAllowedPrefixsController.clear();
-                          Get.find<SettingsService>().saveSettings();
+                          settingsService.saveSettings();
                         },
                       );
                     },
@@ -471,13 +472,13 @@ class Tts extends StatelessWidget {
                         onDeleted: (index) {
                           settings.ttsSettings!.ttsUsersToIgnore
                               .removeAt(index);
-                          Get.find<SettingsService>().settings.value =
+                          settingsService.settings.value =
                               settings.copyWith(
                             ttsSettings: settings.ttsSettings?.copyWith(
                                 ttsUsersToIgnore:
                                     settings.ttsSettings!.ttsUsersToIgnore),
                           );
-                          Get.find<SettingsService>().saveSettings();
+                          settingsService.saveSettings();
                           controller.nothingJustToRefreshDialog.refresh();
                         },
                         controller: controller,
@@ -487,14 +488,14 @@ class Tts extends StatelessWidget {
                           settings.ttsSettings!.ttsUsersToIgnore.add(controller
                               .addTtsIgnoredUsersController.text
                               .trim());
-                          Get.find<SettingsService>().settings.value =
+                          settingsService.settings.value =
                               settings.copyWith(
                             ttsSettings: settings.ttsSettings?.copyWith(
                                 ttsUsersToIgnore:
                                     settings.ttsSettings!.ttsUsersToIgnore),
                           );
                           controller.addTtsIgnoredUsersController.clear();
-                          Get.find<SettingsService>().saveSettings();
+                          settingsService.saveSettings();
                           controller.nothingJustToRefreshDialog.refresh();
                         },
                       );

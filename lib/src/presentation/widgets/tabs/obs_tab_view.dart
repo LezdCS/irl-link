@@ -103,9 +103,10 @@ class ObsTabView extends GetView<ObsTabViewController> {
                                       () => Container(
                                         color: Colors.black,
                                         child: Image(
-                                            image: Image.memory(controller
-                                                    .sceneScreenshot.value)
-                                                .image),
+                                          image: Image.memory(controller
+                                                  .sceneScreenshot.value)
+                                              .image,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -218,7 +219,12 @@ class ObsTabView extends GetView<ObsTabViewController> {
                       ),
                     ),
                     Visibility(
-                      visible: Get.find<SettingsService>().settings.value.obsWebsocketUrl?.contains("https") ?? false,
+                      visible: Get.find<SettingsService>()
+                              .settings
+                              .value
+                              .obsWebsocketUrl
+                              ?.contains("https") ??
+                          false,
                       child: const Text(
                         "It seems that your OBS websocket URL contains 'https', try without it.",
                         textAlign: TextAlign.center,

@@ -51,6 +51,7 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
   }
 
   Widget _activitiesSettings() {
+    final SettingsService settingsService = Get.find<SettingsService>();
     return PopupMenuButton(
       offset: const Offset(30, 10),
       color: Theme.of(Get.context!).colorScheme.secondary,
@@ -58,7 +59,7 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
       itemBuilder: (context) => [
         PopupMenuItem(
           child: Obx(() {
-            StreamElementsSettings? seSettings = Get.find<SettingsService>()
+            StreamElementsSettings? seSettings = settingsService
                 .settings
                 .value
                 .streamElementsSettings;
@@ -69,12 +70,12 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
               ),
               value: seSettings?.showFollowerActivity,
               onChanged: (bool? value) {
-                Get.find<SettingsService>().settings.value =
-                    Get.find<SettingsService>().settings.value.copyWith(
+                settingsService.settings.value =
+                    settingsService.settings.value.copyWith(
                           streamElementsSettings:
                               seSettings!.copyWith(showFollowerActivity: value),
                         );
-                Get.find<SettingsService>().saveSettings();
+                settingsService.saveSettings();
               },
             );
           }),
@@ -82,7 +83,7 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
         PopupMenuItem(
           child: Obx(
             () {
-              Settings settings = Get.find<SettingsService>().settings.value;
+              Settings settings = settingsService.settings.value;
               return CheckboxListTile(
                 controlAffinity: ListTileControlAffinity.leading,
                 title: Text(
@@ -90,12 +91,12 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                 ),
                 value: settings.streamElementsSettings!.showSubscriberActivity,
                 onChanged: (bool? value) {
-                  Get.find<SettingsService>().settings.value =
+                  settingsService.settings.value =
                       settings.copyWith(
                     streamElementsSettings: settings.streamElementsSettings!
                         .copyWith(showSubscriberActivity: value),
                   );
-                  Get.find<SettingsService>().saveSettings();
+                  settingsService.saveSettings();
                 },
               );
             },
@@ -103,7 +104,7 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
         ),
         PopupMenuItem(child: Obx(
           () {
-            Settings settings = Get.find<SettingsService>().settings.value;
+            Settings settings = settingsService.settings.value;
             return CheckboxListTile(
               controlAffinity: ListTileControlAffinity.leading,
               title: Text(
@@ -111,11 +112,11 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
               ),
               value: settings.streamElementsSettings!.showCheerActivity,
               onChanged: (bool? value) {
-                Get.find<SettingsService>().settings.value = settings.copyWith(
+                settingsService.settings.value = settings.copyWith(
                   streamElementsSettings: settings.streamElementsSettings!
                       .copyWith(showCheerActivity: value),
                 );
-                Get.find<SettingsService>().saveSettings();
+                settingsService.saveSettings();
               },
             );
           },
@@ -123,7 +124,7 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
         PopupMenuItem(
           child: Obx(
             () {
-              Settings settings = Get.find<SettingsService>().settings.value;
+              Settings settings = settingsService.settings.value;
               return CheckboxListTile(
                 controlAffinity: ListTileControlAffinity.leading,
                 title: Text(
@@ -131,12 +132,12 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                 ),
                 value: settings.streamElementsSettings!.showDonationActivity,
                 onChanged: (bool? value) {
-                  Get.find<SettingsService>().settings.value =
+                  settingsService.settings.value =
                       settings.copyWith(
                     streamElementsSettings: settings.streamElementsSettings!
                         .copyWith(showDonationActivity: value),
                   );
-                  Get.find<SettingsService>().saveSettings();
+                  settingsService.saveSettings();
                 },
               );
             },
@@ -145,7 +146,7 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
         PopupMenuItem(
           child: Obx(
             () {
-              Settings settings = Get.find<SettingsService>().settings.value;
+              Settings settings = settingsService.settings.value;
               return CheckboxListTile(
                 controlAffinity: ListTileControlAffinity.leading,
                 title: Text(
@@ -153,12 +154,12 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                 ),
                 value: settings.streamElementsSettings!.showRaidActivity,
                 onChanged: (bool? value) {
-                  Get.find<SettingsService>().settings.value =
+                  settingsService.settings.value =
                       settings.copyWith(
                     streamElementsSettings: settings.streamElementsSettings!
                         .copyWith(showRaidActivity: value),
                   );
-                  Get.find<SettingsService>().saveSettings();
+                  settingsService.saveSettings();
                 },
               );
             },
@@ -167,7 +168,7 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
         PopupMenuItem(
           child: Obx(
             () {
-              Settings settings = Get.find<SettingsService>().settings.value;
+              Settings settings = settingsService.settings.value;
               return CheckboxListTile(
                 controlAffinity: ListTileControlAffinity.leading,
                 title: Text(
@@ -175,12 +176,12 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                 ),
                 value: settings.streamElementsSettings!.showHostActivity,
                 onChanged: (bool? value) {
-                  Get.find<SettingsService>().settings.value =
+                  settingsService.settings.value =
                       settings.copyWith(
                     streamElementsSettings: settings.streamElementsSettings!
                         .copyWith(showHostActivity: value),
                   );
-                  Get.find<SettingsService>().saveSettings();
+                  settingsService.saveSettings();
                 },
               );
             },

@@ -18,6 +18,8 @@ class SettingsViewController extends GetxController {
   SettingsViewController(
       {required this.settingsEvents, required this.streamelementsEvents});
 
+  final SettingsService settingsService = Get.find<SettingsService>();
+
   final SettingsEvents settingsEvents;
   final StreamelementsEvents streamelementsEvents;
 
@@ -49,27 +51,25 @@ class SettingsViewController extends GetxController {
   late TextEditingController addTtsAllowedPrefixsController;
   Rx<Color> nothingJustToRefreshDialog = Colors.grey.obs;
 
-  late HomeViewController homeViewController;
-  late TtsService ttsService;
-  late StoreService storeService;
+  final HomeViewController homeViewController = Get.find<HomeViewController>();
+  final TtsService ttsService = Get.find<TtsService>();
+  final StoreService storeService = Get.find<StoreService>();
 
   @override
   void onInit() {
-    homeViewController = Get.find<HomeViewController>();
-    ttsService = Get.find<TtsService>();
-    storeService = Get.find<StoreService>();
+    Settings settings = settingsService.settings.value;
 
-    obsWebsocketUrlFieldController = TextEditingController();
-    obsWebsocketPasswordFieldController = TextEditingController();
+    obsWebsocketUrlFieldController = TextEditingController(text: settings.obsWebsocketUrl);
+    obsWebsocketPasswordFieldController = TextEditingController(text: settings.obsWebsocketPassword);
     addBrowserTitleController = TextEditingController();
     addBrowserUrlController = TextEditingController();
     addHiddenUsernameController = TextEditingController();
     addTtsIgnoredUsersController = TextEditingController();
     addTtsIgnoredPrefixsController = TextEditingController();
     addTtsAllowedPrefixsController = TextEditingController();
-    seJwtInputController = TextEditingController();
-    seOverlayTokenInputController = TextEditingController();
-    rtIrlInputController = TextEditingController();
+    seJwtInputController = TextEditingController(text: settings.streamElementsSettings?.jwt);
+    seOverlayTokenInputController = TextEditingController(text: settings.streamElementsSettings?.overlayToken);
+    rtIrlInputController = TextEditingController(text: settings.rtIrlPushKey);
 
     usernamesHiddenUsers = <String>[].obs;
     super.onInit();
@@ -77,15 +77,7 @@ class SettingsViewController extends GetxController {
 
   @override
   void onReady() {
-    Settings settings = Get.find<SettingsService>().settings.value;
-
     if (homeViewController.twitchData != null) {
-      obsWebsocketUrlFieldController.text = settings.obsWebsocketUrl!;
-      obsWebsocketPasswordFieldController.text = settings.obsWebsocketPassword!;
-      seJwtInputController.text = settings.streamElementsSettings!.jwt ?? '';
-      seOverlayTokenInputController.text =
-          settings.streamElementsSettings!.overlayToken ?? '';
-      rtIrlInputController.text = settings.rtIrlPushKey ?? '';
       getUsernames();
     }
 
@@ -176,13 +168,13 @@ class SettingsViewController extends GetxController {
   }
 
   void removeHiddenUser(userId) {
-    Settings settings = Get.find<SettingsService>().settings.value;
+    Settings settings = settingsService.settings.value;
 
     List hiddenUsersIds = settings.hiddenUsersIds!;
     hiddenUsersIds.remove(userId);
-    Get.find<SettingsService>().settings.value =
+    settingsService.settings.value =
         settings.copyWith(hiddenUsersIds: hiddenUsersIds);
-    Get.find<SettingsService>().saveSettings();
+    settingsService.saveSettings();
   }
 
   void addBrowserTab() {
@@ -207,14 +199,14 @@ class SettingsViewController extends GetxController {
       toggled: toggled,
       iOSAudioSource: audioSourceToggled,
     );
-    Settings settings = Get.find<SettingsService>().settings.value;
+    Settings settings = settingsService.settings.value;
 
     List<BrowserTab> tabs = List.from(settings.browserTabs!.tabs);
     tabs.add(tab);
-    Get.find<SettingsService>().settings.value = settings.copyWith(
+    settingsService.settings.value = settings.copyWith(
       browserTabs: settings.browserTabs?.copyWith(tabs: tabs),
     );
-    Get.find<SettingsService>().saveSettings();
+    settingsService.saveSettings();
 
     Get.back();
   }
@@ -238,38 +230,38 @@ class SettingsViewController extends GetxController {
       iOSAudioSource: audioSourceToggled,
     );
 
-    Settings settings = Get.find<SettingsService>().settings.value;
+    Settings settings = settingsService.settings.value;
 
     List<BrowserTab> tabs = settings.browserTabs!.tabs;
     int index = tabs.indexWhere((element) => element.id == tab.id);
     tabs[index] = newTab;
-    Get.find<SettingsService>().settings.value = settings.copyWith(
+    settingsService.settings.value = settings.copyWith(
       browserTabs: settings.browserTabs?.copyWith(tabs: tabs),
     );
 
-    Get.find<SettingsService>().saveSettings();
+    settingsService.saveSettings();
 
     // Close the dialog
     Get.back();
   }
 
   void removeBrowserTab(tab) {
-    Settings settings = Get.find<SettingsService>().settings.value;
+    Settings settings = settingsService.settings.value;
 
     List<BrowserTab> tabs = settings.browserTabs!.tabs;
     tabs.remove(tab);
 
-    Get.find<SettingsService>().settings.value = settings.copyWith(
+    settingsService.settings.value = settings.copyWith(
       browserTabs: settings.browserTabs?.copyWith(tabs: tabs),
     );
-    Get.find<SettingsService>().saveSettings();
+    settingsService.saveSettings();
 
     Get.back();
   }
 
   Future getUsernames() async {
     List<TwitchUser> users = [];
-    Settings settings = Get.find<SettingsService>().settings.value;
+    Settings settings = settingsService.settings.value;
 
     await settingsEvents
         .getTwitchUsers(

@@ -44,11 +44,10 @@ class StreamelementsViewController extends GetxController
 
   RxBool isSocketConnected = false.obs;
 
-  late HomeViewController homeViewController;
+  final HomeViewController homeViewController = Get.find<HomeViewController>();
 
   @override
   Future<void> onInit() async {
-    homeViewController = Get.find<HomeViewController>();
     if(!Platform.isIOS) {
       tabController = TabController(length: 3, vsync: this);
     } else {

@@ -10,6 +10,7 @@ import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
+import 'package:irllink/src/core/services/twitch_event_sub_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/list_move.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
@@ -92,12 +93,30 @@ class HomeViewController extends GetxController
     chatTabsController = TabController(length: 0, vsync: this);
     emotesTabController = TabController(length: 0, vsync: this);
     if (Get.arguments != null) {
+      twitchData = Get.arguments[0];
+
+      TwitchEventSubService subService = await Get.putAsync(
+        () => TwitchEventSubService(
+          homeEvents: HomeEvents(
+            twitchUseCase: TwitchUseCase(
+              twitchRepository: TwitchRepositoryImpl(),
+            ),
+            streamelementsUseCase: StreamelementsUseCase(
+              streamelementsRepository: StreamelementsRepositoryImpl(),
+            ),
+          ),
+        ).init(
+          token: twitchData!.accessToken,
+          channel: twitchData!.twitchUser.login,
+        ),
+        permanent: true,
+      );
+      subService.connect();
+
       TwitchTabView twitchPage = const TwitchTabView();
       tabElements.add(twitchPage);
 
       tabController = TabController(length: tabElements.length, vsync: this);
-
-      twitchData = Get.arguments[0];
 
       await FirebaseCrashlytics.instance.setUserIdentifier(
         twitchData!.twitchUser.id,

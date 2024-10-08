@@ -14,9 +14,9 @@ class ChatsJoined extends GetView<SettingsViewController> {
   @override
   Widget build(BuildContext context) {
     TextEditingController channelTextController = TextEditingController();
-
+    final SettingsService settingsService = Get.find<SettingsService>();
     return Obx(() {
-      Settings settings = Get.find<SettingsService>().settings.value;
+      Settings settings = settingsService.settings.value;
       List<ChatGroup> chatGroups = settings.chatSettings?.chatGroups ?? [];
       ChatGroup firstGroup = settings.chatSettings!.permanentFirstGroup;
       return Scaffold(
@@ -137,6 +137,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
   }
 
   Widget _group(context, channelTextController, ChatGroup group) {
+    final SettingsService settingsService = Get.find<SettingsService>();
     return Dismissible(
       key: ValueKey(group),
       direction: DismissDirection.endToStart,
@@ -147,12 +148,12 @@ class ChatsJoined extends GetView<SettingsViewController> {
       onDismissed: (direction) {
         // If the user swipes to the left
         if (direction == DismissDirection.endToStart) {
-          Settings settings = Get.find<SettingsService>().settings.value;
+          Settings settings = settingsService.settings.value;
 
           // Remove the group from the list of groups in the settings
           settings.chatSettings?.chatGroups.remove(group);
           // Save the settings and refresh the UI
-          Get.find<SettingsService>().saveSettings();
+          settingsService.saveSettings();
         }
       },
       child: Container(
@@ -189,6 +190,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
   }
 
   Widget _channel(Channel channel, ChatGroup group) {
+    final SettingsService settingsService = Get.find<SettingsService>();
     String badge = '';
     switch (channel.platform) {
       case Platform.twitch:
@@ -214,7 +216,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
           // Remove the channel from the group
           group.channels.remove(channel);
           // Save the settings and refresh the UI
-          Get.find<SettingsService>().saveSettings();
+          settingsService.saveSettings();
         }
       },
       key: ValueKey(channel),
@@ -248,7 +250,8 @@ class ChatsJoined extends GetView<SettingsViewController> {
     ChatGroup chatGroup,
   ) {
     Rx<Platform?> selectedPlatform = Platform.values.first.obs;
-    Settings settings = Get.find<SettingsService>().settings.value;
+    final SettingsService settingsService = Get.find<SettingsService>();
+    Settings settings = settingsService.settings.value;
 
     return InkWell(
       onTap: () {
@@ -278,7 +281,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
             chatGroup = chatGroup.copyWith(channels: channels);
 
             if (chatGroup.id == 'permanentFirstGroup') {
-              Get.find<SettingsService>().settings.value = settings.copyWith(
+              settingsService.settings.value = settings.copyWith(
                 chatSettings: settings.chatSettings
                     ?.copyWith(permanentFirstGroup: chatGroup),
               );
@@ -292,14 +295,14 @@ class ChatsJoined extends GetView<SettingsViewController> {
               groups.insert(indexToReplace, chatGroup);
 
               // Update the settings
-              Get.find<SettingsService>().settings.value = settings.copyWith(
+              settingsService.settings.value = settings.copyWith(
                 chatSettings:
                     settings.chatSettings?.copyWith(chatGroups: groups),
               );
             }
 
             // Save and close dialog
-            Get.find<SettingsService>().saveSettings();
+            settingsService.saveSettings();
 
             channelTextController.text = '';
             Get.back();
@@ -330,6 +333,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
   }
 
   Widget _addGroupButton(context) {
+    final SettingsService settingsService = Get.find<SettingsService>();
     return InkWell(
       onTap: () {
         var uuid = const Uuid();
@@ -337,14 +341,14 @@ class ChatsJoined extends GetView<SettingsViewController> {
           id: uuid.v4(),
           channels: const [],
         );
-        Settings settings = Get.find<SettingsService>().settings.value;
+        Settings settings = settingsService.settings.value;
         List<ChatGroup> chatGroups =
             List.from(settings.chatSettings!.chatGroups);
         chatGroups.add(newGroup);
-        Get.find<SettingsService>().settings.value = settings.copyWith(
+        settingsService.settings.value = settings.copyWith(
           chatSettings: settings.chatSettings!.copyWith(chatGroups: chatGroups),
         );
-        Get.find<SettingsService>().saveSettings();
+        settingsService.saveSettings();
       },
       child: Container(
         padding:

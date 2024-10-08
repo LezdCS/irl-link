@@ -42,8 +42,8 @@ class ChatViewController extends GetxController
 
   late TextEditingController banDurationInputController;
 
-  late HomeViewController homeViewController;
-  late TtsService ttsService;
+  final HomeViewController homeViewController = Get.find<HomeViewController>();
+  final TtsService ttsService = Get.find<TtsService>();
 
   List<TwitchChat> twitchChats = [];
   List<KickChat> kickChats = [];
@@ -51,9 +51,6 @@ class ChatViewController extends GetxController
 
   @override
   void onInit() async {
-    homeViewController = Get.find<HomeViewController>();
-    ttsService = Get.find<TtsService>();
-
     scrollController = ScrollController();
     banDurationInputController = TextEditingController();
     if (Get.arguments != null) {

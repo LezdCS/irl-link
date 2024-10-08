@@ -13,7 +13,8 @@ class ObsSettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Settings settings = Get.find<SettingsService>().settings.value;
+    final SettingsService settingsService = Get.find<SettingsService>();
+    Settings settings = settingsService.settings.value;
 
     return Obx(
       () => Container(
@@ -35,9 +36,9 @@ class ObsSettings extends StatelessWidget {
                     controller: controller.obsWebsocketUrlFieldController,
                     obscureText: !controller.obsWebsocketUrlShow.value,
                     onChanged: (value) {
-                      Get.find<SettingsService>().settings.value =
+                      settingsService.settings.value =
                           settings.copyWith(obsWebsocketUrl: value);
-                      Get.find<SettingsService>().saveSettings();
+                      settingsService.saveSettings();
                     },
                     decoration: InputDecoration(
                       isDense: true,
@@ -72,9 +73,9 @@ class ObsSettings extends StatelessWidget {
                     controller: controller.obsWebsocketPasswordFieldController,
                     obscureText: !controller.obsWebsocketPasswordShow.value,
                     onChanged: (value) {
-                      Get.find<SettingsService>().settings.value =
+                      settingsService.settings.value =
                           settings.copyWith(obsWebsocketPassword: value);
-                      Get.find<SettingsService>().saveSettings();
+                      settingsService.saveSettings();
                     },
                     decoration: InputDecoration(
                       isDense: true,
@@ -205,7 +206,8 @@ class ObsSettings extends StatelessWidget {
       width: 250,
       height: 250,
     );
-    Settings settings = Get.find<SettingsService>().settings.value;
+    final SettingsService settingsService = Get.find<SettingsService>();
+    Settings settings = settingsService.settings.value;
 
     return Stack(
       fit: StackFit.expand,
@@ -222,13 +224,13 @@ class ObsSettings extends StatelessWidget {
               controller.obsWebsocketPasswordFieldController.text = password;
               controller.obsWebsocketUrlFieldController.text = url;
 
-              Get.find<SettingsService>().settings.value =
+              settingsService.settings.value =
                   settings.copyWith(obsWebsocketUrl: url);
 
-              Get.find<SettingsService>().settings.value =
+              settingsService.settings.value =
                   settings.copyWith(obsWebsocketPassword: password);
 
-              Get.find<SettingsService>().saveSettings();
+              settingsService.saveSettings();
               Get.back();
             }
           },
@@ -281,7 +283,8 @@ class ObsSettings extends StatelessWidget {
   }
 
   Widget _obsHistory(SettingsViewController controller) {
-    Settings settings = Get.find<SettingsService>().settings.value;
+    final SettingsService settingsService = Get.find<SettingsService>();
+    Settings settings = settingsService.settings.value;
 
     return SizedBox(
       height: 200,
@@ -297,9 +300,9 @@ class ObsSettings extends StatelessWidget {
             onTap: () {
               controller.obsWebsocketUrlFieldController.text = url;
               controller.obsWebsocketPasswordFieldController.text = password;
-              Get.find<SettingsService>().settings.value = settings.copyWith(
+              settingsService.settings.value = settings.copyWith(
                   obsWebsocketUrl: url, obsWebsocketPassword: password);
-              Get.find<SettingsService>().saveSettings();
+              settingsService.saveSettings();
               Get.back();
             },
           );

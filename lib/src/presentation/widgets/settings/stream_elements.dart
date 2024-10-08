@@ -14,8 +14,6 @@ class StreamElements extends GetView<SettingsViewController> {
 
   @override
   Widget build(BuildContext context) {
-    Settings settings = Get.find<SettingsService>().settings.value;
-
     return Column(
       children: [
         Row(
@@ -67,7 +65,7 @@ class StreamElements extends GetView<SettingsViewController> {
                 controller.homeViewController.streamelementsViewController
                             .value !=
                         null
-                    ? loggedIn(context, settings)
+                    ? loggedIn(context)
                     : loginButton()
               ],
             ),
@@ -77,7 +75,8 @@ class StreamElements extends GetView<SettingsViewController> {
     );
   }
 
-  Widget loggedIn(BuildContext context, Settings settings) {
+  Widget loggedIn(BuildContext context) {
+    Settings settings = Get.find<SettingsService>().settings.value;
     SeMe? seMe = controller.homeViewController.streamelementsViewController
         .value?.userSeProfile.value;
     return Column(
