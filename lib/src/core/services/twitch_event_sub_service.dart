@@ -14,10 +14,15 @@ import 'package:irllink/src/data/entities/twitch/twitch_prediction_dto.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_hype_train.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
+import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
+import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 import 'package:web_socket_channel/io.dart';
 
 class TwitchEventSubService extends GetxService {
+  TwitchEventSubService({required this.homeEvents});
+  final HomeEvents homeEvents;
+
   late String accessToken;
   late String channelName;
   IOWebSocketChannel? _webSocketChannel;
@@ -29,6 +34,8 @@ class TwitchEventSubService extends GetxService {
 
   Rx<TwitchPrediction> currentPrediction = TwitchPrediction.empty().obs;
   Rx<Duration> remainingTimePrediction = const Duration(seconds: 0).obs;
+  RxString selectedOutcomeId = "-1".obs;
+
 
   Rx<TwitchHypeTrain> currentHypeTrain = TwitchHypeTrain.empty().obs;
   Rx<Duration> remainingTimeHypeTrain = const Duration(seconds: 0).obs;
@@ -276,5 +283,46 @@ class TwitchEventSubService extends GetxService {
         );
       }
     });
+  }
+
+
+  void createPoll(String question, List<Choice> choices) {
+    TwitchPoll newPoll = TwitchPoll(
+      id: "",
+      title: "",
+      choices: choices,
+      status: PollStatus.active,
+      totalVotes: 0,
+      endsAt: DateTime.now(),
+    );
+    homeEvents.createPoll(
+      Get.find<HomeViewController>().twitchData!.accessToken,
+      Get.find<HomeViewController>().twitchData!.twitchUser.id,
+      newPoll,
+    );
+  }
+
+  // status is either TERMINATED to end poll and display the result to viewer
+  // or ARCHIVED to end the poll and hide it
+  void endPoll(String status) {
+    homeEvents.endPoll(
+      Get.find<HomeViewController>().twitchData!.accessToken,
+      Get.find<HomeViewController>().twitchData!.twitchUser.id,
+      Get.find<TwitchEventSubService>().currentPoll.value.id,
+      status,
+    );
+  }
+
+  // status is either RESOLVED to end prediction with a winner (should provide winning_outcome_id)
+  // or CANCELED to end the prediction and refund
+  // or LOCKED to lock prediction so user can no longer make predictions
+  void endPrediction(String status, String? winningOutcomeId) {
+    homeEvents.endPrediction(
+      Get.find<HomeViewController>().twitchData!.accessToken,
+      Get.find<HomeViewController>().twitchData!.twitchUser.id,
+      Get.find<TwitchEventSubService>().currentPrediction.value.id,
+      status,
+      winningOutcomeId,
+    );
   }
 }

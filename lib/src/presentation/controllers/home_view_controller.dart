@@ -96,7 +96,16 @@ class HomeViewController extends GetxController
       twitchData = Get.arguments[0];
 
       TwitchEventSubService subService = await Get.putAsync(
-        () => TwitchEventSubService().init(
+        () => TwitchEventSubService(
+          homeEvents: HomeEvents(
+            twitchUseCase: TwitchUseCase(
+              twitchRepository: TwitchRepositoryImpl(),
+            ),
+            streamelementsUseCase: StreamelementsUseCase(
+              streamelementsRepository: StreamelementsRepositoryImpl(),
+            ),
+          ),
+        ).init(
           token: twitchData!.accessToken,
           channel: twitchData!.twitchUser.login,
         ),
