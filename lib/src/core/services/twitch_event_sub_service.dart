@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/convert_to_device_timezone.dart';
@@ -36,7 +35,6 @@ class TwitchEventSubService extends GetxService {
   Rx<Duration> remainingTimePrediction = const Duration(seconds: 0).obs;
   RxString selectedOutcomeId = "-1".obs;
 
-
   Rx<TwitchHypeTrain> currentHypeTrain = TwitchHypeTrain.empty().obs;
   Rx<Duration> remainingTimeHypeTrain = const Duration(seconds: 0).obs;
 
@@ -51,15 +49,16 @@ class TwitchEventSubService extends GetxService {
     return this;
   }
 
-  Rx<bool> get isConnected => (_streamSubscription != null).obs;
+  Rx<bool> isConnected = false.obs;
+
 
   Future<void> connect() async {
     _broadcasterId = await _getChannelId();
 
     String url = "wss://eventsub.wss.twitch.tv/ws";
-    if (kDebugMode) {
-      url = "ws://localhost:8080/ws";
-    }
+    // if (kDebugMode) {
+    //   url = "ws://localhost:8080/ws";
+    // }
 
     _webSocketChannel = IOWebSocketChannel.connect(url);
 
@@ -80,6 +79,7 @@ class TwitchEventSubService extends GetxService {
       onDone: _onDone,
       onError: _onError,
     );
+    isConnected.value = true;
   }
 
   void close() {
@@ -171,10 +171,12 @@ class TwitchEventSubService extends GetxService {
 
   void _onDone() {
     globals.talker?.info("Twitch Sub Event: Connection closed");
+    isConnected.value = false;
     close();
   }
 
   void _onError(Object o, StackTrace s) {
+    isConnected.value = false;
     globals.talker?.error("Twitch Sub Event: error", o, s);
   }
 
