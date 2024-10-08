@@ -369,6 +369,7 @@ class HomeView extends GetView<HomeViewController> {
                                       () => poll(
                                         context,
                                         Get.find<TwitchTabViewController>(),
+                                        Get.find<TwitchTabViewController>().twitchEventSub?.currentPoll.value,
                                       ),
                                     ),
                                   ],
@@ -416,6 +417,7 @@ class HomeView extends GetView<HomeViewController> {
                                       () => prediction(
                                         context,
                                         Get.find<TwitchTabViewController>(),
+                                        Get.find<TwitchTabViewController>().twitchEventSub?.currentPrediction.value,
                                       ),
                                     ),
                                   ],
