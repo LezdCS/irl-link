@@ -6,7 +6,7 @@ import 'package:irllink/src/core/resources/data_state.dart';
 import 'home_view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/services/twitch_event_sub.dart';
+import 'package:irllink/src/core/services/twitch_event_sub_service.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
