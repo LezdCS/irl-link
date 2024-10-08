@@ -325,7 +325,7 @@ Widget _editDialog(
         key: controller.addBrowserTitleKey,
         child: TextFormField(
           controller: controller.addBrowserTitleController,
-          textInputAction: TextInputAction.send,
+          textInputAction: TextInputAction.next,
           maxLines: 1,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -348,7 +348,7 @@ Widget _editDialog(
         key: controller.addBrowserUrlKey,
         child: TextFormField(
           controller: controller.addBrowserUrlController,
-          textInputAction: TextInputAction.send,
+          textInputAction: TextInputAction.done,
           maxLines: 1,
           textCapitalization: TextCapitalization.none,
           validator: (value) {
