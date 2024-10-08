@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -48,8 +49,11 @@ class StreamelementsViewController extends GetxController
   @override
   Future<void> onInit() async {
     homeViewController = Get.find<HomeViewController>();
-
-    tabController = TabController(length: 3, vsync: this);
+    if(!Platform.isIOS) {
+      tabController = TabController(length: 3, vsync: this);
+    } else {
+      tabController = TabController(length: 2, vsync: this);
+    } 
     activitiesScrollController = ScrollController();
     songRequestScrollController = ScrollController();
 

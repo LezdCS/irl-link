@@ -1,6 +1,7 @@
 // import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/alert_message_view.dart';
 import 'package:obs_websocket/obs_websocket.dart';
@@ -213,8 +214,14 @@ class ObsTabView extends GetView<ObsTabViewController> {
                         ),
                         child: Text(
                           "retry_connection".tr,
-                          style: const TextStyle(color: Colors.white),
                         ),
+                      ),
+                    ),
+                    Visibility(
+                      visible: Get.find<SettingsService>().settings.value.obsWebsocketUrl?.contains("https") ?? false,
+                      child: const Text(
+                        "It seems that your OBS websocket URL contains 'https', try without it.",
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   ],
@@ -284,7 +291,8 @@ class ObsTabView extends GetView<ObsTabViewController> {
         double? sourceVolume = controller.sourcesVolumesMap[source.sourceName];
         return GestureDetector(
           onTap: () {
-            controller.setSourceVisibleState(source.sceneItemId, source.sceneItemEnabled);
+            controller.setSourceVisibleState(
+                source.sceneItemId, source.sceneItemEnabled);
           },
           onLongPress: () {
             Get.defaultDialog(

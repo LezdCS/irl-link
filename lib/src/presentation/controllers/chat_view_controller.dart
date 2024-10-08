@@ -79,12 +79,7 @@ class ChatViewController extends GetxController
   void onReady() {
     scrollController.addListener(scrollListener);
     Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      for (TwitchChat twitchChat in twitchChats) {
-        if (!twitchChat.isConnected.value) {
-          twitchChat.close();
-          twitchChat.connect();
-        }
-      }
+      reconnectAllChats();
     });
 
     super.onReady();
@@ -103,17 +98,34 @@ class ChatViewController extends GetxController
 
     if (state == AppLifecycleState.resumed) {
       // The app is back to the foreground
-      debugPrint("App resumed");
-      for (TwitchChat twitchChat in twitchChats) {
-        if (!twitchChat.isConnected.value) {
-          twitchChat.close();
-          twitchChat.connect();
-        }
-      }
+      reconnectAllChats();
     } else if (state == AppLifecycleState.paused) {
       // The app is sent to the background
-      debugPrint("App paused");
     }
+  }
+
+  void reconnectAllChats() {
+    for (TwitchChat twitchChat in twitchChats) {
+      if (!twitchChat.isConnected.value) {
+        twitchChat.close();
+        twitchChat.connect();
+      }
+    }
+    for (KickChat kickChat in kickChats) {
+      kickChat.close();
+      kickChat.connect();
+    }
+    for (YoutubeChat youtubeChat in youtubeChats) {
+      youtubeChat.startFetchingChat();
+    }
+  }
+
+  void addMessage(ChatMessage message) {
+    chatMessages.add(message);
+    if(chatMessages.length > 500) {
+      chatMessages.removeAt(0);
+    }
+    scrollChatToBottom();
   }
 
   void scrollListener() {
@@ -361,8 +373,7 @@ class ChatViewController extends GetxController
       }
       ChatMessage twitchMessage =
           ChatMessage.fromTwitch(message, twitchChat.channelId ?? '');
-      chatMessages.add(twitchMessage);
-      scrollChatToBottom();
+      addMessage(twitchMessage);
     });
   }
 
@@ -382,8 +393,7 @@ class ChatViewController extends GetxController
       if (settings.ttsSettings!.ttsEnabled) {
         ttsService.readTts(message);
       }
-      chatMessages.add(message);
-      scrollChatToBottom();
+      addMessage(message);
     });
     youtubeChats.add(youtubeChat);
   }
@@ -418,7 +428,7 @@ class ChatViewController extends GetxController
           if (settings.ttsSettings!.ttsEnabled) {
             ttsService.readTts(kickMessage);
           }
-          chatMessages.add(kickMessage);
+          addMessage(kickMessage);
           break;
         case TypeEvent.followersUpdated:
           // TODO: TBD
@@ -429,7 +439,7 @@ class ChatViewController extends GetxController
             kickChat.userDetails!.userId.toString(),
             kickChat.userDetails!.subBadges,
           );
-          chatMessages.add(kickMessage);
+          addMessage(kickMessage);
           break;
         case TypeEvent.subscriptionEvent:
           ChatMessage kickMessage = ChatMessage.kickSub(
@@ -437,7 +447,7 @@ class ChatViewController extends GetxController
             kickChat.userDetails!.userId.toString(),
             kickChat.userDetails!.subBadges,
           );
-          chatMessages.add(kickMessage);
+          addMessage(kickMessage);
           break;
         case TypeEvent.chatroomUpdatedEvent:
           // TODO: TBD
@@ -463,7 +473,7 @@ class ChatViewController extends GetxController
             kickChat.userDetails!.userId.toString(),
             kickChat.userDetails!.subBadges,
           );
-          chatMessages.add(kickMessage);
+          addMessage(kickMessage);
           break;
         case TypeEvent.pinnedMessageCreatedEvent:
           // TODO: event in chat (NOT CURRENTLY CODED IN THE APP, SAME FOR TWITCH)
@@ -481,8 +491,6 @@ class ChatViewController extends GetxController
         case null:
           break;
       }
-
-      scrollChatToBottom();
     });
   }
 
