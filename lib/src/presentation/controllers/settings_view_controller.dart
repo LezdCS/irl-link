@@ -18,6 +18,8 @@ class SettingsViewController extends GetxController {
   SettingsViewController(
       {required this.settingsEvents, required this.streamelementsEvents});
 
+  final SettingsService settingsService = Get.find<SettingsService>();
+
   final SettingsEvents settingsEvents;
   final StreamelementsEvents streamelementsEvents;
 
@@ -73,7 +75,7 @@ class SettingsViewController extends GetxController {
 
   @override
   void onReady() {
-    Settings settings = Get.find<SettingsService>().settings.value;
+    Settings settings = settingsService.settings.value;
 
     if (homeViewController.twitchData != null) {
       obsWebsocketUrlFieldController.text = settings.obsWebsocketUrl!;
@@ -172,13 +174,13 @@ class SettingsViewController extends GetxController {
   }
 
   void removeHiddenUser(userId) {
-    Settings settings = Get.find<SettingsService>().settings.value;
+    Settings settings = settingsService.settings.value;
 
     List hiddenUsersIds = settings.hiddenUsersIds!;
     hiddenUsersIds.remove(userId);
-    Get.find<SettingsService>().settings.value =
+    settingsService.settings.value =
         settings.copyWith(hiddenUsersIds: hiddenUsersIds);
-    Get.find<SettingsService>().saveSettings();
+    settingsService.saveSettings();
   }
 
   void addBrowserTab() {
@@ -203,14 +205,14 @@ class SettingsViewController extends GetxController {
       toggled: toggled,
       iOSAudioSource: audioSourceToggled,
     );
-    Settings settings = Get.find<SettingsService>().settings.value;
+    Settings settings = settingsService.settings.value;
 
     List<BrowserTab> tabs = List.from(settings.browserTabs!.tabs);
     tabs.add(tab);
-    Get.find<SettingsService>().settings.value = settings.copyWith(
+    settingsService.settings.value = settings.copyWith(
       browserTabs: settings.browserTabs?.copyWith(tabs: tabs),
     );
-    Get.find<SettingsService>().saveSettings();
+    settingsService.saveSettings();
 
     Get.back();
   }
@@ -234,38 +236,38 @@ class SettingsViewController extends GetxController {
       iOSAudioSource: audioSourceToggled,
     );
 
-    Settings settings = Get.find<SettingsService>().settings.value;
+    Settings settings = settingsService.settings.value;
 
     List<BrowserTab> tabs = settings.browserTabs!.tabs;
     int index = tabs.indexWhere((element) => element.id == tab.id);
     tabs[index] = newTab;
-    Get.find<SettingsService>().settings.value = settings.copyWith(
+    settingsService.settings.value = settings.copyWith(
       browserTabs: settings.browserTabs?.copyWith(tabs: tabs),
     );
 
-    Get.find<SettingsService>().saveSettings();
+    settingsService.saveSettings();
 
     // Close the dialog
     Get.back();
   }
 
   void removeBrowserTab(tab) {
-    Settings settings = Get.find<SettingsService>().settings.value;
+    Settings settings = settingsService.settings.value;
 
     List<BrowserTab> tabs = settings.browserTabs!.tabs;
     tabs.remove(tab);
 
-    Get.find<SettingsService>().settings.value = settings.copyWith(
+    settingsService.settings.value = settings.copyWith(
       browserTabs: settings.browserTabs?.copyWith(tabs: tabs),
     );
-    Get.find<SettingsService>().saveSettings();
+    settingsService.saveSettings();
 
     Get.back();
   }
 
   Future getUsernames() async {
     List<TwitchUser> users = [];
-    Settings settings = Get.find<SettingsService>().settings.value;
+    Settings settings = settingsService.settings.value;
 
     await settingsEvents
         .getTwitchUsers(

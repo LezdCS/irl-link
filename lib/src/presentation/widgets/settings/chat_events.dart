@@ -14,9 +14,10 @@ class ChatEvents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final SettingsService settingsService = Get.find<SettingsService>();
     return Obx(
       () {
-        Settings settings = Get.find<SettingsService>().settings.value;
+        Settings settings = settingsService.settings.value;
 
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.surface,
@@ -70,14 +71,14 @@ class ChatEvents extends StatelessWidget {
                           Switch(
                             value: settings.chatEventsSettings!.firstsMessages,
                             onChanged: (value) {
-                              Get.find<SettingsService>().settings.value =
+                              settingsService.settings.value =
                                   settings.copyWith(
                                 chatEventsSettings:
                                     settings.chatEventsSettings!.copyWith(
                                   firstsMessages: value,
                                 ),
                               );
-                              Get.find<SettingsService>().saveSettings();
+                              settingsService.saveSettings();
                             },
                           ),
                         ],
@@ -114,14 +115,14 @@ class ChatEvents extends StatelessWidget {
                           Switch(
                             value: settings.chatEventsSettings!.subscriptions,
                             onChanged: (value) {
-                              Get.find<SettingsService>().settings.value =
+                              settingsService.settings.value =
                                   settings.copyWith(
                                 chatEventsSettings:
                                     settings.chatEventsSettings!.copyWith(
                                   subscriptions: value,
                                 ),
                               );
-                              Get.find<SettingsService>().saveSettings();
+                              settingsService.saveSettings();
                             },
                           ),
                         ],
@@ -158,14 +159,14 @@ class ChatEvents extends StatelessWidget {
                           Switch(
                             value: settings.chatEventsSettings!.bitsDonations,
                             onChanged: (value) {
-                              Get.find<SettingsService>().settings.value =
+                              settingsService.settings.value =
                                   settings.copyWith(
                                 chatEventsSettings:
                                     settings.chatEventsSettings!.copyWith(
                                   bitsDonations: value,
                                 ),
                               );
-                              Get.find<SettingsService>().saveSettings();
+                              settingsService.saveSettings();
                             },
                           ),
                         ],
@@ -202,14 +203,14 @@ class ChatEvents extends StatelessWidget {
                           Switch(
                             value: settings.chatEventsSettings!.announcements,
                             onChanged: (value) {
-                              Get.find<SettingsService>().settings.value =
+                              settingsService.settings.value =
                                   settings.copyWith(
                                 chatEventsSettings:
                                     settings.chatEventsSettings!.copyWith(
                                   announcements: value,
                                 ),
                               );
-                              Get.find<SettingsService>().saveSettings();
+                              settingsService.saveSettings();
                             },
                           ),
                         ],
@@ -246,14 +247,14 @@ class ChatEvents extends StatelessWidget {
                           Switch(
                             value: settings.chatEventsSettings!.incomingRaids,
                             onChanged: (value) {
-                              Get.find<SettingsService>().settings.value =
+                              settingsService.settings.value =
                                   settings.copyWith(
                                 chatEventsSettings:
                                     settings.chatEventsSettings!.copyWith(
                                   incomingRaids: value,
                                 ),
                               );
-                              Get.find<SettingsService>().saveSettings();
+                              settingsService.saveSettings();
                             },
                           ),
                         ],
@@ -290,14 +291,14 @@ class ChatEvents extends StatelessWidget {
                           Switch(
                             value: settings.chatEventsSettings!.redemptions,
                             onChanged: (value) {
-                              Get.find<SettingsService>().settings.value =
+                              settingsService.settings.value =
                                   settings.copyWith(
                                 chatEventsSettings:
                                     settings.chatEventsSettings!.copyWith(
                                   redemptions: value,
                                 ),
                               );
-                              Get.find<SettingsService>().saveSettings();
+                              settingsService.saveSettings();
                             },
                           ),
                         ],
