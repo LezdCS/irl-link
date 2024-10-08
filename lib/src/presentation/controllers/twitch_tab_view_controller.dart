@@ -80,15 +80,6 @@ class TwitchTabViewController extends GetxController
       refreshData();
     });
 
-    TwitchEventSubService subService = await Get.putAsync(
-      () => TwitchEventSubService().init(
-        token: homeViewController.twitchData!.accessToken,
-        channel: homeViewController.twitchData!.twitchUser.login,
-      ),
-      permanent: true,
-    );
-    subService.connect();
-
     super.onReady();
   }
 

@@ -78,16 +78,16 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                       const SizedBox(
                         width: 8,
                       ),
-                      Icon(
-                        Get.isRegistered<TwitchEventSubService>() &&
-                                Get.find<TwitchEventSubService>().isConnected
-                            ? Icons.stream_sharp
-                            : Icons.close,
-                        size: 12,
-                        color: Get.isRegistered<TwitchEventSubService>() &&
-                                Get.find<TwitchEventSubService>().isConnected
-                            ? Colors.green
-                            : Colors.red,
+                      Obx(
+                        () =>
+                            Get.find<TwitchEventSubService>().isConnected.value
+                                ? const Icon(Icons.stream_sharp,
+                                    size: 12, color: Colors.green)
+                                : const Icon(
+                                    Icons.close,
+                                    size: 12,
+                                    color: Colors.red,
+                                  ),
                       ),
                     ],
                   ),
@@ -374,28 +374,28 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
               const Divider(
                 height: 30,
               ),
-              Visibility(
-                visible: Get.isRegistered<TwitchEventSubService>(),
-                child: Obx(
-                  () => prediction(
-                    context,
-                    controller,
-                    Get.find<TwitchEventSubService>().currentPrediction.value,
-                  ),
-                ),
+              Obx(
+                () => Get.find<TwitchEventSubService>().isConnected.value
+                    ? prediction(
+                        context,
+                        controller,
+                        Get.find<TwitchEventSubService>()
+                            .currentPrediction
+                            .value,
+                      )
+                    : Container(),
               ),
               const Divider(
                 height: 30,
               ),
-              Visibility(
-                visible: Get.isRegistered<TwitchEventSubService>(),
-                child: Obx(
-                  () => poll(
-                    context,
-                    controller,
-                    Get.find<TwitchEventSubService>().currentPoll.value,
-                  ),
-                ),
+              Obx(
+                () => Get.find<TwitchEventSubService>().isConnected.value
+                    ? poll(
+                        context,
+                        controller,
+                        Get.find<TwitchEventSubService>().currentPoll.value,
+                      )
+                    : Container(),
               ),
             ],
           ),

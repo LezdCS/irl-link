@@ -10,6 +10,7 @@ import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
+import 'package:irllink/src/core/services/twitch_event_sub_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/list_move.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
@@ -111,6 +112,15 @@ class HomeViewController extends GetxController
               },
             );
       });
+
+      TwitchEventSubService subService = await Get.putAsync(
+        () => TwitchEventSubService().init(
+          token: twitchData!.accessToken,
+          channel: twitchData!.twitchUser.login,
+        ),
+        permanent: true,
+      );
+      subService.connect();
     }
     await applySettings();
 

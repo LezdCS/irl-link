@@ -44,9 +44,9 @@ class TwitchEventSubService extends GetxService {
     return this;
   }
 
-  bool get isConnected => _streamSubscription != null;
+  Rx<bool> get isConnected => (_streamSubscription != null).obs;
 
-  void connect() async {
+  Future<void> connect() async {
     _broadcasterId = await _getChannelId();
 
     String url = "wss://eventsub.wss.twitch.tv/ws";
