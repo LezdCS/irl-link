@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/convert_to_device_timezone.dart';
@@ -56,9 +57,9 @@ class TwitchEventSubService extends GetxService {
     _broadcasterId = await _getChannelId();
 
     String url = "wss://eventsub.wss.twitch.tv/ws";
-    // if (kDebugMode) {
-    //   url = "ws://localhost:8080/ws";
-    // }
+    if (kDebugMode) {
+      url = "ws://localhost:8080/ws";
+    }
 
     _webSocketChannel = IOWebSocketChannel.connect(url);
 
