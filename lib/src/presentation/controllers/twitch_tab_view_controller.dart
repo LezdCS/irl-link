@@ -24,7 +24,6 @@ class TwitchTabViewController extends GetxController
 
   FocusNode focus = FocusNode();
 
-
   Rx<TwitchStreamInfos> twitchStreamInfos =
       const TwitchStreamInfos.defaultInfos().obs;
   late AnimationController controllerLiveCircleAnimation;
@@ -76,21 +75,19 @@ class TwitchTabViewController extends GetxController
 
   @override
   void onReady() async {
-    if (homeViewController.twitchData != null) {
+    refreshData();
+    refreshDataTimer = Timer.periodic(const Duration(seconds: 15), (timer) {
       refreshData();
-      refreshDataTimer = Timer.periodic(const Duration(seconds: 15), (timer) {
-        refreshData();
-      });
+    });
 
-      TwitchEventSubService subService = await Get.putAsync(
-        () => TwitchEventSubService().init(
-          token: homeViewController.twitchData!.accessToken,
-          channel: homeViewController.twitchData!.twitchUser.login,
-        ),
-        permanent: true,
-      );
-      subService.connect();
-    }
+    TwitchEventSubService subService = await Get.putAsync(
+      () => TwitchEventSubService().init(
+        token: homeViewController.twitchData!.accessToken,
+        channel: homeViewController.twitchData!.twitchUser.login,
+      ),
+      permanent: true,
+    );
+    subService.connect();
 
     super.onReady();
   }
