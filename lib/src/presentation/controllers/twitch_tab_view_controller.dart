@@ -105,7 +105,6 @@ class TwitchTabViewController extends GetxController
 
   Future<void> refreshData() async {
     refreshDataAnimationController.reset();
-    if (homeViewController.twitchData == null) return;
     DataState<TwitchStreamInfos> streamInfos = await homeEvents.getStreamInfo(
       homeViewController.twitchData!.accessToken,
       homeViewController.twitchData!.twitchUser.id,
@@ -146,17 +145,19 @@ class TwitchTabViewController extends GetxController
   }
 
   void changeChatSettings() {
-    if (homeViewController.twitchData == null) return;
-
-    homeEvents.setChatSettings(homeViewController.twitchData!.accessToken,
-        homeViewController.twitchData!.twitchUser.id, twitchStreamInfos.value);
+    homeEvents.setChatSettings(
+      homeViewController.twitchData!.accessToken,
+      homeViewController.twitchData!.twitchUser.id,
+      twitchStreamInfos.value,
+    );
   }
 
   void setStreamTitle() {
-    if (homeViewController.twitchData == null) return;
-
-    homeEvents.setStreamTitle(homeViewController.twitchData!.accessToken,
-        homeViewController.twitchData!.twitchUser.id, titleFormController.text);
+    homeEvents.setStreamTitle(
+      homeViewController.twitchData!.accessToken,
+      homeViewController.twitchData!.twitchUser.id,
+      titleFormController.text,
+    );
   }
 
   void createPoll(String question, List<Choice> choices) {
@@ -168,8 +169,11 @@ class TwitchTabViewController extends GetxController
       totalVotes: 0,
       endsAt: DateTime.now(),
     );
-    homeEvents.createPoll(homeViewController.twitchData!.accessToken,
-        homeViewController.twitchData!.twitchUser.id, newPoll);
+    homeEvents.createPoll(
+      homeViewController.twitchData!.accessToken,
+      homeViewController.twitchData!.twitchUser.id,
+      newPoll,
+    );
   }
 
   // status is either TERMINATED to end poll and display the result to viewer
