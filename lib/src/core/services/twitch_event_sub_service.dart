@@ -36,7 +36,6 @@ class TwitchEventSubService extends GetxService {
   Rx<Duration> remainingTimePrediction = const Duration(seconds: 0).obs;
   RxString selectedOutcomeId = "-1".obs;
 
-
   Rx<TwitchHypeTrain> currentHypeTrain = TwitchHypeTrain.empty().obs;
   Rx<Duration> remainingTimeHypeTrain = const Duration(seconds: 0).obs;
 
@@ -51,7 +50,8 @@ class TwitchEventSubService extends GetxService {
     return this;
   }
 
-  Rx<bool> get isConnected => (_streamSubscription != null).obs;
+  Rx<bool> isConnected = false.obs;
+
 
   Future<void> connect() async {
     _broadcasterId = await _getChannelId();
@@ -80,6 +80,7 @@ class TwitchEventSubService extends GetxService {
       onDone: _onDone,
       onError: _onError,
     );
+    isConnected.value = true;
   }
 
   void close() {
@@ -171,10 +172,12 @@ class TwitchEventSubService extends GetxService {
 
   void _onDone() {
     globals.talker?.info("Twitch Sub Event: Connection closed");
+    isConnected.value = false;
     close();
   }
 
   void _onError(Object o, StackTrace s) {
+    isConnected.value = false;
     globals.talker?.error("Twitch Sub Event: error", o, s);
   }
 
