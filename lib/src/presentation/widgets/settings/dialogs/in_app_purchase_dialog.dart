@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 Widget inAppPurchaseDialog(
   BuildContext context,
@@ -129,6 +130,58 @@ Widget inAppPurchaseDialog(
             style: const TextStyle(fontSize: 13, color: Colors.grey),
             textAlign: TextAlign.center,
           ),
+          Platform.isIOS
+              ? Text.rich(
+                  style: const TextStyle(fontSize: 13, color: Colors.grey),
+                  textAlign: TextAlign.center,
+                  TextSpan(
+                    children: [
+                      const TextSpan(
+                        text: 'To learn more, visit our ',
+                      ),
+                      WidgetSpan(
+                        child: InkWell(
+                          onTap: () {
+                            launchUrlString(
+                              "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/",
+                              mode: LaunchMode.externalApplication,
+                            );
+                          },
+                          child: Text(
+                            "Terms",
+                            textAlign: TextAlign.end,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.tertiary,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const TextSpan(
+                        text: ' and ',
+                      ),
+                      WidgetSpan(
+                        child: InkWell(
+                          onTap: () {
+                            launchUrlString(
+                              "https://github.com/LezdCS/irl-link/blob/master/PRIVACY_POLICY.md",
+                              mode: LaunchMode.externalApplication,
+                            );
+                          },
+                          child: Text(
+                            "Privacy Policy",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.tertiary,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const TextSpan(
+                        text: '.',
+                      ),
+                    ],
+                  ),
+                )
+              : Container(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
