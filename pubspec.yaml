@@ -35,7 +35,6 @@ dependencies:
   firebase_remote_config: ^5.0.4
   flutter_colorpicker: ^1.1.0
   flutter_foreground_task: ^8.3.0
-  flutter_slidable: ^3.1.1
   flutter_svg: ^2.0.10+1
   flutter_tts: ^4.0.2
   flutter_web_auth: ^0.5.0

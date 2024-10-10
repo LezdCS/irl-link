@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/utils/dashboard_events.dart';
@@ -70,24 +69,17 @@ class DashboardSettingsView extends GetView<DashboardController> {
                         settings.dashboardSettings!.userEvents[index];
                     ExistingDashboardEvent? eventDetails =
                         dashboardEvents[event.event];
-                    return Slidable(
+                    return Dismissible(
                       key: Key('${event.title}-$index'),
-                      endActionPane: ActionPane(
-                        motion: const ScrollMotion(),
-                        extentRatio: 0.25,
-                        children: [
-                          SlidableAction(
-                            backgroundColor:
-                                Theme.of(context).colorScheme.surface,
-                            onPressed: (context) {
-                              controller.removeDashboardEvent(event);
-                            },
-                            icon: Icons.delete,
-                            label: "delete".tr,
-                            foregroundColor: Colors.red,
-                          ),
-                        ],
+                      direction: DismissDirection.endToStart,
+                      background: Container(
+                        alignment: Alignment.centerRight,
+                        child: const Icon(Icons.delete, color: Colors.red,),
                       ),
+                      confirmDismiss: (direction) => Future.value(true),
+                      onDismissed: (context) {
+                        controller.removeDashboardEvent(event);
+                      },
                       child: Container(
                         margin: const EdgeInsets.all(4),
                         padding: const EdgeInsets.all(10),
@@ -141,7 +133,7 @@ Widget _addGroupButton(
     onTap: () {
       Get.defaultDialog(
         content: _addDialog(context, dashboardController),
-        title:  "new_event".tr,
+        title: "new_event".tr,
         cancel: null,
         confirm: Container(),
         backgroundColor: Theme.of(context).colorScheme.surface,
@@ -235,7 +227,7 @@ Widget _addDialog(context, DashboardController dashboardController) {
             }).toList(),
             validator: (value) {
               if (value == SupportedEvents.none) {
-                return  "please_select_event".tr;
+                return "please_select_event".tr;
               }
               return null;
             },

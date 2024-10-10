@@ -27,22 +27,7 @@ class ManageListBrowserTabs extends GetView<SettingsViewController> {
               ),
               onPressed: () => Get.back(),
             ),
-            actions: controller.browserTabsSelected.isNotEmpty
-                ? [
-                    IconButton(
-                      icon: const Icon(
-                        Icons.delete,
-                        color: Colors.red,
-                      ),
-                      onPressed: () {
-                        for (var tab in controller.browserTabsSelected) {
-                          controller.removeBrowserTab(tab);
-                        }
-                        controller.browserTabsSelected.value = [];
-                      },
-                    )
-                  ]
-                : const [],
+            actions: const [],
             title: Text(
               "manage_browser_tabs".tr,
             ),
@@ -71,83 +56,59 @@ class ManageListBrowserTabs extends GetView<SettingsViewController> {
                     BrowserTab elem = settings.browserTabs!.tabs[index];
                     return Container(
                       key: ValueKey(settings.browserTabs!.tabs[index]),
-                      color: controller.browserTabsSelected.contains(elem)
-                          ? Colors.red[800]
-                          : Theme.of(context).colorScheme.secondary,
+                      color: Theme.of(context).colorScheme.secondary,
                       margin: const EdgeInsets.only(bottom: 8),
-                      child: ListTile(
-                        title: Text(
+                      child: Dismissible(
+                        key: ValueKey(elem),
+                        background: Container(
+                          alignment: Alignment.centerRight,
+                          child: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ),
+                        ),
+                        onDismissed: (direction) {
+                          if (direction == DismissDirection.endToStart) {
+                            Get.defaultDialog(
+                              content: Container(),
+                              title: 'delete'.tr,
+                              textCancel: "cancel".tr,
+                              textConfirm: "confirm".tr,
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.surface,
+                              buttonColor: const Color(0xFF9147ff),
+                              cancelTextColor: const Color(0xFF9147ff),
+                              confirmTextColor: Colors.white,
+                              radius: 10,
+                              onConfirm: () {
+                                controller.removeBrowserTab(elem);
+                              },
+                            );
+                          } else if (direction == DismissDirection.startToEnd) {
+                            Get.defaultDialog(
+                              content: _editDialog(
+                                context,
+                                controller,
+                                elem,
+                              ),
+                              title: "edit".tr,
+                              textCancel: "cancel".tr,
+                              textConfirm: "confirm".tr,
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.surface,
+                              buttonColor: const Color(0xFF9147ff),
+                              cancelTextColor: const Color(0xFF9147ff),
+                              confirmTextColor: Colors.white,
+                              radius: 10,
+                              onConfirm: () {
+                                controller.editBrowserTab(elem);
+                              },
+                            );
+                          }
+                        },
+                        child: Text(
                           elem.title,
                         ),
-                        trailing: !controller.browserTabsSelected.contains(elem)
-                            ? Wrap(
-                                children: [
-                                  InkWell(
-                                    child: const Icon(
-                                      Icons.edit,
-                                      color: Colors.orange,
-                                      size: 22,
-                                    ),
-                                    onTap: () {
-                                      Get.defaultDialog(
-                                        content: _editDialog(
-                                          context,
-                                          controller,
-                                          elem,
-                                        ),
-                                        title: "edit".tr,
-                                        textCancel: "cancel".tr,
-                                        textConfirm: "confirm".tr,
-                                        backgroundColor: Theme.of(context)
-                                            .colorScheme
-                                            .surface,
-                                        buttonColor: const Color(0xFF9147ff),
-                                        cancelTextColor:
-                                            const Color(0xFF9147ff),
-                                        confirmTextColor: Colors.white,
-                                        radius: 10,
-                                        onConfirm: () {
-                                          controller.editBrowserTab(elem);
-                                        },
-                                      );
-                                    },
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  InkWell(
-                                    onTap: () => {
-                                      Get.defaultDialog(
-                                        content: Container(),
-                                        title: 'delete'.tr,
-                                        textCancel: "cancel".tr,
-                                        textConfirm: "confirm".tr,
-                                        backgroundColor: Theme.of(context)
-                                            .colorScheme
-                                            .surface,
-                                        buttonColor: const Color(0xFF9147ff),
-                                        cancelTextColor:
-                                            const Color(0xFF9147ff),
-                                        confirmTextColor: Colors.white,
-                                        radius: 10,
-                                        onConfirm: () {
-                                          controller.removeBrowserTab(elem);
-                                        },
-                                      )
-                                    },
-                                    child: const Icon(Icons.close),
-                                  ),
-                                ],
-                              )
-                            : null,
-                        selected: false,
-                        iconColor: Colors.red[800],
-                        onTap: () => {
-                          if (controller.browserTabsSelected.contains(elem))
-                            {controller.browserTabsSelected.remove(elem)}
-                          else
-                            {controller.browserTabsSelected.add(elem)}
-                        },
                       ),
                     );
                   },
