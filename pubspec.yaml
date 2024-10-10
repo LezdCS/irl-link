@@ -24,7 +24,6 @@ dependencies:
   flutter:
     sdk: flutter
   audioplayers: ^6.0.0
-  awesome_notifications: ^0.9.3+1
   collection: ^1.18.0
   connectivity_plus: ^5.0.2
   dio: ^5.6.0
