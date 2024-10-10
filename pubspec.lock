@@ -298,7 +298,7 @@ packages:
     source: hosted
     version: "1.3.1"
   faker:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: faker
       sha256: "544c34e9e1d322824156d5a8d451bc1bb778263b892aded24ec7ba77b0706624"
