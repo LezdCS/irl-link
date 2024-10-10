@@ -27,7 +27,6 @@ dependencies:
   awesome_notifications: ^0.9.3+1
   collection: ^1.18.0
   connectivity_plus: ^5.0.2
-  cupertino_icons: ^1.0.6
   dio: ^5.6.0
   equatable: ^2.0.5
   expandable: ^5.0.1
