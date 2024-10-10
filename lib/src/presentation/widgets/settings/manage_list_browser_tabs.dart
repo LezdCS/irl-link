@@ -67,9 +67,10 @@ class ManageListBrowserTabs extends GetView<SettingsViewController> {
                             color: Colors.red,
                           ),
                         ),
-                        onDismissed: (direction) {
+                        confirmDismiss: (direction) async {
                           if (direction == DismissDirection.endToStart) {
-                            Get.defaultDialog(
+                            bool delete = false;
+                            await Get.defaultDialog(
                               content: Container(),
                               title: 'delete'.tr,
                               textCancel: "cancel".tr,
@@ -81,11 +82,13 @@ class ManageListBrowserTabs extends GetView<SettingsViewController> {
                               confirmTextColor: Colors.white,
                               radius: 10,
                               onConfirm: () {
-                                controller.removeBrowserTab(elem);
+                                delete = true;
                               },
                             );
+                            return delete;
                           } else if (direction == DismissDirection.startToEnd) {
-                            Get.defaultDialog(
+                            bool edit = false;
+                            await Get.defaultDialog(
                               content: _editDialog(
                                 context,
                                 controller,
@@ -101,9 +104,18 @@ class ManageListBrowserTabs extends GetView<SettingsViewController> {
                               confirmTextColor: Colors.white,
                               radius: 10,
                               onConfirm: () {
-                                controller.editBrowserTab(elem);
+                                edit = true;
                               },
                             );
+                            return edit;
+                          }
+                          return false;
+                        },
+                        onDismissed: (direction) {
+                          if (direction == DismissDirection.endToStart) {
+                            controller.removeBrowserTab(elem);
+                          } else if (direction == DismissDirection.startToEnd) {
+                            controller.editBrowserTab(elem);
                           }
                         },
                         child: Text(
