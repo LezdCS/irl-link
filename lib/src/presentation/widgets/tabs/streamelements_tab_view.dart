@@ -4,7 +4,6 @@ import 'package:irllink/src/presentation/controllers/streamelements_view_control
 import 'package:irllink/src/presentation/widgets/stream_elements/se_activities_list.dart';
 import 'package:irllink/src/presentation/widgets/stream_elements/se_overlays.dart';
 import 'package:irllink/src/presentation/widgets/stream_elements/se_song_requests.dart';
-import 'dart:io';
 
 class StreamelementsTabView extends GetView<StreamelementsViewController> {
   const StreamelementsTabView({super.key});
@@ -13,21 +12,16 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
   Widget build(BuildContext context) {
     List<Widget> tabsTiles = [
       const Text("Activities"),
-      const Text("Song Requests"),      
+      const Text("Song Requests"),  
+      const Text("Overlays")    
     ];
-
-    if (!Platform.isIOS) {
-      tabsTiles.add(const Text("Overlays"));
-    }
 
     List<Widget> tabs = [
       const SeActivitiesList(),
       const SeSongRequests(),
+      const SeOverlays()
     ];
 
-    if (!Platform.isIOS) {
-      tabs.add(const SeOverlays());
-    }
     return Obx(
       () => controller.isSocketConnected.value
           ? Column(
