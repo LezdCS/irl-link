@@ -74,7 +74,17 @@ class DashboardSettingsView extends GetView<DashboardController> {
                       direction: DismissDirection.endToStart,
                       background: Container(
                         alignment: Alignment.centerRight,
-                        child: const Icon(Icons.delete, color: Colors.red,),
+                        child: Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          spacing: 10,
+                          children: [
+                            Text('delete'.tr),
+                            const Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
+                          ],
+                        ),
                       ),
                       confirmDismiss: (direction) => Future.value(true),
                       onDismissed: (context) {
