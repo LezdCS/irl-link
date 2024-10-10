@@ -54,70 +54,97 @@ class ManageListBrowserTabs extends GetView<SettingsViewController> {
                   },
                   itemBuilder: (BuildContext context, int index) {
                     BrowserTab elem = settings.browserTabs!.tabs[index];
-                    return Container(
-                      key: ValueKey(settings.browserTabs!.tabs[index]),
-                      color: Theme.of(context).colorScheme.secondary,
-                      margin: const EdgeInsets.only(bottom: 8),
-                      child: Dismissible(
-                        key: ValueKey(elem),
-                        background: Container(
-                          alignment: Alignment.centerRight,
-                          child: const Icon(
-                            Icons.delete,
-                            color: Colors.red,
+                    return Dismissible(
+                      key: ValueKey(elem),
+                      background: Container(
+                        alignment: Alignment.centerLeft,
+                        child: Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          spacing: 10,
+                          children: [
+                            const Icon(
+                              Icons.edit,
+                              color: Colors.orange,
+                            ),
+                            Text('edit'.tr,),
+                          ],
+                        ),
+                      ),
+                      secondaryBackground: Container(
+                        alignment: Alignment.centerRight,
+                        child: Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          spacing: 10,
+                          children: [
+                            Text('delete'.tr),
+                            const Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
+                          ],
+                        ),
+                      ),
+                      confirmDismiss: (direction) async {
+                        if (direction == DismissDirection.endToStart) {
+                          bool delete = false;
+                          await Get.defaultDialog(
+                            content: Container(),
+                            title: 'delete'.tr,
+                            textCancel: "cancel".tr,
+                            textConfirm: "confirm".tr,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.surface,
+                            buttonColor: const Color(0xFF9147ff),
+                            cancelTextColor: const Color(0xFF9147ff),
+                            confirmTextColor: Colors.white,
+                            radius: 10,
+                            onConfirm: () {
+                              delete = true;
+                            },
+                          );
+                          return delete;
+                        } else if (direction == DismissDirection.startToEnd) {
+                          bool edit = false;
+                          await Get.defaultDialog(
+                            content: _editDialog(
+                              context,
+                              controller,
+                              elem,
+                            ),
+                            title: "edit".tr,
+                            textCancel: "cancel".tr,
+                            textConfirm: "confirm".tr,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.surface,
+                            buttonColor: const Color(0xFF9147ff),
+                            cancelTextColor: const Color(0xFF9147ff),
+                            confirmTextColor: Colors.white,
+                            radius: 10,
+                            onConfirm: () {
+                              edit = true;
+                            },
+                          );
+                          return edit;
+                        }
+                        return false;
+                      },
+                      onDismissed: (direction) {
+                        if (direction == DismissDirection.endToStart) {
+                          controller.removeBrowserTab(elem);
+                        } else if (direction == DismissDirection.startToEnd) {
+                          controller.editBrowserTab(elem);
+                        }
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.all(4),
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.secondary,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(8),
                           ),
                         ),
-                        confirmDismiss: (direction) async {
-                          if (direction == DismissDirection.endToStart) {
-                            bool delete = false;
-                            await Get.defaultDialog(
-                              content: Container(),
-                              title: 'delete'.tr,
-                              textCancel: "cancel".tr,
-                              textConfirm: "confirm".tr,
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.surface,
-                              buttonColor: const Color(0xFF9147ff),
-                              cancelTextColor: const Color(0xFF9147ff),
-                              confirmTextColor: Colors.white,
-                              radius: 10,
-                              onConfirm: () {
-                                delete = true;
-                              },
-                            );
-                            return delete;
-                          } else if (direction == DismissDirection.startToEnd) {
-                            bool edit = false;
-                            await Get.defaultDialog(
-                              content: _editDialog(
-                                context,
-                                controller,
-                                elem,
-                              ),
-                              title: "edit".tr,
-                              textCancel: "cancel".tr,
-                              textConfirm: "confirm".tr,
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.surface,
-                              buttonColor: const Color(0xFF9147ff),
-                              cancelTextColor: const Color(0xFF9147ff),
-                              confirmTextColor: Colors.white,
-                              radius: 10,
-                              onConfirm: () {
-                                edit = true;
-                              },
-                            );
-                            return edit;
-                          }
-                          return false;
-                        },
-                        onDismissed: (direction) {
-                          if (direction == DismissDirection.endToStart) {
-                            controller.removeBrowserTab(elem);
-                          } else if (direction == DismissDirection.startToEnd) {
-                            controller.editBrowserTab(elem);
-                          }
-                        },
+                        alignment: Alignment.centerLeft,
                         child: Text(
                           elem.title,
                         ),
