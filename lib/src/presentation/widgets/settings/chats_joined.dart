@@ -142,8 +142,18 @@ class ChatsJoined extends GetView<SettingsViewController> {
       key: ValueKey(group),
       direction: DismissDirection.endToStart,
       background: Container(
-        color: Colors.red,
-        child: const Icon(Icons.delete),
+        alignment: Alignment.centerRight,
+        child: Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: 10,
+          children: [
+            Text('delete'.tr),
+            const Icon(
+              Icons.delete,
+              color: Colors.red,
+            ),
+          ],
+        ),
       ),
       onDismissed: (direction) {
         // If the user swipes to the left
@@ -206,8 +216,18 @@ class ChatsJoined extends GetView<SettingsViewController> {
     return Dismissible(
       direction: DismissDirection.endToStart,
       background: Container(
-        color: Colors.red,
-        child: const Icon(Icons.delete),
+        alignment: Alignment.centerRight,
+        child: Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: 10,
+          children: [
+            Text('delete'.tr),
+            const Icon(
+              Icons.delete,
+              color: Colors.red,
+            ),
+          ],
+        ),
       ),
       confirmDismiss: (direction) => Future.value(true),
       onDismissed: (direction) {

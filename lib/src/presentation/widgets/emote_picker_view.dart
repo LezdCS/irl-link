@@ -1,8 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
-import 'package:transparent_image/transparent_image.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 
 class EmotePickerView extends GetView<HomeViewController> {
@@ -147,9 +147,12 @@ class EmotePickerView extends GetView<HomeViewController> {
         controller.chatInputController.text =
             "$text${isLastCharSpace ? "" : " "}${emote.name} ";
       },
-      child: FadeInImage.memoryNetwork(
-        image: emote.url1x,
-        placeholder: kTransparentImage,
+      child: CachedNetworkImage(
+        imageUrl: emote.url1x,
+        placeholder: (BuildContext context, String url) =>
+            const CircularProgressIndicator(),
+        errorWidget: (BuildContext context, String url, dynamic error) =>
+            const Icon(Icons.error),
       ),
     );
   }
