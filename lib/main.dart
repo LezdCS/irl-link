@@ -26,7 +26,6 @@ import 'package:irllink/src/presentation/views/login_view.dart';
 import 'package:kick_chat/kick_chat.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:talker_flutter/talker_flutter.dart';
-import 'package:upgrader/upgrader.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 void main() async {
@@ -105,10 +104,7 @@ class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      home: UpgradeAlert(
-        upgrader: Upgrader(),
-        child: const LoginView(),
-      ),
+      home: const LoginView(),
       theme: Themes().lightTheme,
       darkTheme: Themes().darkTheme,
       themeMode: ThemeMode.dark,

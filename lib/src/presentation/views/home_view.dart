@@ -29,6 +29,7 @@ import 'package:irllink/src/presentation/widgets/web_page_view.dart';
 import 'package:move_to_background/move_to_background.dart';
 import 'package:split_view/split_view.dart';
 import 'package:twitch_chat/twitch_chat.dart';
+import 'package:upgrader/upgrader.dart';
 
 class HomeView extends GetView<HomeViewController> {
   const HomeView({super.key});
@@ -38,85 +39,90 @@ class HomeView extends GetView<HomeViewController> {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
 
-    return PopScope(
-      onPopInvokedWithResult: (bool invoked, dynamic d) async {
-        if (invoked) {
-          MoveToBackground.moveTaskToBack();
-        }
-      },
-      child: AnnotatedRegion(
-        value: SystemUiOverlayStyle(
-          systemNavigationBarColor: Theme.of(context).colorScheme.surface,
-        ),
-        child: Scaffold(
-          resizeToAvoidBottomInset: true,
-          body: Obx(
-            () => Listener(
-              onPointerUp: (_) => {
-                FocusScope.of(context).unfocus(),
-              },
-              child: Container(
-                constraints: const BoxConstraints.expand(),
-                decoration: BoxDecoration(
-                  color: context.theme.colorScheme.surface,
-                ),
-                child: SafeArea(
-                  child: Stack(
-                    children: [
-                      Stack(
-                        children: List<Widget>.generate(
-                          controller.iOSAudioSources.length,
-                          (int index) => controller.iOSAudioSources[index],
+    return UpgradeAlert(
+      upgrader: Upgrader(),
+      child: PopScope(
+        onPopInvokedWithResult: (bool invoked, dynamic d) async {
+          if (invoked) {
+            MoveToBackground.moveTaskToBack();
+          }
+        },
+        child: AnnotatedRegion(
+          value: SystemUiOverlayStyle(
+            systemNavigationBarColor: Theme.of(context).colorScheme.surface,
+          ),
+          child: Scaffold(
+            resizeToAvoidBottomInset: true,
+            body: Obx(
+              () => Listener(
+                onPointerUp: (_) => {
+                  FocusScope.of(context).unfocus(),
+                },
+                child: Container(
+                  constraints: const BoxConstraints.expand(),
+                  decoration: BoxDecoration(
+                    color: context.theme.colorScheme.surface,
+                  ),
+                  child: SafeArea(
+                    child: Stack(
+                      children: [
+                        Stack(
+                          children: List<Widget>.generate(
+                            controller.iOSAudioSources.length,
+                            (int index) => controller.iOSAudioSources[index],
+                          ),
                         ),
-                      ),
-                      Listener(
-                        onPointerUp: (_) => {
-                          controller.displayDashboard.value = false,
-                        },
-                        child: SplitView(
-                          controller: controller.splitViewController,
-                          gripColor: context.theme.colorScheme.secondary,
-                          gripColorActive: context.theme.colorScheme.secondary,
-                          gripSize: 8,
-                          viewMode: context.isPortrait
-                              ? SplitViewMode.Vertical
-                              : SplitViewMode.Horizontal,
-                          indicator: SplitIndicator(
+                        Listener(
+                          onPointerUp: (_) => {
+                            controller.displayDashboard.value = false,
+                          },
+                          child: SplitView(
+                            controller: controller.splitViewController,
+                            gripColor: context.theme.colorScheme.secondary,
+                            gripColorActive:
+                                context.theme.colorScheme.secondary,
+                            gripSize: 8,
                             viewMode: context.isPortrait
                                 ? SplitViewMode.Vertical
                                 : SplitViewMode.Horizontal,
-                            color: const Color(0xFF464444),
+                            indicator: SplitIndicator(
+                              viewMode: context.isPortrait
+                                  ? SplitViewMode.Vertical
+                                  : SplitViewMode.Horizontal,
+                              color: const Color(0xFF464444),
+                            ),
+                            activeIndicator: SplitIndicator(
+                              color: const Color(0xFF464444),
+                              viewMode: context.isPortrait
+                                  ? SplitViewMode.Vertical
+                                  : SplitViewMode.Horizontal,
+                              isActive: true,
+                            ),
+                            onWeightChanged: controller.onSplitResized,
+                            children: [
+                              controller.tabElements.isNotEmpty
+                                  ? _top(context, height, width)
+                                  : const Text(
+                                      "No tabs",
+                                      textAlign: TextAlign.center,
+                                    ),
+                              _bottom(context, height, width),
+                            ],
                           ),
-                          activeIndicator: SplitIndicator(
-                            color: const Color(0xFF464444),
-                            viewMode: context.isPortrait
-                                ? SplitViewMode.Vertical
-                                : SplitViewMode.Horizontal,
-                            isActive: true,
+                        ),
+                        Visibility(
+                          visible: controller.displayDashboard.value,
+                          child: const Dashboard(),
+                        ),
+                        Visibility(
+                          visible:
+                              Get.find<StoreService>().purchasePending.value,
+                          child: CircularProgressIndicator(
+                            color: context.theme.colorScheme.tertiary,
                           ),
-                          onWeightChanged: controller.onSplitResized,
-                          children: [
-                            controller.tabElements.isNotEmpty
-                                ? _top(context, height, width)
-                                : const Text(
-                                    "No tabs",
-                                    textAlign: TextAlign.center,
-                                  ),
-                            _bottom(context, height, width),
-                          ],
                         ),
-                      ),
-                      Visibility(
-                        visible: controller.displayDashboard.value,
-                        child: const Dashboard(),
-                      ),
-                      Visibility(
-                        visible: Get.find<StoreService>().purchasePending.value,
-                        child: CircularProgressIndicator(
-                          color: context.theme.colorScheme.tertiary,
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
