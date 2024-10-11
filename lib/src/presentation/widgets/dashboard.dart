@@ -70,7 +70,7 @@ class Dashboard extends GetView<DashboardController> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                     "events_empty".tr,
+                      "events_empty".tr,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: Colors.grey,

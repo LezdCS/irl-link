@@ -125,7 +125,8 @@ Widget prediction(
                         Theme.of(context).colorScheme.tertiaryContainer,
                   ),
                   onPressed: () {
-                    Get.find<TwitchEventSubService>().endPrediction("CANCELED", null);
+                    Get.find<TwitchEventSubService>()
+                        .endPrediction("CANCELED", null);
                   },
                   child: Text(
                     "cancel".tr,
@@ -140,12 +141,12 @@ Widget prediction(
                   ),
                   onPressed: () {
                     prediction.status == PredictionStatus.active
-                        ? Get.find<TwitchEventSubService>().endPrediction("LOCKED", null)
+                        ? Get.find<TwitchEventSubService>()
+                            .endPrediction("LOCKED", null)
                         : pickWinnerDialog(
                             context,
                             prediction,
                             Get.find<TwitchEventSubService>().endPrediction,
-                            
                           );
                   },
                   child: Text(
@@ -186,7 +187,8 @@ void pickWinnerDialog(
       Get.back();
     },
     onConfirm: () {
-      endPrediction('RESOLVED', Get.find<TwitchEventSubService>().selectedOutcomeId.value);
+      endPrediction('RESOLVED',
+          Get.find<TwitchEventSubService>().selectedOutcomeId.value);
       Get.find<TwitchEventSubService>().selectedOutcomeId.value = "-1";
       Get.back();
     },
@@ -198,9 +200,11 @@ void pickWinnerDialog(
             title: Text(prediction.outcomes[index].title),
             leading: Radio(
               value: prediction.outcomes[index].id,
-              groupValue: Get.find<TwitchEventSubService>().selectedOutcomeId.value,
+              groupValue:
+                  Get.find<TwitchEventSubService>().selectedOutcomeId.value,
               onChanged: (String? value) {
-                Get.find<TwitchEventSubService>().selectedOutcomeId.value = value!;
+                Get.find<TwitchEventSubService>().selectedOutcomeId.value =
+                    value!;
               },
               activeColor: Colors.green,
             ),

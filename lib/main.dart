@@ -65,13 +65,15 @@ void main() async {
     ).init(),
     permanent: true,
   );
-  await Get.putAsync(() => StoreService(
-    loginEvents: LoginEvents(
-      twitchUseCase: TwitchUseCase(
-        twitchRepository: TwitchRepositoryImpl(),
-      ),
-    ),
-  ).init(), permanent: true);
+  await Get.putAsync(
+      () => StoreService(
+            loginEvents: LoginEvents(
+              twitchUseCase: TwitchUseCase(
+                twitchRepository: TwitchRepositoryImpl(),
+              ),
+            ),
+          ).init(),
+      permanent: true);
   TtsService ttsService =
       await Get.putAsync(() => TtsService().init(), permanent: true);
   await ttsService.initTts(settingsService.settings.value);

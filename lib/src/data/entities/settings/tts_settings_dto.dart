@@ -1,5 +1,6 @@
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/tts_settings.dart';
+
 class TtsSettingsDTO extends TtsSettings {
   const TtsSettingsDTO({
     required super.ttsEnabled,

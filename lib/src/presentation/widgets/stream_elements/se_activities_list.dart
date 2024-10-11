@@ -59,10 +59,8 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
       itemBuilder: (context) => [
         PopupMenuItem(
           child: Obx(() {
-            StreamElementsSettings? seSettings = settingsService
-                .settings
-                .value
-                .streamElementsSettings;
+            StreamElementsSettings? seSettings =
+                settingsService.settings.value.streamElementsSettings;
             return CheckboxListTile(
               controlAffinity: ListTileControlAffinity.leading,
               title: Text(
@@ -72,9 +70,9 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
               onChanged: (bool? value) {
                 settingsService.settings.value =
                     settingsService.settings.value.copyWith(
-                          streamElementsSettings:
-                              seSettings!.copyWith(showFollowerActivity: value),
-                        );
+                  streamElementsSettings:
+                      seSettings!.copyWith(showFollowerActivity: value),
+                );
                 settingsService.saveSettings();
               },
             );
@@ -91,8 +89,7 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                 ),
                 value: settings.streamElementsSettings!.showSubscriberActivity,
                 onChanged: (bool? value) {
-                  settingsService.settings.value =
-                      settings.copyWith(
+                  settingsService.settings.value = settings.copyWith(
                     streamElementsSettings: settings.streamElementsSettings!
                         .copyWith(showSubscriberActivity: value),
                   );
@@ -132,8 +129,7 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                 ),
                 value: settings.streamElementsSettings!.showDonationActivity,
                 onChanged: (bool? value) {
-                  settingsService.settings.value =
-                      settings.copyWith(
+                  settingsService.settings.value = settings.copyWith(
                     streamElementsSettings: settings.streamElementsSettings!
                         .copyWith(showDonationActivity: value),
                   );
@@ -154,8 +150,7 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                 ),
                 value: settings.streamElementsSettings!.showRaidActivity,
                 onChanged: (bool? value) {
-                  settingsService.settings.value =
-                      settings.copyWith(
+                  settingsService.settings.value = settings.copyWith(
                     streamElementsSettings: settings.streamElementsSettings!
                         .copyWith(showRaidActivity: value),
                   );
@@ -176,8 +171,7 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                 ),
                 value: settings.streamElementsSettings!.showHostActivity,
                 onChanged: (bool? value) {
-                  settingsService.settings.value =
-                      settings.copyWith(
+                  settingsService.settings.value = settings.copyWith(
                     streamElementsSettings: settings.streamElementsSettings!
                         .copyWith(showHostActivity: value),
                   );

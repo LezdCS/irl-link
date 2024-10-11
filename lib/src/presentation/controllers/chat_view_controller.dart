@@ -119,7 +119,7 @@ class ChatViewController extends GetxController
 
   void addMessage(ChatMessage message) {
     chatMessages.add(message);
-    if(chatMessages.length > 500 && isAutoScrolldown.value) {
+    if (chatMessages.length > 500 && isAutoScrolldown.value) {
       chatMessages.removeAt(0);
     }
     scrollChatToBottom();

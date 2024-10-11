@@ -54,8 +54,7 @@ class Tts extends StatelessWidget {
                       Switch(
                         value: settings.ttsSettings!.ttsEnabled,
                         onChanged: (value) {
-                          settingsService.settings.value =
-                              settings.copyWith(
+                          settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings
                                 ?.copyWith(ttsEnabled: value),
                           );
@@ -88,8 +87,7 @@ class Tts extends StatelessWidget {
                             "name": firstVoiceForLanguage["name"],
                             "locale": firstVoiceForLanguage["locale"],
                           };
-                          settingsService.settings.value =
-                              settings.copyWith(
+                          settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings?.copyWith(
                                 language: value.toString(), voice: voice),
                           );
@@ -136,8 +134,7 @@ class Tts extends StatelessWidget {
                                   ttsSettings: settings.ttsSettings
                                       ?.copyWith(voice: voice),
                                 );
-                                await settingsService
-                                    .saveSettings();
+                                await settingsService.saveSettings();
                                 Get.find<TtsService>().updateSettings(settings);
                               },
                               items: List.generate(
@@ -165,8 +162,7 @@ class Tts extends StatelessWidget {
                       Slider(
                         value: settings.ttsSettings!.volume,
                         onChanged: (value) async {
-                          settingsService.settings.value =
-                              settings.copyWith(
+                          settingsService.settings.value = settings.copyWith(
                             ttsSettings:
                                 settings.ttsSettings?.copyWith(volume: value),
                           );
@@ -190,8 +186,7 @@ class Tts extends StatelessWidget {
                       Slider(
                         value: settings.ttsSettings!.rate,
                         onChanged: (value) async {
-                          settingsService.settings.value =
-                              settings.copyWith(
+                          settingsService.settings.value = settings.copyWith(
                             ttsSettings:
                                 settings.ttsSettings?.copyWith(rate: value),
                           );
@@ -215,8 +210,7 @@ class Tts extends StatelessWidget {
                       Slider(
                         value: settings.ttsSettings!.pitch,
                         onChanged: (value) async {
-                          settingsService.settings.value =
-                              settings.copyWith(
+                          settingsService.settings.value = settings.copyWith(
                             ttsSettings:
                                 settings.ttsSettings?.copyWith(pitch: value),
                           );
@@ -241,8 +235,7 @@ class Tts extends StatelessWidget {
                       Switch(
                         value: settings.ttsSettings!.ttsMuteViewerName,
                         onChanged: (value) {
-                          settingsService.settings.value =
-                              settings.copyWith(
+                          settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings
                                 ?.copyWith(ttsMuteViewerName: value),
                           );
@@ -264,8 +257,7 @@ class Tts extends StatelessWidget {
                       Switch(
                         value: settings.ttsSettings!.ttsOnlyVip,
                         onChanged: (value) {
-                          settingsService.settings.value =
-                              settings.copyWith(
+                          settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings
                                 ?.copyWith(ttsOnlyVip: value),
                           );
@@ -287,8 +279,7 @@ class Tts extends StatelessWidget {
                       Switch(
                         value: settings.ttsSettings!.ttsOnlyMod,
                         onChanged: (value) {
-                          settingsService.settings.value =
-                              settings.copyWith(
+                          settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings
                                 ?.copyWith(ttsOnlyMod: value),
                           );
@@ -310,8 +301,7 @@ class Tts extends StatelessWidget {
                       Switch(
                         value: settings.ttsSettings!.ttsOnlySubscriber,
                         onChanged: (value) {
-                          settingsService.settings.value =
-                              settings.copyWith(
+                          settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings
                                 ?.copyWith(ttsOnlySubscriber: value),
                           );
@@ -331,8 +321,7 @@ class Tts extends StatelessWidget {
                         list: settings.ttsSettings!.prefixsToIgnore,
                         onDeleted: (index) {
                           settings.ttsSettings!.prefixsToIgnore.removeAt(index);
-                          settingsService.settings.value =
-                              settings.copyWith(
+                          settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings?.copyWith(
                                 prefixsToIgnore:
                                     settings.ttsSettings!.prefixsToIgnore),
@@ -347,8 +336,7 @@ class Tts extends StatelessWidget {
                           settings.ttsSettings!.prefixsToIgnore.add(controller
                               .addTtsIgnoredPrefixsController.text
                               .trim());
-                          settingsService.settings.value =
-                              settings.copyWith(
+                          settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings?.copyWith(
                                 prefixsToIgnore:
                                     settings.ttsSettings!.prefixsToIgnore),
@@ -402,8 +390,7 @@ class Tts extends StatelessWidget {
                         onDeleted: (index) {
                           settings.ttsSettings!.prefixsToUseTtsOnly
                               .removeAt(index);
-                          settingsService.settings.value =
-                              settings.copyWith(
+                          settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings?.copyWith(
                                 prefixsToUseTtsOnly:
                                     settings.ttsSettings!.prefixsToUseTtsOnly),
@@ -418,8 +405,7 @@ class Tts extends StatelessWidget {
                           settings.ttsSettings!.prefixsToUseTtsOnly.add(
                               controller.addTtsAllowedPrefixsController.text
                                   .trim());
-                          settingsService.settings.value =
-                              settings.copyWith(
+                          settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings?.copyWith(
                                 prefixsToUseTtsOnly:
                                     settings.ttsSettings!.prefixsToUseTtsOnly),
@@ -472,8 +458,7 @@ class Tts extends StatelessWidget {
                         onDeleted: (index) {
                           settings.ttsSettings!.ttsUsersToIgnore
                               .removeAt(index);
-                          settingsService.settings.value =
-                              settings.copyWith(
+                          settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings?.copyWith(
                                 ttsUsersToIgnore:
                                     settings.ttsSettings!.ttsUsersToIgnore),
@@ -488,8 +473,7 @@ class Tts extends StatelessWidget {
                           settings.ttsSettings!.ttsUsersToIgnore.add(controller
                               .addTtsIgnoredUsersController.text
                               .trim());
-                          settingsService.settings.value =
-                              settings.copyWith(
+                          settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings?.copyWith(
                                 ttsUsersToIgnore:
                                     settings.ttsSettings!.ttsUsersToIgnore),

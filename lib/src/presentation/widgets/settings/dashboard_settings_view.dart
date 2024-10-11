@@ -141,7 +141,7 @@ Widget _addGroupButton(
     onTap: () {
       Get.defaultDialog(
         content: _addDialog(context, dashboardController),
-        title:  "new_event".tr,
+        title: "new_event".tr,
         cancel: null,
         confirm: Container(),
         backgroundColor: Theme.of(context).colorScheme.surface,
@@ -235,7 +235,7 @@ Widget _addDialog(context, DashboardController dashboardController) {
             }).toList(),
             validator: (value) {
               if (value == SupportedEvents.none) {
-                return  "please_select_event".tr;
+                return "please_select_event".tr;
               }
               return null;
             },

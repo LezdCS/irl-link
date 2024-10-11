@@ -19,9 +19,9 @@ class CheerEmote extends StatelessWidget {
         CachedNetworkImage(
           imageUrl: cheerEmote.url1x,
           placeholder: (BuildContext context, String url) =>
-                const CircularProgressIndicator(),
-            errorWidget: (BuildContext context, String url, dynamic error) =>
-                const Icon(Icons.error),
+              const CircularProgressIndicator(),
+          errorWidget: (BuildContext context, String url, dynamic error) =>
+              const Icon(Icons.error),
         ),
         Text(
           '${cheerEmote.id} ',
