@@ -66,7 +66,9 @@ class ManageListBrowserTabs extends GetView<SettingsViewController> {
                               Icons.edit,
                               color: Colors.orange,
                             ),
-                            Text('edit'.tr,),
+                            Text(
+                              'edit'.tr,
+                            ),
                           ],
                         ),
                       ),
