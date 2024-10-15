@@ -12,8 +12,8 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
   Widget build(BuildContext context) {
     List<Widget> tabsTiles = [
       const Text("Activities"),
-      const Text("Song Requests"),  
-      const Text("Overlays")    
+      const Text("Song Requests"),
+      const Text("Overlays")
     ];
 
     List<Widget> tabs = [

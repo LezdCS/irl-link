@@ -27,7 +27,6 @@ class TwitchTabViewController extends GetxController
   late AnimationController controllerLiveCircleAnimation;
   late Animation<double> circleShadowAnimation;
 
-
   Timer? refreshDataTimer;
   late AnimationController refreshDataAnimationController;
 
@@ -144,5 +143,4 @@ class TwitchTabViewController extends GetxController
       titleFormController.text,
     );
   }
-
 }

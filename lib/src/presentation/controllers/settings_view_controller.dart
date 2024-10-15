@@ -58,16 +58,20 @@ class SettingsViewController extends GetxController {
   void onInit() {
     Settings settings = settingsService.settings.value;
 
-    obsWebsocketUrlFieldController = TextEditingController(text: settings.obsWebsocketUrl);
-    obsWebsocketPasswordFieldController = TextEditingController(text: settings.obsWebsocketPassword);
+    obsWebsocketUrlFieldController =
+        TextEditingController(text: settings.obsWebsocketUrl);
+    obsWebsocketPasswordFieldController =
+        TextEditingController(text: settings.obsWebsocketPassword);
     addBrowserTitleController = TextEditingController();
     addBrowserUrlController = TextEditingController();
     addHiddenUsernameController = TextEditingController();
     addTtsIgnoredUsersController = TextEditingController();
     addTtsIgnoredPrefixsController = TextEditingController();
     addTtsAllowedPrefixsController = TextEditingController();
-    seJwtInputController = TextEditingController(text: settings.streamElementsSettings?.jwt);
-    seOverlayTokenInputController = TextEditingController(text: settings.streamElementsSettings?.overlayToken);
+    seJwtInputController =
+        TextEditingController(text: settings.streamElementsSettings?.jwt);
+    seOverlayTokenInputController = TextEditingController(
+        text: settings.streamElementsSettings?.overlayToken);
     rtIrlInputController = TextEditingController(text: settings.rtIrlPushKey);
 
     usernamesHiddenUsers = <String>[].obs;
@@ -96,7 +100,7 @@ class SettingsViewController extends GetxController {
   }
 
   List<dynamic> getVoiceForLanguage(String language) {
-    return ttsService.ttsVoices.where((v) => v['locale'] == language ).toList();
+    return ttsService.ttsVoices.where((v) => v['locale'] == language).toList();
   }
 
   Future<void> loginStreamElements() async {

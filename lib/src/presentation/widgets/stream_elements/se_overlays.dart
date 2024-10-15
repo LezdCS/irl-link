@@ -21,7 +21,8 @@ class SeOverlays extends GetView<StreamelementsViewController> {
       children: [
         Visibility(
           visible: overlayToken == null,
-          child: const Text('To unlock this feature, please enter your overlay token in the settings.'),
+          child: const Text(
+              'To unlock this feature, please enter your overlay token in the settings.'),
         ),
         Container(
           padding: const EdgeInsets.all(4),

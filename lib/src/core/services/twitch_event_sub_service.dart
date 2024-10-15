@@ -52,7 +52,6 @@ class TwitchEventSubService extends GetxService {
 
   Rx<bool> isConnected = false.obs;
 
-
   Future<void> connect() async {
     _broadcasterId = await _getChannelId();
 
@@ -66,8 +65,8 @@ class TwitchEventSubService extends GetxService {
     try {
       await _webSocketChannel?.ready;
     } catch (e) {
-      globals.talker
-          ?.warning('Failed to connect to the Twitch EventSub Websocket. Retrying in 20 seconds.');
+      globals.talker?.warning(
+          'Failed to connect to the Twitch EventSub Websocket. Retrying in 20 seconds.');
 
       Future.delayed(const Duration(seconds: 20), () {
         connect();
@@ -265,7 +264,6 @@ class TwitchEventSubService extends GetxService {
     Timer? timer;
 
     currentHypeTrain.listen((train) {
-
       if (train.id == '') {
         timer?.cancel();
         return;
@@ -287,7 +285,6 @@ class TwitchEventSubService extends GetxService {
       }
     });
   }
-
 
   void createPoll(String question, List<Choice> choices) {
     TwitchPoll newPoll = TwitchPoll(

@@ -85,7 +85,11 @@ Widget poll(
           Obx(
             (() => Text(
                   "ends_in".trParams(
-                    {"time": printDuration(Get.find<TwitchEventSubService>().remainingTimePoll.value)},
+                    {
+                      "time": printDuration(Get.find<TwitchEventSubService>()
+                          .remainingTimePoll
+                          .value)
+                    },
                   ),
                 )),
           ),

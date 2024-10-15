@@ -63,7 +63,7 @@ class ChatEvents extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                           "first_time_chatter".tr,
+                            "first_time_chatter".tr,
                             style: const TextStyle(
                               fontSize: 18,
                             ),

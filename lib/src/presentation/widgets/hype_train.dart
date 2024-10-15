@@ -37,7 +37,8 @@ Widget hypeTrain(
       Text('${hypetrain.progress}%'),
       Obx(
         () => Text(
-          printDuration(Get.find<TwitchEventSubService>().remainingTimeHypeTrain.value),
+          printDuration(
+              Get.find<TwitchEventSubService>().remainingTimeHypeTrain.value),
         ),
       ),
     ],
