@@ -21,6 +21,10 @@ class SettingsService extends GetxService {
           // todo: create table settings
           'CREATE TABLE settings(id INTEGER PRIMARY KEY, ... TEXT, ... INTEGER)',
         );
+        // todo: if the user was on a version of the app using get storage, we need to transfer his settings to the database
+
+      },
+      onUpgrade: (db, oldVersion, newVersion) {
       },
       version: 1,
     );
