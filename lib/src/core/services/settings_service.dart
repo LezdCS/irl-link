@@ -13,7 +13,6 @@ class SettingsService extends GetxService {
   late Database database;
   
   Future<SettingsService> init() async {
-    settings.value = await getSettings();
     database = await openDatabase(
       join(await getDatabasesPath(), 'settings.db'),
       onCreate: (db, version) {
@@ -28,6 +27,7 @@ class SettingsService extends GetxService {
       },
       version: 1,
     );
+    settings.value = await getSettings();
     return this;
   }
 
