@@ -32,7 +32,7 @@ class SettingsDTO extends Settings {
   });
 
   @override
-  Map toJson() => {
+  Map<String, Object?> toJson() => {
         //CHAT
         'isEmotes': isEmotes,
         'textSize': textSize,

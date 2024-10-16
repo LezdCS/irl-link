@@ -134,7 +134,7 @@ class Settings extends Equatable {
     ),
   });
 
-  Map toJson() => {
+  Map<String, Object?> toJson() => {
         //CHAT
         'isEmotes': isEmotes,
         'textSize': textSize,
