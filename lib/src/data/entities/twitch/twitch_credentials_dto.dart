@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:irllink/src/core/utils/mapper.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_decoded_idtoken_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_user_dto.dart';
@@ -40,8 +38,8 @@ class TwitchCredentialsDTO extends TwitchCredentials {
       refreshToken: map['refreshToken'] as String,
       expiresIn: map['expiresIn'] as String,
       decodedIdToken:
-          TwitchDecodedIdTokenDTO.fromJson(jsonDecode(map['decodedIdToken'])),
-      twitchUser: TwitchUserDTO.fromJson(jsonDecode(map['twitchUser'])),
+          TwitchDecodedIdTokenDTO.fromJson(map['decodedIdToken']),
+      twitchUser: TwitchUserDTO.fromJson(map['twitchUser']),
       scopes: map['scopes'] as String,
     );
   }
