@@ -61,7 +61,7 @@ class StreamelementsViewController extends GetxController
       }
     }
 
-    streamelementsEvents.getSettings().then((value) => applySettings());
+    Get.find<SettingsService>().getSettings().then((value) => applySettings());
 
     isSocketConnected.listen((value) {
       // Send to watchOS

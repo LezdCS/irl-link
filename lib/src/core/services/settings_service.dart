@@ -19,9 +19,7 @@ class SettingsService extends GetxService {
     if (settingsResult is DataFailed) {
       return const Settings.defaultSettings();
     }
-    settings.value = settingsResult.data!;
-
-    return settings.value;
+    return settingsResult.data!;
   }
 
   Future<void> saveSettings() async {

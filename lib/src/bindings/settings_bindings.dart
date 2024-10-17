@@ -28,9 +28,6 @@ class SettingsBindings extends Bindings {
             streamelementsUseCase: StreamelementsUseCase(
               streamelementsRepository: StreamelementsRepositoryImpl(),
             ),
-            settingsUseCase: SettingsUseCase(
-              settingsRepository: SettingsRepositoryImpl(),
-            ),
           )),
     );
   }
