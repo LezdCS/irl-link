@@ -1,25 +1,17 @@
-import 'package:equatable/equatable.dart';
 
-class BrowserTabSettings extends Equatable {
+
+class BrowserTabSettings {
   final List<BrowserTab> tabs;
 
   const BrowserTabSettings({
     required this.tabs,
   });
 
-  @override
-  List<Object?> get props {
-    return [
-      tabs,
-    ];
-  }
-
   Map toJson() => {
         'tabs': tabs.map((e) => e.toJson()).toList(),
       };
 
-  @override
-  bool get stringify => true;
+  
 
   BrowserTabSettings copyWith({
     List<BrowserTab>? tabs,
@@ -30,7 +22,7 @@ class BrowserTabSettings extends Equatable {
   }
 }
 
-class BrowserTab extends Equatable {
+class BrowserTab {
   final String id;
   final String title;
   final String url;
@@ -45,17 +37,6 @@ class BrowserTab extends Equatable {
     required this.iOSAudioSource,
   });
 
-  @override
-  List<Object?> get props {
-    return [
-      id,
-      title,
-      url,
-      toggled,
-      iOSAudioSource,
-    ];
-  }
-
   Map toJson() => {
         'id': id,
         'title': title,
@@ -63,9 +44,6 @@ class BrowserTab extends Equatable {
         'toggled': toggled,
         'iOSAudioSource': iOSAudioSource,
       };
-
-  @override
-  bool get stringify => true;
 
   BrowserTab copyWith({
     String? id,

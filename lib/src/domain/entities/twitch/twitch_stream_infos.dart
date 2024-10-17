@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-class TwitchStreamInfos extends Equatable {
+class TwitchStreamInfos {
   final String? title;
   final int? viewerCount;
   final bool? isOnline;
@@ -46,21 +44,6 @@ class TwitchStreamInfos extends Equatable {
         'isSubscriberMode': isSubscriberMode,
       };
 
-  @override
-  List<Object?> get props {
-    return [
-      title,
-      viewerCount,
-      isOnline,
-      startedAtDuration,
-      isEmoteMode,
-      isFollowerMode,
-      isSlowMode,
-      slowModeWaitTime,
-      isSubscriberMode
-    ];
-  }
-
   TwitchStreamInfos copyWith({
     String? title,
     int? viewerCount,
@@ -84,6 +67,5 @@ class TwitchStreamInfos extends Equatable {
         slowModeWaitTime: slowModeWaitTime ?? this.slowModeWaitTime,
       );
 
-  @override
-  bool get stringify => true;
+  
 }

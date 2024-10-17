@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-class SeOverlay extends Equatable {
+class SeOverlay {
   final String id;
   final String name;
 
@@ -9,14 +7,4 @@ class SeOverlay extends Equatable {
     required this.name,
   });
 
-  @override
-  List<Object?> get props {
-    return [
-      id,
-      name,
-    ];
-  }
-
-  @override
-  bool get stringify => true;
 }

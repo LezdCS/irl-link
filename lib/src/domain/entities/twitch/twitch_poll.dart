@@ -1,12 +1,10 @@
-import 'package:equatable/equatable.dart';
-
 enum PollStatus {
   empty,
   active,
   completed,
 }
 
-class TwitchPoll extends Equatable {
+class TwitchPoll {
   final String id;
   final String title;
   final List<Choice> choices;
@@ -42,24 +40,10 @@ class TwitchPoll extends Equatable {
         'status': status,
         'endsAt': endsAt,
       };
-
-  @override
-  List<Object?> get props {
-    return [
-      id,
-      title,
-      choices,
-      totalVotes,
-      status,
-      endsAt,
-    ];
-  }
-
-  @override
-  bool get stringify => true;
+  
 }
 
-class Choice extends Equatable {
+class Choice {
   final String id;
   final String title;
   final int votes;
@@ -76,15 +60,4 @@ class Choice extends Equatable {
         'votes': votes,
       };
 
-  @override
-  List<Object?> get props {
-    return [
-      id,
-      title,
-      votes,
-    ];
-  }
-
-  @override
-  bool get stringify => true;
 }

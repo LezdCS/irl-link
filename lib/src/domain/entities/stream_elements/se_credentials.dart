@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-class SeCredentials extends Equatable {
+class SeCredentials {
   final String accessToken;
   final String refreshToken;
   final int expiresIn;
@@ -19,17 +17,4 @@ class SeCredentials extends Equatable {
         'expiresIn': expiresIn,
         'scopes': scopes,
       };
-
-  @override
-  List<Object?> get props {
-    return [
-      accessToken,
-      refreshToken,
-      expiresIn,
-      scopes,
-    ];
-  }
-
-  @override
-  bool get stringify => true;
 }

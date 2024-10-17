@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-class SeMe extends Equatable {
+class SeMe {
   final String id;
   final String avatar;
   final String username;
@@ -13,16 +11,4 @@ class SeMe extends Equatable {
     required this.displayName,
   });
 
-  @override
-  List<Object?> get props {
-    return [
-      id,
-      avatar,
-      username,
-      displayName,
-    ];
-  }
-
-  @override
-  bool get stringify => true;
 }

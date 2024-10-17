@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_events_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
@@ -7,7 +6,7 @@ import 'package:irllink/src/domain/entities/settings/general_settings.dart';
 import 'package:irllink/src/domain/entities/settings/stream_elements_settings.dart';
 import 'package:irllink/src/domain/entities/settings/tts_settings.dart';
 
-class Settings extends Equatable {
+class Settings {
   //CHAT SETTINGS
   final bool? isEmotes;
   final double? textSize;
@@ -156,35 +155,6 @@ class Settings extends Equatable {
         //TTS
         'ttsSettings': ttsSettings?.toJson(),
       };
-
-  @override
-  List<Object?> get props {
-    return [
-      //CHAT
-      isEmotes,
-      textSize,
-      displayTimestamp,
-      hiddenUsersIds,
-      chatEventsSettings,
-      chatSettings,
-      //GENERAL
-      generalSettings,
-      dashboardSettings,
-      //CONNECTIONS
-      isObsConnected,
-      obsWebsocketUrl,
-      obsWebsocketPassword,
-      browserTabs,
-      obsConnectionsHistory,
-      streamElementsSettings,
-      rtIrlPushKey,
-      //TTS
-      ttsSettings
-    ];
-  }
-
-  @override
-  bool get stringify => true;
 
   Settings copyWith(
           {

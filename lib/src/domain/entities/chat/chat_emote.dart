@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:twitch_chat/twitch_chat.dart' as twitch;
 
 enum EmotePlateform {
@@ -6,7 +5,7 @@ enum EmotePlateform {
   kick,
 }
 
-class ChatEmote extends Equatable {
+class ChatEmote {
   final String id;
   final String name;
   final String url1x;
@@ -71,20 +70,5 @@ class ChatEmote extends Equatable {
         'color': color,
         'emoteType': emoteType,
       };
-
-  @override
-  List<Object?> get props {
-    return [
-      id,
-      name,
-      url1x,
-      url2x,
-      url4x,
-      color,
-      emoteType,
-    ];
-  }
-
-  @override
-  bool get stringify => true;
+  
 }
