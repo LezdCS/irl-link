@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_events_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
@@ -6,6 +7,7 @@ import 'package:irllink/src/domain/entities/settings/general_settings.dart';
 import 'package:irllink/src/domain/entities/settings/stream_elements_settings.dart';
 import 'package:irllink/src/domain/entities/settings/tts_settings.dart';
 
+@immutable
 class Settings {
   //CHAT SETTINGS
   final bool? isEmotes;

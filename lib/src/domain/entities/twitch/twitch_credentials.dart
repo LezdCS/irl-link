@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_decoded_idtoken.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
 
+@immutable
 class TwitchCredentials {
   final String accessToken;
   final String idToken;

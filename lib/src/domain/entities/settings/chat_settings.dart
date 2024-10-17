@@ -1,6 +1,8 @@
 
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
+import 'package:flutter/material.dart';
 
+@immutable
 class ChatSettings {
   final ChatGroup permanentFirstGroup;
   final List<ChatGroup> chatGroups;

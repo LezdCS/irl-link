@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+
+@immutable
 class SeMe {
   final String id;
   final String avatar;

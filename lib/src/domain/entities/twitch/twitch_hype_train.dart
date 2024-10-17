@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+
+@immutable
 class TwitchHypeTrain {
   final String id;
   final int total;
@@ -33,6 +36,7 @@ class TwitchHypeTrain {
   }
 }
 
+@immutable
 class Contribution {
   final String userId;
   final String userLogin;

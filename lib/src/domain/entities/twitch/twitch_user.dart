@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+
+@immutable
 class TwitchUser {
   final String id;
   final String login;

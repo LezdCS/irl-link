@@ -1,7 +1,9 @@
 import 'package:collection/collection.dart';
 import 'package:kick_chat/kick_chat.dart';
 import 'package:twitch_chat/twitch_chat.dart' as twitch;
+import 'package:flutter/material.dart';
 
+@immutable
 class ChatBadge {
   final String id;
   final String imageUrl1x;

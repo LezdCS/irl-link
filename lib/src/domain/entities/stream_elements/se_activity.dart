@@ -11,6 +11,7 @@ enum ActivityType {
   unsupported,
 }
 
+@immutable
 class SeActivity {
   final String id;
   final String channel;

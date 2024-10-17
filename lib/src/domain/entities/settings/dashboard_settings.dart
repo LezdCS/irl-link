@@ -1,5 +1,7 @@
 import '../dashboard_event.dart';
+import 'package:flutter/material.dart';
 
+@immutable
 class DashboardSettings {
   final List<DashboardEvent> userEvents;
   final bool activated;

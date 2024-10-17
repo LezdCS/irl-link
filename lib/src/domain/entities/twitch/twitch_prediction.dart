@@ -1,4 +1,5 @@
-import 'dart:ui';
+import 'package:flutter/material.dart';
+
 
 enum PredictionStatus {
   empty,
@@ -8,6 +9,7 @@ enum PredictionStatus {
   locked,
 }
 
+@immutable
 class TwitchPrediction {
   final String id;
   final String title;
@@ -40,6 +42,7 @@ class TwitchPrediction {
   }
 }
 
+@immutable
 class Outcome {
   final String id;
   final String title;

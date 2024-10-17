@@ -1,5 +1,6 @@
+import 'package:flutter/material.dart';
 
-
+@immutable
 class StreamElementsSettings {
   final bool showFollowerActivity;
   final bool showSubscriberActivity;
