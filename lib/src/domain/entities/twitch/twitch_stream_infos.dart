@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+
+@immutable
 class TwitchStreamInfos {
   final String? title;
   final int? viewerCount;

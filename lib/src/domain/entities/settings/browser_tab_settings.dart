@@ -1,5 +1,6 @@
+import 'package:flutter/material.dart';
 
-
+@immutable
 class BrowserTabSettings {
   final List<BrowserTab> tabs;
 

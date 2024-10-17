@@ -1,10 +1,12 @@
 import 'package:twitch_chat/twitch_chat.dart' as twitch;
+import 'package:flutter/material.dart';
 
 enum EmotePlateform {
   twitch,
   kick,
 }
 
+@immutable
 class ChatEmote {
   final String id;
   final String name;

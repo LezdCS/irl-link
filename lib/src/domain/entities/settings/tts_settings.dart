@@ -1,5 +1,6 @@
+import 'package:flutter/material.dart';
 
-
+@immutable
 class TtsSettings {
   final bool ttsEnabled;
   final String language;

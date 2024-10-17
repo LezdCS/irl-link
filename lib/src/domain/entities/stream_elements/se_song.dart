@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+
+@immutable
 class SeSong {
   final String id;
   final String videoId;

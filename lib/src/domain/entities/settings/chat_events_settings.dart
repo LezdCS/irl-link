@@ -1,5 +1,6 @@
+import 'package:flutter/material.dart';
 
-
+@immutable
 class ChatEventsSettings {
   final bool firstsMessages;
   final bool subscriptions;

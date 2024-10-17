@@ -1,5 +1,6 @@
+import 'package:flutter/material.dart';
 
-
+@immutable
 class GeneralSettings {
   final bool isDarkMode;
   final bool keepSpeakerOn;

@@ -1,9 +1,12 @@
+import 'package:flutter/material.dart';
+
 enum PollStatus {
   empty,
   active,
   completed,
 }
 
+@immutable
 class TwitchPoll {
   final String id;
   final String title;
@@ -33,6 +36,7 @@ class TwitchPoll {
   }
 }
 
+@immutable
 class Choice {
   final String id;
   final String title;
