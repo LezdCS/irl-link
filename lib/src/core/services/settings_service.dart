@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
@@ -44,13 +47,14 @@ class SettingsService extends GetxService {
     );
   }
 
-  void _migrateFromGetStorage() {
+  Future<void> _migrateFromGetStorage(Database db) async {
     // We get the settings from GetStorage
-    final settingsJson = GetStorage().read('settings');
-    if (settingsJson != null) {
+    final settingsString = GetStorage().read('settings');
+    if (settingsString != null) {
+      Map<String, dynamic> settingsJson = jsonDecode(settingsString);
       SettingsDTO settingsDTO = SettingsDTO.fromJson(settingsJson);
       // We save the settings in the database
-      settingsEvents.setSettings(settings: settingsDTO, database: database);
+      await settingsEvents.setSettings(settings: settingsDTO, database: db);
       // We delete the settings from GetStorage
       GetStorage().remove('settings');
     }
@@ -65,9 +69,10 @@ class SettingsService extends GetxService {
         // We create all the tables
         _createTableSettingsV1(batch);
         await batch.commit();
-        _migrateFromGetStorage(); //this can be removed only if every user has updated to the version with the migration
+        await _migrateFromGetStorage(db); //this can be removed only if every user has updated to the version with the migration
       },
       onUpgrade: (db, oldVersion, newVersion) {
+        debugPrint('Upgrading database from $oldVersion to $newVersion');
       },
       version: 1,
     );
@@ -78,7 +83,7 @@ class SettingsService extends GetxService {
   Future<Settings> getSettings() async {
     DataState<Settings> settingsResult =
         await settingsEvents.getSettings(database: database);
-    if (settings is DataFailed) {
+    if (settingsResult is DataFailed) {
       return const Settings.defaultSettings();
     }
     return settingsResult.data!;
