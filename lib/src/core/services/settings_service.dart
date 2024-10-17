@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:irllink/src/data/entities/settings_dto.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/events/settings_events.dart';
 import 'package:path/path.dart';
@@ -42,6 +44,18 @@ class SettingsService extends GetxService {
     );
   }
 
+  void _migrateFromGetStorage() {
+    // We get the settings from GetStorage
+    final settingsJson = GetStorage().read('settings');
+    if (settingsJson != null) {
+      SettingsDTO settingsDTO = SettingsDTO.fromJson(settingsJson);
+      // We save the settings in the database
+      settingsEvents.setSettings(settings: settingsDTO, database: database);
+      // We delete the settings from GetStorage
+      GetStorage().remove('settings');
+    }
+  }
+
   Future<SettingsService> init() async {
     database = await openDatabase(
       join(await getDatabasesPath(), 'irllink.db'),
@@ -51,6 +65,7 @@ class SettingsService extends GetxService {
         // We create all the tables
         _createTableSettingsV1(batch);
         await batch.commit();
+        _migrateFromGetStorage(); //this can be removed only if every user has updated to the version with the migration
       },
       onUpgrade: (db, oldVersion, newVersion) {
       },
