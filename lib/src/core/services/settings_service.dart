@@ -16,7 +16,7 @@ class SettingsService extends GetxService {
 
   Future<Settings> getSettings() async {
     DataState<Settings> settingsResult = await settingsEvents.getSettings();
-    if (settings is DataFailed) {
+    if (settingsResult is DataFailed) {
       return const Settings.defaultSettings();
     }
     settings.value = settingsResult.data!;
