@@ -24,7 +24,7 @@ class ChatSettings extends Equatable {
   Map toJson() => {
         'permanentFirstGroup': permanentFirstGroup.toJson(),
         'chatGroups': chatGroups.map((e) => e.toJson()).toList(),
-        'hideDeletedMessages': hideDeletedMessages,
+        'hideDeletedMessages': hideDeletedMessages == true ? 1 : 0,
       };
 
   @override

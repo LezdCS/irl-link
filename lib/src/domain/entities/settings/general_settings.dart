@@ -27,9 +27,9 @@ class GeneralSettings extends Equatable {
   }
 
   Map toJson() => {
-        'isDarkMode': isDarkMode,
-        'keepSpeakerOn': keepSpeakerOn,
-        'displayViewerCount': displayViewerCount,
+        'isDarkMode': isDarkMode == true ? 1 : 0,
+        'keepSpeakerOn': keepSpeakerOn == true ? 1 : 0,
+        'displayViewerCount': displayViewerCount == true ? 1 : 0,
         'appLanguage': appLanguage,
         'splitViewWeights': splitViewWeights,
       };

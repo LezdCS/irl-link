@@ -60,8 +60,8 @@ class BrowserTab extends Equatable {
         'id': id,
         'title': title,
         'url': url,
-        'toggled': toggled,
-        'iOSAudioSource': iOSAudioSource,
+        'toggled': toggled == true ? 1 : 0,
+        'iOSAudioSource': iOSAudioSource == true ? 1 : 0,
       };
 
   @override

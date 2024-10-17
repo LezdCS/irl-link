@@ -21,7 +21,7 @@ class DashboardSettings extends Equatable {
 
   Map toJson() => {
         'userEvents': userEvents.map((e) => e.toJson()).toList(),
-        'activated': activated,
+        'activated': activated == true ? 1 : 0,
       };
 
   @override

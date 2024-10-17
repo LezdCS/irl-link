@@ -30,12 +30,12 @@ class ChatEventsSettings extends Equatable {
   }
 
   Map toJson() => {
-        'firstsMessages': firstsMessages,
-        'subscriptions': subscriptions,
-        'bitsDonations': bitsDonations,
-        'announcements': announcements,
-        'incomingRaids': incomingRaids,
-        'redemptions': redemptions,
+        'firstsMessages': firstsMessages == true ? 1 : 0,
+        'subscriptions': subscriptions == true ? 1 : 0,
+        'bitsDonations': bitsDonations == true ? 1 : 0,
+        'announcements': announcements == true ? 1 : 0,
+        'incomingRaids': incomingRaids == true ? 1 : 0,
+        'redemptions': redemptions == true ? 1 : 0,
       };
 
   @override

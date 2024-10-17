@@ -136,9 +136,9 @@ class Settings extends Equatable {
 
   Map<String, Object?> toJson() => {
         //CHAT
-        'isEmotes': isEmotes,
+        'isEmotes': isEmotes == true ? 1 : 0,
         'textSize': textSize,
-        'displayTimestamp': displayTimestamp,
+        'displayTimestamp': displayTimestamp == true ? 1 : 0,
         'hiddenUsersIds': hiddenUsersIds,
         'chatEventsSettings': chatEventsSettings?.toJson(),
         'chatSettings': chatSettings?.toJson(),
@@ -146,7 +146,7 @@ class Settings extends Equatable {
         'generalSettings': generalSettings?.toJson(),
         'dashboardSettings': dashboardSettings?.toJson(),
         //CONNECTIONS
-        'isObsConnected': isObsConnected,
+        'isObsConnected': isObsConnected == true ? 1 : 0,
         'obsWebsocketUrl': obsWebsocketUrl,
         'obsWebsocketPassword': obsWebsocketPassword,
         'browserTabs': browserTabs,

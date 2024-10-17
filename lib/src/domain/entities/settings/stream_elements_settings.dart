@@ -42,13 +42,13 @@ class StreamElementsSettings extends Equatable {
   }
 
   Map toJson() => {
-        'showFollowerActivity': showFollowerActivity,
-        'showSubscriberActivity': showSubscriberActivity,
-        'showDonationActivity': showDonationActivity,
-        'showCheerActivity': showCheerActivity,
-        'showRaidActivity': showRaidActivity,
-        'showHostActivity': showHostActivity,
-        'showMerchActivity': showMerchActivity,
+        'showFollowerActivity': showFollowerActivity == true ? 1 : 0,
+        'showSubscriberActivity': showSubscriberActivity == true ? 1 : 0,
+        'showDonationActivity': showDonationActivity == true ? 1 : 0,
+        'showCheerActivity': showCheerActivity == true ? 1 : 0,
+        'showRaidActivity': showRaidActivity == true ? 1 : 0,
+        'showHostActivity': showHostActivity == true ? 1 : 0,
+        'showMerchActivity': showMerchActivity == true ? 1 : 0,
         'jwt': jwt,
         'overlayToken': overlayToken,
         'mutedOverlays': mutedOverlays,

@@ -51,7 +51,7 @@ class TtsSettings extends Equatable {
   }
 
   Map toJson() => {
-        'ttsEnabled': ttsEnabled,
+        'ttsEnabled': ttsEnabled == true ? 1 : 0,
         'language': language,
         'prefixsToIgnore': prefixsToIgnore,
         'prefixsToUseTtsOnly': prefixsToUseTtsOnly,
@@ -60,10 +60,10 @@ class TtsSettings extends Equatable {
         'rate': rate,
         'voice': voice,
         'ttsUsersToIgnore': ttsUsersToIgnore,
-        'ttsMuteViewerName': ttsMuteViewerName,
-        'ttsOnlyVip': ttsOnlyVip,
-        'ttsOnlyMod': ttsOnlyMod,
-        'ttsOnlySubscriber': ttsOnlySubscriber,
+        'ttsMuteViewerName': ttsMuteViewerName  == true ? 1 : 0,
+        'ttsOnlyVip': ttsOnlyVip == true ? 1 : 0,
+        'ttsOnlyMod': ttsOnlyMod == true ? 1 : 0,
+        'ttsOnlySubscriber': ttsOnlySubscriber == true ? 1 : 0,
       };
 
   @override
