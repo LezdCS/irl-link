@@ -22,7 +22,6 @@ String getDashboardActionTypeString(DashboardActionsTypes actionType) {
   }
 }
 
-// ignore: must_be_immutable
 class DashboardEvent {
   final String title;
   final Color color;

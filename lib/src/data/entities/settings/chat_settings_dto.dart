@@ -1,3 +1,4 @@
+import 'package:irllink/src/core/utils/mapper.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
@@ -9,11 +10,22 @@ class ChatSettingsDTO extends ChatSettings {
     required super.hideDeletedMessages,
   });
 
-  Map toJson() => {
-        'permanentFirstGroup': permanentFirstGroup.toJson(),
-        'chatGroups': chatGroups.map((e) => e.toJson()).toList(),
+  Map toJson() {
+    final mappr = Mappr();
+    ChatGroupDTO permanentFirstGroupDTO =
+        mappr.convert<ChatGroup, ChatGroupDTO>(permanentFirstGroup);
+    List<Map<dynamic, dynamic>> list = chatGroups.map((chatGroup) {
+      ChatGroupDTO chatGroupDTO =
+          mappr.convert<ChatGroup, ChatGroupDTO>(chatGroup);
+      return chatGroupDTO.toJson();
+    }).toList();
+
+    return {
+        'permanentFirstGroup': permanentFirstGroupDTO.toJson(),
+        'chatGroups': list,
         'hideDeletedMessages': hideDeletedMessages,
       };
+  }
 
   factory ChatSettingsDTO.fromJson(Map<String, dynamic> map) {
     List<ChatGroup> gDto = [];
@@ -60,10 +72,17 @@ class ChatGroupDTO extends ChatGroup {
     );
   }
 
-  Map toJson() => {
-        'id': id,
-        'channels': channels.map((e) => e.toJson()).toList(),
-      };
+  Map toJson() {
+    List list = channels.map((channel) {
+      final mappr = Mappr();
+      ChannelDTO channelDTO = mappr.convert<Channel, ChannelDTO>(channel);
+      return channelDTO.toJson();
+    }).toList();
+    return {
+      'id': id,
+      'channels': list,
+    };
+  }
 }
 
 class ChannelDTO extends Channel {

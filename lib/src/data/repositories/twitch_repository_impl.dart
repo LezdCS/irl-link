@@ -11,6 +11,7 @@ import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/globals.dart' as globals;
 import 'package:irllink/src/core/utils/init_dio.dart';
+import 'package:irllink/src/core/utils/mapper.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_credentials_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_decoded_idtoken_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_poll_dto.dart';
@@ -209,7 +210,10 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
   Future<void> setTwitchOnLocal(TwitchCredentials twitchData) async {
     final box = GetStorage();
-    String jsonTwitchData = jsonEncode(twitchData);
+    Mappr mappr = Mappr();
+    TwitchCredentialsDTO twitchDataDTO =
+        mappr.convert<TwitchCredentials, TwitchCredentialsDTO>(twitchData);
+    String jsonTwitchData = jsonEncode(twitchDataDTO);
     box.write('twitchData', jsonTwitchData);
   }
 

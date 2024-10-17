@@ -1,3 +1,4 @@
+import 'package:irllink/src/core/utils/mapper.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:uuid/uuid.dart';
 
@@ -6,9 +7,13 @@ class BrowserTabSettingsDTO extends BrowserTabSettings {
     required super.tabs,
   });
 
-  Map toJson() => {
-        'tabs': tabs.map((tab) => tab.toJson()).toList(),
+  Map toJson() {
+    Mappr mappr = Mappr();
+    List list = tabs.map((tab) => mappr.convert<BrowserTab, BrowserTabDTO>(tab).toJson()).toList();
+    return {
+        'tabs': list,
       };
+  }
 
   factory BrowserTabSettingsDTO.fromJson(Map<String, dynamic> map) {
     List<BrowserTab> bDto = [];

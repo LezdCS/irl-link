@@ -25,6 +25,16 @@ class DashboardEventDTO extends DashboardEvent {
       customValue: jsonDecode(map['customValue']),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'color': color.value,
+      'dashboardActionsType': dashboardActionsType.name,
+      'event': event.name,
+      'customValue': jsonEncode(customValue),
+    };
+  }
 }
 
 // Get the action type from a string

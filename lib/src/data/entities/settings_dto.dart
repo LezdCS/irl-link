@@ -1,3 +1,4 @@
+import 'package:irllink/src/core/utils/mapper.dart';
 import 'package:irllink/src/data/entities/settings/browser_tab_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/chat_events_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/chat_settings_dto.dart';
@@ -6,6 +7,13 @@ import 'package:irllink/src/data/entities/settings/general_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/stream_elements_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/tts_settings_dto.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
+import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
+import 'package:irllink/src/domain/entities/settings/chat_events_settings.dart';
+import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
+import 'package:irllink/src/domain/entities/settings/dashboard_settings.dart';
+import 'package:irllink/src/domain/entities/settings/general_settings.dart';
+import 'package:irllink/src/domain/entities/settings/stream_elements_settings.dart';
+import 'package:irllink/src/domain/entities/settings/tts_settings.dart';
 
 class SettingsDTO extends Settings {
   const SettingsDTO({
@@ -31,28 +39,47 @@ class SettingsDTO extends Settings {
     required super.ttsSettings,
   });
 
-  Map toJson() => {
+  Map toJson() {
+    Mappr mappr = Mappr();
+    ChatSettingsDTO chatSettingsDTO =
+        mappr.convert<ChatSettings, ChatSettingsDTO>(chatSettings);
+    ChatEventsSettingsDTO chatEventsSettingsDTO =
+        mappr.convert<ChatEventsSettings, ChatEventsSettingsDTO>(
+            chatEventsSettings);
+    GeneralSettingsDTO generalSettingsDTO =
+        mappr.convert<GeneralSettings, GeneralSettingsDTO>(generalSettings);
+        DashboardSettingsDTO dashboardSettingsDTO =
+          mappr.convert<DashboardSettings, DashboardSettingsDTO>(dashboardSettings);
+    BrowserTabSettingsDTO browserTabSettingsDTO =
+        mappr.convert<BrowserTabSettings, BrowserTabSettingsDTO>(browserTabs);
+    StreamElementsSettingsDTO streamElementsSettingsDTO =
+        mappr.convert<StreamElementsSettings, StreamElementsSettingsDTO>(
+            streamElementsSettings);
+    TtsSettingsDTO ttsSettingsDTO =
+        mappr.convert<TtsSettings, TtsSettingsDTO>(ttsSettings);
+    return {
         //CHAT
         'isEmotes': isEmotes,
         'textSize': textSize,
         'displayTimestamp': displayTimestamp,
         'hiddenUsersIds': hiddenUsersIds,
-        'chatEventsSettings': chatEventsSettings?.toJson(),
-        'chatSettings': chatSettings?.toJson(),
+        'chatEventsSettings': chatEventsSettingsDTO.toJson(),
+        'chatSettings': chatSettingsDTO.toJson(),
         //GENERAL
-        'generalSettings': generalSettings?.toJson(),
-        'dashboardSettings': dashboardSettings?.toJson(),
+        'generalSettings': generalSettingsDTO.toJson(),
+        'dashboardSettings': dashboardSettingsDTO.toJson(),
         //CONNECTIONS
         'isObsConnected': isObsConnected,
         'obsWebsocketUrl': obsWebsocketUrl,
         'obsWebsocketPassword': obsWebsocketPassword,
-        'browserTabs': browserTabs?.toJson(),
+        'browserTabs': browserTabSettingsDTO.toJson(),
         'obsConnectionsHistory': obsConnectionsHistory,
-        'streamElementsSettings': streamElementsSettings?.toJson(),
+        'streamElementsSettings': streamElementsSettingsDTO.toJson(),
         'rtIrlPushKey': rtIrlPushKey,
         //TTS
-        'ttsSettings': ttsSettings?.toJson(),
+        'ttsSettings': ttsSettingsDTO.toJson(),
       };
+  }
 
   factory SettingsDTO.fromJson(Map<String, dynamic> map) {
     return SettingsDTO(
