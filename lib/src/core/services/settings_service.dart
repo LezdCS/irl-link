@@ -11,17 +11,46 @@ class SettingsService extends GetxService {
 
   Rx<Settings> settings = const Settings.defaultSettings().obs;
   late Database database;
-  
+
+  Future onConfigure(Database db) async {
+    await db.execute('PRAGMA foreign_keys = ON');
+  }
+
+  void _createTableSettingsV1(Batch batch) {
+    batch.execute('DROP TABLE IF EXISTS settings');
+    batch.execute(
+      '''CREATE TABLE settings
+          (
+          isEmotes INTEGER,
+          textSize REAL,
+          displayTimestamp INTEGER,
+          hiddenUsersIds TEXT,
+          chatEventsSettings TEXT,
+          chatSettings TEXT,
+          generalSettings TEXT,
+          dashboardSettings TEXT,
+          isObsConnected INTEGER,
+          obsWebsocketUrl TEXT,
+          obsWebsocketPassword TEXT,
+          browserTabs TEXT,
+          obsConnectionsHistory TEXT,
+          streamElementsSettings TEXT,
+          rtIrlPushKey TEXT,
+          ttsSettings TEXT
+          )
+          ''',
+    );
+  }
+
   Future<SettingsService> init() async {
     database = await openDatabase(
-      join(await getDatabasesPath(), 'settings.db'),
-      onCreate: (db, version) {
-        return db.execute(
-          // todo: create table settings
-          'CREATE TABLE settings(id INTEGER PRIMARY KEY, ... TEXT, ... INTEGER)',
-        );
-        // todo: if the user was on a version of the app using get storage, we need to transfer his settings to the database
-
+      join(await getDatabasesPath(), 'irllink.db'),
+      onConfigure: onConfigure,
+      onCreate: (db, version) async {
+        var batch = db.batch();
+        // We create all the tables
+        _createTableSettingsV1(batch);
+        await batch.commit();
       },
       onUpgrade: (db, oldVersion, newVersion) {
       },
@@ -32,7 +61,8 @@ class SettingsService extends GetxService {
   }
 
   Future<Settings> getSettings() async {
-    DataState<Settings> settingsResult = await settingsEvents.getSettings(database: database);
+    DataState<Settings> settingsResult =
+        await settingsEvents.getSettings(database: database);
     if (settings is DataFailed) {
       return const Settings.defaultSettings();
     }
