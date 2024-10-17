@@ -6,9 +6,4 @@ class TwitchDecodedIdToken {
     required this.preferredUsername,
     required this.profilePicture,
   });
-
-  Map toJson() => {
-        'preferredUsername': preferredUsername,
-        'profilePicture': profilePicture,
-      };
 }

@@ -10,11 +10,4 @@ class SeCredentials {
     required this.expiresIn,
     required this.scopes,
   });
-
-  Map toJson() => {
-        'accessToken': accessToken,
-        'refreshToken': refreshToken,
-        'expiresIn': expiresIn,
-        'scopes': scopes,
-      };
 }

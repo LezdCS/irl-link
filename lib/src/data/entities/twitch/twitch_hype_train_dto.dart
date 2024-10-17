@@ -13,7 +13,6 @@ class TwitchHypeTrainDTO extends TwitchHypeTrain {
     required super.endsAt,
   });
 
-  @override
   Map toJson() => {
         'id': id,
         'total': total,

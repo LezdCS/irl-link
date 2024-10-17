@@ -60,15 +60,4 @@ class ChatEmote {
       plateform: EmotePlateform.kick,
     );
   }
-
-  Map toJson() => {
-        'id': id,
-        'name': name,
-        'url1x': url1x,
-        'url2x': url2x,
-        'url4x': url4x,
-        'color': color,
-        'emoteType': emoteType,
-      };
-  
 }

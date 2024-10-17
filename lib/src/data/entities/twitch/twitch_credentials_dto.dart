@@ -15,7 +15,6 @@ class TwitchCredentialsDTO extends TwitchCredentials {
     required super.scopes,
   });
 
-  @override
   Map toJson() => {
         'accessToken': accessToken,
         'idToken': idToken,

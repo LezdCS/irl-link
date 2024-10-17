@@ -31,17 +31,6 @@ class TwitchHypeTrain {
       lastContribution: null,
     );
   }
-
-  Map toJson() => {
-        'id': id,
-        'total': total,
-        'progress': progress,
-        'goal': goal,
-        'level': level,
-        'topContributions': topContributions,
-        'lastContribution': lastContribution,
-        'endsAt': endsAt,
-      };
 }
 
 class Contribution {
@@ -58,12 +47,4 @@ class Contribution {
     required this.type,
     required this.total,
   });
-
-  Map toJson() => {
-        'userId': userId,
-        'userLogin': userLogin,
-        'userName': userName,
-        'type': type,
-        'total': total,
-      };
 }

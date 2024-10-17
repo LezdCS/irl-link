@@ -38,17 +38,6 @@ class TwitchPrediction {
       remainingTime: DateTime.now(),
     );
   }
-
-  Map toJson() => {
-        'id': id,
-        'title': title,
-        'winningOutcomeId': winningOutcomeId,
-        'totalUsers': totalUsers,
-        'outcomes': outcomes,
-        'status': status,
-        'remainingTime': remainingTime,
-      };
-  
 }
 
 class Outcome {
@@ -65,12 +54,4 @@ class Outcome {
     required this.channelPoints,
     required this.color,
   });
-
-  Map toJson() => {
-        'id': id,
-        'title': title,
-        'users': users,
-        'channelPoints': channelPoints,
-        'color': color,
-      };
 }

@@ -31,7 +31,6 @@ class SettingsDTO extends Settings {
     required super.ttsSettings,
   });
 
-  @override
   Map toJson() => {
         //CHAT
         'isEmotes': isEmotes,

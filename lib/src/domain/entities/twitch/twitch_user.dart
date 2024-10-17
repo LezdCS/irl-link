@@ -16,14 +16,4 @@ class TwitchUser {
     required this.profileImageUrl,
     required this.viewCount,
   });
-
-  Map toJson() => {
-        'id': id,
-        'login': login,
-        'display_name': displayName,
-        'broadcaster_type': broadcasterType,
-        'description': description,
-        'profile_image_url': profileImageUrl,
-        'view_count': viewCount,
-      };
 }

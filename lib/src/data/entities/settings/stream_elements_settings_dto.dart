@@ -15,7 +15,6 @@ class StreamElementsSettingsDTO extends StreamElementsSettings {
     required super.mutedOverlays,
   });
 
-  @override
   Map toJson() => {
         'showFollowerActivity': showFollowerActivity,
         'showSubscriberActivity': showSubscriberActivity,

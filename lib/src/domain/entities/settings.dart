@@ -133,29 +133,6 @@ class Settings {
     ),
   });
 
-  Map toJson() => {
-        //CHAT
-        'isEmotes': isEmotes,
-        'textSize': textSize,
-        'displayTimestamp': displayTimestamp,
-        'hiddenUsersIds': hiddenUsersIds,
-        'chatEventsSettings': chatEventsSettings?.toJson(),
-        'chatSettings': chatSettings?.toJson(),
-        //GENERAL
-        'generalSettings': generalSettings?.toJson(),
-        'dashboardSettings': dashboardSettings?.toJson(),
-        //CONNECTIONS
-        'isObsConnected': isObsConnected,
-        'obsWebsocketUrl': obsWebsocketUrl,
-        'obsWebsocketPassword': obsWebsocketPassword,
-        'browserTabs': browserTabs,
-        'obsConnectionsHistory': obsConnectionsHistory,
-        'streamElementsSettings': streamElementsSettings?.toJson(),
-        'rtIrlPushKey': rtIrlPushKey,
-        //TTS
-        'ttsSettings': ttsSettings?.toJson(),
-      };
-
   Settings copyWith(
           {
           //CHAT

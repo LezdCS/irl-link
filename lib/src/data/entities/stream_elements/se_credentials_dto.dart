@@ -8,7 +8,6 @@ class SeCredentialsDTO extends SeCredentials {
     required super.scopes,
   });
 
-  @override
   Map toJson() => {
         'accessToken': accessToken,
         'refreshToken': refreshToken,

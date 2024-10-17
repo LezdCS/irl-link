@@ -6,9 +6,8 @@ class BrowserTabSettingsDTO extends BrowserTabSettings {
     required super.tabs,
   });
 
-  @override
   Map toJson() => {
-        'tabs': tabs.map((e) => e.toJson()).toList(),
+        'tabs': tabs.map((tab) => tab.toJson()).toList(),
       };
 
   factory BrowserTabSettingsDTO.fromJson(Map<String, dynamic> map) {
@@ -37,7 +36,6 @@ class BrowserTabDTO extends BrowserTab {
     required super.iOSAudioSource,
   });
 
-  @override
   Map toJson() => {
         'id': id,
         'title': title,

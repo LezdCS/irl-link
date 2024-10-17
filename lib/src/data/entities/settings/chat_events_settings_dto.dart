@@ -11,7 +11,6 @@ class ChatEventsSettingsDTO extends ChatEventsSettings {
     required super.redemptions,
   });
 
-  @override
   Map toJson() => {
         'firstsMessages': firstsMessages,
         'subscriptions': subscriptions,

@@ -9,7 +9,6 @@ class ChatSettingsDTO extends ChatSettings {
     required super.hideDeletedMessages,
   });
 
-  @override
   Map toJson() => {
         'permanentFirstGroup': permanentFirstGroup.toJson(),
         'chatGroups': chatGroups.map((e) => e.toJson()).toList(),
@@ -61,7 +60,6 @@ class ChatGroupDTO extends ChatGroup {
     );
   }
 
-  @override
   Map toJson() => {
         'id': id,
         'channels': channels.map((e) => e.toJson()).toList(),
@@ -106,7 +104,6 @@ class ChannelDTO extends Channel {
     );
   }
 
-  @override
   Map toJson() => {
         'platform': platform.name.toString(),
         'channel': channel,

@@ -18,7 +18,6 @@ class TtsSettingsDTO extends TtsSettings {
     required super.ttsOnlySubscriber,
   });
 
-  @override
   Map toJson() => {
         'ttsEnabled': ttsEnabled,
         'language': language,

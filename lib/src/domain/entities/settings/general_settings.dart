@@ -14,17 +14,7 @@ class GeneralSettings {
     required this.appLanguage,
     required this.splitViewWeights,
   });
-
-  Map toJson() => {
-        'isDarkMode': isDarkMode,
-        'keepSpeakerOn': keepSpeakerOn,
-        'displayViewerCount': displayViewerCount,
-        'appLanguage': appLanguage,
-        'splitViewWeights': splitViewWeights,
-      };
-
   
-
   GeneralSettings copyWith({
     bool? isDarkMode,
     bool? keepSpeakerOn,

@@ -33,17 +33,6 @@ class TwitchStreamInfos {
     this.isSubscriberMode = false,
   });
 
-  Map toJson() => {
-        'title': title,
-        'viewerCount': viewerCount,
-        'isOnline': isOnline,
-        'isEmoteMode': isEmoteMode,
-        'isFollowerMode': isFollowerMode,
-        'isSlowMode': isSlowMode,
-        'slowModeWaitTime': slowModeWaitTime,
-        'isSubscriberMode': isSubscriberMode,
-      };
-
   TwitchStreamInfos copyWith({
     String? title,
     int? viewerCount,

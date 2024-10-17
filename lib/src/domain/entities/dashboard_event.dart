@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:ui';
 
 import 'package:irllink/src/core/utils/dashboard_events.dart';
@@ -38,14 +37,6 @@ class DashboardEvent {
     required this.event,
     required this.customValue,
   });
-
-  Map toJson() => {
-        'title': title,
-        'color': color.value,
-        'dashboardActionsType': dashboardActionsType.name,
-        'event': event.name,
-        'customValue': jsonEncode(customValue),
-      };
 
   DashboardEvent copyWith({
     String? title,

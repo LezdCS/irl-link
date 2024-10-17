@@ -12,12 +12,6 @@ class ChatSettings {
     required this.hideDeletedMessages,
   });
 
-  Map toJson() => {
-        'permanentFirstGroup': permanentFirstGroup.toJson(),
-        'chatGroups': chatGroups.map((e) => e.toJson()).toList(),
-        'hideDeletedMessages': hideDeletedMessages,
-      };
-  
   ChatSettings copyWith({
     ChatGroup? permanentFirstGroup,
     List<ChatGroup>? chatGroups,
@@ -40,11 +34,6 @@ class ChatGroup {
     required this.channels,
   });
 
-  Map toJson() => {
-        'id': id,
-        'channels': channels.map((e) => e.toJson()).toList(),
-      };
-
   ChatGroup copyWith({
     String? id,
     List<Channel>? channels,
@@ -66,10 +55,4 @@ class Channel {
     required this.channel,
     required this.enabled,
   });
-
-  Map toJson() => {
-        'platform': platform.name.toString(),
-        'channel': channel,
-        'enabled': enabled,
-      };
 }
