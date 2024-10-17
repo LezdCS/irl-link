@@ -11,7 +11,6 @@ class TwitchUserDTO extends TwitchUser {
     required super.viewCount,
   });
 
-  @override
   Map toJson() => {
         'id': id,
         'login': login,

@@ -24,7 +24,6 @@ class TwitchStreamInfosDto extends TwitchStreamInfos {
           isSubscriberMode: isSubscriberMode,
         );
 
-  @override
   Map toJson() => {
         'viewerCount': viewerCount,
         'title': title,

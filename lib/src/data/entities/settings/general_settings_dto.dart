@@ -10,7 +10,6 @@ class GeneralSettingsDTO extends GeneralSettings {
     required super.splitViewWeights,
   });
 
-  @override
   Map toJson() => {
         'isDarkMode': isDarkMode,
         'keepSpeakerOn': keepSpeakerOn,

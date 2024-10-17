@@ -13,7 +13,6 @@ class TwitchPredictionDTO extends TwitchPrediction {
     required super.remainingTime,
   });
 
-  @override
   Map toJson() => {
         'id': id,
         'title': title,
@@ -74,7 +73,6 @@ class OutcomeDTO extends Outcome {
     required super.color,
   });
 
-  @override
   Map toJson() => {
         'id': id,
         'title': title,

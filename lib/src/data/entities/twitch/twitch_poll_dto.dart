@@ -11,7 +11,6 @@ class TwitchPollDTO extends TwitchPoll {
     required super.endsAt,
   });
 
-  @override
   Map toJson() => {
         'id': id,
         'title': title,
@@ -62,7 +61,6 @@ class ChoiceDTO extends Choice {
     required super.votes,
   });
 
-  @override
   Map toJson() => {
         'id': id,
         'title': title,

@@ -31,16 +31,6 @@ class TwitchPoll {
       endsAt: DateTime.now(),
     );
   }
-
-  Map toJson() => {
-        'id': id,
-        'title': title,
-        'choices': choices,
-        'totalVotes': totalVotes,
-        'status': status,
-        'endsAt': endsAt,
-      };
-  
 }
 
 class Choice {
@@ -53,11 +43,4 @@ class Choice {
     required this.title,
     required this.votes,
   });
-
-  Map toJson() => {
-        'id': id,
-        'title': title,
-        'votes': votes,
-      };
-
 }

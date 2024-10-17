@@ -6,7 +6,6 @@ class TwitchDecodedIdTokenDTO extends TwitchDecodedIdToken {
     required super.profilePicture,
   });
 
-  @override
   Map toJson() => {
         'preferredUsername': preferredUsername,
         'profilePicture': profilePicture,

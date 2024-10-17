@@ -17,17 +17,6 @@ class ChatEventsSettings {
     required this.redemptions,
   });
 
-  Map toJson() => {
-        'firstsMessages': firstsMessages,
-        'subscriptions': subscriptions,
-        'bitsDonations': bitsDonations,
-        'announcements': announcements,
-        'incomingRaids': incomingRaids,
-        'redemptions': redemptions,
-      };
-
-  
-
   ChatEventsSettings copyWith({
     bool? firstsMessages,
     bool? subscriptions,

@@ -9,11 +9,6 @@ class DashboardSettings {
     required this.activated,
   });
 
-  Map toJson() => {
-        'userEvents': userEvents.map((e) => e.toJson()).toList(),
-        'activated': activated,
-      };
-
   DashboardSettings copyWith({
     List<DashboardEvent>? userEvents,
     bool? activated,

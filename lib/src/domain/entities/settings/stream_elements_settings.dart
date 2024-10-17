@@ -25,21 +25,6 @@ class StreamElementsSettings {
     required this.mutedOverlays,
   });
 
-  Map toJson() => {
-        'showFollowerActivity': showFollowerActivity,
-        'showSubscriberActivity': showSubscriberActivity,
-        'showDonationActivity': showDonationActivity,
-        'showCheerActivity': showCheerActivity,
-        'showRaidActivity': showRaidActivity,
-        'showHostActivity': showHostActivity,
-        'showMerchActivity': showMerchActivity,
-        'jwt': jwt,
-        'overlayToken': overlayToken,
-        'mutedOverlays': mutedOverlays,
-      };
-
-  
-
   StreamElementsSettings copyWith({
     bool? showFollowerActivity,
     bool? showSubscriberActivity,

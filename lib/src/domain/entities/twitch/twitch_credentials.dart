@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:irllink/src/domain/entities/twitch/twitch_decoded_idtoken.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
 
@@ -21,14 +19,4 @@ class TwitchCredentials {
     required this.twitchUser,
     required this.scopes,
   });
-
-  Map toJson() => {
-        'accessToken': accessToken,
-        'idToken': idToken,
-        'refreshToken': refreshToken,
-        'expiresIn': expiresIn,
-        'decodedIdToken': jsonEncode(decodedIdToken),
-        'twitchUser': jsonEncode(twitchUser),
-        'scopes': scopes,
-      };
 }

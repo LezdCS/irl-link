@@ -31,24 +31,6 @@ class TtsSettings {
     required this.ttsOnlySubscriber,
   });
 
-  Map toJson() => {
-        'ttsEnabled': ttsEnabled,
-        'language': language,
-        'prefixsToIgnore': prefixsToIgnore,
-        'prefixsToUseTtsOnly': prefixsToUseTtsOnly,
-        'volume': volume,
-        'pitch': pitch,
-        'rate': rate,
-        'voice': voice,
-        'ttsUsersToIgnore': ttsUsersToIgnore,
-        'ttsMuteViewerName': ttsMuteViewerName,
-        'ttsOnlyVip': ttsOnlyVip,
-        'ttsOnlyMod': ttsOnlyMod,
-        'ttsOnlySubscriber': ttsOnlySubscriber,
-      };
-
-  
-
   TtsSettings copyWith({
     bool? ttsEnabled,
     String? language,

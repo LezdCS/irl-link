@@ -73,11 +73,4 @@ class ChatBadge {
       imageUrl4x: correspondingBadge.badgeImage.src,
     );
   }
-
-  Map toJson() => {
-        'id': id,
-        'imageUrl1x': imageUrl1x,
-        'imageUrl2x': imageUrl2x,
-        'imageUrl4x': imageUrl4x,
-      };
 }

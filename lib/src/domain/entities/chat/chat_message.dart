@@ -337,26 +337,6 @@ class ChatMessage
     );
   }
 
-  Map toJson() => {
-        'id': id,
-        'authorId': authorId,
-        'displayName': displayName,
-        'username': username,
-        'color': color,
-        'message': message,
-        'timestamp': timestamp,
-        'isAction': isAction,
-        'isSubscriber': isSubscriber,
-        'isModerator': isModerator,
-        'isVip': isVip,
-        'isDeleted': isDeleted,
-        'rawData': rawData,
-        'eventType': eventType,
-        'badgesList': badgesList,
-        'emotes': emotes,
-        'platform': platform,
-      };
-
   Map toJsonForWatch() => {
         'id': id == '' ? const Uuid().v4() : id,
         'username': username == '' ? displayName : username,

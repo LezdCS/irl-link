@@ -7,12 +7,6 @@ class BrowserTabSettings {
     required this.tabs,
   });
 
-  Map toJson() => {
-        'tabs': tabs.map((e) => e.toJson()).toList(),
-      };
-
-  
-
   BrowserTabSettings copyWith({
     List<BrowserTab>? tabs,
   }) {
@@ -36,14 +30,6 @@ class BrowserTab {
     required this.toggled,
     required this.iOSAudioSource,
   });
-
-  Map toJson() => {
-        'id': id,
-        'title': title,
-        'url': url,
-        'toggled': toggled,
-        'iOSAudioSource': iOSAudioSource,
-      };
 
   BrowserTab copyWith({
     String? id,
