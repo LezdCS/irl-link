@@ -40,7 +40,10 @@ class HomeView extends GetView<HomeViewController> {
     final double width = MediaQuery.of(context).size.width;
 
     return UpgradeAlert(
-      upgrader: Upgrader(),
+      upgrader: Upgrader(
+        minAppVersion: "2.7.2",
+        debugDisplayAlways: true,
+      ),
       child: PopScope(
         onPopInvokedWithResult: (bool invoked, dynamic d) async {
           if (invoked) {
