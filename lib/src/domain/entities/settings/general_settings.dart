@@ -1,6 +1,6 @@
-import 'package:equatable/equatable.dart';
 
-class GeneralSettings extends Equatable {
+
+class GeneralSettings {
   final bool isDarkMode;
   final bool keepSpeakerOn;
   final bool displayViewerCount;
@@ -15,17 +15,6 @@ class GeneralSettings extends Equatable {
     required this.splitViewWeights,
   });
 
-  @override
-  List<Object?> get props {
-    return [
-      isDarkMode,
-      keepSpeakerOn,
-      displayViewerCount,
-      appLanguage,
-      splitViewWeights,
-    ];
-  }
-
   Map toJson() => {
         'isDarkMode': isDarkMode,
         'keepSpeakerOn': keepSpeakerOn,
@@ -34,8 +23,7 @@ class GeneralSettings extends Equatable {
         'splitViewWeights': splitViewWeights,
       };
 
-  @override
-  bool get stringify => true;
+  
 
   GeneralSettings copyWith({
     bool? isDarkMode,

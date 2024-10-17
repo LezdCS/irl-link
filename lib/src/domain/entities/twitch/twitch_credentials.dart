@@ -1,10 +1,9 @@
 import 'dart:convert';
 
-import 'package:equatable/equatable.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_decoded_idtoken.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
 
-class TwitchCredentials extends Equatable {
+class TwitchCredentials {
   final String accessToken;
   final String idToken;
   final String refreshToken;
@@ -32,20 +31,4 @@ class TwitchCredentials extends Equatable {
         'twitchUser': jsonEncode(twitchUser),
         'scopes': scopes,
       };
-
-  @override
-  List<Object?> get props {
-    return [
-      accessToken,
-      idToken,
-      refreshToken,
-      expiresIn,
-      decodedIdToken,
-      twitchUser,
-      scopes,
-    ];
-  }
-
-  @override
-  bool get stringify => true;
 }

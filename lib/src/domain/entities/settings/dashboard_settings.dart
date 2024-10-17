@@ -1,8 +1,6 @@
-import 'package:equatable/equatable.dart';
-
 import '../dashboard_event.dart';
 
-class DashboardSettings extends Equatable {
+class DashboardSettings {
   final List<DashboardEvent> userEvents;
   final bool activated;
 
@@ -11,21 +9,10 @@ class DashboardSettings extends Equatable {
     required this.activated,
   });
 
-  @override
-  List<Object?> get props {
-    return [
-      userEvents,
-      activated,
-    ];
-  }
-
   Map toJson() => {
         'userEvents': userEvents.map((e) => e.toJson()).toList(),
         'activated': activated,
       };
-
-  @override
-  bool get stringify => true;
 
   DashboardSettings copyWith({
     List<DashboardEvent>? userEvents,

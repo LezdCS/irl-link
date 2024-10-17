@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-class TwitchDecodedIdToken extends Equatable {
+class TwitchDecodedIdToken {
   final String preferredUsername;
   final String profilePicture;
 
@@ -13,15 +11,4 @@ class TwitchDecodedIdToken extends Equatable {
         'preferredUsername': preferredUsername,
         'profilePicture': profilePicture,
       };
-
-  @override
-  List<Object?> get props {
-    return [
-      preferredUsername,
-      profilePicture,
-    ];
-  }
-
-  @override
-  bool get stringify => true;
 }

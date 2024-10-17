@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
-import 'package:equatable/equatable.dart';
 import 'package:irllink/src/domain/entities/chat/chat_badge.dart';
 import 'package:kick_chat/kick_chat.dart';
 import 'package:twitch_chat/twitch_chat.dart' as twitch;
@@ -26,7 +25,7 @@ enum Platform {
 }
 
 // ignore: must_be_immutable
-class ChatMessage extends Equatable
+class ChatMessage
     implements
         twitch.Subscription,
         twitch.SubGift,
@@ -370,32 +369,6 @@ class ChatMessage extends Equatable
               .toList(),
         ),
       };
-
-  @override
-  List<Object?> get props {
-    return [
-      id,
-      authorId,
-      displayName,
-      username,
-      color,
-      message,
-      timestamp,
-      isAction,
-      isSubscriber,
-      isModerator,
-      isVip,
-      isDeleted,
-      rawData,
-      eventType,
-      badgesList,
-      emotes,
-      platform,
-    ];
-  }
-
-  @override
-  bool get stringify => true;
 
   @override
   String raidingChannelName;

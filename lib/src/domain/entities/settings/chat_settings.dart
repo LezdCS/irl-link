@@ -1,7 +1,7 @@
-import 'package:equatable/equatable.dart';
+
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 
-class ChatSettings extends Equatable {
+class ChatSettings {
   final ChatGroup permanentFirstGroup;
   final List<ChatGroup> chatGroups;
   final bool hideDeletedMessages;
@@ -12,24 +12,12 @@ class ChatSettings extends Equatable {
     required this.hideDeletedMessages,
   });
 
-  @override
-  List<Object?> get props {
-    return [
-      permanentFirstGroup,
-      chatGroups,
-      hideDeletedMessages,
-    ];
-  }
-
   Map toJson() => {
         'permanentFirstGroup': permanentFirstGroup.toJson(),
         'chatGroups': chatGroups.map((e) => e.toJson()).toList(),
         'hideDeletedMessages': hideDeletedMessages,
       };
-
-  @override
-  bool get stringify => true;
-
+  
   ChatSettings copyWith({
     ChatGroup? permanentFirstGroup,
     List<ChatGroup>? chatGroups,
@@ -43,7 +31,7 @@ class ChatSettings extends Equatable {
   }
 }
 
-class ChatGroup extends Equatable {
+class ChatGroup {
   final String id;
   final List<Channel> channels;
 
@@ -57,14 +45,6 @@ class ChatGroup extends Equatable {
         'channels': channels.map((e) => e.toJson()).toList(),
       };
 
-  @override
-  List<Object?> get props {
-    return [
-      id,
-      channels,
-    ];
-  }
-
   ChatGroup copyWith({
     String? id,
     List<Channel>? channels,
@@ -76,7 +56,7 @@ class ChatGroup extends Equatable {
   }
 }
 
-class Channel extends Equatable {
+class Channel {
   final Platform platform;
   final String channel;
   final bool enabled;
@@ -92,13 +72,4 @@ class Channel extends Equatable {
         'channel': channel,
         'enabled': enabled,
       };
-
-  @override
-  List<Object?> get props {
-    return [
-      platform,
-      channel,
-      enabled,
-    ];
-  }
 }

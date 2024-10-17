@@ -1,9 +1,8 @@
 import 'package:collection/collection.dart';
-import 'package:equatable/equatable.dart';
 import 'package:kick_chat/kick_chat.dart';
 import 'package:twitch_chat/twitch_chat.dart' as twitch;
 
-class ChatBadge extends Equatable {
+class ChatBadge {
   final String id;
   final String imageUrl1x;
   final String imageUrl2x;
@@ -81,17 +80,4 @@ class ChatBadge extends Equatable {
         'imageUrl2x': imageUrl2x,
         'imageUrl4x': imageUrl4x,
       };
-
-  @override
-  List<Object?> get props {
-    return [
-      id,
-      imageUrl1x,
-      imageUrl2x,
-      imageUrl4x,
-    ];
-  }
-
-  @override
-  bool get stringify => true;
 }

@@ -1,6 +1,6 @@
-import 'package:equatable/equatable.dart';
 
-class StreamElementsSettings extends Equatable {
+
+class StreamElementsSettings {
   final bool showFollowerActivity;
   final bool showSubscriberActivity;
   final bool showDonationActivity;
@@ -25,22 +25,6 @@ class StreamElementsSettings extends Equatable {
     required this.mutedOverlays,
   });
 
-  @override
-  List<Object?> get props {
-    return [
-      showFollowerActivity,
-      showSubscriberActivity,
-      showDonationActivity,
-      showCheerActivity,
-      showRaidActivity,
-      showHostActivity,
-      showMerchActivity,
-      jwt,
-      overlayToken,
-      mutedOverlays,
-    ];
-  }
-
   Map toJson() => {
         'showFollowerActivity': showFollowerActivity,
         'showSubscriberActivity': showSubscriberActivity,
@@ -54,8 +38,7 @@ class StreamElementsSettings extends Equatable {
         'mutedOverlays': mutedOverlays,
       };
 
-  @override
-  bool get stringify => true;
+  
 
   StreamElementsSettings copyWith({
     bool? showFollowerActivity,

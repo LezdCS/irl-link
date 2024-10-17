@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:equatable/equatable.dart';
-
 enum PredictionStatus {
   empty,
   resolved,
@@ -10,7 +8,7 @@ enum PredictionStatus {
   locked,
 }
 
-class TwitchPrediction extends Equatable {
+class TwitchPrediction {
   final String id;
   final String title;
   final String winningOutcomeId;
@@ -50,25 +48,10 @@ class TwitchPrediction extends Equatable {
         'status': status,
         'remainingTime': remainingTime,
       };
-
-  @override
-  List<Object?> get props {
-    return [
-      id,
-      title,
-      winningOutcomeId,
-      totalUsers,
-      outcomes,
-      status,
-      remainingTime,
-    ];
-  }
-
-  @override
-  bool get stringify => true;
+  
 }
 
-class Outcome extends Equatable {
+class Outcome {
   final String id;
   final String title;
   final int users;
@@ -90,18 +73,4 @@ class Outcome extends Equatable {
         'channelPoints': channelPoints,
         'color': color,
       };
-
-  @override
-  List<Object?> get props {
-    return [
-      id,
-      title,
-      users,
-      channelPoints,
-      color,
-    ];
-  }
-
-  @override
-  bool get stringify => true;
 }

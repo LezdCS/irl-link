@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+
 import 'package:flutter/material.dart';
 
 enum ActivityType {
@@ -11,7 +11,7 @@ enum ActivityType {
   unsupported,
 }
 
-class SeActivity extends Equatable {
+class SeActivity {
   final String id;
   final String channel;
   final String username;
@@ -37,20 +37,6 @@ class SeActivity extends Equatable {
     this.currency,
     this.isTest,
   });
-
-  @override
-  List<Object?> get props {
-    return [
-      id,
-      username,
-      message,
-      amount,
-      activityType,
-    ];
-  }
-
-  @override
-  bool get stringify => true;
 
   Map toJsonForWatch() => {
         'id': id,

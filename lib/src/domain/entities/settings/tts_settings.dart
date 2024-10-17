@@ -1,6 +1,6 @@
-import 'package:equatable/equatable.dart';
 
-class TtsSettings extends Equatable {
+
+class TtsSettings {
   final bool ttsEnabled;
   final String language;
   final List prefixsToIgnore;
@@ -31,25 +31,6 @@ class TtsSettings extends Equatable {
     required this.ttsOnlySubscriber,
   });
 
-  @override
-  List<Object?> get props {
-    return [
-      ttsEnabled,
-      language,
-      prefixsToIgnore,
-      prefixsToUseTtsOnly,
-      volume,
-      pitch,
-      rate,
-      voice,
-      ttsUsersToIgnore,
-      ttsMuteViewerName,
-      ttsOnlyVip,
-      ttsOnlyMod,
-      ttsOnlySubscriber,
-    ];
-  }
-
   Map toJson() => {
         'ttsEnabled': ttsEnabled,
         'language': language,
@@ -66,8 +47,7 @@ class TtsSettings extends Equatable {
         'ttsOnlySubscriber': ttsOnlySubscriber,
       };
 
-  @override
-  bool get stringify => true;
+  
 
   TtsSettings copyWith({
     bool? ttsEnabled,

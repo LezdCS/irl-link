@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-class TwitchUser extends Equatable {
+class TwitchUser {
   final String id;
   final String login;
   final String displayName;
@@ -28,20 +26,4 @@ class TwitchUser extends Equatable {
         'profile_image_url': profileImageUrl,
         'view_count': viewCount,
       };
-
-  @override
-  List<Object?> get props {
-    return [
-      id,
-      login,
-      displayName,
-      broadcasterType,
-      description,
-      profileImageUrl,
-      viewCount,
-    ];
-  }
-
-  @override
-  bool get stringify => true;
 }
