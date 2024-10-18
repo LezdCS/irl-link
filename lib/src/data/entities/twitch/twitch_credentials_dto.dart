@@ -1,46 +1,21 @@
-import 'package:irllink/src/core/utils/mapper.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_decoded_idtoken_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_user_dto.dart';
-import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
-import 'package:irllink/src/domain/entities/twitch/twitch_decoded_idtoken.dart';
-import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
 
-class TwitchCredentialsDTO extends TwitchCredentials {
-  const TwitchCredentialsDTO({
-    required super.accessToken,
-    required super.idToken,
-    required super.refreshToken,
-    required super.expiresIn,
-    required super.decodedIdToken,
-    required super.twitchUser,
-    required super.scopes,
-  });
+part 'twitch_credentials_dto.freezed.dart';
+part 'twitch_credentials_dto.g.dart';
 
-  Map toJson() { 
-    Mappr mappr = Mappr();
-    TwitchDecodedIdTokenDTO decodedIdTokenDTO = mappr.convert<TwitchDecodedIdToken, TwitchDecodedIdTokenDTO>(decodedIdToken);
-    TwitchUserDTO twitchUserDTO = mappr.convert<TwitchUser, TwitchUserDTO>(twitchUser);
-    return {
-        'accessToken': accessToken,
-        'idToken': idToken,
-        'refreshToken': refreshToken,
-        'expiresIn': expiresIn,
-        'decodedIdToken': decodedIdTokenDTO.toJson(),
-        'twitchUser': twitchUserDTO.toJson(),
-        'scopes': scopes,
-      };
-  }
+@freezed
+class TwitchCredentialsDTO with _$TwitchCredentialsDTO {
+  const factory TwitchCredentialsDTO({
+    required String accessToken,
+    required String idToken,
+    required String refreshToken,
+    required String expiresIn,
+    required TwitchDecodedIdTokenDTO decodedIdToken,
+    required TwitchUserDTO twitchUser,
+    required String scopes,
+  }) = _TwitchCredentialsDTO;
 
-  factory TwitchCredentialsDTO.fromJson(Map<String, dynamic> map) {
-    return TwitchCredentialsDTO(
-      accessToken: map['accessToken'] as String,
-      idToken: map['idToken'] as String,
-      refreshToken: map['refreshToken'] as String,
-      expiresIn: map['expiresIn'] as String,
-      decodedIdToken:
-          TwitchDecodedIdTokenDTO.fromJson(map['decodedIdToken']),
-      twitchUser: TwitchUserDTO.fromJson(map['twitchUser']),
-      scopes: map['scopes'] as String,
-    );
-  }
+  factory TwitchCredentialsDTO.fromJson(Map<String, dynamic> json) => _$TwitchCredentialsDTOFromJson(json);
 }

@@ -13,13 +13,14 @@ import 'package:irllink/src/core/utils/globals.dart' as globals;
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/core/utils/mapper.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_credentials_dto.dart';
-import 'package:irllink/src/data/entities/twitch/twitch_decoded_idtoken_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_poll_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_stream_infos_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_user_dto.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_decoded_idtoken.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
 import 'package:irllink/src/domain/repositories/twitch_repository.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:quiver/iterables.dart';
@@ -62,25 +63,25 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       Map<String, dynamic> decodedToken = JwtDecoder.decode(idToken!);
 
-      TwitchDecodedIdTokenDTO decodedIdToken = TwitchDecodedIdTokenDTO(
+      TwitchDecodedIdToken decodedIdToken = TwitchDecodedIdToken(
         preferredUsername: decodedToken['preferred_username'],
         profilePicture: decodedToken['picture'] ?? "",
       );
 
-      TwitchUserDTO twitchUser = const TwitchUserDTO(
+      TwitchUser twitchUser = const TwitchUser(
         profileImageUrl: '',
         id: '',
         broadcasterType: '',
         login: '',
         description: '',
-        viewCount: '',
+        viewCount: 0,
         displayName: '',
       );
 
       await getTwitchUser(null, accessToken)
           .then((value) => twitchUser = value.data!);
 
-      TwitchCredentials twitchData = TwitchCredentialsDTO(
+      TwitchCredentials twitchData = TwitchCredentials(
         accessToken: accessToken,
         idToken: idToken,
         refreshToken: refreshToken!,
@@ -181,7 +182,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
     if (twitchDataString != null) {
       Map<String, dynamic> twitchDataJson = jsonDecode(twitchDataString);
 
-      TwitchCredentials twitchData =
+      TwitchCredentialsDTO twitchDataDTO =
           TwitchCredentialsDTO.fromJson(twitchDataJson);
 
       TwitchAuthParams params = const TwitchAuthParams();
@@ -192,7 +193,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       });
       String paramsScopesOrdered = paramsScopesList.join(' ');
 
-      List savedScopesList = twitchData.scopes.split(' ');
+      List savedScopesList = twitchDataDTO.scopes.split(' ');
       savedScopesList.sort((a, b) {
         return a.compareTo(b);
       });
@@ -201,6 +202,10 @@ class TwitchRepositoryImpl extends TwitchRepository {
       if (savedScopesOrdered != paramsScopesOrdered) {
         return DataFailed("Scopes have been updated, please login again.");
       }
+
+      Mappr mappr = Mappr();
+      TwitchCredentials twitchData =
+          mappr.convert<TwitchCredentialsDTO, TwitchCredentials>(twitchDataDTO);
 
       return DataSuccess(twitchData);
     } else {
@@ -218,7 +223,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
   }
 
   @override
-  Future<DataState<TwitchUserDTO>> getTwitchUser(
+  Future<DataState<TwitchUser>> getTwitchUser(
       String? username, String accessToken) async {
     Response response;
     var dio = initDio();
@@ -238,8 +243,12 @@ class TwitchRepositoryImpl extends TwitchRepository {
         );
       }
 
-      TwitchUserDTO twitchUser =
+      TwitchUserDTO twitchUserDTO =
           TwitchUserDTO.fromJson(response.data['data'][0]);
+
+      Mappr mappr = Mappr();
+      TwitchUser twitchUser =
+          mappr.convert<TwitchUserDTO, TwitchUser>(twitchUserDTO);
 
       return DataSuccess(twitchUser);
     } on DioException catch (e) {
@@ -248,11 +257,11 @@ class TwitchRepositoryImpl extends TwitchRepository {
   }
 
   @override
-  Future<DataState<List<TwitchUserDTO>>> getTwitchUsers(
+  Future<DataState<List<TwitchUser>>> getTwitchUsers(
       List ids, String accessToken) async {
     Response response;
     var dio = initDio();
-    List<TwitchUserDTO> twitchUsers = <TwitchUserDTO>[];
+    List<TwitchUser> twitchUsers = <TwitchUser>[];
     try {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
       dio.options.headers["authorization"] = "Bearer $accessToken";
@@ -266,9 +275,14 @@ class TwitchRepositoryImpl extends TwitchRepository {
             queryParameters: {'id': chunk},
           );
 
+          Mappr mappr = Mappr();
           response.data['data'].forEach(
             (user) => {
-              twitchUsers.add(TwitchUserDTO.fromJson(user)),
+              twitchUsers.add(
+                mappr.convert<TwitchUserDTO, TwitchUser>(
+                  TwitchUserDTO.fromJson(user),
+                ),
+              )
             },
           );
         });
