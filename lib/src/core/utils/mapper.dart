@@ -39,8 +39,11 @@ import 'mapper.auto_mappr.dart';
   MapType<TtsSettings, TtsSettingsDTO>(),
   MapType<ChatEventsSettings, ChatEventsSettingsDTO>(),
   MapType<TwitchCredentials, TwitchCredentialsDTO>(),
+  MapType<TwitchCredentialsDTO, TwitchCredentials>(),
   MapType<TwitchDecodedIdToken, TwitchDecodedIdTokenDTO>(),
+  MapType<TwitchDecodedIdTokenDTO, TwitchDecodedIdToken>(),
   MapType<TwitchUser, TwitchUserDTO>(),
+  MapType<TwitchUserDTO, TwitchUser>(),
   MapType<DashboardSettings, DashboardSettingsDTO>(),
 ])
 class Mappr extends $Mappr {}

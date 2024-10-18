@@ -48,8 +48,11 @@ import '../../domain/entities/twitch/twitch_user.dart' as _i22;
 /// - `TtsSettings` → `TtsSettingsDTO`.
 /// - `ChatEventsSettings` → `ChatEventsSettingsDTO`.
 /// - `TwitchCredentials` → `TwitchCredentialsDTO`.
+/// - `TwitchCredentialsDTO` → `TwitchCredentials`.
 /// - `TwitchDecodedIdToken` → `TwitchDecodedIdTokenDTO`.
+/// - `TwitchDecodedIdTokenDTO` → `TwitchDecodedIdToken`.
 /// - `TwitchUser` → `TwitchUserDTO`.
+/// - `TwitchUserDTO` → `TwitchUser`.
 /// - `DashboardSettings` → `DashboardSettingsDTO`.
 /// {@endtemplate}
 class $Mappr implements _i1.AutoMapprInterface {
@@ -137,16 +140,34 @@ class $Mappr implements _i1.AutoMapprInterface {
             targetTypeOf == _typeOf<_i19.TwitchCredentialsDTO?>())) {
       return true;
     }
+    if ((sourceTypeOf == _typeOf<_i19.TwitchCredentialsDTO>() ||
+            sourceTypeOf == _typeOf<_i19.TwitchCredentialsDTO?>()) &&
+        (targetTypeOf == _typeOf<_i18.TwitchCredentials>() ||
+            targetTypeOf == _typeOf<_i18.TwitchCredentials?>())) {
+      return true;
+    }
     if ((sourceTypeOf == _typeOf<_i20.TwitchDecodedIdToken>() ||
             sourceTypeOf == _typeOf<_i20.TwitchDecodedIdToken?>()) &&
         (targetTypeOf == _typeOf<_i21.TwitchDecodedIdTokenDTO>() ||
             targetTypeOf == _typeOf<_i21.TwitchDecodedIdTokenDTO?>())) {
       return true;
     }
+    if ((sourceTypeOf == _typeOf<_i21.TwitchDecodedIdTokenDTO>() ||
+            sourceTypeOf == _typeOf<_i21.TwitchDecodedIdTokenDTO?>()) &&
+        (targetTypeOf == _typeOf<_i20.TwitchDecodedIdToken>() ||
+            targetTypeOf == _typeOf<_i20.TwitchDecodedIdToken?>())) {
+      return true;
+    }
     if ((sourceTypeOf == _typeOf<_i22.TwitchUser>() ||
             sourceTypeOf == _typeOf<_i22.TwitchUser?>()) &&
         (targetTypeOf == _typeOf<_i23.TwitchUserDTO>() ||
             targetTypeOf == _typeOf<_i23.TwitchUserDTO?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i23.TwitchUserDTO>() ||
+            sourceTypeOf == _typeOf<_i23.TwitchUserDTO?>()) &&
+        (targetTypeOf == _typeOf<_i22.TwitchUser>() ||
+            targetTypeOf == _typeOf<_i22.TwitchUser?>())) {
       return true;
     }
     if ((sourceTypeOf == _typeOf<_i24.DashboardSettings>() ||
@@ -466,6 +487,16 @@ class $Mappr implements _i1.AutoMapprInterface {
       return (_map__i18$TwitchCredentials_To__i19$TwitchCredentialsDTO(
           (model as _i18.TwitchCredentials?)) as TARGET);
     }
+    if ((sourceTypeOf == _typeOf<_i19.TwitchCredentialsDTO>() ||
+            sourceTypeOf == _typeOf<_i19.TwitchCredentialsDTO?>()) &&
+        (targetTypeOf == _typeOf<_i18.TwitchCredentials>() ||
+            targetTypeOf == _typeOf<_i18.TwitchCredentials?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i19$TwitchCredentialsDTO_To__i18$TwitchCredentials(
+          (model as _i19.TwitchCredentialsDTO?)) as TARGET);
+    }
     if ((sourceTypeOf == _typeOf<_i20.TwitchDecodedIdToken>() ||
             sourceTypeOf == _typeOf<_i20.TwitchDecodedIdToken?>()) &&
         (targetTypeOf == _typeOf<_i21.TwitchDecodedIdTokenDTO>() ||
@@ -476,6 +507,16 @@ class $Mappr implements _i1.AutoMapprInterface {
       return (_map__i20$TwitchDecodedIdToken_To__i21$TwitchDecodedIdTokenDTO(
           (model as _i20.TwitchDecodedIdToken?)) as TARGET);
     }
+    if ((sourceTypeOf == _typeOf<_i21.TwitchDecodedIdTokenDTO>() ||
+            sourceTypeOf == _typeOf<_i21.TwitchDecodedIdTokenDTO?>()) &&
+        (targetTypeOf == _typeOf<_i20.TwitchDecodedIdToken>() ||
+            targetTypeOf == _typeOf<_i20.TwitchDecodedIdToken?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i21$TwitchDecodedIdTokenDTO_To__i20$TwitchDecodedIdToken(
+          (model as _i21.TwitchDecodedIdTokenDTO?)) as TARGET);
+    }
     if ((sourceTypeOf == _typeOf<_i22.TwitchUser>() ||
             sourceTypeOf == _typeOf<_i22.TwitchUser?>()) &&
         (targetTypeOf == _typeOf<_i23.TwitchUserDTO>() ||
@@ -485,6 +526,16 @@ class $Mappr implements _i1.AutoMapprInterface {
       }
       return (_map__i22$TwitchUser_To__i23$TwitchUserDTO(
           (model as _i22.TwitchUser?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i23.TwitchUserDTO>() ||
+            sourceTypeOf == _typeOf<_i23.TwitchUserDTO?>()) &&
+        (targetTypeOf == _typeOf<_i22.TwitchUser>() ||
+            targetTypeOf == _typeOf<_i22.TwitchUser?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i23$TwitchUserDTO_To__i22$TwitchUser(
+          (model as _i23.TwitchUserDTO?)) as TARGET);
     }
     if ((sourceTypeOf == _typeOf<_i24.DashboardSettings>() ||
             sourceTypeOf == _typeOf<_i24.DashboardSettings?>()) &&
@@ -742,8 +793,32 @@ class $Mappr implements _i1.AutoMapprInterface {
       idToken: model.idToken,
       refreshToken: model.refreshToken,
       expiresIn: model.expiresIn,
-      decodedIdToken: model.decodedIdToken,
-      twitchUser: model.twitchUser,
+      decodedIdToken:
+          _map__i20$TwitchDecodedIdToken_To__i21$TwitchDecodedIdTokenDTO(
+              model.decodedIdToken),
+      twitchUser: _map__i22$TwitchUser_To__i23$TwitchUserDTO(model.twitchUser),
+      scopes: model.scopes,
+    );
+  }
+
+  _i18.TwitchCredentials
+      _map__i19$TwitchCredentialsDTO_To__i18$TwitchCredentials(
+          _i19.TwitchCredentialsDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping TwitchCredentialsDTO → TwitchCredentials failed because TwitchCredentialsDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<TwitchCredentialsDTO, TwitchCredentials> to handle null values during mapping.');
+    }
+    return _i18.TwitchCredentials(
+      accessToken: model.accessToken,
+      idToken: model.idToken,
+      refreshToken: model.refreshToken,
+      expiresIn: model.expiresIn,
+      decodedIdToken:
+          _map__i21$TwitchDecodedIdTokenDTO_To__i20$TwitchDecodedIdToken(
+              model.decodedIdToken),
+      twitchUser: _map__i23$TwitchUserDTO_To__i22$TwitchUser(model.twitchUser),
       scopes: model.scopes,
     );
   }
@@ -763,6 +838,21 @@ class $Mappr implements _i1.AutoMapprInterface {
     );
   }
 
+  _i20.TwitchDecodedIdToken
+      _map__i21$TwitchDecodedIdTokenDTO_To__i20$TwitchDecodedIdToken(
+          _i21.TwitchDecodedIdTokenDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping TwitchDecodedIdTokenDTO → TwitchDecodedIdToken failed because TwitchDecodedIdTokenDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<TwitchDecodedIdTokenDTO, TwitchDecodedIdToken> to handle null values during mapping.');
+    }
+    return _i20.TwitchDecodedIdToken(
+      preferredUsername: model.preferredUsername,
+      profilePicture: model.profilePicture,
+    );
+  }
+
   _i23.TwitchUserDTO _map__i22$TwitchUser_To__i23$TwitchUserDTO(
       _i22.TwitchUser? input) {
     final model = input;
@@ -772,6 +862,25 @@ class $Mappr implements _i1.AutoMapprInterface {
           r'Consider setting the whenSourceIsNull parameter on the MapType<TwitchUser, TwitchUserDTO> to handle null values during mapping.');
     }
     return _i23.TwitchUserDTO(
+      id: model.id,
+      login: model.login,
+      displayName: model.displayName,
+      broadcasterType: model.broadcasterType,
+      description: model.description,
+      profileImageUrl: model.profileImageUrl,
+      viewCount: model.viewCount,
+    );
+  }
+
+  _i22.TwitchUser _map__i23$TwitchUserDTO_To__i22$TwitchUser(
+      _i23.TwitchUserDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping TwitchUserDTO → TwitchUser failed because TwitchUserDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<TwitchUserDTO, TwitchUser> to handle null values during mapping.');
+    }
+    return _i22.TwitchUser(
       id: model.id,
       login: model.login,
       displayName: model.displayName,

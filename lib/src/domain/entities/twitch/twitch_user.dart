@@ -8,7 +8,7 @@ class TwitchUser {
   final String broadcasterType;
   final String description;
   final String profileImageUrl;
-  final String viewCount;
+  final int viewCount;
 
   const TwitchUser({
     required this.id,
