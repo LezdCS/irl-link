@@ -1,34 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 
-class TwitchPredictionDTO extends TwitchPrediction {
-  const TwitchPredictionDTO({
-    required super.id,
-    required super.title,
-    required super.winningOutcomeId,
-    required super.totalUsers,
-    required super.outcomes,
-    required super.status,
-    required super.remainingTime,
-  });
+part 'twitch_prediction_dto.freezed.dart';
 
-  Map toJson() => {
-        'id': id,
-        'title': title,
-        'winningOutcomeId': winningOutcomeId,
-        'totalUsers': totalUsers,
-        'outcomes': outcomes,
-        'status': status,
-        'remainingTime': remainingTime,
-      };
+@freezed
+class TwitchPredictionDTO with _$TwitchPredictionDTO {
+  const factory TwitchPredictionDTO({
+    required String id,
+    required String title,
+    required String winningOutcomeId,
+    required int totalUsers,
+    required List<OutcomeDTO> outcomes,
+    required PredictionStatus status,
+    required DateTime remainingTime,
+  }) = _TwitchPredictionDTO;
 
   factory TwitchPredictionDTO.fromJson(Map<String, dynamic> map) {
-    List<Outcome> outcomes = [];
+    List<OutcomeDTO> outcomes = [];
     int totalUsers = 0;
     PredictionStatus status = PredictionStatus.active;
 
-    Outcome o;
+    OutcomeDTO o;
     map['outcomes'].forEach((outcome) => {
           o = OutcomeDTO.fromJson(outcome),
           outcomes.add(o),
@@ -64,22 +58,15 @@ class TwitchPredictionDTO extends TwitchPrediction {
   }
 }
 
-class OutcomeDTO extends Outcome {
-  const OutcomeDTO({
-    required super.id,
-    required super.title,
-    required super.users,
-    required super.channelPoints,
-    required super.color,
-  });
-
-  Map toJson() => {
-        'id': id,
-        'title': title,
-        'users': users,
-        'channelPoints': channelPoints,
-        'color': color,
-      };
+@freezed
+class OutcomeDTO with _$OutcomeDTO {
+  const factory OutcomeDTO({
+    required String id,
+    required String title,
+    required int users,
+    required int channelPoints,
+    required Color color,
+  }) = _OutcomeDTO;
 
   factory OutcomeDTO.fromJson(Map<String, dynamic> map) {
     Color color;

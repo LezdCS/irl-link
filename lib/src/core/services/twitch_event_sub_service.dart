@@ -148,10 +148,14 @@ class TwitchEventSubService extends GetxService {
         case 'channel.prediction.begin':
         case 'channel.prediction.progress':
         case 'channel.prediction.lock':
-          currentPrediction.value = TwitchPredictionDTO.fromJson(event);
+          TwitchPredictionDTO predictionDTO = TwitchPredictionDTO.fromJson(event);
+          Mappr mappr = Mappr();
+          currentPrediction.value = mappr.convert<TwitchPredictionDTO, TwitchPrediction>(predictionDTO);
           break;
         case 'channel.prediction.end':
-          currentPrediction.value = TwitchPredictionDTO.fromJson(event);
+          TwitchPredictionDTO predictionDTO = TwitchPredictionDTO.fromJson(event);
+          Mappr mappr = Mappr();
+          currentPrediction.value = mappr.convert<TwitchPredictionDTO, TwitchPrediction>(predictionDTO);
           Future.delayed(const Duration(seconds: 20)).then(
             (value) => currentPrediction.value = TwitchPrediction.empty(),
           );

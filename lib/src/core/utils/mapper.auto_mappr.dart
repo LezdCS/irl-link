@@ -20,6 +20,8 @@ import '../../data/entities/settings/tts_settings_dto.dart' as _i15;
 import '../../data/entities/settings_dto.dart' as _i3;
 import '../../data/entities/twitch/twitch_credentials_dto.dart' as _i19;
 import '../../data/entities/twitch/twitch_decoded_idtoken_dto.dart' as _i21;
+import '../../data/entities/twitch/twitch_poll_dto.dart' as _i27;
+import '../../data/entities/twitch/twitch_prediction_dto.dart' as _i28;
 import '../../data/entities/twitch/twitch_user_dto.dart' as _i23;
 import '../../domain/entities/dashboard_event.dart' as _i10;
 import '../../domain/entities/settings.dart' as _i2;
@@ -32,6 +34,8 @@ import '../../domain/entities/settings/stream_elements_settings.dart' as _i12;
 import '../../domain/entities/settings/tts_settings.dart' as _i14;
 import '../../domain/entities/twitch/twitch_credentials.dart' as _i18;
 import '../../domain/entities/twitch/twitch_decoded_idtoken.dart' as _i20;
+import '../../domain/entities/twitch/twitch_poll.dart' as _i26;
+import '../../domain/entities/twitch/twitch_prediction.dart' as _i29;
 import '../../domain/entities/twitch/twitch_user.dart' as _i22;
 
 /// {@template package:irllink/src/core/utils/mapper.dart}
@@ -54,6 +58,10 @@ import '../../domain/entities/twitch/twitch_user.dart' as _i22;
 /// - `TwitchUser` → `TwitchUserDTO`.
 /// - `TwitchUserDTO` → `TwitchUser`.
 /// - `DashboardSettings` → `DashboardSettingsDTO`.
+/// - `TwitchPoll` → `TwitchPollDTO`.
+/// - `Choice` → `ChoiceDTO`.
+/// - `TwitchPredictionDTO` → `TwitchPrediction`.
+/// - `OutcomeDTO` → `Outcome`.
 /// {@endtemplate}
 class $Mappr implements _i1.AutoMapprInterface {
   const $Mappr();
@@ -174,6 +182,30 @@ class $Mappr implements _i1.AutoMapprInterface {
             sourceTypeOf == _typeOf<_i24.DashboardSettings?>()) &&
         (targetTypeOf == _typeOf<_i25.DashboardSettingsDTO>() ||
             targetTypeOf == _typeOf<_i25.DashboardSettingsDTO?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i26.TwitchPoll>() ||
+            sourceTypeOf == _typeOf<_i26.TwitchPoll?>()) &&
+        (targetTypeOf == _typeOf<_i27.TwitchPollDTO>() ||
+            targetTypeOf == _typeOf<_i27.TwitchPollDTO?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i26.Choice>() ||
+            sourceTypeOf == _typeOf<_i26.Choice?>()) &&
+        (targetTypeOf == _typeOf<_i27.ChoiceDTO>() ||
+            targetTypeOf == _typeOf<_i27.ChoiceDTO?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i28.TwitchPredictionDTO>() ||
+            sourceTypeOf == _typeOf<_i28.TwitchPredictionDTO?>()) &&
+        (targetTypeOf == _typeOf<_i29.TwitchPrediction>() ||
+            targetTypeOf == _typeOf<_i29.TwitchPrediction?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i28.OutcomeDTO>() ||
+            sourceTypeOf == _typeOf<_i28.OutcomeDTO?>()) &&
+        (targetTypeOf == _typeOf<_i29.Outcome>() ||
+            targetTypeOf == _typeOf<_i29.Outcome?>())) {
       return true;
     }
     if (recursive) {
@@ -547,6 +579,46 @@ class $Mappr implements _i1.AutoMapprInterface {
       return (_map__i24$DashboardSettings_To__i25$DashboardSettingsDTO(
           (model as _i24.DashboardSettings?)) as TARGET);
     }
+    if ((sourceTypeOf == _typeOf<_i26.TwitchPoll>() ||
+            sourceTypeOf == _typeOf<_i26.TwitchPoll?>()) &&
+        (targetTypeOf == _typeOf<_i27.TwitchPollDTO>() ||
+            targetTypeOf == _typeOf<_i27.TwitchPollDTO?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i26$TwitchPoll_To__i27$TwitchPollDTO(
+          (model as _i26.TwitchPoll?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i26.Choice>() ||
+            sourceTypeOf == _typeOf<_i26.Choice?>()) &&
+        (targetTypeOf == _typeOf<_i27.ChoiceDTO>() ||
+            targetTypeOf == _typeOf<_i27.ChoiceDTO?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i26$Choice_To__i27$ChoiceDTO((model as _i26.Choice?))
+          as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i28.TwitchPredictionDTO>() ||
+            sourceTypeOf == _typeOf<_i28.TwitchPredictionDTO?>()) &&
+        (targetTypeOf == _typeOf<_i29.TwitchPrediction>() ||
+            targetTypeOf == _typeOf<_i29.TwitchPrediction?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i28$TwitchPredictionDTO_To__i29$TwitchPrediction(
+          (model as _i28.TwitchPredictionDTO?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i28.OutcomeDTO>() ||
+            sourceTypeOf == _typeOf<_i28.OutcomeDTO?>()) &&
+        (targetTypeOf == _typeOf<_i29.Outcome>() ||
+            targetTypeOf == _typeOf<_i29.Outcome?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i28$OutcomeDTO_To__i29$Outcome((model as _i28.OutcomeDTO?))
+          as TARGET);
+    }
     throw Exception('No ${model.runtimeType} -> $targetTypeOf mapping.');
   }
 
@@ -903,6 +975,79 @@ class $Mappr implements _i1.AutoMapprInterface {
     return _i25.DashboardSettingsDTO(
       userEvents: model.userEvents,
       activated: model.activated,
+    );
+  }
+
+  _i27.TwitchPollDTO _map__i26$TwitchPoll_To__i27$TwitchPollDTO(
+      _i26.TwitchPoll? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping TwitchPoll → TwitchPollDTO failed because TwitchPoll was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<TwitchPoll, TwitchPollDTO> to handle null values during mapping.');
+    }
+    return _i27.TwitchPollDTO(
+      id: model.id,
+      title: model.title,
+      choices: model.choices
+          .map<_i27.ChoiceDTO>(
+              (value) => _map__i26$Choice_To__i27$ChoiceDTO(value))
+          .toList(),
+      totalVotes: model.totalVotes,
+      status: model.status,
+      endsAt: model.endsAt,
+    );
+  }
+
+  _i27.ChoiceDTO _map__i26$Choice_To__i27$ChoiceDTO(_i26.Choice? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping Choice → ChoiceDTO failed because Choice was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<Choice, ChoiceDTO> to handle null values during mapping.');
+    }
+    return _i27.ChoiceDTO(
+      id: model.id,
+      title: model.title,
+      votes: model.votes,
+    );
+  }
+
+  _i29.TwitchPrediction _map__i28$TwitchPredictionDTO_To__i29$TwitchPrediction(
+      _i28.TwitchPredictionDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping TwitchPredictionDTO → TwitchPrediction failed because TwitchPredictionDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<TwitchPredictionDTO, TwitchPrediction> to handle null values during mapping.');
+    }
+    return _i29.TwitchPrediction(
+      id: model.id,
+      title: model.title,
+      winningOutcomeId: model.winningOutcomeId,
+      totalUsers: model.totalUsers,
+      outcomes: model.outcomes
+          .map<_i29.Outcome>(
+              (value) => _map__i28$OutcomeDTO_To__i29$Outcome(value))
+          .toList(),
+      status: model.status,
+      remainingTime: model.remainingTime,
+    );
+  }
+
+  _i29.Outcome _map__i28$OutcomeDTO_To__i29$Outcome(_i28.OutcomeDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping OutcomeDTO → Outcome failed because OutcomeDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<OutcomeDTO, Outcome> to handle null values during mapping.');
+    }
+    return _i29.Outcome(
+      id: model.id,
+      title: model.title,
+      users: model.users,
+      channelPoints: model.channelPoints,
+      color: model.color,
     );
   }
 }
