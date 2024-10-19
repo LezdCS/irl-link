@@ -53,5 +53,6 @@ import 'mapper.auto_mappr.dart';
   MapType<Choice, ChoiceDTO>(),
   MapType<TwitchPredictionDTO, TwitchPrediction>(),
   MapType<OutcomeDTO, Outcome>(),
+  MapType<TwitchPredictionDTO, TwitchPrediction>(),
 ])
 class Mappr extends $Mappr {}

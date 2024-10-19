@@ -320,7 +320,12 @@ class TwitchRepositoryImpl extends TwitchRepository {
       TwitchStreamInfosDto twitchStreamInfosDto = TwitchStreamInfosDto.fromJson(
           response.data['data'][0], response2.data, reponse3['data'][0]);
 
-      return DataSuccess(twitchStreamInfosDto);
+      Mappr mappr = Mappr();
+      TwitchStreamInfos twitchStreamInfos =
+          mappr.convert<TwitchStreamInfosDto, TwitchStreamInfos>(
+              twitchStreamInfosDto);
+
+      return DataSuccess(twitchStreamInfos);
     } on DioException catch (e) {
       return DataFailed(e.toString());
     }

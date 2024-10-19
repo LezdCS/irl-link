@@ -1,8 +1,11 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
-import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
 
-class TwitchStreamInfosDto extends TwitchStreamInfos {
-  const TwitchStreamInfosDto({
+part 'twitch_stream_infos_dto.freezed.dart';
+
+@freezed
+class TwitchStreamInfosDto with _$TwitchStreamInfosDto {
+  const factory TwitchStreamInfosDto({
     required String title,
     required int viewerCount,
     required bool isOnline,
@@ -12,29 +15,7 @@ class TwitchStreamInfosDto extends TwitchStreamInfos {
     required bool isSlowMode,
     required int slowModeWaitTime,
     required bool isSubscriberMode,
-  }) : super(
-          title: title,
-          viewerCount: viewerCount,
-          isOnline: isOnline,
-          startedAtDuration: startedAtDuration,
-          isEmoteMode: isEmoteMode,
-          isFollowerMode: isFollowerMode,
-          isSlowMode: isSlowMode,
-          slowModeWaitTime: slowModeWaitTime,
-          isSubscriberMode: isSubscriberMode,
-        );
-
-  Map toJson() => {
-        'viewerCount': viewerCount,
-        'title': title,
-        'isOnline': isOnline,
-        'startedAtDuration': startedAtDuration,
-        'isEmoteMode': isEmoteMode,
-        'isFollowerMode': isFollowerMode,
-        'isSlowMode': isSlowMode,
-        'slowModeWaitTime': slowModeWaitTime,
-        'isSubscriberMode': isSubscriberMode,
-      };
+  }) = _TwitchStreamInfosDto;
 
   factory TwitchStreamInfosDto.fromJson(Map<String, dynamic> map1,
       Map<String, dynamic> map2, Map<String, dynamic> map3) {
