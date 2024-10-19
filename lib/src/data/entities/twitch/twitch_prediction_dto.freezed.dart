@@ -285,13 +285,22 @@ abstract class _TwitchPredictionDTO implements TwitchPredictionDTO {
       throw _privateConstructorUsedError;
 }
 
+OutcomeDTO _$OutcomeDTOFromJson(Map<String, dynamic> json) {
+  return _OutcomeDTO.fromJson(json);
+}
+
 /// @nodoc
 mixin _$OutcomeDTO {
   String get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   int get users => throw _privateConstructorUsedError;
+  @JsonKey(name: 'channel_points')
   int get channelPoints => throw _privateConstructorUsedError;
+  @ColorConverter()
   Color get color => throw _privateConstructorUsedError;
+
+  /// Serializes this OutcomeDTO to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
   /// Create a copy of OutcomeDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -307,7 +316,11 @@ abstract class $OutcomeDTOCopyWith<$Res> {
       _$OutcomeDTOCopyWithImpl<$Res, OutcomeDTO>;
   @useResult
   $Res call(
-      {String id, String title, int users, int channelPoints, Color color});
+      {String id,
+      String title,
+      int users,
+      @JsonKey(name: 'channel_points') int channelPoints,
+      @ColorConverter() Color color});
 }
 
 /// @nodoc
@@ -365,7 +378,11 @@ abstract class _$$OutcomeDTOImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id, String title, int users, int channelPoints, Color color});
+      {String id,
+      String title,
+      int users,
+      @JsonKey(name: 'channel_points') int channelPoints,
+      @ColorConverter() Color color});
 }
 
 /// @nodoc
@@ -413,24 +430,30 @@ class __$$OutcomeDTOImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$OutcomeDTOImpl implements _OutcomeDTO {
   const _$OutcomeDTOImpl(
       {required this.id,
       required this.title,
-      required this.users,
-      required this.channelPoints,
-      required this.color});
+      this.users = 0,
+      @JsonKey(name: 'channel_points') this.channelPoints = 0,
+      @ColorConverter() required this.color});
+
+  factory _$OutcomeDTOImpl.fromJson(Map<String, dynamic> json) =>
+      _$$OutcomeDTOImplFromJson(json);
 
   @override
   final String id;
   @override
   final String title;
   @override
+  @JsonKey()
   final int users;
   @override
+  @JsonKey(name: 'channel_points')
   final int channelPoints;
   @override
+  @ColorConverter()
   final Color color;
 
   @override
@@ -451,6 +474,7 @@ class _$OutcomeDTOImpl implements _OutcomeDTO {
             (identical(other.color, color) || other.color == color));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, id, title, users, channelPoints, color);
@@ -462,15 +486,25 @@ class _$OutcomeDTOImpl implements _OutcomeDTO {
   @pragma('vm:prefer-inline')
   _$$OutcomeDTOImplCopyWith<_$OutcomeDTOImpl> get copyWith =>
       __$$OutcomeDTOImplCopyWithImpl<_$OutcomeDTOImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$OutcomeDTOImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _OutcomeDTO implements OutcomeDTO {
   const factory _OutcomeDTO(
       {required final String id,
       required final String title,
-      required final int users,
-      required final int channelPoints,
-      required final Color color}) = _$OutcomeDTOImpl;
+      final int users,
+      @JsonKey(name: 'channel_points') final int channelPoints,
+      @ColorConverter() required final Color color}) = _$OutcomeDTOImpl;
+
+  factory _OutcomeDTO.fromJson(Map<String, dynamic> json) =
+      _$OutcomeDTOImpl.fromJson;
 
   @override
   String get id;
@@ -479,8 +513,10 @@ abstract class _OutcomeDTO implements OutcomeDTO {
   @override
   int get users;
   @override
+  @JsonKey(name: 'channel_points')
   int get channelPoints;
   @override
+  @ColorConverter()
   Color get color;
 
   /// Create a copy of OutcomeDTO

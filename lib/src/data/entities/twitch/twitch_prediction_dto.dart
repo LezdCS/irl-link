@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 
 part 'twitch_prediction_dto.freezed.dart';
+part 'twitch_prediction_dto.g.dart';
 
 @freezed
 class TwitchPredictionDTO with _$TwitchPredictionDTO {
@@ -63,24 +64,38 @@ class OutcomeDTO with _$OutcomeDTO {
   const factory OutcomeDTO({
     required String id,
     required String title,
-    required int users,
-    required int channelPoints,
-    required Color color,
+    @Default(0) int users,
+    @JsonKey(name: 'channel_points')
+    @Default(0) int channelPoints,
+    @ColorConverter() required Color color,
   }) = _OutcomeDTO;
 
-  factory OutcomeDTO.fromJson(Map<String, dynamic> map) {
-    Color color;
-    if (map['color'] == "pink") {
-      color = Colors.pink;
-    } else {
-      color = Colors.blue;
+  factory OutcomeDTO.fromJson(Map<String, dynamic> json) => _$OutcomeDTOFromJson(json);
+}
+
+class ColorConverter implements JsonConverter<Color, String> {
+  const ColorConverter();
+
+  @override
+  Color fromJson(String color) {
+    switch (color) {
+      case "pink":
+        return Colors.pink;
+      case "blue":
+        return Colors.blue;
+      default:
+        return Colors.blue; // Default to blue
     }
-    return OutcomeDTO(
-      id: map['id'],
-      title: map['title'],
-      users: map['users'] ?? 0,
-      channelPoints: map['channel_points'] ?? 0,
-      color: color,
-    );
+  }
+
+  @override
+  String toJson(Color color) {
+    if (color == Colors.pink) {
+      return "pink";
+    } else if (color == Colors.blue) {
+      return "blue";
+    } else {
+      return "blue"; // Default to blue if no match
+    }
   }
 }
