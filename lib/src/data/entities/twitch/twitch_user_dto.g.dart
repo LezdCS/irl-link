@@ -14,7 +14,7 @@ _$TwitchUserDTOImpl _$$TwitchUserDTOImplFromJson(Map<String, dynamic> json) =>
       broadcasterType: json['broadcaster_type'] as String,
       description: json['description'] as String,
       profileImageUrl: json['profile_image_url'] as String,
-      viewCount: (json['view_count'] as num).toInt(),
+      viewCount: _stringToInt(json['view_count']),
     );
 
 Map<String, dynamic> _$$TwitchUserDTOImplToJson(_$TwitchUserDTOImpl instance) =>

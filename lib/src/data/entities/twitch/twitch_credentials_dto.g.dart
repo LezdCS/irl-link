@@ -13,10 +13,8 @@ _$TwitchCredentialsDTOImpl _$$TwitchCredentialsDTOImplFromJson(
       idToken: json['idToken'] as String,
       refreshToken: json['refreshToken'] as String,
       expiresIn: json['expiresIn'] as String,
-      decodedIdToken: TwitchDecodedIdTokenDTO.fromJson(
-          json['decodedIdToken'] as Map<String, dynamic>),
-      twitchUser:
-          TwitchUserDTO.fromJson(json['twitchUser'] as Map<String, dynamic>),
+      decodedIdToken: _stringToTwitchDecodedIdTokenDTO(json['decodedIdToken']),
+      twitchUser: _stringToTwitchUserDTO(json['twitchUser']),
       scopes: json['scopes'] as String,
     );
 

@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_decoded_idtoken_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_user_dto.dart';
@@ -14,8 +13,8 @@ class TwitchCredentialsDTO with _$TwitchCredentialsDTO {
     required String idToken,
     required String refreshToken,
     required String expiresIn,
-    @JsonKey(fromJson: _stringToMap) required TwitchDecodedIdTokenDTO decodedIdToken,
-    @JsonKey(fromJson: _stringToMap) required TwitchUserDTO twitchUser,
+    @JsonKey(fromJson: _stringToTwitchDecodedIdTokenDTO) required TwitchDecodedIdTokenDTO decodedIdToken,
+    @JsonKey(fromJson: _stringToTwitchUserDTO) required TwitchUserDTO twitchUser,
     required String scopes,
   }) = _TwitchCredentialsDTO;
 
@@ -23,11 +22,20 @@ class TwitchCredentialsDTO with _$TwitchCredentialsDTO {
 }
 
 // Because in previous versions of the app, the idToken and decodedIdToken were stored as a string
-Map<String, dynamic> _stringToMap(dynamic json) {
+TwitchDecodedIdTokenDTO _stringToTwitchDecodedIdTokenDTO(dynamic json) {
   if (json is String) {
-    return jsonDecode(json) as Map<String, dynamic>; // Convert the string to a Map
+    return TwitchDecodedIdTokenDTO.fromJson(jsonDecode(json)) ;
   } else if (json is Map<String, dynamic>) {
-    return json;
+    return TwitchDecodedIdTokenDTO.fromJson(json);
+  }
+  throw Exception("Unexpected type");
+}
+
+TwitchUserDTO _stringToTwitchUserDTO(dynamic json) {
+  if (json is String) {
+    return TwitchUserDTO.fromJson(jsonDecode(json)) ;
+  } else if (json is Map<String, dynamic>) {
+    return TwitchUserDTO.fromJson(json);
   }
   throw Exception("Unexpected type");
 }

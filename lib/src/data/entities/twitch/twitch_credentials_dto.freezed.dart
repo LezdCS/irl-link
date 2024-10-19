@@ -24,8 +24,10 @@ mixin _$TwitchCredentialsDTO {
   String get idToken => throw _privateConstructorUsedError;
   String get refreshToken => throw _privateConstructorUsedError;
   String get expiresIn => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _stringToTwitchDecodedIdTokenDTO)
   TwitchDecodedIdTokenDTO get decodedIdToken =>
       throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _stringToTwitchUserDTO)
   TwitchUserDTO get twitchUser => throw _privateConstructorUsedError;
   String get scopes => throw _privateConstructorUsedError;
 
@@ -50,8 +52,9 @@ abstract class $TwitchCredentialsDTOCopyWith<$Res> {
       String idToken,
       String refreshToken,
       String expiresIn,
+      @JsonKey(fromJson: _stringToTwitchDecodedIdTokenDTO)
       TwitchDecodedIdTokenDTO decodedIdToken,
-      TwitchUserDTO twitchUser,
+      @JsonKey(fromJson: _stringToTwitchUserDTO) TwitchUserDTO twitchUser,
       String scopes});
 
   $TwitchDecodedIdTokenDTOCopyWith<$Res> get decodedIdToken;
@@ -149,8 +152,9 @@ abstract class _$$TwitchCredentialsDTOImplCopyWith<$Res>
       String idToken,
       String refreshToken,
       String expiresIn,
+      @JsonKey(fromJson: _stringToTwitchDecodedIdTokenDTO)
       TwitchDecodedIdTokenDTO decodedIdToken,
-      TwitchUserDTO twitchUser,
+      @JsonKey(fromJson: _stringToTwitchUserDTO) TwitchUserDTO twitchUser,
       String scopes});
 
   @override
@@ -221,8 +225,9 @@ class _$TwitchCredentialsDTOImpl implements _TwitchCredentialsDTO {
       required this.idToken,
       required this.refreshToken,
       required this.expiresIn,
+      @JsonKey(fromJson: _stringToTwitchDecodedIdTokenDTO)
       required this.decodedIdToken,
-      required this.twitchUser,
+      @JsonKey(fromJson: _stringToTwitchUserDTO) required this.twitchUser,
       required this.scopes});
 
   factory _$TwitchCredentialsDTOImpl.fromJson(Map<String, dynamic> json) =>
@@ -237,8 +242,10 @@ class _$TwitchCredentialsDTOImpl implements _TwitchCredentialsDTO {
   @override
   final String expiresIn;
   @override
+  @JsonKey(fromJson: _stringToTwitchDecodedIdTokenDTO)
   final TwitchDecodedIdTokenDTO decodedIdToken;
   @override
+  @JsonKey(fromJson: _stringToTwitchUserDTO)
   final TwitchUserDTO twitchUser;
   @override
   final String scopes;
@@ -296,7 +303,9 @@ abstract class _TwitchCredentialsDTO implements TwitchCredentialsDTO {
       required final String idToken,
       required final String refreshToken,
       required final String expiresIn,
+      @JsonKey(fromJson: _stringToTwitchDecodedIdTokenDTO)
       required final TwitchDecodedIdTokenDTO decodedIdToken,
+      @JsonKey(fromJson: _stringToTwitchUserDTO)
       required final TwitchUserDTO twitchUser,
       required final String scopes}) = _$TwitchCredentialsDTOImpl;
 
@@ -312,8 +321,10 @@ abstract class _TwitchCredentialsDTO implements TwitchCredentialsDTO {
   @override
   String get expiresIn;
   @override
+  @JsonKey(fromJson: _stringToTwitchDecodedIdTokenDTO)
   TwitchDecodedIdTokenDTO get decodedIdToken;
   @override
+  @JsonKey(fromJson: _stringToTwitchUserDTO)
   TwitchUserDTO get twitchUser;
   @override
   String get scopes;

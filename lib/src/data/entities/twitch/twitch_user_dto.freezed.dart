@@ -29,7 +29,7 @@ mixin _$TwitchUserDTO {
   String get description => throw _privateConstructorUsedError;
   @JsonKey(name: 'profile_image_url')
   String get profileImageUrl => throw _privateConstructorUsedError;
-  @JsonKey(name: 'view_count')
+  @JsonKey(name: 'view_count', fromJson: _stringToInt)
   int get viewCount => throw _privateConstructorUsedError;
 
   /// Serializes this TwitchUserDTO to a JSON map.
@@ -55,7 +55,7 @@ abstract class $TwitchUserDTOCopyWith<$Res> {
       @JsonKey(name: 'broadcaster_type') String broadcasterType,
       String description,
       @JsonKey(name: 'profile_image_url') String profileImageUrl,
-      @JsonKey(name: 'view_count') int viewCount});
+      @JsonKey(name: 'view_count', fromJson: _stringToInt) int viewCount});
 }
 
 /// @nodoc
@@ -129,7 +129,7 @@ abstract class _$$TwitchUserDTOImplCopyWith<$Res>
       @JsonKey(name: 'broadcaster_type') String broadcasterType,
       String description,
       @JsonKey(name: 'profile_image_url') String profileImageUrl,
-      @JsonKey(name: 'view_count') int viewCount});
+      @JsonKey(name: 'view_count', fromJson: _stringToInt) int viewCount});
 }
 
 /// @nodoc
@@ -196,7 +196,8 @@ class _$TwitchUserDTOImpl implements _TwitchUserDTO {
       @JsonKey(name: 'broadcaster_type') required this.broadcasterType,
       required this.description,
       @JsonKey(name: 'profile_image_url') required this.profileImageUrl,
-      @JsonKey(name: 'view_count') required this.viewCount});
+      @JsonKey(name: 'view_count', fromJson: _stringToInt)
+      required this.viewCount});
 
   factory _$TwitchUserDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$TwitchUserDTOImplFromJson(json);
@@ -217,7 +218,7 @@ class _$TwitchUserDTOImpl implements _TwitchUserDTO {
   @JsonKey(name: 'profile_image_url')
   final String profileImageUrl;
   @override
-  @JsonKey(name: 'view_count')
+  @JsonKey(name: 'view_count', fromJson: _stringToInt)
   final int viewCount;
 
   @override
@@ -273,7 +274,7 @@ abstract class _TwitchUserDTO implements TwitchUserDTO {
       @JsonKey(name: 'broadcaster_type') required final String broadcasterType,
       required final String description,
       @JsonKey(name: 'profile_image_url') required final String profileImageUrl,
-      @JsonKey(name: 'view_count')
+      @JsonKey(name: 'view_count', fromJson: _stringToInt)
       required final int viewCount}) = _$TwitchUserDTOImpl;
 
   factory _TwitchUserDTO.fromJson(Map<String, dynamic> json) =
@@ -295,7 +296,7 @@ abstract class _TwitchUserDTO implements TwitchUserDTO {
   @JsonKey(name: 'profile_image_url')
   String get profileImageUrl;
   @override
-  @JsonKey(name: 'view_count')
+  @JsonKey(name: 'view_count', fromJson: _stringToInt)
   int get viewCount;
 
   /// Create a copy of TwitchUserDTO
