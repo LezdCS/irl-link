@@ -21,7 +21,7 @@ class TwitchCredentialsDTO with _$TwitchCredentialsDTO {
   factory TwitchCredentialsDTO.fromJson(Map<String, dynamic> json) => _$TwitchCredentialsDTOFromJson(json);
 }
 
-// Because in previous versions of the app, the idToken and decodedIdToken were stored as a string
+// Because in previous versions of the app, the twitchUser and decodedIdToken were stored as a string
 TwitchDecodedIdTokenDTO _stringToTwitchDecodedIdTokenDTO(dynamic json) {
   if (json is String) {
     return TwitchDecodedIdTokenDTO.fromJson(jsonDecode(json)) ;
