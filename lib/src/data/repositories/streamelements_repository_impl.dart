@@ -10,6 +10,7 @@ import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/globals.dart' as globals;
 import 'package:irllink/src/core/utils/init_dio.dart';
+import 'package:irllink/src/core/utils/mapper.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_activity_dto.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_credentials_dto.dart';
@@ -180,7 +181,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
     if (seCredentialsString != null) {
       Map<String, dynamic> seCredentialsJson = jsonDecode(seCredentialsString);
 
-      SeCredentials seCredentials =
+      SeCredentialsDTO seCredentialsDTO =
           SeCredentialsDTO.fromJson(seCredentialsJson);
 
       StreamelementsAuthParams params = const StreamelementsAuthParams();
@@ -189,7 +190,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
         return a.compareTo(b);
       });
       String paramsScopesOrdered = paramsScopesList.join(' ');
-      List savedScopesList = seCredentials.scopes.split(' ');
+      List savedScopesList = seCredentialsDTO.scopes.split(' ');
       savedScopesList.sort((a, b) {
         return a.compareTo(b);
       });
@@ -199,9 +200,13 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
           StreamElementsLog(
               'StreamElements scopes changed, user need to relogin.'),
         );
-        disconnect(seCredentials.accessToken);
+        disconnect(seCredentialsDTO.accessToken);
         return DataFailed("Scopes have been updated, please login again.");
       }
+
+      Mappr mappr = Mappr();
+      SeCredentials seCredentials =
+          mappr.convert<SeCredentialsDTO, SeCredentials>(seCredentialsDTO);
 
       //refresh the access token to be sure the token is going to be valid after starting the app
       DataState<SeCredentials> creds = await refreshAccessToken(seCredentials);
@@ -240,8 +245,10 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
         },
       );
       response.data.reversed.forEach(
-        (activity) => {
-          activities.add(SeActivityDTO.fromJson(activity)),
+        (activity) {
+          SeActivityDTO activityDTO = SeActivityDTO.fromJson(activity);
+          Mappr mappr = Mappr();
+          activities.add(mappr.convert<SeActivityDTO, SeActivity>(activityDTO));
         },
       );
       return DataSuccess(activities);
@@ -262,8 +269,10 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
         queryParameters: {'search': ' ', 'type': 'regular'},
       );
       response.data['docs'].forEach(
-        (overlay) => {
-          overlays.add(SeOverlayDTO.fromJson(overlay)),
+        (overlay) {
+          Mappr mappr = Mappr();
+          SeOverlayDTO overlayDTO = SeOverlayDTO.fromJson(overlay);
+          overlays.add(mappr.convert<SeOverlayDTO, SeOverlay>(overlayDTO));
         },
       );
       return DataSuccess(overlays);
@@ -275,14 +284,15 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
   @override
   Future<DataState<SeMe>> getMe(String token) async {
     var dio = initDio();
-    late SeMe me;
     try {
       dio.options.headers["Authorization"] = "oAuth $token";
       Response response = await dio.get(
         'https://api.streamelements.com/kappa/v2/channels/me',
       );
 
-      me = SeMeDTO.fromJson(response.data);
+      SeMeDTO meDto = SeMeDTO.fromJson(response.data);
+      Mappr mappr = Mappr();
+      SeMe me = mappr.convert<SeMeDTO, SeMe>(meDto);
 
       return DataSuccess(me);
     } on DioException catch (e) {

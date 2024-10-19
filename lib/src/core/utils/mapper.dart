@@ -8,6 +8,10 @@ import 'package:irllink/src/data/entities/settings/general_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/stream_elements_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/tts_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings_dto.dart';
+import 'package:irllink/src/data/entities/stream_elements/se_activity_dto.dart';
+import 'package:irllink/src/data/entities/stream_elements/se_credentials_dto.dart';
+import 'package:irllink/src/data/entities/stream_elements/se_me_dto.dart';
+import 'package:irllink/src/data/entities/stream_elements/se_overlay_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_credentials_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_decoded_idtoken_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_poll_dto.dart';
@@ -22,6 +26,10 @@ import 'package:irllink/src/domain/entities/settings/dashboard_settings.dart';
 import 'package:irllink/src/domain/entities/settings/general_settings.dart';
 import 'package:irllink/src/domain/entities/settings/stream_elements_settings.dart';
 import 'package:irllink/src/domain/entities/settings/tts_settings.dart';
+import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
+import 'package:irllink/src/domain/entities/stream_elements/se_credentials.dart';
+import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
+import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_decoded_idtoken.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
@@ -51,8 +59,12 @@ import 'mapper.auto_mappr.dart';
   MapType<DashboardSettings, DashboardSettingsDTO>(),
   MapType<TwitchPoll, TwitchPollDTO>(),
   MapType<Choice, ChoiceDTO>(),
-  MapType<TwitchPredictionDTO, TwitchPrediction>(),
   MapType<OutcomeDTO, Outcome>(),
   MapType<TwitchPredictionDTO, TwitchPrediction>(),
+  MapType<SeActivityDTO, SeActivity>(),
+  MapType<SeCredentialsDTO, SeCredentials>(),
+  MapType<SeMeDTO, SeMe>(),
+  MapType<SeOverlayDTO, SeOverlay>(),
+  
 ])
 class Mappr extends $Mappr {}

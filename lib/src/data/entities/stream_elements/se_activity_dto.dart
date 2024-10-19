@@ -1,19 +1,23 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
 
-class SeActivityDTO extends SeActivity {
-  const SeActivityDTO({
-    required super.id,
-    required super.channel,
-    required super.username,
-    required super.activityType,
-    super.message,
-    super.amount,
-    super.tier,
-    super.gifted,
-    super.sender,
-    super.currency,
-    super.isTest,
-  });
+part 'se_activity_dto.freezed.dart';
+
+@freezed
+class SeActivityDTO with _$SeActivityDTO {
+  const factory SeActivityDTO({
+    required String id,
+    required String channel,
+    required String username,
+    required ActivityType activityType,
+    String? message,
+    String? amount,
+    String? tier,
+    bool? gifted,
+    String? sender,
+    String? currency,
+    bool? isTest,
+  }) = _SeActivityDTO;
 
   factory SeActivityDTO.fromJson(Map<String, dynamic> map) {
     switch (map['type']) {
