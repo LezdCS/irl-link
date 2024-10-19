@@ -15,9 +15,19 @@ class TwitchUserDTO with _$TwitchUserDTO {
     required String description,
     @JsonKey(name: 'profile_image_url')
     required String profileImageUrl,
-    @JsonKey(name: 'view_count')
+    @JsonKey(name: 'view_count', fromJson: _stringToInt)
     required int viewCount,
   }) = _TwitchUserDTO;
 
   factory TwitchUserDTO.fromJson(Map<String, dynamic> json) => _$TwitchUserDTOFromJson(json);
+}
+
+// Because in previous versions of the app, the viewCount was stored as a string (even tho it made no sense to save this in local storage)
+int _stringToInt(dynamic json) {
+  if (json is String) {
+    return int.tryParse(json) ?? 0; // Fallback to 0 if parsing fails
+  } else if (json is int) {
+    return json;
+  }
+  throw Exception("Unexpected type");
 }
