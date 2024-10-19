@@ -164,10 +164,14 @@ class TwitchEventSubService extends GetxService {
         //HYPE TRAIN
         case 'channel.hype_train.begin':
         case 'channel.hype_train.progress':
-          currentHypeTrain.value = TwitchHypeTrainDTO.fromJson(event);
+          TwitchHypeTrainDTO hypeTrainDTO = TwitchHypeTrainDTO.fromJson(event);
+          Mappr mappr = Mappr();
+          currentHypeTrain.value = mappr.convert<TwitchHypeTrainDTO, TwitchHypeTrain>(hypeTrainDTO);
           break;
         case 'channel.hype_train.end':
-          currentHypeTrain.value = TwitchHypeTrainDTO.fromJson(event);
+          TwitchHypeTrainDTO hypeTrainDTO = TwitchHypeTrainDTO.fromJson(event);
+          Mappr mappr = Mappr();
+          currentHypeTrain.value = mappr.convert<TwitchHypeTrainDTO, TwitchHypeTrain>(hypeTrainDTO);
           Future.delayed(const Duration(seconds: 20)).then(
             (value) => currentHypeTrain.value = TwitchHypeTrain.empty(),
           );
