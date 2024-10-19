@@ -8,6 +8,7 @@ import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/convert_to_device_timezone.dart';
 import 'package:irllink/src/core/utils/globals.dart' as globals;
 import 'package:irllink/src/core/utils/init_dio.dart';
+import 'package:irllink/src/core/utils/mapper.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_hype_train_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_poll_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_prediction_dto.dart';
@@ -130,10 +131,14 @@ class TwitchEventSubService extends GetxService {
         //POLLS
         case 'channel.poll.begin':
         case 'channel.poll.progress':
-          currentPoll.value = TwitchPollDTO.fromJson(event);
+          TwitchPollDTO pollDTO = TwitchPollDTO.fromJson(event);
+          Mappr mappr = Mappr();
+          currentPoll.value = mappr.convert<TwitchPollDTO, TwitchPoll>(pollDTO);
           break;
         case 'channel.poll.end':
-          currentPoll.value = TwitchPollDTO.fromJson(event);
+          TwitchPollDTO pollDTO = TwitchPollDTO.fromJson(event);
+          Mappr mappr = Mappr();
+          currentPoll.value = mappr.convert<TwitchPollDTO, TwitchPoll>(pollDTO);
           Future.delayed(const Duration(seconds: 20)).then(
             (value) => currentPoll.value = TwitchPoll.empty(),
           );

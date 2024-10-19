@@ -10,6 +10,7 @@ import 'package:irllink/src/data/entities/settings/tts_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_credentials_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_decoded_idtoken_dto.dart';
+import 'package:irllink/src/data/entities/twitch/twitch_poll_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_user_dto.dart';
 import 'package:irllink/src/domain/entities/dashboard_event.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
@@ -22,6 +23,7 @@ import 'package:irllink/src/domain/entities/settings/stream_elements_settings.da
 import 'package:irllink/src/domain/entities/settings/tts_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_decoded_idtoken.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
 
 import 'mapper.auto_mappr.dart';
@@ -45,5 +47,6 @@ import 'mapper.auto_mappr.dart';
   MapType<TwitchUser, TwitchUserDTO>(),
   MapType<TwitchUserDTO, TwitchUser>(),
   MapType<DashboardSettings, DashboardSettingsDTO>(),
+  MapType<TwitchPoll, TwitchPollDTO>(),
 ])
 class Mappr extends $Mappr {}

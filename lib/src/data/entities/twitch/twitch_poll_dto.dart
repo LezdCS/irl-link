@@ -1,31 +1,27 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 
-class TwitchPollDTO extends TwitchPoll {
-  const TwitchPollDTO({
-    required super.id,
-    required super.title,
-    required super.choices,
-    required super.totalVotes,
-    required super.status,
-    required super.endsAt,
-  });
+part 'twitch_poll_dto.freezed.dart';
+part 'twitch_poll_dto.g.dart';
 
-  Map toJson() => {
-        'id': id,
-        'title': title,
-        'choices': choices,
-        'totalVotes': totalVotes,
-        'status': status,
-        'endsAt': endsAt,
-      };
+@freezed
+class TwitchPollDTO with _$TwitchPollDTO {
+  const factory TwitchPollDTO({
+    required String id,
+    required String title,
+    required List<ChoiceDTO> choices,
+    required int totalVotes,
+    required PollStatus status,
+    required DateTime endsAt,
+  }) = _TwitchPollDTO;
 
   factory TwitchPollDTO.fromJson(Map<String, dynamic> map) {
-    List<Choice> choices = [];
+    List<ChoiceDTO> choices = [];
     int totalVotes = 0;
     PollStatus status = PollStatus.active;
 
-    Choice c;
+    ChoiceDTO c;
     map['choices'].forEach((choice) => {
           c = ChoiceDTO.fromJson(choice),
           choices.add(c),
@@ -54,24 +50,13 @@ class TwitchPollDTO extends TwitchPoll {
   }
 }
 
-class ChoiceDTO extends Choice {
-  const ChoiceDTO({
-    required super.id,
-    required super.title,
-    required super.votes,
-  });
+@freezed
+class ChoiceDTO with _$ChoiceDTO {
+  const factory ChoiceDTO({
+    required String id,
+    required String title,
+    @Default(0) int votes,
+  }) = _ChoiceDTO;
 
-  Map toJson() => {
-        'id': id,
-        'title': title,
-        'votes': votes,
-      };
-
-  factory ChoiceDTO.fromJson(Map<String, dynamic> map) {
-    return ChoiceDTO(
-      id: map['id'],
-      title: map['title'],
-      votes: map['votes'] ?? 0,
-    );
-  }
+  factory ChoiceDTO.fromJson(Map<String, dynamic> json) => _$ChoiceDTOFromJson(json);
 }
