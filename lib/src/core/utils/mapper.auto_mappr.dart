@@ -21,10 +21,12 @@ import '../../data/entities/settings_dto.dart' as _i3;
 import '../../data/entities/stream_elements/se_activity_dto.dart' as _i30;
 import '../../data/entities/stream_elements/se_credentials_dto.dart' as _i32;
 import '../../data/entities/stream_elements/se_me_dto.dart' as _i34;
+import '../../data/entities/stream_elements/se_overlay_dto.dart' as _i36;
 import '../../data/entities/twitch/twitch_credentials_dto.dart' as _i19;
 import '../../data/entities/twitch/twitch_decoded_idtoken_dto.dart' as _i21;
 import '../../data/entities/twitch/twitch_poll_dto.dart' as _i27;
 import '../../data/entities/twitch/twitch_prediction_dto.dart' as _i28;
+import '../../data/entities/twitch/twitch_stream_infos_dto.dart' as _i38;
 import '../../data/entities/twitch/twitch_user_dto.dart' as _i23;
 import '../../domain/entities/dashboard_event.dart' as _i10;
 import '../../domain/entities/settings.dart' as _i2;
@@ -38,10 +40,12 @@ import '../../domain/entities/settings/tts_settings.dart' as _i14;
 import '../../domain/entities/stream_elements/se_activity.dart' as _i31;
 import '../../domain/entities/stream_elements/se_credentials.dart' as _i33;
 import '../../domain/entities/stream_elements/se_me.dart' as _i35;
+import '../../domain/entities/stream_elements/se_overlay.dart' as _i37;
 import '../../domain/entities/twitch/twitch_credentials.dart' as _i18;
 import '../../domain/entities/twitch/twitch_decoded_idtoken.dart' as _i20;
 import '../../domain/entities/twitch/twitch_poll.dart' as _i26;
 import '../../domain/entities/twitch/twitch_prediction.dart' as _i29;
+import '../../domain/entities/twitch/twitch_stream_infos.dart' as _i39;
 import '../../domain/entities/twitch/twitch_user.dart' as _i22;
 
 /// {@template package:irllink/src/core/utils/mapper.dart}
@@ -71,6 +75,8 @@ import '../../domain/entities/twitch/twitch_user.dart' as _i22;
 /// - `SeActivityDTO` → `SeActivity`.
 /// - `SeCredentialsDTO` → `SeCredentials`.
 /// - `SeMeDTO` → `SeMe`.
+/// - `SeOverlayDTO` → `SeOverlay`.
+/// - `TwitchStreamInfosDto` → `TwitchStreamInfos`.
 /// {@endtemplate}
 class $Mappr implements _i1.AutoMapprInterface {
   const $Mappr();
@@ -233,6 +239,18 @@ class $Mappr implements _i1.AutoMapprInterface {
             sourceTypeOf == _typeOf<_i34.SeMeDTO?>()) &&
         (targetTypeOf == _typeOf<_i35.SeMe>() ||
             targetTypeOf == _typeOf<_i35.SeMe?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i36.SeOverlayDTO>() ||
+            sourceTypeOf == _typeOf<_i36.SeOverlayDTO?>()) &&
+        (targetTypeOf == _typeOf<_i37.SeOverlay>() ||
+            targetTypeOf == _typeOf<_i37.SeOverlay?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i38.TwitchStreamInfosDto>() ||
+            sourceTypeOf == _typeOf<_i38.TwitchStreamInfosDto?>()) &&
+        (targetTypeOf == _typeOf<_i39.TwitchStreamInfos>() ||
+            targetTypeOf == _typeOf<_i39.TwitchStreamInfos?>())) {
       return true;
     }
     if (recursive) {
@@ -675,6 +693,26 @@ class $Mappr implements _i1.AutoMapprInterface {
       }
       return (_map__i34$SeMeDTO_To__i35$SeMe((model as _i34.SeMeDTO?))
           as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i36.SeOverlayDTO>() ||
+            sourceTypeOf == _typeOf<_i36.SeOverlayDTO?>()) &&
+        (targetTypeOf == _typeOf<_i37.SeOverlay>() ||
+            targetTypeOf == _typeOf<_i37.SeOverlay?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i36$SeOverlayDTO_To__i37$SeOverlay(
+          (model as _i36.SeOverlayDTO?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i38.TwitchStreamInfosDto>() ||
+            sourceTypeOf == _typeOf<_i38.TwitchStreamInfosDto?>()) &&
+        (targetTypeOf == _typeOf<_i39.TwitchStreamInfos>() ||
+            targetTypeOf == _typeOf<_i39.TwitchStreamInfos?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i38$TwitchStreamInfosDto_To__i39$TwitchStreamInfos(
+          (model as _i38.TwitchStreamInfosDto?)) as TARGET);
     }
     throw Exception('No ${model.runtimeType} -> $targetTypeOf mapping.');
   }
@@ -1159,6 +1197,42 @@ class $Mappr implements _i1.AutoMapprInterface {
       avatar: model.avatar,
       username: model.username,
       displayName: model.displayName,
+    );
+  }
+
+  _i37.SeOverlay _map__i36$SeOverlayDTO_To__i37$SeOverlay(
+      _i36.SeOverlayDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping SeOverlayDTO → SeOverlay failed because SeOverlayDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<SeOverlayDTO, SeOverlay> to handle null values during mapping.');
+    }
+    return _i37.SeOverlay(
+      id: model.id,
+      name: model.name,
+    );
+  }
+
+  _i39.TwitchStreamInfos
+      _map__i38$TwitchStreamInfosDto_To__i39$TwitchStreamInfos(
+          _i38.TwitchStreamInfosDto? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping TwitchStreamInfosDto → TwitchStreamInfos failed because TwitchStreamInfosDto was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<TwitchStreamInfosDto, TwitchStreamInfos> to handle null values during mapping.');
+    }
+    return _i39.TwitchStreamInfos(
+      title: model.title,
+      viewerCount: model.viewerCount,
+      isOnline: model.isOnline,
+      startedAtDuration: model.startedAtDuration,
+      isEmoteMode: model.isEmoteMode,
+      isFollowerMode: model.isFollowerMode,
+      isSlowMode: model.isSlowMode,
+      slowModeWaitTime: model.slowModeWaitTime,
+      isSubscriberMode: model.isSubscriberMode,
     );
   }
 }
