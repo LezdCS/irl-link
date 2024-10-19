@@ -69,7 +69,9 @@ import '../../domain/entities/twitch/twitch_user.dart' as _i22;
 /// - `TwitchUserDTO` → `TwitchUser`.
 /// - `DashboardSettings` → `DashboardSettingsDTO`.
 /// - `TwitchPoll` → `TwitchPollDTO`.
+/// - `TwitchPollDTO` → `TwitchPoll`.
 /// - `Choice` → `ChoiceDTO`.
+/// - `ChoiceDTO` → `Choice`.
 /// - `OutcomeDTO` → `Outcome`.
 /// - `TwitchPredictionDTO` → `TwitchPrediction`.
 /// - `SeActivityDTO` → `SeActivity`.
@@ -205,10 +207,22 @@ class $Mappr implements _i1.AutoMapprInterface {
             targetTypeOf == _typeOf<_i27.TwitchPollDTO?>())) {
       return true;
     }
+    if ((sourceTypeOf == _typeOf<_i27.TwitchPollDTO>() ||
+            sourceTypeOf == _typeOf<_i27.TwitchPollDTO?>()) &&
+        (targetTypeOf == _typeOf<_i26.TwitchPoll>() ||
+            targetTypeOf == _typeOf<_i26.TwitchPoll?>())) {
+      return true;
+    }
     if ((sourceTypeOf == _typeOf<_i26.Choice>() ||
             sourceTypeOf == _typeOf<_i26.Choice?>()) &&
         (targetTypeOf == _typeOf<_i27.ChoiceDTO>() ||
             targetTypeOf == _typeOf<_i27.ChoiceDTO?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i27.ChoiceDTO>() ||
+            sourceTypeOf == _typeOf<_i27.ChoiceDTO?>()) &&
+        (targetTypeOf == _typeOf<_i26.Choice>() ||
+            targetTypeOf == _typeOf<_i26.Choice?>())) {
       return true;
     }
     if ((sourceTypeOf == _typeOf<_i28.OutcomeDTO>() ||
@@ -634,6 +648,16 @@ class $Mappr implements _i1.AutoMapprInterface {
       return (_map__i26$TwitchPoll_To__i27$TwitchPollDTO(
           (model as _i26.TwitchPoll?)) as TARGET);
     }
+    if ((sourceTypeOf == _typeOf<_i27.TwitchPollDTO>() ||
+            sourceTypeOf == _typeOf<_i27.TwitchPollDTO?>()) &&
+        (targetTypeOf == _typeOf<_i26.TwitchPoll>() ||
+            targetTypeOf == _typeOf<_i26.TwitchPoll?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i27$TwitchPollDTO_To__i26$TwitchPoll(
+          (model as _i27.TwitchPollDTO?)) as TARGET);
+    }
     if ((sourceTypeOf == _typeOf<_i26.Choice>() ||
             sourceTypeOf == _typeOf<_i26.Choice?>()) &&
         (targetTypeOf == _typeOf<_i27.ChoiceDTO>() ||
@@ -642,6 +666,16 @@ class $Mappr implements _i1.AutoMapprInterface {
         return null;
       }
       return (_map__i26$Choice_To__i27$ChoiceDTO((model as _i26.Choice?))
+          as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i27.ChoiceDTO>() ||
+            sourceTypeOf == _typeOf<_i27.ChoiceDTO?>()) &&
+        (targetTypeOf == _typeOf<_i26.Choice>() ||
+            targetTypeOf == _typeOf<_i26.Choice?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i27$ChoiceDTO_To__i26$Choice((model as _i27.ChoiceDTO?))
           as TARGET);
     }
     if ((sourceTypeOf == _typeOf<_i28.OutcomeDTO>() ||
@@ -1094,6 +1128,27 @@ class $Mappr implements _i1.AutoMapprInterface {
     );
   }
 
+  _i26.TwitchPoll _map__i27$TwitchPollDTO_To__i26$TwitchPoll(
+      _i27.TwitchPollDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping TwitchPollDTO → TwitchPoll failed because TwitchPollDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<TwitchPollDTO, TwitchPoll> to handle null values during mapping.');
+    }
+    return _i26.TwitchPoll(
+      id: model.id,
+      title: model.title,
+      choices: model.choices
+          .map<_i26.Choice>(
+              (value) => _map__i27$ChoiceDTO_To__i26$Choice(value))
+          .toList(),
+      totalVotes: model.totalVotes,
+      status: model.status,
+      endsAt: model.endsAt,
+    );
+  }
+
   _i27.ChoiceDTO _map__i26$Choice_To__i27$ChoiceDTO(_i26.Choice? input) {
     final model = input;
     if (model == null) {
@@ -1102,6 +1157,20 @@ class $Mappr implements _i1.AutoMapprInterface {
           r'Consider setting the whenSourceIsNull parameter on the MapType<Choice, ChoiceDTO> to handle null values during mapping.');
     }
     return _i27.ChoiceDTO(
+      id: model.id,
+      title: model.title,
+      votes: model.votes,
+    );
+  }
+
+  _i26.Choice _map__i27$ChoiceDTO_To__i26$Choice(_i27.ChoiceDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping ChoiceDTO → Choice failed because ChoiceDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<ChoiceDTO, Choice> to handle null values during mapping.');
+    }
+    return _i26.Choice(
       id: model.id,
       title: model.title,
       votes: model.votes,
