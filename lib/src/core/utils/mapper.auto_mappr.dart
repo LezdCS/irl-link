@@ -18,8 +18,15 @@ import '../../data/entities/settings/general_settings_dto.dart' as _i9;
 import '../../data/entities/settings/stream_elements_settings_dto.dart' as _i13;
 import '../../data/entities/settings/tts_settings_dto.dart' as _i15;
 import '../../data/entities/settings_dto.dart' as _i3;
+import '../../data/entities/stream_elements/se_activity_dto.dart' as _i30;
+import '../../data/entities/stream_elements/se_credentials_dto.dart' as _i32;
+import '../../data/entities/stream_elements/se_me_dto.dart' as _i34;
+import '../../data/entities/stream_elements/se_overlay_dto.dart' as _i36;
 import '../../data/entities/twitch/twitch_credentials_dto.dart' as _i19;
 import '../../data/entities/twitch/twitch_decoded_idtoken_dto.dart' as _i21;
+import '../../data/entities/twitch/twitch_poll_dto.dart' as _i27;
+import '../../data/entities/twitch/twitch_prediction_dto.dart' as _i28;
+import '../../data/entities/twitch/twitch_stream_infos_dto.dart' as _i38;
 import '../../data/entities/twitch/twitch_user_dto.dart' as _i23;
 import '../../domain/entities/dashboard_event.dart' as _i10;
 import '../../domain/entities/settings.dart' as _i2;
@@ -30,8 +37,15 @@ import '../../domain/entities/settings/dashboard_settings.dart' as _i24;
 import '../../domain/entities/settings/general_settings.dart' as _i8;
 import '../../domain/entities/settings/stream_elements_settings.dart' as _i12;
 import '../../domain/entities/settings/tts_settings.dart' as _i14;
+import '../../domain/entities/stream_elements/se_activity.dart' as _i31;
+import '../../domain/entities/stream_elements/se_credentials.dart' as _i33;
+import '../../domain/entities/stream_elements/se_me.dart' as _i35;
+import '../../domain/entities/stream_elements/se_overlay.dart' as _i37;
 import '../../domain/entities/twitch/twitch_credentials.dart' as _i18;
 import '../../domain/entities/twitch/twitch_decoded_idtoken.dart' as _i20;
+import '../../domain/entities/twitch/twitch_poll.dart' as _i26;
+import '../../domain/entities/twitch/twitch_prediction.dart' as _i29;
+import '../../domain/entities/twitch/twitch_stream_infos.dart' as _i39;
 import '../../domain/entities/twitch/twitch_user.dart' as _i22;
 
 /// {@template package:irllink/src/core/utils/mapper.dart}
@@ -54,6 +68,17 @@ import '../../domain/entities/twitch/twitch_user.dart' as _i22;
 /// - `TwitchUser` → `TwitchUserDTO`.
 /// - `TwitchUserDTO` → `TwitchUser`.
 /// - `DashboardSettings` → `DashboardSettingsDTO`.
+/// - `TwitchPoll` → `TwitchPollDTO`.
+/// - `TwitchPollDTO` → `TwitchPoll`.
+/// - `Choice` → `ChoiceDTO`.
+/// - `ChoiceDTO` → `Choice`.
+/// - `OutcomeDTO` → `Outcome`.
+/// - `TwitchPredictionDTO` → `TwitchPrediction`.
+/// - `SeActivityDTO` → `SeActivity`.
+/// - `SeCredentialsDTO` → `SeCredentials`.
+/// - `SeMeDTO` → `SeMe`.
+/// - `SeOverlayDTO` → `SeOverlay`.
+/// - `TwitchStreamInfosDto` → `TwitchStreamInfos`.
 /// {@endtemplate}
 class $Mappr implements _i1.AutoMapprInterface {
   const $Mappr();
@@ -174,6 +199,72 @@ class $Mappr implements _i1.AutoMapprInterface {
             sourceTypeOf == _typeOf<_i24.DashboardSettings?>()) &&
         (targetTypeOf == _typeOf<_i25.DashboardSettingsDTO>() ||
             targetTypeOf == _typeOf<_i25.DashboardSettingsDTO?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i26.TwitchPoll>() ||
+            sourceTypeOf == _typeOf<_i26.TwitchPoll?>()) &&
+        (targetTypeOf == _typeOf<_i27.TwitchPollDTO>() ||
+            targetTypeOf == _typeOf<_i27.TwitchPollDTO?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i27.TwitchPollDTO>() ||
+            sourceTypeOf == _typeOf<_i27.TwitchPollDTO?>()) &&
+        (targetTypeOf == _typeOf<_i26.TwitchPoll>() ||
+            targetTypeOf == _typeOf<_i26.TwitchPoll?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i26.Choice>() ||
+            sourceTypeOf == _typeOf<_i26.Choice?>()) &&
+        (targetTypeOf == _typeOf<_i27.ChoiceDTO>() ||
+            targetTypeOf == _typeOf<_i27.ChoiceDTO?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i27.ChoiceDTO>() ||
+            sourceTypeOf == _typeOf<_i27.ChoiceDTO?>()) &&
+        (targetTypeOf == _typeOf<_i26.Choice>() ||
+            targetTypeOf == _typeOf<_i26.Choice?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i28.OutcomeDTO>() ||
+            sourceTypeOf == _typeOf<_i28.OutcomeDTO?>()) &&
+        (targetTypeOf == _typeOf<_i29.Outcome>() ||
+            targetTypeOf == _typeOf<_i29.Outcome?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i28.TwitchPredictionDTO>() ||
+            sourceTypeOf == _typeOf<_i28.TwitchPredictionDTO?>()) &&
+        (targetTypeOf == _typeOf<_i29.TwitchPrediction>() ||
+            targetTypeOf == _typeOf<_i29.TwitchPrediction?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i30.SeActivityDTO>() ||
+            sourceTypeOf == _typeOf<_i30.SeActivityDTO?>()) &&
+        (targetTypeOf == _typeOf<_i31.SeActivity>() ||
+            targetTypeOf == _typeOf<_i31.SeActivity?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i32.SeCredentialsDTO>() ||
+            sourceTypeOf == _typeOf<_i32.SeCredentialsDTO?>()) &&
+        (targetTypeOf == _typeOf<_i33.SeCredentials>() ||
+            targetTypeOf == _typeOf<_i33.SeCredentials?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i34.SeMeDTO>() ||
+            sourceTypeOf == _typeOf<_i34.SeMeDTO?>()) &&
+        (targetTypeOf == _typeOf<_i35.SeMe>() ||
+            targetTypeOf == _typeOf<_i35.SeMe?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i36.SeOverlayDTO>() ||
+            sourceTypeOf == _typeOf<_i36.SeOverlayDTO?>()) &&
+        (targetTypeOf == _typeOf<_i37.SeOverlay>() ||
+            targetTypeOf == _typeOf<_i37.SeOverlay?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i38.TwitchStreamInfosDto>() ||
+            sourceTypeOf == _typeOf<_i38.TwitchStreamInfosDto?>()) &&
+        (targetTypeOf == _typeOf<_i39.TwitchStreamInfos>() ||
+            targetTypeOf == _typeOf<_i39.TwitchStreamInfos?>())) {
       return true;
     }
     if (recursive) {
@@ -547,6 +638,116 @@ class $Mappr implements _i1.AutoMapprInterface {
       return (_map__i24$DashboardSettings_To__i25$DashboardSettingsDTO(
           (model as _i24.DashboardSettings?)) as TARGET);
     }
+    if ((sourceTypeOf == _typeOf<_i26.TwitchPoll>() ||
+            sourceTypeOf == _typeOf<_i26.TwitchPoll?>()) &&
+        (targetTypeOf == _typeOf<_i27.TwitchPollDTO>() ||
+            targetTypeOf == _typeOf<_i27.TwitchPollDTO?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i26$TwitchPoll_To__i27$TwitchPollDTO(
+          (model as _i26.TwitchPoll?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i27.TwitchPollDTO>() ||
+            sourceTypeOf == _typeOf<_i27.TwitchPollDTO?>()) &&
+        (targetTypeOf == _typeOf<_i26.TwitchPoll>() ||
+            targetTypeOf == _typeOf<_i26.TwitchPoll?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i27$TwitchPollDTO_To__i26$TwitchPoll(
+          (model as _i27.TwitchPollDTO?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i26.Choice>() ||
+            sourceTypeOf == _typeOf<_i26.Choice?>()) &&
+        (targetTypeOf == _typeOf<_i27.ChoiceDTO>() ||
+            targetTypeOf == _typeOf<_i27.ChoiceDTO?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i26$Choice_To__i27$ChoiceDTO((model as _i26.Choice?))
+          as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i27.ChoiceDTO>() ||
+            sourceTypeOf == _typeOf<_i27.ChoiceDTO?>()) &&
+        (targetTypeOf == _typeOf<_i26.Choice>() ||
+            targetTypeOf == _typeOf<_i26.Choice?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i27$ChoiceDTO_To__i26$Choice((model as _i27.ChoiceDTO?))
+          as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i28.OutcomeDTO>() ||
+            sourceTypeOf == _typeOf<_i28.OutcomeDTO?>()) &&
+        (targetTypeOf == _typeOf<_i29.Outcome>() ||
+            targetTypeOf == _typeOf<_i29.Outcome?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i28$OutcomeDTO_To__i29$Outcome((model as _i28.OutcomeDTO?))
+          as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i28.TwitchPredictionDTO>() ||
+            sourceTypeOf == _typeOf<_i28.TwitchPredictionDTO?>()) &&
+        (targetTypeOf == _typeOf<_i29.TwitchPrediction>() ||
+            targetTypeOf == _typeOf<_i29.TwitchPrediction?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i28$TwitchPredictionDTO_To__i29$TwitchPrediction(
+          (model as _i28.TwitchPredictionDTO?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i30.SeActivityDTO>() ||
+            sourceTypeOf == _typeOf<_i30.SeActivityDTO?>()) &&
+        (targetTypeOf == _typeOf<_i31.SeActivity>() ||
+            targetTypeOf == _typeOf<_i31.SeActivity?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i30$SeActivityDTO_To__i31$SeActivity(
+          (model as _i30.SeActivityDTO?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i32.SeCredentialsDTO>() ||
+            sourceTypeOf == _typeOf<_i32.SeCredentialsDTO?>()) &&
+        (targetTypeOf == _typeOf<_i33.SeCredentials>() ||
+            targetTypeOf == _typeOf<_i33.SeCredentials?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i32$SeCredentialsDTO_To__i33$SeCredentials(
+          (model as _i32.SeCredentialsDTO?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i34.SeMeDTO>() ||
+            sourceTypeOf == _typeOf<_i34.SeMeDTO?>()) &&
+        (targetTypeOf == _typeOf<_i35.SeMe>() ||
+            targetTypeOf == _typeOf<_i35.SeMe?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i34$SeMeDTO_To__i35$SeMe((model as _i34.SeMeDTO?))
+          as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i36.SeOverlayDTO>() ||
+            sourceTypeOf == _typeOf<_i36.SeOverlayDTO?>()) &&
+        (targetTypeOf == _typeOf<_i37.SeOverlay>() ||
+            targetTypeOf == _typeOf<_i37.SeOverlay?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i36$SeOverlayDTO_To__i37$SeOverlay(
+          (model as _i36.SeOverlayDTO?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i38.TwitchStreamInfosDto>() ||
+            sourceTypeOf == _typeOf<_i38.TwitchStreamInfosDto?>()) &&
+        (targetTypeOf == _typeOf<_i39.TwitchStreamInfos>() ||
+            targetTypeOf == _typeOf<_i39.TwitchStreamInfos?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i38$TwitchStreamInfosDto_To__i39$TwitchStreamInfos(
+          (model as _i38.TwitchStreamInfosDto?)) as TARGET);
+    }
     throw Exception('No ${model.runtimeType} -> $targetTypeOf mapping.');
   }
 
@@ -903,6 +1104,204 @@ class $Mappr implements _i1.AutoMapprInterface {
     return _i25.DashboardSettingsDTO(
       userEvents: model.userEvents,
       activated: model.activated,
+    );
+  }
+
+  _i27.TwitchPollDTO _map__i26$TwitchPoll_To__i27$TwitchPollDTO(
+      _i26.TwitchPoll? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping TwitchPoll → TwitchPollDTO failed because TwitchPoll was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<TwitchPoll, TwitchPollDTO> to handle null values during mapping.');
+    }
+    return _i27.TwitchPollDTO(
+      id: model.id,
+      title: model.title,
+      choices: model.choices
+          .map<_i27.ChoiceDTO>(
+              (value) => _map__i26$Choice_To__i27$ChoiceDTO(value))
+          .toList(),
+      totalVotes: model.totalVotes,
+      status: model.status,
+      endsAt: model.endsAt,
+    );
+  }
+
+  _i26.TwitchPoll _map__i27$TwitchPollDTO_To__i26$TwitchPoll(
+      _i27.TwitchPollDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping TwitchPollDTO → TwitchPoll failed because TwitchPollDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<TwitchPollDTO, TwitchPoll> to handle null values during mapping.');
+    }
+    return _i26.TwitchPoll(
+      id: model.id,
+      title: model.title,
+      choices: model.choices
+          .map<_i26.Choice>(
+              (value) => _map__i27$ChoiceDTO_To__i26$Choice(value))
+          .toList(),
+      totalVotes: model.totalVotes,
+      status: model.status,
+      endsAt: model.endsAt,
+    );
+  }
+
+  _i27.ChoiceDTO _map__i26$Choice_To__i27$ChoiceDTO(_i26.Choice? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping Choice → ChoiceDTO failed because Choice was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<Choice, ChoiceDTO> to handle null values during mapping.');
+    }
+    return _i27.ChoiceDTO(
+      id: model.id,
+      title: model.title,
+      votes: model.votes,
+    );
+  }
+
+  _i26.Choice _map__i27$ChoiceDTO_To__i26$Choice(_i27.ChoiceDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping ChoiceDTO → Choice failed because ChoiceDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<ChoiceDTO, Choice> to handle null values during mapping.');
+    }
+    return _i26.Choice(
+      id: model.id,
+      title: model.title,
+      votes: model.votes,
+    );
+  }
+
+  _i29.Outcome _map__i28$OutcomeDTO_To__i29$Outcome(_i28.OutcomeDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping OutcomeDTO → Outcome failed because OutcomeDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<OutcomeDTO, Outcome> to handle null values during mapping.');
+    }
+    return _i29.Outcome(
+      id: model.id,
+      title: model.title,
+      users: model.users,
+      channelPoints: model.channelPoints,
+      color: model.color,
+    );
+  }
+
+  _i29.TwitchPrediction _map__i28$TwitchPredictionDTO_To__i29$TwitchPrediction(
+      _i28.TwitchPredictionDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping TwitchPredictionDTO → TwitchPrediction failed because TwitchPredictionDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<TwitchPredictionDTO, TwitchPrediction> to handle null values during mapping.');
+    }
+    return _i29.TwitchPrediction(
+      id: model.id,
+      title: model.title,
+      winningOutcomeId: model.winningOutcomeId,
+      totalUsers: model.totalUsers,
+      outcomes: model.outcomes
+          .map<_i29.Outcome>(
+              (value) => _map__i28$OutcomeDTO_To__i29$Outcome(value))
+          .toList(),
+      status: model.status,
+      remainingTime: model.remainingTime,
+    );
+  }
+
+  _i31.SeActivity _map__i30$SeActivityDTO_To__i31$SeActivity(
+      _i30.SeActivityDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping SeActivityDTO → SeActivity failed because SeActivityDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<SeActivityDTO, SeActivity> to handle null values during mapping.');
+    }
+    return _i31.SeActivity(
+      id: model.id,
+      channel: model.channel,
+      username: model.username,
+      activityType: model.activityType,
+      message: model.message,
+      amount: model.amount,
+      tier: model.tier,
+      gifted: model.gifted,
+      sender: model.sender,
+      currency: model.currency,
+      isTest: model.isTest,
+    );
+  }
+
+  _i33.SeCredentials _map__i32$SeCredentialsDTO_To__i33$SeCredentials(
+      _i32.SeCredentialsDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping SeCredentialsDTO → SeCredentials failed because SeCredentialsDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<SeCredentialsDTO, SeCredentials> to handle null values during mapping.');
+    }
+    return _i33.SeCredentials(
+      accessToken: model.accessToken,
+      refreshToken: model.refreshToken,
+      expiresIn: model.expiresIn,
+      scopes: model.scopes,
+    );
+  }
+
+  _i35.SeMe _map__i34$SeMeDTO_To__i35$SeMe(_i34.SeMeDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping SeMeDTO → SeMe failed because SeMeDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<SeMeDTO, SeMe> to handle null values during mapping.');
+    }
+    return _i35.SeMe(
+      id: model.id,
+      avatar: model.avatar,
+      username: model.username,
+      displayName: model.displayName,
+    );
+  }
+
+  _i37.SeOverlay _map__i36$SeOverlayDTO_To__i37$SeOverlay(
+      _i36.SeOverlayDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping SeOverlayDTO → SeOverlay failed because SeOverlayDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<SeOverlayDTO, SeOverlay> to handle null values during mapping.');
+    }
+    return _i37.SeOverlay(
+      id: model.id,
+      name: model.name,
+    );
+  }
+
+  _i39.TwitchStreamInfos
+      _map__i38$TwitchStreamInfosDto_To__i39$TwitchStreamInfos(
+          _i38.TwitchStreamInfosDto? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping TwitchStreamInfosDto → TwitchStreamInfos failed because TwitchStreamInfosDto was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<TwitchStreamInfosDto, TwitchStreamInfos> to handle null values during mapping.');
+    }
+    return _i39.TwitchStreamInfos(
+      title: model.title,
+      viewerCount: model.viewerCount,
+      isOnline: model.isOnline,
+      startedAtDuration: model.startedAtDuration,
+      isEmoteMode: model.isEmoteMode,
+      isFollowerMode: model.isFollowerMode,
+      isSlowMode: model.isSlowMode,
+      slowModeWaitTime: model.slowModeWaitTime,
+      isSubscriberMode: model.isSubscriberMode,
     );
   }
 }

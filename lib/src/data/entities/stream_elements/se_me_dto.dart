@@ -1,26 +1,17 @@
-import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class SeMeDTO extends SeMe {
-  const SeMeDTO({
-    required super.id,
-    required super.avatar,
-    required super.username,
-    required super.displayName,
-  });
+part 'se_me_dto.freezed.dart';
+part 'se_me_dto.g.dart';
 
-  Map toJson() => {
-        'id': id,
-        'avatar': avatar,
-        'username': username,
-        'displayName': displayName,
-      };
+@freezed
+class SeMeDTO with _$SeMeDTO {
+  const factory SeMeDTO({
+    @JsonKey(name: '_id')
+    required String id,
+    required String avatar,
+    required String username,
+    required String displayName,
+  }) = _SeMeDTO;
 
-  factory SeMeDTO.fromJson(Map<String, dynamic> map) {
-    return SeMeDTO(
-      id: map['_id'] as String,
-      avatar: map['avatar'] as String,
-      username: map['username'] as String,
-      displayName: map['displayName'] as String,
-    );
-  }
+  factory SeMeDTO.fromJson(Map<String, dynamic> json) => _$SeMeDTOFromJson(json);
 }

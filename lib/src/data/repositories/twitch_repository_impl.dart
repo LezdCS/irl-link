@@ -320,7 +320,12 @@ class TwitchRepositoryImpl extends TwitchRepository {
       TwitchStreamInfosDto twitchStreamInfosDto = TwitchStreamInfosDto.fromJson(
           response.data['data'][0], response2.data, reponse3['data'][0]);
 
-      return DataSuccess(twitchStreamInfosDto);
+      Mappr mappr = Mappr();
+      TwitchStreamInfos twitchStreamInfos =
+          mappr.convert<TwitchStreamInfosDto, TwitchStreamInfos>(
+              twitchStreamInfosDto);
+
+      return DataSuccess(twitchStreamInfos);
     } on DioException catch (e) {
       return DataFailed(e.toString());
     }
@@ -425,7 +430,6 @@ class TwitchRepositoryImpl extends TwitchRepository {
       String broadcasterId, String pollId, String status) async {
     var dio = initDio();
     Response response;
-    TwitchPoll? poll;
 
     try {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
@@ -442,7 +446,9 @@ class TwitchRepositoryImpl extends TwitchRepository {
         data: jsonEncode(body),
       );
 
-      poll = TwitchPollDTO.fromJson(response.data['data'][0]);
+      TwitchPollDTO pollDTO = TwitchPollDTO.fromJson(response.data['data'][0]);
+      Mappr mappr = Mappr();
+      TwitchPoll poll = mappr.convert<TwitchPollDTO, TwitchPoll>(pollDTO);
 
       return DataSuccess(poll);
     } on DioException catch (e) {
