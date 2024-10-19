@@ -24,6 +24,7 @@ import '../../data/entities/stream_elements/se_me_dto.dart' as _i34;
 import '../../data/entities/stream_elements/se_overlay_dto.dart' as _i36;
 import '../../data/entities/twitch/twitch_credentials_dto.dart' as _i19;
 import '../../data/entities/twitch/twitch_decoded_idtoken_dto.dart' as _i21;
+import '../../data/entities/twitch/twitch_hype_train_dto.dart' as _i40;
 import '../../data/entities/twitch/twitch_poll_dto.dart' as _i27;
 import '../../data/entities/twitch/twitch_prediction_dto.dart' as _i28;
 import '../../data/entities/twitch/twitch_stream_infos_dto.dart' as _i38;
@@ -43,6 +44,7 @@ import '../../domain/entities/stream_elements/se_me.dart' as _i35;
 import '../../domain/entities/stream_elements/se_overlay.dart' as _i37;
 import '../../domain/entities/twitch/twitch_credentials.dart' as _i18;
 import '../../domain/entities/twitch/twitch_decoded_idtoken.dart' as _i20;
+import '../../domain/entities/twitch/twitch_hype_train.dart' as _i41;
 import '../../domain/entities/twitch/twitch_poll.dart' as _i26;
 import '../../domain/entities/twitch/twitch_prediction.dart' as _i29;
 import '../../domain/entities/twitch/twitch_stream_infos.dart' as _i39;
@@ -79,6 +81,9 @@ import '../../domain/entities/twitch/twitch_user.dart' as _i22;
 /// - `SeMeDTO` → `SeMe`.
 /// - `SeOverlayDTO` → `SeOverlay`.
 /// - `TwitchStreamInfosDto` → `TwitchStreamInfos`.
+/// - `TwitchHypeTrainDTO` → `TwitchHypeTrain`.
+/// - `Contribution` → `ContributionDTO`.
+/// - `ContributionDTO` → `Contribution`.
 /// {@endtemplate}
 class $Mappr implements _i1.AutoMapprInterface {
   const $Mappr();
@@ -265,6 +270,24 @@ class $Mappr implements _i1.AutoMapprInterface {
             sourceTypeOf == _typeOf<_i38.TwitchStreamInfosDto?>()) &&
         (targetTypeOf == _typeOf<_i39.TwitchStreamInfos>() ||
             targetTypeOf == _typeOf<_i39.TwitchStreamInfos?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i40.TwitchHypeTrainDTO>() ||
+            sourceTypeOf == _typeOf<_i40.TwitchHypeTrainDTO?>()) &&
+        (targetTypeOf == _typeOf<_i41.TwitchHypeTrain>() ||
+            targetTypeOf == _typeOf<_i41.TwitchHypeTrain?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i41.Contribution>() ||
+            sourceTypeOf == _typeOf<_i41.Contribution?>()) &&
+        (targetTypeOf == _typeOf<_i40.ContributionDTO>() ||
+            targetTypeOf == _typeOf<_i40.ContributionDTO?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i40.ContributionDTO>() ||
+            sourceTypeOf == _typeOf<_i40.ContributionDTO?>()) &&
+        (targetTypeOf == _typeOf<_i41.Contribution>() ||
+            targetTypeOf == _typeOf<_i41.Contribution?>())) {
       return true;
     }
     if (recursive) {
@@ -747,6 +770,36 @@ class $Mappr implements _i1.AutoMapprInterface {
       }
       return (_map__i38$TwitchStreamInfosDto_To__i39$TwitchStreamInfos(
           (model as _i38.TwitchStreamInfosDto?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i40.TwitchHypeTrainDTO>() ||
+            sourceTypeOf == _typeOf<_i40.TwitchHypeTrainDTO?>()) &&
+        (targetTypeOf == _typeOf<_i41.TwitchHypeTrain>() ||
+            targetTypeOf == _typeOf<_i41.TwitchHypeTrain?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i40$TwitchHypeTrainDTO_To__i41$TwitchHypeTrain(
+          (model as _i40.TwitchHypeTrainDTO?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i41.Contribution>() ||
+            sourceTypeOf == _typeOf<_i41.Contribution?>()) &&
+        (targetTypeOf == _typeOf<_i40.ContributionDTO>() ||
+            targetTypeOf == _typeOf<_i40.ContributionDTO?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i41$Contribution_To__i40$ContributionDTO(
+          (model as _i41.Contribution?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i40.ContributionDTO>() ||
+            sourceTypeOf == _typeOf<_i40.ContributionDTO?>()) &&
+        (targetTypeOf == _typeOf<_i41.Contribution>() ||
+            targetTypeOf == _typeOf<_i41.Contribution?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i40$ContributionDTO_To__i41$Contribution(
+          (model as _i40.ContributionDTO?)) as TARGET);
     }
     throw Exception('No ${model.runtimeType} -> $targetTypeOf mapping.');
   }
@@ -1302,6 +1355,79 @@ class $Mappr implements _i1.AutoMapprInterface {
       isSlowMode: model.isSlowMode,
       slowModeWaitTime: model.slowModeWaitTime,
       isSubscriberMode: model.isSubscriberMode,
+    );
+  }
+
+  _i41.TwitchHypeTrain _map__i40$TwitchHypeTrainDTO_To__i41$TwitchHypeTrain(
+      _i40.TwitchHypeTrainDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping TwitchHypeTrainDTO → TwitchHypeTrain failed because TwitchHypeTrainDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<TwitchHypeTrainDTO, TwitchHypeTrain> to handle null values during mapping.');
+    }
+    return _i41.TwitchHypeTrain(
+      id: model.id,
+      total: model.total,
+      progress: model.progress,
+      goal: model.goal,
+      level: model.level,
+      topContributions: model.topContributions
+          .map<_i41.Contribution>(
+              (value) => _map__i40$ContributionDTO_To__i41$Contribution(value))
+          .toList(),
+      lastContribution: _map__i40$ContributionDTO_To__i41$Contribution_Nullable(
+          model.lastContribution),
+      endsAt: model.endsAt,
+    );
+  }
+
+  _i40.ContributionDTO _map__i41$Contribution_To__i40$ContributionDTO(
+      _i41.Contribution? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping Contribution → ContributionDTO failed because Contribution was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<Contribution, ContributionDTO> to handle null values during mapping.');
+    }
+    return _i40.ContributionDTO(
+      userId: model.userId,
+      userLogin: model.userLogin,
+      userName: model.userName,
+      type: model.type,
+      total: model.total,
+    );
+  }
+
+  _i41.Contribution _map__i40$ContributionDTO_To__i41$Contribution(
+      _i40.ContributionDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping ContributionDTO → Contribution failed because ContributionDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<ContributionDTO, Contribution> to handle null values during mapping.');
+    }
+    return _i41.Contribution(
+      userId: model.userId,
+      userLogin: model.userLogin,
+      userName: model.userName,
+      type: model.type,
+      total: model.total,
+    );
+  }
+
+  _i41.Contribution? _map__i40$ContributionDTO_To__i41$Contribution_Nullable(
+      _i40.ContributionDTO? input) {
+    final model = input;
+    if (model == null) {
+      return null;
+    }
+    return _i41.Contribution(
+      userId: model.userId,
+      userLogin: model.userLogin,
+      userName: model.userName,
+      type: model.type,
+      total: model.total,
     );
   }
 }

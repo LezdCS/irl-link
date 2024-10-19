@@ -14,6 +14,7 @@ import 'package:irllink/src/data/entities/stream_elements/se_me_dto.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_overlay_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_credentials_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_decoded_idtoken_dto.dart';
+import 'package:irllink/src/data/entities/twitch/twitch_hype_train_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_poll_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_prediction_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_stream_infos_dto.dart';
@@ -33,6 +34,7 @@ import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_decoded_idtoken.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_hype_train.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
@@ -70,5 +72,8 @@ import 'mapper.auto_mappr.dart';
   MapType<SeMeDTO, SeMe>(),
   MapType<SeOverlayDTO, SeOverlay>(),
   MapType<TwitchStreamInfosDto, TwitchStreamInfos>(),
+  MapType<TwitchHypeTrainDTO, TwitchHypeTrain>(),
+  MapType<Contribution, ContributionDTO>(),
+  MapType<ContributionDTO, Contribution>(),
 ])
 class Mappr extends $Mappr {}

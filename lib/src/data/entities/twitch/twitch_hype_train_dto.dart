@@ -1,33 +1,26 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
-import 'package:irllink/src/domain/entities/twitch/twitch_hype_train.dart';
 
-class TwitchHypeTrainDTO extends TwitchHypeTrain {
-  const TwitchHypeTrainDTO({
-    required super.id,
-    required super.total,
-    required super.progress,
-    required super.goal,
-    required super.level,
-    required super.topContributions,
-    required super.lastContribution,
-    required super.endsAt,
-  });
+part 'twitch_hype_train_dto.freezed.dart';
+part 'twitch_hype_train_dto.g.dart';
 
-  Map toJson() => {
-        'id': id,
-        'total': total,
-        'progress': progress,
-        'goal': goal,
-        'level': level,
-        'topContributions': topContributions,
-        'lastContribution': lastContribution,
-        'endsAt': endsAt,
-      };
+@freezed
+class TwitchHypeTrainDTO with _$TwitchHypeTrainDTO {
+  const factory TwitchHypeTrainDTO({
+    required String id,
+    required int total,
+    required int progress,
+    required int goal,
+    required int level,
+    required List<ContributionDTO> topContributions,
+    required ContributionDTO? lastContribution,
+    required DateTime endsAt,
+  }) = _TwitchHypeTrainDTO;
 
   factory TwitchHypeTrainDTO.fromJson(Map<String, dynamic> map) {
-    List<Contribution> topContributions = [];
+    List<ContributionDTO> topContributions = [];
 
-    Contribution c;
+    ContributionDTO c;
     map['top_contributions'].forEach((contribution) => {
           c = ContributionDTO.fromJson(contribution),
           topContributions.add(c),
@@ -51,22 +44,18 @@ class TwitchHypeTrainDTO extends TwitchHypeTrain {
   }
 }
 
-class ContributionDTO extends Contribution {
-  const ContributionDTO({
-    required super.userId,
-    required super.userLogin,
-    required super.userName,
-    required super.type,
-    required super.total,
-  });
+@freezed
+class ContributionDTO with _$ContributionDTO {
+  const factory ContributionDTO({
+    @JsonKey(name: 'user_id')
+    required String userId,
+    @JsonKey(name: 'user_login')
+    required String userLogin,
+    @JsonKey(name: 'user_name')
+    required String userName,
+    required String type,
+    required int total,
+  }) = _ContributionDTO;
 
-  factory ContributionDTO.fromJson(Map<String, dynamic> map) {
-    return ContributionDTO(
-      total: map['total'],
-      userId: map['user_id'],
-      userLogin: map['user_login'],
-      userName: map['user_name'],
-      type: map['type'],
-    );
-  }
+  factory ContributionDTO.fromJson(Map<String, dynamic> json) => _$ContributionDTOFromJson(json);
 }
