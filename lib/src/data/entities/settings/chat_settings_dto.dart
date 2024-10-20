@@ -1,140 +1,51 @@
-import 'package:irllink/src/core/utils/mapper.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
-import 'package:irllink/src/domain/entities/settings.dart';
-import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 
-class ChatSettingsDTO extends ChatSettings {
-  const ChatSettingsDTO({
-    required super.permanentFirstGroup,
-    required super.chatGroups,
-    required super.hideDeletedMessages,
-  });
+part 'chat_settings_dto.freezed.dart';
+part 'chat_settings_dto.g.dart';
 
-  Map toJson() {
-    final mappr = Mappr();
-    ChatGroupDTO permanentFirstGroupDTO =
-        mappr.convert<ChatGroup, ChatGroupDTO>(permanentFirstGroup);
-    List<Map<dynamic, dynamic>> list = chatGroups.map((chatGroup) {
-      ChatGroupDTO chatGroupDTO =
-          mappr.convert<ChatGroup, ChatGroupDTO>(chatGroup);
-      return chatGroupDTO.toJson();
-    }).toList();
+@freezed
+class ChatSettingsDTO with _$ChatSettingsDTO {
+  ChatSettingsDTO._();
 
-    return {
-        'permanentFirstGroup': permanentFirstGroupDTO.toJson(),
-        'chatGroups': list,
-        'hideDeletedMessages': hideDeletedMessages,
-      };
-  }
+  factory ChatSettingsDTO({
+    @JsonKey(fromJson: _permanentGroupFromJson)
+    @Default(ChatGroupDTO(id: "permanentFirstGroup", channels: [])) ChatGroupDTO permanentFirstGroup,
+    @Default([]) List<ChatGroupDTO> chatGroups,
+    @Default(true) bool hideDeletedMessages,
+  }) = _ChatSettingsDTO;
 
-  factory ChatSettingsDTO.fromJson(Map<String, dynamic> map) {
-    List<ChatGroup> gDto = [];
-    for (dynamic chatGroup in map['chatGroups'] ?? []) {
-      gDto.add(ChatGroupDTO.fromJson(chatGroup));
-    }
-
-    ChatGroup permanentFirstGroup =
-        const Settings.defaultSettings().chatSettings.permanentFirstGroup;
-
-    if (map['permanentFirstGroup'] is ChatGroup) {
-      permanentFirstGroup = map['permanentFirstGroup'];
-    } else if (map['permanentFirstGroup'] is Map<String, dynamic>) {
-      permanentFirstGroup = ChatGroupDTO.fromJson(
-        map['permanentFirstGroup'],
-      );
-    }
-
-    return ChatSettingsDTO(
-      permanentFirstGroup: permanentFirstGroup,
-      chatGroups: gDto,
-      hideDeletedMessages: map['hideDeletedMessages'] ??
-          const Settings.defaultSettings().chatSettings.hideDeletedMessages,
-    );
-  }
+  factory ChatSettingsDTO.blank() => ChatSettingsDTO();
+  factory ChatSettingsDTO.fromJson(Map<String, dynamic> json) => _$ChatSettingsDTOFromJson(json);
 }
 
-class ChatGroupDTO extends ChatGroup {
-  const ChatGroupDTO({
-    required super.id,
-    required super.channels,
-  });
-
-  factory ChatGroupDTO.fromJson(Map<String, dynamic> map) {
-    List<Channel> cDto = [];
-    for (dynamic channel in map['channels'] ?? []) {
-      cDto.add(ChannelDTO.fromJson(channel));
-    }
-
-    return ChatGroupDTO(
-      id: map['id'] ??
-          const Settings.defaultSettings().chatSettings.chatGroups.first.id,
-      channels: cDto,
-    );
+ChatGroupDTO _permanentGroupFromJson(dynamic permanentGroup) {
+  if (permanentGroup is ChatGroupDTO) {
+    return permanentGroup;
+  } else if (permanentGroup is Map<String, dynamic>) {
+    return ChatGroupDTO.fromJson(permanentGroup);
   }
-
-  Map toJson() {
-    List list = channels.map((channel) {
-      final mappr = Mappr();
-      ChannelDTO channelDTO = mappr.convert<Channel, ChannelDTO>(channel);
-      return channelDTO.toJson();
-    }).toList();
-    return {
-      'id': id,
-      'channels': list,
-    };
-  }
+  return const ChatGroupDTO(id: "permanentFirstGroup", channels: []);
 }
 
-class ChannelDTO extends Channel {
-  const ChannelDTO({
-    required super.platform,
-    required super.channel,
-    required super.enabled,
-  });
+@freezed
+class ChatGroupDTO with _$ChatGroupDTO {
 
-  factory ChannelDTO.fromJson(Map<String, dynamic> map) {
-    return ChannelDTO(
-      platform: getPlatformFromString(
-        map['platform'] ??
-            const Settings.defaultSettings()
-                .chatSettings
-                .chatGroups
-                .first
-                .channels
-                .first
-                .platform,
-      ),
-      channel: map['channel'] ??
-          const Settings.defaultSettings()
-              .chatSettings
-              .chatGroups
-              .first
-              .channels
-              .first
-              .channel,
-      enabled: map['enabled'] ??
-          const Settings.defaultSettings()
-              .chatSettings
-              .chatGroups
-              .first
-              .channels
-              .first
-              .enabled,
-    );
-  }
+  const factory ChatGroupDTO({
+    required String id,
+    required List<ChannelDTO> channels,
+  }) = _ChatGroupDTO;
 
-  Map toJson() => {
-        'platform': platform.name.toString(),
-        'channel': channel,
-        'enabled': enabled,
-      };
+  factory ChatGroupDTO.fromJson(Map<String, dynamic> json) => _$ChatGroupDTOFromJson(json);
 }
 
-Platform getPlatformFromString(String platformAsString) {
-  for (Platform element in Platform.values) {
-    if (element.name == platformAsString) {
-      return element;
-    }
-  }
-  throw Exception('Platform not found');
+@freezed
+class ChannelDTO with _$ChannelDTO {
+  const factory ChannelDTO({
+    required Platform platform,
+    required String channel,
+    required bool enabled,
+  }) = _ChannelDTO;
+
+  factory ChannelDTO.fromJson(Map<String, dynamic> json) => _$ChannelDTOFromJson(json);
 }
