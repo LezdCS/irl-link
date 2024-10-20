@@ -9,10 +9,12 @@ part of 'dashboard_settings_dto.dart';
 _$DashboardSettingsDTOImpl _$$DashboardSettingsDTOImplFromJson(
         Map<String, dynamic> json) =>
     _$DashboardSettingsDTOImpl(
-      userEvents: (json['userEvents'] as List<dynamic>)
-          .map((e) => DashboardEventDTO.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      activated: json['activated'] as bool,
+      userEvents: (json['userEvents'] as List<dynamic>?)
+              ?.map(
+                  (e) => DashboardEventDTO.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+      activated: json['activated'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$$DashboardSettingsDTOImplToJson(

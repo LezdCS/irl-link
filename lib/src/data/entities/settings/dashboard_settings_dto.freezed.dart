@@ -118,8 +118,8 @@ class __$$DashboardSettingsDTOImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$DashboardSettingsDTOImpl implements _DashboardSettingsDTO {
   const _$DashboardSettingsDTOImpl(
-      {required final List<DashboardEventDTO> userEvents,
-      required this.activated})
+      {final List<DashboardEventDTO> userEvents = const [],
+      this.activated = true})
       : _userEvents = userEvents;
 
   factory _$DashboardSettingsDTOImpl.fromJson(Map<String, dynamic> json) =>
@@ -127,6 +127,7 @@ class _$DashboardSettingsDTOImpl implements _DashboardSettingsDTO {
 
   final List<DashboardEventDTO> _userEvents;
   @override
+  @JsonKey()
   List<DashboardEventDTO> get userEvents {
     if (_userEvents is EqualUnmodifiableListView) return _userEvents;
     // ignore: implicit_dynamic_type
@@ -134,6 +135,7 @@ class _$DashboardSettingsDTOImpl implements _DashboardSettingsDTO {
   }
 
   @override
+  @JsonKey()
   final bool activated;
 
   @override
@@ -177,8 +179,8 @@ class _$DashboardSettingsDTOImpl implements _DashboardSettingsDTO {
 
 abstract class _DashboardSettingsDTO implements DashboardSettingsDTO {
   const factory _DashboardSettingsDTO(
-      {required final List<DashboardEventDTO> userEvents,
-      required final bool activated}) = _$DashboardSettingsDTOImpl;
+      {final List<DashboardEventDTO> userEvents,
+      final bool activated}) = _$DashboardSettingsDTOImpl;
 
   factory _DashboardSettingsDTO.fromJson(Map<String, dynamic> json) =
       _$DashboardSettingsDTOImpl.fromJson;
