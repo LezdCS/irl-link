@@ -64,6 +64,7 @@ import '../../domain/entities/twitch/twitch_user.dart' as _i22;
 /// - `GeneralSettings` → `GeneralSettingsDTO`.
 /// - `GeneralSettingsDTO` → `GeneralSettings`.
 /// - `DashboardEvent` → `DashboardEventDTO`.
+/// - `DashboardEventDTO` → `DashboardEvent`.
 /// - `BrowserTabSettings` → `BrowserTabSettingsDTO`.
 /// - `BrowserTabSettingsDTO` → `BrowserTabSettings`.
 /// - `StreamElementsSettings` → `StreamElementsSettingsDTO`.
@@ -178,6 +179,12 @@ class $Mappr implements _i1.AutoMapprInterface {
             sourceTypeOf == _typeOf<_i10.DashboardEvent?>()) &&
         (targetTypeOf == _typeOf<_i11.DashboardEventDTO>() ||
             targetTypeOf == _typeOf<_i11.DashboardEventDTO?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i11.DashboardEventDTO>() ||
+            sourceTypeOf == _typeOf<_i11.DashboardEventDTO?>()) &&
+        (targetTypeOf == _typeOf<_i10.DashboardEvent>() ||
+            targetTypeOf == _typeOf<_i10.DashboardEvent?>())) {
       return true;
     }
     if ((sourceTypeOf == _typeOf<_i6.BrowserTabSettings>() ||
@@ -670,6 +677,16 @@ class $Mappr implements _i1.AutoMapprInterface {
       }
       return (_map__i10$DashboardEvent_To__i11$DashboardEventDTO(
           (model as _i10.DashboardEvent?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i11.DashboardEventDTO>() ||
+            sourceTypeOf == _typeOf<_i11.DashboardEventDTO?>()) &&
+        (targetTypeOf == _typeOf<_i10.DashboardEvent>() ||
+            targetTypeOf == _typeOf<_i10.DashboardEvent?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i11$DashboardEventDTO_To__i10$DashboardEvent(
+          (model as _i11.DashboardEventDTO?)) as TARGET);
     }
     if ((sourceTypeOf == _typeOf<_i6.BrowserTabSettings>() ||
             sourceTypeOf == _typeOf<_i6.BrowserTabSettings?>()) &&
@@ -1245,6 +1262,23 @@ class $Mappr implements _i1.AutoMapprInterface {
     );
   }
 
+  _i10.DashboardEvent _map__i11$DashboardEventDTO_To__i10$DashboardEvent(
+      _i11.DashboardEventDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping DashboardEventDTO → DashboardEvent failed because DashboardEventDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<DashboardEventDTO, DashboardEvent> to handle null values during mapping.');
+    }
+    return _i10.DashboardEvent(
+      title: model.title,
+      color: model.color,
+      dashboardActionsType: model.dashboardActionsType,
+      event: model.event,
+      customValue: model.customValue,
+    );
+  }
+
   _i7.BrowserTabSettingsDTO
       _map__i6$BrowserTabSettings_To__i7$BrowserTabSettingsDTO(
           _i6.BrowserTabSettings? input) {
@@ -1525,7 +1559,10 @@ class $Mappr implements _i1.AutoMapprInterface {
           r'Consider setting the whenSourceIsNull parameter on the MapType<DashboardSettings, DashboardSettingsDTO> to handle null values during mapping.');
     }
     return _i25.DashboardSettingsDTO(
-      userEvents: model.userEvents,
+      userEvents: model.userEvents
+          .map<_i11.DashboardEventDTO>((value) =>
+              _map__i10$DashboardEvent_To__i11$DashboardEventDTO(value))
+          .toList(),
       activated: model.activated,
     );
   }
@@ -1540,7 +1577,10 @@ class $Mappr implements _i1.AutoMapprInterface {
           r'Consider setting the whenSourceIsNull parameter on the MapType<DashboardSettingsDTO, DashboardSettings> to handle null values during mapping.');
     }
     return _i24.DashboardSettings(
-      userEvents: model.userEvents,
+      userEvents: model.userEvents
+          .map<_i10.DashboardEvent>((value) =>
+              _map__i11$DashboardEventDTO_To__i10$DashboardEvent(value))
+          .toList(),
       activated: model.activated,
     );
   }

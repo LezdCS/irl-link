@@ -55,6 +55,7 @@ import 'mapper.auto_mappr.dart';
   MapType<GeneralSettings, GeneralSettingsDTO>(),
   MapType<GeneralSettingsDTO, GeneralSettings>(),
   MapType<DashboardEvent, DashboardEventDTO>(),
+  MapType<DashboardEventDTO, DashboardEvent>(),
   MapType<BrowserTabSettings, BrowserTabSettingsDTO>(),
   MapType<BrowserTabSettingsDTO, BrowserTabSettings>(),
   MapType<StreamElementsSettings, StreamElementsSettingsDTO>(),

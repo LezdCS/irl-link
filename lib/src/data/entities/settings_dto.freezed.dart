@@ -79,6 +79,7 @@ abstract class $SettingsDTOCopyWith<$Res> {
   $ChatEventsSettingsDTOCopyWith<$Res> get chatEventsSettings;
   $ChatSettingsDTOCopyWith<$Res> get chatSettings;
   $GeneralSettingsDTOCopyWith<$Res> get generalSettings;
+  $DashboardSettingsDTOCopyWith<$Res> get dashboardSettings;
   $StreamElementsSettingsDTOCopyWith<$Res> get streamElementsSettings;
 }
 
@@ -217,6 +218,17 @@ class _$SettingsDTOCopyWithImpl<$Res, $Val extends SettingsDTO>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
+  $DashboardSettingsDTOCopyWith<$Res> get dashboardSettings {
+    return $DashboardSettingsDTOCopyWith<$Res>(_value.dashboardSettings,
+        (value) {
+      return _then(_value.copyWith(dashboardSettings: value) as $Val);
+    });
+  }
+
+  /// Create a copy of SettingsDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
   $StreamElementsSettingsDTOCopyWith<$Res> get streamElementsSettings {
     return $StreamElementsSettingsDTOCopyWith<$Res>(
         _value.streamElementsSettings, (value) {
@@ -257,6 +269,8 @@ abstract class _$$SettingsDTOImplCopyWith<$Res>
   $ChatSettingsDTOCopyWith<$Res> get chatSettings;
   @override
   $GeneralSettingsDTOCopyWith<$Res> get generalSettings;
+  @override
+  $DashboardSettingsDTOCopyWith<$Res> get dashboardSettings;
   @override
   $StreamElementsSettingsDTOCopyWith<$Res> get streamElementsSettings;
 }

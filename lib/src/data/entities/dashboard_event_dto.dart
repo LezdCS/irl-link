@@ -1,58 +1,34 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:irllink/src/core/utils/dashboard_events.dart';
 import 'package:irllink/src/domain/entities/dashboard_event.dart';
 
-class DashboardEventDTO extends DashboardEvent {
-  const DashboardEventDTO({
-    required super.title,
-    required super.color,
-    required super.dashboardActionsType,
-    required super.event,
-    required super.customValue,
-  });
+part 'dashboard_event_dto.freezed.dart';
+part 'dashboard_event_dto.g.dart';
 
-  factory DashboardEventDTO.fromJson(Map<String, dynamic> map) {
-    DashboardActionsTypes action =
-        getActionFromString(map['dashboardActionsType']);
-    SupportedEvents event = getEventFromString(map['event']);
-    return DashboardEventDTO(
-      title: map['title'] ?? "None",
-      color: Color(map['color'] ?? '0xFF000000'),
-      dashboardActionsType: action,
-      event: event,
-      customValue: jsonDecode(map['customValue']),
-    );
-  }
+@freezed
+class DashboardEventDTO with _$DashboardEventDTO {
+  const factory DashboardEventDTO({
+    @Default('None') String title,
+    @ColorConverter() required Color color,
+    required DashboardActionsTypes dashboardActionsType,
+    required SupportedEvents event,
+    required dynamic customValue,
+  }) = _DashboardEventDTO;
 
-  Map<String, dynamic> toJson() {
-    return {
-      'title': title,
-      'color': color.value,
-      'dashboardActionsType': dashboardActionsType.name,
-      'event': event.name,
-      'customValue': jsonEncode(customValue),
-    };
-  }
+ factory DashboardEventDTO.fromJson(Map<String, dynamic> json) => _$DashboardEventDTOFromJson(json);
 }
 
-// Get the action type from a string
-DashboardActionsTypes getActionFromString(String actionAsString) {
-  for (DashboardActionsTypes element in DashboardActionsTypes.values) {
-    if (element.name == actionAsString) {
-      return element;
-    }
-  }
-  return DashboardActionsTypes.button;
-}
+class ColorConverter implements JsonConverter<Color, int> {
+  const ColorConverter();
 
-// Get the event type from a string
-SupportedEvents getEventFromString(String eventAsString) {
-  for (SupportedEvents element in SupportedEvents.values) {
-    if (element.name == eventAsString) {
-      return element;
-    }
+  @override
+  Color fromJson(int json) {
+    return Color(json);
   }
-  return SupportedEvents.none;
+
+  @override
+  int toJson(Color object) {
+    return object.value;
+  }
 }
