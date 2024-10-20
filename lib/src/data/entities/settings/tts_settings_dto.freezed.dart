@@ -26,8 +26,7 @@ mixin _$TtsSettingsDTO {
   List<dynamic> get prefixsToUseTtsOnly => throw _privateConstructorUsedError;
   double get volume => throw _privateConstructorUsedError;
   double get pitch => throw _privateConstructorUsedError;
-  double get rate =>
-      throw _privateConstructorUsedError; // @JsonKey(fromJson: _voiceFromJson)
+  double get rate => throw _privateConstructorUsedError;
   Map<String, String> get voice => throw _privateConstructorUsedError;
   List<dynamic> get ttsUsersToIgnore => throw _privateConstructorUsedError;
   bool get ttsMuteViewerName => throw _privateConstructorUsedError;
@@ -323,9 +322,7 @@ class _$TtsSettingsDTOImpl implements _TtsSettingsDTO {
   @override
   @JsonKey()
   final double rate;
-// @JsonKey(fromJson: _voiceFromJson)
   final Map<String, String> _voice;
-// @JsonKey(fromJson: _voiceFromJson)
   @override
   @JsonKey()
   Map<String, String> get voice {
@@ -458,7 +455,7 @@ abstract class _TtsSettingsDTO implements TtsSettingsDTO {
   @override
   double get pitch;
   @override
-  double get rate; // @JsonKey(fromJson: _voiceFromJson)
+  double get rate;
   @override
   Map<String, String> get voice;
   @override

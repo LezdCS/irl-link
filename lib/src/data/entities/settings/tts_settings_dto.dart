@@ -13,7 +13,6 @@ class TtsSettingsDTO with _$TtsSettingsDTO {
     @Default(1) double volume,
     @Default(1) double pitch,
     @Default(0.5) double rate,
-    // @JsonKey(fromJson: _voiceFromJson)
     @Default({"name": "en-us-x-sfg-local", "locale": "en-US"}) Map<String, String> voice,
     @Default([]) List ttsUsersToIgnore,
     @Default(false) bool ttsMuteViewerName,
@@ -24,7 +23,3 @@ class TtsSettingsDTO with _$TtsSettingsDTO {
 
   factory TtsSettingsDTO.fromJson(Map<String, dynamic> json) => _$TtsSettingsDTOFromJson(json);
 }
-
-// Map<String, String> _voiceFromJson(Map<String, dynamic> map) {
-//   return {"name": map["voice"]["name"], "locale": map["voice"]["locale"]};
-// }

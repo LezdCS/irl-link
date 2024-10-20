@@ -59,6 +59,7 @@ import '../../domain/entities/twitch/twitch_user.dart' as _i22;
 /// - `ChatGroup` → `ChatGroupDTO`.
 /// - `ChatGroupDTO` → `ChatGroup`.
 /// - `BrowserTab` → `BrowserTabDTO`.
+/// - `BrowserTabDTO` → `BrowserTab`.
 /// - `ChatSettings` → `ChatSettingsDTO`.
 /// - `ChatSettingsDTO` → `ChatSettings`.
 /// - `GeneralSettings` → `GeneralSettingsDTO`.
@@ -149,6 +150,12 @@ class $Mappr implements _i1.AutoMapprInterface {
             sourceTypeOf == _typeOf<_i6.BrowserTab?>()) &&
         (targetTypeOf == _typeOf<_i7.BrowserTabDTO>() ||
             targetTypeOf == _typeOf<_i7.BrowserTabDTO?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i7.BrowserTabDTO>() ||
+            sourceTypeOf == _typeOf<_i7.BrowserTabDTO?>()) &&
+        (targetTypeOf == _typeOf<_i6.BrowserTab>() ||
+            targetTypeOf == _typeOf<_i6.BrowserTab?>())) {
       return true;
     }
     if ((sourceTypeOf == _typeOf<_i4.ChatSettings>() ||
@@ -627,6 +634,16 @@ class $Mappr implements _i1.AutoMapprInterface {
       }
       return (_map__i6$BrowserTab_To__i7$BrowserTabDTO(
           (model as _i6.BrowserTab?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i7.BrowserTabDTO>() ||
+            sourceTypeOf == _typeOf<_i7.BrowserTabDTO?>()) &&
+        (targetTypeOf == _typeOf<_i6.BrowserTab>() ||
+            targetTypeOf == _typeOf<_i6.BrowserTab?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i7$BrowserTabDTO_To__i6$BrowserTab(
+          (model as _i7.BrowserTabDTO?)) as TARGET);
     }
     if ((sourceTypeOf == _typeOf<_i4.ChatSettings>() ||
             sourceTypeOf == _typeOf<_i4.ChatSettings?>()) &&
@@ -1173,6 +1190,23 @@ class $Mappr implements _i1.AutoMapprInterface {
     );
   }
 
+  _i6.BrowserTab _map__i7$BrowserTabDTO_To__i6$BrowserTab(
+      _i7.BrowserTabDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping BrowserTabDTO → BrowserTab failed because BrowserTabDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<BrowserTabDTO, BrowserTab> to handle null values during mapping.');
+    }
+    return _i6.BrowserTab(
+      id: model.id,
+      title: model.title,
+      url: model.url,
+      toggled: model.toggled,
+      iOSAudioSource: model.iOSAudioSource,
+    );
+  }
+
   _i5.ChatSettingsDTO _map__i4$ChatSettings_To__i5$ChatSettingsDTO(
       _i4.ChatSettings? input) {
     final model = input;
@@ -1288,7 +1322,11 @@ class $Mappr implements _i1.AutoMapprInterface {
           r'Mapping BrowserTabSettings → BrowserTabSettingsDTO failed because BrowserTabSettings was null, and no default value was provided. '
           r'Consider setting the whenSourceIsNull parameter on the MapType<BrowserTabSettings, BrowserTabSettingsDTO> to handle null values during mapping.');
     }
-    return _i7.BrowserTabSettingsDTO(tabs: model.tabs);
+    return _i7.BrowserTabSettingsDTO(
+        tabs: model.tabs
+            .map<_i7.BrowserTabDTO>(
+                (value) => _map__i6$BrowserTab_To__i7$BrowserTabDTO(value))
+            .toList());
   }
 
   _i6.BrowserTabSettings
@@ -1300,7 +1338,11 @@ class $Mappr implements _i1.AutoMapprInterface {
           r'Mapping BrowserTabSettingsDTO → BrowserTabSettings failed because BrowserTabSettingsDTO was null, and no default value was provided. '
           r'Consider setting the whenSourceIsNull parameter on the MapType<BrowserTabSettingsDTO, BrowserTabSettings> to handle null values during mapping.');
     }
-    return _i6.BrowserTabSettings(tabs: model.tabs);
+    return _i6.BrowserTabSettings(
+        tabs: model.tabs
+            .map<_i6.BrowserTab>(
+                (value) => _map__i7$BrowserTabDTO_To__i6$BrowserTab(value))
+            .toList());
   }
 
   _i13.StreamElementsSettingsDTO

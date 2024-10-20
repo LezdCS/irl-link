@@ -50,6 +50,7 @@ import 'mapper.auto_mappr.dart';
   MapType<ChatGroup, ChatGroupDTO>(),
   MapType<ChatGroupDTO, ChatGroup>(),
   MapType<BrowserTab, BrowserTabDTO>(),
+  MapType<BrowserTabDTO, BrowserTab>(),
   MapType<ChatSettings, ChatSettingsDTO>(),
   MapType<ChatSettingsDTO, ChatSettings>(),
   MapType<GeneralSettings, GeneralSettingsDTO>(),
