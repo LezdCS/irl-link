@@ -81,6 +81,7 @@ abstract class $SettingsDTOCopyWith<$Res> {
   $GeneralSettingsDTOCopyWith<$Res> get generalSettings;
   $DashboardSettingsDTOCopyWith<$Res> get dashboardSettings;
   $StreamElementsSettingsDTOCopyWith<$Res> get streamElementsSettings;
+  $TtsSettingsDTOCopyWith<$Res> get ttsSettings;
 }
 
 /// @nodoc
@@ -235,6 +236,16 @@ class _$SettingsDTOCopyWithImpl<$Res, $Val extends SettingsDTO>
       return _then(_value.copyWith(streamElementsSettings: value) as $Val);
     });
   }
+
+  /// Create a copy of SettingsDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TtsSettingsDTOCopyWith<$Res> get ttsSettings {
+    return $TtsSettingsDTOCopyWith<$Res>(_value.ttsSettings, (value) {
+      return _then(_value.copyWith(ttsSettings: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -273,6 +284,8 @@ abstract class _$$SettingsDTOImplCopyWith<$Res>
   $DashboardSettingsDTOCopyWith<$Res> get dashboardSettings;
   @override
   $StreamElementsSettingsDTOCopyWith<$Res> get streamElementsSettings;
+  @override
+  $TtsSettingsDTOCopyWith<$Res> get ttsSettings;
 }
 
 /// @nodoc
