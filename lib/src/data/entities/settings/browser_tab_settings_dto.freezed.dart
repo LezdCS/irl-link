@@ -108,9 +108,10 @@ class __$$BrowserTabSettingsDTOImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$BrowserTabSettingsDTOImpl implements _BrowserTabSettingsDTO {
-  const _$BrowserTabSettingsDTOImpl({final List<BrowserTabDTO> tabs = const []})
-      : _tabs = tabs;
+class _$BrowserTabSettingsDTOImpl extends _BrowserTabSettingsDTO {
+  _$BrowserTabSettingsDTOImpl({final List<BrowserTabDTO> tabs = const []})
+      : _tabs = tabs,
+        super._();
 
   factory _$BrowserTabSettingsDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$BrowserTabSettingsDTOImplFromJson(json);
@@ -159,9 +160,10 @@ class _$BrowserTabSettingsDTOImpl implements _BrowserTabSettingsDTO {
   }
 }
 
-abstract class _BrowserTabSettingsDTO implements BrowserTabSettingsDTO {
-  const factory _BrowserTabSettingsDTO({final List<BrowserTabDTO> tabs}) =
+abstract class _BrowserTabSettingsDTO extends BrowserTabSettingsDTO {
+  factory _BrowserTabSettingsDTO({final List<BrowserTabDTO> tabs}) =
       _$BrowserTabSettingsDTOImpl;
+  _BrowserTabSettingsDTO._() : super._();
 
   factory _BrowserTabSettingsDTO.fromJson(Map<String, dynamic> json) =
       _$BrowserTabSettingsDTOImpl.fromJson;

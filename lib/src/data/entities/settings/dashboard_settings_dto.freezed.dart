@@ -116,11 +116,12 @@ class __$$DashboardSettingsDTOImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$DashboardSettingsDTOImpl implements _DashboardSettingsDTO {
-  const _$DashboardSettingsDTOImpl(
+class _$DashboardSettingsDTOImpl extends _DashboardSettingsDTO {
+  _$DashboardSettingsDTOImpl(
       {final List<DashboardEventDTO> userEvents = const [],
       this.activated = true})
-      : _userEvents = userEvents;
+      : _userEvents = userEvents,
+        super._();
 
   factory _$DashboardSettingsDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$DashboardSettingsDTOImplFromJson(json);
@@ -177,10 +178,11 @@ class _$DashboardSettingsDTOImpl implements _DashboardSettingsDTO {
   }
 }
 
-abstract class _DashboardSettingsDTO implements DashboardSettingsDTO {
-  const factory _DashboardSettingsDTO(
+abstract class _DashboardSettingsDTO extends DashboardSettingsDTO {
+  factory _DashboardSettingsDTO(
       {final List<DashboardEventDTO> userEvents,
       final bool activated}) = _$DashboardSettingsDTOImpl;
+  _DashboardSettingsDTO._() : super._();
 
   factory _DashboardSettingsDTO.fromJson(Map<String, dynamic> json) =
       _$DashboardSettingsDTOImpl.fromJson;

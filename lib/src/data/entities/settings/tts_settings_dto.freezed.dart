@@ -262,8 +262,8 @@ class __$$TtsSettingsDTOImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$TtsSettingsDTOImpl implements _TtsSettingsDTO {
-  const _$TtsSettingsDTOImpl(
+class _$TtsSettingsDTOImpl extends _TtsSettingsDTO {
+  _$TtsSettingsDTOImpl(
       {this.ttsEnabled = false,
       this.language = "en-US",
       final List<dynamic> prefixsToIgnore = const [],
@@ -283,7 +283,8 @@ class _$TtsSettingsDTOImpl implements _TtsSettingsDTO {
       : _prefixsToIgnore = prefixsToIgnore,
         _prefixsToUseTtsOnly = prefixsToUseTtsOnly,
         _voice = voice,
-        _ttsUsersToIgnore = ttsUsersToIgnore;
+        _ttsUsersToIgnore = ttsUsersToIgnore,
+        super._();
 
   factory _$TtsSettingsDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$TtsSettingsDTOImplFromJson(json);
@@ -423,8 +424,8 @@ class _$TtsSettingsDTOImpl implements _TtsSettingsDTO {
   }
 }
 
-abstract class _TtsSettingsDTO implements TtsSettingsDTO {
-  const factory _TtsSettingsDTO(
+abstract class _TtsSettingsDTO extends TtsSettingsDTO {
+  factory _TtsSettingsDTO(
       {final bool ttsEnabled,
       final String language,
       final List<dynamic> prefixsToIgnore,
@@ -438,6 +439,7 @@ abstract class _TtsSettingsDTO implements TtsSettingsDTO {
       final bool ttsOnlyVip,
       final bool ttsOnlyMod,
       final bool ttsOnlySubscriber}) = _$TtsSettingsDTOImpl;
+  _TtsSettingsDTO._() : super._();
 
   factory _TtsSettingsDTO.fromJson(Map<String, dynamic> json) =
       _$TtsSettingsDTOImpl.fromJson;

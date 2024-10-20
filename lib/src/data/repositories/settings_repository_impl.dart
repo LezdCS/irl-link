@@ -25,7 +25,10 @@ class SettingsRepositoryImpl extends SettingsRepository {
       return DataSuccess(settings);
     }
     globals.talker?.info('No settings found.');
-    return DataSuccess(const Settings.defaultSettings());
+    SettingsDTO settingsDTO = SettingsDTO.blank();
+    Mappr mappr = Mappr();
+    Settings settings = mappr.convert<SettingsDTO, Settings>(settingsDTO);
+    return DataSuccess(settings);
   }
 
   @override

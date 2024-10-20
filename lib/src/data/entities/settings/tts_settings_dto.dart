@@ -5,7 +5,8 @@ part 'tts_settings_dto.g.dart';
 
 @freezed
 class TtsSettingsDTO with _$TtsSettingsDTO {
-  const factory TtsSettingsDTO({
+  TtsSettingsDTO._();
+  factory TtsSettingsDTO({
     @Default(false) bool ttsEnabled,
     @Default("en-US") String language,
     @Default([]) List prefixsToIgnore,
@@ -21,5 +22,6 @@ class TtsSettingsDTO with _$TtsSettingsDTO {
     @Default(false) bool ttsOnlySubscriber,
   }) = _TtsSettingsDTO;
 
+  factory TtsSettingsDTO.blank() => TtsSettingsDTO();
   factory TtsSettingsDTO.fromJson(Map<String, dynamic> json) => _$TtsSettingsDTOFromJson(json);
 }
