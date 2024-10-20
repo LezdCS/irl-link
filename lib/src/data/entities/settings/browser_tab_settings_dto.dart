@@ -6,10 +6,12 @@ part 'browser_tab_settings_dto.g.dart';
 
 @freezed
 class BrowserTabSettingsDTO with _$BrowserTabSettingsDTO {
-  const factory BrowserTabSettingsDTO({
+  BrowserTabSettingsDTO._();
+  factory BrowserTabSettingsDTO({
     @Default([]) List<BrowserTabDTO> tabs,
   }) = _BrowserTabSettingsDTO;
 
+  factory BrowserTabSettingsDTO.blank() => BrowserTabSettingsDTO();
   factory BrowserTabSettingsDTO.fromJson(Map<String, dynamic> json) => _$BrowserTabSettingsDTOFromJson(json);
 }
 

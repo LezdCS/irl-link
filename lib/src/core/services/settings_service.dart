@@ -7,7 +7,7 @@ class SettingsService extends GetxService {
   SettingsService({required this.settingsEvents});
   final SettingsEvents settingsEvents;
 
-  Rx<Settings> settings = const Settings.defaultSettings().obs;
+  late Rx<Settings> settings;
 
   Future<SettingsService> init() async {
     settings.value = await getSettings();
@@ -17,7 +17,8 @@ class SettingsService extends GetxService {
   Future<Settings> getSettings() async {
     DataState<Settings> settingsResult = await settingsEvents.getSettings();
     if (settingsResult is DataFailed) {
-      return const Settings.defaultSettings();
+      // settingsResult is never returned as DataFailed, we always return DataSuccess in the implementation
+      Exception(settingsResult.error);
     }
     return settingsResult.data!;
   }
