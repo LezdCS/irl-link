@@ -17,8 +17,8 @@ class ChatsJoined extends GetView<SettingsViewController> {
     final SettingsService settingsService = Get.find<SettingsService>();
     return Obx(() {
       Settings settings = settingsService.settings.value;
-      List<ChatGroup> chatGroups = settings.chatSettings?.chatGroups ?? [];
-      ChatGroup firstGroup = settings.chatSettings!.permanentFirstGroup;
+      List<ChatGroup> chatGroups = settings.chatSettings.chatGroups;
+      ChatGroup firstGroup = settings.chatSettings.permanentFirstGroup;
       return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -92,7 +92,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
                     _addChannelToGroupButton(
                       context,
                       channelTextController,
-                      settings.chatSettings!.permanentFirstGroup,
+                      settings.chatSettings.permanentFirstGroup,
                     ),
                   ],
                 ),
@@ -161,7 +161,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
           Settings settings = settingsService.settings.value;
 
           // Remove the group from the list of groups in the settings
-          settings.chatSettings?.chatGroups.remove(group);
+          settings.chatSettings.chatGroups.remove(group);
           // Save the settings and refresh the UI
           settingsService.saveSettings();
         }
@@ -303,12 +303,12 @@ class ChatsJoined extends GetView<SettingsViewController> {
             if (chatGroup.id == 'permanentFirstGroup') {
               settingsService.settings.value = settings.copyWith(
                 chatSettings: settings.chatSettings
-                    ?.copyWith(permanentFirstGroup: chatGroup),
+                    .copyWith(permanentFirstGroup: chatGroup),
               );
             } else {
               // Replace the group in the list
               List<ChatGroup>? groups = [];
-              groups.addAll(settings.chatSettings?.chatGroups ?? []);
+              groups.addAll(settings.chatSettings.chatGroups);
               int indexToReplace =
                   groups.indexWhere((g) => g.id == chatGroup.id);
               groups.removeAt(indexToReplace);
@@ -317,7 +317,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
               // Update the settings
               settingsService.settings.value = settings.copyWith(
                 chatSettings:
-                    settings.chatSettings?.copyWith(chatGroups: groups),
+                    settings.chatSettings.copyWith(chatGroups: groups),
               );
             }
 
@@ -363,10 +363,10 @@ class ChatsJoined extends GetView<SettingsViewController> {
         );
         Settings settings = settingsService.settings.value;
         List<ChatGroup> chatGroups =
-            List.from(settings.chatSettings!.chatGroups);
+            List.from(settings.chatSettings.chatGroups);
         chatGroups.add(newGroup);
         settingsService.settings.value = settings.copyWith(
-          chatSettings: settings.chatSettings!.copyWith(chatGroups: chatGroups),
+          chatSettings: settings.chatSettings.copyWith(chatGroups: chatGroups),
         );
         settingsService.saveSettings();
       },

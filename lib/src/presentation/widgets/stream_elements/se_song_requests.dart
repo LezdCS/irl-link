@@ -17,7 +17,7 @@ class SeSongRequests extends GetView<StreamelementsViewController> {
             .settings
             .value
             .streamElementsSettings
-            ?.jwt;
+            .jwt;
         return Container(
           margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
           child: Column(

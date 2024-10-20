@@ -78,7 +78,7 @@ void main() async {
   await ttsService.initTts(settingsService.settings.value);
   await Get.putAsync(() => WatchService().init(), permanent: true);
 
-  if (!settingsService.settings.value.generalSettings!.isDarkMode) {
+  if (!settingsService.settings.value.generalSettings.isDarkMode) {
     Get.changeThemeMode(ThemeMode.light);
   }
 

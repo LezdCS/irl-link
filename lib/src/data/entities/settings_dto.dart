@@ -86,57 +86,57 @@ class SettingsDTO extends Settings {
       //CHAT SETTINGS
       isEmotes: map['isEmotes'] != null
           ? map['isEmotes'] as bool
-          : const Settings.defaultSettings().isEmotes!,
+          : const Settings.defaultSettings().isEmotes,
       textSize: map['textSize'] != null
           ? map['textSize'] as double
-          : const Settings.defaultSettings().textSize!,
+          : const Settings.defaultSettings().textSize,
       displayTimestamp: map['displayTimestamp'] != null
           ? map['displayTimestamp'] as bool
-          : const Settings.defaultSettings().displayTimestamp!,
+          : const Settings.defaultSettings().displayTimestamp,
       hiddenUsersIds: map['hiddenUsersIds'] != null
           ? map['hiddenUsersIds'] as List
-          : const Settings.defaultSettings().hiddenUsersIds!,
+          : const Settings.defaultSettings().hiddenUsersIds,
       chatEventsSettings: map['chatEventsSettings'] != null
           ? ChatEventsSettingsDTO.fromJson(map['chatEventsSettings'])
-          : const Settings.defaultSettings().chatEventsSettings!,
+          : const Settings.defaultSettings().chatEventsSettings,
       chatSettings: map['chatSettings'] != null
           ? ChatSettingsDTO.fromJson(map['chatSettings'])
-          : const Settings.defaultSettings().chatSettings!,
+          : const Settings.defaultSettings().chatSettings,
       //GENERAL SETTINGS
       generalSettings: map['generalSettings'] != null
           ? GeneralSettingsDTO.fromJson(map['generalSettings'])
-          : const Settings.defaultSettings().generalSettings!,
+          : const Settings.defaultSettings().generalSettings,
       dashboardSettings: map['dashboardSettings'] != null
           ? DashboardSettingsDTO.fromJson(map['dashboardSettings'])
-          : const Settings.defaultSettings().dashboardSettings!,
+          : const Settings.defaultSettings().dashboardSettings,
       //CONNECTIONS SETTINGS
       isObsConnected: map['isObsConnected'] != null
           ? map['isObsConnected'] as bool
-          : const Settings.defaultSettings().isObsConnected!,
+          : const Settings.defaultSettings().isObsConnected,
       obsWebsocketUrl: map['obsWebsocketUrl'] != null
           ? map['obsWebsocketUrl'] as String
-          : const Settings.defaultSettings().obsWebsocketUrl!,
+          : const Settings.defaultSettings().obsWebsocketUrl,
       obsWebsocketPassword: map['obsWebsocketPassword'] != null
           ? map['obsWebsocketPassword'] as String
-          : const Settings.defaultSettings().obsWebsocketPassword!,
+          : const Settings.defaultSettings().obsWebsocketPassword,
       browserTabs: map['browserTabs'] != null
           ? map['browserTabs'] is List<dynamic>
               ? BrowserTabSettingsDTO.fromList(map['browserTabs'])
               : BrowserTabSettingsDTO.fromJson(map['browserTabs'])
-          : const Settings.defaultSettings().browserTabs!,
+          : const Settings.defaultSettings().browserTabs,
       obsConnectionsHistory: map['obsConnectionsHistory'] != null
           ? map['obsConnectionsHistory'] as List
-          : const Settings.defaultSettings().obsConnectionsHistory!,
+          : const Settings.defaultSettings().obsConnectionsHistory,
       streamElementsSettings: map['streamElementsSettings'] != null
           ? StreamElementsSettingsDTO.fromJson(map['streamElementsSettings'])
-          : const Settings.defaultSettings().streamElementsSettings!,
+          : const Settings.defaultSettings().streamElementsSettings,
       rtIrlPushKey: map['rtIrlPushKey'] != null
           ? map['rtIrlPushKey'] as String
-          : const Settings.defaultSettings().rtIrlPushKey!,
+          : const Settings.defaultSettings().rtIrlPushKey,
       //TTS SETTINGS
       ttsSettings: map['ttsSettings'] != null
           ? TtsSettingsDTO.fromJson(map['ttsSettings'])
-          : const Settings.defaultSettings().ttsSettings!,
+          : const Settings.defaultSettings().ttsSettings,
     );
   }
 }

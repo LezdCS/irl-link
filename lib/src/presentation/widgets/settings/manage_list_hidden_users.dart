@@ -36,7 +36,7 @@ class ManageListHiddenUsers extends GetView<SettingsViewController> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  child: settings.hiddenUsersIds!.isEmpty
+                  child: settings.hiddenUsersIds.isEmpty
                       ? Container(
                           padding: const EdgeInsets.only(top: 20),
                           child: const Text(
@@ -45,7 +45,7 @@ class ManageListHiddenUsers extends GetView<SettingsViewController> {
                           ),
                         )
                       : controller.usernamesHiddenUsers.length !=
-                              settings.hiddenUsersIds!.length
+                              settings.hiddenUsersIds.length
                           ? Container(
                               padding: const EdgeInsets.only(top: 20),
                               child: const Column(
@@ -70,12 +70,12 @@ class ManageListHiddenUsers extends GetView<SettingsViewController> {
                                   newIndex -= 1;
                                 }
                                 final element =
-                                    settings.hiddenUsersIds!.removeAt(oldIndex);
-                                settings.hiddenUsersIds!
+                                    settings.hiddenUsersIds.removeAt(oldIndex);
+                                settings.hiddenUsersIds
                                     .insert(newIndex, element);
                               },
                               itemBuilder: (BuildContext context, int index) {
-                                var elem = settings.hiddenUsersIds![index];
+                                var elem = settings.hiddenUsersIds[index];
 
                                 return Container(
                                   key: ValueKey(

@@ -22,7 +22,7 @@ class RealtimeIrlViewController extends GetxController {
   void onInit() {
     Settings settings = Get.find<SettingsService>().settings.value;
 
-    realtimeIrl = RealtimeIrl(settings.rtIrlPushKey ?? '');
+    realtimeIrl = RealtimeIrl(settings.rtIrlPushKey);
 
     FlutterForegroundTask.addTaskDataCallback(realtimeIrl.onReceiveTaskData);
     _initService();
@@ -123,6 +123,6 @@ class RealtimeIrlViewController extends GetxController {
 
   Future applySettings() async {
     Settings settings = Get.find<SettingsService>().settings.value;
-    realtimeIrl.key = settings.rtIrlPushKey ?? '';
+    realtimeIrl.key = settings.rtIrlPushKey;
   }
 }

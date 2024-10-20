@@ -23,17 +23,17 @@ class ChatEventsSettingsDTO extends ChatEventsSettings {
   factory ChatEventsSettingsDTO.fromJson(Map<String, dynamic> map) {
     return ChatEventsSettingsDTO(
       firstsMessages: map['firstsMessages'] ??
-          const Settings.defaultSettings().chatEventsSettings!.firstsMessages,
+          const Settings.defaultSettings().chatEventsSettings.firstsMessages,
       subscriptions: map['subscriptions'] ??
-          const Settings.defaultSettings().chatEventsSettings!.subscriptions,
+          const Settings.defaultSettings().chatEventsSettings.subscriptions,
       bitsDonations: map['bitsDonations'] ??
-          const Settings.defaultSettings().chatEventsSettings!.bitsDonations,
+          const Settings.defaultSettings().chatEventsSettings.bitsDonations,
       announcements: map['announcements'] ??
-          const Settings.defaultSettings().chatEventsSettings!.announcements,
+          const Settings.defaultSettings().chatEventsSettings.announcements,
       incomingRaids: map['incomingRaids'] ??
-          const Settings.defaultSettings().chatEventsSettings!.incomingRaids,
+          const Settings.defaultSettings().chatEventsSettings.incomingRaids,
       redemptions: map['redemptions'] ??
-          const Settings.defaultSettings().chatEventsSettings!.redemptions,
+          const Settings.defaultSettings().chatEventsSettings.redemptions,
     );
   }
 }

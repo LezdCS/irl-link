@@ -69,9 +69,9 @@ class SettingsViewController extends GetxController {
     addTtsIgnoredPrefixsController = TextEditingController();
     addTtsAllowedPrefixsController = TextEditingController();
     seJwtInputController =
-        TextEditingController(text: settings.streamElementsSettings?.jwt);
+        TextEditingController(text: settings.streamElementsSettings.jwt);
     seOverlayTokenInputController = TextEditingController(
-        text: settings.streamElementsSettings?.overlayToken);
+        text: settings.streamElementsSettings.overlayToken);
     rtIrlInputController = TextEditingController(text: settings.rtIrlPushKey);
 
     usernamesHiddenUsers = <String>[].obs;
@@ -173,7 +173,7 @@ class SettingsViewController extends GetxController {
   void removeHiddenUser(userId) {
     Settings settings = settingsService.settings.value;
 
-    List hiddenUsersIds = settings.hiddenUsersIds!;
+    List hiddenUsersIds = settings.hiddenUsersIds;
     hiddenUsersIds.remove(userId);
     settingsService.settings.value =
         settings.copyWith(hiddenUsersIds: hiddenUsersIds);
@@ -204,10 +204,10 @@ class SettingsViewController extends GetxController {
     );
     Settings settings = settingsService.settings.value;
 
-    List<BrowserTab> tabs = List.from(settings.browserTabs!.tabs);
+    List<BrowserTab> tabs = List.from(settings.browserTabs.tabs);
     tabs.add(tab);
     settingsService.settings.value = settings.copyWith(
-      browserTabs: settings.browserTabs?.copyWith(tabs: tabs),
+      browserTabs: settings.browserTabs.copyWith(tabs: tabs),
     );
     settingsService.saveSettings();
 
@@ -235,11 +235,11 @@ class SettingsViewController extends GetxController {
 
     Settings settings = settingsService.settings.value;
 
-    List<BrowserTab> tabs = settings.browserTabs!.tabs;
+    List<BrowserTab> tabs = settings.browserTabs.tabs;
     int index = tabs.indexWhere((element) => element.id == tab.id);
     tabs[index] = newTab;
     settingsService.settings.value = settings.copyWith(
-      browserTabs: settings.browserTabs?.copyWith(tabs: tabs),
+      browserTabs: settings.browserTabs.copyWith(tabs: tabs),
     );
 
     settingsService.saveSettings();
@@ -251,11 +251,11 @@ class SettingsViewController extends GetxController {
   void removeBrowserTab(tab) {
     Settings settings = settingsService.settings.value;
 
-    List<BrowserTab> tabs = settings.browserTabs!.tabs;
+    List<BrowserTab> tabs = settings.browserTabs.tabs;
     tabs.remove(tab);
 
     settingsService.settings.value = settings.copyWith(
-      browserTabs: settings.browserTabs?.copyWith(tabs: tabs),
+      browserTabs: settings.browserTabs.copyWith(tabs: tabs),
     );
     settingsService.saveSettings();
 
@@ -268,7 +268,7 @@ class SettingsViewController extends GetxController {
 
     await settingsEvents
         .getTwitchUsers(
-            ids: settings.hiddenUsersIds!,
+            ids: settings.hiddenUsersIds,
             accessToken: homeViewController.twitchData!.accessToken)
         .then((value) => users = value.data!);
 

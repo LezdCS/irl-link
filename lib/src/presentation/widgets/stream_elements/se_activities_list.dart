@@ -66,12 +66,12 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
               title: Text(
                 "followers".tr,
               ),
-              value: seSettings?.showFollowerActivity,
+              value: seSettings.showFollowerActivity,
               onChanged: (bool? value) {
                 settingsService.settings.value =
                     settingsService.settings.value.copyWith(
                   streamElementsSettings:
-                      seSettings!.copyWith(showFollowerActivity: value),
+                      seSettings.copyWith(showFollowerActivity: value),
                 );
                 settingsService.saveSettings();
               },
@@ -87,10 +87,10 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                 title: Text(
                   "subscriptions".tr,
                 ),
-                value: settings.streamElementsSettings!.showSubscriberActivity,
+                value: settings.streamElementsSettings.showSubscriberActivity,
                 onChanged: (bool? value) {
                   settingsService.settings.value = settings.copyWith(
-                    streamElementsSettings: settings.streamElementsSettings!
+                    streamElementsSettings: settings.streamElementsSettings
                         .copyWith(showSubscriberActivity: value),
                   );
                   settingsService.saveSettings();
@@ -107,10 +107,10 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
               title: Text(
                 "bits".tr,
               ),
-              value: settings.streamElementsSettings!.showCheerActivity,
+              value: settings.streamElementsSettings.showCheerActivity,
               onChanged: (bool? value) {
                 settingsService.settings.value = settings.copyWith(
-                  streamElementsSettings: settings.streamElementsSettings!
+                  streamElementsSettings: settings.streamElementsSettings
                       .copyWith(showCheerActivity: value),
                 );
                 settingsService.saveSettings();
@@ -127,10 +127,10 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                 title: Text(
                   "donations".tr,
                 ),
-                value: settings.streamElementsSettings!.showDonationActivity,
+                value: settings.streamElementsSettings.showDonationActivity,
                 onChanged: (bool? value) {
                   settingsService.settings.value = settings.copyWith(
-                    streamElementsSettings: settings.streamElementsSettings!
+                    streamElementsSettings: settings.streamElementsSettings
                         .copyWith(showDonationActivity: value),
                   );
                   settingsService.saveSettings();
@@ -148,10 +148,10 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                 title: Text(
                   "raids".tr,
                 ),
-                value: settings.streamElementsSettings!.showRaidActivity,
+                value: settings.streamElementsSettings.showRaidActivity,
                 onChanged: (bool? value) {
                   settingsService.settings.value = settings.copyWith(
-                    streamElementsSettings: settings.streamElementsSettings!
+                    streamElementsSettings: settings.streamElementsSettings
                         .copyWith(showRaidActivity: value),
                   );
                   settingsService.saveSettings();
@@ -169,10 +169,10 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                 title: Text(
                   "hosts".tr,
                 ),
-                value: settings.streamElementsSettings!.showHostActivity,
+                value: settings.streamElementsSettings.showHostActivity,
                 onChanged: (bool? value) {
                   settingsService.settings.value = settings.copyWith(
-                    streamElementsSettings: settings.streamElementsSettings!
+                    streamElementsSettings: settings.streamElementsSettings
                         .copyWith(showHostActivity: value),
                   );
                   settingsService.saveSettings();

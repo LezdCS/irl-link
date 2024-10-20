@@ -125,7 +125,7 @@ class StreamelementsViewController extends GetxController
 
   Future<void> handleGetMe() async {
     String? jwt =
-        Get.find<SettingsService>().settings.value.streamElementsSettings?.jwt;
+        Get.find<SettingsService>().settings.value.streamElementsSettings.jwt;
     SeMe? me = userSeProfile.value;
     if (me == null) {
       globals.talker?.error('User profile was not found.');
@@ -322,7 +322,7 @@ class StreamelementsViewController extends GetxController
     dynamic event = widget["event"];
     switch (listener) {
       case "follower-latest":
-        if (!settings.streamElementsSettings!.showFollowerActivity) return;
+        if (!settings.streamElementsSettings.showFollowerActivity) return;
         SeActivity activity = SeActivity(
           id: "1",
           channel: "",
@@ -333,7 +333,7 @@ class StreamelementsViewController extends GetxController
         activities.add(activity);
         break;
       case "subscriber-latest":
-        if (!settings.streamElementsSettings!.showSubscriberActivity) return;
+        if (!settings.streamElementsSettings.showSubscriberActivity) return;
         SeActivity activity = SeActivity(
           id: "1",
           channel: "",
@@ -348,7 +348,7 @@ class StreamelementsViewController extends GetxController
         activities.add(activity);
         break;
       case "tip-latest":
-        if (!settings.streamElementsSettings!.showDonationActivity) return;
+        if (!settings.streamElementsSettings.showDonationActivity) return;
         SeActivity activity = SeActivity(
           id: "1",
           channel: "",
@@ -361,7 +361,7 @@ class StreamelementsViewController extends GetxController
         activities.add(activity);
         break;
       case "cheer-latest":
-        if (!settings.streamElementsSettings!.showCheerActivity) return;
+        if (!settings.streamElementsSettings.showCheerActivity) return;
         SeActivity activity = SeActivity(
           id: "1",
           channel: "",
@@ -374,7 +374,7 @@ class StreamelementsViewController extends GetxController
         activities.add(activity);
         break;
       case "host-latest":
-        if (!settings.streamElementsSettings!.showHostActivity) return;
+        if (!settings.streamElementsSettings.showHostActivity) return;
         SeActivity activity = SeActivity(
           id: "1",
           channel: "",
@@ -386,7 +386,7 @@ class StreamelementsViewController extends GetxController
         activities.add(activity);
         break;
       case "raid-latest":
-        if (!settings.streamElementsSettings!.showRaidActivity) return;
+        if (!settings.streamElementsSettings.showRaidActivity) return;
         SeActivity activity = SeActivity(
           channel: "",
           id: "1",
@@ -409,7 +409,7 @@ class StreamelementsViewController extends GetxController
     String type = event["type"];
     switch (type) {
       case "follower":
-        if (!settings.streamElementsSettings!.showFollowerActivity) return;
+        if (!settings.streamElementsSettings.showFollowerActivity) return;
         SeActivity activity = SeActivity(
           id: event["_id"],
           channel: event["channel"],
@@ -419,7 +419,7 @@ class StreamelementsViewController extends GetxController
         activities.add(activity);
         break;
       case "subscriber":
-        if (!settings.streamElementsSettings!.showSubscriberActivity) return;
+        if (!settings.streamElementsSettings.showSubscriberActivity) return;
         SeActivity activity = SeActivity(
           id: event["_id"],
           channel: event["channel"],
@@ -434,7 +434,7 @@ class StreamelementsViewController extends GetxController
         activities.add(activity);
         break;
       case "tip":
-        if (!settings.streamElementsSettings!.showDonationActivity) return;
+        if (!settings.streamElementsSettings.showDonationActivity) return;
         SeActivity activity = SeActivity(
           id: event["_id"],
           channel: event["channel"],
@@ -446,7 +446,7 @@ class StreamelementsViewController extends GetxController
         activities.add(activity);
         break;
       case "cheer":
-        if (!settings.streamElementsSettings!.showCheerActivity) return;
+        if (!settings.streamElementsSettings.showCheerActivity) return;
         SeActivity activity = SeActivity(
           id: event["_id"],
           channel: event["channel"],
@@ -458,7 +458,7 @@ class StreamelementsViewController extends GetxController
         activities.add(activity);
         break;
       case "host":
-        if (!settings.streamElementsSettings!.showHostActivity) return;
+        if (!settings.streamElementsSettings.showHostActivity) return;
         SeActivity activity = SeActivity(
           id: event["_id"],
           channel: event["channel"],
@@ -469,7 +469,7 @@ class StreamelementsViewController extends GetxController
         activities.add(activity);
         break;
       case "raid":
-        if (!settings.streamElementsSettings!.showRaidActivity) return;
+        if (!settings.streamElementsSettings.showRaidActivity) return;
         SeActivity activity = SeActivity(
           id: event["_id"],
           channel: event["channel"],

@@ -102,7 +102,7 @@ class StreamElements extends GetView<SettingsViewController> {
                   Get.find<SettingsService>().settings.value =
                       settings.copyWith(
                     streamElementsSettings:
-                        settings.streamElementsSettings!.copyWith(jwt: value),
+                        settings.streamElementsSettings.copyWith(jwt: value),
                   );
                   Get.find<SettingsService>().saveSettings();
                 },
@@ -144,7 +144,7 @@ class StreamElements extends GetView<SettingsViewController> {
                 onChanged: (value) {
                   Get.find<SettingsService>().settings.value =
                       settings.copyWith(
-                    streamElementsSettings: settings.streamElementsSettings!
+                    streamElementsSettings: settings.streamElementsSettings
                         .copyWith(overlayToken: value),
                   );
                   Get.find<SettingsService>().saveSettings();

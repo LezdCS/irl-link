@@ -223,8 +223,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
                               .settings
                               .value
                               .obsWebsocketUrl
-                              ?.contains("https") ??
-                          false,
+                              .contains("https"),
                       child: const Text(
                         "It seems that your OBS websocket URL contains 'https', try without it.",
                         textAlign: TextAlign.center,

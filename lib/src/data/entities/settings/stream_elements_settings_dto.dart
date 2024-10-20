@@ -32,39 +32,39 @@ class StreamElementsSettingsDTO extends StreamElementsSettings {
     return StreamElementsSettingsDTO(
       showFollowerActivity: map['showFollowerActivity'] ??
           const Settings.defaultSettings()
-              .streamElementsSettings!
+              .streamElementsSettings
               .showFollowerActivity,
       showSubscriberActivity: map['showSubscriberActivity'] ??
           const Settings.defaultSettings()
-              .streamElementsSettings!
+              .streamElementsSettings
               .showSubscriberActivity,
       showDonationActivity: map['showDonationActivity'] ??
           const Settings.defaultSettings()
-              .streamElementsSettings!
+              .streamElementsSettings
               .showDonationActivity,
       showCheerActivity: map['showCheerActivity'] ??
           const Settings.defaultSettings()
-              .streamElementsSettings!
+              .streamElementsSettings
               .showCheerActivity,
       showRaidActivity: map['showRaidActivity'] ??
           const Settings.defaultSettings()
-              .streamElementsSettings!
+              .streamElementsSettings
               .showRaidActivity,
       showHostActivity: map['showHostActivity'] ??
           const Settings.defaultSettings()
-              .streamElementsSettings!
+              .streamElementsSettings
               .showHostActivity,
       showMerchActivity: map['showMerchActivity'] ??
           const Settings.defaultSettings()
-              .streamElementsSettings!
+              .streamElementsSettings
               .showMerchActivity,
       jwt: map['jwt'] ??
-          const Settings.defaultSettings().streamElementsSettings!.jwt,
+          const Settings.defaultSettings().streamElementsSettings.jwt,
       overlayToken: map['overlayToken'] ??
-          const Settings.defaultSettings().streamElementsSettings!.overlayToken,
+          const Settings.defaultSettings().streamElementsSettings.overlayToken,
       mutedOverlays: (List<String>.from(map['mutedOverlays'] ??
           const Settings.defaultSettings()
-              .streamElementsSettings!
+              .streamElementsSettings
               .mutedOverlays)),
     );
   }
