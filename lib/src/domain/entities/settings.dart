@@ -10,28 +10,28 @@ import 'package:irllink/src/domain/entities/settings/tts_settings.dart';
 @immutable
 class Settings {
   //CHAT SETTINGS
-  final bool? isEmotes;
-  final double? textSize;
-  final bool? displayTimestamp;
-  final List? hiddenUsersIds;
-  final ChatEventsSettings? chatEventsSettings;
-  final ChatSettings? chatSettings;
+  final bool isEmotes;
+  final double textSize;
+  final bool displayTimestamp;
+  final List hiddenUsersIds;
+  final ChatEventsSettings chatEventsSettings;
+  final ChatSettings chatSettings;
 
   //GENERAL SETTINGS
-  final GeneralSettings? generalSettings;
-  final DashboardSettings? dashboardSettings;
+  final GeneralSettings generalSettings;
+  final DashboardSettings dashboardSettings;
 
   //CONNECTIONS SETTINGS
-  final bool? isObsConnected;
-  final String? obsWebsocketUrl;
-  final String? obsWebsocketPassword;
-  final BrowserTabSettings? browserTabs;
-  final List? obsConnectionsHistory;
-  final StreamElementsSettings? streamElementsSettings;
-  final String? rtIrlPushKey;
+  final bool isObsConnected;
+  final String obsWebsocketUrl;
+  final String obsWebsocketPassword;
+  final BrowserTabSettings browserTabs;
+  final List obsConnectionsHistory;
+  final StreamElementsSettings streamElementsSettings;
+  final String rtIrlPushKey;
 
   //TTS SETTIGS
-  final TtsSettings? ttsSettings;
+  final TtsSettings ttsSettings;
 
   const Settings({
     //CHAT SETTINGS

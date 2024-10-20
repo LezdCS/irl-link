@@ -154,7 +154,7 @@ class HomeViewController extends GetxController
     if (debounceSplitResize?.isActive ?? false) debounceSplitResize?.cancel();
     debounceSplitResize = Timer(const Duration(milliseconds: 500), () {
       Get.find<SettingsService>().settings.value = settings.copyWith(
-        generalSettings: settings.generalSettings?.copyWith(
+        generalSettings: settings.generalSettings.copyWith(
           splitViewWeights: [weight[0]!, weight[1]!],
         ),
       );
@@ -182,7 +182,7 @@ class HomeViewController extends GetxController
   void reorderTabs() {
     Settings settings = Get.find<SettingsService>().settings.value;
 
-    List<BrowserTab> tabs = settings.browserTabs!.tabs
+    List<BrowserTab> tabs = settings.browserTabs.tabs
         .where((t) => t.toggled && !t.iOSAudioSource)
         .toList();
     int diff = tabElements.length - tabs.length;
@@ -204,7 +204,7 @@ class HomeViewController extends GetxController
     // Check if WebTabs have to be removed
     List webTabsToRemove = [];
     tabElements.whereType<WebPageView>().forEach((tabElement) {
-      BrowserTab? tabExist = settings.browserTabs!.tabs.firstWhereOrNull(
+      BrowserTab? tabExist = settings.browserTabs.tabs.firstWhereOrNull(
         (settingsTab) => settingsTab.id == tabElement.tab.id,
       );
       if (tabExist == null) {
@@ -221,7 +221,7 @@ class HomeViewController extends GetxController
     // We also remove them if they got untoggled
     List audioSourcesToRemove = [];
     for (var tabElement in iOSAudioSources) {
-      BrowserTab? tabExist = settings.browserTabs!.tabs.firstWhereOrNull(
+      BrowserTab? tabExist = settings.browserTabs.tabs.firstWhereOrNull(
           (settingsTab) => settingsTab.id == tabElement.tab.id);
       if (tabExist == null) {
         audioSourcesToRemove.add(tabElement);
@@ -232,7 +232,7 @@ class HomeViewController extends GetxController
     iOSAudioSources.removeWhere((a) => audioSourcesToRemove.contains(a));
 
     // Check if OBS have to be removed
-    if (Get.isRegistered<ObsTabViewController>() && !settings.isObsConnected!) {
+    if (Get.isRegistered<ObsTabViewController>() && !settings.isObsConnected) {
       tabElements.removeWhere((t) => t is ObsTabView);
       obsTabViewController = null;
       await Get.delete<ObsTabViewController>();
@@ -251,7 +251,7 @@ class HomeViewController extends GetxController
 
     // Check if Realtime IRL have to be removed
     if (Get.isRegistered<RealtimeIrlViewController>() &&
-        (settings.rtIrlPushKey == null || settings.rtIrlPushKey!.isEmpty)) {
+        (settings.rtIrlPushKey.isEmpty)) {
       tabElements.removeWhere((t) => t is RealtimeIrlTabView);
       realtimeIrlViewController = null;
       await Get.delete<RealtimeIrlViewController>();
@@ -263,7 +263,7 @@ class HomeViewController extends GetxController
     Settings settings = Get.find<SettingsService>().settings.value;
 
     // Check if OBS have to be added
-    if (obsTabViewController == null && settings.isObsConnected!) {
+    if (obsTabViewController == null && settings.isObsConnected) {
       obsTabViewController = Get.find<ObsTabViewController>();
       ObsTabView obsPage = const ObsTabView();
       tabElements.insert(1, obsPage);
@@ -283,8 +283,7 @@ class HomeViewController extends GetxController
     }
 
     // Check if Realtime IRL have to be added
-    if (settings.rtIrlPushKey != null &&
-        settings.rtIrlPushKey!.isNotEmpty &&
+    if (settings.rtIrlPushKey.isNotEmpty &&
         realtimeIrlViewController == null) {
       realtimeIrlViewController = Get.find<RealtimeIrlViewController>();
       RealtimeIrlTabView realtimeIrlTabView = const RealtimeIrlTabView();
@@ -292,7 +291,7 @@ class HomeViewController extends GetxController
     }
 
     // Check if WebTabs have to be added
-    for (BrowserTab tab in settings.browserTabs!.tabs) {
+    for (BrowserTab tab in settings.browserTabs.tabs) {
       if (!tab.toggled) continue;
       // first we check if the tab already exist
       bool tabExist = tabElements
@@ -335,7 +334,7 @@ class HomeViewController extends GetxController
 
     // 1. Find the groups that are in the groupsViews but not in the settings to remove them
     List<ChatGroup> settingsGroups =
-        settings.chatSettings!.copyWith().chatGroups;
+        settings.chatSettings.copyWith().chatGroups;
     List<ChatGroup> groupsToRemove = groupsViews
         .where((groupView) => !settingsGroups
             .any((sGroup) => sGroup.id == groupView.chatGroup.id))
@@ -367,7 +366,7 @@ class HomeViewController extends GetxController
 
     // 3. We add the 'Permanent First Group' from the settings to the first position if it does not exist yet in the channels
     ChatGroup? permanentFirstGroup =
-        settings.chatSettings!.permanentFirstGroup.copyWith();
+        settings.chatSettings.permanentFirstGroup.copyWith();
     // if the permanentFirstGroup is not in the channels, we add it
     if (!chatsViews.any(
         (groupView) => groupView.chatGroup.id == permanentFirstGroup?.id)) {
@@ -464,7 +463,7 @@ class HomeViewController extends GetxController
       generateChats();
 
       // SPEAKER SETTING
-      if (settings.generalSettings!.keepSpeakerOn) {
+      if (settings.generalSettings.keepSpeakerOn) {
         const path = "../lib/assets/blank.mp3";
         timerKeepSpeakerOn = Timer.periodic(
           const Duration(minutes: 5),
@@ -475,7 +474,7 @@ class HomeViewController extends GetxController
       }
 
       // SPLIT VIEW
-      splitViewController?.weights = settings.generalSettings!.splitViewWeights;
+      splitViewController?.weights = settings.generalSettings.splitViewWeights;
     }
   }
 }

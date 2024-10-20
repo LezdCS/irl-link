@@ -139,7 +139,7 @@ class ModerationBottomSheet extends GetView {
                 onTap: () => controller.hideUser(
                   message,
                 ),
-                child: (settings.hiddenUsersIds!.firstWhereOrNull(
+                child: (settings.hiddenUsersIds.firstWhereOrNull(
                           (userId) => message.authorId == userId,
                         ) !=
                         null)

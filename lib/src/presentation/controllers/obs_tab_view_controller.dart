@@ -157,7 +157,7 @@ class ObsTabViewController extends GetxController {
       isConnected.value = true;
       Settings settings = Get.find<SettingsService>().settings.value;
 
-      List obsConnectionsHistory = settings.obsConnectionsHistory!;
+      List obsConnectionsHistory = settings.obsConnectionsHistory;
       if (obsConnectionsHistory.firstWhereOrNull(
             (element) =>
                 element['url'] == url && element['password'] == password,
@@ -299,8 +299,8 @@ class ObsTabViewController extends GetxController {
     if (obsWebSocket != null) {
       obsWebSocket!.close();
     }
-    if (settings.isObsConnected!) {
-      connectWs(settings.obsWebsocketUrl!, settings.obsWebsocketPassword!);
+    if (settings.isObsConnected) {
+      connectWs(settings.obsWebsocketUrl, settings.obsWebsocketPassword);
     }
   }
 }

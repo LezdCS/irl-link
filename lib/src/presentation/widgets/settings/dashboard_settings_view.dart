@@ -35,11 +35,11 @@ class DashboardSettingsView extends GetView<DashboardController> {
                 activeColor: Colors.white,
                 inactiveTrackColor:
                     Theme.of(context).colorScheme.tertiaryContainer,
-                value: settings.dashboardSettings!.activated,
+                value: settings.dashboardSettings.activated,
                 onChanged: (value) {
                   Get.find<SettingsService>().settings.value =
                       settings.copyWith(
-                    dashboardSettings: settings.dashboardSettings!.copyWith(
+                    dashboardSettings: settings.dashboardSettings.copyWith(
                       activated: value,
                     ),
                   );
@@ -63,10 +63,10 @@ class DashboardSettingsView extends GetView<DashboardController> {
                   reverse: true,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: settings.dashboardSettings!.userEvents.length,
+                  itemCount: settings.dashboardSettings.userEvents.length,
                   itemBuilder: (context, index) {
                     DashboardEvent event =
-                        settings.dashboardSettings!.userEvents[index];
+                        settings.dashboardSettings.userEvents[index];
                     ExistingDashboardEvent? eventDetails =
                         dashboardEvents[event.event];
                     return Dismissible(

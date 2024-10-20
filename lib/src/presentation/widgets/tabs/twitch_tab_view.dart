@@ -164,7 +164,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                       visible: Get.find<SettingsService>()
                           .settings
                           .value
-                          .generalSettings!
+                          .generalSettings
                           .displayViewerCount,
                       child: Row(
                         children: [

@@ -303,7 +303,7 @@ class HomeView extends GetView<HomeViewController> {
                       maxLines: 1,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: settings.generalSettings!.displayViewerCount
+                        hintText: settings.generalSettings.displayViewerCount
                             ? "viewers_number".trParams({
                                 "number": Get.find<TwitchTabViewController>()
                                     .twitchStreamInfos
@@ -456,7 +456,7 @@ class HomeView extends GetView<HomeViewController> {
                 )
               : Container(),
           Visibility(
-            visible: settings.dashboardSettings!.activated,
+            visible: settings.dashboardSettings.activated,
             child: Expanded(
               flex: 1,
               child: InkWell(

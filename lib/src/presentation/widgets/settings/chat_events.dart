@@ -69,12 +69,12 @@ class ChatEvents extends StatelessWidget {
                             ),
                           ),
                           Switch(
-                            value: settings.chatEventsSettings!.firstsMessages,
+                            value: settings.chatEventsSettings.firstsMessages,
                             onChanged: (value) {
                               settingsService.settings.value =
                                   settings.copyWith(
                                 chatEventsSettings:
-                                    settings.chatEventsSettings!.copyWith(
+                                    settings.chatEventsSettings.copyWith(
                                   firstsMessages: value,
                                 ),
                               );
@@ -113,12 +113,12 @@ class ChatEvents extends StatelessWidget {
                             ),
                           ),
                           Switch(
-                            value: settings.chatEventsSettings!.subscriptions,
+                            value: settings.chatEventsSettings.subscriptions,
                             onChanged: (value) {
                               settingsService.settings.value =
                                   settings.copyWith(
                                 chatEventsSettings:
-                                    settings.chatEventsSettings!.copyWith(
+                                    settings.chatEventsSettings.copyWith(
                                   subscriptions: value,
                                 ),
                               );
@@ -157,12 +157,12 @@ class ChatEvents extends StatelessWidget {
                             ),
                           ),
                           Switch(
-                            value: settings.chatEventsSettings!.bitsDonations,
+                            value: settings.chatEventsSettings.bitsDonations,
                             onChanged: (value) {
                               settingsService.settings.value =
                                   settings.copyWith(
                                 chatEventsSettings:
-                                    settings.chatEventsSettings!.copyWith(
+                                    settings.chatEventsSettings.copyWith(
                                   bitsDonations: value,
                                 ),
                               );
@@ -201,12 +201,12 @@ class ChatEvents extends StatelessWidget {
                             ),
                           ),
                           Switch(
-                            value: settings.chatEventsSettings!.announcements,
+                            value: settings.chatEventsSettings.announcements,
                             onChanged: (value) {
                               settingsService.settings.value =
                                   settings.copyWith(
                                 chatEventsSettings:
-                                    settings.chatEventsSettings!.copyWith(
+                                    settings.chatEventsSettings.copyWith(
                                   announcements: value,
                                 ),
                               );
@@ -245,12 +245,12 @@ class ChatEvents extends StatelessWidget {
                             ),
                           ),
                           Switch(
-                            value: settings.chatEventsSettings!.incomingRaids,
+                            value: settings.chatEventsSettings.incomingRaids,
                             onChanged: (value) {
                               settingsService.settings.value =
                                   settings.copyWith(
                                 chatEventsSettings:
-                                    settings.chatEventsSettings!.copyWith(
+                                    settings.chatEventsSettings.copyWith(
                                   incomingRaids: value,
                                 ),
                               );
@@ -289,12 +289,12 @@ class ChatEvents extends StatelessWidget {
                             ),
                           ),
                           Switch(
-                            value: settings.chatEventsSettings!.redemptions,
+                            value: settings.chatEventsSettings.redemptions,
                             onChanged: (value) {
                               settingsService.settings.value =
                                   settings.copyWith(
                                 chatEventsSettings:
-                                    settings.chatEventsSettings!.copyWith(
+                                    settings.chatEventsSettings.copyWith(
                                   redemptions: value,
                                 ),
                               );

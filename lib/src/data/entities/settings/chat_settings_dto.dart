@@ -34,7 +34,7 @@ class ChatSettingsDTO extends ChatSettings {
     }
 
     ChatGroup permanentFirstGroup =
-        const Settings.defaultSettings().chatSettings!.permanentFirstGroup;
+        const Settings.defaultSettings().chatSettings.permanentFirstGroup;
 
     if (map['permanentFirstGroup'] is ChatGroup) {
       permanentFirstGroup = map['permanentFirstGroup'];
@@ -48,7 +48,7 @@ class ChatSettingsDTO extends ChatSettings {
       permanentFirstGroup: permanentFirstGroup,
       chatGroups: gDto,
       hideDeletedMessages: map['hideDeletedMessages'] ??
-          const Settings.defaultSettings().chatSettings!.hideDeletedMessages,
+          const Settings.defaultSettings().chatSettings.hideDeletedMessages,
     );
   }
 }
@@ -67,7 +67,7 @@ class ChatGroupDTO extends ChatGroup {
 
     return ChatGroupDTO(
       id: map['id'] ??
-          const Settings.defaultSettings().chatSettings!.chatGroups.first.id,
+          const Settings.defaultSettings().chatSettings.chatGroups.first.id,
       channels: cDto,
     );
   }
@@ -97,7 +97,7 @@ class ChannelDTO extends Channel {
       platform: getPlatformFromString(
         map['platform'] ??
             const Settings.defaultSettings()
-                .chatSettings!
+                .chatSettings
                 .chatGroups
                 .first
                 .channels
@@ -106,7 +106,7 @@ class ChannelDTO extends Channel {
       ),
       channel: map['channel'] ??
           const Settings.defaultSettings()
-              .chatSettings!
+              .chatSettings
               .chatGroups
               .first
               .channels
@@ -114,7 +114,7 @@ class ChannelDTO extends Channel {
               .channel,
       enabled: map['enabled'] ??
           const Settings.defaultSettings()
-              .chatSettings!
+              .chatSettings
               .chatGroups
               .first
               .channels

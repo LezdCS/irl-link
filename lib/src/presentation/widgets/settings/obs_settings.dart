@@ -290,10 +290,10 @@ class ObsSettings extends StatelessWidget {
       height: 200,
       width: 300,
       child: ListView.builder(
-        itemCount: settings.obsConnectionsHistory!.length,
+        itemCount: settings.obsConnectionsHistory.length,
         itemBuilder: (context, index) {
-          String url = settings.obsConnectionsHistory![index]['url']!;
-          String password = settings.obsConnectionsHistory![index]['password']!;
+          String url = settings.obsConnectionsHistory[index]['url']!;
+          String password = settings.obsConnectionsHistory[index]['password']!;
 
           return ListTile(
             title: Text(url),

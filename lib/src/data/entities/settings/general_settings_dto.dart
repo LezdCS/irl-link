@@ -21,17 +21,17 @@ class GeneralSettingsDTO extends GeneralSettings {
   factory GeneralSettingsDTO.fromJson(Map<String, dynamic> map) {
     return GeneralSettingsDTO(
       isDarkMode: map['isDarkMode'] ??
-          const Settings.defaultSettings().generalSettings!.isDarkMode,
+          const Settings.defaultSettings().generalSettings.isDarkMode,
       keepSpeakerOn: map['keepSpeakerOn'] ??
-          const Settings.defaultSettings().generalSettings!.keepSpeakerOn,
+          const Settings.defaultSettings().generalSettings.keepSpeakerOn,
       displayViewerCount: map['displayViewerCount'] ??
-          const Settings.defaultSettings().generalSettings!.displayViewerCount,
+          const Settings.defaultSettings().generalSettings.displayViewerCount,
       appLanguage: map['appLanguage'] ??
-          const Settings.defaultSettings().generalSettings!.appLanguage,
+          const Settings.defaultSettings().generalSettings.appLanguage,
       splitViewWeights: (map['splitViewWeights'] as List?)
               ?.map((item) => item as double)
               .toList() ??
-          const Settings.defaultSettings().generalSettings!.splitViewWeights,
+          const Settings.defaultSettings().generalSettings.splitViewWeights,
     );
   }
 }

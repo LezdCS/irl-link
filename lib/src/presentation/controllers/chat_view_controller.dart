@@ -188,7 +188,7 @@ class ChatViewController extends GetxController
     Settings settings = Get.find<SettingsService>().settings.value;
 
     List hiddenUsersIds =
-        settings.hiddenUsersIds! != const [] ? settings.hiddenUsersIds! : [];
+        settings.hiddenUsersIds != const [] ? settings.hiddenUsersIds : [];
     if (hiddenUsersIds
             .firstWhereOrNull((userId) => userId == message.authorId) ==
         null) {
@@ -362,10 +362,10 @@ class ChatViewController extends GetxController
             .map((e) => ChatEmote.fromTwitch(e))
             .toList();
       }
-      if (settings.hiddenUsersIds!.contains(message.authorId)) {
+      if (settings.hiddenUsersIds.contains(message.authorId)) {
         return;
       }
-      if (settings.ttsSettings!.ttsEnabled) {
+      if (settings.ttsSettings.ttsEnabled) {
         ttsService.readTts(message);
       }
       ChatMessage twitchMessage =
@@ -387,7 +387,7 @@ class ChatViewController extends GetxController
     youtubeChat.startFetchingChat();
     youtubeChat.chatStream.listen((ChatMessage message) {
       Settings settings = Get.find<SettingsService>().settings.value;
-      if (settings.ttsSettings!.ttsEnabled) {
+      if (settings.ttsSettings.ttsEnabled) {
         ttsService.readTts(message);
       }
       addMessage(message);
@@ -422,7 +422,7 @@ class ChatViewController extends GetxController
             kickChat.userDetails!.subBadges,
           );
           Settings settings = Get.find<SettingsService>().settings.value;
-          if (settings.ttsSettings!.ttsEnabled) {
+          if (settings.ttsSettings.ttsEnabled) {
             ttsService.readTts(kickMessage);
           }
           addMessage(kickMessage);

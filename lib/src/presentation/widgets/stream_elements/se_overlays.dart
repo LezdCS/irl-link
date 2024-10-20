@@ -16,7 +16,7 @@ class SeOverlays extends GetView<StreamelementsViewController> {
   @override
   Widget build(BuildContext context) {
     Settings settings = Get.find<SettingsService>().settings.value;
-    String? overlayToken = settings.streamElementsSettings?.overlayToken;
+    String? overlayToken = settings.streamElementsSettings.overlayToken;
     return Column(
       children: [
         Visibility(
@@ -77,8 +77,7 @@ Widget _overlayRow(
 
   Settings settings = Get.find<SettingsService>().settings.value;
   bool isMuted =
-      settings.streamElementsSettings?.mutedOverlays.contains(overlay.id) ??
-          false;
+      settings.streamElementsSettings.mutedOverlays.contains(overlay.id);
   String? overlayUrl;
   Widget? webpage;
 
@@ -136,14 +135,14 @@ Widget _overlayRow(
               onTap: () {
                 Settings settings = Get.find<SettingsService>().settings.value;
                 List<String> mutedList =
-                    settings.streamElementsSettings!.mutedOverlays;
+                    settings.streamElementsSettings.mutedOverlays;
                 if (isMuted) {
                   mutedList.removeWhere((element) => element == overlay.id);
                 } else {
                   mutedList.add(overlay.id);
                 }
                 Get.find<SettingsService>().settings.value = settings.copyWith(
-                    streamElementsSettings: settings.streamElementsSettings!
+                    streamElementsSettings: settings.streamElementsSettings
                         .copyWith(mutedOverlays: mutedList));
                 Get.find<SettingsService>().saveSettings();
                 controller.overlays.refresh();

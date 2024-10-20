@@ -149,7 +149,7 @@ class SettingsView extends GetView<SettingsViewController> {
                             settings.copyWith(isEmotes: value);
                         Get.find<SettingsService>().saveSettings();
                       },
-                      value: settings.isEmotes!,
+                      value: settings.isEmotes,
                     )
                   ],
                 ),
@@ -160,7 +160,7 @@ class SettingsView extends GetView<SettingsViewController> {
                       "text_size".tr,
                       style: const TextStyle(fontSize: 18),
                     ),
-                    Text(settings.textSize!.ceil().toString(),
+                    Text(settings.textSize.ceil().toString(),
                         style: const TextStyle(fontSize: 18)),
                     Slider(
                       onChanged: (value) {
@@ -168,7 +168,7 @@ class SettingsView extends GetView<SettingsViewController> {
                             settings.copyWith(textSize: value);
                         Get.find<SettingsService>().saveSettings();
                       },
-                      value: settings.textSize!,
+                      value: settings.textSize,
                       min: 0.0,
                       max: 50.0,
                       divisions: 100,
@@ -189,7 +189,7 @@ class SettingsView extends GetView<SettingsViewController> {
                             settings.copyWith(displayTimestamp: value);
                         Get.find<SettingsService>().saveSettings();
                       },
-                      value: settings.displayTimestamp!,
+                      value: settings.displayTimestamp,
                     )
                   ],
                 ),
@@ -205,11 +205,11 @@ class SettingsView extends GetView<SettingsViewController> {
                         Get.find<SettingsService>().settings.value =
                             settings.copyWith(
                                 chatSettings: settings.chatSettings
-                                    ?.copyWith(hideDeletedMessages: value));
+                                    .copyWith(hideDeletedMessages: value));
 
                         Get.find<SettingsService>().saveSettings();
                       },
-                      value: settings.chatSettings!.hideDeletedMessages,
+                      value: settings.chatSettings.hideDeletedMessages,
                     )
                   ],
                 ),
@@ -311,11 +311,11 @@ class SettingsView extends GetView<SettingsViewController> {
                         Get.find<SettingsService>().settings.value =
                             settings.copyWith(
                           generalSettings: settings.generalSettings
-                              ?.copyWith(isDarkMode: value),
+                              .copyWith(isDarkMode: value),
                         );
                         Get.find<SettingsService>().saveSettings();
                       },
-                      value: settings.generalSettings!.isDarkMode,
+                      value: settings.generalSettings.isDarkMode,
                     )
                   ],
                 ),
@@ -335,11 +335,11 @@ class SettingsView extends GetView<SettingsViewController> {
                         Get.find<SettingsService>().settings.value =
                             settings.copyWith(
                           generalSettings: settings.generalSettings
-                              ?.copyWith(keepSpeakerOn: value),
+                              .copyWith(keepSpeakerOn: value),
                         );
                         Get.find<SettingsService>().saveSettings();
                       },
-                      value: settings.generalSettings!.keepSpeakerOn,
+                      value: settings.generalSettings.keepSpeakerOn,
                     )
                   ],
                 ),
@@ -359,11 +359,11 @@ class SettingsView extends GetView<SettingsViewController> {
                         Get.find<SettingsService>().settings.value =
                             settings.copyWith(
                           generalSettings: settings.generalSettings
-                              ?.copyWith(displayViewerCount: value),
+                              .copyWith(displayViewerCount: value),
                         );
                         Get.find<SettingsService>().saveSettings();
                       },
-                      value: settings.generalSettings!.displayViewerCount,
+                      value: settings.generalSettings.displayViewerCount,
                     )
                   ],
                 ),
@@ -397,7 +397,7 @@ class SettingsView extends GetView<SettingsViewController> {
 
                         Get.find<SettingsService>().settings.value =
                             settings.copyWith(
-                          generalSettings: settings.generalSettings?.copyWith(
+                          generalSettings: settings.generalSettings.copyWith(
                               appLanguage: {
                                 "languageCode": value['languageCode']!,
                                 "countryCode": value['countryCode']!
@@ -459,12 +459,12 @@ class SettingsView extends GetView<SettingsViewController> {
                             settings.copyWith(isObsConnected: value);
                         Get.find<SettingsService>().saveSettings();
                       },
-                      value: settings.isObsConnected!,
+                      value: settings.isObsConnected,
                     ),
                   ],
                 ),
                 Visibility(
-                  visible: settings.isObsConnected!,
+                  visible: settings.isObsConnected,
                   child: ObsSettings(
                     controller: controller,
                   ),

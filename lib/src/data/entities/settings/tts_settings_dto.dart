@@ -34,31 +34,31 @@ class TtsSettingsDTO extends TtsSettings {
   factory TtsSettingsDTO.fromJson(Map<String, dynamic> map) {
     return TtsSettingsDTO(
       ttsEnabled: map['ttsEnabled'] ??
-          const Settings.defaultSettings().ttsSettings!.ttsEnabled,
+          const Settings.defaultSettings().ttsSettings.ttsEnabled,
       language: map['language'] ??
-          const Settings.defaultSettings().ttsSettings!.language,
+          const Settings.defaultSettings().ttsSettings.language,
       prefixsToIgnore: map['prefixsToIgnore'] ??
-          const Settings.defaultSettings().ttsSettings!.prefixsToIgnore,
+          const Settings.defaultSettings().ttsSettings.prefixsToIgnore,
       prefixsToUseTtsOnly: map['prefixsToUseTtsOnly'] ??
-          const Settings.defaultSettings().ttsSettings!.prefixsToUseTtsOnly,
+          const Settings.defaultSettings().ttsSettings.prefixsToUseTtsOnly,
       volume:
-          map['volume'] ?? const Settings.defaultSettings().ttsSettings!.volume,
+          map['volume'] ?? const Settings.defaultSettings().ttsSettings.volume,
       pitch:
-          map['pitch'] ?? const Settings.defaultSettings().ttsSettings!.pitch,
-      rate: map['rate'] ?? const Settings.defaultSettings().ttsSettings!.rate,
+          map['pitch'] ?? const Settings.defaultSettings().ttsSettings.pitch,
+      rate: map['rate'] ?? const Settings.defaultSettings().ttsSettings.rate,
       voice: map['voice'] != null
           ? {"name": map["voice"]["name"], "locale": map["voice"]["locale"]}
-          : const Settings.defaultSettings().ttsSettings!.voice,
+          : const Settings.defaultSettings().ttsSettings.voice,
       ttsUsersToIgnore: map['ttsUsersToIgnore'] ??
-          const Settings.defaultSettings().ttsSettings!.ttsUsersToIgnore,
+          const Settings.defaultSettings().ttsSettings.ttsUsersToIgnore,
       ttsMuteViewerName: map['ttsMuteViewerName'] ??
-          const Settings.defaultSettings().ttsSettings!.ttsMuteViewerName,
+          const Settings.defaultSettings().ttsSettings.ttsMuteViewerName,
       ttsOnlyVip: map['ttsOnlyVip'] ??
-          const Settings.defaultSettings().ttsSettings!.ttsOnlyVip,
+          const Settings.defaultSettings().ttsSettings.ttsOnlyVip,
       ttsOnlyMod: map['ttsOnlyMod'] ??
-          const Settings.defaultSettings().ttsSettings!.ttsOnlyMod,
+          const Settings.defaultSettings().ttsSettings.ttsOnlyMod,
       ttsOnlySubscriber: map['ttsOnlySubscriber'] ??
-          const Settings.defaultSettings().ttsSettings!.ttsOnlySubscriber,
+          const Settings.defaultSettings().ttsSettings.ttsOnlySubscriber,
     );
   }
 }

@@ -42,18 +42,18 @@ class ManageListBrowserTabs extends GetView<SettingsViewController> {
                   shrinkWrap: true,
                   padding: const EdgeInsets.only(
                       top: 8, left: 18, right: 18, bottom: 8),
-                  itemCount: settings.browserTabs!.tabs.length,
+                  itemCount: settings.browserTabs.tabs.length,
                   onReorder: (int oldIndex, int newIndex) {
                     if (newIndex > oldIndex) {
                       newIndex -= 1;
                     }
                     final element =
-                        settings.browserTabs!.tabs.removeAt(oldIndex);
-                    settings.browserTabs!.tabs.insert(newIndex, element);
+                        settings.browserTabs.tabs.removeAt(oldIndex);
+                    settings.browserTabs.tabs.insert(newIndex, element);
                     Get.find<SettingsService>().saveSettings();
                   },
                   itemBuilder: (BuildContext context, int index) {
-                    BrowserTab elem = settings.browserTabs!.tabs[index];
+                    BrowserTab elem = settings.browserTabs.tabs[index];
                     return Dismissible(
                       key: ValueKey(elem),
                       background: Container(

@@ -53,16 +53,23 @@ import '../../domain/entities/twitch/twitch_user.dart' as _i22;
 /// {@template package:irllink/src/core/utils/mapper.dart}
 /// Available mappings:
 /// - `Settings` → `SettingsDTO`.
+/// - `SettingsDTO` → `Settings`.
 /// - `Channel` → `ChannelDTO`.
 /// - `ChatGroup` → `ChatGroupDTO`.
 /// - `BrowserTab` → `BrowserTabDTO`.
 /// - `ChatSettings` → `ChatSettingsDTO`.
+/// - `ChatSettingsDTO` → `ChatSettings`.
 /// - `GeneralSettings` → `GeneralSettingsDTO`.
+/// - `GeneralSettingsDTO` → `GeneralSettings`.
 /// - `DashboardEvent` → `DashboardEventDTO`.
 /// - `BrowserTabSettings` → `BrowserTabSettingsDTO`.
+/// - `BrowserTabSettingsDTO` → `BrowserTabSettings`.
 /// - `StreamElementsSettings` → `StreamElementsSettingsDTO`.
+/// - `StreamElementsSettingsDTO` → `StreamElementsSettings`.
 /// - `TtsSettings` → `TtsSettingsDTO`.
+/// - `TtsSettingsDTO` → `TtsSettings`.
 /// - `ChatEventsSettings` → `ChatEventsSettingsDTO`.
+/// - `ChatEventsSettingsDTO` → `ChatEventsSettings`.
 /// - `TwitchCredentials` → `TwitchCredentialsDTO`.
 /// - `TwitchCredentialsDTO` → `TwitchCredentials`.
 /// - `TwitchDecodedIdToken` → `TwitchDecodedIdTokenDTO`.
@@ -70,6 +77,7 @@ import '../../domain/entities/twitch/twitch_user.dart' as _i22;
 /// - `TwitchUser` → `TwitchUserDTO`.
 /// - `TwitchUserDTO` → `TwitchUser`.
 /// - `DashboardSettings` → `DashboardSettingsDTO`.
+/// - `DashboardSettingsDTO` → `DashboardSettings`.
 /// - `TwitchPoll` → `TwitchPollDTO`.
 /// - `TwitchPollDTO` → `TwitchPoll`.
 /// - `Choice` → `ChoiceDTO`.
@@ -104,6 +112,12 @@ class $Mappr implements _i1.AutoMapprInterface {
             targetTypeOf == _typeOf<_i3.SettingsDTO?>())) {
       return true;
     }
+    if ((sourceTypeOf == _typeOf<_i3.SettingsDTO>() ||
+            sourceTypeOf == _typeOf<_i3.SettingsDTO?>()) &&
+        (targetTypeOf == _typeOf<_i2.Settings>() ||
+            targetTypeOf == _typeOf<_i2.Settings?>())) {
+      return true;
+    }
     if ((sourceTypeOf == _typeOf<_i4.Channel>() ||
             sourceTypeOf == _typeOf<_i4.Channel?>()) &&
         (targetTypeOf == _typeOf<_i5.ChannelDTO>() ||
@@ -128,10 +142,22 @@ class $Mappr implements _i1.AutoMapprInterface {
             targetTypeOf == _typeOf<_i5.ChatSettingsDTO?>())) {
       return true;
     }
+    if ((sourceTypeOf == _typeOf<_i5.ChatSettingsDTO>() ||
+            sourceTypeOf == _typeOf<_i5.ChatSettingsDTO?>()) &&
+        (targetTypeOf == _typeOf<_i4.ChatSettings>() ||
+            targetTypeOf == _typeOf<_i4.ChatSettings?>())) {
+      return true;
+    }
     if ((sourceTypeOf == _typeOf<_i8.GeneralSettings>() ||
             sourceTypeOf == _typeOf<_i8.GeneralSettings?>()) &&
         (targetTypeOf == _typeOf<_i9.GeneralSettingsDTO>() ||
             targetTypeOf == _typeOf<_i9.GeneralSettingsDTO?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i9.GeneralSettingsDTO>() ||
+            sourceTypeOf == _typeOf<_i9.GeneralSettingsDTO?>()) &&
+        (targetTypeOf == _typeOf<_i8.GeneralSettings>() ||
+            targetTypeOf == _typeOf<_i8.GeneralSettings?>())) {
       return true;
     }
     if ((sourceTypeOf == _typeOf<_i10.DashboardEvent>() ||
@@ -146,10 +172,22 @@ class $Mappr implements _i1.AutoMapprInterface {
             targetTypeOf == _typeOf<_i7.BrowserTabSettingsDTO?>())) {
       return true;
     }
+    if ((sourceTypeOf == _typeOf<_i7.BrowserTabSettingsDTO>() ||
+            sourceTypeOf == _typeOf<_i7.BrowserTabSettingsDTO?>()) &&
+        (targetTypeOf == _typeOf<_i6.BrowserTabSettings>() ||
+            targetTypeOf == _typeOf<_i6.BrowserTabSettings?>())) {
+      return true;
+    }
     if ((sourceTypeOf == _typeOf<_i12.StreamElementsSettings>() ||
             sourceTypeOf == _typeOf<_i12.StreamElementsSettings?>()) &&
         (targetTypeOf == _typeOf<_i13.StreamElementsSettingsDTO>() ||
             targetTypeOf == _typeOf<_i13.StreamElementsSettingsDTO?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i13.StreamElementsSettingsDTO>() ||
+            sourceTypeOf == _typeOf<_i13.StreamElementsSettingsDTO?>()) &&
+        (targetTypeOf == _typeOf<_i12.StreamElementsSettings>() ||
+            targetTypeOf == _typeOf<_i12.StreamElementsSettings?>())) {
       return true;
     }
     if ((sourceTypeOf == _typeOf<_i14.TtsSettings>() ||
@@ -158,10 +196,22 @@ class $Mappr implements _i1.AutoMapprInterface {
             targetTypeOf == _typeOf<_i15.TtsSettingsDTO?>())) {
       return true;
     }
+    if ((sourceTypeOf == _typeOf<_i15.TtsSettingsDTO>() ||
+            sourceTypeOf == _typeOf<_i15.TtsSettingsDTO?>()) &&
+        (targetTypeOf == _typeOf<_i14.TtsSettings>() ||
+            targetTypeOf == _typeOf<_i14.TtsSettings?>())) {
+      return true;
+    }
     if ((sourceTypeOf == _typeOf<_i16.ChatEventsSettings>() ||
             sourceTypeOf == _typeOf<_i16.ChatEventsSettings?>()) &&
         (targetTypeOf == _typeOf<_i17.ChatEventsSettingsDTO>() ||
             targetTypeOf == _typeOf<_i17.ChatEventsSettingsDTO?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i17.ChatEventsSettingsDTO>() ||
+            sourceTypeOf == _typeOf<_i17.ChatEventsSettingsDTO?>()) &&
+        (targetTypeOf == _typeOf<_i16.ChatEventsSettings>() ||
+            targetTypeOf == _typeOf<_i16.ChatEventsSettings?>())) {
       return true;
     }
     if ((sourceTypeOf == _typeOf<_i18.TwitchCredentials>() ||
@@ -204,6 +254,12 @@ class $Mappr implements _i1.AutoMapprInterface {
             sourceTypeOf == _typeOf<_i24.DashboardSettings?>()) &&
         (targetTypeOf == _typeOf<_i25.DashboardSettingsDTO>() ||
             targetTypeOf == _typeOf<_i25.DashboardSettingsDTO?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i25.DashboardSettingsDTO>() ||
+            sourceTypeOf == _typeOf<_i25.DashboardSettingsDTO?>()) &&
+        (targetTypeOf == _typeOf<_i24.DashboardSettings>() ||
+            targetTypeOf == _typeOf<_i24.DashboardSettings?>())) {
       return true;
     }
     if ((sourceTypeOf == _typeOf<_i26.TwitchPoll>() ||
@@ -491,6 +547,16 @@ class $Mappr implements _i1.AutoMapprInterface {
       return (_map__i2$Settings_To__i3$SettingsDTO((model as _i2.Settings?))
           as TARGET);
     }
+    if ((sourceTypeOf == _typeOf<_i3.SettingsDTO>() ||
+            sourceTypeOf == _typeOf<_i3.SettingsDTO?>()) &&
+        (targetTypeOf == _typeOf<_i2.Settings>() ||
+            targetTypeOf == _typeOf<_i2.Settings?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i3$SettingsDTO_To__i2$Settings((model as _i3.SettingsDTO?))
+          as TARGET);
+    }
     if ((sourceTypeOf == _typeOf<_i4.Channel>() ||
             sourceTypeOf == _typeOf<_i4.Channel?>()) &&
         (targetTypeOf == _typeOf<_i5.ChannelDTO>() ||
@@ -531,6 +597,16 @@ class $Mappr implements _i1.AutoMapprInterface {
       return (_map__i4$ChatSettings_To__i5$ChatSettingsDTO(
           (model as _i4.ChatSettings?)) as TARGET);
     }
+    if ((sourceTypeOf == _typeOf<_i5.ChatSettingsDTO>() ||
+            sourceTypeOf == _typeOf<_i5.ChatSettingsDTO?>()) &&
+        (targetTypeOf == _typeOf<_i4.ChatSettings>() ||
+            targetTypeOf == _typeOf<_i4.ChatSettings?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i5$ChatSettingsDTO_To__i4$ChatSettings(
+          (model as _i5.ChatSettingsDTO?)) as TARGET);
+    }
     if ((sourceTypeOf == _typeOf<_i8.GeneralSettings>() ||
             sourceTypeOf == _typeOf<_i8.GeneralSettings?>()) &&
         (targetTypeOf == _typeOf<_i9.GeneralSettingsDTO>() ||
@@ -540,6 +616,16 @@ class $Mappr implements _i1.AutoMapprInterface {
       }
       return (_map__i8$GeneralSettings_To__i9$GeneralSettingsDTO(
           (model as _i8.GeneralSettings?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i9.GeneralSettingsDTO>() ||
+            sourceTypeOf == _typeOf<_i9.GeneralSettingsDTO?>()) &&
+        (targetTypeOf == _typeOf<_i8.GeneralSettings>() ||
+            targetTypeOf == _typeOf<_i8.GeneralSettings?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i9$GeneralSettingsDTO_To__i8$GeneralSettings(
+          (model as _i9.GeneralSettingsDTO?)) as TARGET);
     }
     if ((sourceTypeOf == _typeOf<_i10.DashboardEvent>() ||
             sourceTypeOf == _typeOf<_i10.DashboardEvent?>()) &&
@@ -561,6 +647,16 @@ class $Mappr implements _i1.AutoMapprInterface {
       return (_map__i6$BrowserTabSettings_To__i7$BrowserTabSettingsDTO(
           (model as _i6.BrowserTabSettings?)) as TARGET);
     }
+    if ((sourceTypeOf == _typeOf<_i7.BrowserTabSettingsDTO>() ||
+            sourceTypeOf == _typeOf<_i7.BrowserTabSettingsDTO?>()) &&
+        (targetTypeOf == _typeOf<_i6.BrowserTabSettings>() ||
+            targetTypeOf == _typeOf<_i6.BrowserTabSettings?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i7$BrowserTabSettingsDTO_To__i6$BrowserTabSettings(
+          (model as _i7.BrowserTabSettingsDTO?)) as TARGET);
+    }
     if ((sourceTypeOf == _typeOf<_i12.StreamElementsSettings>() ||
             sourceTypeOf == _typeOf<_i12.StreamElementsSettings?>()) &&
         (targetTypeOf == _typeOf<_i13.StreamElementsSettingsDTO>() ||
@@ -570,6 +666,16 @@ class $Mappr implements _i1.AutoMapprInterface {
       }
       return (_map__i12$StreamElementsSettings_To__i13$StreamElementsSettingsDTO(
           (model as _i12.StreamElementsSettings?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i13.StreamElementsSettingsDTO>() ||
+            sourceTypeOf == _typeOf<_i13.StreamElementsSettingsDTO?>()) &&
+        (targetTypeOf == _typeOf<_i12.StreamElementsSettings>() ||
+            targetTypeOf == _typeOf<_i12.StreamElementsSettings?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i13$StreamElementsSettingsDTO_To__i12$StreamElementsSettings(
+          (model as _i13.StreamElementsSettingsDTO?)) as TARGET);
     }
     if ((sourceTypeOf == _typeOf<_i14.TtsSettings>() ||
             sourceTypeOf == _typeOf<_i14.TtsSettings?>()) &&
@@ -581,6 +687,16 @@ class $Mappr implements _i1.AutoMapprInterface {
       return (_map__i14$TtsSettings_To__i15$TtsSettingsDTO(
           (model as _i14.TtsSettings?)) as TARGET);
     }
+    if ((sourceTypeOf == _typeOf<_i15.TtsSettingsDTO>() ||
+            sourceTypeOf == _typeOf<_i15.TtsSettingsDTO?>()) &&
+        (targetTypeOf == _typeOf<_i14.TtsSettings>() ||
+            targetTypeOf == _typeOf<_i14.TtsSettings?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i15$TtsSettingsDTO_To__i14$TtsSettings(
+          (model as _i15.TtsSettingsDTO?)) as TARGET);
+    }
     if ((sourceTypeOf == _typeOf<_i16.ChatEventsSettings>() ||
             sourceTypeOf == _typeOf<_i16.ChatEventsSettings?>()) &&
         (targetTypeOf == _typeOf<_i17.ChatEventsSettingsDTO>() ||
@@ -590,6 +706,16 @@ class $Mappr implements _i1.AutoMapprInterface {
       }
       return (_map__i16$ChatEventsSettings_To__i17$ChatEventsSettingsDTO(
           (model as _i16.ChatEventsSettings?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i17.ChatEventsSettingsDTO>() ||
+            sourceTypeOf == _typeOf<_i17.ChatEventsSettingsDTO?>()) &&
+        (targetTypeOf == _typeOf<_i16.ChatEventsSettings>() ||
+            targetTypeOf == _typeOf<_i16.ChatEventsSettings?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i17$ChatEventsSettingsDTO_To__i16$ChatEventsSettings(
+          (model as _i17.ChatEventsSettingsDTO?)) as TARGET);
     }
     if ((sourceTypeOf == _typeOf<_i18.TwitchCredentials>() ||
             sourceTypeOf == _typeOf<_i18.TwitchCredentials?>()) &&
@@ -660,6 +786,16 @@ class $Mappr implements _i1.AutoMapprInterface {
       }
       return (_map__i24$DashboardSettings_To__i25$DashboardSettingsDTO(
           (model as _i24.DashboardSettings?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i25.DashboardSettingsDTO>() ||
+            sourceTypeOf == _typeOf<_i25.DashboardSettingsDTO?>()) &&
+        (targetTypeOf == _typeOf<_i24.DashboardSettings>() ||
+            targetTypeOf == _typeOf<_i24.DashboardSettings?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i25$DashboardSettingsDTO_To__i24$DashboardSettings(
+          (model as _i25.DashboardSettingsDTO?)) as TARGET);
     }
     if ((sourceTypeOf == _typeOf<_i26.TwitchPoll>() ||
             sourceTypeOf == _typeOf<_i26.TwitchPoll?>()) &&
@@ -845,18 +981,65 @@ class $Mappr implements _i1.AutoMapprInterface {
       textSize: model.textSize,
       displayTimestamp: model.displayTimestamp,
       hiddenUsersIds: model.hiddenUsersIds,
-      chatEventsSettings: model.chatEventsSettings,
-      chatSettings: model.chatSettings,
-      generalSettings: model.generalSettings,
-      dashboardSettings: model.dashboardSettings,
+      chatEventsSettings:
+          _map__i16$ChatEventsSettings_To__i17$ChatEventsSettingsDTO(
+              model.chatEventsSettings),
+      chatSettings:
+          _map__i4$ChatSettings_To__i5$ChatSettingsDTO(model.chatSettings),
+      generalSettings: _map__i8$GeneralSettings_To__i9$GeneralSettingsDTO(
+          model.generalSettings),
+      dashboardSettings:
+          _map__i24$DashboardSettings_To__i25$DashboardSettingsDTO(
+              model.dashboardSettings),
       isObsConnected: model.isObsConnected,
       obsWebsocketUrl: model.obsWebsocketUrl,
       obsWebsocketPassword: model.obsWebsocketPassword,
-      browserTabs: model.browserTabs,
+      browserTabs: _map__i6$BrowserTabSettings_To__i7$BrowserTabSettingsDTO(
+          model.browserTabs),
       obsConnectionsHistory: model.obsConnectionsHistory,
-      streamElementsSettings: model.streamElementsSettings,
+      streamElementsSettings:
+          _map__i12$StreamElementsSettings_To__i13$StreamElementsSettingsDTO(
+              model.streamElementsSettings),
       rtIrlPushKey: model.rtIrlPushKey,
-      ttsSettings: model.ttsSettings,
+      ttsSettings:
+          _map__i14$TtsSettings_To__i15$TtsSettingsDTO(model.ttsSettings),
+    );
+  }
+
+  _i2.Settings _map__i3$SettingsDTO_To__i2$Settings(_i3.SettingsDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping SettingsDTO → Settings failed because SettingsDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<SettingsDTO, Settings> to handle null values during mapping.');
+    }
+    return _i2.Settings(
+      isEmotes: model.isEmotes,
+      textSize: model.textSize,
+      displayTimestamp: model.displayTimestamp,
+      hiddenUsersIds: model.hiddenUsersIds,
+      chatEventsSettings:
+          _map__i17$ChatEventsSettingsDTO_To__i16$ChatEventsSettings(
+              model.chatEventsSettings),
+      chatSettings:
+          _map__i5$ChatSettingsDTO_To__i4$ChatSettings(model.chatSettings),
+      generalSettings: _map__i9$GeneralSettingsDTO_To__i8$GeneralSettings(
+          model.generalSettings),
+      dashboardSettings:
+          _map__i25$DashboardSettingsDTO_To__i24$DashboardSettings(
+              model.dashboardSettings),
+      isObsConnected: model.isObsConnected,
+      obsWebsocketUrl: model.obsWebsocketUrl,
+      obsWebsocketPassword: model.obsWebsocketPassword,
+      browserTabs: _map__i7$BrowserTabSettingsDTO_To__i6$BrowserTabSettings(
+          model.browserTabs),
+      obsConnectionsHistory: model.obsConnectionsHistory,
+      streamElementsSettings:
+          _map__i13$StreamElementsSettingsDTO_To__i12$StreamElementsSettings(
+              model.streamElementsSettings),
+      rtIrlPushKey: model.rtIrlPushKey,
+      ttsSettings:
+          _map__i15$TtsSettingsDTO_To__i14$TtsSettings(model.ttsSettings),
     );
   }
 
@@ -920,6 +1103,21 @@ class $Mappr implements _i1.AutoMapprInterface {
     );
   }
 
+  _i4.ChatSettings _map__i5$ChatSettingsDTO_To__i4$ChatSettings(
+      _i5.ChatSettingsDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping ChatSettingsDTO → ChatSettings failed because ChatSettingsDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<ChatSettingsDTO, ChatSettings> to handle null values during mapping.');
+    }
+    return _i4.ChatSettings(
+      permanentFirstGroup: model.permanentFirstGroup,
+      chatGroups: model.chatGroups,
+      hideDeletedMessages: model.hideDeletedMessages,
+    );
+  }
+
   _i9.GeneralSettingsDTO _map__i8$GeneralSettings_To__i9$GeneralSettingsDTO(
       _i8.GeneralSettings? input) {
     final model = input;
@@ -929,6 +1127,23 @@ class $Mappr implements _i1.AutoMapprInterface {
           r'Consider setting the whenSourceIsNull parameter on the MapType<GeneralSettings, GeneralSettingsDTO> to handle null values during mapping.');
     }
     return _i9.GeneralSettingsDTO(
+      isDarkMode: model.isDarkMode,
+      keepSpeakerOn: model.keepSpeakerOn,
+      displayViewerCount: model.displayViewerCount,
+      appLanguage: model.appLanguage,
+      splitViewWeights: model.splitViewWeights,
+    );
+  }
+
+  _i8.GeneralSettings _map__i9$GeneralSettingsDTO_To__i8$GeneralSettings(
+      _i9.GeneralSettingsDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping GeneralSettingsDTO → GeneralSettings failed because GeneralSettingsDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<GeneralSettingsDTO, GeneralSettings> to handle null values during mapping.');
+    }
+    return _i8.GeneralSettings(
       isDarkMode: model.isDarkMode,
       keepSpeakerOn: model.keepSpeakerOn,
       displayViewerCount: model.displayViewerCount,
@@ -966,6 +1181,18 @@ class $Mappr implements _i1.AutoMapprInterface {
     return _i7.BrowserTabSettingsDTO(tabs: model.tabs);
   }
 
+  _i6.BrowserTabSettings
+      _map__i7$BrowserTabSettingsDTO_To__i6$BrowserTabSettings(
+          _i7.BrowserTabSettingsDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping BrowserTabSettingsDTO → BrowserTabSettings failed because BrowserTabSettingsDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<BrowserTabSettingsDTO, BrowserTabSettings> to handle null values during mapping.');
+    }
+    return _i6.BrowserTabSettings(tabs: model.tabs);
+  }
+
   _i13.StreamElementsSettingsDTO
       _map__i12$StreamElementsSettings_To__i13$StreamElementsSettingsDTO(
           _i12.StreamElementsSettings? input) {
@@ -976,6 +1203,29 @@ class $Mappr implements _i1.AutoMapprInterface {
           r'Consider setting the whenSourceIsNull parameter on the MapType<StreamElementsSettings, StreamElementsSettingsDTO> to handle null values during mapping.');
     }
     return _i13.StreamElementsSettingsDTO(
+      showFollowerActivity: model.showFollowerActivity,
+      showSubscriberActivity: model.showSubscriberActivity,
+      showDonationActivity: model.showDonationActivity,
+      showCheerActivity: model.showCheerActivity,
+      showRaidActivity: model.showRaidActivity,
+      showHostActivity: model.showHostActivity,
+      showMerchActivity: model.showMerchActivity,
+      jwt: model.jwt,
+      overlayToken: model.overlayToken,
+      mutedOverlays: model.mutedOverlays,
+    );
+  }
+
+  _i12.StreamElementsSettings
+      _map__i13$StreamElementsSettingsDTO_To__i12$StreamElementsSettings(
+          _i13.StreamElementsSettingsDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping StreamElementsSettingsDTO → StreamElementsSettings failed because StreamElementsSettingsDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<StreamElementsSettingsDTO, StreamElementsSettings> to handle null values during mapping.');
+    }
+    return _i12.StreamElementsSettings(
       showFollowerActivity: model.showFollowerActivity,
       showSubscriberActivity: model.showSubscriberActivity,
       showDonationActivity: model.showDonationActivity,
@@ -1014,6 +1264,31 @@ class $Mappr implements _i1.AutoMapprInterface {
     );
   }
 
+  _i14.TtsSettings _map__i15$TtsSettingsDTO_To__i14$TtsSettings(
+      _i15.TtsSettingsDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping TtsSettingsDTO → TtsSettings failed because TtsSettingsDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<TtsSettingsDTO, TtsSettings> to handle null values during mapping.');
+    }
+    return _i14.TtsSettings(
+      ttsEnabled: model.ttsEnabled,
+      language: model.language,
+      prefixsToIgnore: model.prefixsToIgnore,
+      prefixsToUseTtsOnly: model.prefixsToUseTtsOnly,
+      volume: model.volume,
+      pitch: model.pitch,
+      rate: model.rate,
+      voice: model.voice,
+      ttsUsersToIgnore: model.ttsUsersToIgnore,
+      ttsMuteViewerName: model.ttsMuteViewerName,
+      ttsOnlyVip: model.ttsOnlyVip,
+      ttsOnlyMod: model.ttsOnlyMod,
+      ttsOnlySubscriber: model.ttsOnlySubscriber,
+    );
+  }
+
   _i17.ChatEventsSettingsDTO
       _map__i16$ChatEventsSettings_To__i17$ChatEventsSettingsDTO(
           _i16.ChatEventsSettings? input) {
@@ -1024,6 +1299,25 @@ class $Mappr implements _i1.AutoMapprInterface {
           r'Consider setting the whenSourceIsNull parameter on the MapType<ChatEventsSettings, ChatEventsSettingsDTO> to handle null values during mapping.');
     }
     return _i17.ChatEventsSettingsDTO(
+      firstsMessages: model.firstsMessages,
+      subscriptions: model.subscriptions,
+      bitsDonations: model.bitsDonations,
+      announcements: model.announcements,
+      incomingRaids: model.incomingRaids,
+      redemptions: model.redemptions,
+    );
+  }
+
+  _i16.ChatEventsSettings
+      _map__i17$ChatEventsSettingsDTO_To__i16$ChatEventsSettings(
+          _i17.ChatEventsSettingsDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping ChatEventsSettingsDTO → ChatEventsSettings failed because ChatEventsSettingsDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<ChatEventsSettingsDTO, ChatEventsSettings> to handle null values during mapping.');
+    }
+    return _i16.ChatEventsSettings(
       firstsMessages: model.firstsMessages,
       subscriptions: model.subscriptions,
       bitsDonations: model.bitsDonations,
@@ -1155,6 +1449,21 @@ class $Mappr implements _i1.AutoMapprInterface {
           r'Consider setting the whenSourceIsNull parameter on the MapType<DashboardSettings, DashboardSettingsDTO> to handle null values during mapping.');
     }
     return _i25.DashboardSettingsDTO(
+      userEvents: model.userEvents,
+      activated: model.activated,
+    );
+  }
+
+  _i24.DashboardSettings
+      _map__i25$DashboardSettingsDTO_To__i24$DashboardSettings(
+          _i25.DashboardSettingsDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping DashboardSettingsDTO → DashboardSettings failed because DashboardSettingsDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<DashboardSettingsDTO, DashboardSettings> to handle null values during mapping.');
+    }
+    return _i24.DashboardSettings(
       userEvents: model.userEvents,
       activated: model.activated,
     );

@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
@@ -42,7 +41,7 @@ class StreamElements extends GetView<SettingsViewController> {
                     ),
                   ),
                   const Icon(
-                    CupertinoIcons.sparkles,
+                    Icons.star_purple500,
                     size: 12,
                     color: Colors.yellow,
                   ),
@@ -102,7 +101,7 @@ class StreamElements extends GetView<SettingsViewController> {
                   Get.find<SettingsService>().settings.value =
                       settings.copyWith(
                     streamElementsSettings:
-                        settings.streamElementsSettings!.copyWith(jwt: value),
+                        settings.streamElementsSettings.copyWith(jwt: value),
                   );
                   Get.find<SettingsService>().saveSettings();
                 },
@@ -144,7 +143,7 @@ class StreamElements extends GetView<SettingsViewController> {
                 onChanged: (value) {
                   Get.find<SettingsService>().settings.value =
                       settings.copyWith(
-                    streamElementsSettings: settings.streamElementsSettings!
+                    streamElementsSettings: settings.streamElementsSettings
                         .copyWith(overlayToken: value),
                   );
                   Get.find<SettingsService>().saveSettings();

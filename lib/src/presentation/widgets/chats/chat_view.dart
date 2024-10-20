@@ -100,10 +100,10 @@ class ChatView extends GetView<ChatViewController> {
                                   message: message,
                                   selectedMessage: controller
                                       .homeViewController.selectedMessage.value,
-                                  displayTimestamp: settings.displayTimestamp!,
-                                  textSize: settings.textSize!,
+                                  displayTimestamp: settings.displayTimestamp,
+                                  textSize: settings.textSize,
                                   hideDeletedMessages: settings
-                                      .chatSettings!.hideDeletedMessages,
+                                      .chatSettings.hideDeletedMessages,
                                   cheerEmotes: controller.cheerEmotes,
                                   thirdPartEmotes: controller.thirdPartEmotes,
                                   showPlatformBadge: multiplePlatform,
@@ -112,10 +112,10 @@ class ChatView extends GetView<ChatViewController> {
                                   selectedMessage: controller
                                       .homeViewController.selectedMessage.value,
                                   message: message,
-                                  displayTimestamp: settings.displayTimestamp!,
-                                  textSize: settings.textSize!,
+                                  displayTimestamp: settings.displayTimestamp,
+                                  textSize: settings.textSize,
                                   hideDeletedMessages: settings
-                                      .chatSettings!.hideDeletedMessages,
+                                      .chatSettings.hideDeletedMessages,
                                   cheerEmotes: controller.cheerEmotes,
                                   thirdPartEmotes: controller.thirdPartEmotes,
                                   showPlatformBadge: multiplePlatform,

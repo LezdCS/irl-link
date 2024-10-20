@@ -14,11 +14,11 @@ class DashboardController extends GetxController {
     Settings settings = Get.find<SettingsService>().settings.value;
 
     List<DashboardEvent> events = [];
-    events.addAll(settings.dashboardSettings!.userEvents);
+    events.addAll(settings.dashboardSettings.userEvents);
     events.add(event);
     Get.find<SettingsService>().settings.value = settings.copyWith(
       dashboardSettings:
-          settings.dashboardSettings!.copyWith(userEvents: events),
+          settings.dashboardSettings.copyWith(userEvents: events),
     );
     Get.find<SettingsService>().saveSettings();
 
@@ -29,11 +29,11 @@ class DashboardController extends GetxController {
   void removeDashboardEvent(DashboardEvent event) {
     Settings settings = Get.find<SettingsService>().settings.value;
 
-    List<DashboardEvent> events = settings.dashboardSettings!.userEvents;
+    List<DashboardEvent> events = settings.dashboardSettings.userEvents;
     events.remove(event);
     Get.find<SettingsService>().settings.value = settings.copyWith(
       dashboardSettings:
-          settings.dashboardSettings!.copyWith(userEvents: events),
+          settings.dashboardSettings.copyWith(userEvents: events),
     );
     Get.find<SettingsService>().saveSettings();
   }
