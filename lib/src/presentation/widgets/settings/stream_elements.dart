@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
@@ -42,7 +41,7 @@ class StreamElements extends GetView<SettingsViewController> {
                     ),
                   ),
                   const Icon(
-                    CupertinoIcons.sparkles,
+                    Icons.star_purple500,
                     size: 12,
                     color: Colors.yellow,
                   ),
