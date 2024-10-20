@@ -1,36 +1,15 @@
-import 'package:irllink/src/core/utils/mapper.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:irllink/src/data/entities/dashboard_event_dto.dart';
-import 'package:irllink/src/domain/entities/dashboard_event.dart';
-import 'package:irllink/src/domain/entities/settings/dashboard_settings.dart';
 
-class DashboardSettingsDTO extends DashboardSettings {
-  const DashboardSettingsDTO({
-    required super.userEvents,
-    required super.activated,
-  });
+part 'dashboard_settings_dto.freezed.dart';
+part 'dashboard_settings_dto.g.dart';
 
-  Map<String, dynamic> toJson() {
-    Mappr mappr = Mappr();
-    List<Map<String, dynamic>> userEventsList = 
-      userEvents.map((event) => 
-      mappr.convert<DashboardEvent, DashboardEventDTO>(event).toJson()
-      ).toList();
+@freezed
+class DashboardSettingsDTO with _$DashboardSettingsDTO {
+  const factory DashboardSettingsDTO({
+    required List<DashboardEventDTO> userEvents,
+    required bool activated,
+  }) = _DashboardSettingsDTO;
 
-    return {
-      'userEvents': userEventsList,
-      'activated': activated,
-    };
-  }
-
-  factory DashboardSettingsDTO.fromJson(Map<String, dynamic> map) {
-    List<DashboardEventDTO> userEvents = [];
-    map['userEvents'].forEach((element) {
-      userEvents.add(DashboardEventDTO.fromJson(element));
-    });
-
-    return DashboardSettingsDTO(
-      userEvents: userEvents,
-      activated: map['activated'],
-    );
-  }
+  factory DashboardSettingsDTO.fromJson(Map<String, dynamic> json) => _$DashboardSettingsDTOFromJson(json);
 }

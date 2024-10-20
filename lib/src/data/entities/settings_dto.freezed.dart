@@ -77,7 +77,12 @@ abstract class $SettingsDTOCopyWith<$Res> {
       TtsSettingsDTO ttsSettings});
 
   $ChatEventsSettingsDTOCopyWith<$Res> get chatEventsSettings;
+  $ChatSettingsDTOCopyWith<$Res> get chatSettings;
+  $GeneralSettingsDTOCopyWith<$Res> get generalSettings;
+  $DashboardSettingsDTOCopyWith<$Res> get dashboardSettings;
+  $BrowserTabSettingsDTOCopyWith<$Res> get browserTabs;
   $StreamElementsSettingsDTOCopyWith<$Res> get streamElementsSettings;
+  $TtsSettingsDTOCopyWith<$Res> get ttsSettings;
 }
 
 /// @nodoc
@@ -195,10 +200,61 @@ class _$SettingsDTOCopyWithImpl<$Res, $Val extends SettingsDTO>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
+  $ChatSettingsDTOCopyWith<$Res> get chatSettings {
+    return $ChatSettingsDTOCopyWith<$Res>(_value.chatSettings, (value) {
+      return _then(_value.copyWith(chatSettings: value) as $Val);
+    });
+  }
+
+  /// Create a copy of SettingsDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $GeneralSettingsDTOCopyWith<$Res> get generalSettings {
+    return $GeneralSettingsDTOCopyWith<$Res>(_value.generalSettings, (value) {
+      return _then(_value.copyWith(generalSettings: value) as $Val);
+    });
+  }
+
+  /// Create a copy of SettingsDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $DashboardSettingsDTOCopyWith<$Res> get dashboardSettings {
+    return $DashboardSettingsDTOCopyWith<$Res>(_value.dashboardSettings,
+        (value) {
+      return _then(_value.copyWith(dashboardSettings: value) as $Val);
+    });
+  }
+
+  /// Create a copy of SettingsDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $BrowserTabSettingsDTOCopyWith<$Res> get browserTabs {
+    return $BrowserTabSettingsDTOCopyWith<$Res>(_value.browserTabs, (value) {
+      return _then(_value.copyWith(browserTabs: value) as $Val);
+    });
+  }
+
+  /// Create a copy of SettingsDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
   $StreamElementsSettingsDTOCopyWith<$Res> get streamElementsSettings {
     return $StreamElementsSettingsDTOCopyWith<$Res>(
         _value.streamElementsSettings, (value) {
       return _then(_value.copyWith(streamElementsSettings: value) as $Val);
+    });
+  }
+
+  /// Create a copy of SettingsDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TtsSettingsDTOCopyWith<$Res> get ttsSettings {
+    return $TtsSettingsDTOCopyWith<$Res>(_value.ttsSettings, (value) {
+      return _then(_value.copyWith(ttsSettings: value) as $Val);
     });
   }
 }
@@ -232,7 +288,17 @@ abstract class _$$SettingsDTOImplCopyWith<$Res>
   @override
   $ChatEventsSettingsDTOCopyWith<$Res> get chatEventsSettings;
   @override
+  $ChatSettingsDTOCopyWith<$Res> get chatSettings;
+  @override
+  $GeneralSettingsDTOCopyWith<$Res> get generalSettings;
+  @override
+  $DashboardSettingsDTOCopyWith<$Res> get dashboardSettings;
+  @override
+  $BrowserTabSettingsDTOCopyWith<$Res> get browserTabs;
+  @override
   $StreamElementsSettingsDTOCopyWith<$Res> get streamElementsSettings;
+  @override
+  $TtsSettingsDTOCopyWith<$Res> get ttsSettings;
 }
 
 /// @nodoc

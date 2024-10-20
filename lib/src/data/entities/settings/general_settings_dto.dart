@@ -1,37 +1,19 @@
-import 'package:irllink/src/domain/entities/settings.dart';
-import 'package:irllink/src/domain/entities/settings/general_settings.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class GeneralSettingsDTO extends GeneralSettings {
-  const GeneralSettingsDTO({
-    required super.isDarkMode,
-    required super.keepSpeakerOn,
-    required super.displayViewerCount,
-    required super.appLanguage,
-    required super.splitViewWeights,
-  });
+part 'general_settings_dto.freezed.dart';
+part 'general_settings_dto.g.dart';
 
-  Map toJson() => {
-        'isDarkMode': isDarkMode,
-        'keepSpeakerOn': keepSpeakerOn,
-        'displayViewerCount': displayViewerCount,
-        'appLanguage': appLanguage,
-        'splitViewWeights': splitViewWeights,
-      };
+@freezed
+class GeneralSettingsDTO with _$GeneralSettingsDTO {
+  const GeneralSettingsDTO._();
+  const factory GeneralSettingsDTO({
+    @Default(true) bool isDarkMode,
+    @Default(true) bool keepSpeakerOn,
+    @Default(true) bool displayViewerCount,
+    @Default({"languageCode": "en", "countryCode": "US"}) Map<dynamic, dynamic> appLanguage,
+    @Default([0.5, 0.5]) List<double> splitViewWeights,
+  }) = _GeneralSettingsDTO;
 
-  factory GeneralSettingsDTO.fromJson(Map<String, dynamic> map) {
-    return GeneralSettingsDTO(
-      isDarkMode: map['isDarkMode'] ??
-          const Settings.defaultSettings().generalSettings.isDarkMode,
-      keepSpeakerOn: map['keepSpeakerOn'] ??
-          const Settings.defaultSettings().generalSettings.keepSpeakerOn,
-      displayViewerCount: map['displayViewerCount'] ??
-          const Settings.defaultSettings().generalSettings.displayViewerCount,
-      appLanguage: map['appLanguage'] ??
-          const Settings.defaultSettings().generalSettings.appLanguage,
-      splitViewWeights: (map['splitViewWeights'] as List?)
-              ?.map((item) => item as double)
-              .toList() ??
-          const Settings.defaultSettings().generalSettings.splitViewWeights,
-    );
-  }
+  factory GeneralSettingsDTO.blank() => const GeneralSettingsDTO();
+  factory GeneralSettingsDTO.fromJson(Map<String, dynamic> json) => _$GeneralSettingsDTOFromJson(json);
 }

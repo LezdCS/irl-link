@@ -55,13 +55,17 @@ import '../../domain/entities/twitch/twitch_user.dart' as _i22;
 /// - `Settings` → `SettingsDTO`.
 /// - `SettingsDTO` → `Settings`.
 /// - `Channel` → `ChannelDTO`.
+/// - `ChannelDTO` → `Channel`.
 /// - `ChatGroup` → `ChatGroupDTO`.
+/// - `ChatGroupDTO` → `ChatGroup`.
 /// - `BrowserTab` → `BrowserTabDTO`.
+/// - `BrowserTabDTO` → `BrowserTab`.
 /// - `ChatSettings` → `ChatSettingsDTO`.
 /// - `ChatSettingsDTO` → `ChatSettings`.
 /// - `GeneralSettings` → `GeneralSettingsDTO`.
 /// - `GeneralSettingsDTO` → `GeneralSettings`.
 /// - `DashboardEvent` → `DashboardEventDTO`.
+/// - `DashboardEventDTO` → `DashboardEvent`.
 /// - `BrowserTabSettings` → `BrowserTabSettingsDTO`.
 /// - `BrowserTabSettingsDTO` → `BrowserTabSettings`.
 /// - `StreamElementsSettings` → `StreamElementsSettingsDTO`.
@@ -124,16 +128,34 @@ class $Mappr implements _i1.AutoMapprInterface {
             targetTypeOf == _typeOf<_i5.ChannelDTO?>())) {
       return true;
     }
+    if ((sourceTypeOf == _typeOf<_i5.ChannelDTO>() ||
+            sourceTypeOf == _typeOf<_i5.ChannelDTO?>()) &&
+        (targetTypeOf == _typeOf<_i4.Channel>() ||
+            targetTypeOf == _typeOf<_i4.Channel?>())) {
+      return true;
+    }
     if ((sourceTypeOf == _typeOf<_i4.ChatGroup>() ||
             sourceTypeOf == _typeOf<_i4.ChatGroup?>()) &&
         (targetTypeOf == _typeOf<_i5.ChatGroupDTO>() ||
             targetTypeOf == _typeOf<_i5.ChatGroupDTO?>())) {
       return true;
     }
+    if ((sourceTypeOf == _typeOf<_i5.ChatGroupDTO>() ||
+            sourceTypeOf == _typeOf<_i5.ChatGroupDTO?>()) &&
+        (targetTypeOf == _typeOf<_i4.ChatGroup>() ||
+            targetTypeOf == _typeOf<_i4.ChatGroup?>())) {
+      return true;
+    }
     if ((sourceTypeOf == _typeOf<_i6.BrowserTab>() ||
             sourceTypeOf == _typeOf<_i6.BrowserTab?>()) &&
         (targetTypeOf == _typeOf<_i7.BrowserTabDTO>() ||
             targetTypeOf == _typeOf<_i7.BrowserTabDTO?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i7.BrowserTabDTO>() ||
+            sourceTypeOf == _typeOf<_i7.BrowserTabDTO?>()) &&
+        (targetTypeOf == _typeOf<_i6.BrowserTab>() ||
+            targetTypeOf == _typeOf<_i6.BrowserTab?>())) {
       return true;
     }
     if ((sourceTypeOf == _typeOf<_i4.ChatSettings>() ||
@@ -164,6 +186,12 @@ class $Mappr implements _i1.AutoMapprInterface {
             sourceTypeOf == _typeOf<_i10.DashboardEvent?>()) &&
         (targetTypeOf == _typeOf<_i11.DashboardEventDTO>() ||
             targetTypeOf == _typeOf<_i11.DashboardEventDTO?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i11.DashboardEventDTO>() ||
+            sourceTypeOf == _typeOf<_i11.DashboardEventDTO?>()) &&
+        (targetTypeOf == _typeOf<_i10.DashboardEvent>() ||
+            targetTypeOf == _typeOf<_i10.DashboardEvent?>())) {
       return true;
     }
     if ((sourceTypeOf == _typeOf<_i6.BrowserTabSettings>() ||
@@ -567,6 +595,16 @@ class $Mappr implements _i1.AutoMapprInterface {
       return (_map__i4$Channel_To__i5$ChannelDTO((model as _i4.Channel?))
           as TARGET);
     }
+    if ((sourceTypeOf == _typeOf<_i5.ChannelDTO>() ||
+            sourceTypeOf == _typeOf<_i5.ChannelDTO?>()) &&
+        (targetTypeOf == _typeOf<_i4.Channel>() ||
+            targetTypeOf == _typeOf<_i4.Channel?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i5$ChannelDTO_To__i4$Channel((model as _i5.ChannelDTO?))
+          as TARGET);
+    }
     if ((sourceTypeOf == _typeOf<_i4.ChatGroup>() ||
             sourceTypeOf == _typeOf<_i4.ChatGroup?>()) &&
         (targetTypeOf == _typeOf<_i5.ChatGroupDTO>() ||
@@ -577,6 +615,16 @@ class $Mappr implements _i1.AutoMapprInterface {
       return (_map__i4$ChatGroup_To__i5$ChatGroupDTO((model as _i4.ChatGroup?))
           as TARGET);
     }
+    if ((sourceTypeOf == _typeOf<_i5.ChatGroupDTO>() ||
+            sourceTypeOf == _typeOf<_i5.ChatGroupDTO?>()) &&
+        (targetTypeOf == _typeOf<_i4.ChatGroup>() ||
+            targetTypeOf == _typeOf<_i4.ChatGroup?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i5$ChatGroupDTO_To__i4$ChatGroup(
+          (model as _i5.ChatGroupDTO?)) as TARGET);
+    }
     if ((sourceTypeOf == _typeOf<_i6.BrowserTab>() ||
             sourceTypeOf == _typeOf<_i6.BrowserTab?>()) &&
         (targetTypeOf == _typeOf<_i7.BrowserTabDTO>() ||
@@ -586,6 +634,16 @@ class $Mappr implements _i1.AutoMapprInterface {
       }
       return (_map__i6$BrowserTab_To__i7$BrowserTabDTO(
           (model as _i6.BrowserTab?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i7.BrowserTabDTO>() ||
+            sourceTypeOf == _typeOf<_i7.BrowserTabDTO?>()) &&
+        (targetTypeOf == _typeOf<_i6.BrowserTab>() ||
+            targetTypeOf == _typeOf<_i6.BrowserTab?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i7$BrowserTabDTO_To__i6$BrowserTab(
+          (model as _i7.BrowserTabDTO?)) as TARGET);
     }
     if ((sourceTypeOf == _typeOf<_i4.ChatSettings>() ||
             sourceTypeOf == _typeOf<_i4.ChatSettings?>()) &&
@@ -636,6 +694,16 @@ class $Mappr implements _i1.AutoMapprInterface {
       }
       return (_map__i10$DashboardEvent_To__i11$DashboardEventDTO(
           (model as _i10.DashboardEvent?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i11.DashboardEventDTO>() ||
+            sourceTypeOf == _typeOf<_i11.DashboardEventDTO?>()) &&
+        (targetTypeOf == _typeOf<_i10.DashboardEvent>() ||
+            targetTypeOf == _typeOf<_i10.DashboardEvent?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i11$DashboardEventDTO_To__i10$DashboardEvent(
+          (model as _i11.DashboardEventDTO?)) as TARGET);
     }
     if ((sourceTypeOf == _typeOf<_i6.BrowserTabSettings>() ||
             sourceTypeOf == _typeOf<_i6.BrowserTabSettings?>()) &&
@@ -1057,6 +1125,20 @@ class $Mappr implements _i1.AutoMapprInterface {
     );
   }
 
+  _i4.Channel _map__i5$ChannelDTO_To__i4$Channel(_i5.ChannelDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping ChannelDTO → Channel failed because ChannelDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<ChannelDTO, Channel> to handle null values during mapping.');
+    }
+    return _i4.Channel(
+      platform: model.platform,
+      channel: model.channel,
+      enabled: model.enabled,
+    );
+  }
+
   _i5.ChatGroupDTO _map__i4$ChatGroup_To__i5$ChatGroupDTO(
       _i4.ChatGroup? input) {
     final model = input;
@@ -1067,7 +1149,27 @@ class $Mappr implements _i1.AutoMapprInterface {
     }
     return _i5.ChatGroupDTO(
       id: model.id,
-      channels: model.channels,
+      channels: model.channels
+          .map<_i5.ChannelDTO>(
+              (value) => _map__i4$Channel_To__i5$ChannelDTO(value))
+          .toList(),
+    );
+  }
+
+  _i4.ChatGroup _map__i5$ChatGroupDTO_To__i4$ChatGroup(
+      _i5.ChatGroupDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping ChatGroupDTO → ChatGroup failed because ChatGroupDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<ChatGroupDTO, ChatGroup> to handle null values during mapping.');
+    }
+    return _i4.ChatGroup(
+      id: model.id,
+      channels: model.channels
+          .map<_i4.Channel>(
+              (value) => _map__i5$ChannelDTO_To__i4$Channel(value))
+          .toList(),
     );
   }
 
@@ -1088,6 +1190,23 @@ class $Mappr implements _i1.AutoMapprInterface {
     );
   }
 
+  _i6.BrowserTab _map__i7$BrowserTabDTO_To__i6$BrowserTab(
+      _i7.BrowserTabDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping BrowserTabDTO → BrowserTab failed because BrowserTabDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<BrowserTabDTO, BrowserTab> to handle null values during mapping.');
+    }
+    return _i6.BrowserTab(
+      id: model.id,
+      title: model.title,
+      url: model.url,
+      toggled: model.toggled,
+      iOSAudioSource: model.iOSAudioSource,
+    );
+  }
+
   _i5.ChatSettingsDTO _map__i4$ChatSettings_To__i5$ChatSettingsDTO(
       _i4.ChatSettings? input) {
     final model = input;
@@ -1097,8 +1216,12 @@ class $Mappr implements _i1.AutoMapprInterface {
           r'Consider setting the whenSourceIsNull parameter on the MapType<ChatSettings, ChatSettingsDTO> to handle null values during mapping.');
     }
     return _i5.ChatSettingsDTO(
-      permanentFirstGroup: model.permanentFirstGroup,
-      chatGroups: model.chatGroups,
+      permanentFirstGroup:
+          _map__i4$ChatGroup_To__i5$ChatGroupDTO(model.permanentFirstGroup),
+      chatGroups: model.chatGroups
+          .map<_i5.ChatGroupDTO>(
+              (value) => _map__i4$ChatGroup_To__i5$ChatGroupDTO(value))
+          .toList(),
       hideDeletedMessages: model.hideDeletedMessages,
     );
   }
@@ -1112,8 +1235,12 @@ class $Mappr implements _i1.AutoMapprInterface {
           r'Consider setting the whenSourceIsNull parameter on the MapType<ChatSettingsDTO, ChatSettings> to handle null values during mapping.');
     }
     return _i4.ChatSettings(
-      permanentFirstGroup: model.permanentFirstGroup,
-      chatGroups: model.chatGroups,
+      permanentFirstGroup:
+          _map__i5$ChatGroupDTO_To__i4$ChatGroup(model.permanentFirstGroup),
+      chatGroups: model.chatGroups
+          .map<_i4.ChatGroup>(
+              (value) => _map__i5$ChatGroupDTO_To__i4$ChatGroup(value))
+          .toList(),
       hideDeletedMessages: model.hideDeletedMessages,
     );
   }
@@ -1169,6 +1296,23 @@ class $Mappr implements _i1.AutoMapprInterface {
     );
   }
 
+  _i10.DashboardEvent _map__i11$DashboardEventDTO_To__i10$DashboardEvent(
+      _i11.DashboardEventDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping DashboardEventDTO → DashboardEvent failed because DashboardEventDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<DashboardEventDTO, DashboardEvent> to handle null values during mapping.');
+    }
+    return _i10.DashboardEvent(
+      title: model.title,
+      color: model.color,
+      dashboardActionsType: model.dashboardActionsType,
+      event: model.event,
+      customValue: model.customValue,
+    );
+  }
+
   _i7.BrowserTabSettingsDTO
       _map__i6$BrowserTabSettings_To__i7$BrowserTabSettingsDTO(
           _i6.BrowserTabSettings? input) {
@@ -1178,7 +1322,11 @@ class $Mappr implements _i1.AutoMapprInterface {
           r'Mapping BrowserTabSettings → BrowserTabSettingsDTO failed because BrowserTabSettings was null, and no default value was provided. '
           r'Consider setting the whenSourceIsNull parameter on the MapType<BrowserTabSettings, BrowserTabSettingsDTO> to handle null values during mapping.');
     }
-    return _i7.BrowserTabSettingsDTO(tabs: model.tabs);
+    return _i7.BrowserTabSettingsDTO(
+        tabs: model.tabs
+            .map<_i7.BrowserTabDTO>(
+                (value) => _map__i6$BrowserTab_To__i7$BrowserTabDTO(value))
+            .toList());
   }
 
   _i6.BrowserTabSettings
@@ -1190,7 +1338,11 @@ class $Mappr implements _i1.AutoMapprInterface {
           r'Mapping BrowserTabSettingsDTO → BrowserTabSettings failed because BrowserTabSettingsDTO was null, and no default value was provided. '
           r'Consider setting the whenSourceIsNull parameter on the MapType<BrowserTabSettingsDTO, BrowserTabSettings> to handle null values during mapping.');
     }
-    return _i6.BrowserTabSettings(tabs: model.tabs);
+    return _i6.BrowserTabSettings(
+        tabs: model.tabs
+            .map<_i6.BrowserTab>(
+                (value) => _map__i7$BrowserTabDTO_To__i6$BrowserTab(value))
+            .toList());
   }
 
   _i13.StreamElementsSettingsDTO
@@ -1449,7 +1601,10 @@ class $Mappr implements _i1.AutoMapprInterface {
           r'Consider setting the whenSourceIsNull parameter on the MapType<DashboardSettings, DashboardSettingsDTO> to handle null values during mapping.');
     }
     return _i25.DashboardSettingsDTO(
-      userEvents: model.userEvents,
+      userEvents: model.userEvents
+          .map<_i11.DashboardEventDTO>((value) =>
+              _map__i10$DashboardEvent_To__i11$DashboardEventDTO(value))
+          .toList(),
       activated: model.activated,
     );
   }
@@ -1464,7 +1619,10 @@ class $Mappr implements _i1.AutoMapprInterface {
           r'Consider setting the whenSourceIsNull parameter on the MapType<DashboardSettingsDTO, DashboardSettings> to handle null values during mapping.');
     }
     return _i24.DashboardSettings(
-      userEvents: model.userEvents,
+      userEvents: model.userEvents
+          .map<_i10.DashboardEvent>((value) =>
+              _map__i11$DashboardEventDTO_To__i10$DashboardEvent(value))
+          .toList(),
       activated: model.activated,
     );
   }
