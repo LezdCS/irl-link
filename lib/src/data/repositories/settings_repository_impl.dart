@@ -18,8 +18,10 @@ class SettingsRepositoryImpl extends SettingsRepository {
     if (settingsString != null) {
       globals.talker?.logTyped(SettingsLog('Settings found.'));
       Map<String, dynamic> settingsJson = jsonDecode(settingsString);
-      SettingsDTO settings = SettingsDTO.fromJson(settingsJson);
+      SettingsDTO settingsDTO = SettingsDTO.fromJson(settingsJson);
       globals.talker?.logTyped(SettingsLog('Settings JSON: $settingsJson'));
+      Mappr mappr = Mappr();
+      Settings settings = mappr.convert<SettingsDTO, Settings>(settingsDTO);
       return DataSuccess(settings);
     }
     globals.talker?.info('No settings found.');

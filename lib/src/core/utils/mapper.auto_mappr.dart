@@ -845,18 +845,28 @@ class $Mappr implements _i1.AutoMapprInterface {
       textSize: model.textSize,
       displayTimestamp: model.displayTimestamp,
       hiddenUsersIds: model.hiddenUsersIds,
-      chatEventsSettings: model.chatEventsSettings,
-      chatSettings: model.chatSettings,
-      generalSettings: model.generalSettings,
-      dashboardSettings: model.dashboardSettings,
+      chatEventsSettings:
+          _map__i16$ChatEventsSettings_To__i17$ChatEventsSettingsDTO(
+              model.chatEventsSettings),
+      chatSettings:
+          _map__i4$ChatSettings_To__i5$ChatSettingsDTO(model.chatSettings),
+      generalSettings: _map__i8$GeneralSettings_To__i9$GeneralSettingsDTO(
+          model.generalSettings),
+      dashboardSettings:
+          _map__i24$DashboardSettings_To__i25$DashboardSettingsDTO(
+              model.dashboardSettings),
       isObsConnected: model.isObsConnected,
       obsWebsocketUrl: model.obsWebsocketUrl,
       obsWebsocketPassword: model.obsWebsocketPassword,
-      browserTabs: model.browserTabs,
+      browserTabs: _map__i6$BrowserTabSettings_To__i7$BrowserTabSettingsDTO(
+          model.browserTabs),
       obsConnectionsHistory: model.obsConnectionsHistory,
-      streamElementsSettings: model.streamElementsSettings,
+      streamElementsSettings:
+          _map__i12$StreamElementsSettings_To__i13$StreamElementsSettingsDTO(
+              model.streamElementsSettings),
       rtIrlPushKey: model.rtIrlPushKey,
-      ttsSettings: model.ttsSettings,
+      ttsSettings:
+          _map__i14$TtsSettings_To__i15$TtsSettingsDTO(model.ttsSettings),
     );
   }
 
