@@ -1,39 +1,21 @@
-import 'package:irllink/src/domain/entities/settings.dart';
-import 'package:irllink/src/domain/entities/settings/chat_events_settings.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class ChatEventsSettingsDTO extends ChatEventsSettings {
-  const ChatEventsSettingsDTO({
-    required super.firstsMessages,
-    required super.subscriptions,
-    required super.bitsDonations,
-    required super.announcements,
-    required super.incomingRaids,
-    required super.redemptions,
-  });
+part 'chat_events_settings_dto.freezed.dart';
+part 'chat_events_settings_dto.g.dart';
 
-  Map toJson() => {
-        'firstsMessages': firstsMessages,
-        'subscriptions': subscriptions,
-        'bitsDonations': bitsDonations,
-        'announcements': announcements,
-        'incomingRaids': incomingRaids,
-        'redemptions': redemptions,
-      };
+@freezed
+class ChatEventsSettingsDTO with _$ChatEventsSettingsDTO {
+  ChatEventsSettingsDTO._();
 
-  factory ChatEventsSettingsDTO.fromJson(Map<String, dynamic> map) {
-    return ChatEventsSettingsDTO(
-      firstsMessages: map['firstsMessages'] ??
-          const Settings.defaultSettings().chatEventsSettings.firstsMessages,
-      subscriptions: map['subscriptions'] ??
-          const Settings.defaultSettings().chatEventsSettings.subscriptions,
-      bitsDonations: map['bitsDonations'] ??
-          const Settings.defaultSettings().chatEventsSettings.bitsDonations,
-      announcements: map['announcements'] ??
-          const Settings.defaultSettings().chatEventsSettings.announcements,
-      incomingRaids: map['incomingRaids'] ??
-          const Settings.defaultSettings().chatEventsSettings.incomingRaids,
-      redemptions: map['redemptions'] ??
-          const Settings.defaultSettings().chatEventsSettings.redemptions,
-    );
-  }
+  factory ChatEventsSettingsDTO({
+    @Default(true) bool firstsMessages,
+    @Default(true) bool subscriptions,
+    @Default(true) bool bitsDonations,
+    @Default(true) bool announcements,
+    @Default(true) bool incomingRaids,
+    @Default(true) bool redemptions,
+  }) = _ChatEventsSettingsDTO;
+
+  factory ChatEventsSettingsDTO.blank() => ChatEventsSettingsDTO();
+  factory ChatEventsSettingsDTO.fromJson(Map<String, dynamic> json) => _$ChatEventsSettingsDTOFromJson(json);
 }

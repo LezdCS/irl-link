@@ -75,6 +75,8 @@ abstract class $SettingsDTOCopyWith<$Res> {
       StreamElementsSettingsDTO streamElementsSettings,
       String rtIrlPushKey,
       TtsSettingsDTO ttsSettings});
+
+  $ChatEventsSettingsDTOCopyWith<$Res> get chatEventsSettings;
 }
 
 /// @nodoc
@@ -176,6 +178,17 @@ class _$SettingsDTOCopyWithImpl<$Res, $Val extends SettingsDTO>
               as TtsSettingsDTO,
     ) as $Val);
   }
+
+  /// Create a copy of SettingsDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ChatEventsSettingsDTOCopyWith<$Res> get chatEventsSettings {
+    return $ChatEventsSettingsDTOCopyWith<$Res>(_value.chatEventsSettings,
+        (value) {
+      return _then(_value.copyWith(chatEventsSettings: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -203,6 +216,9 @@ abstract class _$$SettingsDTOImplCopyWith<$Res>
       StreamElementsSettingsDTO streamElementsSettings,
       String rtIrlPushKey,
       TtsSettingsDTO ttsSettings});
+
+  @override
+  $ChatEventsSettingsDTOCopyWith<$Res> get chatEventsSettings;
 }
 
 /// @nodoc
