@@ -407,88 +407,43 @@ class ChatViewController extends GetxController
       onError: () => {
         globals.talker?.error('error on kick chat'),
       },
+      onChatroomClear: (String channelId) {
+        chatMessages
+              .removeWhere((message) => message.channelId == channelId);
+      },
+      onDeletedMessageByMessageId: (String messageId) {
+        chatMessages
+            .firstWhereOrNull((message) => message.id == messageId)
+            ?.isDeleted = true;
+        chatMessages.refresh();
+      },
+      onDeletedMessageByUserId: (String userId) {
+        for (ChatMessage message in chatMessages.where(
+          (message) =>
+              message.authorId == userId && message.platform == Platform.kick,
+        )) {
+          message.isDeleted = true;
+        }
+        chatMessages.refresh();
+      },
     );
     kickChats.add(kickChat);
     await kickChat.connect();
     for (var e in kickChat.seventvEmotes) {
       thirdPartEmotes.add(ChatEmote.fromKick(e));
     }
-    kickChat.chatStream.listen((message) {
-      final KickEvent? kickEvent = eventParser(message);
-      switch (kickEvent?.event) {
-        case TypeEvent.message:
-          ChatMessage kickMessage = ChatMessage.fromKick(
-            kickEvent as KickMessage,
-            kickChat.userDetails!.userId.toString(),
-            kickChat.userDetails!.subBadges,
-          );
-          Settings settings = Get.find<SettingsService>().settings.value;
-          if (settings.ttsSettings.ttsEnabled) {
-            ttsService.readTts(kickMessage);
-          }
-          addMessage(kickMessage);
-          break;
-        case TypeEvent.followersUpdated:
-          // TODO: TBD
-          break;
-        case TypeEvent.streamHostEvent:
-          ChatMessage kickMessage = ChatMessage.kickHost(
-            kickEvent as KickStreamHost,
-            kickChat.userDetails!.userId.toString(),
-            kickChat.userDetails!.subBadges,
-          );
-          addMessage(kickMessage);
-          break;
-        case TypeEvent.subscriptionEvent:
-          ChatMessage kickMessage = ChatMessage.kickSub(
-            kickEvent as KickSubscription,
-            kickChat.userDetails!.userId.toString(),
-            kickChat.userDetails!.subBadges,
-          );
-          addMessage(kickMessage);
-          break;
-        case TypeEvent.chatroomUpdatedEvent:
-          // TODO: TBD
-          break;
-        case TypeEvent.userBannedEvent:
-          KickUserBanned event = kickEvent as KickUserBanned;
-          for (var message in chatMessages.where(
-            (message) =>
-                message.authorId == event.data.user.id.toString() &&
-                message.platform == Platform.kick,
-          )) {
-            message.isDeleted = true;
-          }
-          break;
-        case TypeEvent.chatroomClearEvent:
-          KickChatroomClear event = kickEvent as KickChatroomClear;
-          chatMessages
-              .removeWhere((message) => message.channelId == event.channel);
-          break;
-        case TypeEvent.giftedSubscriptionsEvent:
-          ChatMessage kickMessage = ChatMessage.kickSubGift(
-            kickEvent as KickGiftedSubscriptions,
-            kickChat.userDetails!.userId.toString(),
-            kickChat.userDetails!.subBadges,
-          );
-          addMessage(kickMessage);
-          break;
-        case TypeEvent.pinnedMessageCreatedEvent:
-          // TODO: event in chat (NOT CURRENTLY CODED IN THE APP, SAME FOR TWITCH)
-          break;
-        case TypeEvent.pollUpdateEvent:
-          // TODO: rework poll view to integrate kick polls
-          break;
-        case TypeEvent.messageDeletedEvent:
-          KickMessageDeleted event = kickEvent as KickMessageDeleted;
-          chatMessages
-              .firstWhereOrNull(
-                  (message) => message.id == event.data.message.id)
-              ?.isDeleted = true;
-          break;
-        case null:
-          break;
+    kickChat.chatStream.listen((event) {
+      final KickEvent kickEvent = event as KickEvent;
+      ChatMessage message = ChatMessage.fromKick(
+        kickEvent,
+        kickChat.userDetails!.userId.toString(),
+        kickChat.userDetails!.subBadges,
+      );
+      Settings settings = Get.find<SettingsService>().settings.value;
+      if (settings.ttsSettings.ttsEnabled) {
+        ttsService.readTts(message);
       }
+      addMessage(message);
     });
   }
 

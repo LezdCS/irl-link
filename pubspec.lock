@@ -641,10 +641,10 @@ packages:
     dependency: "direct main"
     description:
       name: geolocator
-      sha256: "149876cc5207a0f5daf4fdd3bfcf0a0f27258b3fe95108fa084f527ad0568f1b"
+      sha256: "0ec58b731776bc43097fcf751f79681b6a8f6d3bc737c94779fe9f1ad73c1a81"
       url: "https://pub.dev"
     source: hosted
-    version: "12.0.0"
+    version: "13.0.1"
   geolocator_android:
     dependency: transitive
     description:
@@ -865,10 +865,10 @@ packages:
     dependency: "direct main"
     description:
       name: kick_chat
-      sha256: "719504ca335626e02dd6cb0d2f2247ce384556896fb8c2487c1e50858ecb0359"
+      sha256: e71b4b0e1f4d5419b9f94edbf9acf3e1ef89e3d6ed50ec39ed245363da3f9ed7
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.0"
+    version: "1.5.0"
   leak_tracker:
     dependency: transitive
     description:

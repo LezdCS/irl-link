@@ -61,6 +61,7 @@ class ChatMessage {
     required this.id,
     required this.authorId,
     required this.username,
+    required this.displayName,
     required this.color,
     required this.message,
     required this.timestamp,
@@ -78,7 +79,6 @@ class ChatMessage {
 
     //implements
     required this.raidingChannelName,
-    required this.displayName,
     required this.giftedName,
     required this.highlightType,
     required this.isGift,
@@ -144,10 +144,21 @@ class ChatMessage {
   }
 
   factory ChatMessage.fromKick(
-    KickMessage message,
+    KickEvent message,
     String channelId,
     List<KickBadge> subBadges,
   ) {
+
+    if(message.event == TypeEvent.subscriptionEvent){
+      return ChatMessage.kickSub(message as KickSubscription, channelId, subBadges);
+    } else if(message.event == TypeEvent.giftedSubscriptionsEvent){
+      return ChatMessage.kickSubGift(message as KickGiftedSubscriptions, channelId, subBadges);
+    } else if(message.event == TypeEvent.streamHostEvent){
+      return ChatMessage.kickHost(message as KickStreamHost, channelId, subBadges);
+    }
+
+    message = message as KickMessage;
+
     return ChatMessage(
       id: message.data.id,
       authorId: message.data.sender.id.toString(),
