@@ -352,7 +352,7 @@ class ChatViewController extends GetxController
 
     Settings settings = Get.find<SettingsService>().settings.value;
 
-    twitchChat.chatStream.listen((message) {
+    twitchChat.chatStream.listen((twitchMessage) {
       if (cheerEmotes.isEmpty) {
         cheerEmotes.value =
             twitchChat.cheerEmotes.map((e) => ChatEmote.fromTwitch(e)).toList();
@@ -362,15 +362,16 @@ class ChatViewController extends GetxController
             .map((e) => ChatEmote.fromTwitch(e))
             .toList();
       }
+      ChatMessage message =
+          ChatMessage.fromTwitch(twitchMessage, twitchChat.channelId ?? '');
       if (settings.hiddenUsersIds.contains(message.authorId)) {
         return;
       }
       if (settings.ttsSettings.ttsEnabled) {
         ttsService.readTts(message);
       }
-      ChatMessage twitchMessage =
-          ChatMessage.fromTwitch(message, twitchChat.channelId ?? '');
-      addMessage(twitchMessage);
+
+      addMessage(message);
     });
   }
 

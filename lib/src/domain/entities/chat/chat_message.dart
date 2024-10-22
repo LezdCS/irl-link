@@ -152,7 +152,10 @@ class ChatMessage
   }
 
   factory ChatMessage.fromKick(
-      KickMessage message, String channelId, List<KickBadge> subBadges) {
+    KickMessage message,
+    String channelId,
+    List<KickBadge> subBadges,
+  ) {
     return ChatMessage(
       id: message.data.id,
       authorId: message.data.sender.id.toString(),

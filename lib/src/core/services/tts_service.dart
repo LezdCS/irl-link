@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/domain/entities/chat/chat_message.dart' show ChatMessage;
 import 'package:irllink/src/domain/entities/settings.dart';
-import 'package:twitch_chat/twitch_chat.dart';
 
 class TtsService extends GetxService {
   late FlutterTts flutterTts;
