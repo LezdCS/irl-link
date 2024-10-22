@@ -25,43 +25,37 @@ enum Platform {
 }
 
 // ignore: must_be_immutable
-class ChatMessage
-    implements
-        twitch.Subscription,
-        twitch.SubGift,
-        twitch.BitDonation,
-        twitch.IncomingRaid {
-  @override
+class ChatMessage {
   final String id;
-  @override
   final String authorId;
-  @override
   final String username;
-  @override
+  final String displayName;
   final String color;
-  @override
   final String message;
-  @override
   final int timestamp;
-  @override
   final bool isAction;
-  @override
   final bool isSubscriber;
-  @override
   final bool isModerator;
-  @override
   final bool isVip;
-  @override
   bool isDeleted;
-  @override
   final String rawData;
 
   final String channelId;
   final EventType? eventType;
   final List<ChatBadge> badgesList;
-  @override
-  final Map<String, List> emotes; //TODO: emote entity
+  final Map<String, List> emotes;
   final Platform platform;
+
+  //from Twitch Chat events (subs, bits, raids...)
+  final String raidingChannelName;
+  final String giftedName;
+  final twitch.HighlightType? highlightType;
+  final bool isGift;
+  final String months;
+  final String systemMessage;
+  final String tier;
+  final int totalBits;
+  final int viewerCount;
 
   ChatMessage({
     required this.id,
@@ -84,7 +78,6 @@ class ChatMessage
 
     //implements
     required this.raidingChannelName,
-    required this.badges,
     required this.displayName,
     required this.giftedName,
     required this.highlightType,
@@ -127,7 +120,6 @@ class ChatMessage
       raidingChannelName: type == EventType.incomingRaid
           ? (message as twitch.IncomingRaid).raidingChannelName
           : '',
-      badges: message.badges,
       giftedName: type == EventType.subscriptionGifted
           ? (message as twitch.SubGift).giftedName
           : '',
@@ -180,7 +172,6 @@ class ChatMessage
 
       //implements
       raidingChannelName: '',
-      badges: const [],
       giftedName: '',
       highlightType: null,
       isGift: false,
@@ -219,7 +210,6 @@ class ChatMessage
 
       //implements
       raidingChannelName: '',
-      badges: const [],
       giftedName: '',
       highlightType: null,
       isGift: false,
@@ -255,7 +245,6 @@ class ChatMessage
 
       //implements
       raidingChannelName: '',
-      badges: const [],
       giftedName: '',
       highlightType: null,
       isGift: false,
@@ -291,7 +280,6 @@ class ChatMessage
 
       //implements
       raidingChannelName: '',
-      badges: const [],
       giftedName: sub
           .data.giftedUsernames.first, //TODO: handle multiple usernames gifted
       highlightType: null,
@@ -328,7 +316,6 @@ class ChatMessage
 
       //implements
       raidingChannelName: '',
-      badges: const [],
       giftedName: '',
       highlightType: null,
       isGift: true,
@@ -352,42 +339,4 @@ class ChatMessage
               .toList(),
         ),
       };
-
-  @override
-  String raidingChannelName;
-
-  @override
-  List<twitch.TwitchBadge> badges;
-
-  @override
-  String displayName;
-
-  @override
-  String giftedName;
-
-  @override
-  twitch.HighlightType? highlightType;
-
-  @override
-  bool isGift;
-
-  @override
-  String months;
-
-  @override
-  String systemMessage;
-
-  @override
-  String tier;
-
-  @override
-  int totalBits;
-
-  @override
-  int viewerCount;
-
-  @override
-  set rawData(String rawData) {
-    // TODO: implement rawData
-  }
 }
