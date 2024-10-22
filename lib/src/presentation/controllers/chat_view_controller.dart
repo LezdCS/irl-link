@@ -432,10 +432,9 @@ class ChatViewController extends GetxController
     for (var e in kickChat.seventvEmotes) {
       thirdPartEmotes.add(ChatEmote.fromKick(e));
     }
-    kickChat.chatStream.listen((event) {
-      final KickEvent kickEvent = event as KickEvent;
+    kickChat.chatStream.listen((KickEvent event) {
       ChatMessage message = ChatMessage.fromKick(
-        kickEvent,
+        event,
         kickChat.userDetails!.userId.toString(),
         kickChat.userDetails!.subBadges,
       );
