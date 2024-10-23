@@ -3,7 +3,7 @@ import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 class RealtimeIrlTaskHandler extends TaskHandler {
   // Called when the task is started.
   @override
-  void onStart(DateTime timestamp) {
+  Future<void> onStart(DateTime timestamp, TaskStarter starter) async {
     // debugPrint('onStart');
   }
 
@@ -20,7 +20,7 @@ class RealtimeIrlTaskHandler extends TaskHandler {
 
   // Called when the task is destroyed.
   @override
-  void onDestroy(DateTime timestamp) {
+  Future<void> onDestroy(DateTime timestamp) async {
     // debugPrint('onDestroy');
   }
 
