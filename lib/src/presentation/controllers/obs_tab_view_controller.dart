@@ -68,7 +68,6 @@ class ObsTabViewController extends GetxController {
 
     sourcesList.listen((value) {
       String data = jsonEncode(value.map((e) => e.toJson()).toList());
-      debugPrint("sourcesList: $data");
       // Send to watchOS
       const platform = MethodChannel('com.irllink');
       platform.invokeMethod("flutterToWatch", {

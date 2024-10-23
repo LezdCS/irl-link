@@ -401,7 +401,6 @@ class ChatViewController extends GetxController
     final remoteConfig = FirebaseRemoteConfig.instance;
     await remoteConfig.fetchAndActivate();
     String pushKey = remoteConfig.getString('kick_chat_push_key');
-    debugPrint("kc.channel: ${kc.channel}");
     KickChat kickChat = KickChat(
       kc.channel,
       pushKey,
