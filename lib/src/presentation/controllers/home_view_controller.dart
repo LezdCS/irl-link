@@ -117,6 +117,7 @@ class HomeViewController extends GetxController
       TwitchPubSubService pubSubService = await Get.putAsync(
         () => TwitchPubSubService().init(
           accessToken: twitchData!.accessToken,
+          channelName: twitchData!.twitchUser.login,
         ),
         permanent: true,
       );

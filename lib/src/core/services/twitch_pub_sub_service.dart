@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/utils/constants.dart';
+import 'package:twitch_chat/twitch_chat.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:irllink/src/core/utils/globals.dart' as globals;
 
@@ -10,22 +11,23 @@ class TwitchPubSubService extends GetxService {
   TwitchPubSubService();
 
   late String accessToken;
+  late String channelName;
+  late String _broadcasterId;
   Rx<bool> isConnected = false.obs;
 
   late IOWebSocketChannel? _webSocketChannel;
   late StreamSubscription? _streamSubscription;
 
-  Future<TwitchPubSubService> init({required String accessToken}) async {
+  Future<TwitchPubSubService> init({required String accessToken, required String channelName}) async {
     this.accessToken = accessToken;
+    this.channelName = channelName;
     return this;
   }
 
   Future<void> connect() async {
+    _broadcasterId = await _getChannelId();
 
     String url = "wss://pubsub-edge.twitch.tv";
-    if (kDebugMode) {
-      url = "ws://localhost:8080/ws";
-    }
 
     _webSocketChannel = IOWebSocketChannel.connect(url);
 
@@ -60,7 +62,6 @@ class TwitchPubSubService extends GetxService {
 
   void _eventListener(data) {
     // Handle incoming events
-      debugPrint("Pub sub: $data");
      Map msgMapped = jsonDecode(data);
     if (msgMapped['type'] == 'PONG') {
       globals.talker?.info('Twitch PubSub Websocket PONG received.');
@@ -89,7 +90,7 @@ class TwitchPubSubService extends GetxService {
   }
   
   void _listenToPinnedUpdates() {
-    send('{"type":"LISTEN","data":{"topics":["pinned-chat-updates-v1.169185650"],"auth_token":"$accessToken"}}');
+    send('{"type":"LISTEN","data":{"topics":["pinned-chat-updates-v1.$_broadcasterId"],"auth_token":"$accessToken"}, "nonce":"${DateTime.now().millisecondsSinceEpoch}"}');
   }
 
   void _ping() {
@@ -99,5 +100,14 @@ class TwitchPubSubService extends GetxService {
   void _reconnect() {
     close();
     connect();
+  }
+
+  Future<String> _getChannelId() async {
+    String? response = await TwitchApi.getTwitchUserChannelId(
+      channelName,
+      accessToken,
+      kTwitchAuthClientId,
+    );
+    return response ?? '';
   }
 }
