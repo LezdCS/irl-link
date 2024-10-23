@@ -10,7 +10,7 @@ class SettingsService extends GetxService {
   late Rx<Settings> settings;
 
   Future<SettingsService> init() async {
-    settings.value = await getSettings();
+    settings = (await getSettings()).obs;
     return this;
   }
 
