@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/chat/chat_badge.dart';
 import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
-import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/kick/kick_emote.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/author_name.dart';
@@ -13,10 +12,10 @@ import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/times
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/word.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/twitch/cheer_emote.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/twitch/twitch_emote.dart';
-import 'package:twitch_chat/twitch_chat.dart';
+import 'package:twitch_chat/twitch_chat.dart' hide ChatMessage;
 
 class MessageRow extends StatelessWidget {
-  final entity.ChatMessage message;
+  final ChatMessage message;
   final bool displayTimestamp;
   final double textSize;
   final bool hideDeletedMessages;
@@ -110,7 +109,7 @@ class MessageRow extends StatelessWidget {
   }
 
   List<Widget> messageContent(
-    final entity.ChatMessage message,
+    final ChatMessage message,
     final TwitchChatParameters? params,
     final double textSize,
     final List<ChatEmote> cheerEmotes,
