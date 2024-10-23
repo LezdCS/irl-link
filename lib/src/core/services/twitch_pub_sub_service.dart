@@ -60,6 +60,7 @@ class TwitchPubSubService extends GetxService {
 
   void _eventListener(data) {
     // Handle incoming events
+      debugPrint("Pub sub: $data");
      Map msgMapped = jsonDecode(data);
     if (msgMapped['type'] == 'PONG') {
       globals.talker?.info('Twitch PubSub Websocket PONG received.');

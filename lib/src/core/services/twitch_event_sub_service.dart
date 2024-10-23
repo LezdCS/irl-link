@@ -90,7 +90,7 @@ class TwitchEventSubService extends GetxService {
   }
 
   void _eventListener(String data) {
-    // debugPrint("Sub event: $data");
+    debugPrint("Event sub: $data");
     Map msgMapped = jsonDecode(data);
 
     if (msgMapped['metadata'] != null &&
