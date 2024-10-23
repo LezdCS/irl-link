@@ -19,6 +19,7 @@ import 'package:irllink/src/presentation/widgets/chats/select_channel_dialog.dar
 import 'package:irllink/src/presentation/widgets/dashboard.dart';
 import 'package:irllink/src/presentation/widgets/emote_picker_view.dart';
 import 'package:irllink/src/presentation/widgets/hype_train.dart';
+import 'package:irllink/src/presentation/widgets/pinned_messages_sheet.dart';
 import 'package:irllink/src/presentation/widgets/poll.dart';
 import 'package:irllink/src/presentation/widgets/prediction.dart';
 import 'package:irllink/src/presentation/widgets/tabs/obs_tab_view.dart';
@@ -193,6 +194,21 @@ class HomeView extends GetView<HomeViewController> {
               left: 10,
               right: 150,
               child: EmotePickerView(),
+            ),
+          ),
+          Positioned(
+            bottom: height * 0.07,
+            left: 0,
+            right: 0,
+            child: AnimatedSlide(
+              offset: controller.showPinnedMessages.value
+                  ? Offset.zero
+                  : const Offset(0, 1),
+              duration: const Duration(milliseconds: 200),
+              child: Visibility(
+                visible: controller.showPinnedMessages.value,
+                child: PinnedMessagesSheet(messages: controller.pinnedMessages),
+              ),
             ),
           ),
           Positioned(
@@ -455,16 +471,19 @@ class HomeView extends GetView<HomeViewController> {
                   ),
                 )
               : Container(),
-          Expanded(
-            flex: 1,
-            child: InkWell(
-              onTap: () {
-                // open pinned messages
-              },
-              child: Icon(
-                Icons.push_pin,
-                color: Theme.of(context).primaryIconTheme.color,
-                size: 22,
+          Visibility(
+            visible: controller.pinnedMessages.isNotEmpty,
+            child: Expanded(
+              flex: 1,
+              child: InkWell(
+                onTap: () {
+                  controller.showPinnedMessages.toggle();
+                },
+                child: Icon(
+                  Icons.push_pin,
+                  color: Theme.of(context).primaryIconTheme.color,
+                  size: 22,
+                ),
               ),
             ),
           ),

@@ -90,6 +90,7 @@ class HomeViewController extends GetxController
   Rxn<entity.ChatMessage> selectedMessage = Rxn<entity.ChatMessage>();
 
   RxList<PinnedMessage> pinnedMessages = <PinnedMessage>[].obs;
+  RxBool showPinnedMessages = false.obs;
 
   @override
   void onInit() async {
