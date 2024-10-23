@@ -81,10 +81,15 @@ class TwitchPubSubService extends GetxService {
       String topic = msgMapped['data']['topic'];
       if (topic == 'pinned-chat-updates-v1.$_broadcasterId') {
         Map<String, dynamic> message = jsonDecode(msgMapped['data']['message']);
-        if (message['type'] == 'pin-message') {
-          _handlePinnedMessage(message);
-        } else if (message['type'] == 'unpin-message') {
-          _handleRemovePinnedMessage(message['data']['id']);
+        switch (message['type']) {
+          case 'pin-message':
+            _handlePinnedMessage(message);
+            break;
+          case 'unpin-message':
+            _handleRemovePinnedMessage(message['data']['id']);
+            break;
+          default:
+            break;
         }
       }
     }
