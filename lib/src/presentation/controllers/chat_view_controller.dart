@@ -76,7 +76,7 @@ class ChatViewController extends GetxController
   @override
   void onReady() {
     scrollController.addListener(scrollListener);
-    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+    Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
       reconnectAllChats();
     });
 
