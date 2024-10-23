@@ -1,4 +1,6 @@
 
+import 'package:kick_chat/kick_chat.dart';
+
 class PinnedMessage {
   final String id;
   final String messageId;
@@ -26,6 +28,18 @@ class PinnedMessage {
       displayName: json['data']['message']['sender']['display_name'],
       color: json['data']['message']['sender']['chat_color'],
       message: json['data']['message']['content']['text'],
+      timestamp: DateTime.now().toUtc().millisecondsSinceEpoch,
+    );
+  }
+
+  factory PinnedMessage.fromKick(KickPinnedMessageCreated kickPinnedMessageCreated) {
+    return PinnedMessage(
+      id: kickPinnedMessageCreated.channel,
+      messageId: kickPinnedMessageCreated.data.message.id,
+      authorId: kickPinnedMessageCreated.data.message.sender.id.toString(),
+      displayName: kickPinnedMessageCreated.data.message.sender.username,
+      color: kickPinnedMessageCreated.data.message.sender.identity.color,
+      message: kickPinnedMessageCreated.data.message.content,
       timestamp: DateTime.now().toUtc().millisecondsSinceEpoch,
     );
   }

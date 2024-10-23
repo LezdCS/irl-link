@@ -13,6 +13,7 @@ import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/globals.dart' as globals;
 import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
+import 'package:irllink/src/domain/entities/pinned_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
@@ -400,6 +401,7 @@ class ChatViewController extends GetxController
     final remoteConfig = FirebaseRemoteConfig.instance;
     await remoteConfig.fetchAndActivate();
     String pushKey = remoteConfig.getString('kick_chat_push_key');
+    debugPrint("kc.channel: ${kc.channel}");
     KickChat kickChat = KickChat(
       kc.channel,
       pushKey,
@@ -408,8 +410,7 @@ class ChatViewController extends GetxController
         globals.talker?.error('error on kick chat'),
       },
       onChatroomClear: (String channelId) {
-        chatMessages
-              .removeWhere((message) => message.channelId == channelId);
+        chatMessages.removeWhere((message) => message.channelId == channelId);
       },
       onDeletedMessageByMessageId: (String messageId) {
         chatMessages
@@ -426,6 +427,14 @@ class ChatViewController extends GetxController
         }
         chatMessages.refresh();
       },
+      onMessagePinned: (KickPinnedMessageCreated pinnedMessage) {
+        PinnedMessage message = PinnedMessage.fromKick(pinnedMessage);
+        homeViewController.pinnedMessages.add(message);
+      },
+      onMessageUnpinned: (KickPinnedMessageDeleted unpinnedMessage) {
+        homeViewController.pinnedMessages
+            .removeWhere((message) => message.id == unpinnedMessage.channel);
+      },
     );
     kickChats.add(kickChat);
     await kickChat.connect();
@@ -441,6 +450,10 @@ class ChatViewController extends GetxController
       Settings settings = Get.find<SettingsService>().settings.value;
       if (settings.ttsSettings.ttsEnabled) {
         ttsService.readTts(message);
+      }
+      // For some reason, the same message is sent multiple times, need to investigate further but for now, this is a workaround
+      if(chatMessages.contains(message)) {
+        return;
       }
       addMessage(message);
     });
