@@ -338,6 +338,10 @@ class ChatMessage {
     );
   }
 
+  // factory ChatMessage.kickPinnedMessage(KickPinnedMessage pin, String channelId, List<KickBadges> subBadges){
+
+  // }
+
   Map toJsonForWatch() => {
         'id': id == '' ? const Uuid().v4() : id,
         'username': username == '' ? displayName : username,

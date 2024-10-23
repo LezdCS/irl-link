@@ -3,6 +3,8 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:irllink/src/core/utils/constants.dart';
+import 'package:irllink/src/domain/entities/pinned_message.dart';
+import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:irllink/src/core/utils/globals.dart' as globals;
@@ -20,7 +22,8 @@ class TwitchPubSubService extends GetxService {
 
   late Timer pingTimer;
 
-  Future<TwitchPubSubService> init({required String accessToken, required String channelName}) async {
+  Future<TwitchPubSubService> init(
+      {required String accessToken, required String channelName}) async {
     this.accessToken = accessToken;
     this.channelName = channelName;
     return this;
@@ -67,14 +70,23 @@ class TwitchPubSubService extends GetxService {
 
   void _eventListener(data) {
     // Handle incoming events
-     Map msgMapped = jsonDecode(data);
-    if (msgMapped['type'] == 'PONG') {
+    Map<String, dynamic> msgMapped = jsonDecode(data);
+    String type = msgMapped['type'];
+    if (type == 'PONG') {
       globals.talker?.info('Twitch PubSub Websocket PONG received.');
-    } else if (msgMapped['type'] == 'RECONNECT') {
+    } else if (type == 'RECONNECT') {
       globals.talker?.warning('Twitch PubSub Websocket RECONNECT received.');
       _reconnect();
-    } else {
-      globals.talker?.info('Twitch PubSub Websocket message received: $data');
+    } else if (type == 'MESSAGE') {
+      String topic = msgMapped['data']['topic'];
+      if (topic == 'pinned-chat-updates-v1.$_broadcasterId') {
+        Map<String, dynamic> message = jsonDecode(msgMapped['data']['message']);
+        if (message['type'] == 'pin-message') {
+          _handlePinnedMessage(message);
+        } else if (message['type'] == 'unpin-message') {
+          _handleRemovePinnedMessage(message['data']['id']);
+        }
+      }
     }
   }
 
@@ -93,9 +105,10 @@ class TwitchPubSubService extends GetxService {
   void send(String message) {
     _webSocketChannel?.sink.add(message);
   }
-  
+
   void _listenToPinnedUpdates() {
-    send('{"type":"LISTEN","data":{"topics":["pinned-chat-updates-v1.$_broadcasterId"],"auth_token":"$accessToken"}, "nonce":"${DateTime.now().millisecondsSinceEpoch}"}');
+    send(
+        '{"type":"LISTEN","data":{"topics":["pinned-chat-updates-v1.$_broadcasterId"],"auth_token":"$accessToken"}, "nonce":"${DateTime.now().millisecondsSinceEpoch}"}');
   }
 
   void _ping() {
@@ -114,5 +127,17 @@ class TwitchPubSubService extends GetxService {
       kTwitchAuthClientId,
     );
     return response ?? '';
+  }
+
+  void _handlePinnedMessage(Map<String, dynamic> message) {
+    PinnedMessage pinnedMessage =
+        PinnedMessage.fromTwitch(message);
+    Get.find<HomeViewController>().pinnedMessages.add(pinnedMessage);
+  }
+
+  void _handleRemovePinnedMessage(String pinId) {
+    Get.find<HomeViewController>()
+        .pinnedMessages
+        .removeWhere((element) => element.id == pinId);
   }
 }

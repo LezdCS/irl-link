@@ -18,6 +18,7 @@ import 'package:irllink/src/data/repositories/streamelements_repository_impl.dar
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
+import 'package:irllink/src/domain/entities/pinned_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
@@ -87,6 +88,8 @@ class HomeViewController extends GetxController
 
   late TabController chatTabsController;
   Rxn<entity.ChatMessage> selectedMessage = Rxn<entity.ChatMessage>();
+
+  RxList<PinnedMessage> pinnedMessages = <PinnedMessage>[].obs;
 
   @override
   void onInit() async {
