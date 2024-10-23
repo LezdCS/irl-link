@@ -18,6 +18,8 @@ class TwitchPubSubService extends GetxService {
   late IOWebSocketChannel? _webSocketChannel;
   late StreamSubscription? _streamSubscription;
 
+  late Timer pingTimer;
+
   Future<TwitchPubSubService> init({required String accessToken, required String channelName}) async {
     this.accessToken = accessToken;
     this.channelName = channelName;
@@ -34,7 +36,9 @@ class TwitchPubSubService extends GetxService {
     try {
       await _webSocketChannel?.ready;
       _ping();
-      //TODO : every 4 minutes we need to send a PING message to the server, if the server to not respond PONG within 10 seconds, we need to reconnect
+      pingTimer = Timer.periodic(const Duration(minutes: 4), (Timer t) {
+        _ping();
+      });
       _listenToPinnedUpdates();
     } catch (e) {
       globals.talker?.warning(
@@ -58,6 +62,7 @@ class TwitchPubSubService extends GetxService {
     _webSocketChannel?.sink.close();
     _streamSubscription?.cancel();
     _streamSubscription = null;
+    pingTimer.cancel();
   }
 
   void _eventListener(data) {
