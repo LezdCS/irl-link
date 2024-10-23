@@ -11,6 +11,7 @@ import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/core/services/twitch_event_sub_service.dart';
+import 'package:irllink/src/core/services/twitch_pub_sub_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/list_move.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
@@ -112,6 +113,14 @@ class HomeViewController extends GetxController
         permanent: true,
       );
       subService.connect();
+
+      TwitchPubSubService pubSubService = await Get.putAsync(
+        () => TwitchPubSubService().init(
+          accessToken: twitchData!.accessToken,
+        ),
+        permanent: true,
+      );
+      pubSubService.connect();
 
       TwitchTabView twitchPage = const TwitchTabView();
       tabElements.add(twitchPage);

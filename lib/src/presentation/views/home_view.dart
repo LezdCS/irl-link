@@ -455,6 +455,19 @@ class HomeView extends GetView<HomeViewController> {
                   ),
                 )
               : Container(),
+          Expanded(
+            flex: 1,
+            child: InkWell(
+              onTap: () {
+                // open pinned messages
+              },
+              child: Icon(
+                Icons.push_pin,
+                color: Theme.of(context).primaryIconTheme.color,
+                size: 22,
+              ),
+            ),
+          ),
           Visibility(
             visible: settings.dashboardSettings.activated,
             child: Expanded(
