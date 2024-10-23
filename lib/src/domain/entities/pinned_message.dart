@@ -36,14 +36,14 @@ class PinnedMessage {
     );
   }
 
-  factory PinnedMessage.fromKick(KickPinnedMessageCreated kickPinnedMessageCreated) {
+  factory PinnedMessage.fromKick(KickPinnedMessageCreated messsage) {
     return PinnedMessage(
-      id: kickPinnedMessageCreated.channel,
-      messageId: kickPinnedMessageCreated.data.message.id,
-      authorId: kickPinnedMessageCreated.data.message.sender.id.toString(),
-      displayName: kickPinnedMessageCreated.data.message.sender.username,
-      color: kickPinnedMessageCreated.data.message.sender.identity.color,
-      message: kickPinnedMessageCreated.data.message.content,
+      id: messsage.channel,
+      messageId: messsage.data.message.id,
+      authorId: messsage.data.message.sender.id.toString(),
+      displayName: messsage.data.message.sender.username,
+      color: messsage.data.message.sender.identity.color,
+      message: messsage.data.message.content,
       timestamp: DateTime.now().toUtc().millisecondsSinceEpoch,
       platform: Platform.kick,
     );
