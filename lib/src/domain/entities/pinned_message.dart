@@ -1,4 +1,5 @@
 
+import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:kick_chat/kick_chat.dart';
 
 class PinnedMessage {
@@ -9,6 +10,7 @@ class PinnedMessage {
   final String color;
   final String message;
   final int timestamp;
+  final Platform platform;
 
   PinnedMessage({
     required this.id,
@@ -18,6 +20,7 @@ class PinnedMessage {
     required this.displayName,
     required this.color,
     required this.timestamp,
+    required this.platform,
   });
 
   factory PinnedMessage.fromTwitch(Map<String, dynamic> json) {
@@ -29,6 +32,7 @@ class PinnedMessage {
       color: json['data']['message']['sender']['chat_color'],
       message: json['data']['message']['content']['text'],
       timestamp: DateTime.now().toUtc().millisecondsSinceEpoch,
+      platform: Platform.twitch,
     );
   }
 
@@ -41,6 +45,7 @@ class PinnedMessage {
       color: kickPinnedMessageCreated.data.message.sender.identity.color,
       message: kickPinnedMessageCreated.data.message.content,
       timestamp: DateTime.now().toUtc().millisecondsSinceEpoch,
+      platform: Platform.kick,
     );
   }
 }
