@@ -24,6 +24,7 @@ class PinnedMessagesSheet extends GetView {
             itemBuilder: (context, index) {
               final message = messages[index];
               return Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
                   Container(
                     padding: const EdgeInsets.only(right: 5),
