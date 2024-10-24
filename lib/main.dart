@@ -64,23 +64,21 @@ Future<void> initializeDependencies() async {
   TwitchRepositoryImpl twitchRepository = TwitchRepositoryImpl();
 
   // Use cases
-  SettingsUseCase settingsUseCase =
+  final settingsUseCase =
       SettingsUseCase(settingsRepository: settingsRepository);
-  TwitchUseCase twitchUseCase = TwitchUseCase(twitchRepository: twitchRepository);
+  final twitchUseCase = TwitchUseCase(twitchRepository: twitchRepository);
 
   // Events
-  SettingsEvents settingsEvents = SettingsEvents(
+  final settingsEvents = SettingsEvents(
     settingsUseCase: settingsUseCase,
     twitchUseCase: twitchUseCase,
   );
-  LoginEvents loginEvents = LoginEvents(
+  final loginEvents = LoginEvents(
     twitchUseCase: twitchUseCase,
   );
-  
-  SettingsService settingsService = await Get.putAsync(
-    () => SettingsService(
-      settingsEvents: settingsEvents,
-    ).init(),
+
+  final settingsService = await Get.putAsync(
+    () => SettingsService(settingsEvents: settingsEvents).init(),
     permanent: true,
   );
   if (!settingsService.settings.value.generalSettings.isDarkMode) {
@@ -88,14 +86,14 @@ Future<void> initializeDependencies() async {
   }
 
   await Get.putAsync(
-    () => StoreService(
-      loginEvents: loginEvents,
-    ).init(),
+    () => StoreService(loginEvents: loginEvents).init(),
     permanent: true,
   );
 
-  TtsService ttsService =
-      await Get.putAsync(() => TtsService().init(), permanent: true);
+  final ttsService = await Get.putAsync(
+    () => TtsService().init(),
+    permanent: true,
+  );
   await ttsService.initTts(settingsService.settings.value);
 
   await Get.putAsync(() => WatchService().init(), permanent: true);
