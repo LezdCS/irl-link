@@ -44,6 +44,9 @@ class ChatView extends GetView<ChatViewController> {
               if (controller.homeViewController.selectedMessage.value != null) {
                 controller.homeViewController.selectedMessage.value = null;
               }
+              if(controller.homeViewController.showPinnedMessages.value) {
+                controller.homeViewController.showPinnedMessages.value = false;
+              }
               FocusScope.of(context).unfocus();
             },
             onDoubleTap: () {
