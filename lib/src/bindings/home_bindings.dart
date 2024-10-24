@@ -47,9 +47,7 @@ class HomeBindings extends Bindings {
     Get.lazyPut<StreamelementsViewController>(
       () => StreamelementsViewController(
         streamelementsEvents: StreamelementsEvents(
-          streamelementsUseCase: StreamelementsUseCase(
-            streamelementsRepository: StreamelementsRepositoryImpl(),
-          ),
+          streamelementsUseCase: streamelementsUseCase,
         ),
       ),
       fenix: true,
