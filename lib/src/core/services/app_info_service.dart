@@ -2,17 +2,11 @@ import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class AppInfoService extends GetxService {
-  static final AppInfoService _instance = AppInfoService._internal();
   late PackageInfo _packageInfo;
 
-  factory AppInfoService() {
-    return _instance;
-  }
-
-  AppInfoService._internal();
-
-  Future<void> init() async {
+  Future<AppInfoService> init() async {
     _packageInfo = await PackageInfo.fromPlatform();
+    return this;
   }
 
   String get appName => _packageInfo.appName;
