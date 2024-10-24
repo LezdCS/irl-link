@@ -9,13 +9,21 @@ import 'package:irllink/src/presentation/events/login_events.dart';
 class LoginBindings extends Bindings {
   @override
   void dependencies() {
+
+    // Repositories
+    TwitchRepositoryImpl twitchRepository = TwitchRepositoryImpl();
+
+    // Use cases
+    TwitchUseCase twitchUseCase = TwitchUseCase(twitchRepository: twitchRepository);
+
+    // Events
+    LoginEvents loginEvents = LoginEvents(
+      twitchUseCase: twitchUseCase,
+    );
+
     Get.lazyPut<LoginViewController>(
       () => LoginViewController(
-        loginEvents: LoginEvents(
-          twitchUseCase: TwitchUseCase(
-            twitchRepository: TwitchRepositoryImpl(),
-          ),
-        ),
+        loginEvents: loginEvents,
       ),
     );
   }

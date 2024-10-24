@@ -14,21 +14,33 @@ import 'package:irllink/src/presentation/events/streamelements_events.dart';
 class SettingsBindings extends Bindings {
   @override
   void dependencies() {
+    // Repositories
+    final settingsRepository = SettingsRepositoryImpl();
+    final twitchRepository = TwitchRepositoryImpl();
+    final streamelementsRepository = StreamelementsRepositoryImpl();
+
+    // Use cases
+    final settingsUseCase =
+        SettingsUseCase(settingsRepository: settingsRepository);
+    final twitchUseCase = TwitchUseCase(twitchRepository: twitchRepository);
+    final streamelementsUseCase = StreamelementsUseCase(
+        streamelementsRepository: streamelementsRepository);
+
+    // Events
+    final settingsEvents = SettingsEvents(
+      settingsUseCase: settingsUseCase,
+      twitchUseCase: twitchUseCase,
+    );
+
+    final streamelementsEvents = StreamelementsEvents(
+      streamelementsUseCase: streamelementsUseCase,
+    );
+
     Get.lazyPut<SettingsViewController>(
       () => SettingsViewController(
-          settingsEvents: SettingsEvents(
-            settingsUseCase: SettingsUseCase(
-              settingsRepository: SettingsRepositoryImpl(),
-            ),
-            twitchUseCase: TwitchUseCase(
-              twitchRepository: TwitchRepositoryImpl(),
-            ),
-          ),
-          streamelementsEvents: StreamelementsEvents(
-            streamelementsUseCase: StreamelementsUseCase(
-              streamelementsRepository: StreamelementsRepositoryImpl(),
-            ),
-          )),
+        settingsEvents: settingsEvents,
+        streamelementsEvents: streamelementsEvents,
+      ),
     );
   }
 }

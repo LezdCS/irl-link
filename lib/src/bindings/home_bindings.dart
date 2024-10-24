@@ -18,6 +18,7 @@ class HomeBindings extends Bindings {
   @override
   Future<void> dependencies() async {
 
+    // Repositories
     final twitchRepository = TwitchRepositoryImpl();
     final streamelementsRepository = StreamelementsRepositoryImpl();
 
