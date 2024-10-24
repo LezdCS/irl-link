@@ -32,7 +32,7 @@ class ObsTabViewController extends GetxController {
 
   Rxn<StatsResponse> statsResponse = Rxn<StatsResponse>();
 
-  late Timer statsTimer;
+  Timer? statsTimer;
 
   @override
   Future<void> onReady() async {
@@ -81,7 +81,7 @@ class ObsTabViewController extends GetxController {
   @override
   void onClose() {
     isConnected.value = false;
-    statsTimer.cancel();
+    statsTimer?.cancel();
     obsWebSocket?.close();
     super.onClose();
   }
@@ -197,7 +197,7 @@ class ObsTabViewController extends GetxController {
 
   void connectionLost() {
     globals.talker?.error("Connection lost with OBS.");
-    statsTimer.cancel();
+    statsTimer?.cancel();
     isConnected.value = false;
     alertMessage.value = "Connection with OBS lost...";
   }
