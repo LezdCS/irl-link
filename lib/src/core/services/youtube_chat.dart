@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:get/instance_manager.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' as parser;
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
+import 'package:irllink/src/core/services/talker_service.dart';
+
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 class YoutubeChat {
   String videoId;
@@ -14,6 +17,8 @@ class YoutubeChat {
   final StreamController<ChatMessage> _chatStreamController =
       StreamController<ChatMessage>.broadcast();
   Stream<ChatMessage> get chatStream => _chatStreamController.stream;
+
+  Talker talker = Get.find<TalkerService>().talker;
 
   YoutubeChat(
     this.videoId,
@@ -54,8 +59,7 @@ class YoutubeChat {
           ['continuations'][0]['invalidationContinuationData']['continuation'];
       return continuation;
     } catch (error) {
-      globals.talker
-          ?.error('Error fetching initial continuation token: $error');
+      talker.error('Error fetching initial continuation token: $error');
       return null;
     }
   }
@@ -110,12 +114,12 @@ class YoutubeChat {
               ['liveChatContinuation']['continuations'][0]
           ['invalidationContinuationData']['continuation'];
       if (newContinuationToken == null) {
-        globals.talker?.info('No continuation token found, terminating.');
+        talker.info('No continuation token found, terminating.');
         return null;
       }
       return newContinuationToken;
     } catch (error) {
-      globals.talker?.error('Error fetching chat messages: $error');
+      talker.error('Error fetching chat messages: $error');
       return continuationToken; // Retry with the same token
     }
   }
@@ -123,7 +127,7 @@ class YoutubeChat {
   Future<void> startFetchingChat() async {
     var continuationToken = await fetchInitialContinuationToken();
     if (continuationToken == null) {
-      globals.talker?.error('Failed to fetch initial continuation token.');
+      talker.error('Failed to fetch initial continuation token.');
       return;
     }
 
@@ -136,10 +140,12 @@ class YoutubeChat {
 }
 
 Future<String?> getLiveVideoId(String channelURL) async {
+  Talker talker = Get.find<TalkerService>().talker;
+  
   // Send GET request to the YouTube channel's live streams page
   var response = await http.get(Uri.parse(channelURL));
   if (response.statusCode != 200) {
-    globals.talker?.error(
+    talker.error(
         'Failed to retrieve the page. Status code: ${response.statusCode}');
     return null;
   }
@@ -148,7 +154,7 @@ Future<String?> getLiveVideoId(String channelURL) async {
   var match = RegExp(r'ytInitialData\s*=\s*({.*?});</script>')
       .firstMatch(response.body);
   if (match == null) {
-    globals.talker?.error('Failed to find ytInitialData in the page content.');
+    talker.error('Failed to find ytInitialData in the page content.');
     return null;
   }
 
@@ -181,10 +187,10 @@ Future<String?> getLiveVideoId(String channelURL) async {
       }
     }
   } catch (e) {
-    globals.talker?.error('Error parsing ytInitialData: $e');
+    talker.error('Error parsing ytInitialData: $e');
     return null;
   }
 
-  globals.talker?.info('No live video found.');
+  talker.info('No live video found.');
   return null;
 }

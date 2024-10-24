@@ -4,7 +4,8 @@ import 'package:get/get.dart';
 import 'package:irllink/src/core/resources/app_translations.dart';
 import 'package:irllink/src/core/services/app_info_service.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
+import 'package:irllink/src/core/services/talker_service.dart';
+
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation//widgets/settings/chats_joined.dart';
 import 'package:irllink/src/presentation//widgets/settings/manage_list_browser_tabs.dart';
@@ -106,7 +107,7 @@ class SettingsView extends GetView<SettingsViewController> {
                 () {
                   Get.to(
                     () => TalkerScreenView(
-                      talker: globals.talker!,
+                      talker: Get.find<TalkerService>().talker,
                     ),
                   );
                 },

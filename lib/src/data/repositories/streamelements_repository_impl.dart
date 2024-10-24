@@ -4,11 +4,13 @@ import 'package:dio/dio.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
+import 'package:get/instance_manager.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
+
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/core/utils/mapper.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
@@ -22,8 +24,10 @@ import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_song.dart';
 import 'package:irllink/src/domain/repositories/streamelements_repository.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 class StreamelementsRepositoryImpl extends StreamelementsRepository {
+  Talker talker = Get.find<TalkerService>().talker;
   @override
   Future<DataState<SeCredentials>> login(
       StreamelementsAuthParams params) async {
@@ -45,7 +49,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       String refreshToken = Uri.parse(result).queryParameters['refresh_token']!;
       int expiresIn =
           int.parse(Uri.parse(result).queryParameters['expires_in']!);
-      globals.talker?.logTyped(
+      talker.logTyped(
         StreamElementsLog('StreamElements login successful.'),
       );
 
@@ -88,8 +92,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
         queryParameters: {'refresh_token': seCredentials.refreshToken},
       );
 
-      globals.talker
-          ?.logTyped(StreamElementsLog('StreamElements token refreshed.'));
+      talker.logTyped(StreamElementsLog('StreamElements token refreshed.'));
 
       SeCredentials newSeCredentials = SeCredentials(
         accessToken: response.data['access_token'],
@@ -111,7 +114,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
     GetStorage box = GetStorage();
     String jsonData = jsonEncode(seCredentials);
     await box.write('seCredentials', jsonData);
-    globals.talker?.logTyped(
+    talker.logTyped(
         StreamElementsLog('StreamElements credentials saved in local.'));
   }
 
@@ -122,12 +125,11 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       dio.options.headers["authorization"] = "OAuth $accessToken";
       response =
           await dio.get('https://api.streamelements.com/oauth2/validate');
-      globals.talker
-          ?.logTyped(StreamElementsLog('StreamElements token validated.'));
+      talker.logTyped(StreamElementsLog('StreamElements token validated.'));
 
       return DataSuccess(response.data);
     } on DioException catch (e) {
-      globals.talker?.error(e.message);
+      talker.error(e.message);
       return DataFailed(
         "Unable to validate StreamElements token: ${e.message}",
       );
@@ -148,7 +150,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       );
       GetStorage box = GetStorage();
       box.remove('seCredentials');
-      globals.talker?.logTyped(
+      talker.logTyped(
           StreamElementsLog('StreamElements credentials removed from local.'));
       return DataSuccess(null);
     } on DioException catch (e) {
@@ -172,7 +174,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
   @override
   Future<DataState<SeCredentials>> getSeCredentialsFromLocal() async {
     final box = GetStorage();
-    globals.talker?.logTyped(
+    talker.logTyped(
       StreamElementsLog(
           'Getting StreamElements credentials from local storage.'),
     );
@@ -196,7 +198,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       });
       String savedScopesOrdered = savedScopesList.join(' ');
       if (savedScopesOrdered != paramsScopesOrdered) {
-        globals.talker?.logTyped(
+        talker.logTyped(
           StreamElementsLog(
               'StreamElements scopes changed, user need to relogin.'),
         );

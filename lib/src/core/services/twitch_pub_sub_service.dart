@@ -2,12 +2,14 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/domain/entities/pinned_message.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 import 'package:web_socket_channel/io.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
+
 
 class TwitchPubSubService extends GetxService {
   TwitchPubSubService();
@@ -21,6 +23,8 @@ class TwitchPubSubService extends GetxService {
   late StreamSubscription? _streamSubscription;
 
   late Timer pingTimer;
+
+  Talker talker = Get.find<TalkerService>().talker;
 
   Future<TwitchPubSubService> init(
       {required String accessToken, required String channelName}) async {
@@ -44,7 +48,7 @@ class TwitchPubSubService extends GetxService {
       });
       _listenToPinnedUpdates();
     } catch (e) {
-      globals.talker?.warning(
+      talker.warning(
           'Failed to connect to the Twitch EventSub Websocket. Retrying in 20 seconds.');
 
       Future.delayed(const Duration(seconds: 20), () {
@@ -73,9 +77,9 @@ class TwitchPubSubService extends GetxService {
     Map<String, dynamic> msgMapped = jsonDecode(data);
     String type = msgMapped['type'];
     if (type == 'PONG') {
-      globals.talker?.info('Twitch PubSub Websocket PONG received.');
+      talker.info('Twitch PubSub Websocket PONG received.');
     } else if (type == 'RECONNECT') {
-      globals.talker?.warning('Twitch PubSub Websocket RECONNECT received.');
+      talker.warning('Twitch PubSub Websocket RECONNECT received.');
       _reconnect();
     } else if (type == 'MESSAGE') {
       String topic = msgMapped['data']['topic'];
@@ -96,13 +100,13 @@ class TwitchPubSubService extends GetxService {
   }
 
   void _onDone() {
-    globals.talker?.warning('Twitch PubSub Websocket closed.');
+    talker.warning('Twitch PubSub Websocket closed.');
     isConnected.value = false;
     close();
   }
 
   void _onError(error) {
-    globals.talker?.warning('Twitch PubSub Websocket error: $error');
+    talker.warning('Twitch PubSub Websocket error: $error');
     isConnected.value = false;
     close();
   }

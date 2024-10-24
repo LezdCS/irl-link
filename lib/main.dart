@@ -12,10 +12,9 @@ import 'package:irllink/src/core/services/app_info_service.dart';
 import 'package:irllink/src/core/services/realtime_irl_task_handler.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
+import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/core/services/watch_service.dart';
-import 'package:irllink/src/core/utils/crashlytics_talker_observer.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/repositories/settings_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
@@ -30,26 +29,25 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final crashlyticsTalkerObserver = CrashlyticsTalkerObserver();
-  final talker = TalkerFlutter.init(
-    settings:
-        TalkerSettings(colors: {TalkerLogType.debug: AnsiPen()..yellow()}),
-    observer: crashlyticsTalkerObserver,
-  );
+  
   await GetStorage.init();
   await WakelockPlus.enable();
   await KickChat.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  globals.talker = talker;
   AppTranslations.initLanguages();
   FlutterForegroundTask.initCommunicationPort();
 
   await initializeDependencies();
 
+  final talkerService = await Get.putAsync(
+    () => TalkerService().init(),
+    permanent: true,
+  );
+
   runApp(Main(
-    talker: talker,
+    talker: talkerService.talker,
   ));
 }
 
@@ -133,7 +131,7 @@ class Main extends StatelessWidget {
 
   void localLogWriter(String text, {bool isError = false}) {
     if (isError) {
-      globals.talker?.error(text);
+      talker.error(text);
     } else {
       if (text.startsWith('Instance')) {
         talker.logTyped(GetxInstanceLog(text, false));
@@ -151,7 +149,7 @@ class Main extends StatelessWidget {
         talker.logTyped(RouterLog(text));
         return;
       }
-      globals.talker?.log(text);
+      talker.log(text);
     }
   }
 }

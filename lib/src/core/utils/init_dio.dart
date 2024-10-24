@@ -1,10 +1,14 @@
 import 'package:dio/dio.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/get_instance.dart';
+import 'package:irllink/src/core/services/talker_service.dart';
+
 import 'package:talker_dio_logger/talker_dio_logger_interceptor.dart';
 import 'package:talker_dio_logger/talker_dio_logger_settings.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 Dio initDio() {
-  final talker = globals.talker;
+  Talker talker = Get.find<TalkerService>().talker;
   var dio = Dio();
   dio.interceptors.add(
     TalkerDioLogger(

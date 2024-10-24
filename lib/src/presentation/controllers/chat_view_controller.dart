@@ -7,10 +7,11 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/core/services/youtube_chat.dart';
 import 'package:irllink/src/core/utils/constants.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
+
 import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/pinned_message.dart';
@@ -20,6 +21,7 @@ import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:kick_chat/kick_chat.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 import 'package:twitch_chat/twitch_chat.dart' hide ChatMessage;
 
 class ChatViewController extends GetxController
@@ -49,6 +51,8 @@ class ChatViewController extends GetxController
   List<TwitchChat> twitchChats = [];
   List<KickChat> kickChats = [];
   List<YoutubeChat> youtubeChats = [];
+
+  Talker talker = Get.find<TalkerService>().talker;
 
   @override
   void onInit() async {
@@ -301,19 +305,19 @@ class ChatViewController extends GetxController
         .toList();
 
     for (TwitchChat t in twitchChatToRemove) {
-      globals.talker?.info('Removing chat: ${t.channel}');
+      talker.info('Removing chat: ${t.channel}');
       t.close();
       twitchChats.removeWhere((tc) => tc.channelId == t.channelId);
     }
 
     for (KickChat k in kickChatToRemove) {
-      globals.talker?.info('Removing chat: ${k.username}');
+      talker.info('Removing chat: ${k.username}');
       k.close();
       kickChats.removeWhere((kc) => kc.username == k.username);
     }
 
     for (YoutubeChat y in youtubeChatToRemove) {
-      globals.talker?.info('Removing chat: ${y.videoId}');
+      talker.info('Removing chat: ${y.videoId}');
       y.closeStream();
       youtubeChats.removeWhere((yc) => yc.videoId == y.videoId);
     }
@@ -379,7 +383,7 @@ class ChatViewController extends GetxController
   Future<void> createYoutubeChat(String channelId) async {
     String? videoId = await getLiveVideoId(channelId);
     if (videoId == null) {
-      globals.talker?.error('VideoID not found for the channel: $channelId');
+      talker.error('VideoID not found for the channel: $channelId');
       return;
     }
 
@@ -406,7 +410,7 @@ class ChatViewController extends GetxController
       pushKey,
       onDone: () => {},
       onError: () => {
-        globals.talker?.error('error on kick chat'),
+        talker.error('error on kick chat'),
       },
       onChatroomClear: (String channelId) {
         chatMessages.removeWhere((message) => message.channelId == channelId);

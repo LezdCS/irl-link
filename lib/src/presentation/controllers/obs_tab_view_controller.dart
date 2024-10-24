@@ -4,11 +4,13 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
+import 'package:irllink/src/core/services/talker_service.dart';
+
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:obs_websocket/obs_websocket.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 class ObsTabViewController extends GetxController {
   ObsTabViewController({required this.homeEvents});
@@ -33,6 +35,8 @@ class ObsTabViewController extends GetxController {
   Rxn<StatsResponse> statsResponse = Rxn<StatsResponse>();
 
   Timer? statsTimer;
+
+  Talker talker = Get.find<TalkerService>().talker;
 
   @override
   Future<void> onReady() async {
@@ -92,7 +96,7 @@ class ObsTabViewController extends GetxController {
       if (!url.startsWith('ws://') && !url.startsWith('wss://')) {
         url = 'ws://$url';
       }
-      globals.talker?.logTyped(ObsLog("Connecting to OBS at $url..."));
+      talker.logTyped(ObsLog("Connecting to OBS at $url..."));
       obsWebSocket = await ObsWebSocket.connect(
         url,
         password: password,
@@ -196,7 +200,7 @@ class ObsTabViewController extends GetxController {
   }
 
   void connectionLost() {
-    globals.talker?.error("Connection lost with OBS.");
+    talker.error("Connection lost with OBS.");
     statsTimer?.cancel();
     isConnected.value = false;
     alertMessage.value = "Connection with OBS lost...";

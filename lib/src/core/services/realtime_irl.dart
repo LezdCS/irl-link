@@ -3,11 +3,15 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:get/get_instance/get_instance.dart';
+import 'package:get/get_rx/get_rx.dart';
+import 'package:get/route_manager.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/utils/determine_position.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
+
 import 'package:irllink/src/core/utils/init_dio.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 enum RtIrlStatus {
   updating,
@@ -18,6 +22,7 @@ class RealtimeIrl {
   String key;
 
   Rx<RtIrlStatus> status = RtIrlStatus.stopped.obs;
+  Talker talker = Get.find<TalkerService>().talker;
 
   RealtimeIrl(
     this.key,
@@ -31,7 +36,7 @@ class RealtimeIrl {
           status.value = RtIrlStatus.updating;
           DataState<Position> p = await determinePosition();
           if (p is DataSuccess && status.value == RtIrlStatus.updating) {
-            globals.talker?.info(
+            talker.info(
               "Updating position on RTIRL: ${p.data!.latitude}, ${p.data!.longitude} at ${data['timestampMillis']}",
             );
             DataState updateResult = await updatePosition(p.data!);
@@ -45,7 +50,7 @@ class RealtimeIrl {
           await stopTracking();
           break;
         default:
-          globals.talker?.info("Unknown action: $action");
+          talker.info("Unknown action: $action");
       }
     }
   }

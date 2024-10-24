@@ -5,7 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
+import 'package:irllink/src/core/services/talker_service.dart';
+
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
@@ -16,6 +17,7 @@ import 'package:irllink/src/domain/entities/stream_elements/se_song.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/events/streamelements_events.dart';
 import 'package:socket_io_client/socket_io_client.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 class StreamelementsViewController extends GetxController
     with GetTickerProviderStateMixin {
@@ -44,6 +46,8 @@ class StreamelementsViewController extends GetxController
   RxBool isSocketConnected = false.obs;
 
   final HomeViewController homeViewController = Get.find<HomeViewController>();
+
+  Talker talker = Get.find<TalkerService>().talker;
 
   @override
   Future<void> onInit() async {
@@ -128,12 +132,12 @@ class StreamelementsViewController extends GetxController
         Get.find<SettingsService>().settings.value.streamElementsSettings.jwt;
     SeMe? me = userSeProfile.value;
     if (me == null) {
-      globals.talker?.error('User profile was not found.');
+      talker.error('User profile was not found.');
       return;
     }
     String? accessToken = seCredentials.value?.accessToken;
     if (accessToken == null) {
-      globals.talker?.error('There is no accessToken to use for SE api calls.');
+      talker.error('There is no accessToken to use for SE api calls.');
       return;
     }
 
@@ -218,7 +222,7 @@ class StreamelementsViewController extends GetxController
       (event, data) => {
         if (data != null)
           {
-            globals.talker?.debug(data),
+            talker.debug(data),
           }
       },
     );
@@ -266,23 +270,23 @@ class StreamelementsViewController extends GetxController
     if (accessToken != null) {
       socket?.emit('authenticate', {"method": 'oauth2', "token": accessToken});
     } else {
-      globals.talker?.error('There is no accessToken to use for SE weboscket.');
+      talker.error('There is no accessToken to use for SE weboscket.');
     }
   }
 
   Future<void> onError() async {
     isSocketConnected.value = false;
-    globals.talker?.error('StreamElements WebSocket error.');
+    talker.error('StreamElements WebSocket error.');
   }
 
   Future<void> onDisconnect() async {
     isSocketConnected.value = false;
-    globals.talker?.warning('StreamElements WebSocket disconnected.');
+    talker.warning('StreamElements WebSocket disconnected.');
   }
 
   Future<void> onAuthenticated(data) async {
     isSocketConnected.value = true;
-    globals.talker?.logTyped(
+    talker.logTyped(
       StreamElementsLog('StreamElements WebSocket authenticated.'),
     );
   }

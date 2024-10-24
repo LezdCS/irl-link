@@ -4,9 +4,10 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/convert_to_device_timezone.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
+
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/core/utils/mapper.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_hype_train_dto.dart';
@@ -17,6 +18,7 @@ import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/events/home_events.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 import 'package:web_socket_channel/io.dart';
 
@@ -39,6 +41,8 @@ class TwitchEventSubService extends GetxService {
 
   Rx<TwitchHypeTrain> currentHypeTrain = TwitchHypeTrain.empty().obs;
   Rx<Duration> remainingTimeHypeTrain = const Duration(seconds: 0).obs;
+
+  Talker talker = Get.find<TalkerService>().talker;
 
   Future<TwitchEventSubService> init(
       {required String token, required String channel}) async {
@@ -66,7 +70,7 @@ class TwitchEventSubService extends GetxService {
     try {
       await _webSocketChannel?.ready;
     } catch (e) {
-      globals.talker?.warning(
+      talker.warning(
           'Failed to connect to the Twitch EventSub Websocket. Retrying in 20 seconds.');
 
       Future.delayed(const Duration(seconds: 20), () {
@@ -182,14 +186,14 @@ class TwitchEventSubService extends GetxService {
   }
 
   void _onDone() {
-    globals.talker?.info("Twitch Sub Event: Connection closed");
+    talker.info("Twitch Sub Event: Connection closed");
     isConnected.value = false;
     close();
   }
 
   void _onError(Object o, StackTrace s) {
     isConnected.value = false;
-    globals.talker?.error("Twitch Sub Event: error", o, s);
+    talker.error("Twitch Sub Event: error", o, s);
   }
 
   Future<String> _getChannelId() async {
@@ -216,7 +220,7 @@ class TwitchEventSubService extends GetxService {
         "transport": {"method": "websocket", "session_id": sessionId}
       });
     } on DioException catch (e) {
-      globals.talker?.error(e.response.toString());
+      talker.error(e.response.toString());
     }
   }
 

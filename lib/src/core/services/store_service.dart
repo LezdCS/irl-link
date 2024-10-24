@@ -8,11 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
+import 'package:irllink/src/core/services/talker_service.dart';
+
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/events/login_events.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 class StoreService extends GetxService {
   StoreService({required this.loginEvents});
@@ -25,6 +27,8 @@ class StoreService extends GetxService {
   RxBool storeFound = false.obs;
 
   Set<String> kIds = <String>{'irl_premium_subscription', 'irl_premium'};
+
+  Talker talker = Get.find<TalkerService>().talker;
 
   Future<StoreService> init() async {
     await getStore();
@@ -59,8 +63,8 @@ class StoreService extends GetxService {
     final ProductDetailsResponse response =
         await InAppPurchase.instance.queryProductDetails(kIds);
     if (response.notFoundIDs.isNotEmpty) {
-      globals.talker?.debug('Products not found: ${response.notFoundIDs}');
-      globals.talker?.debug(
+      talker.debug('Products not found: ${response.notFoundIDs}');
+      talker.debug(
           'Products found: ${response.productDetails.map((e) => e.id)}');
     }
     products = response.productDetails;
@@ -79,7 +83,7 @@ class StoreService extends GetxService {
     try {
       await InAppPurchase.instance.restorePurchases();
     } catch (error) {
-      globals.talker?.error('Not logged to any store.');
+      talker.error('Not logged to any store.');
     }
   }
 
@@ -158,7 +162,7 @@ class StoreService extends GetxService {
       );
       return Future<bool>.value(true);
     } on DioException catch (e) {
-      globals.talker?.error(e.toString());
+      talker.error(e.toString());
       return Future<bool>.value(false);
     }
   }
