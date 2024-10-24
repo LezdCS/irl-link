@@ -17,29 +17,29 @@ import 'package:irllink/src/presentation/events/streamelements_events.dart';
 class HomeBindings extends Bindings {
   @override
   Future<void> dependencies() async {
+
+    final twitchRepository = TwitchRepositoryImpl();
+    final streamelementsRepository = StreamelementsRepositoryImpl();
+
+    // Use cases
+    final twitchUseCase = TwitchUseCase(twitchRepository: twitchRepository);
+    final streamelementsUseCase = StreamelementsUseCase(streamelementsRepository: streamelementsRepository);
+
+    // HomeEvents instance reused across controllers
+    final homeEvents = HomeEvents(
+      twitchUseCase: twitchUseCase,
+      streamelementsUseCase: streamelementsUseCase,
+    );
+
     Get.lazyPut<HomeViewController>(
       () => HomeViewController(
-        homeEvents: HomeEvents(
-          twitchUseCase: TwitchUseCase(
-            twitchRepository: TwitchRepositoryImpl(),
-          ),
-          streamelementsUseCase: StreamelementsUseCase(
-            streamelementsRepository: StreamelementsRepositoryImpl(),
-          ),
-        ),
+        homeEvents: homeEvents,
       ),
     );
 
     Get.lazyPut<ObsTabViewController>(
       () => ObsTabViewController(
-        homeEvents: HomeEvents(
-          twitchUseCase: TwitchUseCase(
-            twitchRepository: TwitchRepositoryImpl(),
-          ),
-          streamelementsUseCase: StreamelementsUseCase(
-            streamelementsRepository: StreamelementsRepositoryImpl(),
-          ),
-        ),
+        homeEvents: homeEvents
       ),
       fenix: true,
     );
@@ -57,14 +57,7 @@ class HomeBindings extends Bindings {
 
     Get.lazyPut<TwitchTabViewController>(
       () => TwitchTabViewController(
-        homeEvents: HomeEvents(
-          twitchUseCase: TwitchUseCase(
-            twitchRepository: TwitchRepositoryImpl(),
-          ),
-          streamelementsUseCase: StreamelementsUseCase(
-            streamelementsRepository: StreamelementsRepositoryImpl(),
-          ),
-        ),
+        homeEvents: homeEvents
       ),
     );
 
