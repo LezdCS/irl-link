@@ -15,7 +15,15 @@ class PinnedMessagesSheet extends GetView {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
+      padding: const EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
+      decoration: BoxDecoration(
+        border: Border.all(color: const Color(0xFFa970ff)),
+        color: const Color(0xFF18181b),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(8),
+          topRight: Radius.circular(8),
+        ),
+      ),
       child: Column(
         children: [
           ListView.builder(
