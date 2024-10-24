@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/resources/app_translations.dart';
+import 'package:irllink/src/core/services/app_info_service.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/utils/globals.dart' as globals;
 import 'package:irllink/src/domain/entities/settings.dart';
@@ -96,7 +97,7 @@ class SettingsView extends GetView<SettingsViewController> {
               contactSettings(context, width),
               Container(
                 padding: const EdgeInsets.only(left: 4, right: 4, top: 6),
-                child: Text("Version: ${globals.version}"),
+                child: Text("Version: ${Get.find<AppInfoService>().version}"),
               ),
               settingsGoToRow(
                 context,

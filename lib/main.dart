@@ -8,6 +8,7 @@ import 'package:irllink/routes/app_pages.dart';
 import 'package:irllink/src/bindings/login_bindings.dart';
 import 'package:irllink/src/core/resources/app_translations.dart';
 import 'package:irllink/src/core/resources/themes.dart';
+import 'package:irllink/src/core/services/app_info_service.dart';
 import 'package:irllink/src/core/services/realtime_irl_task_handler.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
@@ -24,7 +25,6 @@ import 'package:irllink/src/presentation/events/login_events.dart';
 import 'package:irllink/src/presentation/events/settings_events.dart';
 import 'package:irllink/src/presentation/views/login_view.dart';
 import 'package:kick_chat/kick_chat.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
@@ -42,11 +42,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  PackageInfo packageInfo = await PackageInfo.fromPlatform();
-  globals.version = packageInfo.version;
-  globals.buildNumber = packageInfo.buildNumber;
-  globals.appName = packageInfo.appName;
-  globals.packageName = packageInfo.packageName;
   globals.talker = talker;
   AppTranslations.initLanguages();
   FlutterForegroundTask.initCommunicationPort();
@@ -97,6 +92,8 @@ Future<void> initializeDependencies() async {
   await ttsService.initTts(settingsService.settings.value);
 
   await Get.putAsync(() => WatchService().init(), permanent: true);
+
+  await Get.putAsync(() => AppInfoService().init(), permanent: true);
 }
 
 // The callback function should always be a top-level function.

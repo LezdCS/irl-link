@@ -2,10 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/app_info_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/presentation/controllers/login_view_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
 
 class LoginView extends GetView<LoginViewController> {
   const LoginView({super.key});
@@ -208,7 +208,7 @@ class LoginView extends GetView<LoginViewController> {
               ],
             ),
             const SizedBox(height: 10),
-            Text("Version: ${globals.version}")
+            Text("Version: ${Get.find<AppInfoService>().version}")
           ],
         ),
       ],

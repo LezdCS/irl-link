@@ -5,11 +5,13 @@ import 'package:dio/dio.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
+import 'package:get/get_core/get_core.dart';
+import 'package:get/get_instance/get_instance.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:irllink/src/core/services/app_info_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/core/utils/mapper.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_credentials_dto.dart';
@@ -119,7 +121,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
         apiRefreshTokenUrl,
         queryParameters: {
           'refresh_token': twitchData.refreshToken,
-          'app_version': globals.version,
+          'app_version': Get.find<AppInfoService>().version,
           'platform': Platform.isAndroid ? 'android' : 'ios'
         },
       );
