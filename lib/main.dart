@@ -29,7 +29,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   await GetStorage.init();
   await WakelockPlus.enable();
   await KickChat.init();
@@ -39,12 +39,12 @@ void main() async {
   AppTranslations.initLanguages();
   FlutterForegroundTask.initCommunicationPort();
 
-  await initializeDependencies();
-
   final talkerService = await Get.putAsync(
     () => TalkerService().init(),
     permanent: true,
   );
+
+  await initializeDependencies();
 
   runApp(Main(
     talker: talkerService.talker,
