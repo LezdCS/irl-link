@@ -40,7 +40,7 @@ class PinnedMessagesSheet extends GetView {
                     textSize: 18,
                     platform: message.platform,
                   ),
-                  Text(message.message),
+                  Text(message.message, style: const TextStyle(fontSize: 18)),
                 ],
               );
             },
