@@ -20,7 +20,7 @@ import 'package:socket_io_client/socket_io_client.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class StreamelementsViewController extends GetxController
-    with GetTickerProviderStateMixin {
+    with GetTickerProviderStateMixin, WidgetsBindingObserver {
   StreamelementsViewController({required this.streamelementsEvents});
 
   final StreamelementsEvents streamelementsEvents;
@@ -94,6 +94,25 @@ class StreamelementsViewController extends GetxController
     isSocketConnected.value = false;
     socket = null;
     super.onClose();
+  }
+
+  void reconnectSocket() {
+    socket?.close();
+    socket = null;
+    isSocketConnected.value = false;
+    connectWebsocket();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.resumed) {
+      // The app is back to the foreground
+      reconnectSocket(); // Reconnect to SE websocket
+    } else if (state == AppLifecycleState.paused) {
+      // The app is sent to the background
+    }
   }
 
   Future<void> setStreamElementsCredentials() async {

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
@@ -12,7 +13,7 @@ import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
-class ObsTabViewController extends GetxController {
+class ObsTabViewController extends GetxController with WidgetsBindingObserver {
   ObsTabViewController({required this.homeEvents});
 
   final HomeEvents homeEvents;
@@ -88,6 +89,18 @@ class ObsTabViewController extends GetxController {
     statsTimer?.cancel();
     obsWebSocket?.close();
     super.onClose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.resumed) {
+      // The app is back to the foreground
+      applySettings(); // Reconnect to OBS session
+    } else if (state == AppLifecycleState.paused) {
+      // The app is sent to the background
+    }
   }
 
   /// Connect to the OBS websocket at [url] with optional [password]
