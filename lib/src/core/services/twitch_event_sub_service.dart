@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
@@ -22,7 +23,7 @@ import 'package:talker_flutter/talker_flutter.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 import 'package:web_socket_channel/io.dart';
 
-class TwitchEventSubService extends GetxService {
+class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
   TwitchEventSubService({required this.homeEvents});
   final HomeEvents homeEvents;
 
@@ -91,6 +92,23 @@ class TwitchEventSubService extends GetxService {
     _webSocketChannel?.sink.close();
     _streamSubscription?.cancel();
     _streamSubscription = null;
+  }
+
+  void reconnect() {
+    close();
+    connect();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.resumed) {
+      // The app is back to the foreground
+      reconnect(); // Reconnect to Twitch EventSub
+    } else if (state == AppLifecycleState.paused) {
+      // The app is sent to the background
+    }
   }
 
   void _eventListener(String data) {
