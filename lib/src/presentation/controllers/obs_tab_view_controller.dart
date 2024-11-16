@@ -9,14 +9,11 @@ import 'package:irllink/src/core/services/talker_service.dart';
 
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
-import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class ObsTabViewController extends GetxController with WidgetsBindingObserver {
-  ObsTabViewController({required this.homeEvents});
-
-  final HomeEvents homeEvents;
+  ObsTabViewController();
 
   ObsWebSocket? obsWebSocket;
   RxBool isConnected = false.obs;

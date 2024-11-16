@@ -19,7 +19,6 @@ import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
-import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:kick_chat/kick_chat.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:twitch_chat/twitch_chat.dart' hide ChatMessage;
@@ -27,11 +26,9 @@ import 'package:twitch_chat/twitch_chat.dart' hide ChatMessage;
 class ChatViewController extends GetxController
     with GetTickerProviderStateMixin, WidgetsBindingObserver {
   ChatViewController({
-    required this.homeEvents,
     required this.chatGroup,
   });
 
-  final HomeEvents homeEvents;
   ChatGroup chatGroup;
 
   //CHAT
@@ -80,7 +77,9 @@ class ChatViewController extends GetxController
   @override
   void onReady() {
     scrollController.addListener(scrollListener);
-    Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
+    Connectivity()
+        .onConnectivityChanged
+        .listen((List<ConnectivityResult> result) {
       reconnectAllChats();
     });
 
@@ -455,7 +454,7 @@ class ChatViewController extends GetxController
         ttsService.readTts(message);
       }
       // For some reason, the same message is sent multiple times, need to investigate further but for now, this is a workaround
-      if(chatMessages.contains(message)) {
+      if (chatMessages.contains(message)) {
         return;
       }
       addMessage(message);

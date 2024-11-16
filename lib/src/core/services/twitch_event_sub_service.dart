@@ -17,15 +17,24 @@ import 'package:irllink/src/data/entities/twitch/twitch_prediction_dto.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_hype_train.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
+import 'package:irllink/src/domain/usecases/twitch/create_poll_usecase.dart';
+import 'package:irllink/src/domain/usecases/twitch/end_poll_usecase.dart';
+import 'package:irllink/src/domain/usecases/twitch/end_prediction_usecase.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
-import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 import 'package:web_socket_channel/io.dart';
 
 class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
-  TwitchEventSubService({required this.homeEvents});
-  final HomeEvents homeEvents;
+  TwitchEventSubService({
+    required this.createPollUseCase,
+    required this.endPollUseCase,
+    required this.endPredictionUseCase,
+  });
+
+  final CreatePollUseCase createPollUseCase;
+  final EndPollUseCase endPollUseCase;
+  final EndPredictionUseCase endPredictionUseCase;
 
   late String accessToken;
   late String channelName;
@@ -169,14 +178,18 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
         case 'channel.prediction.begin':
         case 'channel.prediction.progress':
         case 'channel.prediction.lock':
-          TwitchPredictionDTO predictionDTO = TwitchPredictionDTO.fromJson(event);
+          TwitchPredictionDTO predictionDTO =
+              TwitchPredictionDTO.fromJson(event);
           Mappr mappr = Mappr();
-          currentPrediction.value = mappr.convert<TwitchPredictionDTO, TwitchPrediction>(predictionDTO);
+          currentPrediction.value = mappr
+              .convert<TwitchPredictionDTO, TwitchPrediction>(predictionDTO);
           break;
         case 'channel.prediction.end':
-          TwitchPredictionDTO predictionDTO = TwitchPredictionDTO.fromJson(event);
+          TwitchPredictionDTO predictionDTO =
+              TwitchPredictionDTO.fromJson(event);
           Mappr mappr = Mappr();
-          currentPrediction.value = mappr.convert<TwitchPredictionDTO, TwitchPrediction>(predictionDTO);
+          currentPrediction.value = mappr
+              .convert<TwitchPredictionDTO, TwitchPrediction>(predictionDTO);
           Future.delayed(const Duration(seconds: 20)).then(
             (value) => currentPrediction.value = TwitchPrediction.empty(),
           );
@@ -187,12 +200,14 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
         case 'channel.hype_train.progress':
           TwitchHypeTrainDTO hypeTrainDTO = TwitchHypeTrainDTO.fromJson(event);
           Mappr mappr = Mappr();
-          currentHypeTrain.value = mappr.convert<TwitchHypeTrainDTO, TwitchHypeTrain>(hypeTrainDTO);
+          currentHypeTrain.value =
+              mappr.convert<TwitchHypeTrainDTO, TwitchHypeTrain>(hypeTrainDTO);
           break;
         case 'channel.hype_train.end':
           TwitchHypeTrainDTO hypeTrainDTO = TwitchHypeTrainDTO.fromJson(event);
           Mappr mappr = Mappr();
-          currentHypeTrain.value = mappr.convert<TwitchHypeTrainDTO, TwitchHypeTrain>(hypeTrainDTO);
+          currentHypeTrain.value =
+              mappr.convert<TwitchHypeTrainDTO, TwitchHypeTrain>(hypeTrainDTO);
           Future.delayed(const Duration(seconds: 20)).then(
             (value) => currentHypeTrain.value = TwitchHypeTrain.empty(),
           );
@@ -329,21 +344,25 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
       totalVotes: 0,
       endsAt: DateTime.now(),
     );
-    homeEvents.createPoll(
-      Get.find<HomeViewController>().twitchData!.accessToken,
-      Get.find<HomeViewController>().twitchData!.twitchUser.id,
-      newPoll,
+    createPollUseCase(
+      params: CreatePollUseCaseParams(
+        accessToken: Get.find<HomeViewController>().twitchData!.accessToken,
+        broadcasterId: Get.find<HomeViewController>().twitchData!.twitchUser.id,
+        newPoll: newPoll,
+      ),
     );
   }
 
   // status is either TERMINATED to end poll and display the result to viewer
   // or ARCHIVED to end the poll and hide it
   void endPoll(String status) {
-    homeEvents.endPoll(
-      Get.find<HomeViewController>().twitchData!.accessToken,
-      Get.find<HomeViewController>().twitchData!.twitchUser.id,
-      Get.find<TwitchEventSubService>().currentPoll.value.id,
-      status,
+    endPollUseCase(
+      params: EndPollUseCaseParams(
+        accessToken: Get.find<HomeViewController>().twitchData!.accessToken,
+        broadcasterId: Get.find<HomeViewController>().twitchData!.twitchUser.id,
+        pollId: Get.find<TwitchEventSubService>().currentPoll.value.id,
+        status: status,
+      ),
     );
   }
 
@@ -351,12 +370,15 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
   // or CANCELED to end the prediction and refund
   // or LOCKED to lock prediction so user can no longer make predictions
   void endPrediction(String status, String? winningOutcomeId) {
-    homeEvents.endPrediction(
-      Get.find<HomeViewController>().twitchData!.accessToken,
-      Get.find<HomeViewController>().twitchData!.twitchUser.id,
-      Get.find<TwitchEventSubService>().currentPrediction.value.id,
-      status,
-      winningOutcomeId,
+    endPredictionUseCase(
+      params: EndPredictionUseCaseParams(
+        accessToken: Get.find<HomeViewController>().twitchData!.accessToken,
+        broadcasterId: Get.find<HomeViewController>().twitchData!.twitchUser.id,
+        predictionId:
+            Get.find<TwitchEventSubService>().currentPrediction.value.id,
+        status: status,
+        winningOutcomeId: winningOutcomeId,
+      ),
     );
   }
 }

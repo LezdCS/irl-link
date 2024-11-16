@@ -7,12 +7,21 @@ import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:flutter/services.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
-import 'package:irllink/src/presentation/events/login_events.dart';
+import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart';
+import 'package:irllink/src/domain/usecases/twitch/login_usecase.dart';
+import 'package:irllink/src/domain/usecases/twitch/refresh_token_usecase.dart';
 
 class LoginViewController extends GetxController {
-  LoginViewController({required this.loginEvents});
+  LoginViewController({
+    required this.getTwitchLocalUseCase,
+    required this.refreshTwitchTokenUseCase,
+    required this.loginUseCase,
+  });
 
-  final LoginEvents loginEvents;
+  final GetTwitchLocalUseCase getTwitchLocalUseCase;
+  final RefreshTwitchTokenUseCase refreshTwitchTokenUseCase;
+  final LoginUseCase loginUseCase;
+
   RxBool isLoading = true.obs;
   RxString loadingMessage = "retrieving_data".tr.obs;
   Rxn<TwitchCredentials> twitchCredentials = Rxn<TwitchCredentials>();
@@ -32,14 +41,14 @@ class LoginViewController extends GetxController {
         Future.delayed(const Duration(seconds: 2)).then((_) => hasNoNetwork()));
 
     DataState<TwitchCredentials> twitchCredsResult =
-        await loginEvents.getTwitchFromLocal();
+        await getTwitchLocalUseCase();
 
     if (twitchCredsResult is DataSuccess) {
       twitchCredentials.value = twitchCredsResult.data!;
       loadingMessage.value = "refreshing_token".tr;
 
       DataState<TwitchCredentials> refreshResult =
-          await loginEvents.refreshAccessToken(twitchCredsResult.data!);
+          await refreshTwitchTokenUseCase(params: twitchCredsResult.data!);
 
       isLoading.value = false;
 
@@ -56,7 +65,7 @@ class LoginViewController extends GetxController {
   Future<void> login() async {
     isLoading.value = true;
     TwitchAuthParams params = const TwitchAuthParams();
-    await loginEvents.getTwitchOauth(params: params).then((value) {
+    await loginUseCase(params: params).then((value) {
       if (value is DataSuccess) {
         Get.offAllNamed(Routes.home, arguments: [value.data]);
       }

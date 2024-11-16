@@ -2,20 +2,28 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:irllink/src/domain/usecases/twitch/get_stream_info_usecase.dart';
+import 'package:irllink/src/domain/usecases/twitch/set_chat_settings_usecase.dart';
+import 'package:irllink/src/domain/usecases/twitch/set_stream_title_usecase.dart';
 
 import 'home_view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
-import 'package:irllink/src/presentation/events/home_events.dart';
 
 class TwitchTabViewController extends GetxController
     with GetTickerProviderStateMixin {
-  TwitchTabViewController({required this.homeEvents});
+  TwitchTabViewController({
+    required this.getStreamInfoUseCase,
+    required this.setChatSettingsUseCase,
+    required this.setStreamTitleUseCase,
+  });
+
+  final GetStreamInfoUseCase getStreamInfoUseCase;
+  final SetChatSettingsUseCase setChatSettingsUseCase;
+  final SetStreamTitleUseCase setStreamTitleUseCase;
 
   final HomeViewController homeViewController = Get.find<HomeViewController>();
-
-  final HomeEvents homeEvents;
 
   late TextEditingController titleFormController;
   RxString streamTitle = "".obs;
@@ -89,9 +97,11 @@ class TwitchTabViewController extends GetxController
 
   Future<void> refreshData() async {
     refreshDataAnimationController.reset();
-    DataState<TwitchStreamInfos> streamInfos = await homeEvents.getStreamInfo(
-      homeViewController.twitchData!.accessToken,
-      homeViewController.twitchData!.twitchUser.id,
+    DataState<TwitchStreamInfos> streamInfos = await getStreamInfoUseCase(
+      params: GetStreamInfoUseCaseParams(
+        accessToken: homeViewController.twitchData!.accessToken,
+        broadcasterId: homeViewController.twitchData!.twitchUser.id,
+      ),
     );
     if (streamInfos is DataSuccess) {
       twitchStreamInfos.value = streamInfos.data!;
@@ -129,18 +139,22 @@ class TwitchTabViewController extends GetxController
   }
 
   void changeChatSettings() {
-    homeEvents.setChatSettings(
-      homeViewController.twitchData!.accessToken,
-      homeViewController.twitchData!.twitchUser.id,
-      twitchStreamInfos.value,
+    setChatSettingsUseCase(
+      params: SetChatSettingsUseCaseParams(
+        accessToken: homeViewController.twitchData!.accessToken,
+        broadcasterId: homeViewController.twitchData!.twitchUser.id,
+        twitchStreamInfos: twitchStreamInfos.value,
+      ),
     );
   }
 
   void setStreamTitle() {
-    homeEvents.setStreamTitle(
-      homeViewController.twitchData!.accessToken,
-      homeViewController.twitchData!.twitchUser.id,
-      titleFormController.text,
+    setStreamTitleUseCase(
+      params: SetStreamTitleUseCaseParams(
+        accessToken: homeViewController.twitchData!.accessToken,
+        broadcasterId: homeViewController.twitchData!.twitchUser.id,
+        title: titleFormController.text,
+      ),
     );
   }
 }

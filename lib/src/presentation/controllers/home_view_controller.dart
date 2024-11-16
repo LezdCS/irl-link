@@ -14,7 +14,6 @@ import 'package:irllink/src/core/services/twitch_event_sub_service.dart';
 import 'package:irllink/src/core/services/twitch_pub_sub_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/list_move.dart';
-import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
@@ -23,13 +22,14 @@ import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
-import 'package:irllink/src/domain/usecases/streamelements_usecase.dart';
-import 'package:irllink/src/domain/usecases/twitch_usecase.dart';
+import 'package:irllink/src/domain/usecases/twitch/create_poll_usecase.dart';
+import 'package:irllink/src/domain/usecases/twitch/end_poll_usecase.dart';
+import 'package:irllink/src/domain/usecases/twitch/end_prediction_usecase.dart';
+import 'package:irllink/src/domain/usecases/twitch/refresh_token_usecase.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/realtime_irl_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
-import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_view.dart';
 import 'package:irllink/src/presentation/widgets/tabs/obs_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/tabs/realtime_irl_tab_view.dart';
@@ -41,9 +41,11 @@ import 'package:twitch_chat/twitch_chat.dart';
 
 class HomeViewController extends GetxController
     with GetTickerProviderStateMixin {
-  HomeViewController({required this.homeEvents});
+  HomeViewController({
+    required this.refreshAccessTokenUseCase,
+  });
 
-  final HomeEvents homeEvents;
+  final RefreshTwitchTokenUseCase refreshAccessTokenUseCase;
 
   SplitViewController? splitViewController = SplitViewController(
     limits: [null, WeightLimit(min: 0.12, max: 0.92)],
@@ -102,13 +104,14 @@ class HomeViewController extends GetxController
 
       TwitchEventSubService subService = await Get.putAsync(
         () => TwitchEventSubService(
-          homeEvents: HomeEvents(
-            twitchUseCase: TwitchUseCase(
-              twitchRepository: TwitchRepositoryImpl(),
-            ),
-            streamelementsUseCase: StreamelementsUseCase(
-              streamelementsRepository: StreamelementsRepositoryImpl(),
-            ),
+          createPollUseCase: CreatePollUseCase(
+            twitchRepository: TwitchRepositoryImpl(),
+          ),
+          endPollUseCase: EndPollUseCase(
+            twitchRepository: TwitchRepositoryImpl(),
+          ),
+          endPredictionUseCase: EndPredictionUseCase(
+            twitchRepository: TwitchRepositoryImpl(),
           ),
         ).init(
           token: twitchData!.accessToken,
@@ -138,11 +141,11 @@ class HomeViewController extends GetxController
 
       timerRefreshToken =
           Timer.periodic(const Duration(seconds: 13000), (Timer t) {
-        homeEvents.refreshAccessToken(twitchData: twitchData!).then(
-              (value) => {
-                if (value is DataSuccess) {twitchData = value.data}
-              },
-            );
+        refreshAccessTokenUseCase(params: twitchData!).then(
+          (value) => {
+            if (value is DataSuccess) {twitchData = value.data}
+          },
+        );
       });
     }
     await applySettings();
@@ -179,14 +182,6 @@ class HomeViewController extends GetxController
   Future<void> putChat(ChatGroup chatGroup) async {
     await Get.putAsync<ChatViewController>(() async {
       final controller = ChatViewController(
-        homeEvents: HomeEvents(
-          twitchUseCase: TwitchUseCase(
-            twitchRepository: TwitchRepositoryImpl(),
-          ),
-          streamelementsUseCase: StreamelementsUseCase(
-            streamelementsRepository: StreamelementsRepositoryImpl(),
-          ),
-        ),
         chatGroup: chatGroup,
       );
       return controller;
@@ -297,8 +292,7 @@ class HomeViewController extends GetxController
     }
 
     // Check if Realtime IRL have to be added
-    if (settings.rtIrlPushKey.isNotEmpty &&
-        realtimeIrlViewController == null) {
+    if (settings.rtIrlPushKey.isNotEmpty && realtimeIrlViewController == null) {
       realtimeIrlViewController = Get.find<RealtimeIrlViewController>();
       RealtimeIrlTabView realtimeIrlTabView = const RealtimeIrlTabView();
       tabElements.insert(1, realtimeIrlTabView);

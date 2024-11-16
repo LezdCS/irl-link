@@ -18,10 +18,9 @@ import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/repositories/settings_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
+import 'package:irllink/src/domain/usecases/settings/set_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings_usecase.dart';
-import 'package:irllink/src/domain/usecases/twitch_usecase.dart';
-import 'package:irllink/src/presentation/events/login_events.dart';
-import 'package:irllink/src/presentation/events/settings_events.dart';
+import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart';
 import 'package:irllink/src/presentation/views/login_view.dart';
 import 'package:kick_chat/kick_chat.dart';
 import 'package:talker_flutter/talker_flutter.dart';
@@ -57,21 +56,15 @@ Future<void> initializeDependencies() async {
   TwitchRepositoryImpl twitchRepository = TwitchRepositoryImpl();
 
   // Use cases
-  final settingsUseCase =
-      SettingsUseCase(settingsRepository: settingsRepository);
-  final twitchUseCase = TwitchUseCase(twitchRepository: twitchRepository);
-
-  // Events
-  final settingsEvents = SettingsEvents(
-    settingsUseCase: settingsUseCase,
-    twitchUseCase: twitchUseCase,
-  );
-  final loginEvents = LoginEvents(
-    twitchUseCase: twitchUseCase,
-  );
+  final getSettingsUseCase = GetSettingsUseCase(settingsRepository);
+  final setSettingsUseCase = SetSettingsUseCase(settingsRepository);
+  final getTwitchLocalUseCase = GetTwitchLocalUseCase(twitchRepository);
 
   final settingsService = await Get.putAsync(
-    () => SettingsService(settingsEvents: settingsEvents).init(),
+    () => SettingsService(
+      getSettingsUseCase: getSettingsUseCase,
+      setSettingsUseCase: setSettingsUseCase,
+    ).init(),
     permanent: true,
   );
   if (!settingsService.settings.value.generalSettings.isDarkMode) {
@@ -79,7 +72,9 @@ Future<void> initializeDependencies() async {
   }
 
   await Get.putAsync(
-    () => StoreService(loginEvents: loginEvents).init(),
+    () => StoreService(
+      getTwitchLocalUseCase: getTwitchLocalUseCase,
+    ).init(),
     permanent: true,
   );
 

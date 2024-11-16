@@ -12,13 +12,14 @@ import 'package:irllink/src/core/services/talker_service.dart';
 
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
+import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
-import 'package:irllink/src/presentation/events/login_events.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class StoreService extends GetxService {
-  StoreService({required this.loginEvents});
-  final LoginEvents loginEvents;
+  StoreService({required this.getTwitchLocalUseCase});
+
+  final GetTwitchLocalUseCase getTwitchLocalUseCase;
 
   late StreamSubscription<List<PurchaseDetails>> subscription;
   List<ProductDetails> products = [];
@@ -64,8 +65,8 @@ class StoreService extends GetxService {
         await InAppPurchase.instance.queryProductDetails(kIds);
     if (response.notFoundIDs.isNotEmpty) {
       talker.debug('Products not found: ${response.notFoundIDs}');
-      talker.debug(
-          'Products found: ${response.productDetails.map((e) => e.id)}');
+      talker
+          .debug('Products found: ${response.productDetails.map((e) => e.id)}');
     }
     products = response.productDetails;
   }
@@ -133,7 +134,7 @@ class StoreService extends GetxService {
     }
 
     TwitchCredentials? twitchCredentials;
-    await loginEvents.getTwitchFromLocal().then((value) {
+    await getTwitchLocalUseCase().then((value) {
       if (value is DataSuccess) {
         twitchCredentials = value.data;
       }
