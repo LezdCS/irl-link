@@ -33,6 +33,9 @@ class StoreService extends GetxService {
 
   Future<StoreService> init() async {
     await getStore();
+    if (!storeFound.value) {
+      return this;
+    }
     await getStoreProducts();
     initListeningStorePurchase();
     return this;
