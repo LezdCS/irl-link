@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
+import 'package:irllink/src/domain/usecases/settings/get_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/set_settings_usecase.dart';
-import 'package:irllink/src/domain/usecases/settings_usecase.dart';
 
 class SettingsService extends GetxService {
   SettingsService(
