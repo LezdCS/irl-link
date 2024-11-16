@@ -27,7 +27,6 @@ import 'package:irllink/src/presentation/widgets/tabs/realtime_irl_tab_view.dart
 import 'package:irllink/src/presentation/widgets/tabs/streamelements_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/tabs/twitch_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/web_page_view.dart';
-import 'package:move_to_background/move_to_background.dart';
 import 'package:split_view/split_view.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 import 'package:upgrader/upgrader.dart';
@@ -47,9 +46,7 @@ class HomeView extends GetView<HomeViewController> {
       ),
       child: PopScope(
         onPopInvokedWithResult: (bool invoked, dynamic d) async {
-          if (invoked) {
-            MoveToBackground.moveTaskToBack();
-          }
+          if (invoked) {}
         },
         child: AnnotatedRegion(
           value: SystemUiOverlayStyle(

@@ -29,7 +29,8 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    compileSdkVersion 34
+    namespace = "dev.lezd.www.irllink"
+    compileSdkVersion = 34
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
