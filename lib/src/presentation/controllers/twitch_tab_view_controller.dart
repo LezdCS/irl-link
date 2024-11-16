@@ -97,6 +97,10 @@ class TwitchTabViewController extends GetxController
 
   Future<void> refreshData() async {
     refreshDataAnimationController.reset();
+    if (homeViewController.twitchData == null) {
+      return;
+    }
+
     DataState<TwitchStreamInfos> streamInfos = await getStreamInfoUseCase(
       params: GetStreamInfoUseCaseParams(
         accessToken: homeViewController.twitchData!.accessToken,
