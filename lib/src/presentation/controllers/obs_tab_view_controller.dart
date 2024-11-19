@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
+import 'package:irllink/src/core/services/watch_service.dart';
 
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
@@ -42,39 +43,23 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
 
     isConnected.listen((value) {
       // Send to watchOS
-      const platform = MethodChannel('com.irllink');
-      platform.invokeMethod("flutterToWatch", {
-        "method": "sendUpdateObsConnecteToNative",
-        "data": value,
-      });
+      Get.find<WatchService>().sendUpdateObsConnecteToNative(value);
     });
 
     currentScene.listen((value) {
       // Send to watchOS
-      const platform = MethodChannel('com.irllink');
-      platform.invokeMethod("flutterToWatch", {
-        "method": "sendSelectedObsSceneToNative",
-        "data": value,
-      });
+      Get.find<WatchService>().sendSelectedObsSceneToNative(value);
     });
 
     scenesList.listen((value) {
       // Send to watchOS
-      const platform = MethodChannel('com.irllink');
-      platform.invokeMethod("flutterToWatch", {
-        "method": "sendObsScenesToNative",
-        "data": value,
-      });
+      Get.find<WatchService>().sendObsScenesToNative(value);
     });
 
     sourcesList.listen((value) {
       String data = jsonEncode(value.map((e) => e.toJson()).toList());
       // Send to watchOS
-      const platform = MethodChannel('com.irllink');
-      platform.invokeMethod("flutterToWatch", {
-        "method": "sendObsSourcesToNative",
-        "data": data,
-      });
+      Get.find<WatchService>().sendObsSourcesToNative(data);
     });
 
     super.onReady();

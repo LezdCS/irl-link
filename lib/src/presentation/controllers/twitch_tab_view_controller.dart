@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_stream_info_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/set_chat_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/set_stream_title_usecase.dart';
@@ -46,15 +46,8 @@ class TwitchTabViewController extends GetxController
 
     twitchStreamInfos.listen((value) {
       // Send to watchOS
-      const platform = MethodChannel('com.irllink');
-      platform.invokeMethod("flutterToWatch", {
-        "method": "sendViewersToNative",
-        "data": value.viewerCount,
-      });
-      platform.invokeMethod("flutterToWatch", {
-        "method": "sendLiveStatusToNative",
-        "data": value.isOnline,
-      });
+      Get.find<WatchService>().sendViewersToNative(value.viewerCount ?? 0);
+      Get.find<WatchService>().sendLiveStatusToNative(value.isOnline ?? false);
     });
 
     controllerLiveCircleAnimation = AnimationController(

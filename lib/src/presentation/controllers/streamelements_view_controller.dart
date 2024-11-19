@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
+import 'package:irllink/src/core/services/watch_service.dart';
 
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
@@ -105,20 +105,12 @@ class StreamelementsViewController extends GetxController
 
     isSocketConnected.listen((value) {
       // Send to watchOS
-      const platform = MethodChannel('com.irllink');
-      platform.invokeMethod("flutterToWatch", {
-        "method": "sendSeConnectedToNative",
-        "data": isSocketConnected.value,
-      });
+      Get.find<WatchService>().sendSeConnectedToNative(isSocketConnected.value);
     });
 
     activities.listen((value) {
       // Send to watchOS
-      const platform = MethodChannel('com.irllink');
-      platform.invokeMethod("flutterToWatch", {
-        "method": "sendSeActivityToNative",
-        "data": value.last.toJsonForWatch(),
-      });
+      Get.find<WatchService>().sendSeActivityToNative(value.last);
     });
 
     super.onInit();

@@ -4,11 +4,11 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/services/tts_service.dart';
+import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/services/youtube_chat.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 
@@ -63,11 +63,7 @@ class ChatViewController extends GetxController
 
     chatMessages.listen((value) {
       // Send to watchOS
-      const platform = MethodChannel('com.irllink');
-      platform.invokeMethod("flutterToWatch", {
-        "method": "sendChatMessageToNative",
-        "data": value.last.toJsonForWatch(),
-      });
+      Get.find<WatchService>().sendChatMessageToNative(value.last);
     });
 
     super.onInit();

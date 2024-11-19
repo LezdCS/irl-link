@@ -45,9 +45,6 @@ class HomeView extends GetView<HomeViewController> {
         debugDisplayAlways: true,
       ),
       child: PopScope(
-        onPopInvokedWithResult: (bool invoked, dynamic d) async {
-          if (invoked) {}
-        },
         child: AnnotatedRegion(
           value: SystemUiOverlayStyle(
             systemNavigationBarColor: Theme.of(context).colorScheme.surface,
