@@ -38,19 +38,17 @@ void main() async {
   AppTranslations.initLanguages();
   FlutterForegroundTask.initCommunicationPort();
 
-  final talkerService = await Get.putAsync(
+  await initializeDependencies();
+
+  runApp(const Main());
+}
+
+Future<void> initializeDependencies() async {
+  await Get.putAsync(
     () => TalkerService().init(),
     permanent: true,
   );
 
-  await initializeDependencies();
-
-  runApp(Main(
-    talker: talkerService.talker,
-  ));
-}
-
-Future<void> initializeDependencies() async {
   // Repositories
   SettingsRepositoryImpl settingsRepository = SettingsRepositoryImpl();
   TwitchRepositoryImpl twitchRepository = TwitchRepositoryImpl();
@@ -97,14 +95,12 @@ void startCallback() {
 }
 
 class Main extends StatelessWidget {
-  const Main({
-    super.key,
-    required this.talker,
-  });
-  final Talker talker;
+  const Main({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final talkerService = Get.find<TalkerService>();
+
     return GetMaterialApp(
       home: const LoginView(),
       theme: Themes().lightTheme,
@@ -118,33 +114,34 @@ class Main extends StatelessWidget {
       locale: Get.deviceLocale,
       fallbackLocale: const Locale('en', 'US'),
       navigatorObservers: [
-        TalkerRouteObserver(talker),
+        TalkerRouteObserver(talkerService.talker),
       ],
       logWriterCallback: localLogWriter,
     );
   }
 
   void localLogWriter(String text, {bool isError = false}) {
+    final talkerService = Get.find<TalkerService>();
     if (isError) {
-      talker.error(text);
+      talkerService.talker.error(text);
     } else {
       if (text.startsWith('Instance')) {
-        talker.logTyped(GetxInstanceLog(text, false));
+        talkerService.talker.logTyped(GetxInstanceLog(text, false));
         return;
       }
       if (text.endsWith('onDelete() called') ||
           text.endsWith('deleted from memory')) {
-        talker.logTyped(GetxInstanceLog(text, true));
+        talkerService.talker.logTyped(GetxInstanceLog(text, true));
         return;
       }
       if (text.contains('GOING TO ROUTE') || text.contains('CLOSE TO ROUTE')) {
         return;
       }
       if (text.startsWith('REMOVING ROUTE')) {
-        talker.logTyped(RouterLog(text));
+        talkerService.talker.logTyped(RouterLog(text));
         return;
       }
-      talker.log(text);
+      talkerService.talker.log(text);
     }
   }
 }

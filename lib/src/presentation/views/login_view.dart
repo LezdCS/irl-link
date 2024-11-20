@@ -69,6 +69,7 @@ class LoginView extends GetView<LoginViewController> {
           height: 10,
         ),
         TextButton(
+          key: const Key("maybe_later_key"),
           style: TextButton.styleFrom(
             backgroundColor: Theme.of(context).colorScheme.secondary,
           ),

@@ -80,6 +80,8 @@ dev_dependencies:
   auto_mappr: ^2.5.0
   freezed: ^2.5.7
   json_serializable: ^6.8.0
+  integration_test:
+    sdk: flutter
 
 dependency_overrides:
   fk_user_agent:
