@@ -45,6 +45,7 @@ android {
         manifestPlaceholders = [
                 'appAuthRedirectScheme': 'dev.lezd.www.irllink',
         ]
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     compileOptions {
@@ -69,6 +70,13 @@ android {
             signingConfig signingConfigs.release
         }
     }
+}
+
+dependencies {
+    testImplementation 'junit:junit: 4.13.2'
+
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
 
 flutter {
