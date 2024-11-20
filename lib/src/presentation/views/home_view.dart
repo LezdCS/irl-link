@@ -39,6 +39,8 @@ class HomeView extends GetView<HomeViewController> {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
 
+    final storeService = Get.find<StoreService>();
+
     return UpgradeAlert(
       upgrader: Upgrader(
         minAppVersion: "2.7.2",
@@ -113,8 +115,7 @@ class HomeView extends GetView<HomeViewController> {
                           child: const Dashboard(),
                         ),
                         Visibility(
-                          visible:
-                              Get.find<StoreService>().purchasePending.value,
+                          visible: storeService.purchasePending.value,
                           child: CircularProgressIndicator(
                             color: context.theme.colorScheme.tertiary,
                           ),

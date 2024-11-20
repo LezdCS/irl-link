@@ -10,8 +10,11 @@ import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
+import 'package:irllink/src/core/services/talker_service.dart';
+import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/core/services/twitch_event_sub_service.dart';
 import 'package:irllink/src/core/services/twitch_pub_sub_service.dart';
+import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/list_move.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
@@ -104,16 +107,18 @@ class HomeViewController extends GetxController
 
       TwitchEventSubService subService = await Get.putAsync(
         () => TwitchEventSubService(
-          createPollUseCase: CreatePollUseCase(
-            twitchRepository: TwitchRepositoryImpl(),
-          ),
-          endPollUseCase: EndPollUseCase(
-            twitchRepository: TwitchRepositoryImpl(),
-          ),
-          endPredictionUseCase: EndPredictionUseCase(
-            twitchRepository: TwitchRepositoryImpl(),
-          ),
-        ).init(
+                createPollUseCase: CreatePollUseCase(
+                  twitchRepository: TwitchRepositoryImpl(),
+                ),
+                endPollUseCase: EndPollUseCase(
+                  twitchRepository: TwitchRepositoryImpl(),
+                ),
+                endPredictionUseCase: EndPredictionUseCase(
+                  twitchRepository: TwitchRepositoryImpl(),
+                ),
+                homeViewController: this,
+                talkerService: Get.find<TalkerService>())
+            .init(
           token: twitchData!.accessToken,
           channel: twitchData!.twitchUser.login,
         ),
@@ -183,6 +188,11 @@ class HomeViewController extends GetxController
     await Get.putAsync<ChatViewController>(() async {
       final controller = ChatViewController(
         chatGroup: chatGroup,
+        homeViewController: this,
+        settingsService: Get.find<SettingsService>(),
+        talker: Get.find<TalkerService>().talker,
+        ttsService: Get.find<TtsService>(),
+        watchService: Get.find<WatchService>(),
       );
       return controller;
     }, tag: chatGroup.id);

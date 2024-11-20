@@ -14,7 +14,7 @@ import 'package:obs_websocket/obs_websocket.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class ObsTabViewController extends GetxController with WidgetsBindingObserver {
-  ObsTabViewController();
+  ObsTabViewController({required this.watchService});
 
   ObsWebSocket? obsWebSocket;
   RxBool isConnected = false.obs;
@@ -37,29 +37,31 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
 
   Talker talker = Get.find<TalkerService>().talker;
 
+  final WatchService watchService;
+
   @override
   Future<void> onReady() async {
     await applySettings();
 
     isConnected.listen((value) {
       // Send to watchOS
-      Get.find<WatchService>().sendUpdateObsConnecteToNative(value);
+      watchService.sendUpdateObsConnecteToNative(value);
     });
 
     currentScene.listen((value) {
       // Send to watchOS
-      Get.find<WatchService>().sendSelectedObsSceneToNative(value);
+      watchService.sendSelectedObsSceneToNative(value);
     });
 
     scenesList.listen((value) {
       // Send to watchOS
-      Get.find<WatchService>().sendObsScenesToNative(value);
+      watchService.sendObsScenesToNative(value);
     });
 
     sourcesList.listen((value) {
       String data = jsonEncode(value.map((e) => e.toJson()).toList());
       // Send to watchOS
-      Get.find<WatchService>().sendObsSourcesToNative(data);
+      watchService.sendObsSourcesToNative(data);
     });
 
     super.onReady();

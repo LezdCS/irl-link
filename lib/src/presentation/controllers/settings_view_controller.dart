@@ -22,6 +22,10 @@ class SettingsViewController extends GetxController {
     required this.streamElementsLoginUseCase,
     required this.streamElementsDisconnectUseCase,
     required this.getTwitchUsersUseCase,
+    required this.settingsService,
+    required this.homeViewController,
+    required this.ttsService,
+    required this.storeService,
   });
 
   final LogoutUseCase logoutUseCase;
@@ -29,7 +33,10 @@ class SettingsViewController extends GetxController {
   final StreamElementsDisconnectUseCase streamElementsDisconnectUseCase;
   final GetTwitchUsersUseCase getTwitchUsersUseCase;
 
-  final SettingsService settingsService = Get.find<SettingsService>();
+  final SettingsService settingsService;
+  final HomeViewController homeViewController;
+  final TtsService ttsService;
+  final StoreService storeService;
 
   late TextEditingController addBrowserTitleController;
   late TextEditingController addBrowserUrlController;
@@ -57,10 +64,6 @@ class SettingsViewController extends GetxController {
   late TextEditingController addTtsIgnoredPrefixsController;
   late TextEditingController addTtsAllowedPrefixsController;
   Rx<Color> nothingJustToRefreshDialog = Colors.grey.obs;
-
-  final HomeViewController homeViewController = Get.find<HomeViewController>();
-  final TtsService ttsService = Get.find<TtsService>();
-  final StoreService storeService = Get.find<StoreService>();
 
   @override
   void onInit() {
@@ -110,7 +113,7 @@ class SettingsViewController extends GetxController {
   }
 
   Future<void> loginStreamElements() async {
-    if (Get.find<StoreService>().isSubscribed() == false) {
+    if (storeService.isSubscribed() == false) {
       Get.snackbar(
         "Error",
         "You are not subscribed",

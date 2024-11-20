@@ -30,11 +30,15 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
     required this.createPollUseCase,
     required this.endPollUseCase,
     required this.endPredictionUseCase,
-  });
+    required HomeViewController homeViewController,
+    required TalkerService talkerService,
+  }) : _homeViewController = homeViewController;
 
   final CreatePollUseCase createPollUseCase;
   final EndPollUseCase endPollUseCase;
   final EndPredictionUseCase endPredictionUseCase;
+
+  final HomeViewController _homeViewController;
 
   late String accessToken;
   late String channelName;
@@ -346,8 +350,8 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
     );
     createPollUseCase(
       params: CreatePollUseCaseParams(
-        accessToken: Get.find<HomeViewController>().twitchData!.accessToken,
-        broadcasterId: Get.find<HomeViewController>().twitchData!.twitchUser.id,
+        accessToken: _homeViewController.twitchData!.accessToken,
+        broadcasterId: _homeViewController.twitchData!.twitchUser.id,
         newPoll: newPoll,
       ),
     );
@@ -358,9 +362,9 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
   void endPoll(String status) {
     endPollUseCase(
       params: EndPollUseCaseParams(
-        accessToken: Get.find<HomeViewController>().twitchData!.accessToken,
-        broadcasterId: Get.find<HomeViewController>().twitchData!.twitchUser.id,
-        pollId: Get.find<TwitchEventSubService>().currentPoll.value.id,
+        accessToken: _homeViewController.twitchData!.accessToken,
+        broadcasterId: _homeViewController.twitchData!.twitchUser.id,
+        pollId: currentPoll.value.id,
         status: status,
       ),
     );
@@ -372,10 +376,9 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
   void endPrediction(String status, String? winningOutcomeId) {
     endPredictionUseCase(
       params: EndPredictionUseCaseParams(
-        accessToken: Get.find<HomeViewController>().twitchData!.accessToken,
-        broadcasterId: Get.find<HomeViewController>().twitchData!.twitchUser.id,
-        predictionId:
-            Get.find<TwitchEventSubService>().currentPrediction.value.id,
+        accessToken: _homeViewController.twitchData!.accessToken,
+        broadcasterId: _homeViewController.twitchData!.twitchUser.id,
+        predictionId: currentPrediction.value.id,
         status: status,
         winningOutcomeId: winningOutcomeId,
       ),

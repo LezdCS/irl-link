@@ -15,11 +15,12 @@ class Tts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final SettingsService settingsService = Get.find<SettingsService>();
+    final TtsService ttsService = Get.find<TtsService>();
     return Obx(
       () {
         Settings settings = settingsService.settings.value;
-        List<dynamic> ttsVoicesFiltered = controller
-            .getVoiceForLanguage(settings.ttsSettings.language);
+        List<dynamic> ttsVoicesFiltered =
+            controller.getVoiceForLanguage(settings.ttsSettings.language);
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.surface,
           appBar: AppBar(
@@ -73,10 +74,8 @@ class Tts extends StatelessWidget {
                         ),
                       ),
                       DropdownButton(
-                        value:
-                            controller.ttsService.ttsLanguages.firstWhereOrNull(
-                          (element) =>
-                              element == settings.ttsSettings.language,
+                        value: ttsService.ttsLanguages.firstWhereOrNull(
+                          (element) => element == settings.ttsSettings.language,
                         ),
                         hint: const Text("Select a language"),
                         onChanged: (value) async {
@@ -92,14 +91,14 @@ class Tts extends StatelessWidget {
                                 language: value.toString(), voice: voice),
                           );
                           await settingsService.saveSettings();
-                          Get.find<TtsService>().updateSettings(settings);
+                          ttsService.updateSettings(settings);
                         },
                         items: List.generate(
-                          controller.ttsService.ttsLanguages.length,
+                          ttsService.ttsLanguages.length,
                           (index) => DropdownMenuItem(
-                            value: controller.ttsService.ttsLanguages[index],
+                            value: ttsService.ttsLanguages[index],
                             child: Text(
-                              controller.ttsService.ttsLanguages[index],
+                              ttsService.ttsLanguages[index],
                             ),
                           ),
                         ),
@@ -117,8 +116,7 @@ class Tts extends StatelessWidget {
                               ),
                             ),
                             DropdownButton(
-                              value: controller.ttsService.ttsVoices
-                                  .firstWhereOrNull(
+                              value: ttsService.ttsVoices.firstWhereOrNull(
                                 (element) =>
                                     element["name"] ==
                                     settings.ttsSettings.voice["name"],
@@ -135,7 +133,7 @@ class Tts extends StatelessWidget {
                                       .copyWith(voice: voice),
                                 );
                                 await settingsService.saveSettings();
-                                Get.find<TtsService>().updateSettings(settings);
+                                ttsService.updateSettings(settings);
                               },
                               items: List.generate(
                                 ttsVoicesFiltered.length,
@@ -167,7 +165,7 @@ class Tts extends StatelessWidget {
                                 settings.ttsSettings.copyWith(volume: value),
                           );
                           await settingsService.saveSettings();
-                          Get.find<TtsService>().updateSettings(settings);
+                          ttsService.updateSettings(settings);
                         },
                         max: 1,
                         min: 0,
@@ -191,7 +189,7 @@ class Tts extends StatelessWidget {
                                 settings.ttsSettings.copyWith(rate: value),
                           );
                           await settingsService.saveSettings();
-                          Get.find<TtsService>().updateSettings(settings);
+                          ttsService.updateSettings(settings);
                         },
                         max: 1,
                         min: 0,
@@ -215,7 +213,7 @@ class Tts extends StatelessWidget {
                                 settings.ttsSettings.copyWith(pitch: value),
                           );
                           await settingsService.saveSettings();
-                          Get.find<TtsService>().updateSettings(settings);
+                          ttsService.updateSettings(settings);
                         },
                         max: 1,
                         min: 0,
@@ -456,8 +454,7 @@ class Tts extends StatelessWidget {
                         textFieldHint: 'Username',
                         list: settings.ttsSettings.ttsUsersToIgnore,
                         onDeleted: (index) {
-                          settings.ttsSettings.ttsUsersToIgnore
-                              .removeAt(index);
+                          settings.ttsSettings.ttsUsersToIgnore.removeAt(index);
                           settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings.copyWith(
                                 ttsUsersToIgnore:

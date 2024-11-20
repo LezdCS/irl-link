@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
-import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/services/youtube_chat.dart';
@@ -27,9 +26,19 @@ class ChatViewController extends GetxController
     with GetTickerProviderStateMixin, WidgetsBindingObserver {
   ChatViewController({
     required this.chatGroup,
+    required this.homeViewController,
+    required this.ttsService,
+    required this.watchService,
+    required this.settingsService,
+    required this.talker,
   });
 
-  ChatGroup chatGroup;
+  final ChatGroup chatGroup;
+  final HomeViewController homeViewController;
+  final TtsService ttsService;
+  final WatchService watchService;
+  final SettingsService settingsService;
+  final Talker talker;
 
   //CHAT
   late ScrollController scrollController;
@@ -42,14 +51,9 @@ class ChatViewController extends GetxController
 
   late TextEditingController banDurationInputController;
 
-  final HomeViewController homeViewController = Get.find<HomeViewController>();
-  final TtsService ttsService = Get.find<TtsService>();
-
   List<TwitchChat> twitchChats = [];
   List<KickChat> kickChats = [];
   List<YoutubeChat> youtubeChats = [];
-
-  Talker talker = Get.find<TalkerService>().talker;
 
   @override
   void onInit() async {
@@ -63,7 +67,7 @@ class ChatViewController extends GetxController
 
     chatMessages.listen((value) {
       // Send to watchOS
-      Get.find<WatchService>().sendChatMessageToNative(value.last);
+      watchService.sendChatMessageToNative(value.last);
     });
 
     super.onInit();
@@ -185,7 +189,7 @@ class ChatViewController extends GetxController
   /// Hide every future messages from an user (only on this application, not on Twitch)
   void hideUser(ChatMessage message) {
     if (twitchData == null) return;
-    Settings settings = Get.find<SettingsService>().settings.value;
+    Settings settings = settingsService.settings.value;
 
     List hiddenUsersIds =
         settings.hiddenUsersIds != const [] ? settings.hiddenUsersIds : [];
@@ -194,15 +198,15 @@ class ChatViewController extends GetxController
         null) {
       //add user
       hiddenUsersIds.add(message.authorId);
-      Get.find<SettingsService>().settings.value =
+      settingsService.settings.value =
           settings.copyWith(hiddenUsersIds: hiddenUsersIds);
     } else {
       //remove user
       hiddenUsersIds.remove(message.authorId);
-      Get.find<SettingsService>().settings.value =
+      settingsService.settings.value =
           settings.copyWith(hiddenUsersIds: hiddenUsersIds);
     }
-    Get.find<SettingsService>().saveSettings();
+    settingsService.saveSettings();
     homeViewController.selectedMessage.refresh();
   }
 
@@ -350,7 +354,7 @@ class ChatViewController extends GetxController
     twitchChat.connect();
     twitchChats.add(twitchChat);
 
-    Settings settings = Get.find<SettingsService>().settings.value;
+    Settings settings = settingsService.settings.value;
 
     twitchChat.chatStream.listen((twitchMessage) {
       if (cheerEmotes.isEmpty) {
@@ -387,7 +391,7 @@ class ChatViewController extends GetxController
     );
     youtubeChat.startFetchingChat();
     youtubeChat.chatStream.listen((ChatMessage message) {
-      Settings settings = Get.find<SettingsService>().settings.value;
+      Settings settings = settingsService.settings.value;
       if (settings.ttsSettings.ttsEnabled) {
         ttsService.readTts(message);
       }
@@ -445,7 +449,7 @@ class ChatViewController extends GetxController
         kickChat.userDetails!.userId.toString(),
         kickChat.userDetails!.subBadges,
       );
-      Settings settings = Get.find<SettingsService>().settings.value;
+      Settings settings = settingsService.settings.value;
       if (settings.ttsSettings.ttsEnabled) {
         ttsService.readTts(message);
       }

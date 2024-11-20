@@ -79,6 +79,9 @@ class StreamElements extends GetView<SettingsViewController> {
     Settings settings = Get.find<SettingsService>().settings.value;
     SeMe? seMe = controller.homeViewController.streamelementsViewController
         .value?.userSeProfile.value;
+
+    final settingsService = Get.find<SettingsService>();
+
     return Column(
       children: [
         seMe != null
@@ -98,12 +101,11 @@ class StreamElements extends GetView<SettingsViewController> {
                 controller: controller.seJwtInputController,
                 obscureText: !controller.seJwtShow.value,
                 onChanged: (value) {
-                  Get.find<SettingsService>().settings.value =
-                      settings.copyWith(
+                  settingsService.settings.value = settings.copyWith(
                     streamElementsSettings:
                         settings.streamElementsSettings.copyWith(jwt: value),
                   );
-                  Get.find<SettingsService>().saveSettings();
+                  settingsService.saveSettings();
                 },
                 decoration: InputDecoration(
                   isDense: true,
@@ -141,12 +143,11 @@ class StreamElements extends GetView<SettingsViewController> {
                 controller: controller.seOverlayTokenInputController,
                 obscureText: !controller.seOverlayTokenShow.value,
                 onChanged: (value) {
-                  Get.find<SettingsService>().settings.value =
-                      settings.copyWith(
+                  settingsService.settings.value = settings.copyWith(
                     streamElementsSettings: settings.streamElementsSettings
                         .copyWith(overlayToken: value),
                   );
-                  Get.find<SettingsService>().saveSettings();
+                  settingsService.saveSettings();
                 },
                 decoration: InputDecoration(
                   isDense: true,

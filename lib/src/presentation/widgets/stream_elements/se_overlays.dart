@@ -15,7 +15,8 @@ class SeOverlays extends GetView<StreamelementsViewController> {
 
   @override
   Widget build(BuildContext context) {
-    Settings settings = Get.find<SettingsService>().settings.value;
+    final SettingsService settingsService = Get.find<SettingsService>();
+    Settings settings = settingsService.settings.value;
     String? overlayToken = settings.streamElementsSettings.overlayToken;
     return Column(
       children: [
@@ -51,6 +52,9 @@ Widget _overlayRow(
   BuildContext context,
   String? overlayToken,
 ) {
+  final SettingsService settingsService = Get.find<SettingsService>();
+  Settings settings = settingsService.settings.value;
+
   if (overlayToken == null) {
     return Container(
       decoration: BoxDecoration(
@@ -75,7 +79,6 @@ Widget _overlayRow(
     );
   }
 
-  Settings settings = Get.find<SettingsService>().settings.value;
   bool isMuted =
       settings.streamElementsSettings.mutedOverlays.contains(overlay.id);
   String? overlayUrl;
@@ -133,7 +136,6 @@ Widget _overlayRow(
             ),
             InkWell(
               onTap: () {
-                Settings settings = Get.find<SettingsService>().settings.value;
                 List<String> mutedList =
                     settings.streamElementsSettings.mutedOverlays;
                 if (isMuted) {
@@ -141,10 +143,10 @@ Widget _overlayRow(
                 } else {
                   mutedList.add(overlay.id);
                 }
-                Get.find<SettingsService>().settings.value = settings.copyWith(
+                settingsService.settings.value = settings.copyWith(
                     streamElementsSettings: settings.streamElementsSettings
                         .copyWith(mutedOverlays: mutedList));
-                Get.find<SettingsService>().saveSettings();
+                settingsService.saveSettings();
                 controller.overlays.refresh();
               },
               child: Icon(isMuted ? Icons.volume_mute : Icons.volume_up),

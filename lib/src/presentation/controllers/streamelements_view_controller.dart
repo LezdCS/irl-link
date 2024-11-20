@@ -28,7 +28,6 @@ import 'package:irllink/src/domain/usecases/streamelements/reset_queue_usecase.d
 import 'package:irllink/src/domain/usecases/streamelements/update_player_state_usecase.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:socket_io_client/socket_io_client.dart';
-import 'package:talker_flutter/talker_flutter.dart';
 
 class StreamelementsViewController extends GetxController
     with GetTickerProviderStateMixin, WidgetsBindingObserver {
@@ -45,6 +44,10 @@ class StreamelementsViewController extends GetxController
     required this.getLastActivitiesUseCase,
     required this.getSongPlayingUseCase,
     required this.getSongQueueUseCase,
+    required this.settingsService,
+    required this.watchService,
+    required this.talkerService,
+    required this.homeViewController,
   });
 
   final StreamElementsGetOverlaysUseCase getOverlaysUseCase;
@@ -59,6 +62,11 @@ class StreamelementsViewController extends GetxController
   final StreamElementsGetLastActivitiesUseCase getLastActivitiesUseCase;
   final StreamElementsGetSongPlayingUseCase getSongPlayingUseCase;
   final StreamElementsGetSongQueueUseCase getSongQueueUseCase;
+
+  final SettingsService settingsService;
+  final WatchService watchService;
+  final TalkerService talkerService;
+  final HomeViewController homeViewController;
 
   late TabController tabController;
 
@@ -80,10 +88,6 @@ class StreamelementsViewController extends GetxController
 
   RxBool isSocketConnected = false.obs;
 
-  final HomeViewController homeViewController = Get.find<HomeViewController>();
-
-  Talker talker = Get.find<TalkerService>().talker;
-
   @override
   Future<void> onInit() async {
     tabController = TabController(length: 3, vsync: this);
@@ -101,16 +105,16 @@ class StreamelementsViewController extends GetxController
       }
     }
 
-    Get.find<SettingsService>().getSettings().then((value) => applySettings());
+    settingsService.getSettings().then((value) => applySettings());
 
     isSocketConnected.listen((value) {
       // Send to watchOS
-      Get.find<WatchService>().sendSeConnectedToNative(isSocketConnected.value);
+      watchService.sendSeConnectedToNative(isSocketConnected.value);
     });
 
     activities.listen((value) {
       // Send to watchOS
-      Get.find<WatchService>().sendSeActivityToNative(value.last);
+      watchService.sendSeActivityToNative(value.last);
     });
 
     super.onInit();
@@ -182,16 +186,16 @@ class StreamelementsViewController extends GetxController
   }
 
   Future<void> handleGetMe() async {
-    String? jwt =
-        Get.find<SettingsService>().settings.value.streamElementsSettings.jwt;
+    String? jwt = settingsService.settings.value.streamElementsSettings.jwt;
     SeMe? me = userSeProfile.value;
     if (me == null) {
-      talker.error('User profile was not found.');
+      talkerService.talker.error('User profile was not found.');
       return;
     }
     String? accessToken = seCredentials.value?.accessToken;
     if (accessToken == null) {
-      talker.error('There is no accessToken to use for SE api calls.');
+      talkerService.talker
+          .error('There is no accessToken to use for SE api calls.');
       return;
     }
 
@@ -307,7 +311,7 @@ class StreamelementsViewController extends GetxController
       (event, data) => {
         if (data != null)
           {
-            talker.debug(data),
+            talkerService.talker.debug(data),
           }
       },
     );
@@ -355,23 +359,24 @@ class StreamelementsViewController extends GetxController
     if (accessToken != null) {
       socket?.emit('authenticate', {"method": 'oauth2', "token": accessToken});
     } else {
-      talker.error('There is no accessToken to use for SE weboscket.');
+      talkerService.talker
+          .error('There is no accessToken to use for SE weboscket.');
     }
   }
 
   Future<void> onError() async {
     isSocketConnected.value = false;
-    talker.error('StreamElements WebSocket error.');
+    talkerService.talker.error('StreamElements WebSocket error.');
   }
 
   Future<void> onDisconnect() async {
     isSocketConnected.value = false;
-    talker.warning('StreamElements WebSocket disconnected.');
+    talkerService.talker.warning('StreamElements WebSocket disconnected.');
   }
 
   Future<void> onAuthenticated(data) async {
     isSocketConnected.value = true;
-    talker.logTyped(
+    talkerService.talker.logTyped(
       StreamElementsLog('StreamElements WebSocket authenticated.'),
     );
   }
@@ -404,7 +409,7 @@ class StreamelementsViewController extends GetxController
   }
 
   void parseTestEvent(data) {
-    Settings settings = Get.find<SettingsService>().settings.value;
+    Settings settings = settingsService.settings.value;
 
     dynamic widget = data[0];
     String listener = widget["listener"];
@@ -492,7 +497,7 @@ class StreamelementsViewController extends GetxController
   }
 
   void parseEvent(data) {
-    Settings settings = Get.find<SettingsService>().settings.value;
+    Settings settings = settingsService.settings.value;
 
     dynamic event = data[0];
     String type = event["type"];

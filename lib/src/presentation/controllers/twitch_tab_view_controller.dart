@@ -17,13 +17,15 @@ class TwitchTabViewController extends GetxController
     required this.getStreamInfoUseCase,
     required this.setChatSettingsUseCase,
     required this.setStreamTitleUseCase,
+    required this.homeViewController,
+    required this.watchService,
   });
 
   final GetStreamInfoUseCase getStreamInfoUseCase;
   final SetChatSettingsUseCase setChatSettingsUseCase;
   final SetStreamTitleUseCase setStreamTitleUseCase;
-
-  final HomeViewController homeViewController = Get.find<HomeViewController>();
+  final HomeViewController homeViewController;
+  final WatchService watchService;
 
   late TextEditingController titleFormController;
   RxString streamTitle = "".obs;
@@ -46,8 +48,8 @@ class TwitchTabViewController extends GetxController
 
     twitchStreamInfos.listen((value) {
       // Send to watchOS
-      Get.find<WatchService>().sendViewersToNative(value.viewerCount ?? 0);
-      Get.find<WatchService>().sendLiveStatusToNative(value.isOnline ?? false);
+      watchService.sendViewersToNative(value.viewerCount ?? 0);
+      watchService.sendLiveStatusToNative(value.isOnline ?? false);
     });
 
     controllerLiveCircleAnimation = AnimationController(

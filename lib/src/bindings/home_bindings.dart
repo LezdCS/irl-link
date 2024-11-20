@@ -1,6 +1,9 @@
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/bindings_interface.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/core/services/talker_service.dart';
+import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_last_activities_usecase.dart';
@@ -70,7 +73,9 @@ class HomeBindings extends Bindings {
     );
 
     Get.lazyPut<ObsTabViewController>(
-      () => ObsTabViewController(),
+      () => ObsTabViewController(
+        watchService: Get.find<WatchService>(),
+      ),
       fenix: true,
     );
 
@@ -88,6 +93,10 @@ class HomeBindings extends Bindings {
         getLastActivitiesUseCase: getLastActivitiesUseCase,
         getSongPlayingUseCase: getSongPlayingUseCase,
         getSongQueueUseCase: getSongQueueUseCase,
+        homeViewController: Get.find<HomeViewController>(),
+        watchService: Get.find<WatchService>(),
+        settingsService: Get.find<SettingsService>(),
+        talkerService: Get.find<TalkerService>(),
       ),
       fenix: true,
     );
@@ -97,10 +106,17 @@ class HomeBindings extends Bindings {
         getStreamInfoUseCase: getStreamInfoUseCase,
         setChatSettingsUseCase: setChatSettingsUseCase,
         setStreamTitleUseCase: setStreamTitleUseCase,
+        homeViewController: Get.find<HomeViewController>(),
+        watchService: Get.find<WatchService>(),
       ),
     );
 
-    Get.lazyPut<DashboardController>(() => DashboardController(), fenix: true);
+    Get.lazyPut<DashboardController>(
+        () => DashboardController(
+              homeViewController: Get.find<HomeViewController>(),
+              settingsService: Get.find<SettingsService>(),
+            ),
+        fenix: true);
     Get.lazyPut<RealtimeIrlViewController>(
       () => RealtimeIrlViewController(),
       fenix: true,
