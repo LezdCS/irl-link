@@ -125,9 +125,9 @@ class MessageRow extends StatelessWidget {
               .value
               .where((position) =>
                   message.message.substring(
-                      int.parse(position[0]), int.parse(position[1]) + 1) ==
-                  word)
-              .isNotEmpty);
+                      int.parse(position[0]), int.parse(position[1]) + 1,) ==
+                  word,)
+              .isNotEmpty,);
 
       // [emote:37227:LULW]
       List<String> kickEmotesIds = [];

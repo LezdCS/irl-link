@@ -31,7 +31,7 @@ class ChatView extends GetView<ChatViewController> {
     bool multiplePlatform = atLeastTwoNotEmpty([
       controller.kickChats,
       controller.twitchChats,
-      controller.youtubeChats
+      controller.youtubeChats,
     ]);
 
     return Obx(
@@ -128,7 +128,7 @@ class ChatView extends GetView<ChatViewController> {
                     )
                   : controller.chatGroup.channels.isNotEmpty
                       ? Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
+                          padding: const EdgeInsets.only(left: 8),
                           child: Text(
                             "welcome_to_chat".trParams(
                               {
@@ -210,11 +210,11 @@ class ChatView extends GetView<ChatViewController> {
                           isProgress: !value,
                         ),
                       );
-                    });
+                    },);
               }).toList(),
             ),
           ),
-        ]);
+        ],);
       },
     );
   }

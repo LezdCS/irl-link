@@ -20,7 +20,7 @@ class CheerEmote extends StatelessWidget {
           imageUrl: cheerEmote.url1x,
           placeholder: (BuildContext context, String url) =>
               const CircularProgressIndicator(),
-          errorWidget: (BuildContext context, String url, dynamic error) =>
+          errorWidget: (BuildContext context, String url, error) =>
               const Icon(Icons.error),
         ),
         Text(

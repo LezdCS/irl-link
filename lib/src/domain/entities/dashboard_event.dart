@@ -42,7 +42,7 @@ class DashboardEvent {
     Color? color,
     DashboardActionsTypes? dashboardActionsType,
     SupportedEvents? event,
-    dynamic customValue,
+    customValue,
   }) {
     return DashboardEvent(
       title: title ?? this.title,

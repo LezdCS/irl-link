@@ -15,7 +15,6 @@ Widget poll(
 
   if (poll.status == PollStatus.empty) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
@@ -65,8 +64,8 @@ Widget poll(
                     animation: true,
                     animateFromLastPercent: true,
                     barRadius: const Radius.circular(8),
-                    padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                    lineHeight: 20.0,
+                    padding: const EdgeInsets.symmetric(),
+                    lineHeight: 20,
                     percent: percentage,
                     backgroundColor: Theme.of(context).colorScheme.secondary,
                     progressColor: ((poll.status == PollStatus.completed) &&
@@ -83,15 +82,15 @@ Widget poll(
             },
           ),
           Obx(
-            (() => Text(
+            () => Text(
                   "ends_in".trParams(
                     {
                       "time": printDuration(Get.find<TwitchEventSubService>()
                           .remainingTimePoll
-                          .value)
+                          .value,),
                     },
                   ),
-                )),
+                ),
           ),
           Visibility(
             visible: poll.status == PollStatus.active,

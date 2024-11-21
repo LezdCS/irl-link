@@ -121,7 +121,7 @@ class HomeViewController extends GetxController
             twitchRepository: TwitchRepositoryImpl(),
           ),
           homeViewController: this,
-          talkerService: talkerService,
+          talker: talkerService.talker,
         ).init(
           token: twitchData!.accessToken,
           channel: twitchData!.twitchUser.login,
@@ -152,7 +152,7 @@ class HomeViewController extends GetxController
           Timer.periodic(const Duration(seconds: 13000), (Timer t) {
         refreshAccessTokenUseCase(params: twitchData!).then(
           (value) => {
-            if (value is DataSuccess) {twitchData = value.data}
+            if (value is DataSuccess) {twitchData = value.data},
           },
         );
       });
@@ -199,7 +199,7 @@ class HomeViewController extends GetxController
         watchService: Get.find<WatchService>(),
       );
       return controller;
-    }, tag: chatGroup.id);
+    }, tag: chatGroup.id,);
   }
 
   void reorderTabs() {
@@ -245,7 +245,7 @@ class HomeViewController extends GetxController
     List audioSourcesToRemove = [];
     for (var tabElement in iOSAudioSources) {
       BrowserTab? tabExist = settings.browserTabs.tabs.firstWhereOrNull(
-          (settingsTab) => settingsTab.id == tabElement.tab.id);
+          (settingsTab) => settingsTab.id == tabElement.tab.id,);
       if (tabExist == null) {
         audioSourcesToRemove.add(tabElement);
       } else if (!tabExist.toggled || !tabExist.iOSAudioSource) {
@@ -359,7 +359,7 @@ class HomeViewController extends GetxController
         settings.chatSettings.copyWith().chatGroups;
     List<ChatGroup> groupsToRemove = groupsViews
         .where((groupView) => !settingsGroups
-            .any((sGroup) => sGroup.id == groupView.chatGroup.id))
+            .any((sGroup) => sGroup.id == groupView.chatGroup.id),)
         .map((groupView) => groupView.chatGroup)
         .toList();
     for (var group in groupsToRemove) {
@@ -376,7 +376,7 @@ class HomeViewController extends GetxController
     // 2. Find the groups that are in the settings but not in the groupsViews to add them
     List<ChatGroup> groupsToAdd = settingsGroups
         .where((sGroup) => !groupsViews
-            .any((groupView) => groupView.chatGroup.id == sGroup.id))
+            .any((groupView) => groupView.chatGroup.id == sGroup.id),)
         .toList();
     for (var group in groupsToAdd) {
       ChatView groupView = ChatView(
@@ -391,7 +391,7 @@ class HomeViewController extends GetxController
         settings.chatSettings.permanentFirstGroup.copyWith();
     // if the permanentFirstGroup is not in the channels, we add it
     if (!chatsViews.any(
-        (groupView) => groupView.chatGroup.id == permanentFirstGroup?.id)) {
+        (groupView) => groupView.chatGroup.id == permanentFirstGroup?.id,)) {
       // We add the Twitch Chat of the user to the first position of the channels of this group
       List<Channel> updatedChannels = List.from(permanentFirstGroup.channels);
       updatedChannels.insert(
@@ -489,7 +489,7 @@ class HomeViewController extends GetxController
         const path = "../lib/assets/blank.mp3";
         timerKeepSpeakerOn = Timer.periodic(
           const Duration(minutes: 5),
-          (Timer t) async => await audioPlayer.play(AssetSource(path)),
+          (Timer t) async => audioPlayer.play(AssetSource(path)),
         );
       } else {
         timerKeepSpeakerOn?.cancel();

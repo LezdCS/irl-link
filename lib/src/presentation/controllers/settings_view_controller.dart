@@ -4,6 +4,8 @@ import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/core/services/store_service.dart';
+import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
@@ -12,8 +14,6 @@ import 'package:irllink/src/domain/usecases/streamelements/login_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_users_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/logout_usecase.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
-import 'package:irllink/src/core/services/store_service.dart';
-import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:uuid/uuid.dart';
 
 class SettingsViewController extends GetxController {
@@ -82,7 +82,7 @@ class SettingsViewController extends GetxController {
     seJwtInputController =
         TextEditingController(text: settings.streamElementsSettings.jwt);
     seOverlayTokenInputController = TextEditingController(
-        text: settings.streamElementsSettings.overlayToken);
+        text: settings.streamElementsSettings.overlayToken,);
     rtIrlInputController = TextEditingController(text: settings.rtIrlPushKey);
 
     usernamesHiddenUsers = <String>[].obs;
@@ -113,7 +113,7 @@ class SettingsViewController extends GetxController {
   }
 
   Future<void> loginStreamElements() async {
-    if (storeService.isSubscribed() == false) {
+    if (!storeService.isSubscribed()) {
       Get.snackbar(
         "Error",
         "You are not subscribed",

@@ -1,5 +1,5 @@
-import 'package:irllink/src/core/usecases/usecase.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:irllink/src/core/usecases/usecase.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:irllink/src/domain/repositories/streamelements_repository.dart';
 

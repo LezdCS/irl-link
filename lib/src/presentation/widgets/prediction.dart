@@ -16,7 +16,6 @@ Widget prediction(
 
   if (prediction.status == PredictionStatus.empty) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
@@ -62,10 +61,10 @@ Widget prediction(
                 height: 22,
               );
               return Visibility(
-                visible: (prediction.status == PredictionStatus.active ||
+                visible: prediction.status == PredictionStatus.active ||
                     prediction.status == PredictionStatus.locked ||
                     (prediction.status == PredictionStatus.resolved &&
-                        outcome.id == prediction.winningOutcomeId)),
+                        outcome.id == prediction.winningOutcomeId),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -98,13 +97,13 @@ Widget prediction(
                       animation: true,
                       animateFromLastPercent: true,
                       barRadius: const Radius.circular(8),
-                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                      lineHeight: 20.0,
+                      padding: const EdgeInsets.symmetric(),
+                      lineHeight: 20,
                       percent: percentage,
                       backgroundColor: Theme.of(context).colorScheme.secondary,
                       progressColor: outcome.color,
                       center: Text(
-                          "${(percentage * 100).toStringAsFixed(2)} % (${outcome.channelPoints} points)"),
+                          "${(percentage * 100).toStringAsFixed(2)} % (${outcome.channelPoints} points)",),
                     ),
                     const SizedBox(height: 10),
                   ],
@@ -114,7 +113,7 @@ Widget prediction(
           ),
           Obx(
             () => Text(
-                '${prediction.status == PredictionStatus.active ? 'locks'.tr : 'ends'.tr} in ${printDuration(twitchEventSubService.remainingTimePrediction.value)}'),
+                '${prediction.status == PredictionStatus.active ? 'locks'.tr : 'ends'.tr} in ${printDuration(twitchEventSubService.remainingTimePrediction.value)}',),
           ),
           Visibility(
             visible: prediction.status != PredictionStatus.resolved &&
@@ -163,7 +162,7 @@ Widget prediction(
             ),
           ),
         ],
-      )
+      ),
     ],
   );
 }
@@ -189,7 +188,7 @@ void pickWinnerDialog(
     },
     onConfirm: () {
       twitchEventSubService.endPrediction(
-          'RESOLVED', twitchEventSubService.selectedOutcomeId.value);
+          'RESOLVED', twitchEventSubService.selectedOutcomeId.value,);
       twitchEventSubService.selectedOutcomeId.value = "-1";
       Get.back();
     },

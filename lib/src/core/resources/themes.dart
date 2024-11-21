@@ -159,7 +159,7 @@ class Themes {
     primaryIconTheme: const IconThemeData(color: Colors.black),
     inputDecorationTheme: InputDecorationTheme(
       border: const OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.black),
+        
       ),
       helperStyle: const TextStyle(
         color: Color.fromARGB(255, 28, 25, 25),
@@ -233,7 +233,7 @@ class Themes {
         color: Colors.black,
       ),
       side: const BorderSide(
-        color: Colors.black,
+        
       ),
       disabledColor: const Color(0xFF18181b),
       selectedColor: Colors.deepPurpleAccent[200],
@@ -277,7 +277,7 @@ class Themes {
     ),
     checkboxTheme: CheckboxThemeData(
       side: const BorderSide(
-        color: Colors.black,
+        
       ),
       checkColor: WidgetStateProperty.all(Colors.deepPurple[600]),
     ),

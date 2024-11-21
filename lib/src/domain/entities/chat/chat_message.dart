@@ -148,13 +148,13 @@ class ChatMessage {
     String channelId,
     List<KickBadge> subBadges,
   ) {
-
-    if(message.event == TypeEvent.subscriptionEvent){
-      return ChatMessage.kickSub(message as KickSubscription, channelId, subBadges);
-    } else if(message.event == TypeEvent.giftedSubscriptionsEvent){
-      return ChatMessage.kickSubGift(message as KickGiftedSubscriptions, channelId, subBadges);
-    } else if(message.event == TypeEvent.streamHostEvent){
-      return ChatMessage.kickHost(message as KickStreamHost, channelId, subBadges);
+    if (message.event == TypeEvent.subscriptionEvent) {
+      return ChatMessage.kickSub(message as KickSubscription, channelId);
+    } else if (message.event == TypeEvent.giftedSubscriptionsEvent) {
+      return ChatMessage.kickSubGift(
+          message as KickGiftedSubscriptions, channelId);
+    } else if (message.event == TypeEvent.streamHostEvent) {
+      return ChatMessage.kickHost(message as KickStreamHost, channelId);
     }
 
     message = message as KickMessage;
@@ -195,7 +195,10 @@ class ChatMessage {
   }
 
   factory ChatMessage.fromYoutube(
-      dynamic messageRaw, List? messages, String videoId) {
+    messageRaw,
+    List? messages,
+    String videoId,
+  ) {
     String authorName = messageRaw['authorName']['simpleText'];
     String id = messageRaw['id'];
     String timestamp = messageRaw['timestampUsec'];
@@ -233,7 +236,9 @@ class ChatMessage {
   }
 
   factory ChatMessage.kickSub(
-      KickSubscription sub, String channelId, List<KickBadge> subBadges) {
+    KickSubscription sub,
+    String channelId,
+  ) {
     return ChatMessage(
       id: '',
       authorId: '',
@@ -267,8 +272,10 @@ class ChatMessage {
     );
   }
 
-  factory ChatMessage.kickSubGift(KickGiftedSubscriptions sub, String channelId,
-      List<KickBadge> subBadges) {
+  factory ChatMessage.kickSubGift(
+    KickGiftedSubscriptions sub,
+    String channelId,
+  ) {
     return ChatMessage(
       id: '',
       authorId: '',
@@ -304,7 +311,9 @@ class ChatMessage {
   }
 
   factory ChatMessage.kickHost(
-      KickStreamHost host, String channelId, List<KickBadge> subBadges) {
+    KickStreamHost host,
+    String channelId,
+  ) {
     return ChatMessage(
       id: '',
       authorId: '',
@@ -349,8 +358,10 @@ class ChatMessage {
         'color': color == '' ? '#FFFFFF' : color,
         'badges': jsonEncode(
           badgesList
-              .map((badge) =>
-                  badge.imageUrl1x.startsWith('http') ? badge.imageUrl1x : '')
+              .map(
+                (badge) =>
+                    badge.imageUrl1x.startsWith('http') ? badge.imageUrl1x : '',
+              )
               .toList(),
         ),
       };

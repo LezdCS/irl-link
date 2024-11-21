@@ -23,7 +23,7 @@ class SeOverlays extends GetView<StreamelementsViewController> {
         Visibility(
           visible: overlayToken == null,
           child: const Text(
-              'To unlock this feature, please enter your overlay token in the settings.'),
+              'To unlock this feature, please enter your overlay token in the settings.',),
         ),
         Container(
           padding: const EdgeInsets.all(4),
@@ -84,7 +84,7 @@ Widget _overlayRow(
   String? overlayUrl;
   Widget? webpage;
 
-  if (isMuted == false) {
+  if (!isMuted) {
     overlayUrl =
         'https://streamelements.com/overlay/${overlay.id}/$overlayToken';
     var uuid = const Uuid();
@@ -113,9 +113,8 @@ Widget _overlayRow(
             Expanded(
               child: Text(overlay.name),
             ),
-            webpage != null
-                ? InkWell(
-                    onTap: (() => {
+            if (webpage != null) InkWell(
+                    onTap: () => {
                           Get.defaultDialog(
                             title: 'Overlay',
                             titleStyle: const TextStyle(color: Colors.white),
@@ -125,12 +124,11 @@ Widget _overlayRow(
                             textCancel: "return".tr,
                             radius: 10,
                             content: SizedBox(
-                                width: 384, height: 216, child: webpage!),
-                          )
-                        }),
+                                width: 384, height: 216, child: webpage,),
+                          ),
+                        },
                     child: const Icon(Icons.preview),
-                  )
-                : Container(),
+                  ) else Container(),
             const SizedBox(
               width: 10,
             ),
@@ -145,7 +143,7 @@ Widget _overlayRow(
                 }
                 settingsService.settings.value = settings.copyWith(
                     streamElementsSettings: settings.streamElementsSettings
-                        .copyWith(mutedOverlays: mutedList));
+                        .copyWith(mutedOverlays: mutedList),);
                 settingsService.saveSettings();
                 controller.overlays.refresh();
               },

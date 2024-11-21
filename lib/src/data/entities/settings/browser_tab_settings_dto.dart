@@ -6,10 +6,10 @@ part 'browser_tab_settings_dto.g.dart';
 
 @freezed
 class BrowserTabSettingsDTO with _$BrowserTabSettingsDTO {
-  BrowserTabSettingsDTO._();
   factory BrowserTabSettingsDTO({
     @Default([]) List<BrowserTabDTO> tabs,
   }) = _BrowserTabSettingsDTO;
+  BrowserTabSettingsDTO._();
 
   factory BrowserTabSettingsDTO.blank() => BrowserTabSettingsDTO();
   factory BrowserTabSettingsDTO.fromJson(Map<String, dynamic> json) => _$BrowserTabSettingsDTOFromJson(json);
@@ -31,6 +31,6 @@ class BrowserTabDTO with _$BrowserTabDTO {
 }
 
 // we used not to have id in the BrowserTab entity, this is to prevent braking from the previous versions
-String _idFromJson(dynamic id) {
+String _idFromJson(id) {
   return id ?? const Uuid().v4();
 }

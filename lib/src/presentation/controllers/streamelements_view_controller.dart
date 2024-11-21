@@ -312,7 +312,7 @@ class StreamelementsViewController extends GetxController
         if (data != null)
           {
             talkerService.talker.debug(data),
-          }
+          },
       },
     );
 

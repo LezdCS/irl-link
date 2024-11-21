@@ -5,7 +5,7 @@ class CrashlyticsTalkerObserver extends TalkerObserver {
   CrashlyticsTalkerObserver();
 
   @override
-  void onError(err) {
+  void onError(TalkerError err) {
     FirebaseCrashlytics.instance.recordError(
       err.error,
       err.stackTrace,
@@ -14,7 +14,7 @@ class CrashlyticsTalkerObserver extends TalkerObserver {
   }
 
   @override
-  void onException(err) {
+  void onException(TalkerException err) {
     FirebaseCrashlytics.instance.recordError(
       err.exception,
       err.stackTrace,

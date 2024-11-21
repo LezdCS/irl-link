@@ -28,7 +28,7 @@ class RealtimeIrl {
     this.key,
   );
 
-  Future<void> onReceiveTaskData(dynamic data) async {
+  Future<void> onReceiveTaskData(data) async {
     if (data is Map<String, dynamic>) {
       final dynamic action = data["action"];
       switch (action) {

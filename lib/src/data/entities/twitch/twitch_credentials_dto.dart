@@ -22,7 +22,7 @@ class TwitchCredentialsDTO with _$TwitchCredentialsDTO {
 }
 
 // Because in previous versions of the app, the twitchUser and decodedIdToken were stored as a string
-TwitchDecodedIdTokenDTO _stringToTwitchDecodedIdTokenDTO(dynamic json) {
+TwitchDecodedIdTokenDTO _stringToTwitchDecodedIdTokenDTO(json) {
   if (json is String) {
     return TwitchDecodedIdTokenDTO.fromJson(jsonDecode(json)) ;
   } else if (json is Map<String, dynamic>) {
@@ -31,7 +31,7 @@ TwitchDecodedIdTokenDTO _stringToTwitchDecodedIdTokenDTO(dynamic json) {
   throw Exception("Unexpected type");
 }
 
-TwitchUserDTO _stringToTwitchUserDTO(dynamic json) {
+TwitchUserDTO _stringToTwitchUserDTO(json) {
   if (json is String) {
     return TwitchUserDTO.fromJson(jsonDecode(json)) ;
   } else if (json is Map<String, dynamic>) {

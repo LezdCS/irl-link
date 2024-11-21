@@ -24,7 +24,7 @@ class TwitchHypeTrainDTO with _$TwitchHypeTrainDTO {
     map['top_contributions'].forEach((contribution) => {
           c = ContributionDTO.fromJson(contribution),
           topContributions.add(c),
-        });
+        },);
 
     DateFormat df = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     DateTime endsAt = df.parse(map['expires_at'] ?? map['ended_at']);

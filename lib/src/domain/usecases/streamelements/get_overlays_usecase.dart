@@ -22,7 +22,7 @@ class StreamElementsGetOverlaysUseCase
 
   @override
   Future<DataState<List<SeOverlay>>> call(
-      {required StreamElementsGetOverlaysParams params}) {
+      {required StreamElementsGetOverlaysParams params,}) {
     return streamelementsRepository.getOverlays(params.token, params.channel);
   }
 }

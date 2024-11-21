@@ -1,15 +1,14 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/services/watch_service.dart';
+import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_stream_info_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/set_chat_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/set_stream_title_usecase.dart';
-
-import 'home_view_controller.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
+import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 
 class TwitchTabViewController extends GetxController
     with GetTickerProviderStateMixin {
@@ -57,7 +56,7 @@ class TwitchTabViewController extends GetxController
       vsync: this,
     )..repeat(reverse: true);
 
-    circleShadowAnimation = Tween<double>(begin: 3.0, end: 20.0).animate(
+    circleShadowAnimation = Tween<double>(begin: 3, end: 20).animate(
       CurvedAnimation(
         parent: controllerLiveCircleAnimation,
         curve: Curves.easeInOut,

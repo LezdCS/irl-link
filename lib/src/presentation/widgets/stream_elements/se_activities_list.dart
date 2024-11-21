@@ -15,7 +15,7 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(left: 20, right: 20, top: 0),
+      margin: const EdgeInsets.only(left: 20, right: 20),
       child: Column(
         children: [
           Row(
@@ -117,7 +117,7 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
               },
             );
           },
-        )),
+        ),),
         PopupMenuItem(
           child: Obx(
             () {
@@ -186,7 +186,7 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
   }
 
   Widget _activityCollapsed(
-      StreamelementsViewController controller, SeActivity activity) {
+      StreamelementsViewController controller, SeActivity activity,) {
     return ExpandableButton(
       child: Container(
         padding: const EdgeInsets.only(left: 3, right: 3, top: 5, bottom: 5),
@@ -241,7 +241,7 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
   }
 
   Widget _activityExpanded(
-      StreamelementsViewController controller, SeActivity activity) {
+      StreamelementsViewController controller, SeActivity activity,) {
     return ExpandableButton(
       child: Container(
         padding: const EdgeInsets.only(left: 3, right: 3, top: 5, bottom: 20),
@@ -276,7 +276,7 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                         text: activity.username,
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                    ]),
+                    ],),
                   ),
                 ),
                 InkWell(

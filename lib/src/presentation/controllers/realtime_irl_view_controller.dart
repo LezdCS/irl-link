@@ -47,8 +47,7 @@ class RealtimeIrlViewController extends GetxController {
         priority: NotificationPriority.LOW,
       ),
       iosNotificationOptions: const IOSNotificationOptions(
-        showNotification: true,
-        playSound: false,
+        
       ),
       foregroundTaskOptions: ForegroundTaskOptions(
         eventAction: ForegroundTaskEventAction.repeat(5000),
@@ -67,7 +66,7 @@ class RealtimeIrlViewController extends GetxController {
         notificationIcon: const NotificationIconData(
             resType: ResourceType.drawable,
             resPrefix: ResourcePrefix.ic,
-            name: 'bg_service_small'),
+            name: 'bg_service_small',),
         notificationButtons: [
           const NotificationButton(id: 'rtirl_stop', text: 'Stop sharing'),
         ],
@@ -77,7 +76,7 @@ class RealtimeIrlViewController extends GetxController {
   }
 
   Future stop() async {
-    return await realtimeIrl.stopTracking();
+    return realtimeIrl.stopTracking();
   }
 
   Future start() async {

@@ -37,7 +37,7 @@ class YoutubeChat {
       'cache-control': 'no-cache',
       'pragma': 'no-cache',
       'user-agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36'
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
     };
 
     String url = 'https://www.youtube.com/live_chat?is_popout=1&v=$videoId';
@@ -76,9 +76,9 @@ class YoutubeChat {
           'clientName': 'WEB',
           'clientVersion': '2.20240411.09.00',
         },
-        'user': {'lockedSafetyMode': false}
+        'user': {'lockedSafetyMode': false},
       },
-      'continuation': continuationToken
+      'continuation': continuationToken,
     });
 
     Map<String, Map<String, String>> options = {
@@ -90,13 +90,13 @@ class YoutubeChat {
 
     try {
       Response response = await http.post(Uri.parse(url),
-          headers: options['headers'], body: body);
+          headers: options['headers'], body: body,);
       dynamic data = json.decode(response.body);
 
       Iterable<dynamic>? messagesData = (data['continuationContents']
               ['liveChatContinuation']['actions'] as List?)
-          ?.map((action) => (action['addChatItemAction']['item']
-              ['liveChatTextMessageRenderer']));
+          ?.map((action) => action['addChatItemAction']['item']
+              ['liveChatTextMessageRenderer'],);
 
       messagesData?.forEach((message) {
         if (message['message'] == null) return;
@@ -146,7 +146,7 @@ Future<String?> getLiveVideoId(String channelURL) async {
   var response = await http.get(Uri.parse(channelURL));
   if (response.statusCode != 200) {
     talker.error(
-        'Failed to retrieve the page. Status code: ${response.statusCode}');
+        'Failed to retrieve the page. Status code: ${response.statusCode}',);
     return null;
   }
 

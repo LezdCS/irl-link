@@ -30,7 +30,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
   Talker talker = Get.find<TalkerService>().talker;
   @override
   Future<DataState<SeCredentials>> login(
-      StreamelementsAuthParams params) async {
+      StreamelementsAuthParams params,) async {
     try {
       Uri url = Uri.https(kStreamelementsUrlBase, kStreamelementsAuthPath, {
         'client_id': params.clientId,
@@ -115,7 +115,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
     String jsonData = jsonEncode(seCredentials);
     await box.write('seCredentials', jsonData);
     talker.logTyped(
-        StreamElementsLog('StreamElements credentials saved in local.'));
+        StreamElementsLog('StreamElements credentials saved in local.'),);
   }
 
   Future<DataState<dynamic>> validateToken(String accessToken) async {
@@ -151,7 +151,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       GetStorage box = GetStorage();
       box.remove('seCredentials');
       talker.logTyped(
-          StreamElementsLog('StreamElements credentials removed from local.'));
+          StreamElementsLog('StreamElements credentials removed from local.'),);
       return DataSuccess(null);
     } on DioException catch (e) {
       return DataFailed("Unable to revoke StreamElements token: ${e.message}");
@@ -176,7 +176,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
     final box = GetStorage();
     talker.logTyped(
       StreamElementsLog(
-          'Getting StreamElements credentials from local storage.'),
+          'Getting StreamElements credentials from local storage.',),
     );
     var seCredentialsString = box.read('seCredentials');
 
@@ -200,7 +200,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       if (savedScopesOrdered != paramsScopesOrdered) {
         talker.logTyped(
           StreamElementsLog(
-              'StreamElements scopes changed, user need to relogin.'),
+              'StreamElements scopes changed, user need to relogin.',),
         );
         disconnect(seCredentialsDTO.accessToken);
         return DataFailed("Scopes have been updated, please login again.");
@@ -226,7 +226,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
 
   @override
   Future<DataState<List<SeActivity>>> getLastActivities(
-      String token, String channel) async {
+      String token, String channel,) async {
     var dio = initDio();
     Response response;
     List<SeActivity> activities = [];
@@ -243,7 +243,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
           'minsub': 0,
           'mintip': 0,
           'origin': 'twitch',
-          'types': ['follow', 'tip', 'host', 'raid', 'subscriber', 'cheer']
+          'types': ['follow', 'tip', 'host', 'raid', 'subscriber', 'cheer'],
         },
       );
       response.data.reversed.forEach(
@@ -261,7 +261,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
 
   @override
   Future<DataState<List<SeOverlay>>> getOverlays(
-      String token, String channel) async {
+      String token, String channel,) async {
     var dio = initDio();
     List<SeOverlay> overlays = [];
     try {
@@ -343,7 +343,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
 
   @override
   Future<DataState<List<SeSong>>> getSongQueue(
-      String token, String userId) async {
+      String token, String userId,) async {
     List<SeSong> songs = [];
     var dio = initDio();
     try {
@@ -360,7 +360,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
             id: song['_id'],
             title: song['title'],
             videoId: song['videoId'],
-          )),
+          ),),
         },
       );
 
@@ -398,7 +398,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
 
   @override
   Future<void> updatePlayerState(
-      String token, String userId, String state) async {
+      String token, String userId, String state,) async {
     var dio = initDio();
     try {
       dio.options.headers["Authorization"] = "Bearer $token";

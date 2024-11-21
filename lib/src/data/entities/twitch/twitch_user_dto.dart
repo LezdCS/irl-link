@@ -23,7 +23,7 @@ class TwitchUserDTO with _$TwitchUserDTO {
 }
 
 // Because in previous versions of the app, the viewCount was stored as a string (even tho it made no sense to save this in local storage)
-int _stringToInt(dynamic json) {
+int _stringToInt(json) {
   if (json is String) {
     return int.tryParse(json) ?? 0; // Fallback to 0 if parsing fails
   } else if (json is int) {

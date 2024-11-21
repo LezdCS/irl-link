@@ -1,5 +1,5 @@
-import 'package:twitch_chat/twitch_chat.dart' as twitch;
 import 'package:flutter/material.dart';
+import 'package:twitch_chat/twitch_chat.dart' as twitch;
 
 enum EmotePlateform {
   twitch,

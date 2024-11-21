@@ -28,7 +28,7 @@ class Badges extends StatelessWidget {
                     placeholder: (BuildContext context, String url) =>
                         const CircularProgressIndicator(),
                     errorWidget:
-                        (BuildContext context, String url, dynamic error) =>
+                        (BuildContext context, String url, error) =>
                             const Icon(Icons.error),
                   )
                 : badge.imageUrl1x.endsWith('.svg')
@@ -45,7 +45,7 @@ class Badges extends StatelessWidget {
                         ),
                         filterQuality: FilterQuality.high,
                       ),
-          )
+          ),
       ],
     );
   }

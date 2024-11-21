@@ -28,7 +28,7 @@ class TtsService extends GetxService {
       [
         IosTextToSpeechAudioCategoryOptions.allowBluetooth,
         IosTextToSpeechAudioCategoryOptions.allowBluetoothA2DP,
-        IosTextToSpeechAudioCategoryOptions.mixWithOthers
+        IosTextToSpeechAudioCategoryOptions.mixWithOthers,
       ],
       IosTextToSpeechAudioMode.voicePrompt,
     );
@@ -62,7 +62,7 @@ class TtsService extends GetxService {
     await flutterTts.getVoices.then(
       (value) => {
         ttsVoices.value = value,
-        ttsVoices.sort((a, b) => a['name'].compareTo(b['name']))
+        ttsVoices.sort((a, b) => a['name'].compareTo(b['name'])),
       },
     );
   }
@@ -71,7 +71,7 @@ class TtsService extends GetxService {
     await flutterTts.getLanguages.then(
       (value) => {
         ttsLanguages.value = value,
-        ttsLanguages.sort((a, b) => a.compareTo(b))
+        ttsLanguages.sort((a, b) => a.compareTo(b)),
       },
     );
   }
@@ -108,7 +108,7 @@ class TtsService extends GetxService {
     // If the list of prefixs to use TTS only is not empty, we only read the message if it starts with one of the prefixs
     if (settings.ttsSettings.prefixsToUseTtsOnly.isNotEmpty) {
       for (String prefix in settings.ttsSettings.prefixsToUseTtsOnly) {
-        if (message.message.startsWith(prefix) == false) {
+        if (!message.message.startsWith(prefix)) {
           return;
         }
       }

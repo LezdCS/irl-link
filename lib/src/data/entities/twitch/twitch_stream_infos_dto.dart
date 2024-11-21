@@ -18,7 +18,7 @@ class TwitchStreamInfosDto with _$TwitchStreamInfosDto {
   }) = _TwitchStreamInfosDto;
 
   factory TwitchStreamInfosDto.fromJson(Map<String, dynamic> map1,
-      Map<String, dynamic> map2, Map<String, dynamic> map3) {
+      Map<String, dynamic> map2, Map<String, dynamic> map3,) {
     DateFormat df = DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     String startedAtRaw =
         map2['data'].length > 0 && map2['data'][0]['started_at'] != null

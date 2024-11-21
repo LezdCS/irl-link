@@ -22,7 +22,7 @@ class StreamElementsGetSongQueueUseCase
 
   @override
   Future<DataState<List<SeSong>>> call(
-      {required StreamElementsGetSongQueueParams params}) {
+      {required StreamElementsGetSongQueueParams params,}) {
     return streamelementsRepository.getSongQueue(params.token, params.channel);
   }
 }

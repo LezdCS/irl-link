@@ -23,10 +23,10 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
       child: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.only(
-            left: 20.0,
-            top: 12.0,
-            right: 20.0,
-            bottom: 12.0,
+            left: 20,
+            top: 12,
+            right: 20,
+            bottom: 12,
           ),
           color: Theme.of(context).colorScheme.surface,
           child: Column(
@@ -82,7 +82,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         () =>
                             Get.find<TwitchEventSubService>().isConnected.value
                                 ? const Icon(Icons.stream_sharp,
-                                    size: 12, color: Colors.green)
+                                    size: 12, color: Colors.green,)
                                 : const Icon(
                                     Icons.close,
                                     size: 12,
@@ -140,7 +140,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                           );
                         },
                       ),
-                      const Padding(padding: EdgeInsets.only(right: 6.0)),
+                      const Padding(padding: EdgeInsets.only(right: 6)),
                       Obx(
                         () => Text(
                           controller.twitchStreamInfos.value.isOnline!
@@ -156,7 +156,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                       child: Text(controller
                           .twitchStreamInfos.value.startedAtDuration
                           .toString()
-                          .substring(0, 7)),
+                          .substring(0, 7),),
                     ),
                   ),
                   Obx(
@@ -203,7 +203,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                             horizontal: 8,
                             vertical: 7,
                           ),
-                          hintText: 'Your stream\'s title',
+                          hintText: "Your stream's title",
                           labelText: 'stream_title'.tr,
                         ),
                       ),
@@ -285,7 +285,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         if (controller.twitchStreamInfos.value.isSlowMode!)
                           {controller.toggleSlowMode(0)}
                         else
-                          {Get.dialog(slowModeDialog(context, controller))}
+                          {Get.dialog(slowModeDialog(context, controller))},
                       },
                       isOn: controller.twitchStreamInfos.value.isSlowMode!,
                     ),
@@ -306,9 +306,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         backgroundColor: Colors.transparent,
                         body: Center(
                           child: Column(
-                            mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
                                 "channel_qr_code".tr,
@@ -323,9 +321,8 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                               QrImageView(
                                 data:
                                     'https://www.twitch.tv/${controller.homeViewController.twitchData?.twitchUser.login}',
-                                version: QrVersions.auto,
                                 backgroundColor: Colors.white,
-                                size: 200.0,
+                                size: 200,
                               ),
                               const SizedBox(
                                 height: 10,
@@ -379,7 +376,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                               'https://player.twitch.tv/?channel=${controller.homeViewController.twitchData?.twitchUser.login}&parent=www.irllink.com&muted=true',
                         ),
                       ),
-                    )),
+                    ),),
               ),
               const Divider(
                 height: 30,
@@ -429,7 +426,7 @@ Widget _shortcutButton({
           color: isOn
               ? Theme.of(context).colorScheme.tertiary
               : Theme.of(context).colorScheme.tertiaryContainer,
-          borderRadius: const BorderRadius.all(Radius.circular(8))),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),),
       padding: const EdgeInsets.all(8),
       child: Text(
         text,

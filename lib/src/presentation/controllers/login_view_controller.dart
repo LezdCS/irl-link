@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
-import 'package:flutter/services.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart';
@@ -30,7 +30,7 @@ class LoginViewController extends GetxController {
   Future<void> onInit() async {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
-    ));
+    ),);
 
     super.onInit();
   }
@@ -38,13 +38,13 @@ class LoginViewController extends GetxController {
   @override
   Future<void> onReady() async {
     await Future.doWhile(() =>
-        Future.delayed(const Duration(seconds: 2)).then((_) => hasNoNetwork()));
+        Future.delayed(const Duration(seconds: 2)).then((_) => hasNoNetwork()),);
 
     DataState<TwitchCredentials> twitchCredsResult =
         await getTwitchLocalUseCase();
 
     if (twitchCredsResult is DataSuccess) {
-      twitchCredentials.value = twitchCredsResult.data!;
+      twitchCredentials.value = twitchCredsResult.data;
       loadingMessage.value = "refreshing_token".tr;
 
       DataState<TwitchCredentials> refreshResult =

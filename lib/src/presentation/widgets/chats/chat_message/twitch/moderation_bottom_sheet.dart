@@ -146,9 +146,9 @@ class ModerationBottomSheet extends GetView {
                         null)
                     ? moderationViewButton(Icons.visibility, "unhide_user".tr)
                     : moderationViewButton(
-                        Icons.visibility_off, "hide_user".tr),
+                        Icons.visibility_off, "hide_user".tr,),
               ),
-            ]),
+            ],),
           ),
         ],
       ),
@@ -165,7 +165,6 @@ class ModerationBottomSheet extends GetView {
       ),
       child: Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
-        clipBehavior: Clip.none,
         children: [
           if (icon != null)
             Icon(
@@ -214,7 +213,7 @@ class ModerationBottomSheet extends GetView {
                 child: Container(
                   margin: const EdgeInsets.only(right: 10),
                   padding: const EdgeInsets.only(
-                      left: 5, right: 5, top: 5, bottom: 5),
+                      left: 5, right: 5, top: 5, bottom: 5,),
                   decoration: const BoxDecoration(
                     color: Color(0xFF121212),
                     borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -231,7 +230,6 @@ class ModerationBottomSheet extends GetView {
           ),
           const SizedBox(height: 10),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Expanded(
@@ -254,7 +252,6 @@ class ModerationBottomSheet extends GetView {
                         );
                       }
                     },
-                    maxLines: 1,
                     decoration: const InputDecoration(
                       hintText: 'Custom duration (s)',
                       isDense: true,
@@ -264,11 +261,10 @@ class ModerationBottomSheet extends GetView {
                 ),
               ),
               Expanded(
-                flex: 1,
                 child: InkWell(
                   onTap: () {
                     if (int.tryParse(
-                            controller.banDurationInputController.text) !=
+                            controller.banDurationInputController.text,) !=
                         null) {
                       controller.timeoutMessageInstruction(
                         controller.homeViewController.selectedMessage.value!,

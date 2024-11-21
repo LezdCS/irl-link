@@ -20,12 +20,12 @@ class StreamElementsGetLastActivitiesUseCase
   final StreamelementsRepository streamelementsRepository;
 
   StreamElementsGetLastActivitiesUseCase(
-      {required this.streamelementsRepository});
+      {required this.streamelementsRepository,});
 
   @override
   Future<DataState<List<SeActivity>>> call(
-      {required StreamElementsGetLastActivitiesParams params}) {
+      {required StreamElementsGetLastActivitiesParams params,}) {
     return streamelementsRepository.getLastActivities(
-        params.token, params.channel);
+        params.token, params.channel,);
   }
 }

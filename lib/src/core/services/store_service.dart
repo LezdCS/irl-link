@@ -68,9 +68,9 @@ class StoreService extends GetxService {
     final ProductDetailsResponse response =
         await InAppPurchase.instance.queryProductDetails(kIds);
     if (response.notFoundIDs.isNotEmpty) {
-      talker.debug('Products not found: ${response.notFoundIDs}');
       talker
-          .debug('Products found: ${response.productDetails.map((e) => e.id)}');
+        ..debug('Products not found: ${response.notFoundIDs}')
+        ..debug('Products found: ${response.productDetails.map((e) => e.id)}');
     }
     products = response.productDetails;
   }
@@ -83,7 +83,7 @@ class StoreService extends GetxService {
       subscription.cancel();
     }, onError: (error) {
       // handle error here.
-    }) as StreamSubscription<List<PurchaseDetails>>;
+    },) as StreamSubscription<List<PurchaseDetails>>;
 
     try {
       await InAppPurchase.instance.restorePurchases();
@@ -93,7 +93,7 @@ class StoreService extends GetxService {
   }
 
   void listenToPurchaseUpdated(
-      List<PurchaseDetails> purchaseDetailsList) async {
+      List<PurchaseDetails> purchaseDetailsList,) async {
     for (var purchaseDetails in purchaseDetailsList) {
       if (purchaseDetails.status == PurchaseStatus.pending) {
         purchasePending.value = true;

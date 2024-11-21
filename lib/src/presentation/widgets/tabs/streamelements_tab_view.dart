@@ -13,13 +13,13 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
     List<Widget> tabsTiles = [
       const Text("Activities"),
       const Text("Song Requests"),
-      const Text("Overlays")
+      const Text("Overlays"),
     ];
 
     List<Widget> tabs = [
       const SeActivitiesList(),
       const SeSongRequests(),
-      const SeOverlays()
+      const SeOverlays(),
     ];
 
     return Obx(
@@ -32,14 +32,14 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
                     controller: controller.tabController,
                     isScrollable: true,
                     indicator: const BoxDecoration(
-                      border: null,
+                      
                     ),
                     tabAlignment: TabAlignment.center,
                     tabs: tabsTiles,
                   ),
                 ),
                 Expanded(
-                  child: Container(
+                  child: DecoratedBox(
                     decoration: BoxDecoration(
                       color: context.theme.colorScheme.surface,
                     ),

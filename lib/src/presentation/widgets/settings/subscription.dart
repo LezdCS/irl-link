@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:irllink/src/core/services/store_service.dart';
+import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/settings/dialogs/in_app_purchase_dialog.dart';
 
 class Subscription extends StatelessWidget {
@@ -15,7 +15,7 @@ class Subscription extends StatelessWidget {
     String price = storeService.getSubscriptionPrice();
     RxBool storeFound = storeService.storeFound;
 
-    if (storeFound.value == false || price == "") {
+    if (!storeFound.value || price == "") {
       return const Text('Error loading the subscription module.');
     }
 
@@ -29,7 +29,7 @@ class Subscription extends StatelessWidget {
             Text(
               "subscription".tr,
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.tertiary, fontSize: 20),
+                  color: Theme.of(context).colorScheme.tertiary, fontSize: 20,),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 4, right: 4, top: 10),
@@ -50,9 +50,7 @@ class Subscription extends StatelessWidget {
                             fontSize: 16,
                           ),
                         ),
-                        isSubscribed
-                            ? Text("subscribed_def".tr)
-                            : Text(
+                        if (isSubscribed) Text("subscribed_def".tr) else Text(
                                 "not_subscribed_def".tr,
                                 style: TextStyle(
                                   color: Colors.grey[200],
@@ -81,7 +79,7 @@ class Subscription extends StatelessWidget {
                         ),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

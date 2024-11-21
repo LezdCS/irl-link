@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/core/services/twitch_event_sub_service.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
@@ -12,7 +13,6 @@ import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
-import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_view.dart';
 import 'package:irllink/src/presentation/widgets/chats/select_channel_dialog.dart';
@@ -100,9 +100,7 @@ class HomeView extends GetView<HomeViewController> {
                             ),
                             onWeightChanged: controller.onSplitResized,
                             children: [
-                              controller.tabElements.isNotEmpty
-                                  ? _top(context, height, width)
-                                  : const Text(
+                              if (controller.tabElements.isNotEmpty) _top(context, height, width) else const Text(
                                       "No tabs",
                                       textAlign: TextAlign.center,
                                     ),
@@ -160,7 +158,7 @@ class HomeView extends GetView<HomeViewController> {
                         visible: Get.isRegistered<TwitchEventSubService>(),
                         child: Padding(
                           padding: const EdgeInsets.only(
-                              left: 8, right: 8, top: 4, bottom: 0),
+                              left: 8, right: 8, top: 4,),
                           child: hypeTrain(
                             context,
                             Get.find<TwitchEventSubService>()
@@ -207,9 +205,9 @@ class HomeView extends GetView<HomeViewController> {
             ),
           ),
           Positioned(
-            bottom: 0.0,
-            left: 0.0,
-            right: 0.0,
+            bottom: 0,
+            left: 0,
+            right: 0,
             child: _bottomNavBar(height, width, context),
           ),
         ],
@@ -266,8 +264,8 @@ class HomeView extends GetView<HomeViewController> {
                   gradient: LinearGradient(colors: [
                     Color.fromARGB(255, 45, 2, 53),
                     Color.fromARGB(255, 81, 16, 93),
-                  ]),
-                  borderRadius: BorderRadius.all(Radius.circular(8))),
+                  ],),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),),
               padding:
                   const EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
               child: Row(
@@ -288,13 +286,13 @@ class HomeView extends GetView<HomeViewController> {
                         }
                         ChatViewController chatViewController =
                             Get.find<ChatViewController>(
-                                tag: controller.selectedChatGroup.value?.id);
+                                tag: controller.selectedChatGroup.value?.id,);
                         List<TwitchChat> twitchChats = [];
                         twitchChats
                             .addAll(chatViewController.twitchChats.toList());
                         if (twitchChats.length == 1) {
                           controller.sendChatMessage(
-                              value, twitchChats.first.channel);
+                              value, twitchChats.first.channel,);
                           controller.chatInputController.text = '';
                           FocusScope.of(context).unfocus();
                         } else {
@@ -311,7 +309,6 @@ class HomeView extends GetView<HomeViewController> {
                         controller.isPickingEmote.value = false;
                       },
                       textInputAction: TextInputAction.send,
-                      maxLines: 1,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: settings.generalSettings.displayViewerCount
@@ -320,11 +317,11 @@ class HomeView extends GetView<HomeViewController> {
                                     .twitchStreamInfos
                                     .value
                                     .viewerCount
-                                    .toString()
+                                    .toString(),
                               })
                             : 'send_message'.tr,
                         hintStyle: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge!.color!,
+                          color: Theme.of(context).textTheme.bodyLarge!.color,
                         ),
                         isDense: true,
                         enabledBorder: InputBorder.none,
@@ -340,14 +337,14 @@ class HomeView extends GetView<HomeViewController> {
                       }
                       ChatViewController chatViewController =
                           Get.find<ChatViewController>(
-                              tag: controller.selectedChatGroup.value?.id);
+                              tag: controller.selectedChatGroup.value?.id,);
                       List<TwitchChat> twitchChats = [];
                       twitchChats
                           .addAll(chatViewController.twitchChats.toList());
                       if (twitchChats.length == 1) {
                         controller.sendChatMessage(
                             controller.chatInputController.text,
-                            twitchChats.first.channel);
+                            twitchChats.first.channel,);
                         controller.chatInputController.text = '';
                         FocusScope.of(context).unfocus();
                       } else {
@@ -369,8 +366,7 @@ class HomeView extends GetView<HomeViewController> {
               ),
             ),
           ),
-          Get.isRegistered<TwitchEventSubService>()
-              ? Obx(
+          if (Get.isRegistered<TwitchEventSubService>()) Obx(
                   () => Visibility(
                     visible: Get.find<TwitchEventSubService>()
                             .currentPoll
@@ -378,7 +374,6 @@ class HomeView extends GetView<HomeViewController> {
                             .status !=
                         PollStatus.empty,
                     child: Expanded(
-                      flex: 1,
                       child: InkWell(
                         onTap: () async {
                           Get.dialog(
@@ -415,10 +410,8 @@ class HomeView extends GetView<HomeViewController> {
                       ),
                     ),
                   ),
-                )
-              : Container(),
-          Get.isRegistered<TwitchEventSubService>()
-              ? Obx(
+                ) else Container(),
+          if (Get.isRegistered<TwitchEventSubService>()) Obx(
                   () => Visibility(
                     visible: Get.find<TwitchEventSubService>()
                             .currentPrediction
@@ -426,7 +419,6 @@ class HomeView extends GetView<HomeViewController> {
                             .status !=
                         PredictionStatus.empty,
                     child: Expanded(
-                      flex: 1,
                       child: InkWell(
                         onTap: () async {
                           Get.dialog(
@@ -464,12 +456,10 @@ class HomeView extends GetView<HomeViewController> {
                       ),
                     ),
                   ),
-                )
-              : Container(),
+                ) else Container(),
           Visibility(
             visible: controller.pinnedMessages.isNotEmpty,
             child: Expanded(
-              flex: 1,
               child: InkWell(
                 onTap: () {
                   controller.showPinnedMessages.toggle();
@@ -485,7 +475,6 @@ class HomeView extends GetView<HomeViewController> {
           Visibility(
             visible: settings.dashboardSettings.activated,
             child: Expanded(
-              flex: 1,
               child: InkWell(
                 onTap: () async {
                   controller.displayDashboard.value =
@@ -500,7 +489,6 @@ class HomeView extends GetView<HomeViewController> {
             ),
           ),
           Expanded(
-            flex: 1,
             child: InkWell(
               onTap: () async {
                 await Get.toNamed(
@@ -559,7 +547,7 @@ class HomeView extends GetView<HomeViewController> {
         isScrollable: true,
         onTap: (int i) {
           if (Get.isRegistered<ChatViewController>(
-              tag: controller.chatsViews[i].chatGroup.id)) {
+              tag: controller.chatsViews[i].chatGroup.id,)) {
             ChatViewController c = Get.find<ChatViewController>(
               tag: controller.chatsViews[i].chatGroup.id,
             );

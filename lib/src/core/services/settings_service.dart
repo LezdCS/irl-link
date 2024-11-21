@@ -6,7 +6,7 @@ import 'package:irllink/src/domain/usecases/settings/set_settings_usecase.dart';
 
 class SettingsService extends GetxService {
   SettingsService(
-      {required this.getSettingsUseCase, required this.setSettingsUseCase});
+      {required this.getSettingsUseCase, required this.setSettingsUseCase,});
 
   final GetSettingsUseCase getSettingsUseCase;
   final SetSettingsUseCase setSettingsUseCase;

@@ -82,7 +82,7 @@ class Settings {
           StreamElementsSettings? streamElementsSettings,
           String? rtIrlPushKey,
           //TTS
-          TtsSettings? ttsSettings}) =>
+          TtsSettings? ttsSettings,}) =>
       Settings(
         //CHAT
         isEmotes: isEmotes ?? this.isEmotes,

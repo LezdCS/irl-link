@@ -22,6 +22,6 @@ class StreamElementsRemoveSongUseCase
   @override
   Future<void> call({required StreamElementsRemoveSongParams params}) {
     return streamelementsRepository.removeSong(
-        params.token, params.channel, params.songId);
+        params.token, params.channel, params.songId,);
   }
 }

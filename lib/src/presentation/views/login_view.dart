@@ -46,10 +46,10 @@ class LoginView extends GetView<LoginViewController> {
                       fontSize: 20,
                     ),
                   ),
-                ]),
+                ],),
           ),
           icon: const Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8),
             child: Image(
               height: 24,
               width: 24,
@@ -95,8 +95,7 @@ class LoginView extends GetView<LoginViewController> {
               color: Theme.of(context).colorScheme.tertiary,
             ),
           ),
-          controller.twitchCredentials.value != null
-              ? CachedNetworkImage(
+          if (controller.twitchCredentials.value != null) CachedNetworkImage(
                   imageUrl: controller
                       .twitchCredentials.value!.twitchUser.profileImageUrl,
                   placeholder: (BuildContext context, String url) =>
@@ -104,14 +103,13 @@ class LoginView extends GetView<LoginViewController> {
                     color: Theme.of(context).colorScheme.tertiary,
                   ),
                   errorWidget:
-                      (BuildContext context, String url, dynamic error) =>
+                      (BuildContext context, String url, error) =>
                           const Icon(Icons.error),
                   imageBuilder: (context, imageProvider) => CircleAvatar(
                     radius: 36,
                     backgroundImage: imageProvider,
                   ),
-                )
-              : const SizedBox(),
+                ) else const SizedBox(),
           Visibility(
             visible: controller.twitchCredentials.value != null,
             child: Text(
@@ -143,7 +141,7 @@ class LoginView extends GetView<LoginViewController> {
               visible: Get.find<StoreService>().isSubscribed(),
               child: Container(
                 padding: const EdgeInsets.only(
-                    left: 10, right: 10, top: 4, bottom: 4),
+                    left: 10, right: 10, top: 4, bottom: 4,),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.tertiary,
                   borderRadius: const BorderRadius.all(
@@ -155,9 +153,7 @@ class LoginView extends GetView<LoginViewController> {
             ),
           ],
         ),
-        controller.isLoading.value
-            ? _loadingCircle(context)
-            : _loginButton(context),
+        if (controller.isLoading.value) _loadingCircle(context) else _loginButton(context),
         Column(
           children: [
             const Text("Open Source Project by @LezdCS"),
@@ -209,7 +205,7 @@ class LoginView extends GetView<LoginViewController> {
               ],
             ),
             const SizedBox(height: 10),
-            Text("Version: ${Get.find<AppInfoService>().version}")
+            Text("Version: ${Get.find<AppInfoService>().version}"),
           ],
         ),
       ],

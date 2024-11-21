@@ -28,7 +28,7 @@ class ManageListHiddenUsers extends GetView<SettingsViewController> {
               "manage_hidden_users".tr,
             ),
           ),
-          body: Container(
+          body: DecoratedBox(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
             ),
@@ -63,7 +63,7 @@ class ManageListHiddenUsers extends GetView<SettingsViewController> {
                           : ReorderableListView.builder(
                               shrinkWrap: true,
                               padding: const EdgeInsets.only(
-                                  top: 8, left: 18, right: 18, bottom: 8),
+                                  top: 8, left: 18, right: 18, bottom: 8,),
                               itemCount: controller.usernamesHiddenUsers.length,
                               onReorder: (int oldIndex, int newIndex) {
                                 if (newIndex > oldIndex) {
@@ -84,7 +84,7 @@ class ManageListHiddenUsers extends GetView<SettingsViewController> {
                                   color:
                                       Theme.of(context).colorScheme.secondary,
                                   padding: const EdgeInsets.only(
-                                      left: 20, right: 20, bottom: 10, top: 10),
+                                      left: 20, right: 20, bottom: 10, top: 10,),
                                   margin:
                                       const EdgeInsets.only(bottom: 5, top: 5),
                                   child: InkWell(

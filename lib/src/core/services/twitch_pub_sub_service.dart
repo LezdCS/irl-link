@@ -27,7 +27,7 @@ class TwitchPubSubService extends GetxService {
   Talker talker = Get.find<TalkerService>().talker;
 
   Future<TwitchPubSubService> init(
-      {required String accessToken, required String channelName}) async {
+      {required String accessToken, required String channelName,}) async {
     this.accessToken = accessToken;
     this.channelName = channelName;
     return this;
@@ -49,7 +49,7 @@ class TwitchPubSubService extends GetxService {
       _listenToPinnedUpdates();
     } catch (e) {
       talker.warning(
-          'Failed to connect to the Twitch EventSub Websocket. Retrying in 20 seconds.');
+          'Failed to connect to the Twitch EventSub Websocket. Retrying in 20 seconds.',);
 
       Future.delayed(const Duration(seconds: 20), () {
         connect();
@@ -117,7 +117,7 @@ class TwitchPubSubService extends GetxService {
 
   void _listenToPinnedUpdates() {
     send(
-        '{"type":"LISTEN","data":{"topics":["pinned-chat-updates-v1.$_broadcasterId"],"auth_token":"$accessToken"}, "nonce":"${DateTime.now().millisecondsSinceEpoch}"}');
+        '{"type":"LISTEN","data":{"topics":["pinned-chat-updates-v1.$_broadcasterId"],"auth_token":"$accessToken"}, "nonce":"${DateTime.now().millisecondsSinceEpoch}"}',);
   }
 
   void _ping() {

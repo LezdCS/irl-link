@@ -28,7 +28,7 @@ class TwitchPredictionDTO with _$TwitchPredictionDTO {
           o = OutcomeDTO.fromJson(outcome),
           outcomes.add(o),
           totalUsers += o.users,
-        });
+        },);
 
     if (map['locked_at'] != null) {
       status = PredictionStatus.locked;

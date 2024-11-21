@@ -1,4 +1,5 @@
 import 'package:auto_mappr_annotation/auto_mappr_annotation.dart';
+import 'package:irllink/src/core/utils/mapper.auto_mappr.dart';
 import 'package:irllink/src/data/entities/dashboard_event_dto.dart';
 import 'package:irllink/src/data/entities/settings/browser_tab_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/chat_events_settings_dto.dart';
@@ -39,8 +40,6 @@ import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
-
-import 'mapper.auto_mappr.dart';
 
 @AutoMappr([
   MapType<Settings, SettingsDTO>(),

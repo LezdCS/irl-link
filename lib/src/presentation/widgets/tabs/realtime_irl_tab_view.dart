@@ -18,7 +18,7 @@ class RealtimeIrlTabView extends GetView<RealtimeIrlViewController> {
                   ? _stopUpdatingPosition(
                       title: 'Stop updating position',
                       description:
-                          'Your GPS location is currently shared with RealtimeIRL...')
+                          'Your GPS location is currently shared with RealtimeIRL...',)
                   : _startUpdatingPosition(),
             ),
             Visibility(
@@ -30,7 +30,7 @@ class RealtimeIrlTabView extends GetView<RealtimeIrlViewController> {
                   _stopUpdatingPosition(
                       title: 'Emergency stop',
                       description:
-                          'In case your location is still visible on RealtimeIRL, you can stop the service immediately.'),
+                          'In case your location is still visible on RealtimeIRL, you can stop the service immediately.',),
                 ],
               ),
             ),
@@ -70,7 +70,7 @@ class RealtimeIrlTabView extends GetView<RealtimeIrlViewController> {
   }
 
   Widget _stopUpdatingPosition(
-      {required String title, required String description}) {
+      {required String title, required String description,}) {
     return Column(
       children: [
         const SizedBox(height: 10),

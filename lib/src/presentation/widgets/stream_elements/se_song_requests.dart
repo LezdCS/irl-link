@@ -67,9 +67,7 @@ class SeSongRequests extends GetView<StreamelementsViewController> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              controller.currentSong.value != null
-                  ? _songRow(context, controller.currentSong.value!, false, jwt)
-                  : const Text("No song playing."),
+              if (controller.currentSong.value != null) _songRow(context, controller.currentSong.value!, false, jwt) else const Text("No song playing."),
               const Padding(
                 padding: EdgeInsets.only(bottom: 15),
               ),
@@ -85,7 +83,7 @@ class SeSongRequests extends GetView<StreamelementsViewController> {
                   TextSpan(
                     text: " (${controller.songRequestQueue.length} videos)",
                   ),
-                ]),
+                ],),
               ),
               Expanded(
                 child: ListView.builder(
@@ -142,7 +140,7 @@ class SeSongRequests extends GetView<StreamelementsViewController> {
                       ),
                       TextSpan(
                         text: song.title,
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -161,7 +159,7 @@ class SeSongRequests extends GetView<StreamelementsViewController> {
                     const TextSpan(
                       text: "s",
                     ),
-                  ]),
+                  ],),
                 ),
               ],
             ),

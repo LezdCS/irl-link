@@ -13,7 +13,7 @@ class DashboardEventDTO with _$DashboardEventDTO {
     @ColorConverter() required Color color,
     required DashboardActionsTypes dashboardActionsType,
     required SupportedEvents event,
-    required dynamic customValue,
+    required customValue,
   }) = _DashboardEventDTO;
 
  factory DashboardEventDTO.fromJson(Map<String, dynamic> json) => _$DashboardEventDTOFromJson(json);

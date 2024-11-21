@@ -59,7 +59,7 @@ class RealtimeIrl extends GetView<SettingsViewController> {
                     suffixIcon: IconButton(
                       icon: Icon(controller.rtIrlKeyShow.value
                           ? Icons.visibility
-                          : Icons.visibility_off),
+                          : Icons.visibility_off,),
                       color: Theme.of(context).primaryIconTheme.color,
                       onPressed: () {
                         controller.rtIrlKeyShow.value =

@@ -6,11 +6,11 @@ part 'dashboard_settings_dto.g.dart';
 
 @freezed
 class DashboardSettingsDTO with _$DashboardSettingsDTO {
-  DashboardSettingsDTO._();
   factory DashboardSettingsDTO({
     @Default([]) List<DashboardEventDTO> userEvents,
     @Default(true) bool activated,
   }) = _DashboardSettingsDTO;
+  DashboardSettingsDTO._();
 
   factory DashboardSettingsDTO.blank() => DashboardSettingsDTO();
   factory DashboardSettingsDTO.fromJson(Map<String, dynamic> json) => _$DashboardSettingsDTOFromJson(json);

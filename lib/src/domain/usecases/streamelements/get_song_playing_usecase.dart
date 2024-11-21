@@ -21,8 +21,8 @@ class StreamElementsGetSongPlayingUseCase
 
   @override
   Future<DataState<SeSong>> call(
-      {required StreamElementsGetSongPlayingParams params}) {
+      {required StreamElementsGetSongPlayingParams params,}) {
     return streamelementsRepository.getSongPlaying(
-        params.token, params.channel);
+        params.token, params.channel,);
   }
 }

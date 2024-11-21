@@ -6,7 +6,6 @@ part 'chat_settings_dto.g.dart';
 
 @freezed
 class ChatSettingsDTO with _$ChatSettingsDTO {
-  ChatSettingsDTO._();
 
   factory ChatSettingsDTO({
     @JsonKey(fromJson: _permanentGroupFromJson)
@@ -14,12 +13,13 @@ class ChatSettingsDTO with _$ChatSettingsDTO {
     @Default([]) List<ChatGroupDTO> chatGroups,
     @Default(true) bool hideDeletedMessages,
   }) = _ChatSettingsDTO;
+  ChatSettingsDTO._();
 
   factory ChatSettingsDTO.blank() => ChatSettingsDTO();
   factory ChatSettingsDTO.fromJson(Map<String, dynamic> json) => _$ChatSettingsDTOFromJson(json);
 }
 
-ChatGroupDTO _permanentGroupFromJson(dynamic permanentGroup) {
+ChatGroupDTO _permanentGroupFromJson(permanentGroup) {
   if (permanentGroup is ChatGroupDTO) {
     return permanentGroup;
   } else if (permanentGroup is Map<String, dynamic>) {

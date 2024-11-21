@@ -19,7 +19,7 @@ class ThirdPartEmote extends StatelessWidget {
       height: height,
       placeholder: (BuildContext context, String url) =>
           const CircularProgressIndicator(),
-      errorWidget: (BuildContext context, String url, dynamic error) =>
+      errorWidget: (BuildContext context, String url, error) =>
           const Icon(Icons.error),
     );
   }

@@ -62,11 +62,9 @@ class StreamElements extends GetView<SettingsViewController> {
           child: Obx(
             () => Column(
               children: [
-                controller.homeViewController.streamelementsViewController
+                if (controller.homeViewController.streamelementsViewController
                             .value !=
-                        null
-                    ? loggedIn(context)
-                    : loginButton()
+                        null) loggedIn(context) else loginButton(),
               ],
             ),
           ),
@@ -84,11 +82,9 @@ class StreamElements extends GetView<SettingsViewController> {
 
     return Column(
       children: [
-        seMe != null
-            ? _profile(
+        if (seMe != null) _profile(
                 seMe,
-              )
-            : Container(),
+              ) else Container(),
         const SizedBox(
           height: 12,
         ),
@@ -119,7 +115,7 @@ class StreamElements extends GetView<SettingsViewController> {
                   suffixIcon: IconButton(
                     icon: Icon(controller.seJwtShow.value
                         ? Icons.visibility
-                        : Icons.visibility_off),
+                        : Icons.visibility_off,),
                     color: Theme.of(context).primaryIconTheme.color,
                     onPressed: () {
                       controller.seJwtShow.value = !controller.seJwtShow.value;
@@ -161,7 +157,7 @@ class StreamElements extends GetView<SettingsViewController> {
                   suffixIcon: IconButton(
                     icon: Icon(controller.seOverlayTokenShow.value
                         ? Icons.visibility
-                        : Icons.visibility_off),
+                        : Icons.visibility_off,),
                     color: Theme.of(context).primaryIconTheme.color,
                     onPressed: () {
                       controller.seOverlayTokenShow.value =
@@ -194,9 +190,8 @@ class StreamElements extends GetView<SettingsViewController> {
       ),
       padding: const EdgeInsets.only(top: 8, bottom: 8),
       child: InkWell(
-        onTap: (() => {controller.disconnectStreamElements()}),
+        onTap: () => {controller.disconnectStreamElements()},
         child: const Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image(
@@ -222,9 +217,8 @@ class StreamElements extends GetView<SettingsViewController> {
 
   Widget loginButton() {
     return InkWell(
-      onTap: (() => {controller.loginStreamElements()}),
+      onTap: () => {controller.loginStreamElements()},
       child: const Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image(
@@ -250,7 +244,7 @@ class StreamElements extends GetView<SettingsViewController> {
           imageUrl: me.avatar,
           placeholder: (BuildContext context, String url) =>
               const CircularProgressIndicator(),
-          errorWidget: (BuildContext context, String url, dynamic error) =>
+          errorWidget: (BuildContext context, String url, error) =>
               const Icon(Icons.error),
           imageBuilder: (context, imageProvider) => CircleAvatar(
             radius: 18,

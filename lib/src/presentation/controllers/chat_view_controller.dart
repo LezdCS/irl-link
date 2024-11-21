@@ -139,7 +139,7 @@ class ChatViewController extends GetxController
 
     double maxPosition = scrollController.position.maxScrollExtent;
     double currentPosition = scrollController.position.pixels;
-    double difference = 10.0;
+    double difference = 10;
 
     /// bottom position
     if (!isAutoScrolldown.value &&
@@ -288,19 +288,19 @@ class ChatViewController extends GetxController
         .where((tc) =>
             twitchChannels
                 .firstWhereOrNull((tCa) => tCa.channel == tc.channel) ==
-            null)
+            null,)
         .toList();
     List<KickChat> kickChatToRemove = kickChats
         .where((kc) =>
             kickChannels
                 .firstWhereOrNull((kCa) => kCa.channel == kc.username) ==
-            null)
+            null,)
         .toList();
     List<YoutubeChat> youtubeChatToRemove = youtubeChats
         .where((yc) =>
             youtubeChannels
                 .firstWhereOrNull((yCa) => yCa.channel == yc.videoId) ==
-            null)
+            null,)
         .toList();
 
     for (TwitchChat t in twitchChatToRemove) {

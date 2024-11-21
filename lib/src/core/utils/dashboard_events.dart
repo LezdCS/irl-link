@@ -146,7 +146,7 @@ Map<SupportedEvents, ExistingDashboardEvent> dashboardEvents = {
   SupportedEvents.obsStreamStart: ExistingDashboardEvent(
     provider: DashboardActionsProvider.obs,
     actionsAllowed: [DashboardActionsTypes.button],
-    action: (dynamic v) {
+    action: (v) {
       ObsTabViewController obsTabViewController =
           Get.find<ObsTabViewController>();
       obsTabViewController.startStream();
@@ -155,7 +155,7 @@ Map<SupportedEvents, ExistingDashboardEvent> dashboardEvents = {
   SupportedEvents.obsStreamStop: ExistingDashboardEvent(
     provider: DashboardActionsProvider.obs,
     actionsAllowed: [DashboardActionsTypes.button],
-    action: (dynamic v) {
+    action: (v) {
       ObsTabViewController obsTabViewController =
           Get.find<ObsTabViewController>();
       obsTabViewController.stopStream();
@@ -165,7 +165,7 @@ Map<SupportedEvents, ExistingDashboardEvent> dashboardEvents = {
     provider: DashboardActionsProvider.obs,
     actionsAllowed: [DashboardActionsTypes.toggle],
     value: Get.find<ObsTabViewController>().isRecording,
-    action: (dynamic v) {
+    action: (v) {
       ObsTabViewController obsTabViewController =
           Get.find<ObsTabViewController>();
       obsTabViewController.startStopRecording();

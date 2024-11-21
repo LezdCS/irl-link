@@ -26,7 +26,7 @@ class TwitchPollDTO with _$TwitchPollDTO {
           c = ChoiceDTO.fromJson(choice),
           choices.add(c),
           totalVotes += c.votes,
-        });
+        },);
 
     switch (map["status"]) {
       case "completed":

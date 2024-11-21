@@ -34,7 +34,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
                             },
                             child: Container(
                               constraints: const BoxConstraints(
-                                minWidth: 80.0,
+                                minWidth: 80,
                               ),
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
@@ -62,7 +62,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
                             },
                             child: Container(
                               constraints: const BoxConstraints(
-                                minWidth: 80.0,
+                                minWidth: 80,
                               ),
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
@@ -104,7 +104,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
                                         color: Colors.black,
                                         child: Image(
                                           image: Image.memory(controller
-                                                  .sceneScreenshot.value)
+                                                  .sceneScreenshot.value,)
                                               .image,
                                         ),
                                       ),
@@ -113,11 +113,11 @@ class ObsTabView extends GetView<ObsTabViewController> {
                                 ),
                               );
                               controller.getSourceScreenshot(
-                                  controller.currentScene.value);
+                                  controller.currentScene.value,);
                             },
                             child: Container(
                               constraints: const BoxConstraints(
-                                minWidth: 80.0,
+                                minWidth: 80,
                               ),
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
@@ -152,7 +152,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
                         width: width,
                         child: getScenes(),
                       ),
-                    ]),
+                    ],),
                     const Divider(
                       height: 40,
                     ),
@@ -166,7 +166,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
                         width: width,
                         child: getSources(context),
                       ),
-                    ]),
+                    ],),
                     Divider(
                       height: 40,
                       thickness: 4,
@@ -205,7 +205,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
                       },
                       child: Container(
                         margin: const EdgeInsets.only(
-                            right: 10, top: 10, bottom: 10),
+                            right: 10, top: 10, bottom: 10,),
                         padding: const EdgeInsets.all(8),
                         alignment: Alignment.center,
                         width: width * 0.4,
@@ -252,7 +252,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
           },
           child: Container(
             constraints: const BoxConstraints(
-              minWidth: 80.0,
+              minWidth: 80,
               maxWidth: 120,
             ),
             alignment: Alignment.center,
@@ -281,13 +281,11 @@ class ObsTabView extends GetView<ObsTabViewController> {
   getSources(BuildContext context) {
     return GridView.builder(
       shrinkWrap: true,
-      scrollDirection: Axis.vertical,
       physics: const ScrollPhysics(),
       primary: true,
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: 100,
         crossAxisSpacing: 16,
-        mainAxisSpacing: 0,
         childAspectRatio: 5 / 2,
       ),
       itemCount: controller.sourcesList.length,
@@ -297,7 +295,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
         return GestureDetector(
           onTap: () {
             controller.setSourceVisibleState(
-                source.sceneItemId, source.sceneItemEnabled);
+                source.sceneItemId, source.sceneItemEnabled,);
           },
           onLongPress: () {
             Get.defaultDialog(

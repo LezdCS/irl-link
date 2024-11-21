@@ -21,6 +21,6 @@ class StreamElementsReplayActivityUseCase
   @override
   Future<void> call({required StreamElementsReplayActivityParams params}) {
     return streamelementsRepository.replayActivity(
-        params.token, params.activity);
+        params.token, params.activity,);
   }
 }

@@ -79,7 +79,7 @@ Widget inAppPurchaseDialog(
                         Text(
                           'Events list view',
                           style: TextStyle(fontSize: 13),
-                        )
+                        ),
                       ],
                     ),
                     Wrap(
@@ -98,7 +98,7 @@ Widget inAppPurchaseDialog(
                           style: TextStyle(
                             fontSize: 13,
                           ),
-                        )
+                        ),
                       ],
                     ),
                     Wrap(
@@ -117,7 +117,7 @@ Widget inAppPurchaseDialog(
                           style: TextStyle(
                             fontSize: 13,
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ],
@@ -130,8 +130,7 @@ Widget inAppPurchaseDialog(
             style: const TextStyle(fontSize: 13, color: Colors.grey),
             textAlign: TextAlign.center,
           ),
-          Platform.isIOS
-              ? Text.rich(
+          if (Platform.isIOS) Text.rich(
                   style: const TextStyle(fontSize: 13, color: Colors.grey),
                   textAlign: TextAlign.center,
                   TextSpan(
@@ -180,8 +179,7 @@ Widget inAppPurchaseDialog(
                       ),
                     ],
                   ),
-                )
-              : Container(),
+                ) else Container(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

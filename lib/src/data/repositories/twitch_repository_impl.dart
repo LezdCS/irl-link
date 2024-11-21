@@ -31,7 +31,7 @@ import 'package:twitch_chat/twitch_chat.dart';
 class TwitchRepositoryImpl extends TwitchRepository {
   @override
   Future<DataState<TwitchCredentials>> getTwitchOauth(
-      TwitchAuthParams params) async {
+      TwitchAuthParams params,) async {
     try {
       final remoteConfig = FirebaseRemoteConfig.instance;
       await remoteConfig.fetchAndActivate();
@@ -46,7 +46,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
         'response_type': params.responseType,
         'scope': params.scopes,
         'force_verify': params.forceVerify,
-        'claims': params.claims
+        'claims': params.claims,
       });
 
       final result = await FlutterWebAuth.authenticate(
@@ -122,7 +122,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
         queryParameters: {
           'refresh_token': twitchData.refreshToken,
           'app_version': Get.find<AppInfoService>().version,
-          'platform': Platform.isAndroid ? 'android' : 'ios'
+          'platform': Platform.isAndroid ? 'android' : 'ios',
         },
       );
 
@@ -168,7 +168,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
         'https://id.twitch.tv/oauth2/revoke',
         queryParameters: {
           'client_id': kTwitchAuthClientId,
-          'token': accessToken
+          'token': accessToken,
         },
       );
       return DataSuccess(response.toString());
@@ -226,7 +226,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
   @override
   Future<DataState<TwitchUser>> getTwitchUser(
-      String? username, String accessToken) async {
+      String? username, String accessToken,) async {
     Response response;
     var dio = initDio();
     try {
@@ -260,7 +260,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
   @override
   Future<DataState<List<TwitchUser>>> getTwitchUsers(
-      List ids, String accessToken) async {
+      List ids, String accessToken,) async {
     Response response;
     var dio = initDio();
     List<TwitchUser> twitchUsers = <TwitchUser>[];
@@ -284,7 +284,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
                 mappr.convert<TwitchUserDTO, TwitchUser>(
                   TwitchUserDTO.fromJson(user),
                 ),
-              )
+              ),
             },
           );
         });
@@ -298,7 +298,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
   @override
   Future<DataState<TwitchStreamInfos>> getStreamInfo(
-      String accessToken, String broadcasterId) async {
+      String accessToken, String broadcasterId,) async {
     Response response;
     Response response2;
     var dio = initDio();
@@ -320,12 +320,12 @@ class TwitchRepositoryImpl extends TwitchRepository {
           .then((value) => reponse3 = value.data!.data);
 
       TwitchStreamInfosDto twitchStreamInfosDto = TwitchStreamInfosDto.fromJson(
-          response.data['data'][0], response2.data, reponse3['data'][0]);
+          response.data['data'][0], response2.data, reponse3['data'][0],);
 
       Mappr mappr = Mappr();
       TwitchStreamInfos twitchStreamInfos =
           mappr.convert<TwitchStreamInfosDto, TwitchStreamInfos>(
-              twitchStreamInfosDto);
+              twitchStreamInfosDto,);
 
       return DataSuccess(twitchStreamInfos);
     } on DioException catch (e) {
@@ -335,7 +335,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
   @override
   Future<DataState<Response<dynamic>>> setChatSettings(String accessToken,
-      String broadcasterId, TwitchStreamInfos? twitchStreamInfos) async {
+      String broadcasterId, TwitchStreamInfos? twitchStreamInfos,) async {
     Response response;
     Map<String, dynamic> settings = {};
     var dio = initDio();
@@ -345,10 +345,10 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
       if (twitchStreamInfos != null) {
         settings = {
-          'emote_mode': twitchStreamInfos.isEmoteMode!,
-          'follower_mode': twitchStreamInfos.isFollowerMode!,
-          'slow_mode': twitchStreamInfos.isSlowMode!,
-          'subscriber_mode': twitchStreamInfos.isSubscriberMode!,
+          'emote_mode': twitchStreamInfos.isEmoteMode,
+          'follower_mode': twitchStreamInfos.isFollowerMode,
+          'slow_mode': twitchStreamInfos.isSlowMode,
+          'subscriber_mode': twitchStreamInfos.isSubscriberMode,
         };
 
         if (twitchStreamInfos.isSlowMode!) {
@@ -362,7 +362,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
         'https://api.twitch.tv/helix/chat/settings',
         queryParameters: {
           'broadcaster_id': broadcasterId,
-          'moderator_id': broadcasterId
+          'moderator_id': broadcasterId,
         },
         data: jsonEncode(settings),
       );
@@ -375,7 +375,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
   @override
   Future<DataState<void>> setStreamTitle(
-      String accessToken, String broadcasterId, String title) async {
+      String accessToken, String broadcasterId, String title,) async {
     var dio = initDio();
     try {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
@@ -385,7 +385,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
         'https://api.twitch.tv/helix/channels',
         queryParameters: {
           'broadcaster_id': broadcasterId,
-          'moderator_id': broadcasterId
+          'moderator_id': broadcasterId,
         },
         data: jsonEncode(titleMap),
       );
@@ -413,7 +413,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
         "broadcaster_id": broadcasterId,
         "id": predictionId,
         "status": status,
-        "winning_outcome_id": winningOutcomeId ?? ''
+        "winning_outcome_id": winningOutcomeId ?? '',
       };
 
       await dio.patch(
@@ -429,7 +429,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
   @override
   Future<DataState<TwitchPoll>> endPoll(String accessToken,
-      String broadcasterId, String pollId, String status) async {
+      String broadcasterId, String pollId, String status,) async {
     var dio = initDio();
     Response response;
 
@@ -440,7 +440,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
       Map body = {
         "broadcaster_id": broadcasterId,
         "id": pollId,
-        "status": status
+        "status": status,
       };
 
       response = await dio.patch(
@@ -460,7 +460,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
   @override
   Future<DataState<TwitchPoll>> createPoll(
-      String accessToken, String broadcasterId, TwitchPoll newPoll) async {
+      String accessToken, String broadcasterId, TwitchPoll newPoll,) async {
     // Response response;
     var dio = initDio();
     // TwitchPrediction? prediction;

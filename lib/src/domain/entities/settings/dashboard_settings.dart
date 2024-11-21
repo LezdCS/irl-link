@@ -1,5 +1,5 @@
-import '../dashboard_event.dart';
 import 'package:flutter/material.dart';
+import 'package:irllink/src/domain/entities/dashboard_event.dart';
 
 @immutable
 class DashboardSettings {
