@@ -33,7 +33,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
             "chats_joined".tr,
           ),
         ),
-        body: Container(
+        body: DecoratedBox(
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
           ),
@@ -48,13 +48,11 @@ class ChatsJoined extends GetView<SettingsViewController> {
                   top: 10,
                 ),
                 margin: const EdgeInsets.only(
-                  bottom: 0,
                   top: 12,
                 ),
                 child: Column(
                   children: [
                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         const Image(
                           width: 18,
@@ -81,8 +79,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
                       shrinkWrap: true,
                       itemCount: firstGroup.channels.length,
                       padding: const EdgeInsets.only(
-                        bottom: 0,
-                        top: 0,
+                        
                       ),
                       itemBuilder: (BuildContext context, int index) {
                         Channel channel = firstGroup.channels[index];
@@ -184,8 +181,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
               shrinkWrap: true,
               itemCount: group.channels.length,
               padding: const EdgeInsets.only(
-                bottom: 0,
-                top: 0,
+                
               ),
               itemBuilder: (BuildContext context, int index) {
                 Channel channel = group.channels[index];
@@ -241,7 +237,6 @@ class ChatsJoined extends GetView<SettingsViewController> {
       },
       key: ValueKey(channel),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image(
             width: 18,
@@ -340,7 +335,6 @@ class ChatsJoined extends GetView<SettingsViewController> {
           // dotted border
           border: Border.all(
             color: Theme.of(context).colorScheme.tertiary,
-            width: 1,
           ),
           borderRadius: BorderRadius.circular(8),
         ),
@@ -418,7 +412,6 @@ class ChatsJoined extends GetView<SettingsViewController> {
                     return DropdownMenuItem(
                       value: Platform.values[index].toString(),
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Image(
                             width: 18,
@@ -431,7 +424,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
                           const Padding(padding: EdgeInsets.only(right: 8)),
                           Text(
                             Platform.values[index].name
-                                .toString()
+                                
                                 .toCapitalized(),
                             style: TextStyle(
                               color:
@@ -455,7 +448,6 @@ class ChatsJoined extends GetView<SettingsViewController> {
                   style: TextStyle(
                     color: Theme.of(context).textTheme.bodyLarge!.color,
                   ),
-                  maxLines: 1,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter the channel name';
