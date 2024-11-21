@@ -75,6 +75,7 @@ class HomeBindings extends Bindings {
     Get.lazyPut<ObsTabViewController>(
       () => ObsTabViewController(
         watchService: Get.find<WatchService>(),
+        talkerService: Get.find<TalkerService>(),
       ),
       fenix: true,
     );

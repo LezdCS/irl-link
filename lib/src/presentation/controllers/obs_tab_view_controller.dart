@@ -11,10 +11,10 @@ import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:obs_websocket/obs_websocket.dart';
-import 'package:talker_flutter/talker_flutter.dart';
 
 class ObsTabViewController extends GetxController with WidgetsBindingObserver {
-  ObsTabViewController({required this.watchService});
+  ObsTabViewController(
+      {required this.watchService, required this.talkerService});
 
   ObsWebSocket? obsWebSocket;
   RxBool isConnected = false.obs;
@@ -35,9 +35,8 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
 
   Timer? statsTimer;
 
-  Talker talker = Get.find<TalkerService>().talker;
-
   final WatchService watchService;
+  final TalkerService talkerService;
 
   @override
   Future<void> onReady() async {
@@ -93,7 +92,7 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
       if (!url.startsWith('ws://') && !url.startsWith('wss://')) {
         url = 'ws://$url';
       }
-      talker.logTyped(ObsLog("Connecting to OBS at $url..."));
+      talkerService.talker.logTyped(ObsLog("Connecting to OBS at $url..."));
       obsWebSocket = await ObsWebSocket.connect(
         url,
         password: password,
@@ -197,7 +196,7 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
   }
 
   void connectionLost() {
-    talker.error("Connection lost with OBS.");
+    talkerService.talker.error("Connection lost with OBS.");
     statsTimer?.cancel();
     isConnected.value = false;
     alertMessage.value = "Connection with OBS lost...";
