@@ -523,10 +523,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: af41f960acedecfe4504f823f61f6807952f4136
-      url: "https://github.com/earna-hub/fk_user_agent.git"
+      resolved-ref: "8792a3cdb332317a4e063ae2501320db5596cc5c"
+      url: "https://github.com/andersonmendesdev/fk_user_agent.git"
     source: git
-    version: "2.1.0"
+    version: "2.1.1"
   flutter:
     dependency: "direct main"
     description: flutter
