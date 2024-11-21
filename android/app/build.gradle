@@ -31,7 +31,8 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace = "dev.lezd.www.irllink"
     compileSdkVersion = 34
-
+    ndkVersion = "27.0.12077973"
+    
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
