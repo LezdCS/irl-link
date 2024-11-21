@@ -86,7 +86,7 @@ dev_dependencies:
 dependency_overrides:
   fk_user_agent:
     git:
-      url: https://github.com/HollySite/fk_user_agent.git
+      url: https://github.com/earna-hub/fk_user_agent.git
 
 flutter_icons:
   android: true
