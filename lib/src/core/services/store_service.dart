@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
-import 'package:irllink/src/core/services/talker_service.dart';
 
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
@@ -17,9 +16,13 @@ import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class StoreService extends GetxService {
-  StoreService({required this.getTwitchLocalUseCase});
+  StoreService({
+    required this.getTwitchLocalUseCase,
+    required this.talker,
+  });
 
   final GetTwitchLocalUseCase getTwitchLocalUseCase;
+  final Talker talker;
 
   late StreamSubscription<List<PurchaseDetails>> subscription;
   List<ProductDetails> products = [];
@@ -28,8 +31,6 @@ class StoreService extends GetxService {
   RxBool storeFound = false.obs;
 
   Set<String> kIds = <String>{'irl_premium_subscription', 'irl_premium'};
-
-  Talker talker = Get.find<TalkerService>().talker;
 
   Future<StoreService> init() async {
     await getStore();

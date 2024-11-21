@@ -72,6 +72,7 @@ Future<void> initializeDependencies() async {
   await Get.putAsync(
     () => StoreService(
       getTwitchLocalUseCase: getTwitchLocalUseCase,
+      talker: Get.find<TalkerService>().talker,
     ).init(),
     permanent: true,
   );

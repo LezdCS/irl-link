@@ -35,6 +35,12 @@ class HomeBindings extends Bindings {
     // Repositories
     final twitchRepository = TwitchRepositoryImpl();
     final streamelementsRepository = StreamelementsRepositoryImpl();
+
+    // Services
+    final settingsService = Get.find<SettingsService>();
+    final talkerService = Get.find<TalkerService>();
+    final watchService = Get.find<WatchService>();
+
     // Use cases
     final refreshTwitchAccessTokenUseCase =
         RefreshTwitchTokenUseCase(twitchRepository);
@@ -69,13 +75,15 @@ class HomeBindings extends Bindings {
     Get.lazyPut<HomeViewController>(
       () => HomeViewController(
         refreshAccessTokenUseCase: refreshTwitchAccessTokenUseCase,
+        settingsService: settingsService,
+        talkerService: talkerService,
       ),
     );
 
     Get.lazyPut<ObsTabViewController>(
       () => ObsTabViewController(
-        watchService: Get.find<WatchService>(),
-        talkerService: Get.find<TalkerService>(),
+        watchService: watchService,
+        talkerService: talkerService,
       ),
       fenix: true,
     );
@@ -95,9 +103,9 @@ class HomeBindings extends Bindings {
         getSongPlayingUseCase: getSongPlayingUseCase,
         getSongQueueUseCase: getSongQueueUseCase,
         homeViewController: Get.find<HomeViewController>(),
-        watchService: Get.find<WatchService>(),
-        settingsService: Get.find<SettingsService>(),
-        talkerService: Get.find<TalkerService>(),
+        watchService: watchService,
+        settingsService: settingsService,
+        talkerService: talkerService,
       ),
       fenix: true,
     );
@@ -108,14 +116,14 @@ class HomeBindings extends Bindings {
         setChatSettingsUseCase: setChatSettingsUseCase,
         setStreamTitleUseCase: setStreamTitleUseCase,
         homeViewController: Get.find<HomeViewController>(),
-        watchService: Get.find<WatchService>(),
+        watchService: watchService,
       ),
     );
 
     Get.lazyPut<DashboardController>(
         () => DashboardController(
               homeViewController: Get.find<HomeViewController>(),
-              settingsService: Get.find<SettingsService>(),
+              settingsService: settingsService,
             ),
         fenix: true);
     Get.lazyPut<RealtimeIrlViewController>(

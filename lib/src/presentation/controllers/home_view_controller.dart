@@ -46,9 +46,13 @@ class HomeViewController extends GetxController
     with GetTickerProviderStateMixin {
   HomeViewController({
     required this.refreshAccessTokenUseCase,
+    required this.settingsService,
+    required this.talkerService,
   });
 
   final RefreshTwitchTokenUseCase refreshAccessTokenUseCase;
+  final SettingsService settingsService;
+  final TalkerService talkerService;
 
   SplitViewController? splitViewController = SplitViewController(
     limits: [null, WeightLimit(min: 0.12, max: 0.92)],
@@ -107,18 +111,18 @@ class HomeViewController extends GetxController
 
       TwitchEventSubService subService = await Get.putAsync(
         () => TwitchEventSubService(
-                createPollUseCase: CreatePollUseCase(
-                  twitchRepository: TwitchRepositoryImpl(),
-                ),
-                endPollUseCase: EndPollUseCase(
-                  twitchRepository: TwitchRepositoryImpl(),
-                ),
-                endPredictionUseCase: EndPredictionUseCase(
-                  twitchRepository: TwitchRepositoryImpl(),
-                ),
-                homeViewController: this,
-                talkerService: Get.find<TalkerService>())
-            .init(
+          createPollUseCase: CreatePollUseCase(
+            twitchRepository: TwitchRepositoryImpl(),
+          ),
+          endPollUseCase: EndPollUseCase(
+            twitchRepository: TwitchRepositoryImpl(),
+          ),
+          endPredictionUseCase: EndPredictionUseCase(
+            twitchRepository: TwitchRepositoryImpl(),
+          ),
+          homeViewController: this,
+          talkerService: talkerService,
+        ).init(
           token: twitchData!.accessToken,
           channel: twitchData!.twitchUser.login,
         ),
@@ -171,16 +175,16 @@ class HomeViewController extends GetxController
 
   // This is a debounce function to avoid spamming save settings when resizing the split view
   void onSplitResized(UnmodifiableListView<double?> weight) {
-    Settings settings = Get.find<SettingsService>().settings.value;
+    Settings settings = settingsService.settings.value;
 
     if (debounceSplitResize?.isActive ?? false) debounceSplitResize?.cancel();
     debounceSplitResize = Timer(const Duration(milliseconds: 500), () {
-      Get.find<SettingsService>().settings.value = settings.copyWith(
+      settingsService.settings.value = settings.copyWith(
         generalSettings: settings.generalSettings.copyWith(
           splitViewWeights: [weight[0]!, weight[1]!],
         ),
       );
-      Get.find<SettingsService>().saveSettings();
+      settingsService.saveSettings();
     });
   }
 
@@ -190,7 +194,7 @@ class HomeViewController extends GetxController
         chatGroup: chatGroup,
         homeViewController: this,
         settingsService: Get.find<SettingsService>(),
-        talker: Get.find<TalkerService>().talker,
+        talker: talkerService.talker,
         ttsService: Get.find<TtsService>(),
         watchService: Get.find<WatchService>(),
       );
@@ -218,7 +222,7 @@ class HomeViewController extends GetxController
   }
 
   Future<void> removeTabs() async {
-    Settings settings = Get.find<SettingsService>().settings.value;
+    Settings settings = settingsService.settings.value;
 
     // Check if WebTabs have to be removed
     List webTabsToRemove = [];
@@ -279,7 +283,7 @@ class HomeViewController extends GetxController
 
   void addTabs() {
     bool isSubscribed = Get.find<StoreService>().isSubscribed();
-    Settings settings = Get.find<SettingsService>().settings.value;
+    Settings settings = settingsService.settings.value;
 
     // Check if OBS have to be added
     if (obsTabViewController == null && settings.isObsConnected) {
@@ -346,7 +350,7 @@ class HomeViewController extends GetxController
     if (twitchData == null) {
       return;
     }
-    Settings settings = Get.find<SettingsService>().settings.value;
+    Settings settings = settingsService.settings.value;
 
     RxList<ChatView> groupsViews = RxList<ChatView>.from(chatsViews);
 
@@ -475,7 +479,7 @@ class HomeViewController extends GetxController
 
   Future applySettings() async {
     {
-      Settings settings = Get.find<SettingsService>().settings.value;
+      Settings settings = settingsService.settings.value;
 
       generateTabs();
       generateChats();
