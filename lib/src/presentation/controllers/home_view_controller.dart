@@ -177,7 +177,9 @@ class HomeViewController extends GetxController
   void onSplitResized(UnmodifiableListView<double?> weight) {
     Settings settings = settingsService.settings.value;
 
-    if (debounceSplitResize?.isActive ?? false) debounceSplitResize?.cancel();
+    if (debounceSplitResize?.isActive ?? false) {
+      debounceSplitResize?.cancel();
+    }
     debounceSplitResize = Timer(const Duration(milliseconds: 500), () {
       settingsService.settings.value = settings.copyWith(
         generalSettings: settings.generalSettings.copyWith(
@@ -189,17 +191,20 @@ class HomeViewController extends GetxController
   }
 
   Future<void> putChat(ChatGroup chatGroup) async {
-    await Get.putAsync<ChatViewController>(() async {
-      final controller = ChatViewController(
-        chatGroup: chatGroup,
-        homeViewController: this,
-        settingsService: Get.find<SettingsService>(),
-        talker: talkerService.talker,
-        ttsService: Get.find<TtsService>(),
-        watchService: Get.find<WatchService>(),
-      );
-      return controller;
-    }, tag: chatGroup.id,);
+    await Get.putAsync<ChatViewController>(
+      () async {
+        final controller = ChatViewController(
+          chatGroup: chatGroup,
+          homeViewController: this,
+          settingsService: Get.find<SettingsService>(),
+          talker: talkerService.talker,
+          ttsService: Get.find<TtsService>(),
+          watchService: Get.find<WatchService>(),
+        );
+        return controller;
+      },
+      tag: chatGroup.id,
+    );
   }
 
   void reorderTabs() {
@@ -214,7 +219,9 @@ class HomeViewController extends GetxController
       int indexInTabs = tabElements.indexWhere(
         (element) => element is WebPageView && element.tab.id == tab.id,
       );
-      if (indexInTabs == -1) return;
+      if (indexInTabs == -1) {
+        return;
+      }
       // Move the tab to the correct index
       tabElements.move(indexInTabs, index + diff);
     });
@@ -245,7 +252,8 @@ class HomeViewController extends GetxController
     List audioSourcesToRemove = [];
     for (var tabElement in iOSAudioSources) {
       BrowserTab? tabExist = settings.browserTabs.tabs.firstWhereOrNull(
-          (settingsTab) => settingsTab.id == tabElement.tab.id,);
+        (settingsTab) => settingsTab.id == tabElement.tab.id,
+      );
       if (tabExist == null) {
         audioSourcesToRemove.add(tabElement);
       } else if (!tabExist.toggled || !tabExist.iOSAudioSource) {
@@ -314,7 +322,9 @@ class HomeViewController extends GetxController
 
     // Check if WebTabs have to be added
     for (BrowserTab tab in settings.browserTabs.tabs) {
-      if (!tab.toggled) continue;
+      if (!tab.toggled) {
+        continue;
+      }
       // first we check if the tab already exist
       bool tabExist = tabElements
           .whereType<WebPageView>()
@@ -358,8 +368,10 @@ class HomeViewController extends GetxController
     List<ChatGroup> settingsGroups =
         settings.chatSettings.copyWith().chatGroups;
     List<ChatGroup> groupsToRemove = groupsViews
-        .where((groupView) => !settingsGroups
-            .any((sGroup) => sGroup.id == groupView.chatGroup.id),)
+        .where(
+          (groupView) => !settingsGroups
+              .any((sGroup) => sGroup.id == groupView.chatGroup.id),
+        )
         .map((groupView) => groupView.chatGroup)
         .toList();
     for (var group in groupsToRemove) {
@@ -375,8 +387,10 @@ class HomeViewController extends GetxController
 
     // 2. Find the groups that are in the settings but not in the groupsViews to add them
     List<ChatGroup> groupsToAdd = settingsGroups
-        .where((sGroup) => !groupsViews
-            .any((groupView) => groupView.chatGroup.id == sGroup.id),)
+        .where(
+          (sGroup) => !groupsViews
+              .any((groupView) => groupView.chatGroup.id == sGroup.id),
+        )
         .toList();
     for (var group in groupsToAdd) {
       ChatView groupView = ChatView(
@@ -391,7 +405,8 @@ class HomeViewController extends GetxController
         settings.chatSettings.permanentFirstGroup.copyWith();
     // if the permanentFirstGroup is not in the channels, we add it
     if (!chatsViews.any(
-        (groupView) => groupView.chatGroup.id == permanentFirstGroup?.id,)) {
+      (groupView) => groupView.chatGroup.id == permanentFirstGroup?.id,
+    )) {
       // We add the Twitch Chat of the user to the first position of the channels of this group
       List<Channel> updatedChannels = List.from(permanentFirstGroup.channels);
       updatedChannels.insert(
@@ -446,7 +461,9 @@ class HomeViewController extends GetxController
   }
 
   void sendChatMessage(String message, String channel) {
-    if (twitchData == null) return;
+    if (twitchData == null) {
+      return;
+    }
 
     TwitchChat twitchChat = TwitchChat(
       channel,

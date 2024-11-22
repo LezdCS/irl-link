@@ -28,17 +28,21 @@ class LoginViewController extends GetxController {
 
   @override
   Future<void> onInit() async {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-    ),);
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+      ),
+    );
 
     super.onInit();
   }
 
   @override
   Future<void> onReady() async {
-    await Future.doWhile(() =>
-        Future.delayed(const Duration(seconds: 2)).then((_) => hasNoNetwork()),);
+    await Future.doWhile(
+      () => Future.delayed(const Duration(seconds: 2))
+          .then((_) => hasNoNetwork()),
+    );
 
     DataState<TwitchCredentials> twitchCredsResult =
         await getTwitchLocalUseCase();

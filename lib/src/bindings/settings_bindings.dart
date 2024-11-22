@@ -26,10 +26,12 @@ class SettingsBindings extends Bindings {
     LogoutUseCase logoutUseCase = LogoutUseCase(twitchRepository);
     StreamElementsLoginUseCase streamElementsLoginUseCase =
         StreamElementsLoginUseCase(
-            streamelementsRepository: streamelementsRepository,);
+      streamelementsRepository: streamelementsRepository,
+    );
     StreamElementsDisconnectUseCase streamElementsDisconnectUseCase =
         StreamElementsDisconnectUseCase(
-            streamelementsRepository: streamelementsRepository,);
+      streamelementsRepository: streamelementsRepository,
+    );
 
     Get.lazyPut<SettingsViewController>(
       () => SettingsViewController(

@@ -37,7 +37,8 @@ void main() async {
 // The callback function should always be a top-level function.
 @pragma('vm:entry-point')
 void startCallback() {
-  // The setTaskHandler function must be called to handle the task in the background.
+  // The setTaskHandler function must be called to handle the task
+  //in the background.
   FlutterForegroundTask.setTaskHandler(RealtimeIrlTaskHandler());
 }
 
@@ -73,12 +74,14 @@ class Main extends StatelessWidget {
       talkerService.talker.error(text);
     } else {
       if (text.startsWith('Instance')) {
-        talkerService.talker.logTyped(GetxInstanceLog(text, false));
+        talkerService.talker
+            .logTyped(GetxInstanceLog(text, isDeleteAction: false));
         return;
       }
       if (text.endsWith('onDelete() called') ||
           text.endsWith('deleted from memory')) {
-        talkerService.talker.logTyped(GetxInstanceLog(text, true));
+        talkerService.talker
+            .logTyped(GetxInstanceLog(text, isDeleteAction: true));
         return;
       }
       if (text.contains('GOING TO ROUTE') || text.contains('CLOSE TO ROUTE')) {

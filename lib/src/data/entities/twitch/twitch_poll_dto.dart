@@ -22,11 +22,13 @@ class TwitchPollDTO with _$TwitchPollDTO {
     PollStatus status = PollStatus.active;
 
     ChoiceDTO c;
-    map['choices'].forEach((choice) => {
-          c = ChoiceDTO.fromJson(choice),
-          choices.add(c),
-          totalVotes += c.votes,
-        },);
+    map['choices'].forEach(
+      (choice) => {
+        c = ChoiceDTO.fromJson(choice),
+        choices.add(c),
+        totalVotes += c.votes,
+      },
+    );
 
     switch (map["status"]) {
       case "completed":
@@ -58,5 +60,6 @@ class ChoiceDTO with _$ChoiceDTO {
     @Default(0) int votes,
   }) = _ChoiceDTO;
 
-  factory ChoiceDTO.fromJson(Map<String, dynamic> json) => _$ChoiceDTOFromJson(json);
+  factory ChoiceDTO.fromJson(Map<String, dynamic> json) =>
+      _$ChoiceDTOFromJson(json);
 }

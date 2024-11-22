@@ -59,30 +59,30 @@ class Settings {
     required this.ttsSettings,
   });
 
-  Settings copyWith(
-          {
-          //CHAT
-          bool? isEmotes,
-          double? textSize,
-          bool? displayTimestamp,
-          bool? alternateChannel,
-          String? alternateChannelName,
-          List? hiddenUsersIds,
-          ChatEventsSettings? chatEventsSettings,
-          ChatSettings? chatSettings,
-          //GENERAL
-          GeneralSettings? generalSettings,
-          DashboardSettings? dashboardSettings,
-          //CONNECTIONS
-          bool? isObsConnected,
-          String? obsWebsocketUrl,
-          String? obsWebsocketPassword,
-          BrowserTabSettings? browserTabs,
-          List? obsConnectionsHistory,
-          StreamElementsSettings? streamElementsSettings,
-          String? rtIrlPushKey,
-          //TTS
-          TtsSettings? ttsSettings,}) =>
+  Settings copyWith({
+    //CHAT
+    bool? isEmotes,
+    double? textSize,
+    bool? displayTimestamp,
+    bool? alternateChannel,
+    String? alternateChannelName,
+    List? hiddenUsersIds,
+    ChatEventsSettings? chatEventsSettings,
+    ChatSettings? chatSettings,
+    //GENERAL
+    GeneralSettings? generalSettings,
+    DashboardSettings? dashboardSettings,
+    //CONNECTIONS
+    bool? isObsConnected,
+    String? obsWebsocketUrl,
+    String? obsWebsocketPassword,
+    BrowserTabSettings? browserTabs,
+    List? obsConnectionsHistory,
+    StreamElementsSettings? streamElementsSettings,
+    String? rtIrlPushKey,
+    //TTS
+    TtsSettings? ttsSettings,
+  }) =>
       Settings(
         //CHAT
         isEmotes: isEmotes ?? this.isEmotes,

@@ -41,7 +41,11 @@ class ManageListBrowserTabs extends GetView<SettingsViewController> {
                 ReorderableListView.builder(
                   shrinkWrap: true,
                   padding: const EdgeInsets.only(
-                      top: 8, left: 18, right: 18, bottom: 8,),
+                    top: 8,
+                    left: 18,
+                    right: 18,
+                    bottom: 8,
+                  ),
                   itemCount: settings.browserTabs.tabs.length,
                   onReorder: (int oldIndex, int newIndex) {
                     if (newIndex > oldIndex) {
@@ -165,7 +169,9 @@ class ManageListBrowserTabs extends GetView<SettingsViewController> {
 }
 
 Widget _addGroupButton(
-    BuildContext context, SettingsViewController controller,) {
+  BuildContext context,
+  SettingsViewController controller,
+) {
   return InkWell(
     onTap: () {
       Get.defaultDialog(

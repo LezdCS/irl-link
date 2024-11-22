@@ -18,7 +18,8 @@ class StreamElementsSettingsDTO with _$StreamElementsSettingsDTO {
     @Default([]) List<String> mutedOverlays,
   }) = _StreamElementsSettingsDTO;
 
-  factory StreamElementsSettingsDTO.blank() => const StreamElementsSettingsDTO(jwt: null, overlayToken: null);
-  factory StreamElementsSettingsDTO.fromJson(Map<String, dynamic> json) => _$StreamElementsSettingsDTOFromJson(json);
-
+  factory StreamElementsSettingsDTO.blank() =>
+      const StreamElementsSettingsDTO(jwt: null, overlayToken: null);
+  factory StreamElementsSettingsDTO.fromJson(Map<String, dynamic> json) =>
+      _$StreamElementsSettingsDTOFromJson(json);
 }

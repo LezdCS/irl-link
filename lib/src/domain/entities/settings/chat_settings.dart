@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 

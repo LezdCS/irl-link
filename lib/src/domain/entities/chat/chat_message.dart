@@ -24,7 +24,6 @@ enum Platform {
   youtube,
 }
 
-// ignore: must_be_immutable
 class ChatMessage {
   final String id;
   final String authorId;
@@ -152,7 +151,9 @@ class ChatMessage {
       return ChatMessage.kickSub(message as KickSubscription, channelId);
     } else if (message.event == TypeEvent.giftedSubscriptionsEvent) {
       return ChatMessage.kickSubGift(
-          message as KickGiftedSubscriptions, channelId);
+        message as KickGiftedSubscriptions,
+        channelId,
+      );
     } else if (message.event == TypeEvent.streamHostEvent) {
       return ChatMessage.kickHost(message as KickStreamHost, channelId);
     }
@@ -298,8 +299,8 @@ class ChatMessage {
 
       //implements
       raidingChannelName: '',
-      giftedName: sub
-          .data.giftedUsernames.first, //TODO: handle multiple usernames gifted
+      giftedName: sub.data.giftedUsernames
+          .first, // TODO(LezdCS): Handle multiple usernames gifted
       highlightType: null,
       isGift: true,
       months: '',

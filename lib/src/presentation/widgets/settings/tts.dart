@@ -88,7 +88,9 @@ class Tts extends StatelessWidget {
                           };
                           settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings.copyWith(
-                                language: value.toString(), voice: voice,),
+                              language: value.toString(),
+                              voice: voice,
+                            ),
                           );
                           await settingsService.saveSettings();
                           ttsService.updateSettings(settings);
@@ -105,47 +107,49 @@ class Tts extends StatelessWidget {
                       ),
                     ],
                   ),
-                  if (Platform.isAndroid) Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "voice".tr,
-                              style: const TextStyle(
-                                fontSize: 18,
+                  if (Platform.isAndroid)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "voice".tr,
+                          style: const TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                        DropdownButton(
+                          value: ttsService.ttsVoices.firstWhereOrNull(
+                            (element) =>
+                                element["name"] ==
+                                settings.ttsSettings.voice["name"],
+                          ),
+                          hint: const Text("Select a voice"),
+                          onChanged: (Object? value) async {
+                            Map<String, String> voice = {
+                              "name": (value as Map)["name"],
+                              "locale": value["locale"],
+                            };
+                            settingsService.settings.value = settings.copyWith(
+                              ttsSettings:
+                                  settings.ttsSettings.copyWith(voice: voice),
+                            );
+                            await settingsService.saveSettings();
+                            ttsService.updateSettings(settings);
+                          },
+                          items: List.generate(
+                            ttsVoicesFiltered.length,
+                            (index) => DropdownMenuItem(
+                              value: ttsVoicesFiltered[index],
+                              child: Text(
+                                ttsVoicesFiltered[index]["name"],
                               ),
                             ),
-                            DropdownButton(
-                              value: ttsService.ttsVoices.firstWhereOrNull(
-                                (element) =>
-                                    element["name"] ==
-                                    settings.ttsSettings.voice["name"],
-                              ),
-                              hint: const Text("Select a voice"),
-                              onChanged: (Object? value) async {
-                                Map<String, String> voice = {
-                                  "name": (value as Map)["name"],
-                                  "locale": value["locale"],
-                                };
-                                settingsService.settings.value =
-                                    settings.copyWith(
-                                  ttsSettings: settings.ttsSettings
-                                      .copyWith(voice: voice),
-                                );
-                                await settingsService.saveSettings();
-                                ttsService.updateSettings(settings);
-                              },
-                              items: List.generate(
-                                ttsVoicesFiltered.length,
-                                (index) => DropdownMenuItem(
-                                  value: ttsVoicesFiltered[index],
-                                  child: Text(
-                                    ttsVoicesFiltered[index]["name"],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ) else Container(),
+                          ),
+                        ),
+                      ],
+                    )
+                  else
+                    Container(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -313,8 +317,9 @@ class Tts extends StatelessWidget {
                           settings.ttsSettings.prefixsToIgnore.removeAt(index);
                           settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings.copyWith(
-                                prefixsToIgnore:
-                                    settings.ttsSettings.prefixsToIgnore,),
+                              prefixsToIgnore:
+                                  settings.ttsSettings.prefixsToIgnore,
+                            ),
                           );
                           settingsService.saveSettings();
                           controller.nothingJustToRefreshDialog.refresh();
@@ -323,13 +328,15 @@ class Tts extends StatelessWidget {
                         textFieldController:
                             controller.addTtsIgnoredPrefixsController,
                         onAdd: () {
-                          settings.ttsSettings.prefixsToIgnore.add(controller
-                              .addTtsIgnoredPrefixsController.text
-                              .trim(),);
+                          settings.ttsSettings.prefixsToIgnore.add(
+                            controller.addTtsIgnoredPrefixsController.text
+                                .trim(),
+                          );
                           settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings.copyWith(
-                                prefixsToIgnore:
-                                    settings.ttsSettings.prefixsToIgnore,),
+                              prefixsToIgnore:
+                                  settings.ttsSettings.prefixsToIgnore,
+                            ),
                           );
                           controller.addTtsIgnoredPrefixsController.clear();
                           settingsService.saveSettings();
@@ -382,8 +389,9 @@ class Tts extends StatelessWidget {
                               .removeAt(index);
                           settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings.copyWith(
-                                prefixsToUseTtsOnly:
-                                    settings.ttsSettings.prefixsToUseTtsOnly,),
+                              prefixsToUseTtsOnly:
+                                  settings.ttsSettings.prefixsToUseTtsOnly,
+                            ),
                           );
                           controller.nothingJustToRefreshDialog.refresh();
                           settingsService.saveSettings();
@@ -393,12 +401,14 @@ class Tts extends StatelessWidget {
                             controller.addTtsAllowedPrefixsController,
                         onAdd: () {
                           settings.ttsSettings.prefixsToUseTtsOnly.add(
-                              controller.addTtsAllowedPrefixsController.text
-                                  .trim(),);
+                            controller.addTtsAllowedPrefixsController.text
+                                .trim(),
+                          );
                           settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings.copyWith(
-                                prefixsToUseTtsOnly:
-                                    settings.ttsSettings.prefixsToUseTtsOnly,),
+                              prefixsToUseTtsOnly:
+                                  settings.ttsSettings.prefixsToUseTtsOnly,
+                            ),
                           );
                           controller.nothingJustToRefreshDialog.refresh();
                           controller.addTtsAllowedPrefixsController.clear();
@@ -449,8 +459,9 @@ class Tts extends StatelessWidget {
                           settings.ttsSettings.ttsUsersToIgnore.removeAt(index);
                           settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings.copyWith(
-                                ttsUsersToIgnore:
-                                    settings.ttsSettings.ttsUsersToIgnore,),
+                              ttsUsersToIgnore:
+                                  settings.ttsSettings.ttsUsersToIgnore,
+                            ),
                           );
                           settingsService.saveSettings();
                           controller.nothingJustToRefreshDialog.refresh();
@@ -459,13 +470,14 @@ class Tts extends StatelessWidget {
                         textFieldController:
                             controller.addTtsIgnoredUsersController,
                         onAdd: () {
-                          settings.ttsSettings.ttsUsersToIgnore.add(controller
-                              .addTtsIgnoredUsersController.text
-                              .trim(),);
+                          settings.ttsSettings.ttsUsersToIgnore.add(
+                            controller.addTtsIgnoredUsersController.text.trim(),
+                          );
                           settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings.copyWith(
-                                ttsUsersToIgnore:
-                                    settings.ttsSettings.ttsUsersToIgnore,),
+                              ttsUsersToIgnore:
+                                  settings.ttsSettings.ttsUsersToIgnore,
+                            ),
                           );
                           controller.addTtsIgnoredUsersController.clear();
                           settingsService.saveSettings();

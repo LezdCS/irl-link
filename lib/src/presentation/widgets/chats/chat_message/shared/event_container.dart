@@ -61,15 +61,18 @@ class EventContainer extends StatelessWidget {
               ),
             ],
           ),
-          if (message.message != '') MessageRow(
-                  message: message,
-                  displayTimestamp: displayTimestamp,
-                  textSize: textSize,
-                  hideDeletedMessages: hideDeletedMessages,
-                  cheerEmotes: cheerEmotes,
-                  thirdPartEmotes: thirdPartEmotes,
-                  showPlatformBadge: showPlatformBadge,
-                ) else Container(),
+          if (message.message != '')
+            MessageRow(
+              message: message,
+              displayTimestamp: displayTimestamp,
+              textSize: textSize,
+              hideDeletedMessages: hideDeletedMessages,
+              cheerEmotes: cheerEmotes,
+              thirdPartEmotes: thirdPartEmotes,
+              showPlatformBadge: showPlatformBadge,
+            )
+          else
+            Container(),
         ],
       ),
     );

@@ -99,25 +99,27 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
             },
           ),
         ),
-        PopupMenuItem(child: Obx(
-          () {
-            Settings settings = settingsService.settings.value;
-            return CheckboxListTile(
-              controlAffinity: ListTileControlAffinity.leading,
-              title: Text(
-                "bits".tr,
-              ),
-              value: settings.streamElementsSettings.showCheerActivity,
-              onChanged: (bool? value) {
-                settingsService.settings.value = settings.copyWith(
-                  streamElementsSettings: settings.streamElementsSettings
-                      .copyWith(showCheerActivity: value),
-                );
-                settingsService.saveSettings();
-              },
-            );
-          },
-        ),),
+        PopupMenuItem(
+          child: Obx(
+            () {
+              Settings settings = settingsService.settings.value;
+              return CheckboxListTile(
+                controlAffinity: ListTileControlAffinity.leading,
+                title: Text(
+                  "bits".tr,
+                ),
+                value: settings.streamElementsSettings.showCheerActivity,
+                onChanged: (bool? value) {
+                  settingsService.settings.value = settings.copyWith(
+                    streamElementsSettings: settings.streamElementsSettings
+                        .copyWith(showCheerActivity: value),
+                  );
+                  settingsService.saveSettings();
+                },
+              );
+            },
+          ),
+        ),
         PopupMenuItem(
           child: Obx(
             () {
@@ -186,7 +188,9 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
   }
 
   Widget _activityCollapsed(
-      StreamelementsViewController controller, SeActivity activity,) {
+    StreamelementsViewController controller,
+    SeActivity activity,
+  ) {
     return ExpandableButton(
       child: Container(
         padding: const EdgeInsets.only(left: 3, right: 3, top: 5, bottom: 5),
@@ -241,7 +245,9 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
   }
 
   Widget _activityExpanded(
-      StreamelementsViewController controller, SeActivity activity,) {
+    StreamelementsViewController controller,
+    SeActivity activity,
+  ) {
     return ExpandableButton(
       child: Container(
         padding: const EdgeInsets.only(left: 3, right: 3, top: 5, bottom: 20),
@@ -263,20 +269,22 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                 const SizedBox(width: 4),
                 Expanded(
                   child: Text.rich(
-                    TextSpan(children: [
-                      TextSpan(
-                        text: activity.textFromEnum(),
-                        style: TextStyle(
-                          color: activity.colorsForEnum()[0],
-                          fontWeight: FontWeight.bold,
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: activity.textFromEnum(),
+                          style: TextStyle(
+                            color: activity.colorsForEnum()[0],
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const WidgetSpan(child: SizedBox(width: 4)),
-                      TextSpan(
-                        text: activity.username,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],),
+                        const WidgetSpan(child: SizedBox(width: 4)),
+                        TextSpan(
+                          text: activity.username,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 InkWell(

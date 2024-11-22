@@ -13,18 +13,21 @@ class TwitchCredentialsDTO with _$TwitchCredentialsDTO {
     required String idToken,
     required String refreshToken,
     required String expiresIn,
-    @JsonKey(fromJson: _stringToTwitchDecodedIdTokenDTO) required TwitchDecodedIdTokenDTO decodedIdToken,
-    @JsonKey(fromJson: _stringToTwitchUserDTO) required TwitchUserDTO twitchUser,
+    @JsonKey(fromJson: _stringToTwitchDecodedIdTokenDTO)
+    required TwitchDecodedIdTokenDTO decodedIdToken,
+    @JsonKey(fromJson: _stringToTwitchUserDTO)
+    required TwitchUserDTO twitchUser,
     required String scopes,
   }) = _TwitchCredentialsDTO;
 
-  factory TwitchCredentialsDTO.fromJson(Map<String, dynamic> json) => _$TwitchCredentialsDTOFromJson(json);
+  factory TwitchCredentialsDTO.fromJson(Map<String, dynamic> json) =>
+      _$TwitchCredentialsDTOFromJson(json);
 }
 
 // Because in previous versions of the app, the twitchUser and decodedIdToken were stored as a string
 TwitchDecodedIdTokenDTO _stringToTwitchDecodedIdTokenDTO(json) {
   if (json is String) {
-    return TwitchDecodedIdTokenDTO.fromJson(jsonDecode(json)) ;
+    return TwitchDecodedIdTokenDTO.fromJson(jsonDecode(json));
   } else if (json is Map<String, dynamic>) {
     return TwitchDecodedIdTokenDTO.fromJson(json);
   }
@@ -33,7 +36,7 @@ TwitchDecodedIdTokenDTO _stringToTwitchDecodedIdTokenDTO(json) {
 
 TwitchUserDTO _stringToTwitchUserDTO(json) {
   if (json is String) {
-    return TwitchUserDTO.fromJson(jsonDecode(json)) ;
+    return TwitchUserDTO.fromJson(jsonDecode(json));
   } else if (json is Map<String, dynamic>) {
     return TwitchUserDTO.fromJson(json);
   }

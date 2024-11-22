@@ -17,8 +17,11 @@ class TwitchStreamInfosDto with _$TwitchStreamInfosDto {
     required bool isSubscriberMode,
   }) = _TwitchStreamInfosDto;
 
-  factory TwitchStreamInfosDto.fromJson(Map<String, dynamic> map1,
-      Map<String, dynamic> map2, Map<String, dynamic> map3,) {
+  factory TwitchStreamInfosDto.fromJson(
+    Map<String, dynamic> map1,
+    Map<String, dynamic> map2,
+    Map<String, dynamic> map3,
+  ) {
     DateFormat df = DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     String startedAtRaw =
         map2['data'].length > 0 && map2['data'][0]['started_at'] != null
@@ -33,8 +36,8 @@ class TwitchStreamInfosDto with _$TwitchStreamInfosDto {
           map2['data'].length > 0 && map2['data'][0]['viewer_count'] != null
               ? map2['data'][0]['viewer_count']
               : 0,
-      title: map1['title'] != null ? map1['title'] as String : '',
-      isOnline: map2['data'].length > 0 ? true : false,
+      title: map1['title'] as String? ?? '',
+      isOnline: map2['data'].isNotEmpty,
       startedAtDuration: startedAtDuration,
       isEmoteMode: map3['emote_mode'],
       isFollowerMode: map3['follower_mode'],

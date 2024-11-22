@@ -43,16 +43,20 @@ class ObsSettings extends StatelessWidget {
                     decoration: InputDecoration(
                       isDense: true,
                       contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 7,),
+                        horizontal: 8,
+                        vertical: 7,
+                      ),
                       hintText: 'url',
                       labelText: 'Websocket Url',
                       labelStyle: TextStyle(
                         color: Theme.of(context).colorScheme.tertiary,
                       ),
                       suffixIcon: IconButton(
-                        icon: Icon(controller.obsWebsocketUrlShow.value
-                            ? Icons.visibility
-                            : Icons.visibility_off,),
+                        icon: Icon(
+                          controller.obsWebsocketUrlShow.value
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
                         color: Theme.of(context).primaryIconTheme.color,
                         onPressed: () {
                           controller.obsWebsocketUrlShow.value =
@@ -80,13 +84,17 @@ class ObsSettings extends StatelessWidget {
                     decoration: InputDecoration(
                       isDense: true,
                       contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 7,),
+                        horizontal: 8,
+                        vertical: 7,
+                      ),
                       hintText: 'password',
                       labelText: 'Websocket Password',
                       suffixIcon: IconButton(
-                        icon: Icon(controller.obsWebsocketPasswordShow.value
-                            ? Icons.visibility
-                            : Icons.visibility_off,),
+                        icon: Icon(
+                          controller.obsWebsocketPasswordShow.value
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
                         color: Theme.of(context).primaryIconTheme.color,
                         onPressed: () {
                           controller.obsWebsocketPasswordShow.value =
@@ -271,9 +279,10 @@ class ObsSettings extends StatelessWidget {
               Text(
                 "scan_qr_code".tr,
                 style: const TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                    decoration: TextDecoration.none,),
+                  fontSize: 18,
+                  color: Colors.white,
+                  decoration: TextDecoration.none,
+                ),
               ),
             ],
           ),
@@ -301,7 +310,9 @@ class ObsSettings extends StatelessWidget {
               controller.obsWebsocketUrlFieldController.text = url;
               controller.obsWebsocketPasswordFieldController.text = password;
               settingsService.settings.value = settings.copyWith(
-                  obsWebsocketUrl: url, obsWebsocketPassword: password,);
+                obsWebsocketUrl: url,
+                obsWebsocketPassword: password,
+              );
               settingsService.saveSettings();
               Get.back();
             },

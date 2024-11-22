@@ -41,7 +41,7 @@ class WatchService extends GetxService {
       case "sendToggleObsSourceToFlutter":
         _obsController.setSourceVisibleState(
           data['sourceItemId'],
-          data['sceneItemEnabled'],
+          sceneItemEnabled: data['sceneItemEnabled'],
         );
         break;
     }
@@ -58,7 +58,9 @@ class WatchService extends GetxService {
     }
   }
 
-  Future<void> sendUpdateObsConnecteToNative(bool isConnected) async {
+  Future<void> sendUpdateObsConnecteToNative({
+    required bool isConnected,
+  }) async {
     try {
       await _channel.invokeMethod("flutterToWatch", {
         "method": "sendUpdateObsConnecteToNative",
@@ -102,7 +104,7 @@ class WatchService extends GetxService {
     }
   }
 
-  Future<void> sendSeConnectedToNative(bool isConnected) async {
+  Future<void> sendSeConnectedToNative({required bool isConnected}) async {
     try {
       await _channel.invokeMethod("flutterToWatch", {
         "method": "sendSeConnectedToNative",
@@ -135,7 +137,7 @@ class WatchService extends GetxService {
     }
   }
 
-  Future<void> sendLiveStatusToNative(bool isLive) async {
+  Future<void> sendLiveStatusToNative({required bool isLive}) async {
     try {
       await _channel.invokeMethod("flutterToWatch", {
         "method": "sendLiveStatusToNative",

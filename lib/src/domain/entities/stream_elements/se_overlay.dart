@@ -9,5 +9,4 @@ class SeOverlay {
     required this.id,
     required this.name,
   });
-
 }

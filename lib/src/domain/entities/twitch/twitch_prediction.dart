@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 enum PredictionStatus {
   empty,
   resolved,

@@ -122,9 +122,13 @@ class SettingsView extends GetView<SettingsViewController> {
     );
   }
 
-  Widget chatSettings(BuildContext context, double width,
-      SettingsService settingsService, Rx<Settings> settings,) {
-    return Container(
+  Widget chatSettings(
+    BuildContext context,
+    double width,
+    SettingsService settingsService,
+    Rx<Settings> settings,
+  ) {
+    return ColoredBox(
       color: Theme.of(context).colorScheme.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,7 +136,9 @@ class SettingsView extends GetView<SettingsViewController> {
           Text(
             "chat".tr,
             style: TextStyle(
-                color: Theme.of(context).colorScheme.tertiary, fontSize: 20,),
+              color: Theme.of(context).colorScheme.tertiary,
+              fontSize: 20,
+            ),
           ),
           Container(
             padding: const EdgeInsets.only(left: 4, right: 4),
@@ -165,8 +171,10 @@ class SettingsView extends GetView<SettingsViewController> {
                       "text_size".tr,
                       style: const TextStyle(fontSize: 18),
                     ),
-                    Text(settings.value.textSize.ceil().toString(),
-                        style: const TextStyle(fontSize: 18),),
+                    Text(
+                      settings.value.textSize.ceil().toString(),
+                      style: const TextStyle(fontSize: 18),
+                    ),
                     Slider(
                       onChanged: (value) {
                         settingsService.settings.value =
@@ -206,10 +214,11 @@ class SettingsView extends GetView<SettingsViewController> {
                     ),
                     Switch(
                       onChanged: (value) {
-                        settingsService.settings.value = settings.value
-                            .copyWith(
-                                chatSettings: settings.value.chatSettings
-                                    .copyWith(hideDeletedMessages: value),);
+                        settingsService.settings.value =
+                            settings.value.copyWith(
+                          chatSettings: settings.value.chatSettings
+                              .copyWith(hideDeletedMessages: value),
+                        );
 
                         settingsService.saveSettings();
                       },
@@ -269,9 +278,13 @@ class SettingsView extends GetView<SettingsViewController> {
     );
   }
 
-  Widget generalSettings(BuildContext context, double width,
-      SettingsService settingsService, Rx<Settings> settings,) {
-    return Container(
+  Widget generalSettings(
+    BuildContext context,
+    double width,
+    SettingsService settingsService,
+    Rx<Settings> settings,
+  ) {
+    return ColoredBox(
       color: Theme.of(context).colorScheme.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -279,7 +292,9 @@ class SettingsView extends GetView<SettingsViewController> {
           Text(
             "general".tr,
             style: TextStyle(
-                color: Theme.of(context).colorScheme.tertiary, fontSize: 20,),
+              color: Theme.of(context).colorScheme.tertiary,
+              fontSize: 20,
+            ),
           ),
           Container(
             padding: const EdgeInsets.only(left: 4, right: 4),
@@ -377,11 +392,13 @@ class SettingsView extends GetView<SettingsViewController> {
                       ),
                     ),
                     DropdownButton(
-                      value: supportedLanguages.firstWhereOrNull((element) =>
-                              element['languageCode'] ==
-                                  Get.locale!.languageCode &&
-                              element['countryCode'] ==
-                                  Get.locale!.countryCode,) ??
+                      value: supportedLanguages.firstWhereOrNull(
+                            (element) =>
+                                element['languageCode'] ==
+                                    Get.locale!.languageCode &&
+                                element['countryCode'] ==
+                                    Get.locale!.countryCode,
+                          ) ??
                           supportedLanguages[0],
                       items: List.generate(
                         supportedLanguages.length,
@@ -392,16 +409,20 @@ class SettingsView extends GetView<SettingsViewController> {
                       ),
                       onChanged: (value) {
                         Locale locale = Locale(
-                            value!['languageCode']!, value['countryCode'],);
+                          value!['languageCode']!,
+                          value['countryCode'],
+                        );
                         Get.updateLocale(locale);
 
                         settingsService.settings.value =
                             settings.value.copyWith(
-                          generalSettings: settings.value.generalSettings
-                              .copyWith(appLanguage: {
-                            "languageCode": value['languageCode'],
-                            "countryCode": value['countryCode'],
-                          },),
+                          generalSettings:
+                              settings.value.generalSettings.copyWith(
+                            appLanguage: {
+                              "languageCode": value['languageCode'],
+                              "countryCode": value['countryCode'],
+                            },
+                          ),
                         );
                         settingsService.saveSettings();
                       },
@@ -416,9 +437,13 @@ class SettingsView extends GetView<SettingsViewController> {
     );
   }
 
-  Widget connectionsSettings(BuildContext context, double width,
-      SettingsService settingsService, Rx<Settings> settings,) {
-    return Container(
+  Widget connectionsSettings(
+    BuildContext context,
+    double width,
+    SettingsService settingsService,
+    Rx<Settings> settings,
+  ) {
+    return ColoredBox(
       color: Theme.of(context).colorScheme.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -426,7 +451,9 @@ class SettingsView extends GetView<SettingsViewController> {
           Text(
             "connections_tabs".tr,
             style: TextStyle(
-                color: Theme.of(context).colorScheme.tertiary, fontSize: 20,),
+              color: Theme.of(context).colorScheme.tertiary,
+              fontSize: 20,
+            ),
           ),
           Container(
             padding: const EdgeInsets.only(left: 4, right: 4),
@@ -481,7 +508,7 @@ class SettingsView extends GetView<SettingsViewController> {
   }
 
   Widget contactSettings(BuildContext context, double width) {
-    return Container(
+    return ColoredBox(
       color: Theme.of(context).colorScheme.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -489,7 +516,9 @@ class SettingsView extends GetView<SettingsViewController> {
           Text(
             "contact".tr,
             style: TextStyle(
-                color: Theme.of(context).colorScheme.tertiary, fontSize: 20,),
+              color: Theme.of(context).colorScheme.tertiary,
+              fontSize: 20,
+            ),
           ),
           Container(
             padding: const EdgeInsets.only(left: 4, right: 4, top: 10),
@@ -589,8 +618,12 @@ class SettingsView extends GetView<SettingsViewController> {
     );
   }
 
-  Widget settingsGoToRow(BuildContext context, String title, IconData icon,
-      Function goToFunction,) {
+  Widget settingsGoToRow(
+    BuildContext context,
+    String title,
+    IconData icon,
+    Function goToFunction,
+  ) {
     return InkWell(
       onTap: () async {
         goToFunction();

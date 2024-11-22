@@ -28,7 +28,7 @@ class TwitchStreamInfos {
     this.title = "",
     this.viewerCount = 0,
     this.isOnline = false,
-    this.startedAtDuration = const Duration(),
+    this.startedAtDuration = Duration.zero,
     this.isEmoteMode = false,
     this.isFollowerMode = false,
     this.isSlowMode = false,
@@ -58,6 +58,4 @@ class TwitchStreamInfos {
         isSlowMode: isSlowMode ?? this.isSlowMode,
         slowModeWaitTime: slowModeWaitTime ?? this.slowModeWaitTime,
       );
-
-  
 }

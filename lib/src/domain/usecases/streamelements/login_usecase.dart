@@ -11,8 +11,9 @@ class StreamElementsLoginUseCase
   StreamElementsLoginUseCase({required this.streamelementsRepository});
 
   @override
-  Future<DataState<SeCredentials>> call(
-      {required StreamelementsAuthParams params,}) {
+  Future<DataState<SeCredentials>> call({
+    required StreamelementsAuthParams params,
+  }) {
     return streamelementsRepository.login(params);
   }
 }

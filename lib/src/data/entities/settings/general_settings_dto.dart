@@ -9,11 +9,13 @@ class GeneralSettingsDTO with _$GeneralSettingsDTO {
     @Default(true) bool isDarkMode,
     @Default(true) bool keepSpeakerOn,
     @Default(true) bool displayViewerCount,
-    @Default({"languageCode": "en", "countryCode": "US"}) Map<dynamic, dynamic> appLanguage,
+    @Default({"languageCode": "en", "countryCode": "US"})
+    Map<dynamic, dynamic> appLanguage,
     @Default([0.5, 0.5]) List<double> splitViewWeights,
   }) = _GeneralSettingsDTO;
   const GeneralSettingsDTO._();
 
   factory GeneralSettingsDTO.blank() => const GeneralSettingsDTO();
-  factory GeneralSettingsDTO.fromJson(Map<String, dynamic> json) => _$GeneralSettingsDTOFromJson(json);
+  factory GeneralSettingsDTO.fromJson(Map<String, dynamic> json) =>
+      _$GeneralSettingsDTOFromJson(json);
 }

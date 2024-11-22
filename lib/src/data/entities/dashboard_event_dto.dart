@@ -16,7 +16,8 @@ class DashboardEventDTO with _$DashboardEventDTO {
     required customValue,
   }) = _DashboardEventDTO;
 
- factory DashboardEventDTO.fromJson(Map<String, dynamic> json) => _$DashboardEventDTOFromJson(json);
+  factory DashboardEventDTO.fromJson(Map<String, dynamic> json) =>
+      _$DashboardEventDTOFromJson(json);
 }
 
 class ColorConverter implements JsonConverter<Color, int> {

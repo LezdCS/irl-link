@@ -89,7 +89,6 @@ class ChatViewController extends GetxController
   @override
   void onClose() {
     Get.find<TtsService>().flutterTts.stop();
-    super.onDelete;
     super.onClose();
   }
 
@@ -157,7 +156,9 @@ class ChatViewController extends GetxController
       kTwitchAuthClientId,
     );
 
-    if (twitchData == null) message.isDeleted = true;
+    if (twitchData == null) {
+      message.isDeleted = true;
+    }
     homeViewController.selectedMessage.value = null;
   }
 
@@ -188,7 +189,9 @@ class ChatViewController extends GetxController
 
   /// Hide every future messages from an user (only on this application, not on Twitch)
   void hideUser(ChatMessage message) {
-    if (twitchData == null) return;
+    if (twitchData == null) {
+      return;
+    }
     Settings settings = settingsService.settings.value;
 
     List hiddenUsersIds =
@@ -285,22 +288,28 @@ class ChatViewController extends GetxController
 
     // Remove
     List<TwitchChat> twitchChatToRemove = twitchChats
-        .where((tc) =>
-            twitchChannels
-                .firstWhereOrNull((tCa) => tCa.channel == tc.channel) ==
-            null,)
+        .where(
+          (tc) =>
+              twitchChannels
+                  .firstWhereOrNull((tCa) => tCa.channel == tc.channel) ==
+              null,
+        )
         .toList();
     List<KickChat> kickChatToRemove = kickChats
-        .where((kc) =>
-            kickChannels
-                .firstWhereOrNull((kCa) => kCa.channel == kc.username) ==
-            null,)
+        .where(
+          (kc) =>
+              kickChannels
+                  .firstWhereOrNull((kCa) => kCa.channel == kc.username) ==
+              null,
+        )
         .toList();
     List<YoutubeChat> youtubeChatToRemove = youtubeChats
-        .where((yc) =>
-            youtubeChannels
-                .firstWhereOrNull((yCa) => yCa.channel == yc.videoId) ==
-            null,)
+        .where(
+          (yc) =>
+              youtubeChannels
+                  .firstWhereOrNull((yCa) => yCa.channel == yc.videoId) ==
+              null,
+        )
         .toList();
 
     for (TwitchChat t in twitchChatToRemove) {

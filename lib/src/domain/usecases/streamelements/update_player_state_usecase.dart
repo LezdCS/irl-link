@@ -17,12 +17,16 @@ class StreamElementsUpdatePlayerStateUseCase
     implements UseCase<void, StreamElementsUpdatePlayerStateParams> {
   final StreamelementsRepository streamelementsRepository;
 
-  StreamElementsUpdatePlayerStateUseCase(
-      {required this.streamelementsRepository,});
+  StreamElementsUpdatePlayerStateUseCase({
+    required this.streamelementsRepository,
+  });
 
   @override
   Future<void> call({required StreamElementsUpdatePlayerStateParams params}) {
     return streamelementsRepository.updatePlayerState(
-        params.token, params.channel, params.state,);
+      params.token,
+      params.channel,
+      params.state,
+    );
   }
 }

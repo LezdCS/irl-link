@@ -48,29 +48,41 @@ class HomeBindings extends Bindings {
     final setChatSettingsUseCase = SetChatSettingsUseCase(twitchRepository);
     final setStreamTitleUseCase = SetStreamTitleUseCase(twitchRepository);
     final getOverlaysUseCase = StreamElementsGetOverlaysUseCase(
-        streamelementsRepository: streamelementsRepository,);
+      streamelementsRepository: streamelementsRepository,
+    );
     final getMeUseCase = StreamElementsGetMeUseCase(
-        streamelementsRepository: streamelementsRepository,);
+      streamelementsRepository: streamelementsRepository,
+    );
     final getLocalCredentialsUseCase = StreamElementsGetLocalCredentialsUseCase(
-        streamelementsRepository: streamelementsRepository,);
+      streamelementsRepository: streamelementsRepository,
+    );
     final refreshTokenUseCase = StreamElementsRefreshTokenUseCase(
-        streamelementsRepository: streamelementsRepository,);
+      streamelementsRepository: streamelementsRepository,
+    );
     final replayActivityUseCase = StreamElementsReplayActivityUseCase(
-        streamelementsRepository: streamelementsRepository,);
+      streamelementsRepository: streamelementsRepository,
+    );
     final nextSongUseCase = StreamElementsNextSongUseCase(
-        streamelementsRepository: streamelementsRepository,);
+      streamelementsRepository: streamelementsRepository,
+    );
     final removeSongUseCase = StreamElementsRemoveSongUseCase(
-        streamelementsRepository: streamelementsRepository,);
+      streamelementsRepository: streamelementsRepository,
+    );
     final resetQueueUseCase = StreamElementsResetQueueUseCase(
-        streamelementsRepository: streamelementsRepository,);
+      streamelementsRepository: streamelementsRepository,
+    );
     final updatePlayerStateUseCase = StreamElementsUpdatePlayerStateUseCase(
-        streamelementsRepository: streamelementsRepository,);
+      streamelementsRepository: streamelementsRepository,
+    );
     final getLastActivitiesUseCase = StreamElementsGetLastActivitiesUseCase(
-        streamelementsRepository: streamelementsRepository,);
+      streamelementsRepository: streamelementsRepository,
+    );
     final getSongPlayingUseCase = StreamElementsGetSongPlayingUseCase(
-        streamelementsRepository: streamelementsRepository,);
+      streamelementsRepository: streamelementsRepository,
+    );
     final getSongQueueUseCase = StreamElementsGetSongQueueUseCase(
-        streamelementsRepository: streamelementsRepository,);
+      streamelementsRepository: streamelementsRepository,
+    );
 
     Get.lazyPut<HomeViewController>(
       () => HomeViewController(
@@ -121,11 +133,12 @@ class HomeBindings extends Bindings {
     );
 
     Get.lazyPut<DashboardController>(
-        () => DashboardController(
-              homeViewController: Get.find<HomeViewController>(),
-              settingsService: settingsService,
-            ),
-        fenix: true,);
+      () => DashboardController(
+        homeViewController: Get.find<HomeViewController>(),
+        settingsService: settingsService,
+      ),
+      fenix: true,
+    );
     Get.lazyPut<RealtimeIrlViewController>(
       () => RealtimeIrlViewController(),
       fenix: true,

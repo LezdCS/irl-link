@@ -36,13 +36,14 @@ class SettingsDTO with _$SettingsDTO {
   }) = _SettingsDTO;
 
   factory SettingsDTO.blank() => SettingsDTO(
-    browserTabs: BrowserTabSettingsDTO.blank(),
-    chatEventsSettings: ChatEventsSettingsDTO.blank(),
-    chatSettings: ChatSettingsDTO.blank(),
-    dashboardSettings: DashboardSettingsDTO.blank(),
-    generalSettings: GeneralSettingsDTO.blank(),
-    streamElementsSettings: StreamElementsSettingsDTO.blank(),
-    ttsSettings: TtsSettingsDTO.blank(),
-  );
-  factory SettingsDTO.fromJson(Map<String, dynamic> json) => _$SettingsDTOFromJson(json);
+        browserTabs: BrowserTabSettingsDTO.blank(),
+        chatEventsSettings: ChatEventsSettingsDTO.blank(),
+        chatSettings: ChatSettingsDTO.blank(),
+        dashboardSettings: DashboardSettingsDTO.blank(),
+        generalSettings: GeneralSettingsDTO.blank(),
+        streamElementsSettings: StreamElementsSettingsDTO.blank(),
+        ttsSettings: TtsSettingsDTO.blank(),
+      );
+  factory SettingsDTO.fromJson(Map<String, dynamic> json) =>
+      _$SettingsDTOFromJson(json);
 }

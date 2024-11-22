@@ -64,7 +64,7 @@ Widget poll(
                     animation: true,
                     animateFromLastPercent: true,
                     barRadius: const Radius.circular(8),
-                    padding: const EdgeInsets.symmetric(),
+                    padding: EdgeInsets.zero,
                     lineHeight: 20,
                     percent: percentage,
                     backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -83,14 +83,14 @@ Widget poll(
           ),
           Obx(
             () => Text(
-                  "ends_in".trParams(
-                    {
-                      "time": printDuration(Get.find<TwitchEventSubService>()
-                          .remainingTimePoll
-                          .value,),
-                    },
+              "ends_in".trParams(
+                {
+                  "time": printDuration(
+                    Get.find<TwitchEventSubService>().remainingTimePoll.value,
                   ),
-                ),
+                },
+              ),
+            ),
           ),
           Visibility(
             visible: poll.status == PollStatus.active,

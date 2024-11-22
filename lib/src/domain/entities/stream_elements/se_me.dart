@@ -13,5 +13,4 @@ class SeMe {
     required this.username,
     required this.displayName,
   });
-
 }

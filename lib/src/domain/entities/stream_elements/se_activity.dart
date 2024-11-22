@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 enum ActivityType {
@@ -104,7 +103,7 @@ class SeActivity {
         break;
       case ActivityType.subscription:
         bool isPrime = tier == "prime";
-        bool isGift = gifted == true;
+        bool isGift = gifted ?? false;
         if (isGift) {
           s = 'Got gifted a sub by $sender';
         } else {

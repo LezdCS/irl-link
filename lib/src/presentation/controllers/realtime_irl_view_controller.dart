@@ -46,9 +46,7 @@ class RealtimeIrlViewController extends GetxController {
         channelImportance: NotificationChannelImportance.LOW,
         priority: NotificationPriority.LOW,
       ),
-      iosNotificationOptions: const IOSNotificationOptions(
-        
-      ),
+      iosNotificationOptions: const IOSNotificationOptions(),
       foregroundTaskOptions: ForegroundTaskOptions(
         eventAction: ForegroundTaskEventAction.repeat(5000),
       ),
@@ -64,9 +62,10 @@ class RealtimeIrlViewController extends GetxController {
         notificationTitle: 'IRL Link',
         notificationText: 'Your location is being shared with RealtimeIRL.',
         notificationIcon: const NotificationIconData(
-            resType: ResourceType.drawable,
-            resPrefix: ResourcePrefix.ic,
-            name: 'bg_service_small',),
+          resType: ResourceType.drawable,
+          resPrefix: ResourcePrefix.ic,
+          name: 'bg_service_small',
+        ),
         notificationButtons: [
           const NotificationButton(id: 'rtirl_stop', text: 'Stop sharing'),
         ],

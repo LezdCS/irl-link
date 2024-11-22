@@ -21,8 +21,9 @@ class StreamElementsGetOverlaysUseCase
   StreamElementsGetOverlaysUseCase({required this.streamelementsRepository});
 
   @override
-  Future<DataState<List<SeOverlay>>> call(
-      {required StreamElementsGetOverlaysParams params,}) {
+  Future<DataState<List<SeOverlay>>> call({
+    required StreamElementsGetOverlaysParams params,
+  }) {
     return streamelementsRepository.getOverlays(params.token, params.channel);
   }
 }

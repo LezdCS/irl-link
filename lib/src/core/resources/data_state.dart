@@ -1,5 +1,3 @@
-
-
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
 

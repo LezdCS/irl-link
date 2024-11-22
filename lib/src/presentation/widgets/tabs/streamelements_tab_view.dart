@@ -31,9 +31,7 @@ class StreamelementsTabView extends GetView<StreamelementsViewController> {
                   child: TabBar(
                     controller: controller.tabController,
                     isScrollable: true,
-                    indicator: const BoxDecoration(
-                      
-                    ),
+                    indicator: const BoxDecoration(),
                     tabAlignment: TabAlignment.center,
                     tabs: tabsTiles,
                   ),

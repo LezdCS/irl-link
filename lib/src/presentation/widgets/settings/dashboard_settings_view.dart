@@ -136,9 +136,10 @@ class DashboardSettingsView extends GetView<DashboardController> {
 }
 
 Widget _addGroupButton(
-    BuildContext context,
-    DashboardController dashboardController,
-    SettingsViewController settingsViewController,) {
+  BuildContext context,
+  DashboardController dashboardController,
+  SettingsViewController settingsViewController,
+) {
   return InkWell(
     onTap: () {
       Get.defaultDialog(
@@ -222,9 +223,12 @@ Widget _addDialog(context, DashboardController dashboardController) {
                 child: Row(
                   children: [
                     icon ?? const SizedBox(),
-                    if (icon != null) const SizedBox(
-                            width: 8,
-                          ) else const SizedBox(),
+                    if (icon != null)
+                      const SizedBox(
+                        width: 8,
+                      )
+                    else
+                      const SizedBox(),
                     Text(
                       getSupportedEventString(event),
                     ),
@@ -240,10 +244,11 @@ Widget _addDialog(context, DashboardController dashboardController) {
             },
             onChanged: (obj) {
               selectedEvent.value = obj as SupportedEvents;
-              selectedType = dashboardEvents[dashboardEvents.keys
-                      .firstWhereOrNull(
-                          (element) => element == selectedEvent.value,)]
-                  ?.actionsAllowed[0];
+              selectedType =
+                  dashboardEvents[dashboardEvents.keys.firstWhereOrNull(
+                (element) => element == selectedEvent.value,
+              )]
+                      ?.actionsAllowed[0];
             },
           ),
           const SizedBox(
@@ -255,10 +260,12 @@ Widget _addDialog(context, DashboardController dashboardController) {
               isExpanded: true,
               hint: Text("type_input".tr),
               value: dashboardEvents[dashboardEvents.keys.firstWhereOrNull(
-                      (element) => element == selectedEvent.value,)]
+                (element) => element == selectedEvent.value,
+              )]
                   ?.actionsAllowed[0],
               items: dashboardEvents[dashboardEvents.keys.firstWhereOrNull(
-                      (element) => element == selectedEvent.value,)]
+                (element) => element == selectedEvent.value,
+              )]
                   ?.actionsAllowed
                   .map((DashboardActionsTypes type) {
                 return DropdownMenuItem(
@@ -335,27 +342,28 @@ Widget _addDialog(context, DashboardController dashboardController) {
 
 Widget colorPickerPreview(Color color, Function(Color) onColorChanged) {
   return GestureDetector(
-      onTap: () {
-        Get.defaultDialog(
-          title: "pick_color".tr,
-          backgroundColor: Theme.of(Get.context!).colorScheme.surface,
-          content: BlockPicker(
-            pickerColor: color,
-            onColorChanged: onColorChanged,
+    onTap: () {
+      Get.defaultDialog(
+        title: "pick_color".tr,
+        backgroundColor: Theme.of(Get.context!).colorScheme.surface,
+        content: BlockPicker(
+          pickerColor: color,
+          onColorChanged: onColorChanged,
+        ),
+      );
+    },
+    // Row with circle showing currently selected color
+    child: Row(
+      children: [
+        Text("background_color".tr),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Container(
+            color: color,
+            height: 20,
           ),
-        );
-      },
-      // Row with circle showing currently selected color
-      child: Row(
-        children: [
-          Text("background_color".tr),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Container(
-              color: color,
-              height: 20,
-            ),
-          ),
-        ],
-      ),);
+        ),
+      ],
+    ),
+  );
 }

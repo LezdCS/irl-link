@@ -29,7 +29,9 @@ class Subscription extends StatelessWidget {
             Text(
               "subscription".tr,
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.tertiary, fontSize: 20,),
+                color: Theme.of(context).colorScheme.tertiary,
+                fontSize: 20,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 4, right: 4, top: 10),
@@ -50,13 +52,16 @@ class Subscription extends StatelessWidget {
                             fontSize: 16,
                           ),
                         ),
-                        if (isSubscribed) Text("subscribed_def".tr) else Text(
-                                "not_subscribed_def".tr,
-                                style: TextStyle(
-                                  color: Colors.grey[200],
-                                  fontSize: 16,
-                                ),
-                              ),
+                        if (isSubscribed)
+                          Text("subscribed_def".tr)
+                        else
+                          Text(
+                            "not_subscribed_def".tr,
+                            style: TextStyle(
+                              color: Colors.grey[200],
+                              fontSize: 16,
+                            ),
+                          ),
                       ],
                     ),
                   ),

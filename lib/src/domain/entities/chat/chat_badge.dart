@@ -27,7 +27,10 @@ class ChatBadge {
   }
 
   factory ChatBadge.fromKick(
-      String channelId, UserBadge badge, List<KickBadge> subBadges,) {
+    String channelId,
+    UserBadge badge,
+    List<KickBadge> subBadges,
+  ) {
     String src = '';
     switch (badge.type) {
       case 'subscriber':

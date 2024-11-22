@@ -13,8 +13,10 @@ import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 
 class ObsTabViewController extends GetxController with WidgetsBindingObserver {
-  ObsTabViewController(
-      {required this.watchService, required this.talkerService,});
+  ObsTabViewController({
+    required this.watchService,
+    required this.talkerService,
+  });
 
   ObsWebSocket? obsWebSocket;
   RxBool isConnected = false.obs;
@@ -44,7 +46,7 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
 
     isConnected.listen((value) {
       // Send to watchOS
-      watchService.sendUpdateObsConnecteToNative(value);
+      watchService.sendUpdateObsConnecteToNative(isConnected: value);
     });
 
     currentScene.listen((value) {
@@ -89,12 +91,15 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
   /// Connect to the OBS websocket at [url] with optional [password]
   void connectWs(String url, String password) async {
     try {
-      if (!url.startsWith('ws://') && !url.startsWith('wss://')) {
-        url = 'ws://$url';
+      String modifiedUrl = url;
+      if (!modifiedUrl.startsWith('ws://') &&
+          !modifiedUrl.startsWith('wss://')) {
+        modifiedUrl = 'ws://$modifiedUrl';
       }
-      talkerService.talker.logTyped(ObsLog("Connecting to OBS at $url..."));
+      talkerService.talker
+          .logTyped(ObsLog("Connecting to OBS at $modifiedUrl..."));
       obsWebSocket = await ObsWebSocket.connect(
-        url,
+        modifiedUrl,
         password: password,
         onDone: connectionLost,
         timeout: const Duration(seconds: 30),
@@ -114,8 +119,10 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
 
       obsWebSocket?.addHandler<SceneItemEnableStateChanged>(
           (SceneItemEnableStateChanged sceneItemEnableStateChanged) {
-        SceneItemDetail s = sourcesList.firstWhere((source) =>
-            source.sceneItemId == sceneItemEnableStateChanged.sceneItemId,);
+        SceneItemDetail s = sourcesList.firstWhere(
+          (source) =>
+              source.sceneItemId == sceneItemEnableStateChanged.sceneItemId,
+        );
 
         Map<String, dynamic> srcJson = s.toJson();
         srcJson['sceneItemTransform'] = srcJson['sceneItemTransform'].toJson();
@@ -250,7 +257,9 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
     sourcesVolumesMap.clear();
     for (var source in sources) {
       var response = await obsWebSocket!.send(
-          "GetInputVolume", {"inputName": source.sourceName},).catchError((e) {
+        "GetInputVolume",
+        {"inputName": source.sourceName},
+      ).catchError((e) {
         return null;
       });
       if (response?.requestStatus.code == 100) {
@@ -265,8 +274,11 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
     await obsWebSocket!.scenes.setCurrentProgramScene(sceneName);
   }
 
-  /// Show or hide the source named [sourceName] according to the [sceneItemEnabled]
-  void setSourceVisibleState(int sceneItemId, bool sceneItemEnabled) {
+  /// Show or hide the source [sceneItemId] according to the [sceneItemEnabled]
+  void setSourceVisibleState(
+    int sceneItemId, {
+    required bool sceneItemEnabled,
+  }) {
     obsWebSocket!.sceneItems.setEnabled(
       SceneItemEnableStateChanged(
         sceneName: currentScene.value,
@@ -277,15 +289,19 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
   }
 
   void setInputVolume(String inputName, double inputVolumeDb) {
-    obsWebSocket!.send("SetInputVolume",
-        {"inputName": inputName, "inputVolumeDb": inputVolumeDb},);
+    obsWebSocket!.send(
+      "SetInputVolume",
+      {"inputName": inputName, "inputVolumeDb": inputVolumeDb},
+    );
     sourcesList.refresh();
     sourcesVolumesMap.refresh();
   }
 
   void getSourceScreenshot(String sourceName) async {
-    var response = await obsWebSocket!.send("GetSourceScreenshot",
-        {"sourceName": sourceName, "imageFormat": "png"},);
+    var response = await obsWebSocket!.send(
+      "GetSourceScreenshot",
+      {"sourceName": sourceName, "imageFormat": "png"},
+    );
 
     String imageBase64 = response?.responseData?['imageData'].split(",").last;
     sceneScreenshot.value = const Base64Decoder().convert(imageBase64);

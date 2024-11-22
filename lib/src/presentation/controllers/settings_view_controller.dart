@@ -82,7 +82,8 @@ class SettingsViewController extends GetxController {
     seJwtInputController =
         TextEditingController(text: settings.streamElementsSettings.jwt);
     seOverlayTokenInputController = TextEditingController(
-        text: settings.streamElementsSettings.overlayToken,);
+      text: settings.streamElementsSettings.overlayToken,
+    );
     rtIrlInputController = TextEditingController(text: settings.rtIrlPushKey);
 
     usernamesHiddenUsers = <String>[].obs;
@@ -152,7 +153,9 @@ class SettingsViewController extends GetxController {
   Future<void> disconnectStreamElements() async {
     if (homeViewController
             .streamelementsViewController.value?.seCredentials.value ==
-        null) return;
+        null) {
+      return;
+    }
     DataState<void> result = await streamElementsDisconnectUseCase(
       params: homeViewController
           .streamelementsViewController.value!.seCredentials.value!.accessToken,

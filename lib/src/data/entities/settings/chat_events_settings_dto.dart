@@ -5,7 +5,6 @@ part 'chat_events_settings_dto.g.dart';
 
 @freezed
 class ChatEventsSettingsDTO with _$ChatEventsSettingsDTO {
-
   factory ChatEventsSettingsDTO({
     @Default(true) bool firstsMessages,
     @Default(true) bool subscriptions,
@@ -17,5 +16,6 @@ class ChatEventsSettingsDTO with _$ChatEventsSettingsDTO {
   ChatEventsSettingsDTO._();
 
   factory ChatEventsSettingsDTO.blank() => ChatEventsSettingsDTO();
-  factory ChatEventsSettingsDTO.fromJson(Map<String, dynamic> json) => _$ChatEventsSettingsDTOFromJson(json);
+  factory ChatEventsSettingsDTO.fromJson(Map<String, dynamic> json) =>
+      _$ChatEventsSettingsDTOFromJson(json);
 }

@@ -5,8 +5,10 @@ import 'package:irllink/src/domain/usecases/settings/get_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/set_settings_usecase.dart';
 
 class SettingsService extends GetxService {
-  SettingsService(
-      {required this.getSettingsUseCase, required this.setSettingsUseCase,});
+  SettingsService({
+    required this.getSettingsUseCase,
+    required this.setSettingsUseCase,
+  });
 
   final GetSettingsUseCase getSettingsUseCase;
   final SetSettingsUseCase setSettingsUseCase;

@@ -48,17 +48,19 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
   String? _broadcasterId;
 
   Rx<TwitchPoll> currentPoll = TwitchPoll.empty().obs;
-  Rx<Duration> remainingTimePoll = const Duration().obs;
+  Rx<Duration> remainingTimePoll = Duration.zero.obs;
 
   Rx<TwitchPrediction> currentPrediction = TwitchPrediction.empty().obs;
-  Rx<Duration> remainingTimePrediction = const Duration().obs;
+  Rx<Duration> remainingTimePrediction = Duration.zero.obs;
   RxString selectedOutcomeId = "-1".obs;
 
   Rx<TwitchHypeTrain> currentHypeTrain = TwitchHypeTrain.empty().obs;
-  Rx<Duration> remainingTimeHypeTrain = const Duration().obs;
+  Rx<Duration> remainingTimeHypeTrain = Duration.zero.obs;
 
-  Future<TwitchEventSubService> init(
-      {required String token, required String channel,}) async {
+  Future<TwitchEventSubService> init({
+    required String token,
+    required String channel,
+  }) async {
     channelName = channel;
     accessToken = token;
 
@@ -84,7 +86,8 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
       await _webSocketChannel?.ready;
     } catch (e) {
       talker.warning(
-          'Failed to connect to the Twitch EventSub Websocket. Retrying in 20 seconds.',);
+        'Failed to connect to the Twitch EventSub Websocket. Retrying in 20 seconds.',
+      );
 
       Future.delayed(const Duration(seconds: 20), () {
         connect();
@@ -131,30 +134,70 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
       String sessionId = msgMapped['payload']['session']['id'];
 
       //SUBSCRIBE TO POLLS BEGIN, PROGRESS, END
-      subscribeToEvent('channel.poll.begin', '1', sessionId,
-          {"broadcaster_user_id": _broadcasterId ?? ''},);
-      subscribeToEvent('channel.poll.progress', '1', sessionId,
-          {"broadcaster_user_id": _broadcasterId ?? ''},);
-      subscribeToEvent('channel.poll.end', '1', sessionId,
-          {"broadcaster_user_id": _broadcasterId ?? ''},);
+      subscribeToEvent(
+        'channel.poll.begin',
+        '1',
+        sessionId,
+        {"broadcaster_user_id": _broadcasterId ?? ''},
+      );
+      subscribeToEvent(
+        'channel.poll.progress',
+        '1',
+        sessionId,
+        {"broadcaster_user_id": _broadcasterId ?? ''},
+      );
+      subscribeToEvent(
+        'channel.poll.end',
+        '1',
+        sessionId,
+        {"broadcaster_user_id": _broadcasterId ?? ''},
+      );
 
       //SUBSCRIBE TO PREDICTIONS BEGIN, PROGRESS, END
-      subscribeToEvent('channel.prediction.begin', '1', sessionId,
-          {"broadcaster_user_id": _broadcasterId ?? ''},);
-      subscribeToEvent('channel.prediction.progress', '1', sessionId,
-          {"broadcaster_user_id": _broadcasterId ?? ''},);
-      subscribeToEvent('channel.prediction.lock', '1', sessionId,
-          {"broadcaster_user_id": _broadcasterId ?? ''},);
-      subscribeToEvent('channel.prediction.end', '1', sessionId,
-          {"broadcaster_user_id": _broadcasterId ?? ''},);
+      subscribeToEvent(
+        'channel.prediction.begin',
+        '1',
+        sessionId,
+        {"broadcaster_user_id": _broadcasterId ?? ''},
+      );
+      subscribeToEvent(
+        'channel.prediction.progress',
+        '1',
+        sessionId,
+        {"broadcaster_user_id": _broadcasterId ?? ''},
+      );
+      subscribeToEvent(
+        'channel.prediction.lock',
+        '1',
+        sessionId,
+        {"broadcaster_user_id": _broadcasterId ?? ''},
+      );
+      subscribeToEvent(
+        'channel.prediction.end',
+        '1',
+        sessionId,
+        {"broadcaster_user_id": _broadcasterId ?? ''},
+      );
 
       //SUBSCRIBE TO HYPE TRAINS
-      subscribeToEvent('channel.hype_train.begin', '1', sessionId,
-          {"broadcaster_user_id": _broadcasterId ?? ''},);
-      subscribeToEvent('channel.hype_train.progress', '1', sessionId,
-          {"broadcaster_user_id": _broadcasterId ?? ''},);
-      subscribeToEvent('channel.hype_train.end', '1', sessionId,
-          {"broadcaster_user_id": _broadcasterId ?? ''},);
+      subscribeToEvent(
+        'channel.hype_train.begin',
+        '1',
+        sessionId,
+        {"broadcaster_user_id": _broadcasterId ?? ''},
+      );
+      subscribeToEvent(
+        'channel.hype_train.progress',
+        '1',
+        sessionId,
+        {"broadcaster_user_id": _broadcasterId ?? ''},
+      );
+      subscribeToEvent(
+        'channel.hype_train.end',
+        '1',
+        sessionId,
+        {"broadcaster_user_id": _broadcasterId ?? ''},
+      );
     }
 
     String? subsriptionType = msgMapped['metadata']['subscription_type'];
@@ -241,20 +284,26 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
     return response ?? '';
   }
 
-  void subscribeToEvent(String type, String version, String sessionId,
-      Map<String, String> condition,) async {
+  void subscribeToEvent(
+    String type,
+    String version,
+    String sessionId,
+    Map<String, String> condition,
+  ) async {
     var dio = initDio();
     try {
       dio.options.headers['Client-Id'] = kTwitchAuthClientId;
       dio.options.headers["authorization"] = "Bearer $accessToken";
       // await dio.post('http://localhost:8080/eventsub/subscriptions', data: {
-      await dio
-          .post('https://api.twitch.tv/helix/eventsub/subscriptions', data: {
-        "type": type,
-        "version": version,
-        "condition": condition,
-        "transport": {"method": "websocket", "session_id": sessionId},
-      },);
+      await dio.post(
+        'https://api.twitch.tv/helix/eventsub/subscriptions',
+        data: {
+          "type": type,
+          "version": version,
+          "condition": condition,
+          "transport": {"method": "websocket", "session_id": sessionId},
+        },
+      );
     } on DioException catch (e) {
       talker.error(e.response.toString());
     }
@@ -265,7 +314,9 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
 
     currentPoll.listen((poll) {
       if (poll.status == PollStatus.active) {
-        if (timer != null) timer?.cancel();
+        if (timer != null) {
+          timer?.cancel();
+        }
         remainingTimePoll = convertToDeviceTimezone(currentPoll.value.endsAt)
             .difference(DateTime.now())
             .obs;
@@ -290,7 +341,9 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
 
     currentPrediction.listen((prediction) {
       if (prediction.status == PredictionStatus.active) {
-        if (timer != null) timer?.cancel();
+        if (timer != null) {
+          timer?.cancel();
+        }
         remainingTimePrediction =
             convertToDeviceTimezone(prediction.remainingTime)
                 .difference(DateTime.now())
@@ -321,7 +374,9 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
         return;
       }
 
-      if (timer != null) timer?.cancel();
+      if (timer != null) {
+        timer?.cancel();
+      }
 
       remainingTimeHypeTrain =
           convertToDeviceTimezone(train.endsAt).difference(DateTime.now()).obs;

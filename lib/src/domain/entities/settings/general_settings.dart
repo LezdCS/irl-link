@@ -15,7 +15,7 @@ class GeneralSettings {
     required this.appLanguage,
     required this.splitViewWeights,
   });
-  
+
   GeneralSettings copyWith({
     bool? isDarkMode,
     bool? keepSpeakerOn,

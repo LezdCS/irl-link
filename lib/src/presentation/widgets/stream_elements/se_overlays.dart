@@ -23,7 +23,8 @@ class SeOverlays extends GetView<StreamelementsViewController> {
         Visibility(
           visible: overlayToken == null,
           child: const Text(
-              'To unlock this feature, please enter your overlay token in the settings.',),
+            'To unlock this feature, please enter your overlay token in the settings.',
+          ),
         ),
         Container(
           padding: const EdgeInsets.all(4),
@@ -113,22 +114,28 @@ Widget _overlayRow(
             Expanded(
               child: Text(overlay.name),
             ),
-            if (webpage != null) InkWell(
-                    onTap: () => {
-                          Get.defaultDialog(
-                            title: 'Overlay',
-                            titleStyle: const TextStyle(color: Colors.white),
-                            backgroundColor: const Color(0xFF0e0e10),
-                            buttonColor: const Color(0xFF9147ff),
-                            cancelTextColor: const Color(0xFF9147ff),
-                            textCancel: "return".tr,
-                            radius: 10,
-                            content: SizedBox(
-                                width: 384, height: 216, child: webpage,),
-                          ),
-                        },
-                    child: const Icon(Icons.preview),
-                  ) else Container(),
+            if (webpage != null)
+              InkWell(
+                onTap: () => {
+                  Get.defaultDialog(
+                    title: 'Overlay',
+                    titleStyle: const TextStyle(color: Colors.white),
+                    backgroundColor: const Color(0xFF0e0e10),
+                    buttonColor: const Color(0xFF9147ff),
+                    cancelTextColor: const Color(0xFF9147ff),
+                    textCancel: "return".tr,
+                    radius: 10,
+                    content: SizedBox(
+                      width: 384,
+                      height: 216,
+                      child: webpage,
+                    ),
+                  ),
+                },
+                child: const Icon(Icons.preview),
+              )
+            else
+              Container(),
             const SizedBox(
               width: 10,
             ),
@@ -142,8 +149,9 @@ Widget _overlayRow(
                   mutedList.add(overlay.id);
                 }
                 settingsService.settings.value = settings.copyWith(
-                    streamElementsSettings: settings.streamElementsSettings
-                        .copyWith(mutedOverlays: mutedList),);
+                  streamElementsSettings: settings.streamElementsSettings
+                      .copyWith(mutedOverlays: mutedList),
+                );
                 settingsService.saveSettings();
                 controller.overlays.refresh();
               },

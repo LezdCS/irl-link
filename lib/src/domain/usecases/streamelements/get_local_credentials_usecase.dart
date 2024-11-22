@@ -7,8 +7,9 @@ class StreamElementsGetLocalCredentialsUseCase
     implements UseCase<DataState<SeCredentials>, void> {
   final StreamelementsRepository streamelementsRepository;
 
-  StreamElementsGetLocalCredentialsUseCase(
-      {required this.streamelementsRepository,});
+  StreamElementsGetLocalCredentialsUseCase({
+    required this.streamelementsRepository,
+  });
 
   @override
   Future<DataState<SeCredentials>> call({void params}) {

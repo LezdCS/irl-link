@@ -89,23 +89,34 @@ class YoutubeChat {
         'https://www.youtube.com/youtubei/v1/live_chat/get_live_chat?prettyPrint=false';
 
     try {
-      Response response = await http.post(Uri.parse(url),
-          headers: options['headers'], body: body,);
+      Response response = await http.post(
+        Uri.parse(url),
+        headers: options['headers'],
+        body: body,
+      );
       dynamic data = json.decode(response.body);
 
       Iterable<dynamic>? messagesData = (data['continuationContents']
               ['liveChatContinuation']['actions'] as List?)
-          ?.map((action) => action['addChatItemAction']['item']
-              ['liveChatTextMessageRenderer'],);
+          ?.map(
+        (action) =>
+            action['addChatItemAction']['item']['liveChatTextMessageRenderer'],
+      );
 
       messagesData?.forEach((message) {
-        if (message['message'] == null) return;
+        if (message['message'] == null) {
+          return;
+        }
         List? messages = (message['message']['runs'] as List?)
             ?.map((run) => run['text'])
             .where((message) => message != null)
             .toList();
-        if (messages == null) return;
-        if (messages.isEmpty) return;
+        if (messages == null) {
+          return;
+        }
+        if (messages.isEmpty) {
+          return;
+        }
         ChatMessage msg = ChatMessage.fromYoutube(message, messages, videoId);
         _chatStreamController.add(msg);
       });
@@ -132,7 +143,9 @@ class YoutubeChat {
     }
 
     while (continuationToken != null) {
-      if (_chatStreamController.isClosed) return;
+      if (_chatStreamController.isClosed) {
+        return;
+      }
       continuationToken = await fetchChatMessages(continuationToken);
       await Future.delayed(const Duration(seconds: 5)); // 5-second pause
     }
@@ -141,12 +154,13 @@ class YoutubeChat {
 
 Future<String?> getLiveVideoId(String channelURL) async {
   Talker talker = Get.find<TalkerService>().talker;
-  
+
   // Send GET request to the YouTube channel's live streams page
   var response = await http.get(Uri.parse(channelURL));
   if (response.statusCode != 200) {
     talker.error(
-        'Failed to retrieve the page. Status code: ${response.statusCode}',);
+      'Failed to retrieve the page. Status code: ${response.statusCode}',
+    );
     return null;
   }
 

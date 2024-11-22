@@ -1,4 +1,3 @@
-
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:kick_chat/kick_chat.dart';
 

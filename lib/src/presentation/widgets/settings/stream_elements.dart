@@ -63,8 +63,11 @@ class StreamElements extends GetView<SettingsViewController> {
             () => Column(
               children: [
                 if (controller.homeViewController.streamelementsViewController
-                            .value !=
-                        null) loggedIn(context) else loginButton(),
+                        .value !=
+                    null)
+                  loggedIn(context)
+                else
+                  loginButton(),
               ],
             ),
           ),
@@ -82,9 +85,12 @@ class StreamElements extends GetView<SettingsViewController> {
 
     return Column(
       children: [
-        if (seMe != null) _profile(
-                seMe,
-              ) else Container(),
+        if (seMe != null)
+          _profile(
+            seMe,
+          )
+        else
+          Container(),
         const SizedBox(
           height: 12,
         ),
@@ -113,9 +119,11 @@ class StreamElements extends GetView<SettingsViewController> {
                     color: Theme.of(context).colorScheme.tertiary,
                   ),
                   suffixIcon: IconButton(
-                    icon: Icon(controller.seJwtShow.value
-                        ? Icons.visibility
-                        : Icons.visibility_off,),
+                    icon: Icon(
+                      controller.seJwtShow.value
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
                     color: Theme.of(context).primaryIconTheme.color,
                     onPressed: () {
                       controller.seJwtShow.value = !controller.seJwtShow.value;
@@ -155,9 +163,11 @@ class StreamElements extends GetView<SettingsViewController> {
                     color: Theme.of(context).colorScheme.tertiary,
                   ),
                   suffixIcon: IconButton(
-                    icon: Icon(controller.seOverlayTokenShow.value
-                        ? Icons.visibility
-                        : Icons.visibility_off,),
+                    icon: Icon(
+                      controller.seOverlayTokenShow.value
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
                     color: Theme.of(context).primaryIconTheme.color,
                     onPressed: () {
                       controller.seOverlayTokenShow.value =

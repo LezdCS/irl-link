@@ -6,17 +6,18 @@ part 'chat_settings_dto.g.dart';
 
 @freezed
 class ChatSettingsDTO with _$ChatSettingsDTO {
-
   factory ChatSettingsDTO({
     @JsonKey(fromJson: _permanentGroupFromJson)
-    @Default(ChatGroupDTO(id: "permanentFirstGroup", channels: [])) ChatGroupDTO permanentFirstGroup,
+    @Default(ChatGroupDTO(id: "permanentFirstGroup", channels: []))
+    ChatGroupDTO permanentFirstGroup,
     @Default([]) List<ChatGroupDTO> chatGroups,
     @Default(true) bool hideDeletedMessages,
   }) = _ChatSettingsDTO;
   ChatSettingsDTO._();
 
   factory ChatSettingsDTO.blank() => ChatSettingsDTO();
-  factory ChatSettingsDTO.fromJson(Map<String, dynamic> json) => _$ChatSettingsDTOFromJson(json);
+  factory ChatSettingsDTO.fromJson(Map<String, dynamic> json) =>
+      _$ChatSettingsDTOFromJson(json);
 }
 
 ChatGroupDTO _permanentGroupFromJson(permanentGroup) {
@@ -30,13 +31,13 @@ ChatGroupDTO _permanentGroupFromJson(permanentGroup) {
 
 @freezed
 class ChatGroupDTO with _$ChatGroupDTO {
-
   const factory ChatGroupDTO({
     required String id,
     required List<ChannelDTO> channels,
   }) = _ChatGroupDTO;
 
-  factory ChatGroupDTO.fromJson(Map<String, dynamic> json) => _$ChatGroupDTOFromJson(json);
+  factory ChatGroupDTO.fromJson(Map<String, dynamic> json) =>
+      _$ChatGroupDTOFromJson(json);
 }
 
 @freezed
@@ -47,5 +48,6 @@ class ChannelDTO with _$ChannelDTO {
     required bool enabled,
   }) = _ChannelDTO;
 
-  factory ChannelDTO.fromJson(Map<String, dynamic> json) => _$ChannelDTOFromJson(json);
+  factory ChannelDTO.fromJson(Map<String, dynamic> json) =>
+      _$ChannelDTOFromJson(json);
 }

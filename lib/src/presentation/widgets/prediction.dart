@@ -97,13 +97,14 @@ Widget prediction(
                       animation: true,
                       animateFromLastPercent: true,
                       barRadius: const Radius.circular(8),
-                      padding: const EdgeInsets.symmetric(),
+                      padding: EdgeInsets.zero,
                       lineHeight: 20,
                       percent: percentage,
                       backgroundColor: Theme.of(context).colorScheme.secondary,
                       progressColor: outcome.color,
                       center: Text(
-                          "${(percentage * 100).toStringAsFixed(2)} % (${outcome.channelPoints} points)",),
+                        "${(percentage * 100).toStringAsFixed(2)} % (${outcome.channelPoints} points)",
+                      ),
                     ),
                     const SizedBox(height: 10),
                   ],
@@ -113,7 +114,8 @@ Widget prediction(
           ),
           Obx(
             () => Text(
-                '${prediction.status == PredictionStatus.active ? 'locks'.tr : 'ends'.tr} in ${printDuration(twitchEventSubService.remainingTimePrediction.value)}',),
+              '${prediction.status == PredictionStatus.active ? 'locks'.tr : 'ends'.tr} in ${printDuration(twitchEventSubService.remainingTimePrediction.value)}',
+            ),
           ),
           Visibility(
             visible: prediction.status != PredictionStatus.resolved &&
@@ -188,7 +190,9 @@ void pickWinnerDialog(
     },
     onConfirm: () {
       twitchEventSubService.endPrediction(
-          'RESOLVED', twitchEventSubService.selectedOutcomeId.value,);
+        'RESOLVED',
+        twitchEventSubService.selectedOutcomeId.value,
+      );
       twitchEventSubService.selectedOutcomeId.value = "-1";
       Get.back();
     },

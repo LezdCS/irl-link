@@ -100,12 +100,12 @@ class ObsTabView extends GetView<ObsTabViewController> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Obx(
-                                      () => Container(
+                                      () => ColoredBox(
                                         color: Colors.black,
                                         child: Image(
-                                          image: Image.memory(controller
-                                                  .sceneScreenshot.value,)
-                                              .image,
+                                          image: Image.memory(
+                                            controller.sceneScreenshot.value,
+                                          ).image,
                                         ),
                                       ),
                                     ),
@@ -113,7 +113,8 @@ class ObsTabView extends GetView<ObsTabViewController> {
                                 ),
                               );
                               controller.getSourceScreenshot(
-                                  controller.currentScene.value,);
+                                controller.currentScene.value,
+                              );
                             },
                             child: Container(
                               constraints: const BoxConstraints(
@@ -141,32 +142,36 @@ class ObsTabView extends GetView<ObsTabViewController> {
                     const Divider(
                       height: 40,
                     ),
-                    Wrap(children: [
-                      Text(
-                        "scenes".tr,
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 10),
-                        height: 40,
-                        width: width,
-                        child: getScenes(),
-                      ),
-                    ],),
+                    Wrap(
+                      children: [
+                        Text(
+                          "scenes".tr,
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          height: 40,
+                          width: width,
+                          child: getScenes(),
+                        ),
+                      ],
+                    ),
                     const Divider(
                       height: 40,
                     ),
-                    Wrap(children: [
-                      Text(
-                        "sources".tr,
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 10),
-                        width: width,
-                        child: getSources(context),
-                      ),
-                    ],),
+                    Wrap(
+                      children: [
+                        Text(
+                          "sources".tr,
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          width: width,
+                          child: getSources(context),
+                        ),
+                      ],
+                    ),
                     Divider(
                       height: 40,
                       thickness: 4,
@@ -190,7 +195,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
                   ],
                 ),
               )
-            : Container(
+            : ColoredBox(
                 color: context.theme.colorScheme.surface,
                 child: Column(
                   children: [
@@ -205,7 +210,10 @@ class ObsTabView extends GetView<ObsTabViewController> {
                       },
                       child: Container(
                         margin: const EdgeInsets.only(
-                            right: 10, top: 10, bottom: 10,),
+                          right: 10,
+                          top: 10,
+                          bottom: 10,
+                        ),
                         padding: const EdgeInsets.all(8),
                         alignment: Alignment.center,
                         width: width * 0.4,
@@ -220,10 +228,10 @@ class ObsTabView extends GetView<ObsTabViewController> {
                     ),
                     Visibility(
                       visible: Get.find<SettingsService>()
-                              .settings
-                              .value
-                              .obsWebsocketUrl
-                              .contains("https"),
+                          .settings
+                          .value
+                          .obsWebsocketUrl
+                          .contains("https"),
                       child: const Text(
                         "It seems that your OBS websocket URL contains 'https', try without it.",
                         textAlign: TextAlign.center,
@@ -295,7 +303,9 @@ class ObsTabView extends GetView<ObsTabViewController> {
         return GestureDetector(
           onTap: () {
             controller.setSourceVisibleState(
-                source.sceneItemId, source.sceneItemEnabled,);
+              source.sceneItemId,
+              sceneItemEnabled: source.sceneItemEnabled,
+            );
           },
           onLongPress: () {
             Get.defaultDialog(

@@ -80,10 +80,14 @@ class EmotePickerView extends GetView<HomeViewController> {
     );
   }
 
-  Widget _tabs(BuildContext context, List<Emote> globalEmotes,
-      List<Emote> userSetEmotes, List<Emote> thirdPartEmotes,) {
+  Widget _tabs(
+    BuildContext context,
+    List<Emote> globalEmotes,
+    List<Emote> userSetEmotes,
+    List<Emote> thirdPartEmotes,
+  ) {
     return Expanded(
-      child: Container(
+      child: ColoredBox(
         color: Theme.of(context).colorScheme.surface,
         child: Obx(
           () => IndexedStack(
@@ -142,8 +146,7 @@ class EmotePickerView extends GetView<HomeViewController> {
     return InkWell(
       onTap: () {
         String text = controller.chatInputController.text;
-        bool isLastCharSpace =
-            text.isNotEmpty ? text[text.length - 1] == " " : false;
+        bool isLastCharSpace = text.isNotEmpty && text[text.length - 1] == " ";
         controller.chatInputController.text =
             "$text${isLastCharSpace ? "" : " "}${emote.name} ";
       },

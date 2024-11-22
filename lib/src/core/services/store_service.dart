@@ -77,13 +77,17 @@ class StoreService extends GetxService {
 
   void initListeningStorePurchase() async {
     final Stream purchaseUpdated = InAppPurchase.instance.purchaseStream;
-    subscription = purchaseUpdated.listen((purchaseDetailsList) {
-      listenToPurchaseUpdated(purchaseDetailsList);
-    }, onDone: () {
-      subscription.cancel();
-    }, onError: (error) {
-      // handle error here.
-    },) as StreamSubscription<List<PurchaseDetails>>;
+    subscription = purchaseUpdated.listen(
+      (purchaseDetailsList) {
+        listenToPurchaseUpdated(purchaseDetailsList);
+      },
+      onDone: () {
+        subscription.cancel();
+      },
+      onError: (error) {
+        // handle error here.
+      },
+    ) as StreamSubscription<List<PurchaseDetails>>;
 
     try {
       await InAppPurchase.instance.restorePurchases();
@@ -93,7 +97,8 @@ class StoreService extends GetxService {
   }
 
   void listenToPurchaseUpdated(
-      List<PurchaseDetails> purchaseDetailsList,) async {
+    List<PurchaseDetails> purchaseDetailsList,
+  ) async {
     for (var purchaseDetails in purchaseDetailsList) {
       if (purchaseDetails.status == PurchaseStatus.pending) {
         purchasePending.value = true;

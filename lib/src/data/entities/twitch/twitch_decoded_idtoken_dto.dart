@@ -10,5 +10,6 @@ class TwitchDecodedIdTokenDTO with _$TwitchDecodedIdTokenDTO {
     required String profilePicture,
   }) = _TwitchDecodedIdTokenDTO;
 
-  factory TwitchDecodedIdTokenDTO.fromJson(Map<String, dynamic> json) => _$TwitchDecodedIdTokenDTOFromJson(json);
+  factory TwitchDecodedIdTokenDTO.fromJson(Map<String, dynamic> json) =>
+      _$TwitchDecodedIdTokenDTOFromJson(json);
 }

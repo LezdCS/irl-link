@@ -109,25 +109,29 @@ class MessageRow extends StatelessWidget {
   }
 
   List<Widget> messageContent(
-    final ChatMessage message,
-    final TwitchChatParameters? params,
-    final double textSize,
-    final List<ChatEmote> cheerEmotes,
-    final List<ChatEmote> thirdPartEmotes,
+    ChatMessage message,
+    TwitchChatParameters? params,
+    double textSize,
+    List<ChatEmote> cheerEmotes,
+    List<ChatEmote> thirdPartEmotes,
   ) {
     List<Widget> messageWidgetsBuild = [];
 
     for (int i = 0; i < message.message.trim().split(' ').length; i++) {
       String word = message.message.trim().split(' ')[i];
 
-      MapEntry? emote = message.emotes.entries.firstWhereOrNull((element) =>
-          element
-              .value
-              .where((position) =>
+      MapEntry? emote = message.emotes.entries.firstWhereOrNull(
+        (element) => element.value
+            .where(
+              (position) =>
                   message.message.substring(
-                      int.parse(position[0]), int.parse(position[1]) + 1,) ==
-                  word,)
-              .isNotEmpty,);
+                    int.parse(position[0]),
+                    int.parse(position[1]) + 1,
+                  ) ==
+                  word,
+            )
+            .isNotEmpty,
+      );
 
       // [emote:37227:LULW]
       List<String> kickEmotesIds = [];

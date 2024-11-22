@@ -130,56 +130,59 @@ Widget inAppPurchaseDialog(
             style: const TextStyle(fontSize: 13, color: Colors.grey),
             textAlign: TextAlign.center,
           ),
-          if (Platform.isIOS) Text.rich(
-                  style: const TextStyle(fontSize: 13, color: Colors.grey),
-                  textAlign: TextAlign.center,
-                  TextSpan(
-                    children: [
-                      const TextSpan(
-                        text: 'To learn more, visit our ',
-                      ),
-                      WidgetSpan(
-                        child: InkWell(
-                          onTap: () {
-                            launchUrlString(
-                              "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/",
-                              mode: LaunchMode.externalApplication,
-                            );
-                          },
-                          child: Text(
-                            "Terms",
-                            textAlign: TextAlign.end,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.tertiary,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const TextSpan(
-                        text: ' and ',
-                      ),
-                      WidgetSpan(
-                        child: InkWell(
-                          onTap: () {
-                            launchUrlString(
-                              "https://github.com/LezdCS/irl-link/blob/master/PRIVACY_POLICY.md",
-                              mode: LaunchMode.externalApplication,
-                            );
-                          },
-                          child: Text(
-                            "Privacy Policy",
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.tertiary,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const TextSpan(
-                        text: '.',
-                      ),
-                    ],
+          if (Platform.isIOS)
+            Text.rich(
+              style: const TextStyle(fontSize: 13, color: Colors.grey),
+              textAlign: TextAlign.center,
+              TextSpan(
+                children: [
+                  const TextSpan(
+                    text: 'To learn more, visit our ',
                   ),
-                ) else Container(),
+                  WidgetSpan(
+                    child: InkWell(
+                      onTap: () {
+                        launchUrlString(
+                          "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/",
+                          mode: LaunchMode.externalApplication,
+                        );
+                      },
+                      child: Text(
+                        "Terms",
+                        textAlign: TextAlign.end,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.tertiary,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const TextSpan(
+                    text: ' and ',
+                  ),
+                  WidgetSpan(
+                    child: InkWell(
+                      onTap: () {
+                        launchUrlString(
+                          "https://github.com/LezdCS/irl-link/blob/master/PRIVACY_POLICY.md",
+                          mode: LaunchMode.externalApplication,
+                        );
+                      },
+                      child: Text(
+                        "Privacy Policy",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.tertiary,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const TextSpan(
+                    text: '.',
+                  ),
+                ],
+              ),
+            )
+          else
+            Container(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

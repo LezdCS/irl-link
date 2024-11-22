@@ -24,11 +24,13 @@ class TwitchPredictionDTO with _$TwitchPredictionDTO {
     PredictionStatus status = PredictionStatus.active;
 
     OutcomeDTO o;
-    map['outcomes'].forEach((outcome) => {
-          o = OutcomeDTO.fromJson(outcome),
-          outcomes.add(o),
-          totalUsers += o.users,
-        },);
+    map['outcomes'].forEach(
+      (outcome) => {
+        o = OutcomeDTO.fromJson(outcome),
+        outcomes.add(o),
+        totalUsers += o.users,
+      },
+    );
 
     if (map['locked_at'] != null) {
       status = PredictionStatus.locked;
@@ -65,12 +67,12 @@ class OutcomeDTO with _$OutcomeDTO {
     required String id,
     required String title,
     @Default(0) int users,
-    @JsonKey(name: 'channel_points')
-    @Default(0) int channelPoints,
+    @JsonKey(name: 'channel_points') @Default(0) int channelPoints,
     @ColorConverter() required Color color,
   }) = _OutcomeDTO;
 
-  factory OutcomeDTO.fromJson(Map<String, dynamic> json) => _$OutcomeDTOFromJson(json);
+  factory OutcomeDTO.fromJson(Map<String, dynamic> json) =>
+      _$OutcomeDTOFromJson(json);
 }
 
 class ColorConverter implements JsonConverter<Color, String> {

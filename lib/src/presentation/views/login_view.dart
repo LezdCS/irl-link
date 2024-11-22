@@ -13,7 +13,7 @@ class LoginView extends GetView<LoginViewController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: ColoredBox(
         color: Theme.of(context).colorScheme.surface,
         child: SafeArea(
           child: Obx(
@@ -32,21 +32,22 @@ class LoginView extends GetView<LoginViewController> {
         TextButton.icon(
           label: Text.rich(
             TextSpan(
-                text: "Login with ",
-                style: const TextStyle(
-                  color: Colors.grey,
-                  fontSize: 20,
-                ),
-                children: [
-                  TextSpan(
-                    text: 'Twitch',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.tertiary,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
+              text: "Login with ",
+              style: const TextStyle(
+                color: Colors.grey,
+                fontSize: 20,
+              ),
+              children: [
+                TextSpan(
+                  text: 'Twitch',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.tertiary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
                   ),
-                ],),
+                ),
+              ],
+            ),
           ),
           icon: const Padding(
             padding: EdgeInsets.all(8),
@@ -95,21 +96,23 @@ class LoginView extends GetView<LoginViewController> {
               color: Theme.of(context).colorScheme.tertiary,
             ),
           ),
-          if (controller.twitchCredentials.value != null) CachedNetworkImage(
-                  imageUrl: controller
-                      .twitchCredentials.value!.twitchUser.profileImageUrl,
-                  placeholder: (BuildContext context, String url) =>
-                      CircularProgressIndicator(
-                    color: Theme.of(context).colorScheme.tertiary,
-                  ),
-                  errorWidget:
-                      (BuildContext context, String url, error) =>
-                          const Icon(Icons.error),
-                  imageBuilder: (context, imageProvider) => CircleAvatar(
-                    radius: 36,
-                    backgroundImage: imageProvider,
-                  ),
-                ) else const SizedBox(),
+          if (controller.twitchCredentials.value != null)
+            CachedNetworkImage(
+              imageUrl: controller
+                  .twitchCredentials.value!.twitchUser.profileImageUrl,
+              placeholder: (BuildContext context, String url) =>
+                  CircularProgressIndicator(
+                color: Theme.of(context).colorScheme.tertiary,
+              ),
+              errorWidget: (BuildContext context, String url, error) =>
+                  const Icon(Icons.error),
+              imageBuilder: (context, imageProvider) => CircleAvatar(
+                radius: 36,
+                backgroundImage: imageProvider,
+              ),
+            )
+          else
+            const SizedBox(),
           Visibility(
             visible: controller.twitchCredentials.value != null,
             child: Text(
@@ -141,7 +144,11 @@ class LoginView extends GetView<LoginViewController> {
               visible: Get.find<StoreService>().isSubscribed(),
               child: Container(
                 padding: const EdgeInsets.only(
-                    left: 10, right: 10, top: 4, bottom: 4,),
+                  left: 10,
+                  right: 10,
+                  top: 4,
+                  bottom: 4,
+                ),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.tertiary,
                   borderRadius: const BorderRadius.all(
@@ -153,7 +160,10 @@ class LoginView extends GetView<LoginViewController> {
             ),
           ],
         ),
-        if (controller.isLoading.value) _loadingCircle(context) else _loginButton(context),
+        if (controller.isLoading.value)
+          _loadingCircle(context)
+        else
+          _loginButton(context),
         Column(
           children: [
             const Text("Open Source Project by @LezdCS"),

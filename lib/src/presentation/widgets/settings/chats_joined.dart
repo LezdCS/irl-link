@@ -78,9 +78,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
                     ListView.builder(
                       shrinkWrap: true,
                       itemCount: firstGroup.channels.length,
-                      padding: const EdgeInsets.only(
-                        
-                      ),
+                      padding: EdgeInsets.zero,
                       itemBuilder: (BuildContext context, int index) {
                         Channel channel = firstGroup.channels[index];
                         return _channel(channel, firstGroup);
@@ -180,9 +178,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
             ListView.builder(
               shrinkWrap: true,
               itemCount: group.channels.length,
-              padding: const EdgeInsets.only(
-                
-              ),
+              padding: EdgeInsets.zero,
               itemBuilder: (BuildContext context, int index) {
                 Channel channel = group.channels[index];
                 return _channel(channel, group);
@@ -293,21 +289,21 @@ class ChatsJoined extends GetView<SettingsViewController> {
 
             // Add the new channel to the selected group
             List<Channel> channels = [...chatGroup.channels, newChan];
-            chatGroup = chatGroup.copyWith(channels: channels);
+            ChatGroup updatedGroup = chatGroup.copyWith(channels: channels);
 
-            if (chatGroup.id == 'permanentFirstGroup') {
+            if (updatedGroup.id == 'permanentFirstGroup') {
               settingsService.settings.value = settings.copyWith(
                 chatSettings: settings.chatSettings
-                    .copyWith(permanentFirstGroup: chatGroup),
+                    .copyWith(permanentFirstGroup: updatedGroup),
               );
             } else {
               // Replace the group in the list
               List<ChatGroup>? groups = [];
               groups.addAll(settings.chatSettings.chatGroups);
               int indexToReplace =
-                  groups.indexWhere((g) => g.id == chatGroup.id);
+                  groups.indexWhere((g) => g.id == updatedGroup.id);
               groups.removeAt(indexToReplace);
-              groups.insert(indexToReplace, chatGroup);
+              groups.insert(indexToReplace, updatedGroup);
 
               // Update the settings
               settingsService.settings.value = settings.copyWith(
@@ -423,9 +419,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
                           ),
                           const Padding(padding: EdgeInsets.only(right: 8)),
                           Text(
-                            Platform.values[index].name
-                                
-                                .toCapitalized(),
+                            Platform.values[index].name.toCapitalized(),
                             style: TextStyle(
                               color:
                                   Theme.of(context).textTheme.bodyLarge!.color,

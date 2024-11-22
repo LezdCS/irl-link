@@ -12,22 +12,22 @@ class BrowserTabSettingsDTO with _$BrowserTabSettingsDTO {
   BrowserTabSettingsDTO._();
 
   factory BrowserTabSettingsDTO.blank() => BrowserTabSettingsDTO();
-  factory BrowserTabSettingsDTO.fromJson(Map<String, dynamic> json) => _$BrowserTabSettingsDTOFromJson(json);
+  factory BrowserTabSettingsDTO.fromJson(Map<String, dynamic> json) =>
+      _$BrowserTabSettingsDTOFromJson(json);
 }
 
 @freezed
 class BrowserTabDTO with _$BrowserTabDTO {
   const factory BrowserTabDTO({
-    @JsonKey(fromJson: _idFromJson)
-    required String id,
+    @JsonKey(fromJson: _idFromJson) required String id,
     required String title,
     required String url,
     required bool toggled,
     required bool iOSAudioSource,
   }) = _BrowserTabDTO;
 
-  factory BrowserTabDTO.fromJson(Map<String, dynamic> json) => _$BrowserTabDTOFromJson(json);
-
+  factory BrowserTabDTO.fromJson(Map<String, dynamic> json) =>
+      _$BrowserTabDTOFromJson(json);
 }
 
 // we used not to have id in the BrowserTab entity, this is to prevent braking from the previous versions

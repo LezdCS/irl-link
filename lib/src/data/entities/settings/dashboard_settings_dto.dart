@@ -13,5 +13,6 @@ class DashboardSettingsDTO with _$DashboardSettingsDTO {
   DashboardSettingsDTO._();
 
   factory DashboardSettingsDTO.blank() => DashboardSettingsDTO();
-  factory DashboardSettingsDTO.fromJson(Map<String, dynamic> json) => _$DashboardSettingsDTOFromJson(json);
+  factory DashboardSettingsDTO.fromJson(Map<String, dynamic> json) =>
+      _$DashboardSettingsDTOFromJson(json);
 }

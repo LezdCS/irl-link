@@ -6,10 +6,10 @@ part 'se_overlay_dto.g.dart';
 @freezed
 class SeOverlayDTO with _$SeOverlayDTO {
   const factory SeOverlayDTO({
-    @JsonKey(name: '_id')
-    required String id,
+    @JsonKey(name: '_id') required String id,
     required String name,
   }) = _SeOverlayDTO;
 
-  factory SeOverlayDTO.fromJson(Map<String, dynamic> json) => _$SeOverlayDTOFromJson(json);
+  factory SeOverlayDTO.fromJson(Map<String, dynamic> json) =>
+      _$SeOverlayDTOFromJson(json);
 }

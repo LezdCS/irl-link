@@ -48,7 +48,7 @@ class TwitchTabViewController extends GetxController
     twitchStreamInfos.listen((value) {
       // Send to watchOS
       watchService.sendViewersToNative(value.viewerCount ?? 0);
-      watchService.sendLiveStatusToNative(value.isOnline ?? false);
+      watchService.sendLiveStatusToNative(isLive: value.isOnline ?? false);
     });
 
     controllerLiveCircleAnimation = AnimationController(

@@ -81,8 +81,11 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                       Obx(
                         () =>
                             Get.find<TwitchEventSubService>().isConnected.value
-                                ? const Icon(Icons.stream_sharp,
-                                    size: 12, color: Colors.green,)
+                                ? const Icon(
+                                    Icons.stream_sharp,
+                                    size: 12,
+                                    color: Colors.green,
+                                  )
                                 : const Icon(
                                     Icons.close,
                                     size: 12,
@@ -153,10 +156,11 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                   Obx(
                     () => Visibility(
                       visible: controller.twitchStreamInfos.value.isOnline!,
-                      child: Text(controller
-                          .twitchStreamInfos.value.startedAtDuration
-                          .toString()
-                          .substring(0, 7),),
+                      child: Text(
+                        controller.twitchStreamInfos.value.startedAtDuration
+                            .toString()
+                            .substring(0, 7),
+                      ),
                     ),
                   ),
                   Obx(
@@ -362,21 +366,22 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
               ),
               Obx(
                 () => Visibility(
-                    visible: controller.displayTwitchPlayer.value,
-                    child: SizedBox(
-                      height: 200,
-                      width: double.infinity,
-                      child: WebPageView(
-                        BrowserTab(
-                          iOSAudioSource: false,
-                          id: '1',
-                          title: '',
-                          toggled: true,
-                          url:
-                              'https://player.twitch.tv/?channel=${controller.homeViewController.twitchData?.twitchUser.login}&parent=www.irllink.com&muted=true',
-                        ),
+                  visible: controller.displayTwitchPlayer.value,
+                  child: SizedBox(
+                    height: 200,
+                    width: double.infinity,
+                    child: WebPageView(
+                      BrowserTab(
+                        iOSAudioSource: false,
+                        id: '1',
+                        title: '',
+                        toggled: true,
+                        url:
+                            'https://player.twitch.tv/?channel=${controller.homeViewController.twitchData?.twitchUser.login}&parent=www.irllink.com&muted=true',
                       ),
-                    ),),
+                    ),
+                  ),
+                ),
               ),
               const Divider(
                 height: 30,
@@ -423,10 +428,11 @@ Widget _shortcutButton({
     child: Container(
       alignment: Alignment.center,
       decoration: BoxDecoration(
-          color: isOn
-              ? Theme.of(context).colorScheme.tertiary
-              : Theme.of(context).colorScheme.tertiaryContainer,
-          borderRadius: const BorderRadius.all(Radius.circular(8)),),
+        color: isOn
+            ? Theme.of(context).colorScheme.tertiary
+            : Theme.of(context).colorScheme.tertiaryContainer,
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+      ),
       padding: const EdgeInsets.all(8),
       child: Text(
         text,
