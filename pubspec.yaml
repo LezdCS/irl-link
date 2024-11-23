@@ -74,7 +74,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.14.1
   flutter_lints: ^4.0.0
   build_runner: ^2.4.13
   auto_mappr: ^2.5.0
