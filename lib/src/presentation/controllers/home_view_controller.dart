@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:collection/collection.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,6 +17,7 @@ import 'package:irllink/src/core/services/twitch_event_sub_service.dart';
 import 'package:irllink/src/core/services/twitch_pub_sub_service.dart';
 import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
+import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/core/utils/list_move.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
@@ -109,16 +111,18 @@ class HomeViewController extends GetxController
     if (Get.arguments != null) {
       twitchData = Get.arguments[0];
 
+      Dio dioClient = initDio();
+      final twitchRepositoryImpl = TwitchRepositoryImpl(dioClient: dioClient);
       TwitchEventSubService subService = await Get.putAsync(
         () => TwitchEventSubService(
           createPollUseCase: CreatePollUseCase(
-            twitchRepository: TwitchRepositoryImpl(),
+            twitchRepository: twitchRepositoryImpl,
           ),
           endPollUseCase: EndPollUseCase(
-            twitchRepository: TwitchRepositoryImpl(),
+            twitchRepository: twitchRepositoryImpl,
           ),
           endPredictionUseCase: EndPredictionUseCase(
-            twitchRepository: TwitchRepositoryImpl(),
+            twitchRepository: twitchRepositoryImpl,
           ),
           homeViewController: this,
           talker: talkerService.talker,

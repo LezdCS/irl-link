@@ -23,6 +23,7 @@ class RealtimeIrl {
 
   Rx<RtIrlStatus> status = RtIrlStatus.stopped.obs;
   Talker talker = Get.find<TalkerService>().talker;
+  Dio dioClient = initDio();
 
   RealtimeIrl(
     this.key,
@@ -58,9 +59,8 @@ class RealtimeIrl {
   Future<DataState> updatePosition(Position p) async {
     try {
       Response response;
-      Dio dio = initDio();
-      dio.options.headers["Content-Type"] = "application/json";
-      response = await dio.post(
+      dioClient.options.headers["Content-Type"] = "application/json";
+      response = await dioClient.post(
         "https://rtirl.com/api/push?key=$key",
         data: {
           'latitude': p.latitude,
@@ -81,9 +81,8 @@ class RealtimeIrl {
     try {
       FlutterForegroundTask.stopService();
       Response response;
-      Dio dio = initDio();
       status.value = RtIrlStatus.stopped;
-      response = await dio.post(
+      response = await dioClient.post(
         "https://rtirl.com/api/stop?key=$key",
       );
       return DataSuccess(response.data);

@@ -12,7 +12,6 @@ import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/services/app_info_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
-import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/core/utils/mapper.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_credentials_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_poll_dto.dart';
@@ -28,7 +27,11 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:quiver/iterables.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 
-class TwitchRepositoryImpl extends TwitchRepository {
+class TwitchRepositoryImpl implements TwitchRepository {
+  final Mappr _mappr;
+  final Dio dioClient;
+  TwitchRepositoryImpl({required this.dioClient}) : _mappr = Mappr();
+
   @override
   Future<DataState<TwitchCredentials>> getTwitchOauth(
     TwitchAuthParams params,
@@ -107,7 +110,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
     TwitchCredentials twitchData,
   ) async {
     Response response;
-    var dio = initDio();
+
     try {
       final remoteConfig = FirebaseRemoteConfig.instance;
       await remoteConfig.fetchAndActivate();
@@ -118,7 +121,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
             remoteConfig.getString('irllink_refresh_token_url_dev');
       }
 
-      response = await dio.get(
+      response = await dioClient.get(
         apiRefreshTokenUrl,
         queryParameters: {
           'refresh_token': twitchData.refreshToken,
@@ -149,9 +152,9 @@ class TwitchRepositoryImpl extends TwitchRepository {
   Future<dynamic> validateToken(String accessToken) async {
     try {
       Response response;
-      var dio = initDio();
-      dio.options.headers["authorization"] = "Bearer $accessToken";
-      response = await dio.get('https://id.twitch.tv/oauth2/validate');
+
+      dioClient.options.headers["authorization"] = "Bearer $accessToken";
+      response = await dioClient.get('https://id.twitch.tv/oauth2/validate');
       return response.data;
     } on DioException catch (e) {
       return DataFailed(e.toString());
@@ -163,9 +166,9 @@ class TwitchRepositoryImpl extends TwitchRepository {
     final box = GetStorage();
     box.remove('twitchData');
     Response response;
-    var dio = initDio();
+
     try {
-      response = await dio.post(
+      response = await dioClient.post(
         'https://id.twitch.tv/oauth2/revoke',
         queryParameters: {
           'client_id': kTwitchAuthClientId,
@@ -206,9 +209,8 @@ class TwitchRepositoryImpl extends TwitchRepository {
         return DataFailed("Scopes have been updated, please login again.");
       }
 
-      Mappr mappr = Mappr();
-      TwitchCredentials twitchData =
-          mappr.convert<TwitchCredentialsDTO, TwitchCredentials>(twitchDataDTO);
+      TwitchCredentials twitchData = _mappr
+          .convert<TwitchCredentialsDTO, TwitchCredentials>(twitchDataDTO);
 
       return DataSuccess(twitchData);
     } else {
@@ -218,9 +220,8 @@ class TwitchRepositoryImpl extends TwitchRepository {
 
   Future<void> setTwitchOnLocal(TwitchCredentials twitchData) async {
     final box = GetStorage();
-    Mappr mappr = Mappr();
     TwitchCredentialsDTO twitchDataDTO =
-        mappr.convert<TwitchCredentials, TwitchCredentialsDTO>(twitchData);
+        _mappr.convert<TwitchCredentials, TwitchCredentialsDTO>(twitchData);
     String jsonTwitchData = jsonEncode(twitchDataDTO);
     box.write('twitchData', jsonTwitchData);
   }
@@ -231,19 +232,19 @@ class TwitchRepositoryImpl extends TwitchRepository {
     String accessToken,
   ) async {
     Response response;
-    var dio = initDio();
+
     try {
-      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dio.options.headers["authorization"] = "Bearer $accessToken";
+      dioClient.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dioClient.options.headers["authorization"] = "Bearer $accessToken";
 
       if (username != null) {
-        response = await dio.get(
+        response = await dioClient.get(
           'https://api.twitch.tv/helix/users',
           queryParameters: {'login': username},
         );
       } else {
         //if no username then it get the user linked to the accessToken
-        response = await dio.get(
+        response = await dioClient.get(
           'https://api.twitch.tv/helix/users',
         );
       }
@@ -251,9 +252,8 @@ class TwitchRepositoryImpl extends TwitchRepository {
       TwitchUserDTO twitchUserDTO =
           TwitchUserDTO.fromJson(response.data['data'][0]);
 
-      Mappr mappr = Mappr();
       TwitchUser twitchUser =
-          mappr.convert<TwitchUserDTO, TwitchUser>(twitchUserDTO);
+          _mappr.convert<TwitchUserDTO, TwitchUser>(twitchUserDTO);
 
       return DataSuccess(twitchUser);
     } on DioException catch (e) {
@@ -267,26 +267,25 @@ class TwitchRepositoryImpl extends TwitchRepository {
     String accessToken,
   ) async {
     Response response;
-    var dio = initDio();
+
     List<TwitchUser> twitchUsers = <TwitchUser>[];
     try {
-      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dio.options.headers["authorization"] = "Bearer $accessToken";
+      dioClient.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dioClient.options.headers["authorization"] = "Bearer $accessToken";
 
       var chunks = partition(ids, 100);
 
       for (var chunk in chunks) {
         await Future.delayed(const Duration(seconds: 5), () async {
-          response = await dio.get(
+          response = await dioClient.get(
             'https://api.twitch.tv/helix/users',
             queryParameters: {'id': chunk},
           );
 
-          Mappr mappr = Mappr();
           response.data['data'].forEach(
             (user) => {
               twitchUsers.add(
-                mappr.convert<TwitchUserDTO, TwitchUser>(
+                _mappr.convert<TwitchUserDTO, TwitchUser>(
                   TwitchUserDTO.fromJson(user),
                 ),
               ),
@@ -308,16 +307,16 @@ class TwitchRepositoryImpl extends TwitchRepository {
   ) async {
     Response response;
     Response response2;
-    var dio = initDio();
+
     try {
-      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dio.options.headers["authorization"] = "Bearer $accessToken";
-      response = await dio.get(
+      dioClient.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dioClient.options.headers["authorization"] = "Bearer $accessToken";
+      response = await dioClient.get(
         'https://api.twitch.tv/helix/channels',
         queryParameters: {'broadcaster_id': broadcasterId},
       );
 
-      response2 = await dio.get(
+      response2 = await dioClient.get(
         'https://api.twitch.tv/helix/streams',
         queryParameters: {'user_id': broadcasterId},
       );
@@ -332,9 +331,8 @@ class TwitchRepositoryImpl extends TwitchRepository {
         reponse3['data'][0],
       );
 
-      Mappr mappr = Mappr();
       TwitchStreamInfos twitchStreamInfos =
-          mappr.convert<TwitchStreamInfosDto, TwitchStreamInfos>(
+          _mappr.convert<TwitchStreamInfosDto, TwitchStreamInfos>(
         twitchStreamInfosDto,
       );
 
@@ -352,10 +350,10 @@ class TwitchRepositoryImpl extends TwitchRepository {
   ) async {
     Response response;
     Map<String, dynamic> settings = {};
-    var dio = initDio();
+
     try {
-      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dio.options.headers["authorization"] = "Bearer $accessToken";
+      dioClient.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dioClient.options.headers["authorization"] = "Bearer $accessToken";
 
       if (twitchStreamInfos != null) {
         settings = {
@@ -372,7 +370,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
         }
       }
 
-      response = await dio.patch(
+      response = await dioClient.patch(
         'https://api.twitch.tv/helix/chat/settings',
         queryParameters: {
           'broadcaster_id': broadcasterId,
@@ -393,12 +391,11 @@ class TwitchRepositoryImpl extends TwitchRepository {
     String broadcasterId,
     String title,
   ) async {
-    var dio = initDio();
     try {
-      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dio.options.headers["authorization"] = "Bearer $accessToken";
+      dioClient.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dioClient.options.headers["authorization"] = "Bearer $accessToken";
       Map titleMap = {"title": title};
-      await dio.patch(
+      await dioClient.patch(
         'https://api.twitch.tv/helix/channels',
         queryParameters: {
           'broadcaster_id': broadcasterId,
@@ -420,11 +417,9 @@ class TwitchRepositoryImpl extends TwitchRepository {
     String status,
     String? winningOutcomeId,
   ) async {
-    var dio = initDio();
-
     try {
-      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dio.options.headers["authorization"] = "Bearer $accessToken";
+      dioClient.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dioClient.options.headers["authorization"] = "Bearer $accessToken";
 
       Map body = {
         "broadcaster_id": broadcasterId,
@@ -433,7 +428,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
         "winning_outcome_id": winningOutcomeId ?? '',
       };
 
-      await dio.patch(
+      await dioClient.patch(
         'https://api.twitch.tv/helix/predictions',
         data: jsonEncode(body),
       );
@@ -451,12 +446,11 @@ class TwitchRepositoryImpl extends TwitchRepository {
     String pollId,
     String status,
   ) async {
-    var dio = initDio();
     Response response;
 
     try {
-      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dio.options.headers["authorization"] = "Bearer $accessToken";
+      dioClient.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dioClient.options.headers["authorization"] = "Bearer $accessToken";
 
       Map body = {
         "broadcaster_id": broadcasterId,
@@ -464,14 +458,13 @@ class TwitchRepositoryImpl extends TwitchRepository {
         "status": status,
       };
 
-      response = await dio.patch(
+      response = await dioClient.patch(
         'https://api.twitch.tv/helix/polls',
         data: jsonEncode(body),
       );
 
       TwitchPollDTO pollDTO = TwitchPollDTO.fromJson(response.data['data'][0]);
-      Mappr mappr = Mappr();
-      TwitchPoll poll = mappr.convert<TwitchPollDTO, TwitchPoll>(pollDTO);
+      TwitchPoll poll = _mappr.convert<TwitchPollDTO, TwitchPoll>(pollDTO);
 
       return DataSuccess(poll);
     } on DioException catch (e) {
@@ -486,12 +479,12 @@ class TwitchRepositoryImpl extends TwitchRepository {
     TwitchPoll newPoll,
   ) async {
     // Response response;
-    var dio = initDio();
+
     // TwitchPrediction? prediction;
     try {
-      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dio.options.headers["authorization"] = "Bearer $accessToken";
-      // response = await dio.post(
+      dioClient.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dioClient.options.headers["authorization"] = "Bearer $accessToken";
+      // response = await dioClient.post(
       //     'https://api.twitch.tv/helix/predictions?broadcaster_id=$broadcasterId');
 
       return DataSuccess(newPoll);
@@ -507,10 +500,9 @@ class TwitchRepositoryImpl extends TwitchRepository {
     ChatMessage message,
     int? duration,
   ) async {
-    var dio = initDio();
     try {
-      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dio.options.headers["authorization"] = "Bearer $accessToken";
+      dioClient.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dioClient.options.headers["authorization"] = "Bearer $accessToken";
       Map body = {
         "data": {
           "user_id": message.authorId,
@@ -520,7 +512,7 @@ class TwitchRepositoryImpl extends TwitchRepository {
         body['data']['duration'] = duration.toString();
       }
 
-      await dio.post(
+      await dioClient.post(
         'https://api.twitch.tv/helix/moderation/bans',
         queryParameters: {
           'broadcaster_id': broadcasterId,
@@ -539,11 +531,10 @@ class TwitchRepositoryImpl extends TwitchRepository {
     String broadcasterId,
     ChatMessage message,
   ) async {
-    var dio = initDio();
     try {
-      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dio.options.headers["authorization"] = "Bearer $accessToken";
-      await dio.delete(
+      dioClient.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dioClient.options.headers["authorization"] = "Bearer $accessToken";
+      await dioClient.delete(
         'https://api.twitch.tv/helix/moderation/chat',
         queryParameters: {
           'broadcaster_id': broadcasterId,

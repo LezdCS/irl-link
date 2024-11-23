@@ -1,9 +1,12 @@
+import 'package:dio/dio.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/bindings_interface.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
+import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/services/tts_service.dart';
+import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/usecases/streamelements/disconnect_usecase.dart';
@@ -16,9 +19,15 @@ import 'package:irllink/src/presentation/controllers/settings_view_controller.da
 class SettingsBindings extends Bindings {
   @override
   void dependencies() {
+    Dio dioClient = initDio();
     // Repositories
-    final twitchRepository = TwitchRepositoryImpl();
-    final streamelementsRepository = StreamelementsRepositoryImpl();
+    final twitchRepository = TwitchRepositoryImpl(
+      dioClient: dioClient,
+    );
+    final streamelementsRepository = StreamelementsRepositoryImpl(
+      talker: Get.find<TalkerService>().talker,
+      dioClient: dioClient,
+    );
 
     // Use cases
     GetTwitchUsersUseCase getTwitchUsersUseCase =

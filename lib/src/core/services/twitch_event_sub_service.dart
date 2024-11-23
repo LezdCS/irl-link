@@ -31,7 +31,7 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
     required this.endPredictionUseCase,
     required this.homeViewController,
     required this.talker,
-  });
+  }) : mappr = Mappr();
 
   final CreatePollUseCase createPollUseCase;
   final EndPollUseCase endPollUseCase;
@@ -40,6 +40,7 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
   final HomeViewController homeViewController;
 
   final Talker talker;
+  final Mappr mappr;
 
   late String accessToken;
   late String channelName;
@@ -207,13 +208,11 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
         //POLLS
         case 'channel.poll.begin':
         case 'channel.poll.progress':
-          TwitchPollDTO pollDTO = TwitchPollDTO.fromJson(event);
-          Mappr mappr = Mappr();
+          final pollDTO = TwitchPollDTO.fromJson(event);
           currentPoll.value = mappr.convert<TwitchPollDTO, TwitchPoll>(pollDTO);
           break;
         case 'channel.poll.end':
-          TwitchPollDTO pollDTO = TwitchPollDTO.fromJson(event);
-          Mappr mappr = Mappr();
+          final pollDTO = TwitchPollDTO.fromJson(event);
           currentPoll.value = mappr.convert<TwitchPollDTO, TwitchPoll>(pollDTO);
           Future.delayed(const Duration(seconds: 20)).then(
             (value) => currentPoll.value = TwitchPoll.empty(),
@@ -224,16 +223,12 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
         case 'channel.prediction.begin':
         case 'channel.prediction.progress':
         case 'channel.prediction.lock':
-          TwitchPredictionDTO predictionDTO =
-              TwitchPredictionDTO.fromJson(event);
-          Mappr mappr = Mappr();
+          final predictionDTO = TwitchPredictionDTO.fromJson(event);
           currentPrediction.value = mappr
               .convert<TwitchPredictionDTO, TwitchPrediction>(predictionDTO);
           break;
         case 'channel.prediction.end':
-          TwitchPredictionDTO predictionDTO =
-              TwitchPredictionDTO.fromJson(event);
-          Mappr mappr = Mappr();
+          final predictionDTO = TwitchPredictionDTO.fromJson(event);
           currentPrediction.value = mappr
               .convert<TwitchPredictionDTO, TwitchPrediction>(predictionDTO);
           Future.delayed(const Duration(seconds: 20)).then(
@@ -244,14 +239,12 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
         //HYPE TRAIN
         case 'channel.hype_train.begin':
         case 'channel.hype_train.progress':
-          TwitchHypeTrainDTO hypeTrainDTO = TwitchHypeTrainDTO.fromJson(event);
-          Mappr mappr = Mappr();
+          final hypeTrainDTO = TwitchHypeTrainDTO.fromJson(event);
           currentHypeTrain.value =
               mappr.convert<TwitchHypeTrainDTO, TwitchHypeTrain>(hypeTrainDTO);
           break;
         case 'channel.hype_train.end':
-          TwitchHypeTrainDTO hypeTrainDTO = TwitchHypeTrainDTO.fromJson(event);
-          Mappr mappr = Mappr();
+          final hypeTrainDTO = TwitchHypeTrainDTO.fromJson(event);
           currentHypeTrain.value =
               mappr.convert<TwitchHypeTrainDTO, TwitchHypeTrain>(hypeTrainDTO);
           Future.delayed(const Duration(seconds: 20)).then(
