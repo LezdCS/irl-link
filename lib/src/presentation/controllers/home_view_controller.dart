@@ -111,8 +111,9 @@ class HomeViewController extends GetxController
     if (Get.arguments != null) {
       twitchData = Get.arguments[0];
 
-      Dio dioClient = initDio();
-      final twitchRepositoryImpl = TwitchRepositoryImpl(dioClient: dioClient);
+      Dio dioTwitchClient = initDio(kTwitchApiUrlBase);
+      final twitchRepositoryImpl =
+          TwitchRepositoryImpl(dioClient: dioTwitchClient);
       TwitchEventSubService subService = await Get.putAsync(
         () => TwitchEventSubService(
           createPollUseCase: CreatePollUseCase(
@@ -126,6 +127,7 @@ class HomeViewController extends GetxController
           ),
           homeViewController: this,
           talker: talkerService.talker,
+          dioClient: dioTwitchClient,
         ).init(
           token: twitchData!.accessToken,
           channel: twitchData!.twitchUser.login,

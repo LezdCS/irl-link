@@ -23,7 +23,7 @@ class RealtimeIrl {
 
   Rx<RtIrlStatus> status = RtIrlStatus.stopped.obs;
   Talker talker = Get.find<TalkerService>().talker;
-  Dio dioClient = initDio();
+  Dio dioClient = initDio('https://rtirl.com/api');
 
   RealtimeIrl(
     this.key,
@@ -59,9 +59,8 @@ class RealtimeIrl {
   Future<DataState> updatePosition(Position p) async {
     try {
       Response response;
-      dioClient.options.headers["Content-Type"] = "application/json";
       response = await dioClient.post(
-        "https://rtirl.com/api/push?key=$key",
+        "/push?key=$key",
         data: {
           'latitude': p.latitude,
           'longitude': p.longitude,
@@ -83,7 +82,7 @@ class RealtimeIrl {
       Response response;
       status.value = RtIrlStatus.stopped;
       response = await dioClient.post(
-        "https://rtirl.com/api/stop?key=$key",
+        "/stop?key=$key",
       );
       return DataSuccess(response.data);
     } on DioException catch (e) {

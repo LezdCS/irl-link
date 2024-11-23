@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/convert_to_device_timezone.dart';
 
-import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/core/utils/mapper.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_hype_train_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_poll_dto.dart';
@@ -31,6 +30,7 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
     required this.endPredictionUseCase,
     required this.homeViewController,
     required this.talker,
+    required this.dioClient,
   }) : mappr = Mappr();
 
   final CreatePollUseCase createPollUseCase;
@@ -41,6 +41,7 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
 
   final Talker talker;
   final Mappr mappr;
+  final Dio dioClient;
 
   late String accessToken;
   late String channelName;
@@ -283,13 +284,12 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
     String sessionId,
     Map<String, String> condition,
   ) async {
-    var dio = initDio();
     try {
-      dio.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dio.options.headers["authorization"] = "Bearer $accessToken";
+      dioClient.options.headers['Client-Id'] = kTwitchAuthClientId;
+      dioClient.options.headers["authorization"] = "Bearer $accessToken";
       // await dio.post('http://localhost:8080/eventsub/subscriptions', data: {
-      await dio.post(
-        'https://api.twitch.tv/helix/eventsub/subscriptions',
+      await dioClient.post(
+        '/helix/eventsub/subscriptions',
         data: {
           "type": type,
           "version": version,

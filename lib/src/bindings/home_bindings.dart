@@ -5,6 +5,7 @@ import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/services/watch_service.dart';
+import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
@@ -34,14 +35,16 @@ import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.
 class HomeBindings extends Bindings {
   @override
   Future<void> dependencies() async {
-    Dio dioClient = initDio();
+    Dio dioTwitchClient = initDio(kTwitchApiUrlBase);
+    Dio streamElementsDioClient = initDio(kStreamelementsUrlBase);
+
     // Repositories
     final twitchRepository = TwitchRepositoryImpl(
-      dioClient: dioClient,
+      dioClient: dioTwitchClient,
     );
     final streamelementsRepository = StreamelementsRepositoryImpl(
       talker: Get.find<TalkerService>().talker,
-      dioClient: dioClient,
+      dioClient: streamElementsDioClient,
     );
 
     // Services

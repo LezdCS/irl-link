@@ -24,7 +24,7 @@ class StoreService extends GetxService {
   final GetTwitchLocalUseCase getTwitchLocalUseCase;
   final Talker talker;
 
-  Dio dioClient = initDio();
+  Dio dioClient = initDio('');
 
   late StreamSubscription<List<PurchaseDetails>> subscription;
   List<ProductDetails> products = [];

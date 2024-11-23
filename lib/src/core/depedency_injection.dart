@@ -7,6 +7,7 @@ import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/core/services/watch_service.dart';
+import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/data/repositories/settings_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
@@ -20,14 +21,14 @@ Future<void> initializeDependencies() async {
     permanent: true,
   );
 
-  Dio dioClient = initDio();
+  Dio dioTwitchClient = initDio(kTwitchApiUrlBase);
 
   // Repositories
   final settingsRepository = SettingsRepositoryImpl(
     talker: Get.find<TalkerService>().talker,
   );
   final twitchRepository = TwitchRepositoryImpl(
-    dioClient: dioClient,
+    dioClient: dioTwitchClient,
   );
 
   // Use cases

@@ -35,7 +35,7 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
     StreamelementsAuthParams params,
   ) async {
     try {
-      Uri url = Uri.https(kStreamelementsUrlBase, kStreamelementsAuthPath, {
+      Uri url = Uri.https('api.streamelements.com', '/oauth2/authorize', {
         'client_id': params.clientId,
         'redirect_uri': params.redirectUri,
         'response_type': params.responseType,
@@ -125,8 +125,7 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
     try {
       Response response;
       dioClient.options.headers["authorization"] = "OAuth $accessToken";
-      response =
-          await dioClient.get('https://api.streamelements.com/oauth2/validate');
+      response = await dioClient.get('/oauth2/validate');
       talker.logTyped(StreamElementsLog('StreamElements token validated.'));
 
       return DataSuccess(response.data);
@@ -143,7 +142,7 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
     dioClient.options.headers["authorization"] = "OAuth $accessToken";
     try {
       await dioClient.post(
-        'https://api.streamelements.com/oauth2/revoke',
+        '/oauth2/revoke',
         queryParameters: {
           'client_id': kStreamelementsAuthClientId,
           'token': accessToken,
@@ -165,7 +164,7 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
     try {
       dioClient.options.headers["Authorization"] = "oAuth $token";
       await dioClient.post(
-        'https://api.streamelements.com/kappa/v2/activities/${activity.channel}/${activity.id}/replay',
+        '/kappa/v2/activities/${activity.channel}/${activity.id}/replay',
       );
     } on DioException catch (e) {
       debugPrint(e.toString());
@@ -236,7 +235,7 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
     try {
       dioClient.options.headers["Authorization"] = "oAuth $token";
       response = await dioClient.get(
-        'https://api.streamelements.com/kappa/v2/activities/$channel',
+        '/kappa/v2/activities/$channel',
         queryParameters: {
           'after': DateTime.now().subtract(const Duration(days: 365)),
           'before': DateTime.now(),
@@ -271,7 +270,7 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
     try {
       dioClient.options.headers["Authorization"] = "oAuth $token";
       Response response = await dioClient.get(
-        'https://api.streamelements.com/kappa/v2/overlays/$channel',
+        '/kappa/v2/overlays/$channel',
         queryParameters: {'search': ' ', 'type': 'regular'},
       );
       response.data['docs'].forEach(
@@ -291,7 +290,7 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
     try {
       dioClient.options.headers["Authorization"] = "oAuth $token";
       Response response = await dioClient.get(
-        'https://api.streamelements.com/kappa/v2/channels/me',
+        '/kappa/v2/channels/me',
       );
 
       SeMeDTO meDto = SeMeDTO.fromJson(response.data);
@@ -308,7 +307,7 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
     try {
       dioClient.options.headers["Authorization"] = "Bearer $token";
       await dioClient.post(
-        'https://api.streamelements.com/kappa/v2/songrequest/$userId/skip',
+        '/kappa/v2/songrequest/$userId/skip',
       );
     } on DioException catch (e) {
       debugPrint(e.toString());
@@ -320,7 +319,7 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
     try {
       dioClient.options.headers["Authorization"] = "Bearer $token";
       await dioClient.delete(
-        'https://api.streamelements.com/kappa/v2/songrequest/$userId/queue/$songId',
+        '/kappa/v2/songrequest/$userId/queue/$songId',
       );
     } on DioException catch (e) {
       debugPrint(e.toString());
@@ -332,7 +331,7 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
     try {
       dioClient.options.headers["Authorization"] = "Bearer $token";
       await dioClient.delete(
-        'https://api.streamelements.com/kappa/v2/songrequest/$userId/queue/',
+        '/kappa/v2/songrequest/$userId/queue/',
       );
     } on DioException catch (e) {
       debugPrint(e.toString());
@@ -349,7 +348,7 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
     try {
       dioClient.options.headers["Authorization"] = "Bearer $token";
       Response response = await dioClient.get(
-        'https://api.streamelements.com/kappa/v2/songrequest/$userId/queue',
+        '/kappa/v2/songrequest/$userId/queue',
       );
 
       response.data.forEach(
@@ -377,7 +376,7 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
     try {
       dioClient.options.headers["Authorization"] = "oAuth $token";
       Response response = await dioClient.get(
-        'https://api.streamelements.com/kappa/v2/songrequest/$userId/playing',
+        '/kappa/v2/songrequest/$userId/playing',
       );
 
       if (response.data != null) {
@@ -406,7 +405,7 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
     try {
       dioClient.options.headers["Authorization"] = "Bearer $token";
       await dioClient.post(
-        'https://api.streamelements.com/kappa/v2/songrequest/$userId/player/$state',
+        '/kappa/v2/songrequest/$userId/player/$state',
       );
     } on DioException catch (e) {
       debugPrint(e.toString());
