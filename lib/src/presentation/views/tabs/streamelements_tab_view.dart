@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
-import 'package:irllink/src/presentation/widgets/stream_elements/se_activities_list.dart';
-import 'package:irllink/src/presentation/widgets/stream_elements/se_overlays.dart';
-import 'package:irllink/src/presentation/widgets/stream_elements/se_song_requests.dart';
+import 'package:irllink/src/presentation/views/tabs/stream_elements/se_activities_list.dart';
+import 'package:irllink/src/presentation/views/tabs/stream_elements/se_overlays.dart';
+import 'package:irllink/src/presentation/views/tabs/stream_elements/se_song_requests.dart';
 
 class StreamelementsTabView extends GetView<StreamelementsViewController> {
   const StreamelementsTabView({super.key});

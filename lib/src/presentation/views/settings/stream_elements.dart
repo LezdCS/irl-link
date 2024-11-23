@@ -5,6 +5,7 @@ import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
+import 'package:irllink/src/presentation/widgets/premium_feature_badge.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class StreamElements extends GetView<SettingsViewController> {
@@ -25,29 +26,7 @@ class StreamElements extends GetView<SettingsViewController> {
                 fontSize: 18,
               ),
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-              margin: const EdgeInsets.only(left: 4),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.tertiary,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Wrap(
-                children: [
-                  Text(
-                    "premium_feature".tr,
-                    style: const TextStyle(
-                      fontSize: 12,
-                    ),
-                  ),
-                  const Icon(
-                    Icons.star_purple500,
-                    size: 12,
-                    color: Colors.yellow,
-                  ),
-                ],
-              ),
-            ),
+            premiumFeatureBadge(context),
           ],
         ),
         const SizedBox(height: 6),

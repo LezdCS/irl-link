@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:irllink/src/domain/entities/pinned_message.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/author_name.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/timestamp.dart';
 
-class PinnedMessagesSheet extends GetView {
+class PinnedMessagesSheet extends StatelessWidget {
   const PinnedMessagesSheet({
     super.key,
     required this.messages,

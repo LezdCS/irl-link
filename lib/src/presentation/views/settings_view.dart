@@ -7,18 +7,18 @@ import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
 
 import 'package:irllink/src/domain/entities/settings.dart';
-import 'package:irllink/src/presentation//widgets/settings/chats_joined.dart';
-import 'package:irllink/src/presentation//widgets/settings/manage_list_browser_tabs.dart';
-import 'package:irllink/src/presentation//widgets/settings/manage_list_hidden_users.dart';
-import 'package:irllink/src/presentation//widgets/settings/obs_settings.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
-import 'package:irllink/src/presentation/widgets/settings/chat_events.dart';
-import 'package:irllink/src/presentation/widgets/settings/dashboard_settings_view.dart';
-import 'package:irllink/src/presentation/widgets/settings/realtime_irl.dart';
-import 'package:irllink/src/presentation/widgets/settings/stream_elements.dart';
-import 'package:irllink/src/presentation/widgets/settings/subscription.dart';
-import 'package:irllink/src/presentation/widgets/settings/talker_screen.dart';
-import 'package:irllink/src/presentation/widgets/settings/tts.dart';
+import 'package:irllink/src/presentation/views/settings/chat_events.dart';
+import 'package:irllink/src/presentation/views/settings/chats_joined.dart';
+import 'package:irllink/src/presentation/views/settings/dashboard_settings_view.dart';
+import 'package:irllink/src/presentation/views/settings/manage_list_browser_tabs.dart';
+import 'package:irllink/src/presentation/views/settings/manage_list_hidden_users.dart';
+import 'package:irllink/src/presentation/views/settings/obs_settings.dart';
+import 'package:irllink/src/presentation/views/settings/realtime_irl.dart';
+import 'package:irllink/src/presentation/views/settings/stream_elements.dart';
+import 'package:irllink/src/presentation/views/settings/subscription.dart';
+import 'package:irllink/src/presentation/views/settings/talker_screen.dart';
+import 'package:irllink/src/presentation/views/settings/tts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsView extends GetView<SettingsViewController> {
@@ -329,6 +329,9 @@ class SettingsView extends GetView<SettingsViewController> {
                               .copyWith(isDarkMode: value),
                         );
                         settingsService.saveSettings();
+                        Get.changeThemeMode(
+                          value ? ThemeMode.dark : ThemeMode.light,
+                        );
                       },
                       value: settings.value.generalSettings.isDarkMode,
                     ),

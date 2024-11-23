@@ -6,7 +6,7 @@ import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/poll.dart';
 import 'package:irllink/src/presentation/widgets/prediction.dart';
-import 'package:irllink/src/presentation/widgets/tabs/dialogs/slow_mode_dialog.dart';
+import 'package:irllink/src/presentation/widgets/slow_mode_dialog.dart';
 import 'package:irllink/src/presentation/widgets/web_page_view.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
