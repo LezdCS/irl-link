@@ -7,10 +7,8 @@ import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 
-class Tts extends StatelessWidget {
-  final SettingsViewController controller;
-
-  const Tts({super.key, required this.controller});
+class Tts extends GetView<SettingsViewController> {
+  const Tts({super.key});
 
   @override
   Widget build(BuildContext context) {

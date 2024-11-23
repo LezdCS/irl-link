@@ -78,7 +78,7 @@ class SettingsView extends GetView<SettingsViewController> {
             padding:
                 const EdgeInsets.only(top: 8, left: 10, right: 10, bottom: 8),
             children: [
-              Subscription(controller: controller),
+              const Subscription(),
               const Divider(
                 height: 20,
               ),
@@ -242,9 +242,7 @@ class SettingsView extends GetView<SettingsViewController> {
                   Icons.reviews,
                   () {
                     Get.to(
-                      () => ChatEvents(
-                        controller: controller,
-                      ),
+                      () => const ChatEvents(),
                     );
                   },
                 ),
@@ -264,9 +262,7 @@ class SettingsView extends GetView<SettingsViewController> {
                   Icons.spatial_audio_off_rounded,
                   () {
                     Get.to(
-                      () => Tts(
-                        controller: controller,
-                      ),
+                      () => const Tts(),
                     );
                   },
                 ),
@@ -494,9 +490,7 @@ class SettingsView extends GetView<SettingsViewController> {
                 ),
                 Visibility(
                   visible: settings.value.isObsConnected,
-                  child: ObsSettings(
-                    controller: controller,
-                  ),
+                  child: const ObsSettings(),
                 ),
                 const SizedBox(height: 10),
                 const StreamElements(),

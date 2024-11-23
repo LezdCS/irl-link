@@ -6,10 +6,8 @@ import 'package:irllink/src/presentation/controllers/settings_view_controller.da
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-class ObsSettings extends StatelessWidget {
-  final SettingsViewController controller;
-
-  const ObsSettings({super.key, required this.controller});
+class ObsSettings extends GetView<SettingsViewController> {
+  const ObsSettings({super.key});
 
   @override
   Widget build(BuildContext context) {
