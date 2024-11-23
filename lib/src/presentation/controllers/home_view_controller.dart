@@ -357,9 +357,6 @@ class HomeViewController extends GetxController
   }
 
   Future<void> generateChats() async {
-    if (twitchData == null) {
-      return;
-    }
     Settings settings = settingsService.settings.value;
 
     RxList<ChatView> groupsViews = RxList<ChatView>.from(chatsViews);
@@ -407,20 +404,21 @@ class HomeViewController extends GetxController
     if (!chatsViews.any(
       (groupView) => groupView.chatGroup.id == permanentFirstGroup?.id,
     )) {
-      // We add the Twitch Chat of the user to the first position of the channels of this group
-      List<Channel> updatedChannels = List.from(permanentFirstGroup.channels);
-      updatedChannels.insert(
-        0,
-        Channel(
-          platform: Platform.twitch,
-          channel: twitchData!.twitchUser.login,
-          enabled: true,
-        ),
-      );
-      permanentFirstGroup = permanentFirstGroup.copyWith(
-        channels: updatedChannels,
-      );
-
+      if (twitchData != null) {
+        // We add the Twitch Chat of the user to the first position of the channels of this group
+        List<Channel> updatedChannels = List.from(permanentFirstGroup.channels);
+        updatedChannels.insert(
+          0,
+          Channel(
+            platform: Platform.twitch,
+            channel: twitchData!.twitchUser.login,
+            enabled: true,
+          ),
+        );
+        permanentFirstGroup = permanentFirstGroup.copyWith(
+          channels: updatedChannels,
+        );
+      }
       ChatView groupView = ChatView(
         chatGroup: permanentFirstGroup,
       );
@@ -433,14 +431,14 @@ class HomeViewController extends GetxController
       if (c.chatGroup.id == permanentFirstGroup.id) {
         c.controller.updateChannels(
           permanentFirstGroup.channels,
-          twitchData!.twitchUser.login,
+          twitchData?.twitchUser.login,
         );
       } else {
         ChatGroup group =
             settingsGroups.firstWhere((g) => g.id == c.chatGroup.id);
         c.controller.updateChannels(
           group.channels,
-          twitchData!.twitchUser.login,
+          twitchData?.twitchUser.login,
         );
       }
       c.controller.createChats();

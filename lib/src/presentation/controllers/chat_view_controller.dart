@@ -227,7 +227,7 @@ class ChatViewController extends GetxController
     isAutoScrolldown.value = true;
   }
 
-  void updateChannels(List<Channel> channels, twitchUsername) {
+  void updateChannels(List<Channel> channels, String? twitchUsername) {
     // check chatGroup channels not existings in channels and remove them
     List<Channel> channelsToRemove = [];
     for (var channel in chatGroup.channels) {

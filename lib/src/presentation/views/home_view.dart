@@ -165,12 +165,14 @@ class HomeView extends GetView<HomeViewController> {
                             right: 8,
                             top: 4,
                           ),
-                          child: hypeTrain(
-                            context,
-                            Get.find<TwitchEventSubService>()
-                                .currentHypeTrain
-                                .value,
-                          ),
+                          child: Get.isRegistered<TwitchEventSubService>()
+                              ? hypeTrain(
+                                  context,
+                                  Get.find<TwitchEventSubService>()
+                                      .currentHypeTrain
+                                      .value,
+                                )
+                              : Container(),
                         ),
                       ),
                       Visibility(
