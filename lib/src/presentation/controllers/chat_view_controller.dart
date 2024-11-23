@@ -332,34 +332,40 @@ class ChatViewController extends GetxController
   }
 
   void createTwitchChat(Channel tc) {
-    TwitchChat twitchChat = TwitchChat(
-      tc.channel,
-      twitchData!.twitchUser.login,
-      twitchData!.accessToken,
-      clientId: kTwitchAuthClientId,
-      onConnected: () {},
-      onClearChat: () {
-        chatMessages.clear();
-      },
-      onDeletedMessageByUserId: (String? userId) {
-        for (ChatMessage message in chatMessages.where(
-          (message) =>
-              message.authorId == userId && message.platform == Platform.twitch,
-        )) {
-          message.isDeleted = true;
-        }
-        chatMessages.refresh();
-      },
-      onDeletedMessageByMessageId: (String? messageId) {
-        chatMessages
-            .firstWhereOrNull((message) => message.id == messageId)!
-            .isDeleted = true;
-        chatMessages.refresh();
-      },
-      onDone: () {},
-      onError: () {},
-      params: const TwitchChatParameters(addFirstMessages: true),
-    );
+    TwitchChat twitchChat;
+    if (twitchData == null) {
+      twitchChat = TwitchChat.anonymous(tc.channel);
+    } else {
+      twitchChat = TwitchChat(
+        tc.channel,
+        twitchData!.twitchUser.login,
+        twitchData!.accessToken,
+        clientId: kTwitchAuthClientId,
+        onConnected: () {},
+        onClearChat: () {
+          chatMessages.clear();
+        },
+        onDeletedMessageByUserId: (String? userId) {
+          for (ChatMessage message in chatMessages.where(
+            (message) =>
+                message.authorId == userId &&
+                message.platform == Platform.twitch,
+          )) {
+            message.isDeleted = true;
+          }
+          chatMessages.refresh();
+        },
+        onDeletedMessageByMessageId: (String? messageId) {
+          chatMessages
+              .firstWhereOrNull((message) => message.id == messageId)!
+              .isDeleted = true;
+          chatMessages.refresh();
+        },
+        onDone: () {},
+        onError: () {},
+        params: const TwitchChatParameters(addFirstMessages: true),
+      );
+    }
     twitchChat.connect();
     twitchChats.add(twitchChat);
 
