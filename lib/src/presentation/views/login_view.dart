@@ -2,10 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/app_info_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/presentation/controllers/login_view_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
 
 class LoginView extends GetView<LoginViewController> {
   const LoginView({super.key});
@@ -13,7 +13,7 @@ class LoginView extends GetView<LoginViewController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: ColoredBox(
         color: Theme.of(context).colorScheme.surface,
         child: SafeArea(
           child: Obx(
@@ -32,24 +32,25 @@ class LoginView extends GetView<LoginViewController> {
         TextButton.icon(
           label: Text.rich(
             TextSpan(
-                text: "Login with ",
-                style: const TextStyle(
-                  color: Colors.grey,
-                  fontSize: 20,
-                ),
-                children: [
-                  TextSpan(
-                    text: 'Twitch',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.tertiary,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
+              text: "Login with ",
+              style: const TextStyle(
+                color: Colors.grey,
+                fontSize: 20,
+              ),
+              children: [
+                TextSpan(
+                  text: 'Twitch',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.tertiary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
                   ),
-                ]),
+                ),
+              ],
+            ),
           ),
           icon: const Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8),
             child: Image(
               height: 24,
               width: 24,
@@ -69,6 +70,7 @@ class LoginView extends GetView<LoginViewController> {
           height: 10,
         ),
         TextButton(
+          key: const Key("maybe_later_key"),
           style: TextButton.styleFrom(
             backgroundColor: Theme.of(context).colorScheme.secondary,
           ),
@@ -94,23 +96,23 @@ class LoginView extends GetView<LoginViewController> {
               color: Theme.of(context).colorScheme.tertiary,
             ),
           ),
-          controller.twitchCredentials.value != null
-              ? CachedNetworkImage(
-                  imageUrl: controller
-                      .twitchCredentials.value!.twitchUser.profileImageUrl,
-                  placeholder: (BuildContext context, String url) =>
-                      CircularProgressIndicator(
-                    color: Theme.of(context).colorScheme.tertiary,
-                  ),
-                  errorWidget:
-                      (BuildContext context, String url, dynamic error) =>
-                          const Icon(Icons.error),
-                  imageBuilder: (context, imageProvider) => CircleAvatar(
-                    radius: 36,
-                    backgroundImage: imageProvider,
-                  ),
-                )
-              : const SizedBox(),
+          if (controller.twitchCredentials.value != null)
+            CachedNetworkImage(
+              imageUrl: controller
+                  .twitchCredentials.value!.twitchUser.profileImageUrl,
+              placeholder: (BuildContext context, String url) =>
+                  CircularProgressIndicator(
+                color: Theme.of(context).colorScheme.tertiary,
+              ),
+              errorWidget: (BuildContext context, String url, error) =>
+                  const Icon(Icons.error),
+              imageBuilder: (context, imageProvider) => CircleAvatar(
+                radius: 36,
+                backgroundImage: imageProvider,
+              ),
+            )
+          else
+            const SizedBox(),
           Visibility(
             visible: controller.twitchCredentials.value != null,
             child: Text(
@@ -142,7 +144,11 @@ class LoginView extends GetView<LoginViewController> {
               visible: Get.find<StoreService>().isSubscribed(),
               child: Container(
                 padding: const EdgeInsets.only(
-                    left: 10, right: 10, top: 4, bottom: 4),
+                  left: 10,
+                  right: 10,
+                  top: 4,
+                  bottom: 4,
+                ),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.tertiary,
                   borderRadius: const BorderRadius.all(
@@ -154,9 +160,10 @@ class LoginView extends GetView<LoginViewController> {
             ),
           ],
         ),
-        controller.isLoading.value
-            ? _loadingCircle(context)
-            : _loginButton(context),
+        if (controller.isLoading.value)
+          _loadingCircle(context)
+        else
+          _loginButton(context),
         Column(
           children: [
             const Text("Open Source Project by @LezdCS"),
@@ -208,7 +215,7 @@ class LoginView extends GetView<LoginViewController> {
               ],
             ),
             const SizedBox(height: 10),
-            Text("Version: ${globals.version}")
+            Text("Version: ${Get.find<AppInfoService>().version}"),
           ],
         ),
       ],

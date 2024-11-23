@@ -1,6 +1,7 @@
-import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
-class SeMe extends Equatable {
+@immutable
+class SeMe {
   final String id;
   final String avatar;
   final String username;
@@ -12,17 +13,4 @@ class SeMe extends Equatable {
     required this.username,
     required this.displayName,
   });
-
-  @override
-  List<Object?> get props {
-    return [
-      id,
-      avatar,
-      username,
-      displayName,
-    ];
-  }
-
-  @override
-  bool get stringify => true;
 }

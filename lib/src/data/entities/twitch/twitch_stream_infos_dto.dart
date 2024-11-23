@@ -1,8 +1,11 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
-import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
 
-class TwitchStreamInfosDto extends TwitchStreamInfos {
-  const TwitchStreamInfosDto({
+part 'twitch_stream_infos_dto.freezed.dart';
+
+@freezed
+class TwitchStreamInfosDto with _$TwitchStreamInfosDto {
+  const factory TwitchStreamInfosDto({
     required String title,
     required int viewerCount,
     required bool isOnline,
@@ -12,33 +15,13 @@ class TwitchStreamInfosDto extends TwitchStreamInfos {
     required bool isSlowMode,
     required int slowModeWaitTime,
     required bool isSubscriberMode,
-  }) : super(
-          title: title,
-          viewerCount: viewerCount,
-          isOnline: isOnline,
-          startedAtDuration: startedAtDuration,
-          isEmoteMode: isEmoteMode,
-          isFollowerMode: isFollowerMode,
-          isSlowMode: isSlowMode,
-          slowModeWaitTime: slowModeWaitTime,
-          isSubscriberMode: isSubscriberMode,
-        );
+  }) = _TwitchStreamInfosDto;
 
-  @override
-  Map toJson() => {
-        'viewerCount': viewerCount,
-        'title': title,
-        'isOnline': isOnline,
-        'startedAtDuration': startedAtDuration,
-        'isEmoteMode': isEmoteMode,
-        'isFollowerMode': isFollowerMode,
-        'isSlowMode': isSlowMode,
-        'slowModeWaitTime': slowModeWaitTime,
-        'isSubscriberMode': isSubscriberMode,
-      };
-
-  factory TwitchStreamInfosDto.fromJson(Map<String, dynamic> map1,
-      Map<String, dynamic> map2, Map<String, dynamic> map3) {
+  factory TwitchStreamInfosDto.fromJson(
+    Map<String, dynamic> map1,
+    Map<String, dynamic> map2,
+    Map<String, dynamic> map3,
+  ) {
     DateFormat df = DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     String startedAtRaw =
         map2['data'].length > 0 && map2['data'][0]['started_at'] != null
@@ -53,8 +36,8 @@ class TwitchStreamInfosDto extends TwitchStreamInfos {
           map2['data'].length > 0 && map2['data'][0]['viewer_count'] != null
               ? map2['data'][0]['viewer_count']
               : 0,
-      title: map1['title'] != null ? map1['title'] as String : '',
-      isOnline: map2['data'].length > 0 ? true : false,
+      title: map1['title'] as String? ?? '',
+      isOnline: map2['data'].isNotEmpty,
       startedAtDuration: startedAtDuration,
       isEmoteMode: map3['emote_mode'],
       isFollowerMode: map3['follower_mode'],

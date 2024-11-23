@@ -15,14 +15,16 @@ class SeOverlays extends GetView<StreamelementsViewController> {
 
   @override
   Widget build(BuildContext context) {
-    Settings settings = Get.find<SettingsService>().settings.value;
-    String? overlayToken = settings.streamElementsSettings?.overlayToken;
+    final SettingsService settingsService = Get.find<SettingsService>();
+    Settings settings = settingsService.settings.value;
+    String? overlayToken = settings.streamElementsSettings.overlayToken;
     return Column(
       children: [
         Visibility(
           visible: overlayToken == null,
           child: const Text(
-              'To unlock this feature, please enter your overlay token in the settings.'),
+            'To unlock this feature, please enter your overlay token in the settings.',
+          ),
         ),
         Container(
           padding: const EdgeInsets.all(4),
@@ -51,6 +53,9 @@ Widget _overlayRow(
   BuildContext context,
   String? overlayToken,
 ) {
+  final SettingsService settingsService = Get.find<SettingsService>();
+  Settings settings = settingsService.settings.value;
+
   if (overlayToken == null) {
     return Container(
       decoration: BoxDecoration(
@@ -75,14 +80,12 @@ Widget _overlayRow(
     );
   }
 
-  Settings settings = Get.find<SettingsService>().settings.value;
   bool isMuted =
-      settings.streamElementsSettings?.mutedOverlays.contains(overlay.id) ??
-          false;
+      settings.streamElementsSettings.mutedOverlays.contains(overlay.id);
   String? overlayUrl;
   Widget? webpage;
 
-  if (isMuted == false) {
+  if (!isMuted) {
     overlayUrl =
         'https://streamelements.com/overlay/${overlay.id}/$overlayToken';
     var uuid = const Uuid();
@@ -111,41 +114,45 @@ Widget _overlayRow(
             Expanded(
               child: Text(overlay.name),
             ),
-            webpage != null
-                ? InkWell(
-                    onTap: (() => {
-                          Get.defaultDialog(
-                            title: 'Overlay',
-                            titleStyle: const TextStyle(color: Colors.white),
-                            backgroundColor: const Color(0xFF0e0e10),
-                            buttonColor: const Color(0xFF9147ff),
-                            cancelTextColor: const Color(0xFF9147ff),
-                            textCancel: "return".tr,
-                            radius: 10,
-                            content: SizedBox(
-                                width: 384, height: 216, child: webpage!),
-                          )
-                        }),
-                    child: const Icon(Icons.preview),
-                  )
-                : Container(),
+            if (webpage != null)
+              InkWell(
+                onTap: () => {
+                  Get.defaultDialog(
+                    title: 'Overlay',
+                    titleStyle: const TextStyle(color: Colors.white),
+                    backgroundColor: const Color(0xFF0e0e10),
+                    buttonColor: const Color(0xFF9147ff),
+                    cancelTextColor: const Color(0xFF9147ff),
+                    textCancel: "return".tr,
+                    radius: 10,
+                    content: SizedBox(
+                      width: 384,
+                      height: 216,
+                      child: webpage,
+                    ),
+                  ),
+                },
+                child: const Icon(Icons.preview),
+              )
+            else
+              Container(),
             const SizedBox(
               width: 10,
             ),
             InkWell(
               onTap: () {
-                Settings settings = Get.find<SettingsService>().settings.value;
                 List<String> mutedList =
-                    settings.streamElementsSettings!.mutedOverlays;
+                    settings.streamElementsSettings.mutedOverlays;
                 if (isMuted) {
                   mutedList.removeWhere((element) => element == overlay.id);
                 } else {
                   mutedList.add(overlay.id);
                 }
-                Get.find<SettingsService>().settings.value = settings.copyWith(
-                    streamElementsSettings: settings.streamElementsSettings!
-                        .copyWith(mutedOverlays: mutedList));
-                Get.find<SettingsService>().saveSettings();
+                settingsService.settings.value = settings.copyWith(
+                  streamElementsSettings: settings.streamElementsSettings
+                      .copyWith(mutedOverlays: mutedList),
+                );
+                settingsService.saveSettings();
                 controller.overlays.refresh();
               },
               child: Icon(isMuted ? Icons.volume_mute : Icons.volume_up),

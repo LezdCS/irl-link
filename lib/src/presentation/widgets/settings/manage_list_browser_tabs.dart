@@ -32,7 +32,7 @@ class ManageListBrowserTabs extends GetView<SettingsViewController> {
               "manage_browser_tabs".tr,
             ),
           ),
-          body: Container(
+          body: DecoratedBox(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
             ),
@@ -41,19 +41,23 @@ class ManageListBrowserTabs extends GetView<SettingsViewController> {
                 ReorderableListView.builder(
                   shrinkWrap: true,
                   padding: const EdgeInsets.only(
-                      top: 8, left: 18, right: 18, bottom: 8),
-                  itemCount: settings.browserTabs!.tabs.length,
+                    top: 8,
+                    left: 18,
+                    right: 18,
+                    bottom: 8,
+                  ),
+                  itemCount: settings.browserTabs.tabs.length,
                   onReorder: (int oldIndex, int newIndex) {
                     if (newIndex > oldIndex) {
                       newIndex -= 1;
                     }
                     final element =
-                        settings.browserTabs!.tabs.removeAt(oldIndex);
-                    settings.browserTabs!.tabs.insert(newIndex, element);
+                        settings.browserTabs.tabs.removeAt(oldIndex);
+                    settings.browserTabs.tabs.insert(newIndex, element);
                     Get.find<SettingsService>().saveSettings();
                   },
                   itemBuilder: (BuildContext context, int index) {
-                    BrowserTab elem = settings.browserTabs!.tabs[index];
+                    BrowserTab elem = settings.browserTabs.tabs[index];
                     return Dismissible(
                       key: ValueKey(elem),
                       background: Container(
@@ -165,7 +169,9 @@ class ManageListBrowserTabs extends GetView<SettingsViewController> {
 }
 
 Widget _addGroupButton(
-    BuildContext context, SettingsViewController controller) {
+  BuildContext context,
+  SettingsViewController controller,
+) {
   return InkWell(
     onTap: () {
       Get.defaultDialog(
@@ -217,7 +223,6 @@ Widget _addDialog(context, SettingsViewController controller) {
         child: TextFormField(
           controller: controller.addBrowserTitleController,
           textInputAction: TextInputAction.next,
-          maxLines: 1,
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please enter some text';
@@ -240,8 +245,6 @@ Widget _addDialog(context, SettingsViewController controller) {
         child: TextFormField(
           controller: controller.addBrowserUrlController,
           textInputAction: TextInputAction.done,
-          maxLines: 1,
-          textCapitalization: TextCapitalization.none,
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please enter some text';
@@ -328,7 +331,6 @@ Widget _editDialog(
         child: TextFormField(
           controller: controller.addBrowserTitleController,
           textInputAction: TextInputAction.next,
-          maxLines: 1,
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please enter some text';
@@ -351,8 +353,6 @@ Widget _editDialog(
         child: TextFormField(
           controller: controller.addBrowserUrlController,
           textInputAction: TextInputAction.done,
-          maxLines: 1,
-          textCapitalization: TextCapitalization.none,
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please enter some text';

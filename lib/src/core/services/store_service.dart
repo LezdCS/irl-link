@@ -8,15 +8,21 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
+
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
+import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
-import 'package:irllink/src/presentation/events/login_events.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 class StoreService extends GetxService {
-  StoreService({required this.loginEvents});
-  final LoginEvents loginEvents;
+  StoreService({
+    required this.getTwitchLocalUseCase,
+    required this.talker,
+  });
+
+  final GetTwitchLocalUseCase getTwitchLocalUseCase;
+  final Talker talker;
 
   late StreamSubscription<List<PurchaseDetails>> subscription;
   List<ProductDetails> products = [];
@@ -28,6 +34,9 @@ class StoreService extends GetxService {
 
   Future<StoreService> init() async {
     await getStore();
+    if (!storeFound.value) {
+      return this;
+    }
     await getStoreProducts();
     initListeningStorePurchase();
     return this;
@@ -59,32 +68,37 @@ class StoreService extends GetxService {
     final ProductDetailsResponse response =
         await InAppPurchase.instance.queryProductDetails(kIds);
     if (response.notFoundIDs.isNotEmpty) {
-      globals.talker?.debug('Products not found: ${response.notFoundIDs}');
-      globals.talker?.debug(
-          'Products found: ${response.productDetails.map((e) => e.id)}');
+      talker
+        ..debug('Products not found: ${response.notFoundIDs}')
+        ..debug('Products found: ${response.productDetails.map((e) => e.id)}');
     }
     products = response.productDetails;
   }
 
   void initListeningStorePurchase() async {
     final Stream purchaseUpdated = InAppPurchase.instance.purchaseStream;
-    subscription = purchaseUpdated.listen((purchaseDetailsList) {
-      listenToPurchaseUpdated(purchaseDetailsList);
-    }, onDone: () {
-      subscription.cancel();
-    }, onError: (error) {
-      // handle error here.
-    }) as StreamSubscription<List<PurchaseDetails>>;
+    subscription = purchaseUpdated.listen(
+      (purchaseDetailsList) {
+        listenToPurchaseUpdated(purchaseDetailsList);
+      },
+      onDone: () {
+        subscription.cancel();
+      },
+      onError: (error) {
+        // handle error here.
+      },
+    ) as StreamSubscription<List<PurchaseDetails>>;
 
     try {
       await InAppPurchase.instance.restorePurchases();
     } catch (error) {
-      globals.talker?.error('Not logged to any store.');
+      talker.error('Not logged to any store.');
     }
   }
 
   void listenToPurchaseUpdated(
-      List<PurchaseDetails> purchaseDetailsList) async {
+    List<PurchaseDetails> purchaseDetailsList,
+  ) async {
     for (var purchaseDetails in purchaseDetailsList) {
       if (purchaseDetails.status == PurchaseStatus.pending) {
         purchasePending.value = true;
@@ -129,7 +143,7 @@ class StoreService extends GetxService {
     }
 
     TwitchCredentials? twitchCredentials;
-    await loginEvents.getTwitchFromLocal().then((value) {
+    await getTwitchLocalUseCase().then((value) {
       if (value is DataSuccess) {
         twitchCredentials = value.data;
       }
@@ -158,7 +172,7 @@ class StoreService extends GetxService {
       );
       return Future<bool>.value(true);
     } on DioException catch (e) {
-      globals.talker?.error(e.toString());
+      talker.error(e.toString());
       return Future<bool>.value(false);
     }
   }

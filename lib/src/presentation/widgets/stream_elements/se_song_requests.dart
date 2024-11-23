@@ -17,7 +17,7 @@ class SeSongRequests extends GetView<StreamelementsViewController> {
             .settings
             .value
             .streamElementsSettings
-            ?.jwt;
+            .jwt;
         return Container(
           margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
           child: Column(
@@ -67,25 +67,28 @@ class SeSongRequests extends GetView<StreamelementsViewController> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              controller.currentSong.value != null
-                  ? _songRow(context, controller.currentSong.value!, false, jwt)
-                  : const Text("No song playing."),
+              if (controller.currentSong.value != null)
+                _songRow(context, controller.currentSong.value!, false, jwt)
+              else
+                const Text("No song playing."),
               const Padding(
                 padding: EdgeInsets.only(bottom: 15),
               ),
               Text.rich(
                 overflow: TextOverflow.ellipsis,
-                TextSpan(children: [
-                  TextSpan(
-                    text: "queue".tr,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "queue".tr,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  TextSpan(
-                    text: " (${controller.songRequestQueue.length} videos)",
-                  ),
-                ]),
+                    TextSpan(
+                      text: " (${controller.songRequestQueue.length} videos)",
+                    ),
+                  ],
+                ),
               ),
               Expanded(
                 child: ListView.builder(
@@ -142,26 +145,28 @@ class SeSongRequests extends GetView<StreamelementsViewController> {
                       ),
                       TextSpan(
                         text: song.title,
-                      )
+                      ),
                     ],
                   ),
                 ),
                 Text.rich(
                   overflow: TextOverflow.ellipsis,
-                  TextSpan(children: [
-                    const TextSpan(
-                      text: "Duration: ",
-                    ),
-                    TextSpan(
-                      text: song.duration.toString(),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
+                  TextSpan(
+                    children: [
+                      const TextSpan(
+                        text: "Duration: ",
                       ),
-                    ),
-                    const TextSpan(
-                      text: "s",
-                    ),
-                  ]),
+                      TextSpan(
+                        text: song.duration.toString(),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const TextSpan(
+                        text: "s",
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

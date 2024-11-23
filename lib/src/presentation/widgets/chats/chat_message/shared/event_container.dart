@@ -37,11 +37,11 @@ class EventContainer extends StatelessWidget {
             : getColorFromType(message.eventType!)["background"],
         border: Border(
           left: BorderSide(
-            width: 3.0,
+            width: 3,
             color: borderColor,
           ),
           right: BorderSide(
-            width: 3.0,
+            width: 3,
             color: borderColor,
           ),
         ),
@@ -61,17 +61,18 @@ class EventContainer extends StatelessWidget {
               ),
             ],
           ),
-          message.message != ''
-              ? MessageRow(
-                  message: message,
-                  displayTimestamp: displayTimestamp,
-                  textSize: textSize,
-                  hideDeletedMessages: hideDeletedMessages,
-                  cheerEmotes: cheerEmotes,
-                  thirdPartEmotes: thirdPartEmotes,
-                  showPlatformBadge: showPlatformBadge,
-                )
-              : Container(),
+          if (message.message != '')
+            MessageRow(
+              message: message,
+              displayTimestamp: displayTimestamp,
+              textSize: textSize,
+              hideDeletedMessages: hideDeletedMessages,
+              cheerEmotes: cheerEmotes,
+              thirdPartEmotes: thirdPartEmotes,
+              showPlatformBadge: showPlatformBadge,
+            )
+          else
+            Container(),
         ],
       ),
     );
@@ -80,7 +81,7 @@ class EventContainer extends StatelessWidget {
   String getStringFromType(EventType type, ChatMessage message) {
     switch (type) {
       case EventType.bitDonation:
-        return "Cheered ${message.totalBits.toString()} Bits";
+        return "Cheered ${message.totalBits} Bits";
       case EventType.firstTimeChatter:
         return "First message";
       case EventType.channelPointRedemption:
@@ -104,42 +105,42 @@ class EventContainer extends StatelessWidget {
       case EventType.bitDonation:
         return {
           "border": const Color(0xFF9147ff),
-          "background": const Color(0xFF9147ff).withOpacity(0.2)
+          "background": const Color(0xFF9147ff).withOpacity(0.2),
         };
       case EventType.firstTimeChatter:
         return {
           "border": const Color(0xff0033b5),
-          "background": const Color(0xff0033b5).withOpacity(0.2)
+          "background": const Color(0xff0033b5).withOpacity(0.2),
         };
       case EventType.channelPointRedemption:
         return {
           "border": const Color(0xff486d1a),
-          "background": const Color(0xff486d1a).withOpacity(0.2)
+          "background": const Color(0xff486d1a).withOpacity(0.2),
         };
       case EventType.subscription:
         return {
           "border": const Color(0xFF9147ff),
-          "background": const Color(0xFF9147ff).withOpacity(0.2)
+          "background": const Color(0xFF9147ff).withOpacity(0.2),
         };
       case EventType.announcement:
         return {
           "border": const Color(0xffff475c),
-          "background": const Color(0xffff475c).withOpacity(0.2)
+          "background": const Color(0xffff475c).withOpacity(0.2),
         };
       case EventType.subscriptionGifted:
         return {
           "border": const Color(0xFF9147ff),
-          "background": const Color(0xFF9147ff).withOpacity(0.2)
+          "background": const Color(0xFF9147ff).withOpacity(0.2),
         };
       case EventType.incomingRaid:
         return {
           "border": const Color(0xffb53600),
-          "background": const Color(0xffb53600).withOpacity(0.2)
+          "background": const Color(0xffb53600).withOpacity(0.2),
         };
       default:
         return {
           "border": Colors.black,
-          "background": Colors.black.withOpacity(0.2)
+          "background": Colors.black.withOpacity(0.2),
         };
     }
   }

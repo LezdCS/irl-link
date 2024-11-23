@@ -15,7 +15,7 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(left: 20, right: 20, top: 0),
+      margin: const EdgeInsets.only(left: 20, right: 20),
       child: Column(
         children: [
           Row(
@@ -66,12 +66,12 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
               title: Text(
                 "followers".tr,
               ),
-              value: seSettings?.showFollowerActivity,
+              value: seSettings.showFollowerActivity,
               onChanged: (bool? value) {
                 settingsService.settings.value =
                     settingsService.settings.value.copyWith(
                   streamElementsSettings:
-                      seSettings!.copyWith(showFollowerActivity: value),
+                      seSettings.copyWith(showFollowerActivity: value),
                 );
                 settingsService.saveSettings();
               },
@@ -87,10 +87,10 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                 title: Text(
                   "subscriptions".tr,
                 ),
-                value: settings.streamElementsSettings!.showSubscriberActivity,
+                value: settings.streamElementsSettings.showSubscriberActivity,
                 onChanged: (bool? value) {
                   settingsService.settings.value = settings.copyWith(
-                    streamElementsSettings: settings.streamElementsSettings!
+                    streamElementsSettings: settings.streamElementsSettings
                         .copyWith(showSubscriberActivity: value),
                   );
                   settingsService.saveSettings();
@@ -99,25 +99,27 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
             },
           ),
         ),
-        PopupMenuItem(child: Obx(
-          () {
-            Settings settings = settingsService.settings.value;
-            return CheckboxListTile(
-              controlAffinity: ListTileControlAffinity.leading,
-              title: Text(
-                "bits".tr,
-              ),
-              value: settings.streamElementsSettings!.showCheerActivity,
-              onChanged: (bool? value) {
-                settingsService.settings.value = settings.copyWith(
-                  streamElementsSettings: settings.streamElementsSettings!
-                      .copyWith(showCheerActivity: value),
-                );
-                settingsService.saveSettings();
-              },
-            );
-          },
-        )),
+        PopupMenuItem(
+          child: Obx(
+            () {
+              Settings settings = settingsService.settings.value;
+              return CheckboxListTile(
+                controlAffinity: ListTileControlAffinity.leading,
+                title: Text(
+                  "bits".tr,
+                ),
+                value: settings.streamElementsSettings.showCheerActivity,
+                onChanged: (bool? value) {
+                  settingsService.settings.value = settings.copyWith(
+                    streamElementsSettings: settings.streamElementsSettings
+                        .copyWith(showCheerActivity: value),
+                  );
+                  settingsService.saveSettings();
+                },
+              );
+            },
+          ),
+        ),
         PopupMenuItem(
           child: Obx(
             () {
@@ -127,10 +129,10 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                 title: Text(
                   "donations".tr,
                 ),
-                value: settings.streamElementsSettings!.showDonationActivity,
+                value: settings.streamElementsSettings.showDonationActivity,
                 onChanged: (bool? value) {
                   settingsService.settings.value = settings.copyWith(
-                    streamElementsSettings: settings.streamElementsSettings!
+                    streamElementsSettings: settings.streamElementsSettings
                         .copyWith(showDonationActivity: value),
                   );
                   settingsService.saveSettings();
@@ -148,10 +150,10 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                 title: Text(
                   "raids".tr,
                 ),
-                value: settings.streamElementsSettings!.showRaidActivity,
+                value: settings.streamElementsSettings.showRaidActivity,
                 onChanged: (bool? value) {
                   settingsService.settings.value = settings.copyWith(
-                    streamElementsSettings: settings.streamElementsSettings!
+                    streamElementsSettings: settings.streamElementsSettings
                         .copyWith(showRaidActivity: value),
                   );
                   settingsService.saveSettings();
@@ -169,10 +171,10 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                 title: Text(
                   "hosts".tr,
                 ),
-                value: settings.streamElementsSettings!.showHostActivity,
+                value: settings.streamElementsSettings.showHostActivity,
                 onChanged: (bool? value) {
                   settingsService.settings.value = settings.copyWith(
-                    streamElementsSettings: settings.streamElementsSettings!
+                    streamElementsSettings: settings.streamElementsSettings
                         .copyWith(showHostActivity: value),
                   );
                   settingsService.saveSettings();
@@ -186,7 +188,9 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
   }
 
   Widget _activityCollapsed(
-      StreamelementsViewController controller, SeActivity activity) {
+    StreamelementsViewController controller,
+    SeActivity activity,
+  ) {
     return ExpandableButton(
       child: Container(
         padding: const EdgeInsets.only(left: 3, right: 3, top: 5, bottom: 5),
@@ -241,7 +245,9 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
   }
 
   Widget _activityExpanded(
-      StreamelementsViewController controller, SeActivity activity) {
+    StreamelementsViewController controller,
+    SeActivity activity,
+  ) {
     return ExpandableButton(
       child: Container(
         padding: const EdgeInsets.only(left: 3, right: 3, top: 5, bottom: 20),
@@ -263,20 +269,22 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                 const SizedBox(width: 4),
                 Expanded(
                   child: Text.rich(
-                    TextSpan(children: [
-                      TextSpan(
-                        text: activity.textFromEnum(),
-                        style: TextStyle(
-                          color: activity.colorsForEnum()[0],
-                          fontWeight: FontWeight.bold,
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: activity.textFromEnum(),
+                          style: TextStyle(
+                            color: activity.colorsForEnum()[0],
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const WidgetSpan(child: SizedBox(width: 4)),
-                      TextSpan(
-                        text: activity.username,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ]),
+                        const WidgetSpan(child: SizedBox(width: 4)),
+                        TextSpan(
+                          text: activity.username,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 InkWell(

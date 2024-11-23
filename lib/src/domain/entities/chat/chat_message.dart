@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
-import 'package:equatable/equatable.dart';
 import 'package:irllink/src/domain/entities/chat/chat_badge.dart';
 import 'package:kick_chat/kick_chat.dart';
 import 'package:twitch_chat/twitch_chat.dart' as twitch;
@@ -25,49 +24,43 @@ enum Platform {
   youtube,
 }
 
-// ignore: must_be_immutable
-class ChatMessage extends Equatable
-    implements
-        twitch.Subscription,
-        twitch.SubGift,
-        twitch.BitDonation,
-        twitch.IncomingRaid {
-  @override
+class ChatMessage {
   final String id;
-  @override
   final String authorId;
-  @override
   final String username;
-  @override
+  final String displayName;
   final String color;
-  @override
   final String message;
-  @override
   final int timestamp;
-  @override
   final bool isAction;
-  @override
   final bool isSubscriber;
-  @override
   final bool isModerator;
-  @override
   final bool isVip;
-  @override
   bool isDeleted;
-  @override
   final String rawData;
 
   final String channelId;
   final EventType? eventType;
   final List<ChatBadge> badgesList;
-  @override
-  final Map<String, List> emotes; //TODO: emote entity
+  final Map<String, List> emotes;
   final Platform platform;
+
+  //from Twitch Chat events (subs, bits, raids...)
+  final String raidingChannelName;
+  final String giftedName;
+  final twitch.HighlightType? highlightType;
+  final bool isGift;
+  final String months;
+  final String systemMessage;
+  final String tier;
+  final int totalBits;
+  final int viewerCount;
 
   ChatMessage({
     required this.id,
     required this.authorId,
     required this.username,
+    required this.displayName,
     required this.color,
     required this.message,
     required this.timestamp,
@@ -85,8 +78,6 @@ class ChatMessage extends Equatable
 
     //implements
     required this.raidingChannelName,
-    required this.badges,
-    required this.displayName,
     required this.giftedName,
     required this.highlightType,
     required this.isGift,
@@ -128,7 +119,6 @@ class ChatMessage extends Equatable
       raidingChannelName: type == EventType.incomingRaid
           ? (message as twitch.IncomingRaid).raidingChannelName
           : '',
-      badges: message.badges,
       giftedName: type == EventType.subscriptionGifted
           ? (message as twitch.SubGift).giftedName
           : '',
@@ -153,7 +143,23 @@ class ChatMessage extends Equatable
   }
 
   factory ChatMessage.fromKick(
-      KickMessage message, String channelId, List<KickBadge> subBadges) {
+    KickEvent message,
+    String channelId,
+    List<KickBadge> subBadges,
+  ) {
+    if (message.event == TypeEvent.subscriptionEvent) {
+      return ChatMessage.kickSub(message as KickSubscription, channelId);
+    } else if (message.event == TypeEvent.giftedSubscriptionsEvent) {
+      return ChatMessage.kickSubGift(
+        message as KickGiftedSubscriptions,
+        channelId,
+      );
+    } else if (message.event == TypeEvent.streamHostEvent) {
+      return ChatMessage.kickHost(message as KickStreamHost, channelId);
+    }
+
+    message = message as KickMessage;
+
     return ChatMessage(
       id: message.data.id,
       authorId: message.data.sender.id.toString(),
@@ -178,7 +184,6 @@ class ChatMessage extends Equatable
 
       //implements
       raidingChannelName: '',
-      badges: const [],
       giftedName: '',
       highlightType: null,
       isGift: false,
@@ -191,7 +196,10 @@ class ChatMessage extends Equatable
   }
 
   factory ChatMessage.fromYoutube(
-      dynamic messageRaw, List? messages, String videoId) {
+    messageRaw,
+    List? messages,
+    String videoId,
+  ) {
     String authorName = messageRaw['authorName']['simpleText'];
     String id = messageRaw['id'];
     String timestamp = messageRaw['timestampUsec'];
@@ -217,7 +225,6 @@ class ChatMessage extends Equatable
 
       //implements
       raidingChannelName: '',
-      badges: const [],
       giftedName: '',
       highlightType: null,
       isGift: false,
@@ -230,7 +237,9 @@ class ChatMessage extends Equatable
   }
 
   factory ChatMessage.kickSub(
-      KickSubscription sub, String channelId, List<KickBadge> subBadges) {
+    KickSubscription sub,
+    String channelId,
+  ) {
     return ChatMessage(
       id: '',
       authorId: '',
@@ -253,7 +262,6 @@ class ChatMessage extends Equatable
 
       //implements
       raidingChannelName: '',
-      badges: const [],
       giftedName: '',
       highlightType: null,
       isGift: false,
@@ -265,8 +273,10 @@ class ChatMessage extends Equatable
     );
   }
 
-  factory ChatMessage.kickSubGift(KickGiftedSubscriptions sub, String channelId,
-      List<KickBadge> subBadges) {
+  factory ChatMessage.kickSubGift(
+    KickGiftedSubscriptions sub,
+    String channelId,
+  ) {
     return ChatMessage(
       id: '',
       authorId: '',
@@ -289,9 +299,8 @@ class ChatMessage extends Equatable
 
       //implements
       raidingChannelName: '',
-      badges: const [],
-      giftedName: sub
-          .data.giftedUsernames.first, //TODO: handle multiple usernames gifted
+      giftedName: sub.data.giftedUsernames
+          .first, // TODO(LezdCS): Handle multiple usernames gifted
       highlightType: null,
       isGift: true,
       months: '',
@@ -303,7 +312,9 @@ class ChatMessage extends Equatable
   }
 
   factory ChatMessage.kickHost(
-      KickStreamHost host, String channelId, List<KickBadge> subBadges) {
+    KickStreamHost host,
+    String channelId,
+  ) {
     return ChatMessage(
       id: '',
       authorId: '',
@@ -326,7 +337,6 @@ class ChatMessage extends Equatable
 
       //implements
       raidingChannelName: '',
-      badges: const [],
       giftedName: '',
       highlightType: null,
       isGift: true,
@@ -338,25 +348,9 @@ class ChatMessage extends Equatable
     );
   }
 
-  Map toJson() => {
-        'id': id,
-        'authorId': authorId,
-        'displayName': displayName,
-        'username': username,
-        'color': color,
-        'message': message,
-        'timestamp': timestamp,
-        'isAction': isAction,
-        'isSubscriber': isSubscriber,
-        'isModerator': isModerator,
-        'isVip': isVip,
-        'isDeleted': isDeleted,
-        'rawData': rawData,
-        'eventType': eventType,
-        'badgesList': badgesList,
-        'emotes': emotes,
-        'platform': platform,
-      };
+  // factory ChatMessage.kickPinnedMessage(KickPinnedMessage pin, String channelId, List<KickBadges> subBadges){
+
+  // }
 
   Map toJsonForWatch() => {
         'id': id == '' ? const Uuid().v4() : id,
@@ -365,73 +359,11 @@ class ChatMessage extends Equatable
         'color': color == '' ? '#FFFFFF' : color,
         'badges': jsonEncode(
           badgesList
-              .map((badge) =>
-                  badge.imageUrl1x.startsWith('http') ? badge.imageUrl1x : '')
+              .map(
+                (badge) =>
+                    badge.imageUrl1x.startsWith('http') ? badge.imageUrl1x : '',
+              )
               .toList(),
         ),
       };
-
-  @override
-  List<Object?> get props {
-    return [
-      id,
-      authorId,
-      displayName,
-      username,
-      color,
-      message,
-      timestamp,
-      isAction,
-      isSubscriber,
-      isModerator,
-      isVip,
-      isDeleted,
-      rawData,
-      eventType,
-      badgesList,
-      emotes,
-      platform,
-    ];
-  }
-
-  @override
-  bool get stringify => true;
-
-  @override
-  String raidingChannelName;
-
-  @override
-  List<twitch.TwitchBadge> badges;
-
-  @override
-  String displayName;
-
-  @override
-  String giftedName;
-
-  @override
-  twitch.HighlightType? highlightType;
-
-  @override
-  bool isGift;
-
-  @override
-  String months;
-
-  @override
-  String systemMessage;
-
-  @override
-  String tier;
-
-  @override
-  int totalBits;
-
-  @override
-  int viewerCount;
-
-  @override
-  set rawData(String rawData) {
-    // TODO: implement rawData
-  }
 }

@@ -1,4 +1,5 @@
-import 'package:irllink/src/core/utils/globals.dart' as globals;
+import 'package:get/get.dart';
+import 'package:irllink/src/core/services/talker_service.dart';
 
 abstract class DataState<T> {
   final T? data;
@@ -9,7 +10,7 @@ abstract class DataState<T> {
     this.error,
   }) {
     if (error != null) {
-      globals.talker?.error(error);
+      Get.find<TalkerService>().talker.error(error);
     }
   }
 }

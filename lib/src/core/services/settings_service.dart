@@ -1,31 +1,38 @@
 import 'package:get/get.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
-import 'package:irllink/src/presentation/events/settings_events.dart';
+import 'package:irllink/src/domain/usecases/settings/get_settings_usecase.dart';
+import 'package:irllink/src/domain/usecases/settings/set_settings_usecase.dart';
 
 class SettingsService extends GetxService {
-  SettingsService({required this.settingsEvents});
-  final SettingsEvents settingsEvents;
+  SettingsService({
+    required this.getSettingsUseCase,
+    required this.setSettingsUseCase,
+  });
 
-  Rx<Settings> settings = const Settings.defaultSettings().obs;
+  final GetSettingsUseCase getSettingsUseCase;
+  final SetSettingsUseCase setSettingsUseCase;
+
+  late Rx<Settings> settings;
 
   Future<SettingsService> init() async {
-    settings.value = await getSettings();
+    settings = (await getSettings()).obs;
     return this;
   }
 
   Future<Settings> getSettings() async {
-    DataState<Settings> settingsResult = await settingsEvents.getSettings();
-    if (settings is DataFailed) {
-      return const Settings.defaultSettings();
+    DataState<Settings> settingsResult = await getSettingsUseCase();
+    if (settingsResult is DataFailed) {
+      // settingsResult is never returned as DataFailed, we always return DataSuccess in the implementation
+      Exception(settingsResult.error);
     }
-    settings.value = settingsResult.data!;
-
-    return settings.value;
+    return settingsResult.data!;
   }
 
   Future<void> saveSettings() async {
     settings.refresh();
-    settingsEvents.setSettings(settings: settings.value);
+    await setSettingsUseCase(
+      params: settings.value,
+    );
   }
 }

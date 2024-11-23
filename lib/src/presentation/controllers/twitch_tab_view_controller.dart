@@ -1,21 +1,30 @@
 import 'dart:async';
 
-import 'package:flutter/services.dart';
-import 'package:irllink/src/core/resources/data_state.dart';
-
-import 'home_view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
-import 'package:irllink/src/presentation/events/home_events.dart';
+import 'package:irllink/src/domain/usecases/twitch/get_stream_info_usecase.dart';
+import 'package:irllink/src/domain/usecases/twitch/set_chat_settings_usecase.dart';
+import 'package:irllink/src/domain/usecases/twitch/set_stream_title_usecase.dart';
+import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 
 class TwitchTabViewController extends GetxController
     with GetTickerProviderStateMixin {
-  TwitchTabViewController({required this.homeEvents});
+  TwitchTabViewController({
+    required this.getStreamInfoUseCase,
+    required this.setChatSettingsUseCase,
+    required this.setStreamTitleUseCase,
+    required this.homeViewController,
+    required this.watchService,
+  });
 
-  final HomeViewController homeViewController = Get.find<HomeViewController>();
-
-  final HomeEvents homeEvents;
+  final GetStreamInfoUseCase getStreamInfoUseCase;
+  final SetChatSettingsUseCase setChatSettingsUseCase;
+  final SetStreamTitleUseCase setStreamTitleUseCase;
+  final HomeViewController homeViewController;
+  final WatchService watchService;
 
   late TextEditingController titleFormController;
   RxString streamTitle = "".obs;
@@ -38,15 +47,8 @@ class TwitchTabViewController extends GetxController
 
     twitchStreamInfos.listen((value) {
       // Send to watchOS
-      const platform = MethodChannel('com.irllink');
-      platform.invokeMethod("flutterToWatch", {
-        "method": "sendViewersToNative",
-        "data": value.viewerCount,
-      });
-      platform.invokeMethod("flutterToWatch", {
-        "method": "sendLiveStatusToNative",
-        "data": value.isOnline,
-      });
+      watchService.sendViewersToNative(value.viewerCount ?? 0);
+      watchService.sendLiveStatusToNative(isLive: value.isOnline ?? false);
     });
 
     controllerLiveCircleAnimation = AnimationController(
@@ -54,7 +56,7 @@ class TwitchTabViewController extends GetxController
       vsync: this,
     )..repeat(reverse: true);
 
-    circleShadowAnimation = Tween<double>(begin: 3.0, end: 20.0).animate(
+    circleShadowAnimation = Tween<double>(begin: 3, end: 20).animate(
       CurvedAnimation(
         parent: controllerLiveCircleAnimation,
         curve: Curves.easeInOut,
@@ -89,9 +91,15 @@ class TwitchTabViewController extends GetxController
 
   Future<void> refreshData() async {
     refreshDataAnimationController.reset();
-    DataState<TwitchStreamInfos> streamInfos = await homeEvents.getStreamInfo(
-      homeViewController.twitchData!.accessToken,
-      homeViewController.twitchData!.twitchUser.id,
+    if (homeViewController.twitchData == null) {
+      return;
+    }
+
+    DataState<TwitchStreamInfos> streamInfos = await getStreamInfoUseCase(
+      params: GetStreamInfoUseCaseParams(
+        accessToken: homeViewController.twitchData!.accessToken,
+        broadcasterId: homeViewController.twitchData!.twitchUser.id,
+      ),
     );
     if (streamInfos is DataSuccess) {
       twitchStreamInfos.value = streamInfos.data!;
@@ -129,18 +137,22 @@ class TwitchTabViewController extends GetxController
   }
 
   void changeChatSettings() {
-    homeEvents.setChatSettings(
-      homeViewController.twitchData!.accessToken,
-      homeViewController.twitchData!.twitchUser.id,
-      twitchStreamInfos.value,
+    setChatSettingsUseCase(
+      params: SetChatSettingsUseCaseParams(
+        accessToken: homeViewController.twitchData!.accessToken,
+        broadcasterId: homeViewController.twitchData!.twitchUser.id,
+        twitchStreamInfos: twitchStreamInfos.value,
+      ),
     );
   }
 
   void setStreamTitle() {
-    homeEvents.setStreamTitle(
-      homeViewController.twitchData!.accessToken,
-      homeViewController.twitchData!.twitchUser.id,
-      titleFormController.text,
+    setStreamTitleUseCase(
+      params: SetStreamTitleUseCaseParams(
+        accessToken: homeViewController.twitchData!.accessToken,
+        broadcasterId: homeViewController.twitchData!.twitchUser.id,
+        title: titleFormController.text,
+      ),
     );
   }
 }

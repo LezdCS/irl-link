@@ -15,7 +15,10 @@ class Timestamp extends StatelessWidget {
       DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(timestamp)),
       textAlign: TextAlign.end,
       style: const TextStyle(
-          color: Colors.grey, fontSize: 14, fontWeight: FontWeight.w400),
+        color: Colors.grey,
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+      ),
     );
   }
 }

@@ -1,6 +1,4 @@
-import 'dart:ui';
-
-import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 enum PredictionStatus {
   empty,
@@ -10,7 +8,8 @@ enum PredictionStatus {
   locked,
 }
 
-class TwitchPrediction extends Equatable {
+@immutable
+class TwitchPrediction {
   final String id;
   final String title;
   final String winningOutcomeId;
@@ -40,35 +39,10 @@ class TwitchPrediction extends Equatable {
       remainingTime: DateTime.now(),
     );
   }
-
-  Map toJson() => {
-        'id': id,
-        'title': title,
-        'winningOutcomeId': winningOutcomeId,
-        'totalUsers': totalUsers,
-        'outcomes': outcomes,
-        'status': status,
-        'remainingTime': remainingTime,
-      };
-
-  @override
-  List<Object?> get props {
-    return [
-      id,
-      title,
-      winningOutcomeId,
-      totalUsers,
-      outcomes,
-      status,
-      remainingTime,
-    ];
-  }
-
-  @override
-  bool get stringify => true;
 }
 
-class Outcome extends Equatable {
+@immutable
+class Outcome {
   final String id;
   final String title;
   final int users;
@@ -82,26 +56,4 @@ class Outcome extends Equatable {
     required this.channelPoints,
     required this.color,
   });
-
-  Map toJson() => {
-        'id': id,
-        'title': title,
-        'users': users,
-        'channelPoints': channelPoints,
-        'color': color,
-      };
-
-  @override
-  List<Object?> get props {
-    return [
-      id,
-      title,
-      users,
-      channelPoints,
-      color,
-    ];
-  }
-
-  @override
-  bool get stringify => true;
 }

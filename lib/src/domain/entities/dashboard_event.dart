@@ -1,7 +1,4 @@
-import 'dart:convert';
-import 'dart:ui';
-
-import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:irllink/src/core/utils/dashboard_events.dart';
 
 enum DashboardActionsTypes {
@@ -24,8 +21,8 @@ String getDashboardActionTypeString(DashboardActionsTypes actionType) {
   }
 }
 
-// ignore: must_be_immutable
-class DashboardEvent extends Equatable {
+@immutable
+class DashboardEvent {
   final String title;
   final Color color;
   final DashboardActionsTypes dashboardActionsType;
@@ -40,34 +37,12 @@ class DashboardEvent extends Equatable {
     required this.customValue,
   });
 
-  @override
-  List<Object?> get props {
-    return [
-      title,
-      color,
-      dashboardActionsType,
-      event,
-      customValue,
-    ];
-  }
-
-  Map toJson() => {
-        'title': title,
-        'color': color.value,
-        'dashboardActionsType': dashboardActionsType.name,
-        'event': event.name,
-        'customValue': jsonEncode(customValue),
-      };
-
-  @override
-  bool get stringify => true;
-
   DashboardEvent copyWith({
     String? title,
     Color? color,
     DashboardActionsTypes? dashboardActionsType,
     SupportedEvents? event,
-    dynamic customValue,
+    customValue,
   }) {
     return DashboardEvent(
       title: title ?? this.title,

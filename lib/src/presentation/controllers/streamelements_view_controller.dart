@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
+import 'package:irllink/src/core/services/talker_service.dart';
+import 'package:irllink/src/core/services/watch_service.dart';
+
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
@@ -13,15 +14,59 @@ import 'package:irllink/src/domain/entities/stream_elements/se_credentials.dart'
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_song.dart';
+import 'package:irllink/src/domain/usecases/streamelements/get_last_activities_usecase.dart';
+import 'package:irllink/src/domain/usecases/streamelements/get_local_credentials_usecase.dart';
+import 'package:irllink/src/domain/usecases/streamelements/get_me_usecase.dart';
+import 'package:irllink/src/domain/usecases/streamelements/get_overlays_usecase.dart';
+import 'package:irllink/src/domain/usecases/streamelements/get_song_playing_usecase.dart';
+import 'package:irllink/src/domain/usecases/streamelements/get_song_queue_usecase.dart';
+import 'package:irllink/src/domain/usecases/streamelements/next_song_usecase.dart';
+import 'package:irllink/src/domain/usecases/streamelements/refresh_token_usecase.dart';
+import 'package:irllink/src/domain/usecases/streamelements/remove_song_usecase.dart';
+import 'package:irllink/src/domain/usecases/streamelements/replay_activity_usecase.dart';
+import 'package:irllink/src/domain/usecases/streamelements/reset_queue_usecase.dart';
+import 'package:irllink/src/domain/usecases/streamelements/update_player_state_usecase.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
-import 'package:irllink/src/presentation/events/streamelements_events.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 class StreamelementsViewController extends GetxController
-    with GetTickerProviderStateMixin {
-  StreamelementsViewController({required this.streamelementsEvents});
+    with GetTickerProviderStateMixin, WidgetsBindingObserver {
+  StreamelementsViewController({
+    required this.getOverlaysUseCase,
+    required this.getMeUseCase,
+    required this.getLocalCredentialsUseCase,
+    required this.refreshTokenUseCase,
+    required this.replayActivityUseCase,
+    required this.nextSongUseCase,
+    required this.removeSongUseCase,
+    required this.resetQueueUseCase,
+    required this.updatePlayerStateUseCase,
+    required this.getLastActivitiesUseCase,
+    required this.getSongPlayingUseCase,
+    required this.getSongQueueUseCase,
+    required this.settingsService,
+    required this.watchService,
+    required this.talkerService,
+    required this.homeViewController,
+  });
 
-  final StreamelementsEvents streamelementsEvents;
+  final StreamElementsGetOverlaysUseCase getOverlaysUseCase;
+  final StreamElementsGetMeUseCase getMeUseCase;
+  final StreamElementsGetLocalCredentialsUseCase getLocalCredentialsUseCase;
+  final StreamElementsRefreshTokenUseCase refreshTokenUseCase;
+  final StreamElementsReplayActivityUseCase replayActivityUseCase;
+  final StreamElementsNextSongUseCase nextSongUseCase;
+  final StreamElementsRemoveSongUseCase removeSongUseCase;
+  final StreamElementsResetQueueUseCase resetQueueUseCase;
+  final StreamElementsUpdatePlayerStateUseCase updatePlayerStateUseCase;
+  final StreamElementsGetLastActivitiesUseCase getLastActivitiesUseCase;
+  final StreamElementsGetSongPlayingUseCase getSongPlayingUseCase;
+  final StreamElementsGetSongQueueUseCase getSongQueueUseCase;
+
+  final SettingsService settingsService;
+  final WatchService watchService;
+  final TalkerService talkerService;
+  final HomeViewController homeViewController;
 
   late TabController tabController;
 
@@ -43,8 +88,6 @@ class StreamelementsViewController extends GetxController
 
   RxBool isSocketConnected = false.obs;
 
-  final HomeViewController homeViewController = Get.find<HomeViewController>();
-
   @override
   Future<void> onInit() async {
     tabController = TabController(length: 3, vsync: this);
@@ -53,32 +96,27 @@ class StreamelementsViewController extends GetxController
 
     await setStreamElementsCredentials();
     if (seCredentials.value != null) {
-      DataState<SeCredentials> tokenResult = await streamelementsEvents
-          .refreshSeAccessToken(seCredentials: seCredentials.value!);
+      DataState<SeCredentials> tokenResult = await refreshTokenUseCase(
+        params: seCredentials.value!,
+      );
 
       if (tokenResult.data != null) {
         seCredentials.value = tokenResult.data;
       }
     }
 
-    streamelementsEvents.getSettings().then((value) => applySettings());
+    settingsService.getSettings().then((value) => applySettings());
 
     isSocketConnected.listen((value) {
       // Send to watchOS
-      const platform = MethodChannel('com.irllink');
-      platform.invokeMethod("flutterToWatch", {
-        "method": "sendSeConnectedToNative",
-        "data": isSocketConnected.value,
-      });
+      watchService.sendSeConnectedToNative(
+        isConnected: isSocketConnected.value,
+      );
     });
 
     activities.listen((value) {
       // Send to watchOS
-      const platform = MethodChannel('com.irllink');
-      platform.invokeMethod("flutterToWatch", {
-        "method": "sendSeActivityToNative",
-        "data": value.last.toJsonForWatch(),
-      });
+      watchService.sendSeActivityToNative(value.last);
     });
 
     super.onInit();
@@ -92,9 +130,27 @@ class StreamelementsViewController extends GetxController
     super.onClose();
   }
 
+  void reconnectSocket() {
+    socket?.close();
+    socket = null;
+    isSocketConnected.value = false;
+    connectWebsocket();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.resumed) {
+      // The app is back to the foreground
+      reconnectSocket(); // Reconnect to SE websocket
+    } else if (state == AppLifecycleState.paused) {
+      // The app is sent to the background
+    }
+  }
+
   Future<void> setStreamElementsCredentials() async {
-    DataState<SeCredentials> seCreds =
-        await streamelementsEvents.getSeCredentialsFromLocal();
+    DataState<SeCredentials> seCreds = await getLocalCredentialsUseCase();
     if (seCreds is DataSuccess) {
       seCredentials.value = seCreds.data;
       await setSeMe(seCredentials.value!);
@@ -102,8 +158,11 @@ class StreamelementsViewController extends GetxController
   }
 
   Future<void> setSeMe(SeCredentials seCreds) async {
-    DataState<SeMe> seMeResult =
-        await streamelementsEvents.getSeMe(seCredentials.value!.accessToken);
+    DataState<SeMe> seMeResult = await getMeUseCase(
+      params: StreamElementsGetMeParams(
+        token: seCredentials.value!.accessToken,
+      ),
+    );
     if (seMeResult is DataSuccess) {
       userSeProfile.value = seMeResult.data;
     }
@@ -111,7 +170,12 @@ class StreamelementsViewController extends GetxController
 
   void replayEvent(SeActivity activity) {
     String accessToken = seCredentials.value!.accessToken;
-    streamelementsEvents.replayActivity(accessToken, activity);
+    replayActivityUseCase(
+      params: StreamElementsReplayActivityParams(
+        token: accessToken,
+        activity: activity,
+      ),
+    );
   }
 
   Future<void> applySettings() async {
@@ -124,32 +188,45 @@ class StreamelementsViewController extends GetxController
   }
 
   Future<void> handleGetMe() async {
-    String? jwt =
-        Get.find<SettingsService>().settings.value.streamElementsSettings?.jwt;
+    String? jwt = settingsService.settings.value.streamElementsSettings.jwt;
     SeMe? me = userSeProfile.value;
     if (me == null) {
-      globals.talker?.error('User profile was not found.');
+      talkerService.talker.error('User profile was not found.');
       return;
     }
     String? accessToken = seCredentials.value?.accessToken;
     if (accessToken == null) {
-      globals.talker?.error('There is no accessToken to use for SE api calls.');
+      talkerService.talker
+          .error('There is no accessToken to use for SE api calls.');
       return;
     }
 
-    streamelementsEvents
-        .getOverlays(accessToken, me.id)
-        .then((value) => overlays.value = value.data ?? []);
-    streamelementsEvents
-        .getLastActivities(accessToken, me.id)
-        .then((value) => activities.value = value.data ?? []);
-    streamelementsEvents
-        .getSongPlaying(accessToken, me.id)
-        .then((value) => currentSong.value = value.data);
+    getOverlaysUseCase(
+      params: StreamElementsGetOverlaysParams(
+        token: accessToken,
+        channel: me.id,
+      ),
+    ).then((value) => overlays.value = value.data ?? []);
+    getLastActivitiesUseCase(
+      params: StreamElementsGetLastActivitiesParams(
+        token: accessToken,
+        channel: me.id,
+      ),
+    ).then((value) => activities.value = value.data ?? []);
+    getSongPlayingUseCase(
+      params: StreamElementsGetSongPlayingParams(
+        token: accessToken,
+        channel: me.id,
+      ),
+    ).then((value) => currentSong.value = value.data);
 
     if (jwt != null) {
-      DataState<List<SeSong>> songQueue =
-          await streamelementsEvents.getSongQueue(jwt, me.id);
+      DataState<List<SeSong>> songQueue = await getSongQueueUseCase(
+        params: StreamElementsGetSongQueueParams(
+          token: accessToken,
+          channel: me.id,
+        ),
+      );
       if (songQueue is DataSuccess) {
         songRequestQueue.value = songQueue.data ?? [];
       }
@@ -157,27 +234,53 @@ class StreamelementsViewController extends GetxController
   }
 
   void updatePlayerState(String state, String jwt) {
-    if (userSeProfile.value == null) return;
-    streamelementsEvents.updatePlayerState(
-      jwt,
-      userSeProfile.value!.id,
-      state,
+    if (userSeProfile.value == null) {
+      return;
+    }
+    updatePlayerStateUseCase(
+      params: StreamElementsUpdatePlayerStateParams(
+        token: jwt,
+        channel: userSeProfile.value!.id,
+        state: state,
+      ),
     );
   }
 
   void nextSong(String jwt) {
-    if (userSeProfile.value == null) return;
-    streamelementsEvents.nextSong(jwt, userSeProfile.value!.id);
+    if (userSeProfile.value == null) {
+      return;
+    }
+    nextSongUseCase(
+      params: StreamElementsNextSongParams(
+        token: jwt,
+        channel: userSeProfile.value!.id,
+      ),
+    );
   }
 
   void removeSong(SeSong song, String jwt) {
-    if (userSeProfile.value == null) return;
-    streamelementsEvents.removeSong(jwt, userSeProfile.value!.id, song.id);
+    if (userSeProfile.value == null) {
+      return;
+    }
+    removeSongUseCase(
+      params: StreamElementsRemoveSongParams(
+        token: jwt,
+        channel: userSeProfile.value!.id,
+        songId: song.id,
+      ),
+    );
   }
 
   void resetQueue(String jwt) {
-    if (userSeProfile.value == null) return;
-    streamelementsEvents.resetQueue(jwt, userSeProfile.value!.id);
+    if (userSeProfile.value == null) {
+      return;
+    }
+    resetQueueUseCase(
+      params: StreamElementsResetQueueParams(
+        token: jwt,
+        channel: userSeProfile.value!.id,
+      ),
+    );
   }
 
   /// Connect to WebSocket
@@ -218,8 +321,8 @@ class StreamelementsViewController extends GetxController
       (event, data) => {
         if (data != null)
           {
-            globals.talker?.debug(data),
-          }
+            talkerService.talker.debug(data),
+          },
       },
     );
 
@@ -266,23 +369,24 @@ class StreamelementsViewController extends GetxController
     if (accessToken != null) {
       socket?.emit('authenticate', {"method": 'oauth2', "token": accessToken});
     } else {
-      globals.talker?.error('There is no accessToken to use for SE weboscket.');
+      talkerService.talker
+          .error('There is no accessToken to use for SE weboscket.');
     }
   }
 
   Future<void> onError() async {
     isSocketConnected.value = false;
-    globals.talker?.error('StreamElements WebSocket error.');
+    talkerService.talker.error('StreamElements WebSocket error.');
   }
 
   Future<void> onDisconnect() async {
     isSocketConnected.value = false;
-    globals.talker?.warning('StreamElements WebSocket disconnected.');
+    talkerService.talker.warning('StreamElements WebSocket disconnected.');
   }
 
   Future<void> onAuthenticated(data) async {
     isSocketConnected.value = true;
-    globals.talker?.logTyped(
+    talkerService.talker.logTyped(
       StreamElementsLog('StreamElements WebSocket authenticated.'),
     );
   }
@@ -300,7 +404,9 @@ class StreamelementsViewController extends GetxController
 
   void onNextSong(data) {
     dynamic songData = data[0]["nextSong"];
-    if (songData == null || songData == {}) return;
+    if (songData == null || songData == {}) {
+      return;
+    }
     SeSong song = SeSong.fromJson(songData);
     currentSong.value = song;
     if (song.id != '') {
@@ -315,14 +421,16 @@ class StreamelementsViewController extends GetxController
   }
 
   void parseTestEvent(data) {
-    Settings settings = Get.find<SettingsService>().settings.value;
+    Settings settings = settingsService.settings.value;
 
     dynamic widget = data[0];
     String listener = widget["listener"];
     dynamic event = widget["event"];
     switch (listener) {
       case "follower-latest":
-        if (!settings.streamElementsSettings!.showFollowerActivity) return;
+        if (!settings.streamElementsSettings.showFollowerActivity) {
+          return;
+        }
         SeActivity activity = SeActivity(
           id: "1",
           channel: "",
@@ -333,7 +441,9 @@ class StreamelementsViewController extends GetxController
         activities.add(activity);
         break;
       case "subscriber-latest":
-        if (!settings.streamElementsSettings!.showSubscriberActivity) return;
+        if (!settings.streamElementsSettings.showSubscriberActivity) {
+          return;
+        }
         SeActivity activity = SeActivity(
           id: "1",
           channel: "",
@@ -348,7 +458,9 @@ class StreamelementsViewController extends GetxController
         activities.add(activity);
         break;
       case "tip-latest":
-        if (!settings.streamElementsSettings!.showDonationActivity) return;
+        if (!settings.streamElementsSettings.showDonationActivity) {
+          return;
+        }
         SeActivity activity = SeActivity(
           id: "1",
           channel: "",
@@ -361,7 +473,9 @@ class StreamelementsViewController extends GetxController
         activities.add(activity);
         break;
       case "cheer-latest":
-        if (!settings.streamElementsSettings!.showCheerActivity) return;
+        if (!settings.streamElementsSettings.showCheerActivity) {
+          return;
+        }
         SeActivity activity = SeActivity(
           id: "1",
           channel: "",
@@ -374,7 +488,9 @@ class StreamelementsViewController extends GetxController
         activities.add(activity);
         break;
       case "host-latest":
-        if (!settings.streamElementsSettings!.showHostActivity) return;
+        if (!settings.streamElementsSettings.showHostActivity) {
+          return;
+        }
         SeActivity activity = SeActivity(
           id: "1",
           channel: "",
@@ -386,7 +502,9 @@ class StreamelementsViewController extends GetxController
         activities.add(activity);
         break;
       case "raid-latest":
-        if (!settings.streamElementsSettings!.showRaidActivity) return;
+        if (!settings.streamElementsSettings.showRaidActivity) {
+          return;
+        }
         SeActivity activity = SeActivity(
           channel: "",
           id: "1",
@@ -403,13 +521,15 @@ class StreamelementsViewController extends GetxController
   }
 
   void parseEvent(data) {
-    Settings settings = Get.find<SettingsService>().settings.value;
+    Settings settings = settingsService.settings.value;
 
     dynamic event = data[0];
     String type = event["type"];
     switch (type) {
       case "follower":
-        if (!settings.streamElementsSettings!.showFollowerActivity) return;
+        if (!settings.streamElementsSettings.showFollowerActivity) {
+          return;
+        }
         SeActivity activity = SeActivity(
           id: event["_id"],
           channel: event["channel"],
@@ -419,7 +539,9 @@ class StreamelementsViewController extends GetxController
         activities.add(activity);
         break;
       case "subscriber":
-        if (!settings.streamElementsSettings!.showSubscriberActivity) return;
+        if (!settings.streamElementsSettings.showSubscriberActivity) {
+          return;
+        }
         SeActivity activity = SeActivity(
           id: event["_id"],
           channel: event["channel"],
@@ -434,7 +556,9 @@ class StreamelementsViewController extends GetxController
         activities.add(activity);
         break;
       case "tip":
-        if (!settings.streamElementsSettings!.showDonationActivity) return;
+        if (!settings.streamElementsSettings.showDonationActivity) {
+          return;
+        }
         SeActivity activity = SeActivity(
           id: event["_id"],
           channel: event["channel"],
@@ -446,7 +570,9 @@ class StreamelementsViewController extends GetxController
         activities.add(activity);
         break;
       case "cheer":
-        if (!settings.streamElementsSettings!.showCheerActivity) return;
+        if (!settings.streamElementsSettings.showCheerActivity) {
+          return;
+        }
         SeActivity activity = SeActivity(
           id: event["_id"],
           channel: event["channel"],
@@ -458,7 +584,9 @@ class StreamelementsViewController extends GetxController
         activities.add(activity);
         break;
       case "host":
-        if (!settings.streamElementsSettings!.showHostActivity) return;
+        if (!settings.streamElementsSettings.showHostActivity) {
+          return;
+        }
         SeActivity activity = SeActivity(
           id: event["_id"],
           channel: event["channel"],
@@ -469,7 +597,9 @@ class StreamelementsViewController extends GetxController
         activities.add(activity);
         break;
       case "raid":
-        if (!settings.streamElementsSettings!.showRaidActivity) return;
+        if (!settings.streamElementsSettings.showRaidActivity) {
+          return;
+        }
         SeActivity activity = SeActivity(
           id: event["_id"],
           channel: event["channel"],

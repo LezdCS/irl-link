@@ -17,8 +17,8 @@ class ChatsJoined extends GetView<SettingsViewController> {
     final SettingsService settingsService = Get.find<SettingsService>();
     return Obx(() {
       Settings settings = settingsService.settings.value;
-      List<ChatGroup> chatGroups = settings.chatSettings?.chatGroups ?? [];
-      ChatGroup firstGroup = settings.chatSettings!.permanentFirstGroup;
+      List<ChatGroup> chatGroups = settings.chatSettings.chatGroups;
+      ChatGroup firstGroup = settings.chatSettings.permanentFirstGroup;
       return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -33,7 +33,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
             "chats_joined".tr,
           ),
         ),
-        body: Container(
+        body: DecoratedBox(
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
           ),
@@ -48,13 +48,11 @@ class ChatsJoined extends GetView<SettingsViewController> {
                   top: 10,
                 ),
                 margin: const EdgeInsets.only(
-                  bottom: 0,
                   top: 12,
                 ),
                 child: Column(
                   children: [
                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         const Image(
                           width: 18,
@@ -80,10 +78,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
                     ListView.builder(
                       shrinkWrap: true,
                       itemCount: firstGroup.channels.length,
-                      padding: const EdgeInsets.only(
-                        bottom: 0,
-                        top: 0,
-                      ),
+                      padding: EdgeInsets.zero,
                       itemBuilder: (BuildContext context, int index) {
                         Channel channel = firstGroup.channels[index];
                         return _channel(channel, firstGroup);
@@ -92,7 +87,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
                     _addChannelToGroupButton(
                       context,
                       channelTextController,
-                      settings.chatSettings!.permanentFirstGroup,
+                      settings.chatSettings.permanentFirstGroup,
                     ),
                   ],
                 ),
@@ -161,7 +156,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
           Settings settings = settingsService.settings.value;
 
           // Remove the group from the list of groups in the settings
-          settings.chatSettings?.chatGroups.remove(group);
+          settings.chatSettings.chatGroups.remove(group);
           // Save the settings and refresh the UI
           settingsService.saveSettings();
         }
@@ -183,10 +178,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
             ListView.builder(
               shrinkWrap: true,
               itemCount: group.channels.length,
-              padding: const EdgeInsets.only(
-                bottom: 0,
-                top: 0,
-              ),
+              padding: EdgeInsets.zero,
               itemBuilder: (BuildContext context, int index) {
                 Channel channel = group.channels[index];
                 return _channel(channel, group);
@@ -241,7 +233,6 @@ class ChatsJoined extends GetView<SettingsViewController> {
       },
       key: ValueKey(channel),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image(
             width: 18,
@@ -298,26 +289,26 @@ class ChatsJoined extends GetView<SettingsViewController> {
 
             // Add the new channel to the selected group
             List<Channel> channels = [...chatGroup.channels, newChan];
-            chatGroup = chatGroup.copyWith(channels: channels);
+            ChatGroup updatedGroup = chatGroup.copyWith(channels: channels);
 
-            if (chatGroup.id == 'permanentFirstGroup') {
+            if (updatedGroup.id == 'permanentFirstGroup') {
               settingsService.settings.value = settings.copyWith(
                 chatSettings: settings.chatSettings
-                    ?.copyWith(permanentFirstGroup: chatGroup),
+                    .copyWith(permanentFirstGroup: updatedGroup),
               );
             } else {
               // Replace the group in the list
               List<ChatGroup>? groups = [];
-              groups.addAll(settings.chatSettings?.chatGroups ?? []);
+              groups.addAll(settings.chatSettings.chatGroups);
               int indexToReplace =
-                  groups.indexWhere((g) => g.id == chatGroup.id);
+                  groups.indexWhere((g) => g.id == updatedGroup.id);
               groups.removeAt(indexToReplace);
-              groups.insert(indexToReplace, chatGroup);
+              groups.insert(indexToReplace, updatedGroup);
 
               // Update the settings
               settingsService.settings.value = settings.copyWith(
                 chatSettings:
-                    settings.chatSettings?.copyWith(chatGroups: groups),
+                    settings.chatSettings.copyWith(chatGroups: groups),
               );
             }
 
@@ -340,7 +331,6 @@ class ChatsJoined extends GetView<SettingsViewController> {
           // dotted border
           border: Border.all(
             color: Theme.of(context).colorScheme.tertiary,
-            width: 1,
           ),
           borderRadius: BorderRadius.circular(8),
         ),
@@ -363,10 +353,10 @@ class ChatsJoined extends GetView<SettingsViewController> {
         );
         Settings settings = settingsService.settings.value;
         List<ChatGroup> chatGroups =
-            List.from(settings.chatSettings!.chatGroups);
+            List.from(settings.chatSettings.chatGroups);
         chatGroups.add(newGroup);
         settingsService.settings.value = settings.copyWith(
-          chatSettings: settings.chatSettings!.copyWith(chatGroups: chatGroups),
+          chatSettings: settings.chatSettings.copyWith(chatGroups: chatGroups),
         );
         settingsService.saveSettings();
       },
@@ -418,7 +408,6 @@ class ChatsJoined extends GetView<SettingsViewController> {
                     return DropdownMenuItem(
                       value: Platform.values[index].toString(),
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Image(
                             width: 18,
@@ -430,9 +419,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
                           ),
                           const Padding(padding: EdgeInsets.only(right: 8)),
                           Text(
-                            Platform.values[index].name
-                                .toString()
-                                .toCapitalized(),
+                            Platform.values[index].name.toCapitalized(),
                             style: TextStyle(
                               color:
                                   Theme.of(context).textTheme.bodyLarge!.color,
@@ -455,7 +442,6 @@ class ChatsJoined extends GetView<SettingsViewController> {
                   style: TextStyle(
                     color: Theme.of(context).textTheme.bodyLarge!.color,
                   ),
-                  maxLines: 1,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter the channel name';

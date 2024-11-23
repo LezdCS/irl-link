@@ -1,6 +1,7 @@
-import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
-class TwitchHypeTrain extends Equatable {
+@immutable
+class TwitchHypeTrain {
   final String id;
   final int total;
   final int progress;
@@ -33,37 +34,10 @@ class TwitchHypeTrain extends Equatable {
       lastContribution: null,
     );
   }
-
-  Map toJson() => {
-        'id': id,
-        'total': total,
-        'progress': progress,
-        'goal': goal,
-        'level': level,
-        'topContributions': topContributions,
-        'lastContribution': lastContribution,
-        'endsAt': endsAt,
-      };
-
-  @override
-  List<Object?> get props {
-    return [
-      id,
-      total,
-      progress,
-      goal,
-      level,
-      topContributions,
-      lastContribution,
-      endsAt,
-    ];
-  }
-
-  @override
-  bool get stringify => true;
 }
 
-class Contribution extends Equatable {
+@immutable
+class Contribution {
   final String userId;
   final String userLogin;
   final String userName;
@@ -77,26 +51,4 @@ class Contribution extends Equatable {
     required this.type,
     required this.total,
   });
-
-  Map toJson() => {
-        'userId': userId,
-        'userLogin': userLogin,
-        'userName': userName,
-        'type': type,
-        'total': total,
-      };
-
-  @override
-  List<Object?> get props {
-    return [
-      userId,
-      userLogin,
-      userName,
-      type,
-      total,
-    ];
-  }
-
-  @override
-  bool get stringify => true;
 }

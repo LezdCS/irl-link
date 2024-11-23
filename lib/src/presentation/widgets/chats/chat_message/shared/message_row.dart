@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/chat/chat_badge.dart';
 import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
-import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/kick/kick_emote.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/author_name.dart';
@@ -13,10 +12,10 @@ import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/times
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/word.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/twitch/cheer_emote.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/twitch/twitch_emote.dart';
-import 'package:twitch_chat/twitch_chat.dart';
+import 'package:twitch_chat/twitch_chat.dart' hide ChatMessage;
 
 class MessageRow extends StatelessWidget {
-  final entity.ChatMessage message;
+  final ChatMessage message;
   final bool displayTimestamp;
   final double textSize;
   final bool hideDeletedMessages;
@@ -110,25 +109,29 @@ class MessageRow extends StatelessWidget {
   }
 
   List<Widget> messageContent(
-    final entity.ChatMessage message,
-    final TwitchChatParameters? params,
-    final double textSize,
-    final List<ChatEmote> cheerEmotes,
-    final List<ChatEmote> thirdPartEmotes,
+    ChatMessage message,
+    TwitchChatParameters? params,
+    double textSize,
+    List<ChatEmote> cheerEmotes,
+    List<ChatEmote> thirdPartEmotes,
   ) {
     List<Widget> messageWidgetsBuild = [];
 
     for (int i = 0; i < message.message.trim().split(' ').length; i++) {
       String word = message.message.trim().split(' ')[i];
 
-      MapEntry? emote = message.emotes.entries.firstWhereOrNull((element) =>
-          element
-              .value
-              .where((position) =>
+      MapEntry? emote = message.emotes.entries.firstWhereOrNull(
+        (element) => element.value
+            .where(
+              (position) =>
                   message.message.substring(
-                      int.parse(position[0]), int.parse(position[1]) + 1) ==
-                  word)
-              .isNotEmpty);
+                    int.parse(position[0]),
+                    int.parse(position[1]) + 1,
+                  ) ==
+                  word,
+            )
+            .isNotEmpty,
+      );
 
       // [emote:37227:LULW]
       List<String> kickEmotesIds = [];

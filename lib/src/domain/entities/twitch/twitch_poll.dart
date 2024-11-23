@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 enum PollStatus {
   empty,
@@ -6,7 +6,8 @@ enum PollStatus {
   completed,
 }
 
-class TwitchPoll extends Equatable {
+@immutable
+class TwitchPoll {
   final String id;
   final String title;
   final List<Choice> choices;
@@ -33,33 +34,10 @@ class TwitchPoll extends Equatable {
       endsAt: DateTime.now(),
     );
   }
-
-  Map toJson() => {
-        'id': id,
-        'title': title,
-        'choices': choices,
-        'totalVotes': totalVotes,
-        'status': status,
-        'endsAt': endsAt,
-      };
-
-  @override
-  List<Object?> get props {
-    return [
-      id,
-      title,
-      choices,
-      totalVotes,
-      status,
-      endsAt,
-    ];
-  }
-
-  @override
-  bool get stringify => true;
 }
 
-class Choice extends Equatable {
+@immutable
+class Choice {
   final String id;
   final String title;
   final int votes;
@@ -69,22 +47,4 @@ class Choice extends Equatable {
     required this.title,
     required this.votes,
   });
-
-  Map toJson() => {
-        'id': id,
-        'title': title,
-        'votes': votes,
-      };
-
-  @override
-  List<Object?> get props {
-    return [
-      id,
-      title,
-      votes,
-    ];
-  }
-
-  @override
-  bool get stringify => true;
 }

@@ -1,13 +1,14 @@
-import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
-class TwitchUser extends Equatable {
+@immutable
+class TwitchUser {
   final String id;
   final String login;
   final String displayName;
   final String broadcasterType;
   final String description;
   final String profileImageUrl;
-  final String viewCount;
+  final int viewCount;
 
   const TwitchUser({
     required this.id,
@@ -18,30 +19,4 @@ class TwitchUser extends Equatable {
     required this.profileImageUrl,
     required this.viewCount,
   });
-
-  Map toJson() => {
-        'id': id,
-        'login': login,
-        'display_name': displayName,
-        'broadcaster_type': broadcasterType,
-        'description': description,
-        'profile_image_url': profileImageUrl,
-        'view_count': viewCount,
-      };
-
-  @override
-  List<Object?> get props {
-    return [
-      id,
-      login,
-      displayName,
-      broadcasterType,
-      description,
-      profileImageUrl,
-      viewCount,
-    ];
-  }
-
-  @override
-  bool get stringify => true;
 }

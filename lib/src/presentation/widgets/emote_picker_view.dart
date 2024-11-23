@@ -25,7 +25,7 @@ class EmotePickerView extends GetView<HomeViewController> {
       thirdPartEmotes.addAll(chat.thirdPartEmotes);
     }
 
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: const Color(0xFF121212),
         borderRadius: const BorderRadius.all(
@@ -80,10 +80,14 @@ class EmotePickerView extends GetView<HomeViewController> {
     );
   }
 
-  Widget _tabs(BuildContext context, List<Emote> globalEmotes,
-      List<Emote> userSetEmotes, List<Emote> thirdPartEmotes) {
+  Widget _tabs(
+    BuildContext context,
+    List<Emote> globalEmotes,
+    List<Emote> userSetEmotes,
+    List<Emote> thirdPartEmotes,
+  ) {
     return Expanded(
-      child: Container(
+      child: ColoredBox(
         color: Theme.of(context).colorScheme.surface,
         child: Obx(
           () => IndexedStack(
@@ -142,8 +146,7 @@ class EmotePickerView extends GetView<HomeViewController> {
     return InkWell(
       onTap: () {
         String text = controller.chatInputController.text;
-        bool isLastCharSpace =
-            text.isNotEmpty ? text[text.length - 1] == " " : false;
+        bool isLastCharSpace = text.isNotEmpty && text[text.length - 1] == " ";
         controller.chatInputController.text =
             "$text${isLastCharSpace ? "" : " "}${emote.name} ";
       },
@@ -151,7 +154,7 @@ class EmotePickerView extends GetView<HomeViewController> {
         imageUrl: emote.url1x,
         placeholder: (BuildContext context, String url) =>
             const CircularProgressIndicator(),
-        errorWidget: (BuildContext context, String url, dynamic error) =>
+        errorWidget: (BuildContext context, String url, error) =>
             const Icon(Icons.error),
       ),
     );

@@ -10,7 +10,8 @@ abstract class StreamelementsRepository {
   Future<DataState<SeCredentials>> login(StreamelementsAuthParams params);
 
   Future<DataState<SeCredentials>> refreshAccessToken(
-      SeCredentials seCredentials);
+    SeCredentials seCredentials,
+  );
 
   Future<DataState<void>> disconnect(String accessToken);
 
@@ -19,7 +20,9 @@ abstract class StreamelementsRepository {
   Future<void> replayActivity(String token, SeActivity activity);
 
   Future<DataState<List<SeActivity>>> getLastActivities(
-      String token, String channel);
+    String token,
+    String channel,
+  );
 
   Future<DataState<List<SeOverlay>>> getOverlays(String token, String channel);
 

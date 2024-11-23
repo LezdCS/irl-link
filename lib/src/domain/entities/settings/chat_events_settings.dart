@@ -1,6 +1,7 @@
-import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
-class ChatEventsSettings extends Equatable {
+@immutable
+class ChatEventsSettings {
   final bool firstsMessages;
   final bool subscriptions;
   final bool bitsDonations;
@@ -16,30 +17,6 @@ class ChatEventsSettings extends Equatable {
     required this.incomingRaids,
     required this.redemptions,
   });
-
-  @override
-  List<Object?> get props {
-    return [
-      firstsMessages,
-      subscriptions,
-      bitsDonations,
-      announcements,
-      incomingRaids,
-      redemptions,
-    ];
-  }
-
-  Map toJson() => {
-        'firstsMessages': firstsMessages,
-        'subscriptions': subscriptions,
-        'bitsDonations': bitsDonations,
-        'announcements': announcements,
-        'incomingRaids': incomingRaids,
-        'redemptions': redemptions,
-      };
-
-  @override
-  bool get stringify => true;
 
   ChatEventsSettings copyWith({
     bool? firstsMessages,

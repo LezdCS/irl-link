@@ -1,20 +1,15 @@
-import 'package:irllink/src/domain/entities/stream_elements/se_credentials.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class SeCredentialsDTO extends SeCredentials {
-  const SeCredentialsDTO({
-    required super.accessToken,
-    required super.refreshToken,
-    required super.expiresIn,
-    required super.scopes,
-  });
+part 'se_credentials_dto.freezed.dart';
 
-  @override
-  Map toJson() => {
-        'accessToken': accessToken,
-        'refreshToken': refreshToken,
-        'expiresIn': expiresIn,
-        'scopes': scopes,
-      };
+@freezed
+class SeCredentialsDTO with _$SeCredentialsDTO {
+  const factory SeCredentialsDTO({
+    required String accessToken,
+    required String refreshToken,
+    required int expiresIn,
+    required String scopes,
+  }) = _SeCredentialsDTO;
 
   factory SeCredentialsDTO.fromJson(Map<String, dynamic> map) {
     return SeCredentialsDTO(

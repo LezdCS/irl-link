@@ -158,9 +158,7 @@ class Themes {
     ),
     primaryIconTheme: const IconThemeData(color: Colors.black),
     inputDecorationTheme: InputDecorationTheme(
-      border: const OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.black),
-      ),
+      border: const OutlineInputBorder(),
       helperStyle: const TextStyle(
         color: Color.fromARGB(255, 28, 25, 25),
       ),
@@ -232,9 +230,7 @@ class Themes {
       labelStyle: const TextStyle(
         color: Colors.black,
       ),
-      side: const BorderSide(
-        color: Colors.black,
-      ),
+      side: const BorderSide(),
       disabledColor: const Color(0xFF18181b),
       selectedColor: Colors.deepPurpleAccent[200],
       iconTheme: const IconThemeData(color: Colors.white),
@@ -276,9 +272,7 @@ class Themes {
       textColor: Colors.black,
     ),
     checkboxTheme: CheckboxThemeData(
-      side: const BorderSide(
-        color: Colors.black,
-      ),
+      side: const BorderSide(),
       checkColor: WidgetStateProperty.all(Colors.deepPurple[600]),
     ),
   );

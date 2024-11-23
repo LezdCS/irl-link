@@ -1,20 +1,22 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
+import 'package:irllink/src/core/services/talker_service.dart';
+import 'package:irllink/src/core/services/watch_service.dart';
+
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
-import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 
-class ObsTabViewController extends GetxController {
-  ObsTabViewController({required this.homeEvents});
-
-  final HomeEvents homeEvents;
+class ObsTabViewController extends GetxController with WidgetsBindingObserver {
+  ObsTabViewController({
+    required this.watchService,
+    required this.talkerService,
+  });
 
   ObsWebSocket? obsWebSocket;
   RxBool isConnected = false.obs;
@@ -33,7 +35,10 @@ class ObsTabViewController extends GetxController {
 
   Rxn<StatsResponse> statsResponse = Rxn<StatsResponse>();
 
-  late Timer statsTimer;
+  Timer? statsTimer;
+
+  final WatchService watchService;
+  final TalkerService talkerService;
 
   @override
   Future<void> onReady() async {
@@ -41,40 +46,23 @@ class ObsTabViewController extends GetxController {
 
     isConnected.listen((value) {
       // Send to watchOS
-      const platform = MethodChannel('com.irllink');
-      platform.invokeMethod("flutterToWatch", {
-        "method": "sendUpdateObsConnecteToNative",
-        "data": value,
-      });
+      watchService.sendUpdateObsConnecteToNative(isConnected: value);
     });
 
     currentScene.listen((value) {
       // Send to watchOS
-      const platform = MethodChannel('com.irllink');
-      platform.invokeMethod("flutterToWatch", {
-        "method": "sendSelectedObsSceneToNative",
-        "data": value,
-      });
+      watchService.sendSelectedObsSceneToNative(value);
     });
 
     scenesList.listen((value) {
       // Send to watchOS
-      const platform = MethodChannel('com.irllink');
-      platform.invokeMethod("flutterToWatch", {
-        "method": "sendObsScenesToNative",
-        "data": value,
-      });
+      watchService.sendObsScenesToNative(value);
     });
 
     sourcesList.listen((value) {
       String data = jsonEncode(value.map((e) => e.toJson()).toList());
-      debugPrint("sourcesList: $data");
       // Send to watchOS
-      const platform = MethodChannel('com.irllink');
-      platform.invokeMethod("flutterToWatch", {
-        "method": "sendObsSourcesToNative",
-        "data": data,
-      });
+      watchService.sendObsSourcesToNative(data);
     });
 
     super.onReady();
@@ -83,20 +71,35 @@ class ObsTabViewController extends GetxController {
   @override
   void onClose() {
     isConnected.value = false;
-    statsTimer.cancel();
+    statsTimer?.cancel();
     obsWebSocket?.close();
     super.onClose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.resumed) {
+      // The app is back to the foreground
+      applySettings(); // Reconnect to OBS session
+    } else if (state == AppLifecycleState.paused) {
+      // The app is sent to the background
+    }
   }
 
   /// Connect to the OBS websocket at [url] with optional [password]
   void connectWs(String url, String password) async {
     try {
-      if (!url.startsWith('ws://') && !url.startsWith('wss://')) {
-        url = 'ws://$url';
+      String modifiedUrl = url;
+      if (!modifiedUrl.startsWith('ws://') &&
+          !modifiedUrl.startsWith('wss://')) {
+        modifiedUrl = 'ws://$modifiedUrl';
       }
-      globals.talker?.logTyped(ObsLog("Connecting to OBS at $url..."));
+      talkerService.talker
+          .logTyped(ObsLog("Connecting to OBS at $modifiedUrl..."));
       obsWebSocket = await ObsWebSocket.connect(
-        url,
+        modifiedUrl,
         password: password,
         onDone: connectionLost,
         timeout: const Duration(seconds: 30),
@@ -116,8 +119,10 @@ class ObsTabViewController extends GetxController {
 
       obsWebSocket?.addHandler<SceneItemEnableStateChanged>(
           (SceneItemEnableStateChanged sceneItemEnableStateChanged) {
-        SceneItemDetail s = sourcesList.firstWhere((source) =>
-            source.sceneItemId == sceneItemEnableStateChanged.sceneItemId);
+        SceneItemDetail s = sourcesList.firstWhere(
+          (source) =>
+              source.sceneItemId == sceneItemEnableStateChanged.sceneItemId,
+        );
 
         Map<String, dynamic> srcJson = s.toJson();
         srcJson['sceneItemTransform'] = srcJson['sceneItemTransform'].toJson();
@@ -157,7 +162,7 @@ class ObsTabViewController extends GetxController {
       isConnected.value = true;
       Settings settings = Get.find<SettingsService>().settings.value;
 
-      List obsConnectionsHistory = settings.obsConnectionsHistory!;
+      List obsConnectionsHistory = settings.obsConnectionsHistory;
       if (obsConnectionsHistory.firstWhereOrNull(
             (element) =>
                 element['url'] == url && element['password'] == password,
@@ -198,8 +203,8 @@ class ObsTabViewController extends GetxController {
   }
 
   void connectionLost() {
-    globals.talker?.error("Connection lost with OBS.");
-    statsTimer.cancel();
+    talkerService.talker.error("Connection lost with OBS.");
+    statsTimer?.cancel();
     isConnected.value = false;
     alertMessage.value = "Connection with OBS lost...";
   }
@@ -252,7 +257,9 @@ class ObsTabViewController extends GetxController {
     sourcesVolumesMap.clear();
     for (var source in sources) {
       var response = await obsWebSocket!.send(
-          "GetInputVolume", {"inputName": source.sourceName}).catchError((e) {
+        "GetInputVolume",
+        {"inputName": source.sourceName},
+      ).catchError((e) {
         return null;
       });
       if (response?.requestStatus.code == 100) {
@@ -267,8 +274,11 @@ class ObsTabViewController extends GetxController {
     await obsWebSocket!.scenes.setCurrentProgramScene(sceneName);
   }
 
-  /// Show or hide the source named [sourceName] according to the [sceneItemEnabled]
-  void setSourceVisibleState(int sceneItemId, bool sceneItemEnabled) {
+  /// Show or hide the source [sceneItemId] according to the [sceneItemEnabled]
+  void setSourceVisibleState(
+    int sceneItemId, {
+    required bool sceneItemEnabled,
+  }) {
     obsWebSocket!.sceneItems.setEnabled(
       SceneItemEnableStateChanged(
         sceneName: currentScene.value,
@@ -279,15 +289,19 @@ class ObsTabViewController extends GetxController {
   }
 
   void setInputVolume(String inputName, double inputVolumeDb) {
-    obsWebSocket!.send("SetInputVolume",
-        {"inputName": inputName, "inputVolumeDb": inputVolumeDb});
+    obsWebSocket!.send(
+      "SetInputVolume",
+      {"inputName": inputName, "inputVolumeDb": inputVolumeDb},
+    );
     sourcesList.refresh();
     sourcesVolumesMap.refresh();
   }
 
   void getSourceScreenshot(String sourceName) async {
-    var response = await obsWebSocket!.send("GetSourceScreenshot",
-        {"sourceName": sourceName, "imageFormat": "png"});
+    var response = await obsWebSocket!.send(
+      "GetSourceScreenshot",
+      {"sourceName": sourceName, "imageFormat": "png"},
+    );
 
     String imageBase64 = response?.responseData?['imageData'].split(",").last;
     sceneScreenshot.value = const Base64Decoder().convert(imageBase64);
@@ -299,8 +313,8 @@ class ObsTabViewController extends GetxController {
     if (obsWebSocket != null) {
       obsWebSocket!.close();
     }
-    if (settings.isObsConnected!) {
-      connectWs(settings.obsWebsocketUrl!, settings.obsWebsocketPassword!);
+    if (settings.isObsConnected) {
+      connectWs(settings.obsWebsocketUrl, settings.obsWebsocketPassword);
     }
   }
 }

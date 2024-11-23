@@ -4,32 +4,41 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/tts_service.dart';
+import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/services/youtube_chat.dart';
 import 'package:irllink/src/core/utils/constants.dart';
-import 'package:irllink/src/core/utils/globals.dart' as globals;
+
 import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
+import 'package:irllink/src/domain/entities/pinned_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
-import 'package:irllink/src/presentation/events/home_events.dart';
 import 'package:kick_chat/kick_chat.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 import 'package:twitch_chat/twitch_chat.dart' hide ChatMessage;
 
 class ChatViewController extends GetxController
     with GetTickerProviderStateMixin, WidgetsBindingObserver {
   ChatViewController({
-    required this.homeEvents,
     required this.chatGroup,
+    required this.homeViewController,
+    required this.ttsService,
+    required this.watchService,
+    required this.settingsService,
+    required this.talker,
   });
 
-  final HomeEvents homeEvents;
-  ChatGroup chatGroup;
+  final ChatGroup chatGroup;
+  final HomeViewController homeViewController;
+  final TtsService ttsService;
+  final WatchService watchService;
+  final SettingsService settingsService;
+  final Talker talker;
 
   //CHAT
   late ScrollController scrollController;
@@ -41,9 +50,6 @@ class ChatViewController extends GetxController
   RxList<ChatEmote> thirdPartEmotes = <ChatEmote>[].obs;
 
   late TextEditingController banDurationInputController;
-
-  final HomeViewController homeViewController = Get.find<HomeViewController>();
-  final TtsService ttsService = Get.find<TtsService>();
 
   List<TwitchChat> twitchChats = [];
   List<KickChat> kickChats = [];
@@ -61,11 +67,7 @@ class ChatViewController extends GetxController
 
     chatMessages.listen((value) {
       // Send to watchOS
-      const platform = MethodChannel('com.irllink');
-      platform.invokeMethod("flutterToWatch", {
-        "method": "sendChatMessageToNative",
-        "data": value.last.toJsonForWatch(),
-      });
+      watchService.sendChatMessageToNative(value.last);
     });
 
     super.onInit();
@@ -75,7 +77,9 @@ class ChatViewController extends GetxController
   @override
   void onReady() {
     scrollController.addListener(scrollListener);
-    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+    Connectivity()
+        .onConnectivityChanged
+        .listen((List<ConnectivityResult> result) {
       reconnectAllChats();
     });
 
@@ -85,7 +89,6 @@ class ChatViewController extends GetxController
   @override
   void onClose() {
     Get.find<TtsService>().flutterTts.stop();
-    super.onDelete;
     super.onClose();
   }
 
@@ -135,7 +138,7 @@ class ChatViewController extends GetxController
 
     double maxPosition = scrollController.position.maxScrollExtent;
     double currentPosition = scrollController.position.pixels;
-    double difference = 10.0;
+    double difference = 10;
 
     /// bottom position
     if (!isAutoScrolldown.value &&
@@ -153,7 +156,9 @@ class ChatViewController extends GetxController
       kTwitchAuthClientId,
     );
 
-    if (twitchData == null) message.isDeleted = true;
+    if (twitchData == null) {
+      message.isDeleted = true;
+    }
     homeViewController.selectedMessage.value = null;
   }
 
@@ -184,25 +189,27 @@ class ChatViewController extends GetxController
 
   /// Hide every future messages from an user (only on this application, not on Twitch)
   void hideUser(ChatMessage message) {
-    if (twitchData == null) return;
-    Settings settings = Get.find<SettingsService>().settings.value;
+    if (twitchData == null) {
+      return;
+    }
+    Settings settings = settingsService.settings.value;
 
     List hiddenUsersIds =
-        settings.hiddenUsersIds! != const [] ? settings.hiddenUsersIds! : [];
+        settings.hiddenUsersIds != const [] ? settings.hiddenUsersIds : [];
     if (hiddenUsersIds
             .firstWhereOrNull((userId) => userId == message.authorId) ==
         null) {
       //add user
       hiddenUsersIds.add(message.authorId);
-      Get.find<SettingsService>().settings.value =
+      settingsService.settings.value =
           settings.copyWith(hiddenUsersIds: hiddenUsersIds);
     } else {
       //remove user
       hiddenUsersIds.remove(message.authorId);
-      Get.find<SettingsService>().settings.value =
+      settingsService.settings.value =
           settings.copyWith(hiddenUsersIds: hiddenUsersIds);
     }
-    Get.find<SettingsService>().saveSettings();
+    settingsService.saveSettings();
     homeViewController.selectedMessage.refresh();
   }
 
@@ -281,38 +288,44 @@ class ChatViewController extends GetxController
 
     // Remove
     List<TwitchChat> twitchChatToRemove = twitchChats
-        .where((tc) =>
-            twitchChannels
-                .firstWhereOrNull((tCa) => tCa.channel == tc.channel) ==
-            null)
+        .where(
+          (tc) =>
+              twitchChannels
+                  .firstWhereOrNull((tCa) => tCa.channel == tc.channel) ==
+              null,
+        )
         .toList();
     List<KickChat> kickChatToRemove = kickChats
-        .where((kc) =>
-            kickChannels
-                .firstWhereOrNull((kCa) => kCa.channel == kc.username) ==
-            null)
+        .where(
+          (kc) =>
+              kickChannels
+                  .firstWhereOrNull((kCa) => kCa.channel == kc.username) ==
+              null,
+        )
         .toList();
     List<YoutubeChat> youtubeChatToRemove = youtubeChats
-        .where((yc) =>
-            youtubeChannels
-                .firstWhereOrNull((yCa) => yCa.channel == yc.videoId) ==
-            null)
+        .where(
+          (yc) =>
+              youtubeChannels
+                  .firstWhereOrNull((yCa) => yCa.channel == yc.videoId) ==
+              null,
+        )
         .toList();
 
     for (TwitchChat t in twitchChatToRemove) {
-      globals.talker?.info('Removing chat: ${t.channel}');
+      talker.info('Removing chat: ${t.channel}');
       t.close();
       twitchChats.removeWhere((tc) => tc.channelId == t.channelId);
     }
 
     for (KickChat k in kickChatToRemove) {
-      globals.talker?.info('Removing chat: ${k.username}');
+      talker.info('Removing chat: ${k.username}');
       k.close();
       kickChats.removeWhere((kc) => kc.username == k.username);
     }
 
     for (YoutubeChat y in youtubeChatToRemove) {
-      globals.talker?.info('Removing chat: ${y.videoId}');
+      talker.info('Removing chat: ${y.videoId}');
       y.closeStream();
       youtubeChats.removeWhere((yc) => yc.videoId == y.videoId);
     }
@@ -350,9 +363,9 @@ class ChatViewController extends GetxController
     twitchChat.connect();
     twitchChats.add(twitchChat);
 
-    Settings settings = Get.find<SettingsService>().settings.value;
+    Settings settings = settingsService.settings.value;
 
-    twitchChat.chatStream.listen((message) {
+    twitchChat.chatStream.listen((twitchMessage) {
       if (cheerEmotes.isEmpty) {
         cheerEmotes.value =
             twitchChat.cheerEmotes.map((e) => ChatEmote.fromTwitch(e)).toList();
@@ -362,22 +375,23 @@ class ChatViewController extends GetxController
             .map((e) => ChatEmote.fromTwitch(e))
             .toList();
       }
-      if (settings.hiddenUsersIds!.contains(message.authorId)) {
+      ChatMessage message =
+          ChatMessage.fromTwitch(twitchMessage, twitchChat.channelId ?? '');
+      if (settings.hiddenUsersIds.contains(message.authorId)) {
         return;
       }
-      if (settings.ttsSettings!.ttsEnabled) {
+      if (settings.ttsSettings.ttsEnabled) {
         ttsService.readTts(message);
       }
-      ChatMessage twitchMessage =
-          ChatMessage.fromTwitch(message, twitchChat.channelId ?? '');
-      addMessage(twitchMessage);
+
+      addMessage(message);
     });
   }
 
   Future<void> createYoutubeChat(String channelId) async {
     String? videoId = await getLiveVideoId(channelId);
     if (videoId == null) {
-      globals.talker?.error('VideoID not found for the channel: $channelId');
+      talker.error('VideoID not found for the channel: $channelId');
       return;
     }
 
@@ -386,8 +400,8 @@ class ChatViewController extends GetxController
     );
     youtubeChat.startFetchingChat();
     youtubeChat.chatStream.listen((ChatMessage message) {
-      Settings settings = Get.find<SettingsService>().settings.value;
-      if (settings.ttsSettings!.ttsEnabled) {
+      Settings settings = settingsService.settings.value;
+      if (settings.ttsSettings.ttsEnabled) {
         ttsService.readTts(message);
       }
       addMessage(message);
@@ -404,7 +418,33 @@ class ChatViewController extends GetxController
       pushKey,
       onDone: () => {},
       onError: () => {
-        globals.talker?.error('error on kick chat'),
+        talker.error('error on kick chat'),
+      },
+      onChatroomClear: (String channelId) {
+        chatMessages.removeWhere((message) => message.channelId == channelId);
+      },
+      onDeletedMessageByMessageId: (String messageId) {
+        chatMessages
+            .firstWhereOrNull((message) => message.id == messageId)
+            ?.isDeleted = true;
+        chatMessages.refresh();
+      },
+      onDeletedMessageByUserId: (String userId) {
+        for (ChatMessage message in chatMessages.where(
+          (message) =>
+              message.authorId == userId && message.platform == Platform.kick,
+        )) {
+          message.isDeleted = true;
+        }
+        chatMessages.refresh();
+      },
+      onMessagePinned: (KickPinnedMessageCreated pinnedMessage) {
+        PinnedMessage message = PinnedMessage.fromKick(pinnedMessage);
+        homeViewController.pinnedMessages.add(message);
+      },
+      onMessageUnpinned: (KickPinnedMessageDeleted unpinnedMessage) {
+        homeViewController.pinnedMessages
+            .removeWhere((message) => message.id == unpinnedMessage.channel);
       },
     );
     kickChats.add(kickChat);
@@ -412,82 +452,21 @@ class ChatViewController extends GetxController
     for (var e in kickChat.seventvEmotes) {
       thirdPartEmotes.add(ChatEmote.fromKick(e));
     }
-    kickChat.chatStream.listen((message) {
-      final KickEvent? kickEvent = eventParser(message);
-      switch (kickEvent?.event) {
-        case TypeEvent.message:
-          ChatMessage kickMessage = ChatMessage.fromKick(
-            kickEvent as KickMessage,
-            kickChat.userDetails!.userId.toString(),
-            kickChat.userDetails!.subBadges,
-          );
-          Settings settings = Get.find<SettingsService>().settings.value;
-          if (settings.ttsSettings!.ttsEnabled) {
-            ttsService.readTts(kickMessage);
-          }
-          addMessage(kickMessage);
-          break;
-        case TypeEvent.followersUpdated:
-          // TODO: TBD
-          break;
-        case TypeEvent.streamHostEvent:
-          ChatMessage kickMessage = ChatMessage.kickHost(
-            kickEvent as KickStreamHost,
-            kickChat.userDetails!.userId.toString(),
-            kickChat.userDetails!.subBadges,
-          );
-          addMessage(kickMessage);
-          break;
-        case TypeEvent.subscriptionEvent:
-          ChatMessage kickMessage = ChatMessage.kickSub(
-            kickEvent as KickSubscription,
-            kickChat.userDetails!.userId.toString(),
-            kickChat.userDetails!.subBadges,
-          );
-          addMessage(kickMessage);
-          break;
-        case TypeEvent.chatroomUpdatedEvent:
-          // TODO: TBD
-          break;
-        case TypeEvent.userBannedEvent:
-          KickUserBanned event = kickEvent as KickUserBanned;
-          for (var message in chatMessages.where(
-            (message) =>
-                message.authorId == event.data.user.id.toString() &&
-                message.platform == Platform.kick,
-          )) {
-            message.isDeleted = true;
-          }
-          break;
-        case TypeEvent.chatroomClearEvent:
-          KickChatroomClear event = kickEvent as KickChatroomClear;
-          chatMessages
-              .removeWhere((message) => message.channelId == event.channel);
-          break;
-        case TypeEvent.giftedSubscriptionsEvent:
-          ChatMessage kickMessage = ChatMessage.kickSubGift(
-            kickEvent as KickGiftedSubscriptions,
-            kickChat.userDetails!.userId.toString(),
-            kickChat.userDetails!.subBadges,
-          );
-          addMessage(kickMessage);
-          break;
-        case TypeEvent.pinnedMessageCreatedEvent:
-          // TODO: event in chat (NOT CURRENTLY CODED IN THE APP, SAME FOR TWITCH)
-          break;
-        case TypeEvent.pollUpdateEvent:
-          // TODO: rework poll view to integrate kick polls
-          break;
-        case TypeEvent.messageDeletedEvent:
-          KickMessageDeleted event = kickEvent as KickMessageDeleted;
-          chatMessages
-              .firstWhereOrNull(
-                  (message) => message.id == event.data.message.id)
-              ?.isDeleted = true;
-          break;
-        case null:
-          break;
+    kickChat.chatStream.listen((KickEvent event) {
+      ChatMessage message = ChatMessage.fromKick(
+        event,
+        kickChat.userDetails!.userId.toString(),
+        kickChat.userDetails!.subBadges,
+      );
+      Settings settings = settingsService.settings.value;
+      if (settings.ttsSettings.ttsEnabled) {
+        ttsService.readTts(message);
       }
+      // For some reason, the same message is sent multiple times, need to investigate further but for now, this is a workaround
+      if (chatMessages.contains(message)) {
+        return;
+      }
+      addMessage(message);
     });
   }
 

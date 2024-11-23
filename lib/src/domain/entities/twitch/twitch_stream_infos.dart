@@ -1,6 +1,7 @@
-import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
-class TwitchStreamInfos extends Equatable {
+@immutable
+class TwitchStreamInfos {
   final String? title;
   final int? viewerCount;
   final bool? isOnline;
@@ -27,39 +28,13 @@ class TwitchStreamInfos extends Equatable {
     this.title = "",
     this.viewerCount = 0,
     this.isOnline = false,
-    this.startedAtDuration = const Duration(minutes: 0),
+    this.startedAtDuration = Duration.zero,
     this.isEmoteMode = false,
     this.isFollowerMode = false,
     this.isSlowMode = false,
     this.slowModeWaitTime = 30,
     this.isSubscriberMode = false,
   });
-
-  Map toJson() => {
-        'title': title,
-        'viewerCount': viewerCount,
-        'isOnline': isOnline,
-        'isEmoteMode': isEmoteMode,
-        'isFollowerMode': isFollowerMode,
-        'isSlowMode': isSlowMode,
-        'slowModeWaitTime': slowModeWaitTime,
-        'isSubscriberMode': isSubscriberMode,
-      };
-
-  @override
-  List<Object?> get props {
-    return [
-      title,
-      viewerCount,
-      isOnline,
-      startedAtDuration,
-      isEmoteMode,
-      isFollowerMode,
-      isSlowMode,
-      slowModeWaitTime,
-      isSubscriberMode
-    ];
-  }
 
   TwitchStreamInfos copyWith({
     String? title,
@@ -83,7 +58,4 @@ class TwitchStreamInfos extends Equatable {
         isSlowMode: isSlowMode ?? this.isSlowMode,
         slowModeWaitTime: slowModeWaitTime ?? this.slowModeWaitTime,
       );
-
-  @override
-  bool get stringify => true;
 }

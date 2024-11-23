@@ -95,54 +95,52 @@ class _WebPageViewState extends State<WebPageView>
     );
   }
 
-  Widget controlPanel() {
-    return Container(
-      color: context.theme.colorScheme.secondary,
-      height: 30,
-      width: double.infinity,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(
-            width: 35.0,
-            child: IconButton(
-              onPressed: () {
-                controller.goBack();
-              },
-              icon: const Icon(
-                Icons.arrow_back,
-                size: 20,
+  Widget controlPanel() => Container(
+        color: context.theme.colorScheme.secondary,
+        height: 30,
+        width: double.infinity,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: 35,
+              child: IconButton(
+                onPressed: () async {
+                  await controller.goBack();
+                },
+                icon: const Icon(
+                  Icons.arrow_back,
+                  size: 20,
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            width: 35.0,
-            child: IconButton(
-              onPressed: () {
-                controller.reload();
-              },
-              icon: const Icon(
-                Icons.refresh,
-                size: 20,
+            SizedBox(
+              width: 35,
+              child: IconButton(
+                onPressed: () async {
+                  await controller.reload();
+                },
+                icon: const Icon(
+                  Icons.refresh,
+                  size: 20,
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            width: 35.0,
-            child: IconButton(
-              onPressed: () {
-                controller.goForward();
-              },
-              icon: const Icon(
-                Icons.arrow_forward,
-                size: 20,
+            SizedBox(
+              width: 35,
+              child: IconButton(
+                onPressed: () async {
+                  await controller.goForward();
+                },
+                icon: const Icon(
+                  Icons.arrow_forward,
+                  size: 20,
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 }

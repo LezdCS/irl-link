@@ -52,9 +52,10 @@ class ModerationBottomSheet extends GetView {
                   Text(
                     message.displayName,
                     style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
@@ -122,32 +123,36 @@ class ModerationBottomSheet extends GetView {
           const SizedBox(height: 15),
           Visibility(
             visible: message.platform == Platform.twitch,
-            child: Row(children: [
-              InkWell(
-                onTap: () => controller.banMessageInstruction(
-                  message,
+            child: Row(
+              children: [
+                InkWell(
+                  onTap: () => controller.banMessageInstruction(
+                    message,
+                  ),
+                  child: moderationViewButton(Icons.stop, "ban".tr),
                 ),
-                child: moderationViewButton(Icons.stop, "ban".tr),
-              ),
-              const SizedBox(width: 10),
-              InkWell(
-                onTap: () => timeoutDialog(),
-                child: moderationViewButton(Icons.timer, "timeout".tr),
-              ),
-              const SizedBox(width: 10),
-              InkWell(
-                onTap: () => controller.hideUser(
-                  message,
+                const SizedBox(width: 10),
+                InkWell(
+                  onTap: () => timeoutDialog(),
+                  child: moderationViewButton(Icons.timer, "timeout".tr),
                 ),
-                child: (settings.hiddenUsersIds!.firstWhereOrNull(
-                          (userId) => message.authorId == userId,
-                        ) !=
-                        null)
-                    ? moderationViewButton(Icons.visibility, "unhide_user".tr)
-                    : moderationViewButton(
-                        Icons.visibility_off, "hide_user".tr),
-              ),
-            ]),
+                const SizedBox(width: 10),
+                InkWell(
+                  onTap: () => controller.hideUser(
+                    message,
+                  ),
+                  child: (settings.hiddenUsersIds.firstWhereOrNull(
+                            (userId) => message.authorId == userId,
+                          ) !=
+                          null)
+                      ? moderationViewButton(Icons.visibility, "unhide_user".tr)
+                      : moderationViewButton(
+                          Icons.visibility_off,
+                          "hide_user".tr,
+                        ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -164,7 +169,6 @@ class ModerationBottomSheet extends GetView {
       ),
       child: Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
-        clipBehavior: Clip.none,
         children: [
           if (icon != null)
             Icon(
@@ -213,7 +217,11 @@ class ModerationBottomSheet extends GetView {
                 child: Container(
                   margin: const EdgeInsets.only(right: 10),
                   padding: const EdgeInsets.only(
-                      left: 5, right: 5, top: 5, bottom: 5),
+                    left: 5,
+                    right: 5,
+                    top: 5,
+                    bottom: 5,
+                  ),
                   decoration: const BoxDecoration(
                     color: Color(0xFF121212),
                     borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -230,7 +238,6 @@ class ModerationBottomSheet extends GetView {
           ),
           const SizedBox(height: 10),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Expanded(
@@ -253,7 +260,6 @@ class ModerationBottomSheet extends GetView {
                         );
                       }
                     },
-                    maxLines: 1,
                     decoration: const InputDecoration(
                       hintText: 'Custom duration (s)',
                       isDense: true,
@@ -263,11 +269,11 @@ class ModerationBottomSheet extends GetView {
                 ),
               ),
               Expanded(
-                flex: 1,
                 child: InkWell(
                   onTap: () {
                     if (int.tryParse(
-                            controller.banDurationInputController.text) !=
+                          controller.banDurationInputController.text,
+                        ) !=
                         null) {
                       controller.timeoutMessageInstruction(
                         controller.homeViewController.selectedMessage.value!,

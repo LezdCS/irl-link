@@ -16,7 +16,6 @@ Widget prediction(
 
   if (prediction.status == PredictionStatus.empty) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
@@ -25,6 +24,9 @@ Widget prediction(
       ],
     );
   }
+
+  final twitchEventSubService = Get.find<TwitchEventSubService>();
+
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -59,10 +61,10 @@ Widget prediction(
                 height: 22,
               );
               return Visibility(
-                visible: (prediction.status == PredictionStatus.active ||
+                visible: prediction.status == PredictionStatus.active ||
                     prediction.status == PredictionStatus.locked ||
                     (prediction.status == PredictionStatus.resolved &&
-                        outcome.id == prediction.winningOutcomeId)),
+                        outcome.id == prediction.winningOutcomeId),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -95,13 +97,14 @@ Widget prediction(
                       animation: true,
                       animateFromLastPercent: true,
                       barRadius: const Radius.circular(8),
-                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                      lineHeight: 20.0,
+                      padding: EdgeInsets.zero,
+                      lineHeight: 20,
                       percent: percentage,
                       backgroundColor: Theme.of(context).colorScheme.secondary,
                       progressColor: outcome.color,
                       center: Text(
-                          "${(percentage * 100).toStringAsFixed(2)} % (${outcome.channelPoints} points)"),
+                        "${(percentage * 100).toStringAsFixed(2)} % (${outcome.channelPoints} points)",
+                      ),
                     ),
                     const SizedBox(height: 10),
                   ],
@@ -111,7 +114,8 @@ Widget prediction(
           ),
           Obx(
             () => Text(
-                '${prediction.status == PredictionStatus.active ? 'locks'.tr : 'ends'.tr} in ${printDuration(Get.find<TwitchEventSubService>().remainingTimePrediction.value)}'),
+              '${prediction.status == PredictionStatus.active ? 'locks'.tr : 'ends'.tr} in ${printDuration(twitchEventSubService.remainingTimePrediction.value)}',
+            ),
           ),
           Visibility(
             visible: prediction.status != PredictionStatus.resolved &&
@@ -125,8 +129,7 @@ Widget prediction(
                         Theme.of(context).colorScheme.tertiaryContainer,
                   ),
                   onPressed: () {
-                    Get.find<TwitchEventSubService>()
-                        .endPrediction("CANCELED", null);
+                    twitchEventSubService.endPrediction("CANCELED", null);
                   },
                   child: Text(
                     "cancel".tr,
@@ -141,12 +144,11 @@ Widget prediction(
                   ),
                   onPressed: () {
                     prediction.status == PredictionStatus.active
-                        ? Get.find<TwitchEventSubService>()
-                            .endPrediction("LOCKED", null)
+                        ? twitchEventSubService.endPrediction("LOCKED", null)
                         : pickWinnerDialog(
                             context,
                             prediction,
-                            Get.find<TwitchEventSubService>().endPrediction,
+                            twitchEventSubService,
                           );
                   },
                   child: Text(
@@ -162,7 +164,7 @@ Widget prediction(
             ),
           ),
         ],
-      )
+      ),
     ],
   );
 }
@@ -170,7 +172,7 @@ Widget prediction(
 void pickWinnerDialog(
   BuildContext context,
   TwitchPrediction prediction,
-  Function endPrediction,
+  TwitchEventSubService twitchEventSubService,
 ) {
   Get.defaultDialog(
     title: prediction.title,
@@ -183,13 +185,15 @@ void pickWinnerDialog(
     textConfirm: "confirm".tr,
     radius: 10,
     onCancel: () {
-      Get.find<TwitchEventSubService>().selectedOutcomeId.value = "-1";
+      twitchEventSubService.selectedOutcomeId.value = "-1";
       Get.back();
     },
     onConfirm: () {
-      endPrediction('RESOLVED',
-          Get.find<TwitchEventSubService>().selectedOutcomeId.value);
-      Get.find<TwitchEventSubService>().selectedOutcomeId.value = "-1";
+      twitchEventSubService.endPrediction(
+        'RESOLVED',
+        twitchEventSubService.selectedOutcomeId.value,
+      );
+      twitchEventSubService.selectedOutcomeId.value = "-1";
       Get.back();
     },
     content: Obx(
@@ -200,11 +204,9 @@ void pickWinnerDialog(
             title: Text(prediction.outcomes[index].title),
             leading: Radio(
               value: prediction.outcomes[index].id,
-              groupValue:
-                  Get.find<TwitchEventSubService>().selectedOutcomeId.value,
+              groupValue: twitchEventSubService.selectedOutcomeId.value,
               onChanged: (String? value) {
-                Get.find<TwitchEventSubService>().selectedOutcomeId.value =
-                    value!;
+                twitchEventSubService.selectedOutcomeId.value = value!;
               },
               activeColor: Colors.green,
             ),

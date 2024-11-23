@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/core/services/twitch_event_sub_service.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
@@ -12,13 +13,13 @@ import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
-import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_view.dart';
 import 'package:irllink/src/presentation/widgets/chats/select_channel_dialog.dart';
 import 'package:irllink/src/presentation/widgets/dashboard.dart';
 import 'package:irllink/src/presentation/widgets/emote_picker_view.dart';
 import 'package:irllink/src/presentation/widgets/hype_train.dart';
+import 'package:irllink/src/presentation/widgets/pinned_messages_sheet.dart';
 import 'package:irllink/src/presentation/widgets/poll.dart';
 import 'package:irllink/src/presentation/widgets/prediction.dart';
 import 'package:irllink/src/presentation/widgets/tabs/obs_tab_view.dart';
@@ -26,7 +27,6 @@ import 'package:irllink/src/presentation/widgets/tabs/realtime_irl_tab_view.dart
 import 'package:irllink/src/presentation/widgets/tabs/streamelements_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/tabs/twitch_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/web_page_view.dart';
-import 'package:move_to_background/move_to_background.dart';
 import 'package:split_view/split_view.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 import 'package:upgrader/upgrader.dart';
@@ -39,14 +39,14 @@ class HomeView extends GetView<HomeViewController> {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
 
+    final storeService = Get.find<StoreService>();
+
     return UpgradeAlert(
-      upgrader: Upgrader(),
+      upgrader: Upgrader(
+        minAppVersion: "2.7.2",
+        debugDisplayAlways: true,
+      ),
       child: PopScope(
-        onPopInvokedWithResult: (bool invoked, dynamic d) async {
-          if (invoked) {
-            MoveToBackground.moveTaskToBack();
-          }
-        },
         child: AnnotatedRegion(
           value: SystemUiOverlayStyle(
             systemNavigationBarColor: Theme.of(context).colorScheme.surface,
@@ -100,12 +100,13 @@ class HomeView extends GetView<HomeViewController> {
                             ),
                             onWeightChanged: controller.onSplitResized,
                             children: [
-                              controller.tabElements.isNotEmpty
-                                  ? _top(context, height, width)
-                                  : const Text(
-                                      "No tabs",
-                                      textAlign: TextAlign.center,
-                                    ),
+                              if (controller.tabElements.isNotEmpty)
+                                _top(context, height, width)
+                              else
+                                const Text(
+                                  "No tabs",
+                                  textAlign: TextAlign.center,
+                                ),
                               _bottom(context, height, width),
                             ],
                           ),
@@ -115,8 +116,7 @@ class HomeView extends GetView<HomeViewController> {
                           child: const Dashboard(),
                         ),
                         Visibility(
-                          visible:
-                              Get.find<StoreService>().purchasePending.value,
+                          visible: storeService.purchasePending.value,
                           child: CircularProgressIndicator(
                             color: context.theme.colorScheme.tertiary,
                           ),
@@ -134,7 +134,7 @@ class HomeView extends GetView<HomeViewController> {
   }
 
   Widget _top(BuildContext context, double height, double width) {
-    return Container(
+    return ColoredBox(
       color: Theme.of(context).colorScheme.surface,
       child: Column(
         children: [
@@ -146,7 +146,7 @@ class HomeView extends GetView<HomeViewController> {
   }
 
   Widget _bottom(BuildContext context, double height, double width) {
-    return Container(
+    return ColoredBox(
       color: Theme.of(context).colorScheme.surface,
       child: Stack(
         children: [
@@ -161,7 +161,10 @@ class HomeView extends GetView<HomeViewController> {
                         visible: Get.isRegistered<TwitchEventSubService>(),
                         child: Padding(
                           padding: const EdgeInsets.only(
-                              left: 8, right: 8, top: 4, bottom: 0),
+                            left: 8,
+                            right: 8,
+                            top: 4,
+                          ),
                           child: hypeTrain(
                             context,
                             Get.find<TwitchEventSubService>()
@@ -193,9 +196,24 @@ class HomeView extends GetView<HomeViewController> {
             ),
           ),
           Positioned(
-            bottom: 0.0,
-            left: 0.0,
-            right: 0.0,
+            bottom: height * 0.07,
+            left: 0,
+            right: 0,
+            child: AnimatedSlide(
+              offset: controller.showPinnedMessages.value
+                  ? Offset.zero
+                  : const Offset(0, 1),
+              duration: const Duration(milliseconds: 200),
+              child: Visibility(
+                visible: controller.showPinnedMessages.value,
+                child: PinnedMessagesSheet(messages: controller.pinnedMessages),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
             child: _bottomNavBar(height, width, context),
           ),
         ],
@@ -249,11 +267,14 @@ class HomeView extends GetView<HomeViewController> {
             flex: 5,
             child: Container(
               decoration: const BoxDecoration(
-                  gradient: LinearGradient(colors: [
+                gradient: LinearGradient(
+                  colors: [
                     Color.fromARGB(255, 45, 2, 53),
                     Color.fromARGB(255, 81, 16, 93),
-                  ]),
-                  borderRadius: BorderRadius.all(Radius.circular(8))),
+                  ],
+                ),
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+              ),
               padding:
                   const EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
               child: Row(
@@ -274,13 +295,16 @@ class HomeView extends GetView<HomeViewController> {
                         }
                         ChatViewController chatViewController =
                             Get.find<ChatViewController>(
-                                tag: controller.selectedChatGroup.value?.id);
+                          tag: controller.selectedChatGroup.value?.id,
+                        );
                         List<TwitchChat> twitchChats = [];
                         twitchChats
                             .addAll(chatViewController.twitchChats.toList());
                         if (twitchChats.length == 1) {
                           controller.sendChatMessage(
-                              value, twitchChats.first.channel);
+                            value,
+                            twitchChats.first.channel,
+                          );
                           controller.chatInputController.text = '';
                           FocusScope.of(context).unfocus();
                         } else {
@@ -297,20 +321,19 @@ class HomeView extends GetView<HomeViewController> {
                         controller.isPickingEmote.value = false;
                       },
                       textInputAction: TextInputAction.send,
-                      maxLines: 1,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: settings.generalSettings!.displayViewerCount
+                        hintText: settings.generalSettings.displayViewerCount
                             ? "viewers_number".trParams({
                                 "number": Get.find<TwitchTabViewController>()
                                     .twitchStreamInfos
                                     .value
                                     .viewerCount
-                                    .toString()
+                                    .toString(),
                               })
                             : 'send_message'.tr,
                         hintStyle: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge!.color!,
+                          color: Theme.of(context).textTheme.bodyLarge!.color,
                         ),
                         isDense: true,
                         enabledBorder: InputBorder.none,
@@ -326,14 +349,16 @@ class HomeView extends GetView<HomeViewController> {
                       }
                       ChatViewController chatViewController =
                           Get.find<ChatViewController>(
-                              tag: controller.selectedChatGroup.value?.id);
+                        tag: controller.selectedChatGroup.value?.id,
+                      );
                       List<TwitchChat> twitchChats = [];
                       twitchChats
                           .addAll(chatViewController.twitchChats.toList());
                       if (twitchChats.length == 1) {
                         controller.sendChatMessage(
-                            controller.chatInputController.text,
-                            twitchChats.first.channel);
+                          controller.chatInputController.text,
+                          twitchChats.first.channel,
+                        );
                         controller.chatInputController.text = '';
                         FocusScope.of(context).unfocus();
                       } else {
@@ -355,107 +380,121 @@ class HomeView extends GetView<HomeViewController> {
               ),
             ),
           ),
-          Get.isRegistered<TwitchEventSubService>()
-              ? Obx(
-                  () => Visibility(
-                    visible: Get.find<TwitchEventSubService>()
-                            .currentPoll
-                            .value
-                            .status !=
-                        PollStatus.empty,
-                    child: Expanded(
-                      flex: 1,
-                      child: InkWell(
-                        onTap: () async {
-                          Get.dialog(
-                            AlertDialog(
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.surface,
-                              surfaceTintColor:
-                                  Theme.of(context).colorScheme.surface,
-                              content: Container(
-                                width: width,
-                                color: Theme.of(context).colorScheme.surface,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Obx(
-                                      () => poll(
-                                        context,
-                                        Get.find<TwitchEventSubService>()
-                                            .currentPoll
-                                            .value,
-                                      ),
-                                    ),
-                                  ],
+          if (Get.isRegistered<TwitchEventSubService>())
+            Obx(
+              () => Visibility(
+                visible: Get.find<TwitchEventSubService>()
+                        .currentPoll
+                        .value
+                        .status !=
+                    PollStatus.empty,
+                child: Expanded(
+                  child: InkWell(
+                    onTap: () async {
+                      Get.dialog(
+                        AlertDialog(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.surface,
+                          surfaceTintColor:
+                              Theme.of(context).colorScheme.surface,
+                          content: Container(
+                            width: width,
+                            color: Theme.of(context).colorScheme.surface,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Obx(
+                                  () => poll(
+                                    context,
+                                    Get.find<TwitchEventSubService>()
+                                        .currentPoll
+                                        .value,
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
-                          );
-                        },
-                        child: Icon(
-                          Icons.poll_outlined,
-                          color: Theme.of(context).primaryIconTheme.color,
-                          size: 22,
+                          ),
                         ),
-                      ),
+                      );
+                    },
+                    child: Icon(
+                      Icons.poll_outlined,
+                      color: Theme.of(context).primaryIconTheme.color,
+                      size: 22,
                     ),
                   ),
-                )
-              : Container(),
-          Get.isRegistered<TwitchEventSubService>()
-              ? Obx(
-                  () => Visibility(
-                    visible: Get.find<TwitchEventSubService>()
-                            .currentPrediction
-                            .value
-                            .status !=
-                        PredictionStatus.empty,
-                    child: Expanded(
-                      flex: 1,
-                      child: InkWell(
-                        onTap: () async {
-                          Get.dialog(
-                            AlertDialog(
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.surface,
-                              surfaceTintColor:
-                                  Theme.of(context).colorScheme.surface,
-                              content: Container(
-                                width: width,
-                                color: Theme.of(context).colorScheme.surface,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Obx(
-                                      () => prediction(
-                                        context,
-                                        Get.find<TwitchEventSubService>()
-                                            .currentPrediction
-                                            .value,
-                                      ),
-                                    ),
-                                  ],
+                ),
+              ),
+            )
+          else
+            Container(),
+          if (Get.isRegistered<TwitchEventSubService>())
+            Obx(
+              () => Visibility(
+                visible: Get.find<TwitchEventSubService>()
+                        .currentPrediction
+                        .value
+                        .status !=
+                    PredictionStatus.empty,
+                child: Expanded(
+                  child: InkWell(
+                    onTap: () async {
+                      Get.dialog(
+                        AlertDialog(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.surface,
+                          surfaceTintColor:
+                              Theme.of(context).colorScheme.surface,
+                          content: Container(
+                            width: width,
+                            color: Theme.of(context).colorScheme.surface,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Obx(
+                                  () => prediction(
+                                    context,
+                                    Get.find<TwitchEventSubService>()
+                                        .currentPrediction
+                                        .value,
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
-                          );
-                        },
-                        child: SvgPicture.asset(
-                          './lib/assets/twitch/prediction.svg',
-                          semanticsLabel: 'prediction icon',
-                          width: 22,
-                          height: 22,
+                          ),
                         ),
-                      ),
+                      );
+                    },
+                    child: SvgPicture.asset(
+                      './lib/assets/twitch/prediction.svg',
+                      semanticsLabel: 'prediction icon',
+                      width: 22,
+                      height: 22,
                     ),
                   ),
-                )
-              : Container(),
+                ),
+              ),
+            )
+          else
+            Container(),
           Visibility(
-            visible: settings.dashboardSettings!.activated,
+            visible: controller.pinnedMessages.isNotEmpty,
             child: Expanded(
-              flex: 1,
+              child: InkWell(
+                onTap: () {
+                  controller.showPinnedMessages.toggle();
+                },
+                child: Icon(
+                  Icons.push_pin,
+                  color: Theme.of(context).primaryIconTheme.color,
+                  size: 22,
+                ),
+              ),
+            ),
+          ),
+          Visibility(
+            visible: settings.dashboardSettings.activated,
+            child: Expanded(
               child: InkWell(
                 onTap: () async {
                   controller.displayDashboard.value =
@@ -470,7 +509,6 @@ class HomeView extends GetView<HomeViewController> {
             ),
           ),
           Expanded(
-            flex: 1,
             child: InkWell(
               onTap: () async {
                 await Get.toNamed(
@@ -495,7 +533,7 @@ class HomeView extends GetView<HomeViewController> {
 
   Widget _tabs(BuildContext context) {
     return Expanded(
-      child: Container(
+      child: ColoredBox(
         color: Theme.of(context).colorScheme.surface,
         child: Obx(
           () => IndexedStack(
@@ -529,7 +567,8 @@ class HomeView extends GetView<HomeViewController> {
         isScrollable: true,
         onTap: (int i) {
           if (Get.isRegistered<ChatViewController>(
-              tag: controller.chatsViews[i].chatGroup.id)) {
+            tag: controller.chatsViews[i].chatGroup.id,
+          )) {
             ChatViewController c = Get.find<ChatViewController>(
               tag: controller.chatsViews[i].chatGroup.id,
             );
@@ -579,7 +618,7 @@ class HomeView extends GetView<HomeViewController> {
 
   Widget _chats(BuildContext context) {
     return Expanded(
-      child: Container(
+      child: ColoredBox(
         color: Theme.of(context).colorScheme.surface,
         child: TabBarView(
           physics: const NeverScrollableScrollPhysics(),

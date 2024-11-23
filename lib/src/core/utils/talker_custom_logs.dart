@@ -2,7 +2,7 @@ import 'package:talker_flutter/talker_flutter.dart';
 
 class GetxInstanceLog extends TalkerLog {
   bool isDeleteAction;
-  GetxInstanceLog(String super.message, this.isDeleteAction);
+  GetxInstanceLog(String super.message, {required this.isDeleteAction});
 
   /// Your custom log title
   @override

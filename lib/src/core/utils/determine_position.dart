@@ -34,7 +34,7 @@ Future<DataState<Position>> determinePosition() async {
   if (permission == LocationPermission.deniedForever) {
     // Permissions are denied forever, handle appropriately.
 
-    // TODO: await Geolocator.openLocationSettings();
+    // TODO(LezdCS): await Geolocator.openLocationSettings();
     return DataFailed(
       'Location permissions are permanently denied, we cannot request permissions.',
     );

@@ -1,5 +1,5 @@
 name: irllink
-description: A new Flutter project.
+description: A mobile application to monitor your IRL stream.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -23,22 +23,21 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  audioplayers: ^6.0.0
+  audioplayers: ^6.1.0
   collection: ^1.18.0
-  connectivity_plus: ^5.0.2
+  connectivity_plus: ^6.1.0
   dio: ^5.6.0
-  equatable: ^2.0.5
   expandable: ^5.0.1
-  firebase_analytics: ^11.2.1
-  firebase_core: ^3.3.0
-  firebase_crashlytics: ^4.0.4
-  firebase_remote_config: ^5.0.4
+  firebase_analytics: ^11.3.3
+  firebase_core: ^3.6.0
+  firebase_crashlytics: ^4.1.3
+  firebase_remote_config: ^5.1.3
   flutter_colorpicker: ^1.1.0
-  flutter_foreground_task: ^8.3.0
+  flutter_foreground_task: ^8.11.0
   flutter_svg: ^2.0.10+1
   flutter_tts: ^4.0.2
-  flutter_web_auth: ^0.5.0
-  geolocator: ^12.0.0
+  flutter_web_auth: ^0.6.0
+  geolocator: ^13.0.1
   get: ^4.6.6
   get_storage: ^2.1.1
   html: ^0.15.4
@@ -47,34 +46,44 @@ dependencies:
   instant: ^0.5.1
   intl: ^0.19.0
   jwt_decoder: ^2.0.1
-  kick_chat: ^1.4.0
-  mobile_scanner: ^5.1.1
-  move_to_background: ^1.0.2
+  kick_chat: ^1.6.0
+  mobile_scanner: ^6.0.2
   obs_websocket: ^5.1.0+9
   package_info_plus: ^8.0.2
   percent_indicator: ^4.2.3
   qr_flutter: ^4.1.0
   quiver: ^3.2.1
-  socket_io_client: ^2.0.3+1
+  socket_io_client: ^3.0.0
   split_view: ^3.2.1
   talker_dio_logger: ^4.4.0
   talker_flutter: ^4.4.0
-  twitch_chat: ^1.3.1
-  upgrader: ^10.3.0
-  url_launcher: ^6.3.0
-  uuid:  ^4.4.2
+  twitch_chat: ^1.3.2
+  upgrader: ^11.3.0
+  url_launcher: ^6.3.1
+  uuid:  ^4.5.1
   wakelock_plus: ^1.2.8
   web_socket_channel: ^3.0.1
   webview_flutter: ^4.8.0
   webview_flutter_android: ^3.16.6
   webview_flutter_wkwebview: ^3.14.0
   cached_network_image: ^3.4.1
+  auto_mappr_annotation: ^2.2.0
+  freezed_annotation: ^2.4.4
+  json_annotation: ^4.9.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: ^0.13.1
   flutter_lints: ^4.0.0
+  build_runner: ^2.4.13
+  auto_mappr: ^2.5.0
+  freezed: ^2.5.7
+  json_serializable: ^6.8.0
+  integration_test:
+    sdk: flutter
+
+dependency_overrides:
 
 flutter_icons:
   android: true
@@ -84,9 +93,6 @@ flutter_icons:
   adaptive_icon_background: "lib/assets/icon/background.png"
   adaptive_icon_foreground: "lib/assets/icon/foreground.png"
 
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
-
 # The following section is specific to Flutter.
 flutter:
 
@@ -95,7 +101,6 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  # To add assets to your application, add an assets section, like this:
   assets:
      - lib/assets/
      - lib/assets/i18n/
@@ -104,29 +109,3 @@ flutter:
      - lib/assets/kick/
      - lib/assets/streamelements/
      - lib/assets/youtube/
-
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/assets-and-images/#resolution-aware.
-
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/assets-and-images/#from-packages
-
-  # To add custom fonts to your application, add a fonts section here,
-  # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages

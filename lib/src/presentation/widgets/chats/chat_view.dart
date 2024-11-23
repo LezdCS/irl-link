@@ -31,165 +31,177 @@ class ChatView extends GetView<ChatViewController> {
     bool multiplePlatform = atLeastTwoNotEmpty([
       controller.kickChats,
       controller.twitchChats,
-      controller.youtubeChats
+      controller.youtubeChats,
     ]);
 
     return Obx(
       () {
         Settings settings = Get.find<SettingsService>().settings.value;
 
-        return Stack(children: [
-          GestureDetector(
-            onTap: () {
-              if (controller.homeViewController.selectedMessage.value != null) {
-                controller.homeViewController.selectedMessage.value = null;
-              }
-              FocusScope.of(context).unfocus();
-            },
-            onDoubleTap: () {
-              // Open a confirmation dialog to reconnect to the chat
-              Get.defaultDialog(
-                backgroundColor: Theme.of(context).colorScheme.surface,
-                title: "confirm".tr,
-                middleText: "reconnect_question".tr,
-                textConfirm: "confirm".tr,
-                textCancel: "cancel".tr,
-                confirmTextColor: Theme.of(context).textTheme.bodyLarge!.color,
-                cancelTextColor: Theme.of(context).textTheme.bodyLarge!.color,
-                buttonColor: Theme.of(context).colorScheme.tertiary,
-                onConfirm: () {
-                  for (twitch_chat.TwitchChat twitchChat
-                      in controller.twitchChats) {
-                    twitchChat.close();
-                    twitchChat.connect();
-                  }
-                  Get.back();
-                },
-                onCancel: () {
-                  Get.back();
-                },
-              );
-            },
-            child: Container(
-              width: width,
-              height: double.infinity,
-              padding: EdgeInsets.only(top: 10, bottom: height * 0.07),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
+        return Stack(
+          children: [
+            GestureDetector(
+              onTap: () {
+                if (controller.homeViewController.selectedMessage.value !=
+                    null) {
+                  controller.homeViewController.selectedMessage.value = null;
+                }
+                if (controller.homeViewController.showPinnedMessages.value) {
+                  controller.homeViewController.showPinnedMessages.value =
+                      false;
+                }
+                FocusScope.of(context).unfocus();
+              },
+              onDoubleTap: () {
+                // Open a confirmation dialog to reconnect to the chat
+                Get.defaultDialog(
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                  title: "confirm".tr,
+                  middleText: "reconnect_question".tr,
+                  textConfirm: "confirm".tr,
+                  textCancel: "cancel".tr,
+                  confirmTextColor:
+                      Theme.of(context).textTheme.bodyLarge!.color,
+                  cancelTextColor: Theme.of(context).textTheme.bodyLarge!.color,
+                  buttonColor: Theme.of(context).colorScheme.tertiary,
+                  onConfirm: () {
+                    for (twitch_chat.TwitchChat twitchChat
+                        in controller.twitchChats) {
+                      twitchChat.close();
+                      twitchChat.connect();
+                    }
+                    Get.back();
+                  },
+                  onCancel: () {
+                    Get.back();
+                  },
+                );
+              },
+              child: Container(
+                width: width,
+                height: double.infinity,
+                padding: EdgeInsets.only(top: 10, bottom: height * 0.07),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                ),
+                child: controller.chatMessages.isNotEmpty
+                    ? ListView.builder(
+                        controller: controller.scrollController,
+                        itemCount: controller.chatMessages.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          ChatMessage message = controller.chatMessages[index];
+                          return InkWell(
+                            onTap: () {
+                              if (FocusScope.of(context).isFirstFocus) {
+                                FocusScope.of(context).unfocus();
+                              }
+                              controller.homeViewController.selectedMessage
+                                  .value = null;
+                            },
+                            onLongPress: () {
+                              controller.homeViewController.selectedMessage
+                                  .value = message;
+                            },
+                            child: message.eventType != null
+                                ? EventContainer(
+                                    message: message,
+                                    selectedMessage: controller
+                                        .homeViewController
+                                        .selectedMessage
+                                        .value,
+                                    displayTimestamp: settings.displayTimestamp,
+                                    textSize: settings.textSize,
+                                    hideDeletedMessages: settings
+                                        .chatSettings.hideDeletedMessages,
+                                    cheerEmotes: controller.cheerEmotes,
+                                    thirdPartEmotes: controller.thirdPartEmotes,
+                                    showPlatformBadge: multiplePlatform,
+                                  )
+                                : MessageContainer(
+                                    selectedMessage: controller
+                                        .homeViewController
+                                        .selectedMessage
+                                        .value,
+                                    message: message,
+                                    displayTimestamp: settings.displayTimestamp,
+                                    textSize: settings.textSize,
+                                    hideDeletedMessages: settings
+                                        .chatSettings.hideDeletedMessages,
+                                    cheerEmotes: controller.cheerEmotes,
+                                    thirdPartEmotes: controller.thirdPartEmotes,
+                                    showPlatformBadge: multiplePlatform,
+                                  ),
+                          );
+                        },
+                      )
+                    : controller.chatGroup.channels.isNotEmpty
+                        ? Padding(
+                            padding: const EdgeInsets.only(left: 8),
+                            child: Text(
+                              "welcome_to_chat".trParams(
+                                {
+                                  "channel": controller
+                                      .chatGroup.channels.first.channel,
+                                },
+                              ),
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 13,
+                              ),
+                            ),
+                          )
+                        : Container(),
               ),
-              child: controller.chatMessages.isNotEmpty
-                  ? ListView.builder(
-                      controller: controller.scrollController,
-                      itemCount: controller.chatMessages.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        ChatMessage message = controller.chatMessages[index];
-                        return InkWell(
-                          onTap: () {
-                            if (FocusScope.of(context).isFirstFocus) {
-                              FocusScope.of(context).unfocus();
-                            }
-                            controller.homeViewController.selectedMessage
-                                .value = null;
-                          },
-                          onLongPress: () {
-                            controller.homeViewController.selectedMessage
-                                .value = message;
-                          },
-                          child: message.eventType != null
-                              ? EventContainer(
-                                  message: message,
-                                  selectedMessage: controller
-                                      .homeViewController.selectedMessage.value,
-                                  displayTimestamp: settings.displayTimestamp!,
-                                  textSize: settings.textSize!,
-                                  hideDeletedMessages: settings
-                                      .chatSettings!.hideDeletedMessages,
-                                  cheerEmotes: controller.cheerEmotes,
-                                  thirdPartEmotes: controller.thirdPartEmotes,
-                                  showPlatformBadge: multiplePlatform,
-                                )
-                              : MessageContainer(
-                                  selectedMessage: controller
-                                      .homeViewController.selectedMessage.value,
-                                  message: message,
-                                  displayTimestamp: settings.displayTimestamp!,
-                                  textSize: settings.textSize!,
-                                  hideDeletedMessages: settings
-                                      .chatSettings!.hideDeletedMessages,
-                                  cheerEmotes: controller.cheerEmotes,
-                                  thirdPartEmotes: controller.thirdPartEmotes,
-                                  showPlatformBadge: multiplePlatform,
-                                ),
-                        );
-                      },
-                    )
-                  : controller.chatGroup.channels.isNotEmpty
-                      ? Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: Text(
-                            "welcome_to_chat".trParams(
-                              {
-                                "channel":
-                                    controller.chatGroup.channels.first.channel,
-                              },
-                            ),
-                            style: const TextStyle(
-                              color: Colors.grey,
-                              fontSize: 13,
-                            ),
-                          ),
-                        )
-                      : Container(),
             ),
-          ),
-          Positioned(
-            bottom: height * 0.07,
-            left: 0,
-            right: 0,
-            child: Visibility(
-              visible: !controller.isAutoScrolldown.value,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      controller.scrollToBottom();
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      color: Colors.white.withOpacity(0.8),
-                      child: const Icon(
-                        Icons.keyboard_arrow_down,
-                        color: Colors.black,
-                        size: 30,
+            Positioned(
+              bottom: height * 0.07,
+              left: 0,
+              right: 0,
+              child: Visibility(
+                visible: !controller.isAutoScrolldown.value,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        controller.scrollToBottom();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        color: Colors.white.withOpacity(0.8),
+                        child: const Icon(
+                          Icons.keyboard_arrow_down,
+                          color: Colors.black,
+                          size: 30,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          Positioned(
-            bottom: height * 0.07,
-            left: 0,
-            right: 0,
-            child: AnimatedSlide(
-              offset:
-                  controller.homeViewController.selectedMessage.value != null
-                      ? Offset.zero
-                      : const Offset(0, 1),
-              duration: const Duration(milliseconds: 200),
-              child: Visibility(
-                visible:
-                    controller.homeViewController.selectedMessage.value != null,
-                child: ModerationBottomSheet(controller: controller),
+            Positioned(
+              bottom: height * 0.07,
+              left: 0,
+              right: 0,
+              child: AnimatedSlide(
+                offset:
+                    controller.homeViewController.selectedMessage.value != null
+                        ? Offset.zero
+                        : const Offset(0, 1),
+                duration: const Duration(milliseconds: 200),
+                child: Visibility(
+                  visible:
+                      controller.homeViewController.selectedMessage.value !=
+                          null,
+                  child: ModerationBottomSheet(controller: controller),
+                ),
               ),
             ),
-          ),
-          IgnorePointer(
-            child: Column(
-              children: controller.twitchChats.map((chat) {
-                return ValueListenableBuilder<bool>(
+            IgnorePointer(
+              child: Column(
+                children: controller.twitchChats.map((chat) {
+                  return ValueListenableBuilder<bool>(
                     valueListenable: chat.isConnected,
                     builder: (BuildContext context, bool value, Widget? child) {
                       return AnimatedOpacity(
@@ -207,11 +219,13 @@ class ChatView extends GetView<ChatViewController> {
                           isProgress: !value,
                         ),
                       );
-                    });
-              }).toList(),
+                    },
+                  );
+                }).toList(),
+              ),
             ),
-          ),
-        ]);
+          ],
+        );
       },
     );
   }

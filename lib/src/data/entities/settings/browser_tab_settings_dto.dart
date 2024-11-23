@@ -1,60 +1,36 @@
-import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:uuid/uuid.dart';
 
-class BrowserTabSettingsDTO extends BrowserTabSettings {
-  const BrowserTabSettingsDTO({
-    required super.tabs,
-  });
+part 'browser_tab_settings_dto.freezed.dart';
+part 'browser_tab_settings_dto.g.dart';
 
-  @override
-  Map toJson() => {
-        'tabs': tabs.map((e) => e.toJson()).toList(),
-      };
+@freezed
+class BrowserTabSettingsDTO with _$BrowserTabSettingsDTO {
+  factory BrowserTabSettingsDTO({
+    @Default([]) List<BrowserTabDTO> tabs,
+  }) = _BrowserTabSettingsDTO;
+  BrowserTabSettingsDTO._();
 
-  factory BrowserTabSettingsDTO.fromJson(Map<String, dynamic> map) {
-    List<BrowserTab> bDto = [];
-    for (dynamic tab in map['tabs'] ?? []) {
-      bDto.add(BrowserTabDTO.fromJson(tab));
-    }
-    return BrowserTabSettingsDTO(
-      tabs: bDto,
-    );
-  }
-
-  factory BrowserTabSettingsDTO.fromList(List<dynamic> list) {
-    return BrowserTabSettingsDTO(
-      tabs: (list).map((e) => BrowserTabDTO.fromJson(e)).toList(),
-    );
-  }
+  factory BrowserTabSettingsDTO.blank() => BrowserTabSettingsDTO();
+  factory BrowserTabSettingsDTO.fromJson(Map<String, dynamic> json) =>
+      _$BrowserTabSettingsDTOFromJson(json);
 }
 
-class BrowserTabDTO extends BrowserTab {
-  const BrowserTabDTO({
-    required super.id,
-    required super.title,
-    required super.url,
-    required super.toggled,
-    required super.iOSAudioSource,
-  });
+@freezed
+class BrowserTabDTO with _$BrowserTabDTO {
+  const factory BrowserTabDTO({
+    @JsonKey(fromJson: _idFromJson) required String id,
+    required String title,
+    required String url,
+    required bool toggled,
+    required bool iOSAudioSource,
+  }) = _BrowserTabDTO;
 
-  @override
-  Map toJson() => {
-        'id': id,
-        'title': title,
-        'url': url,
-        'toggled': toggled,
-        'iOSAudioSource': iOSAudioSource,
-      };
+  factory BrowserTabDTO.fromJson(Map<String, dynamic> json) =>
+      _$BrowserTabDTOFromJson(json);
+}
 
-  factory BrowserTabDTO.fromJson(Map<String, dynamic> map) {
-    var uuid = const Uuid();
-
-    return BrowserTabDTO(
-      id: map['id'] ?? uuid.v4(),
-      title: map['title'] ?? '',
-      url: map['url'] ?? '',
-      toggled: map['toggled'] ?? true,
-      iOSAudioSource: map['iOSAudioSource'] ?? false,
-    );
-  }
+// we used not to have id in the BrowserTab entity, this is to prevent braking from the previous versions
+String _idFromJson(id) {
+  return id ?? const Uuid().v4();
 }

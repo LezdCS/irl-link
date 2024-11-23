@@ -4,24 +4,39 @@ import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
 import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/core/services/store_service.dart';
+import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
+import 'package:irllink/src/domain/usecases/streamelements/disconnect_usecase.dart';
+import 'package:irllink/src/domain/usecases/streamelements/login_usecase.dart';
+import 'package:irllink/src/domain/usecases/twitch/get_twitch_users_usecase.dart';
+import 'package:irllink/src/domain/usecases/twitch/logout_usecase.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
-import 'package:irllink/src/core/services/store_service.dart';
-import 'package:irllink/src/core/services/tts_service.dart';
-import 'package:irllink/src/presentation/events/settings_events.dart';
-import 'package:irllink/src/presentation/events/streamelements_events.dart';
 import 'package:uuid/uuid.dart';
 
 class SettingsViewController extends GetxController {
-  SettingsViewController(
-      {required this.settingsEvents, required this.streamelementsEvents});
+  SettingsViewController({
+    required this.logoutUseCase,
+    required this.streamElementsLoginUseCase,
+    required this.streamElementsDisconnectUseCase,
+    required this.getTwitchUsersUseCase,
+    required this.settingsService,
+    required this.homeViewController,
+    required this.ttsService,
+    required this.storeService,
+  });
 
-  final SettingsService settingsService = Get.find<SettingsService>();
+  final LogoutUseCase logoutUseCase;
+  final StreamElementsLoginUseCase streamElementsLoginUseCase;
+  final StreamElementsDisconnectUseCase streamElementsDisconnectUseCase;
+  final GetTwitchUsersUseCase getTwitchUsersUseCase;
 
-  final SettingsEvents settingsEvents;
-  final StreamelementsEvents streamelementsEvents;
+  final SettingsService settingsService;
+  final HomeViewController homeViewController;
+  final TtsService ttsService;
+  final StoreService storeService;
 
   late TextEditingController addBrowserTitleController;
   late TextEditingController addBrowserUrlController;
@@ -50,10 +65,6 @@ class SettingsViewController extends GetxController {
   late TextEditingController addTtsAllowedPrefixsController;
   Rx<Color> nothingJustToRefreshDialog = Colors.grey.obs;
 
-  final HomeViewController homeViewController = Get.find<HomeViewController>();
-  final TtsService ttsService = Get.find<TtsService>();
-  final StoreService storeService = Get.find<StoreService>();
-
   @override
   void onInit() {
     Settings settings = settingsService.settings.value;
@@ -69,9 +80,10 @@ class SettingsViewController extends GetxController {
     addTtsIgnoredPrefixsController = TextEditingController();
     addTtsAllowedPrefixsController = TextEditingController();
     seJwtInputController =
-        TextEditingController(text: settings.streamElementsSettings?.jwt);
+        TextEditingController(text: settings.streamElementsSettings.jwt);
     seOverlayTokenInputController = TextEditingController(
-        text: settings.streamElementsSettings?.overlayToken);
+      text: settings.streamElementsSettings.overlayToken,
+    );
     rtIrlInputController = TextEditingController(text: settings.rtIrlPushKey);
 
     usernamesHiddenUsers = <String>[].obs;
@@ -88,11 +100,9 @@ class SettingsViewController extends GetxController {
   }
 
   void logout() {
-    settingsEvents
-        .logout(accessToken: homeViewController.twitchData!.accessToken)
-        .then(
-          (value) => Get.offAllNamed(Routes.login),
-        );
+    logoutUseCase(params: homeViewController.twitchData!.accessToken).then(
+      (value) => Get.offAllNamed(Routes.login),
+    );
   }
 
   void login() {
@@ -104,7 +114,7 @@ class SettingsViewController extends GetxController {
   }
 
   Future<void> loginStreamElements() async {
-    if (Get.find<StoreService>().isSubscribed() == false) {
+    if (!storeService.isSubscribed()) {
       Get.snackbar(
         "Error",
         "You are not subscribed",
@@ -116,7 +126,7 @@ class SettingsViewController extends GetxController {
       return;
     }
     StreamelementsAuthParams params = const StreamelementsAuthParams();
-    await streamelementsEvents.login(params: params).then((value) {
+    await streamElementsLoginUseCase(params: params).then((value) {
       if (value is DataFailed) {
         Get.snackbar(
           "Error",
@@ -143,9 +153,11 @@ class SettingsViewController extends GetxController {
   Future<void> disconnectStreamElements() async {
     if (homeViewController
             .streamelementsViewController.value?.seCredentials.value ==
-        null) return;
-    DataState<void> result = await streamelementsEvents.disconnect(
-      homeViewController
+        null) {
+      return;
+    }
+    DataState<void> result = await streamElementsDisconnectUseCase(
+      params: homeViewController
           .streamelementsViewController.value!.seCredentials.value!.accessToken,
     );
     if (result is DataSuccess) {
@@ -173,7 +185,7 @@ class SettingsViewController extends GetxController {
   void removeHiddenUser(userId) {
     Settings settings = settingsService.settings.value;
 
-    List hiddenUsersIds = settings.hiddenUsersIds!;
+    List hiddenUsersIds = settings.hiddenUsersIds;
     hiddenUsersIds.remove(userId);
     settingsService.settings.value =
         settings.copyWith(hiddenUsersIds: hiddenUsersIds);
@@ -204,10 +216,10 @@ class SettingsViewController extends GetxController {
     );
     Settings settings = settingsService.settings.value;
 
-    List<BrowserTab> tabs = List.from(settings.browserTabs!.tabs);
+    List<BrowserTab> tabs = List.from(settings.browserTabs.tabs);
     tabs.add(tab);
     settingsService.settings.value = settings.copyWith(
-      browserTabs: settings.browserTabs?.copyWith(tabs: tabs),
+      browserTabs: settings.browserTabs.copyWith(tabs: tabs),
     );
     settingsService.saveSettings();
 
@@ -235,11 +247,11 @@ class SettingsViewController extends GetxController {
 
     Settings settings = settingsService.settings.value;
 
-    List<BrowserTab> tabs = settings.browserTabs!.tabs;
+    List<BrowserTab> tabs = settings.browserTabs.tabs;
     int index = tabs.indexWhere((element) => element.id == tab.id);
     tabs[index] = newTab;
     settingsService.settings.value = settings.copyWith(
-      browserTabs: settings.browserTabs?.copyWith(tabs: tabs),
+      browserTabs: settings.browserTabs.copyWith(tabs: tabs),
     );
 
     settingsService.saveSettings();
@@ -251,11 +263,11 @@ class SettingsViewController extends GetxController {
   void removeBrowserTab(tab) {
     Settings settings = settingsService.settings.value;
 
-    List<BrowserTab> tabs = settings.browserTabs!.tabs;
+    List<BrowserTab> tabs = settings.browserTabs.tabs;
     tabs.remove(tab);
 
     settingsService.settings.value = settings.copyWith(
-      browserTabs: settings.browserTabs?.copyWith(tabs: tabs),
+      browserTabs: settings.browserTabs.copyWith(tabs: tabs),
     );
     settingsService.saveSettings();
 
@@ -266,11 +278,12 @@ class SettingsViewController extends GetxController {
     List<TwitchUser> users = [];
     Settings settings = settingsService.settings.value;
 
-    await settingsEvents
-        .getTwitchUsers(
-            ids: settings.hiddenUsersIds!,
-            accessToken: homeViewController.twitchData!.accessToken)
-        .then((value) => users = value.data!);
+    await getTwitchUsersUseCase(
+      params: GetTwitchUsersUseCaseParams(
+        ids: settings.hiddenUsersIds,
+        accessToken: homeViewController.twitchData!.accessToken,
+      ),
+    ).then((value) => users = value.data!);
 
     for (var user in users) {
       usernamesHiddenUsers.add(user.displayName);

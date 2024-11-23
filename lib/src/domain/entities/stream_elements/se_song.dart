@@ -1,6 +1,7 @@
-import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
-class SeSong extends Equatable {
+@immutable
+class SeSong {
   final String id;
   final String videoId;
   final String title;
@@ -24,18 +25,4 @@ class SeSong extends Equatable {
       channel: map["channel"],
     );
   }
-
-  @override
-  List<Object?> get props {
-    return [
-      id,
-      videoId,
-      title,
-      channel,
-      duration,
-    ];
-  }
-
-  @override
-  bool get stringify => true;
 }

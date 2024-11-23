@@ -1,6 +1,7 @@
-import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
-class StreamElementsSettings extends Equatable {
+@immutable
+class StreamElementsSettings {
   final bool showFollowerActivity;
   final bool showSubscriberActivity;
   final bool showDonationActivity;
@@ -24,38 +25,6 @@ class StreamElementsSettings extends Equatable {
     required this.overlayToken,
     required this.mutedOverlays,
   });
-
-  @override
-  List<Object?> get props {
-    return [
-      showFollowerActivity,
-      showSubscriberActivity,
-      showDonationActivity,
-      showCheerActivity,
-      showRaidActivity,
-      showHostActivity,
-      showMerchActivity,
-      jwt,
-      overlayToken,
-      mutedOverlays,
-    ];
-  }
-
-  Map toJson() => {
-        'showFollowerActivity': showFollowerActivity,
-        'showSubscriberActivity': showSubscriberActivity,
-        'showDonationActivity': showDonationActivity,
-        'showCheerActivity': showCheerActivity,
-        'showRaidActivity': showRaidActivity,
-        'showHostActivity': showHostActivity,
-        'showMerchActivity': showMerchActivity,
-        'jwt': jwt,
-        'overlayToken': overlayToken,
-        'mutedOverlays': mutedOverlays,
-      };
-
-  @override
-  bool get stringify => true;
 
   StreamElementsSettings copyWith({
     bool? showFollowerActivity,

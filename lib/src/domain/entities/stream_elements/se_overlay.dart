@@ -1,6 +1,7 @@
-import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
-class SeOverlay extends Equatable {
+@immutable
+class SeOverlay {
   final String id;
   final String name;
 
@@ -8,15 +9,4 @@ class SeOverlay extends Equatable {
     required this.id,
     required this.name,
   });
-
-  @override
-  List<Object?> get props {
-    return [
-      id,
-      name,
-    ];
-  }
-
-  @override
-  bool get stringify => true;
 }

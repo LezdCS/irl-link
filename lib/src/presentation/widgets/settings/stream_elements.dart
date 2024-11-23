@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
@@ -42,7 +41,7 @@ class StreamElements extends GetView<SettingsViewController> {
                     ),
                   ),
                   const Icon(
-                    CupertinoIcons.sparkles,
+                    Icons.star_purple500,
                     size: 12,
                     color: Colors.yellow,
                   ),
@@ -63,11 +62,12 @@ class StreamElements extends GetView<SettingsViewController> {
           child: Obx(
             () => Column(
               children: [
-                controller.homeViewController.streamelementsViewController
-                            .value !=
-                        null
-                    ? loggedIn(context)
-                    : loginButton()
+                if (controller.homeViewController.streamelementsViewController
+                        .value !=
+                    null)
+                  loggedIn(context)
+                else
+                  loginButton(),
               ],
             ),
           ),
@@ -80,13 +80,17 @@ class StreamElements extends GetView<SettingsViewController> {
     Settings settings = Get.find<SettingsService>().settings.value;
     SeMe? seMe = controller.homeViewController.streamelementsViewController
         .value?.userSeProfile.value;
+
+    final settingsService = Get.find<SettingsService>();
+
     return Column(
       children: [
-        seMe != null
-            ? _profile(
-                seMe,
-              )
-            : Container(),
+        if (seMe != null)
+          _profile(
+            seMe,
+          )
+        else
+          Container(),
         const SizedBox(
           height: 12,
         ),
@@ -99,12 +103,11 @@ class StreamElements extends GetView<SettingsViewController> {
                 controller: controller.seJwtInputController,
                 obscureText: !controller.seJwtShow.value,
                 onChanged: (value) {
-                  Get.find<SettingsService>().settings.value =
-                      settings.copyWith(
+                  settingsService.settings.value = settings.copyWith(
                     streamElementsSettings:
-                        settings.streamElementsSettings!.copyWith(jwt: value),
+                        settings.streamElementsSettings.copyWith(jwt: value),
                   );
-                  Get.find<SettingsService>().saveSettings();
+                  settingsService.saveSettings();
                 },
                 decoration: InputDecoration(
                   isDense: true,
@@ -116,9 +119,11 @@ class StreamElements extends GetView<SettingsViewController> {
                     color: Theme.of(context).colorScheme.tertiary,
                   ),
                   suffixIcon: IconButton(
-                    icon: Icon(controller.seJwtShow.value
-                        ? Icons.visibility
-                        : Icons.visibility_off),
+                    icon: Icon(
+                      controller.seJwtShow.value
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
                     color: Theme.of(context).primaryIconTheme.color,
                     onPressed: () {
                       controller.seJwtShow.value = !controller.seJwtShow.value;
@@ -142,12 +147,11 @@ class StreamElements extends GetView<SettingsViewController> {
                 controller: controller.seOverlayTokenInputController,
                 obscureText: !controller.seOverlayTokenShow.value,
                 onChanged: (value) {
-                  Get.find<SettingsService>().settings.value =
-                      settings.copyWith(
-                    streamElementsSettings: settings.streamElementsSettings!
+                  settingsService.settings.value = settings.copyWith(
+                    streamElementsSettings: settings.streamElementsSettings
                         .copyWith(overlayToken: value),
                   );
-                  Get.find<SettingsService>().saveSettings();
+                  settingsService.saveSettings();
                 },
                 decoration: InputDecoration(
                   isDense: true,
@@ -159,9 +163,11 @@ class StreamElements extends GetView<SettingsViewController> {
                     color: Theme.of(context).colorScheme.tertiary,
                   ),
                   suffixIcon: IconButton(
-                    icon: Icon(controller.seOverlayTokenShow.value
-                        ? Icons.visibility
-                        : Icons.visibility_off),
+                    icon: Icon(
+                      controller.seOverlayTokenShow.value
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
                     color: Theme.of(context).primaryIconTheme.color,
                     onPressed: () {
                       controller.seOverlayTokenShow.value =
@@ -194,9 +200,8 @@ class StreamElements extends GetView<SettingsViewController> {
       ),
       padding: const EdgeInsets.only(top: 8, bottom: 8),
       child: InkWell(
-        onTap: (() => {controller.disconnectStreamElements()}),
+        onTap: () => {controller.disconnectStreamElements()},
         child: const Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image(
@@ -222,9 +227,8 @@ class StreamElements extends GetView<SettingsViewController> {
 
   Widget loginButton() {
     return InkWell(
-      onTap: (() => {controller.loginStreamElements()}),
+      onTap: () => {controller.loginStreamElements()},
       child: const Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image(
@@ -250,7 +254,7 @@ class StreamElements extends GetView<SettingsViewController> {
           imageUrl: me.avatar,
           placeholder: (BuildContext context, String url) =>
               const CircularProgressIndicator(),
-          errorWidget: (BuildContext context, String url, dynamic error) =>
+          errorWidget: (BuildContext context, String url, error) =>
               const Icon(Icons.error),
           imageBuilder: (context, imageProvider) => CircleAvatar(
             radius: 18,

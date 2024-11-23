@@ -1,21 +1,18 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:irllink/src/data/entities/dashboard_event_dto.dart';
-import 'package:irllink/src/domain/entities/settings/dashboard_settings.dart';
 
-class DashboardSettingsDTO extends DashboardSettings {
-  const DashboardSettingsDTO({
-    required List<DashboardEventDTO> super.userEvents,
-    required super.activated,
-  });
+part 'dashboard_settings_dto.freezed.dart';
+part 'dashboard_settings_dto.g.dart';
 
-  factory DashboardSettingsDTO.fromJson(Map<String, dynamic> map) {
-    List<DashboardEventDTO> userEvents = [];
-    map['userEvents'].forEach((element) {
-      userEvents.add(DashboardEventDTO.fromJson(element));
-    });
+@freezed
+class DashboardSettingsDTO with _$DashboardSettingsDTO {
+  factory DashboardSettingsDTO({
+    @Default([]) List<DashboardEventDTO> userEvents,
+    @Default(true) bool activated,
+  }) = _DashboardSettingsDTO;
+  DashboardSettingsDTO._();
 
-    return DashboardSettingsDTO(
-      userEvents: userEvents,
-      activated: map['activated'],
-    );
-  }
+  factory DashboardSettingsDTO.blank() => DashboardSettingsDTO();
+  factory DashboardSettingsDTO.fromJson(Map<String, dynamic> json) =>
+      _$DashboardSettingsDTOFromJson(json);
 }

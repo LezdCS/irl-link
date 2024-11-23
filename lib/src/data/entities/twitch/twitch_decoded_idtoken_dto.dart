@@ -1,21 +1,15 @@
-import 'package:irllink/src/domain/entities/twitch/twitch_decoded_idtoken.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class TwitchDecodedIdTokenDTO extends TwitchDecodedIdToken {
-  const TwitchDecodedIdTokenDTO({
-    required super.preferredUsername,
-    required super.profilePicture,
-  });
+part 'twitch_decoded_idtoken_dto.freezed.dart';
+part 'twitch_decoded_idtoken_dto.g.dart';
 
-  @override
-  Map toJson() => {
-        'preferredUsername': preferredUsername,
-        'profilePicture': profilePicture,
-      };
+@freezed
+class TwitchDecodedIdTokenDTO with _$TwitchDecodedIdTokenDTO {
+  const factory TwitchDecodedIdTokenDTO({
+    required String preferredUsername,
+    required String profilePicture,
+  }) = _TwitchDecodedIdTokenDTO;
 
-  factory TwitchDecodedIdTokenDTO.fromJson(Map<String, dynamic> map) {
-    return TwitchDecodedIdTokenDTO(
-      preferredUsername: map['preferredUsername'] as String,
-      profilePicture: map['profilePicture'] as String,
-    );
-  }
+  factory TwitchDecodedIdTokenDTO.fromJson(Map<String, dynamic> json) =>
+      _$TwitchDecodedIdTokenDTOFromJson(json);
 }

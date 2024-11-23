@@ -31,16 +31,16 @@ class Dashboard extends GetView<DashboardController> {
             Radius.circular(8),
           ),
         ),
-        child: settings.dashboardSettings!.userEvents.isNotEmpty
+        child: settings.dashboardSettings.userEvents.isNotEmpty
             ? GridView.builder(
-                itemCount: settings.dashboardSettings!.userEvents.length,
+                itemCount: settings.dashboardSettings.userEvents.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 3 / 1.8,
                 ),
                 itemBuilder: (BuildContext context, int index) {
                   DashboardEvent event =
-                      settings.dashboardSettings!.userEvents[index];
+                      settings.dashboardSettings.userEvents[index];
                   // Check if the event is still supported
                   if (event.event == SupportedEvents.none) {
                     return _disabledServiceEvent(

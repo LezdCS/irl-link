@@ -1,6 +1,7 @@
-import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
-class TwitchDecodedIdToken extends Equatable {
+@immutable
+class TwitchDecodedIdToken {
   final String preferredUsername;
   final String profilePicture;
 
@@ -8,20 +9,4 @@ class TwitchDecodedIdToken extends Equatable {
     required this.preferredUsername,
     required this.profilePicture,
   });
-
-  Map toJson() => {
-        'preferredUsername': preferredUsername,
-        'profilePicture': profilePicture,
-      };
-
-  @override
-  List<Object?> get props {
-    return [
-      preferredUsername,
-      profilePicture,
-    ];
-  }
-
-  @override
-  bool get stringify => true;
 }

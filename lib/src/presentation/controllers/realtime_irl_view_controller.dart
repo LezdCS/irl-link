@@ -22,7 +22,7 @@ class RealtimeIrlViewController extends GetxController {
   void onInit() {
     Settings settings = Get.find<SettingsService>().settings.value;
 
-    realtimeIrl = RealtimeIrl(settings.rtIrlPushKey ?? '');
+    realtimeIrl = RealtimeIrl(settings.rtIrlPushKey);
 
     FlutterForegroundTask.addTaskDataCallback(realtimeIrl.onReceiveTaskData);
     _initService();
@@ -46,13 +46,9 @@ class RealtimeIrlViewController extends GetxController {
         channelImportance: NotificationChannelImportance.LOW,
         priority: NotificationPriority.LOW,
       ),
-      iosNotificationOptions: const IOSNotificationOptions(
-        showNotification: true,
-        playSound: false,
-      ),
-      foregroundTaskOptions: const ForegroundTaskOptions(
-        interval: 5000,
-        isOnceEvent: false,
+      iosNotificationOptions: const IOSNotificationOptions(),
+      foregroundTaskOptions: ForegroundTaskOptions(
+        eventAction: ForegroundTaskEventAction.repeat(5000),
       ),
     );
   }
@@ -66,9 +62,10 @@ class RealtimeIrlViewController extends GetxController {
         notificationTitle: 'IRL Link',
         notificationText: 'Your location is being shared with RealtimeIRL.',
         notificationIcon: const NotificationIconData(
-            resType: ResourceType.drawable,
-            resPrefix: ResourcePrefix.ic,
-            name: 'bg_service_small'),
+          resType: ResourceType.drawable,
+          resPrefix: ResourcePrefix.ic,
+          name: 'bg_service_small',
+        ),
         notificationButtons: [
           const NotificationButton(id: 'rtirl_stop', text: 'Stop sharing'),
         ],
@@ -78,7 +75,7 @@ class RealtimeIrlViewController extends GetxController {
   }
 
   Future stop() async {
-    return await realtimeIrl.stopTracking();
+    return realtimeIrl.stopTracking();
   }
 
   Future start() async {
@@ -123,6 +120,6 @@ class RealtimeIrlViewController extends GetxController {
 
   Future applySettings() async {
     Settings settings = Get.find<SettingsService>().settings.value;
-    realtimeIrl.key = settings.rtIrlPushKey ?? '';
+    realtimeIrl.key = settings.rtIrlPushKey;
   }
 }

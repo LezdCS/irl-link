@@ -1,6 +1,7 @@
-import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
-class GeneralSettings extends Equatable {
+@immutable
+class GeneralSettings {
   final bool isDarkMode;
   final bool keepSpeakerOn;
   final bool displayViewerCount;
@@ -14,28 +15,6 @@ class GeneralSettings extends Equatable {
     required this.appLanguage,
     required this.splitViewWeights,
   });
-
-  @override
-  List<Object?> get props {
-    return [
-      isDarkMode,
-      keepSpeakerOn,
-      displayViewerCount,
-      appLanguage,
-      splitViewWeights,
-    ];
-  }
-
-  Map toJson() => {
-        'isDarkMode': isDarkMode,
-        'keepSpeakerOn': keepSpeakerOn,
-        'displayViewerCount': displayViewerCount,
-        'appLanguage': appLanguage,
-        'splitViewWeights': splitViewWeights,
-      };
-
-  @override
-  bool get stringify => true;
 
   GeneralSettings copyWith({
     bool? isDarkMode,

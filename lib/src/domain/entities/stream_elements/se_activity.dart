@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 enum ActivityType {
@@ -11,7 +10,8 @@ enum ActivityType {
   unsupported,
 }
 
-class SeActivity extends Equatable {
+@immutable
+class SeActivity {
   final String id;
   final String channel;
   final String username;
@@ -37,20 +37,6 @@ class SeActivity extends Equatable {
     this.currency,
     this.isTest,
   });
-
-  @override
-  List<Object?> get props {
-    return [
-      id,
-      username,
-      message,
-      amount,
-      activityType,
-    ];
-  }
-
-  @override
-  bool get stringify => true;
 
   Map toJsonForWatch() => {
         'id': id,
@@ -117,7 +103,7 @@ class SeActivity extends Equatable {
         break;
       case ActivityType.subscription:
         bool isPrime = tier == "prime";
-        bool isGift = gifted == true;
+        bool isGift = gifted ?? false;
         if (isGift) {
           s = 'Got gifted a sub by $sender';
         } else {

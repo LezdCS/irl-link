@@ -1,20 +1,15 @@
-import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class SeOverlayDTO extends SeOverlay {
-  const SeOverlayDTO({
-    required super.id,
-    required super.name,
-  });
+part 'se_overlay_dto.freezed.dart';
+part 'se_overlay_dto.g.dart';
 
-  Map toJson() => {
-        'id': id,
-        'name': name,
-      };
+@freezed
+class SeOverlayDTO with _$SeOverlayDTO {
+  const factory SeOverlayDTO({
+    @JsonKey(name: '_id') required String id,
+    required String name,
+  }) = _SeOverlayDTO;
 
-  factory SeOverlayDTO.fromJson(Map<String, dynamic> map) {
-    return SeOverlayDTO(
-      id: map['_id'] as String,
-      name: map['name'] as String,
-    );
-  }
+  factory SeOverlayDTO.fromJson(Map<String, dynamic> json) =>
+      _$SeOverlayDTOFromJson(json);
 }

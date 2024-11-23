@@ -1,9 +1,10 @@
 import 'package:collection/collection.dart';
-import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:kick_chat/kick_chat.dart';
 import 'package:twitch_chat/twitch_chat.dart' as twitch;
 
-class ChatBadge extends Equatable {
+@immutable
+class ChatBadge {
   final String id;
   final String imageUrl1x;
   final String imageUrl2x;
@@ -26,7 +27,10 @@ class ChatBadge extends Equatable {
   }
 
   factory ChatBadge.fromKick(
-      String channelId, UserBadge badge, List<KickBadge> subBadges) {
+    String channelId,
+    UserBadge badge,
+    List<KickBadge> subBadges,
+  ) {
     String src = '';
     switch (badge.type) {
       case 'subscriber':
@@ -74,24 +78,4 @@ class ChatBadge extends Equatable {
       imageUrl4x: correspondingBadge.badgeImage.src,
     );
   }
-
-  Map toJson() => {
-        'id': id,
-        'imageUrl1x': imageUrl1x,
-        'imageUrl2x': imageUrl2x,
-        'imageUrl4x': imageUrl4x,
-      };
-
-  @override
-  List<Object?> get props {
-    return [
-      id,
-      imageUrl1x,
-      imageUrl2x,
-      imageUrl4x,
-    ];
-  }
-
-  @override
-  bool get stringify => true;
 }
