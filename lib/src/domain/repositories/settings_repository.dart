@@ -1,9 +1,10 @@
-import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:dartz/dartz.dart';
+import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 
 abstract class SettingsRepository {
-  Future<DataState<Settings>> getSettings();
-  Future<void> setSettings(
+  Future<Either<Failure, Settings>> getSettings();
+  Future<Either<Failure, void>> setSettings(
     Settings settings,
   );
 }

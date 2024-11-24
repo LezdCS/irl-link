@@ -1,4 +1,5 @@
-import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:dartz/dartz.dart';
+import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/usecases/usecase.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
 import 'package:irllink/src/domain/repositories/streamelements_repository.dart';
@@ -15,7 +16,7 @@ class StreamElementsGetLastActivitiesParams {
 
 class StreamElementsGetLastActivitiesUseCase
     implements
-        UseCase<DataState<List<SeActivity>>,
+        UseCase<Either<Failure, List<SeActivity>>,
             StreamElementsGetLastActivitiesParams> {
   final StreamelementsRepository streamelementsRepository;
 
@@ -24,7 +25,7 @@ class StreamElementsGetLastActivitiesUseCase
   });
 
   @override
-  Future<DataState<List<SeActivity>>> call({
+  Future<Either<Failure, List<SeActivity>>> call({
     required StreamElementsGetLastActivitiesParams params,
   }) {
     return streamelementsRepository.getLastActivities(

@@ -1,3 +1,5 @@
+import 'package:dartz/dartz.dart';
+import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/usecases/usecase.dart';
 import 'package:irllink/src/domain/repositories/streamelements_repository.dart';
 
@@ -14,7 +16,8 @@ class StreamElementsUpdatePlayerStateParams {
 }
 
 class StreamElementsUpdatePlayerStateUseCase
-    implements UseCase<void, StreamElementsUpdatePlayerStateParams> {
+    implements
+        UseCase<Either<Failure, void>, StreamElementsUpdatePlayerStateParams> {
   final StreamelementsRepository streamelementsRepository;
 
   StreamElementsUpdatePlayerStateUseCase({
@@ -22,7 +25,9 @@ class StreamElementsUpdatePlayerStateUseCase
   });
 
   @override
-  Future<void> call({required StreamElementsUpdatePlayerStateParams params}) {
+  Future<Either<Failure, void>> call({
+    required StreamElementsUpdatePlayerStateParams params,
+  }) {
     return streamelementsRepository.updatePlayerState(
       params.token,
       params.channel,

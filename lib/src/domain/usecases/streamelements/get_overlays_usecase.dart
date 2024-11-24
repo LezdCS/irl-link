@@ -1,4 +1,5 @@
-import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:dartz/dartz.dart';
+import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/usecases/usecase.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
 import 'package:irllink/src/domain/repositories/streamelements_repository.dart';
@@ -15,13 +16,14 @@ class StreamElementsGetOverlaysParams {
 
 class StreamElementsGetOverlaysUseCase
     implements
-        UseCase<DataState<List<SeOverlay>>, StreamElementsGetOverlaysParams> {
+        UseCase<Either<Failure, List<SeOverlay>>,
+            StreamElementsGetOverlaysParams> {
   final StreamelementsRepository streamelementsRepository;
 
   StreamElementsGetOverlaysUseCase({required this.streamelementsRepository});
 
   @override
-  Future<DataState<List<SeOverlay>>> call({
+  Future<Either<Failure, List<SeOverlay>>> call({
     required StreamElementsGetOverlaysParams params,
   }) {
     return streamelementsRepository.getOverlays(params.token, params.channel);

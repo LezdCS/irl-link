@@ -1,7 +1,8 @@
 import 'dart:convert';
 
+import 'package:dartz/dartz.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/utils/mapper.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/entities/settings_dto.dart';
@@ -15,7 +16,7 @@ class SettingsRepositoryImpl extends SettingsRepository {
   SettingsRepositoryImpl({required this.talker}) : _mappr = Mappr();
 
   @override
-  Future<DataState<Settings>> getSettings() async {
+  Future<Either<Failure, Settings>> getSettings() async {
     final box = GetStorage();
     talker.logTyped(SettingsLog('Retrieving settings.'));
     var settingsString = box.read('settings');
@@ -25,20 +26,21 @@ class SettingsRepositoryImpl extends SettingsRepository {
       SettingsDTO settingsDTO = SettingsDTO.fromJson(settingsJson);
       talker.logTyped(SettingsLog('Settings JSON: $settingsJson'));
       Settings settings = _mappr.convert<SettingsDTO, Settings>(settingsDTO);
-      return DataSuccess(settings);
+      return Right(settings);
     }
     talker.info('No settings found.');
     SettingsDTO settingsDTO = SettingsDTO.blank();
     Settings settings = _mappr.convert<SettingsDTO, Settings>(settingsDTO);
-    return DataSuccess(settings);
+    return Right(settings);
   }
 
   @override
-  Future<void> setSettings(Settings settings) async {
+  Future<Either<Failure, void>> setSettings(Settings settings) async {
     final box = GetStorage();
     SettingsDTO settingsDTO = _mappr.convert<Settings, SettingsDTO>(settings);
     String settingsJson = jsonEncode(settingsDTO.toJson());
     talker.logTyped(SettingsLog('Saving settings: $settingsJson'));
     box.write('settings', settingsJson);
+    return const Right(null);
   }
 }

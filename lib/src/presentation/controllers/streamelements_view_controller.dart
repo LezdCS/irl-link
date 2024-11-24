@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/services/watch_service.dart';
@@ -96,13 +95,14 @@ class StreamelementsViewController extends GetxController
 
     await setStreamElementsCredentials();
     if (seCredentials.value != null) {
-      DataState<SeCredentials> tokenResult = await refreshTokenUseCase(
+      final refreshResult = await refreshTokenUseCase(
         params: seCredentials.value!,
       );
 
-      if (tokenResult.data != null) {
-        seCredentials.value = tokenResult.data;
-      }
+      refreshResult.fold(
+        (l) => {},
+        (r) => seCredentials.value = r,
+      );
     }
 
     settingsService.getSettings().then((value) => applySettings());
@@ -150,22 +150,26 @@ class StreamelementsViewController extends GetxController
   }
 
   Future<void> setStreamElementsCredentials() async {
-    DataState<SeCredentials> seCreds = await getLocalCredentialsUseCase();
-    if (seCreds is DataSuccess) {
-      seCredentials.value = seCreds.data;
-      await setSeMe(seCredentials.value!);
-    }
+    final seCredsResult = await getLocalCredentialsUseCase();
+    seCredsResult.fold(
+      (l) => {},
+      (r) async {
+        seCredentials.value = r;
+        await setSeMe(seCredentials.value!);
+      },
+    );
   }
 
   Future<void> setSeMe(SeCredentials seCreds) async {
-    DataState<SeMe> seMeResult = await getMeUseCase(
+    final seMeResult = await getMeUseCase(
       params: StreamElementsGetMeParams(
         token: seCredentials.value!.accessToken,
       ),
     );
-    if (seMeResult is DataSuccess) {
-      userSeProfile.value = seMeResult.data;
-    }
+    seMeResult.fold(
+      (l) => {},
+      (r) => userSeProfile.value = r,
+    );
   }
 
   void replayEvent(SeActivity activity) {
@@ -201,35 +205,52 @@ class StreamelementsViewController extends GetxController
       return;
     }
 
-    getOverlaysUseCase(
+    final overlaysResult = await getOverlaysUseCase(
       params: StreamElementsGetOverlaysParams(
         token: accessToken,
         channel: me.id,
       ),
-    ).then((value) => overlays.value = value.data ?? []);
-    getLastActivitiesUseCase(
+    );
+    overlaysResult.fold(
+      (l) => {},
+      (r) => overlays.value = r,
+    );
+
+    final lastActivitiesResult = await getLastActivitiesUseCase(
       params: StreamElementsGetLastActivitiesParams(
         token: accessToken,
         channel: me.id,
       ),
-    ).then((value) => activities.value = value.data ?? []);
-    getSongPlayingUseCase(
+    );
+    lastActivitiesResult.fold(
+      (l) => debugPrint(l.message),
+      (r) => activities.value = r,
+    );
+
+    final songPlayingResult = await getSongPlayingUseCase(
       params: StreamElementsGetSongPlayingParams(
         token: accessToken,
         channel: me.id,
       ),
-    ).then((value) => currentSong.value = value.data);
+    );
+    songPlayingResult.fold(
+      (l) => {},
+      (r) => currentSong.value = r,
+    );
 
     if (jwt != null) {
-      DataState<List<SeSong>> songQueue = await getSongQueueUseCase(
+      final songQueueResult = await getSongQueueUseCase(
         params: StreamElementsGetSongQueueParams(
           token: accessToken,
           channel: me.id,
         ),
       );
-      if (songQueue is DataSuccess) {
-        songRequestQueue.value = songQueue.data ?? [];
-      }
+      songQueueResult.fold(
+        (l) => {},
+        (r) => {
+          songRequestQueue.value = r,
+        },
+      );
     }
   }
 
