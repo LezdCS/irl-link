@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_stream_info_usecase.dart';
@@ -95,15 +94,16 @@ class TwitchTabViewController extends GetxController
       return;
     }
 
-    DataState<TwitchStreamInfos> streamInfos = await getStreamInfoUseCase(
+    final streamInfosResult = await getStreamInfoUseCase(
       params: GetStreamInfoUseCaseParams(
         accessToken: homeViewController.twitchData!.accessToken,
         broadcasterId: homeViewController.twitchData!.twitchUser.id,
       ),
     );
-    if (streamInfos is DataSuccess) {
-      twitchStreamInfos.value = streamInfos.data!;
-    }
+    streamInfosResult.fold(
+      (l) => {},
+      (r) => twitchStreamInfos.value = r,
+    );
     if (!focus.hasFocus) {
       titleFormController.text = twitchStreamInfos.value.title!;
     }

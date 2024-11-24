@@ -6,7 +6,6 @@ import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:irllink/main.dart';
-import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/services/realtime_irl.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/utils/determine_position.dart';
@@ -99,21 +98,23 @@ class RealtimeIrlViewController extends GetxController {
       }
     }
 
-    DataState<Position> p = await determinePosition();
+    final positionResult = await determinePosition();
 
-    if (p.error != null) {
-      Get.snackbar(
-        "Error",
-        p.error!,
-        snackPosition: SnackPosition.BOTTOM,
-        icon: const Icon(Icons.error_outline, color: Colors.red),
-        borderWidth: 1,
-        borderColor: Colors.red,
-      );
-      return;
-    }
-
-    _startService();
+    positionResult.fold(
+      (l) {
+        Get.snackbar(
+          "Error",
+          l.message,
+          snackPosition: SnackPosition.BOTTOM,
+          icon: const Icon(Icons.error_outline, color: Colors.red),
+          borderWidth: 1,
+          borderColor: Colors.red,
+        );
+      },
+      (r) {
+        _startService();
+      },
+    );
   }
 
   Future applySettings() async {

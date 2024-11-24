@@ -7,7 +7,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:irllink/src/core/resources/data_state.dart';
 
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
@@ -145,11 +144,11 @@ class StoreService extends GetxService {
     }
 
     TwitchCredentials? twitchCredentials;
-    await getTwitchLocalUseCase().then((value) {
-      if (value is DataSuccess) {
-        twitchCredentials = value.data;
-      }
-    });
+    final getLocalResult = await getTwitchLocalUseCase();
+    getLocalResult.fold(
+      (l) => {},
+      (r) => twitchCredentials = r,
+    );
 
     if (twitchCredentials == null) {
       return Future<bool>.value(false);

@@ -386,7 +386,7 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
     });
   }
 
-  void createPoll(String question, List<Choice> choices) {
+  Future<void> createPoll(String question, List<Choice> choices) async {
     TwitchPoll newPoll = TwitchPoll(
       id: "",
       title: "",
@@ -395,25 +395,33 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
       totalVotes: 0,
       endsAt: DateTime.now(),
     );
-    createPollUseCase(
+    final createPollResult = await createPollUseCase(
       params: CreatePollUseCaseParams(
         accessToken: homeViewController.twitchData!.accessToken,
         broadcasterId: homeViewController.twitchData!.twitchUser.id,
         newPoll: newPoll,
       ),
     );
+    createPollResult.fold(
+      (l) => {},
+      (r) => {},
+    );
   }
 
   // status is either TERMINATED to end poll and display the result to viewer
   // or ARCHIVED to end the poll and hide it
-  void endPoll(String status) {
-    endPollUseCase(
+  Future<void> endPoll(String status) async {
+    final endPollResult = await endPollUseCase(
       params: EndPollUseCaseParams(
         accessToken: homeViewController.twitchData!.accessToken,
         broadcasterId: homeViewController.twitchData!.twitchUser.id,
         pollId: currentPoll.value.id,
         status: status,
       ),
+    );
+    endPollResult.fold(
+      (l) => {},
+      (r) => {},
     );
   }
 

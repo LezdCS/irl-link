@@ -1,3 +1,5 @@
+import 'package:dartz/dartz.dart';
+import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/usecases/usecase.dart';
 import 'package:irllink/src/domain/repositories/twitch_repository.dart';
 
@@ -18,13 +20,13 @@ class EndPredictionUseCaseParams {
 }
 
 class EndPredictionUseCase
-    implements UseCase<dynamic, EndPredictionUseCaseParams> {
+    implements UseCase<Either<Failure, void>, EndPredictionUseCaseParams> {
   final TwitchRepository twitchRepository;
 
   EndPredictionUseCase({required this.twitchRepository});
 
   @override
-  Future<dynamic> call({
+  Future<Either<Failure, void>> call({
     required EndPredictionUseCaseParams params,
   }) {
     return twitchRepository.endPrediction(

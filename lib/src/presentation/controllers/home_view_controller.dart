@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:irllink/routes/app_routes.dart';
-import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
@@ -155,11 +154,13 @@ class HomeViewController extends GetxController
       );
 
       timerRefreshToken =
-          Timer.periodic(const Duration(seconds: 13000), (Timer t) {
-        refreshAccessTokenUseCase(params: twitchData!).then(
-          (value) => {
-            if (value is DataSuccess) {twitchData = value.data},
-          },
+          Timer.periodic(const Duration(seconds: 13000), (Timer t) async {
+        final refreshTokenResult =
+            await refreshAccessTokenUseCase(params: twitchData!);
+
+        refreshTokenResult.fold(
+          (l) => {},
+          (r) => twitchData = r,
         );
       });
     }

@@ -98,9 +98,15 @@ class SettingsViewController extends GetxController {
     super.onReady();
   }
 
-  void logout() {
-    logoutUseCase(params: homeViewController.twitchData!.accessToken).then(
-      (value) => Get.offAllNamed(Routes.login),
+  Future<void> logout() async {
+    final logoutResult =
+        await logoutUseCase(params: homeViewController.twitchData!.accessToken);
+
+    logoutResult.fold(
+      (l) => {},
+      (r) {
+        Get.offAllNamed(Routes.login);
+      },
     );
   }
 
@@ -271,16 +277,21 @@ class SettingsViewController extends GetxController {
     Get.back();
   }
 
-  Future getUsernames() async {
+  Future<void> getUsernames() async {
     List<TwitchUser> users = [];
     Settings settings = settingsService.settings.value;
 
-    await getTwitchUsersUseCase(
+    final twitchUsersResult = await getTwitchUsersUseCase(
       params: GetTwitchUsersUseCaseParams(
         ids: settings.hiddenUsersIds,
         accessToken: homeViewController.twitchData!.accessToken,
       ),
-    ).then((value) => users = value.data!);
+    );
+
+    twitchUsersResult.fold(
+      (l) => {},
+      (r) => users = r,
+    );
 
     for (var user in users) {
       usernamesHiddenUsers.add(user.displayName);

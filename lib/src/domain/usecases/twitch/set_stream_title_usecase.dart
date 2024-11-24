@@ -1,4 +1,5 @@
-import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:dartz/dartz.dart';
+import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/usecases/usecase.dart';
 import 'package:irllink/src/domain/repositories/twitch_repository.dart';
 
@@ -15,13 +16,13 @@ class SetStreamTitleUseCaseParams {
 }
 
 class SetStreamTitleUseCase
-    implements UseCase<DataState<void>, SetStreamTitleUseCaseParams> {
+    implements UseCase<Either<Failure, void>, SetStreamTitleUseCaseParams> {
   final TwitchRepository twitchRepository;
 
   SetStreamTitleUseCase(this.twitchRepository);
 
   @override
-  Future<DataState<void>> call({
+  Future<Either<Failure, void>> call({
     required SetStreamTitleUseCaseParams params,
   }) {
     return twitchRepository.setStreamTitle(

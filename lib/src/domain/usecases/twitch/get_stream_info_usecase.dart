@@ -1,4 +1,5 @@
-import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:dartz/dartz.dart';
+import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/usecases/usecase.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
 import 'package:irllink/src/domain/repositories/twitch_repository.dart';
@@ -15,13 +16,14 @@ class GetStreamInfoUseCaseParams {
 
 class GetStreamInfoUseCase
     implements
-        UseCase<DataState<TwitchStreamInfos>, GetStreamInfoUseCaseParams> {
+        UseCase<Either<Failure, TwitchStreamInfos>,
+            GetStreamInfoUseCaseParams> {
   final TwitchRepository twitchRepository;
 
   GetStreamInfoUseCase(this.twitchRepository);
 
   @override
-  Future<DataState<TwitchStreamInfos>> call({
+  Future<Either<Failure, TwitchStreamInfos>> call({
     required GetStreamInfoUseCaseParams params,
   }) {
     return twitchRepository.getStreamInfo(

@@ -8,7 +8,6 @@ import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
-import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 
 import 'package:irllink/src/core/utils/mapper.dart';
@@ -58,8 +57,19 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
         StreamElementsLog('StreamElements login successful.'),
       );
 
-      DataState tokenInfos = await validateToken(accessToken);
-      final String scopes = tokenInfos.data['scopes'].join(' ');
+      final validateTokenResult = await validateToken(accessToken);
+
+      if (validateTokenResult.isLeft()) {
+        return Left(Failure("Validate token issue."));
+      }
+
+      String scopes = '';
+      validateTokenResult.fold(
+        (l) {},
+        (r) {
+          scopes = r.data['scopes'].join(' ');
+        },
+      );
 
       SeCredentials seCredentials = SeCredentials(
         accessToken: accessToken,
@@ -123,18 +133,18 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
     );
   }
 
-  Future<DataState<dynamic>> validateToken(String accessToken) async {
+  Future<Either<Failure, dynamic>> validateToken(String accessToken) async {
     try {
       Response response;
       dioClient.options.headers["authorization"] = "OAuth $accessToken";
       response = await dioClient.get('/oauth2/validate');
       talker.logTyped(StreamElementsLog('StreamElements token validated.'));
 
-      return DataSuccess(response.data);
+      return Right(response.data);
     } on DioException catch (e) {
       talker.error(e.message);
-      return DataFailed(
-        "Unable to validate StreamElements token: ${e.message}",
+      return Left(
+        Failure("Unable to validate StreamElements token: ${e.message}"),
       );
     }
   }

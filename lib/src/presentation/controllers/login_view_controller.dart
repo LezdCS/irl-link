@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
-import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/login_usecase.dart';
@@ -44,22 +43,26 @@ class LoginViewController extends GetxController {
           .then((_) => hasNoNetwork()),
     );
 
-    DataState<TwitchCredentials> twitchCredsResult =
-        await getTwitchLocalUseCase();
+    final twitchCredsResult = await getTwitchLocalUseCase();
 
-    if (twitchCredsResult is DataSuccess) {
-      twitchCredentials.value = twitchCredsResult.data;
-      loadingMessage.value = "refreshing_token".tr;
+    twitchCredsResult.fold(
+      (l) => {},
+      (r) async {
+        twitchCredentials.value = r;
+        loadingMessage.value = "refreshing_token".tr;
 
-      DataState<TwitchCredentials> refreshResult =
-          await refreshTwitchTokenUseCase(params: twitchCredsResult.data!);
+        final refreshResult = await refreshTwitchTokenUseCase(params: r);
 
-      isLoading.value = false;
+        isLoading.value = false;
 
-      if (refreshResult is DataSuccess) {
-        Get.offAllNamed(Routes.home, arguments: [refreshResult.data]);
-      }
-    }
+        refreshResult.fold(
+          (l) => {},
+          (r) {
+            Get.offAllNamed(Routes.home, arguments: [r]);
+          },
+        );
+      },
+    );
 
     isLoading.value = false;
 
@@ -69,11 +72,15 @@ class LoginViewController extends GetxController {
   Future<void> login() async {
     isLoading.value = true;
     TwitchAuthParams params = const TwitchAuthParams();
-    await loginUseCase(params: params).then((value) {
-      if (value is DataSuccess) {
-        Get.offAllNamed(Routes.home, arguments: [value.data]);
-      }
-    });
+    final loginResult = await loginUseCase(params: params);
+
+    loginResult.fold(
+      (l) => {},
+      (r) {
+        Get.offAllNamed(Routes.home, arguments: [r]);
+      },
+    );
+
     isLoading.value = false;
   }
 

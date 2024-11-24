@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
@@ -8,8 +9,8 @@ import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:get/get_core/get_core.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
-import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/services/app_info_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/mapper.dart';
@@ -33,7 +34,7 @@ class TwitchRepositoryImpl implements TwitchRepository {
   TwitchRepositoryImpl({required this.dioClient}) : _mappr = Mappr();
 
   @override
-  Future<DataState<TwitchCredentials>> getTwitchOauth(
+  Future<Either<Failure, TwitchCredentials>> getTwitchOauth(
     TwitchAuthParams params,
   ) async {
     try {
@@ -84,8 +85,16 @@ class TwitchRepositoryImpl implements TwitchRepository {
         displayName: '',
       );
 
-      await getTwitchUser(null, accessToken)
-          .then((value) => twitchUser = value.data!);
+      final twitchUserResult = await getTwitchUser(null, accessToken);
+
+      if (twitchUserResult.isLeft()) {
+        return Left(Failure("Error getting the Twitch user."));
+      }
+
+      twitchUserResult.fold(
+        (l) => {},
+        (r) => {twitchUser = r},
+      );
 
       TwitchCredentials twitchData = TwitchCredentials(
         accessToken: accessToken,
@@ -99,14 +108,14 @@ class TwitchRepositoryImpl implements TwitchRepository {
 
       setTwitchOnLocal(twitchData);
 
-      return DataSuccess(twitchData);
+      return Right(twitchData);
     } catch (e) {
-      return DataFailed("Unable to retrieve Twitch Data from Auth: $e");
+      return Left(Failure("Unable to retrieve Twitch Data from Auth: $e"));
     }
   }
 
   @override
-  Future<DataState<TwitchCredentials>> refreshAccessToken(
+  Future<Either<Failure, TwitchCredentials>> refreshAccessToken(
     TwitchCredentials twitchData,
   ) async {
     Response response;
@@ -143,9 +152,9 @@ class TwitchRepositoryImpl implements TwitchRepository {
 
       await validateToken(newTwitchData.accessToken);
 
-      return DataSuccess(newTwitchData);
+      return Right(newTwitchData);
     } on DioException catch (e) {
-      return DataFailed(e.toString());
+      return Left(Failure(e.toString()));
     }
   }
 
@@ -157,32 +166,31 @@ class TwitchRepositoryImpl implements TwitchRepository {
       response = await dioClient.get('https://id.twitch.tv/oauth2/validate');
       return response.data;
     } on DioException catch (e) {
-      return DataFailed(e.toString());
+      return e.toString();
     }
   }
 
   @override
-  Future<DataState<String>> logout(String accessToken) async {
+  Future<Either<Failure, void>> logout(String accessToken) async {
     final box = GetStorage();
     box.remove('twitchData');
-    Response response;
 
     try {
-      response = await dioClient.post(
+      await dioClient.post(
         'https://id.twitch.tv/oauth2/revoke',
         queryParameters: {
           'client_id': kTwitchAuthClientId,
           'token': accessToken,
         },
       );
-      return DataSuccess(response.toString());
+      return const Right(null);
     } on DioException catch (e) {
-      return DataFailed(e.toString());
+      return Left(Failure(e.toString()));
     }
   }
 
   @override
-  Future<DataState<TwitchCredentials>> getTwitchFromLocal() async {
+  Future<Either<Failure, TwitchCredentials>> getTwitchFromLocal() async {
     final box = GetStorage();
     var twitchDataString = box.read('twitchData');
     if (twitchDataString != null) {
@@ -206,15 +214,15 @@ class TwitchRepositoryImpl implements TwitchRepository {
       String savedScopesOrdered = savedScopesList.join(' ');
 
       if (savedScopesOrdered != paramsScopesOrdered) {
-        return DataFailed("Scopes have been updated, please login again.");
+        return Left(Failure("Scopes have been updated, please login again."));
       }
 
       TwitchCredentials twitchData = _mappr
           .convert<TwitchCredentialsDTO, TwitchCredentials>(twitchDataDTO);
 
-      return DataSuccess(twitchData);
+      return Right(twitchData);
     } else {
-      return DataFailed("No Twitch Data in local storage");
+      return Left(Failure("No Twitch Data in local storage"));
     }
   }
 
@@ -227,7 +235,7 @@ class TwitchRepositoryImpl implements TwitchRepository {
   }
 
   @override
-  Future<DataState<TwitchUser>> getTwitchUser(
+  Future<Either<Failure, TwitchUser>> getTwitchUser(
     String? username,
     String accessToken,
   ) async {
@@ -255,14 +263,14 @@ class TwitchRepositoryImpl implements TwitchRepository {
       TwitchUser twitchUser =
           _mappr.convert<TwitchUserDTO, TwitchUser>(twitchUserDTO);
 
-      return DataSuccess(twitchUser);
+      return Right(twitchUser);
     } on DioException catch (e) {
-      return DataFailed(e.toString());
+      return Left(Failure(e.toString()));
     }
   }
 
   @override
-  Future<DataState<List<TwitchUser>>> getTwitchUsers(
+  Future<Either<Failure, List<TwitchUser>>> getTwitchUsers(
     List ids,
     String accessToken,
   ) async {
@@ -294,19 +302,20 @@ class TwitchRepositoryImpl implements TwitchRepository {
         });
       }
 
-      return DataSuccess(twitchUsers);
+      return Right(twitchUsers);
     } on DioException catch (e) {
-      return DataFailed(e.toString());
+      return Left(Failure(e.toString()));
     }
   }
 
   @override
-  Future<DataState<TwitchStreamInfos>> getStreamInfo(
+  Future<Either<Failure, TwitchStreamInfos>> getStreamInfo(
     String accessToken,
     String broadcasterId,
   ) async {
     Response response;
     Response response2;
+    Response response3;
 
     try {
       dioClient.options.headers['Client-Id'] = kTwitchAuthClientId;
@@ -321,14 +330,19 @@ class TwitchRepositoryImpl implements TwitchRepository {
         queryParameters: {'user_id': broadcasterId},
       );
 
-      dynamic reponse3;
-      await setChatSettings(accessToken, broadcasterId, null)
-          .then((value) => reponse3 = value.data!.data);
+      response3 = await dioClient.patch(
+        '/helix/chat/settings',
+        queryParameters: {
+          'broadcaster_id': broadcasterId,
+          'moderator_id': broadcasterId,
+        },
+        data: jsonEncode({}),
+      );
 
       TwitchStreamInfosDto twitchStreamInfosDto = TwitchStreamInfosDto.fromJson(
         response.data['data'][0],
         response2.data,
-        reponse3['data'][0],
+        response3.data['data'][0],
       );
 
       TwitchStreamInfos twitchStreamInfos =
@@ -336,19 +350,18 @@ class TwitchRepositoryImpl implements TwitchRepository {
         twitchStreamInfosDto,
       );
 
-      return DataSuccess(twitchStreamInfos);
+      return Right(twitchStreamInfos);
     } on DioException catch (e) {
-      return DataFailed(e.toString());
+      return Left(Failure(e.toString()));
     }
   }
 
   @override
-  Future<DataState<Response<dynamic>>> setChatSettings(
+  Future<Either<Failure, void>> setChatSettings(
     String accessToken,
     String broadcasterId,
     TwitchStreamInfos? twitchStreamInfos,
   ) async {
-    Response response;
     Map<String, dynamic> settings = {};
 
     try {
@@ -370,7 +383,7 @@ class TwitchRepositoryImpl implements TwitchRepository {
         }
       }
 
-      response = await dioClient.patch(
+      await dioClient.patch(
         '/helix/chat/settings',
         queryParameters: {
           'broadcaster_id': broadcasterId,
@@ -379,14 +392,14 @@ class TwitchRepositoryImpl implements TwitchRepository {
         data: jsonEncode(settings),
       );
 
-      return DataSuccess(response);
+      return const Right(null);
     } on DioException catch (e) {
-      return DataFailed(e.toString());
+      return Left(Failure(e.toString()));
     }
   }
 
   @override
-  Future<DataState<void>> setStreamTitle(
+  Future<Either<Failure, void>> setStreamTitle(
     String accessToken,
     String broadcasterId,
     String title,
@@ -403,14 +416,14 @@ class TwitchRepositoryImpl implements TwitchRepository {
         },
         data: jsonEncode(titleMap),
       );
-      return DataSuccess(null);
+      return const Right(null);
     } on DioException catch (e) {
-      return DataFailed(e.toString());
+      return Left(Failure(e.toString()));
     }
   }
 
   @override
-  Future endPrediction(
+  Future<Either<Failure, void>> endPrediction(
     String accessToken,
     String broadcasterId,
     String predictionId,
@@ -433,14 +446,14 @@ class TwitchRepositoryImpl implements TwitchRepository {
         data: jsonEncode(body),
       );
 
-      return DataSuccess("");
+      return const Right(null);
     } on DioException catch (e) {
-      return DataFailed(e.toString());
+      return Left(Failure(e.toString()));
     }
   }
 
   @override
-  Future<DataState<TwitchPoll>> endPoll(
+  Future<Either<Failure, TwitchPoll>> endPoll(
     String accessToken,
     String broadcasterId,
     String pollId,
@@ -466,14 +479,14 @@ class TwitchRepositoryImpl implements TwitchRepository {
       TwitchPollDTO pollDTO = TwitchPollDTO.fromJson(response.data['data'][0]);
       TwitchPoll poll = _mappr.convert<TwitchPollDTO, TwitchPoll>(pollDTO);
 
-      return DataSuccess(poll);
+      return Right(poll);
     } on DioException catch (e) {
-      return DataFailed(e.toString());
+      return Left(Failure(e.toString()));
     }
   }
 
   @override
-  Future<DataState<TwitchPoll>> createPoll(
+  Future<Either<Failure, TwitchPoll>> createPoll(
     String accessToken,
     String broadcasterId,
     TwitchPoll newPoll,
@@ -487,14 +500,14 @@ class TwitchRepositoryImpl implements TwitchRepository {
       // response = await dioClient.post(
       //     '/helix/predictions?broadcaster_id=$broadcasterId');
 
-      return DataSuccess(newPoll);
+      return Right(newPoll);
     } on DioException catch (e) {
-      return DataFailed(e.toString());
+      return Left(Failure(e.toString()));
     }
   }
 
   @override
-  Future<void> banUser(
+  Future<Either<Failure, void>> banUser(
     String accessToken,
     String broadcasterId,
     ChatMessage message,
@@ -520,13 +533,14 @@ class TwitchRepositoryImpl implements TwitchRepository {
         },
         data: jsonEncode(body),
       );
+      return const Right(null);
     } on DioException catch (e) {
-      debugPrint(e.response.toString());
+      return Left(Failure(e.response.toString()));
     }
   }
 
   @override
-  Future<void> deleteMessage(
+  Future<Either<Failure, void>> deleteMessage(
     String accessToken,
     String broadcasterId,
     ChatMessage message,
@@ -542,8 +556,9 @@ class TwitchRepositoryImpl implements TwitchRepository {
           'message_id': message.id,
         },
       );
+      return const Right(null);
     } on DioException catch (e) {
-      debugPrint(e.response.toString());
+      return Left(Failure(e.toString()));
     }
   }
 }
