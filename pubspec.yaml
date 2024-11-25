@@ -41,7 +41,7 @@ dependencies:
   geolocator: ^13.0.1
   get: ^4.6.6
   get_storage: ^2.1.1
-  html: ^0.15.4
+  html: ^0.15.5
   http: ^1.2.2
   in_app_purchase: ^3.2.0
   instant: ^0.5.1
