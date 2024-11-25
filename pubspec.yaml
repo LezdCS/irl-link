@@ -49,7 +49,7 @@ dependencies:
   kick_chat: ^1.6.0
   mobile_scanner: ^6.0.2
   obs_websocket: ^5.1.0+9
-  package_info_plus: ^8.0.2
+  package_info_plus: ^8.1.1
   percent_indicator: ^4.2.3
   qr_flutter: ^4.1.0
   quiver: ^3.2.1
