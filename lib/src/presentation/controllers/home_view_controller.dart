@@ -324,7 +324,7 @@ class HomeViewController extends GetxController
     if (settings.rtIrlPushKey.isNotEmpty && realtimeIrlViewController == null) {
       realtimeIrlViewController = Get.find<RealtimeIrlViewController>();
       RealtimeIrlTabView realtimeIrlTabView = const RealtimeIrlTabView();
-      tabElements.insert(1, realtimeIrlTabView);
+      tabElements.add(realtimeIrlTabView);
     }
 
     // Check if WebTabs have to be added
