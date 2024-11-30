@@ -235,7 +235,7 @@ class HomeViewController extends GetxController
     tabElements.refresh();
   }
 
-  Future<void> removeTabs() async {
+  void removeTabs() async {
     Settings settings = settingsService.settings.value;
 
     // Check if WebTabs have to be removed
@@ -303,8 +303,7 @@ class HomeViewController extends GetxController
     // Check if OBS have to be added
     if (obsTabViewController == null && settings.isObsConnected) {
       obsTabViewController = Get.find<ObsTabViewController>();
-      ObsTabView obsPage = const ObsTabView();
-      tabElements.insert(1, obsPage);
+      tabElements.insert(1, const ObsTabView());
     }
 
     // Check if StreamElements have to be added
@@ -314,17 +313,14 @@ class HomeViewController extends GetxController
       if (seCredentialsString != null) {
         streamelementsViewController.value =
             Get.find<StreamelementsViewController>();
-        StreamelementsTabView streamelementsPage =
-            const StreamelementsTabView();
-        tabElements.insert(1, streamelementsPage);
+        tabElements.insert(1, const StreamelementsTabView());
       }
     }
 
     // Check if Realtime IRL have to be added
     if (settings.rtIrlPushKey.isNotEmpty && realtimeIrlViewController == null) {
       realtimeIrlViewController = Get.find<RealtimeIrlViewController>();
-      RealtimeIrlTabView realtimeIrlTabView = const RealtimeIrlTabView();
-      tabElements.add(realtimeIrlTabView);
+      tabElements.add(const RealtimeIrlTabView());
     }
 
     // Check if WebTabs have to be added
@@ -332,13 +328,13 @@ class HomeViewController extends GetxController
       if (!tab.toggled) {
         continue;
       }
-      // first we check if the tab already exist
-      bool tabExist = tabElements
-          .whereType<WebPageView>()
-          .any((element) => element.tab.id == tab.id);
-      bool tabExistIniOSAudioSources =
+
+      // Check if the tab already exists
+      bool tabExists = tabElements
+              .whereType<WebPageView>()
+              .any((element) => element.tab.id == tab.id) ||
           iOSAudioSources.any((element) => element.tab.id == tab.id);
-      if (tabExist || tabExistIniOSAudioSources) {
+      if (tabExists) {
         continue;
       }
 
@@ -352,7 +348,7 @@ class HomeViewController extends GetxController
   }
 
   Future generateTabs() async {
-    await removeTabs();
+    removeTabs();
     addTabs();
     reorderTabs();
 
