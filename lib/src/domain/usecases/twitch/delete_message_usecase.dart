@@ -1,3 +1,5 @@
+import 'package:dartz/dartz.dart';
+import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/usecases/usecase.dart';
 import 'package:irllink/src/domain/repositories/twitch_repository.dart';
 import 'package:twitch_chat/twitch_chat.dart';
@@ -15,13 +17,13 @@ class DeleteMessageUseCaseParams {
 }
 
 class DeleteMessageUseCase
-    implements UseCase<void, DeleteMessageUseCaseParams> {
+    implements UseCase<Either<Failure, void>, DeleteMessageUseCaseParams> {
   final TwitchRepository twitchRepository;
 
   DeleteMessageUseCase(this.twitchRepository);
 
   @override
-  Future<void> call({
+  Future<Either<Failure, void>> call({
     required DeleteMessageUseCaseParams params,
   }) {
     return twitchRepository.deleteMessage(

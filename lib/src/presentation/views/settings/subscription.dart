@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
-import 'package:irllink/src/presentation/widgets/settings/dialogs/in_app_purchase_dialog.dart';
+import 'package:irllink/src/presentation/widgets/in_app_purchase_dialog.dart';
 
-class Subscription extends StatelessWidget {
-  final SettingsViewController controller;
-
-  const Subscription({super.key, required this.controller});
+class Subscription extends GetView<SettingsViewController> {
+  const Subscription({super.key});
 
   @override
   Widget build(BuildContext context) {

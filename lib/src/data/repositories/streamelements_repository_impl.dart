@@ -1,17 +1,15 @@
 import 'dart:convert';
 
+import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
-import 'package:get/instance_manager.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
-import 'package:irllink/src/core/resources/data_state.dart';
-import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 
-import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/core/utils/mapper.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_activity_dto.dart';
@@ -26,14 +24,19 @@ import 'package:irllink/src/domain/entities/stream_elements/se_song.dart';
 import 'package:irllink/src/domain/repositories/streamelements_repository.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
-class StreamelementsRepositoryImpl extends StreamelementsRepository {
-  Talker talker = Get.find<TalkerService>().talker;
+class StreamelementsRepositoryImpl implements StreamelementsRepository {
+  final Mappr _mappr;
+  final Talker talker;
+  final Dio dioClient;
+  StreamelementsRepositoryImpl({required this.talker, required this.dioClient})
+      : _mappr = Mappr();
+
   @override
-  Future<DataState<SeCredentials>> login(
+  Future<Either<Failure, SeCredentials>> login(
     StreamelementsAuthParams params,
   ) async {
     try {
-      Uri url = Uri.https(kStreamelementsUrlBase, kStreamelementsAuthPath, {
+      Uri url = Uri.https('api.streamelements.com', '/oauth2/authorize', {
         'client_id': params.clientId,
         'redirect_uri': params.redirectUri,
         'response_type': params.responseType,
@@ -54,30 +57,34 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
         StreamElementsLog('StreamElements login successful.'),
       );
 
-      DataState tokenInfos = await validateToken(accessToken);
-      final String scopes = tokenInfos.data['scopes'].join(' ');
+      final validateTokenResult = await validateToken(accessToken);
 
-      SeCredentials seCredentials = SeCredentials(
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-        expiresIn: expiresIn,
-        scopes: scopes,
+      return validateTokenResult.fold(
+        (l) => Left(Failure("Validate token issue.")),
+        (r) async {
+          String scopes = r.data['scopes'].join(' ');
+
+          SeCredentials seCredentials = SeCredentials(
+            accessToken: accessToken,
+            refreshToken: refreshToken,
+            expiresIn: expiresIn,
+            scopes: scopes,
+          );
+
+          await storeCredentials(seCredentials);
+          return Right(seCredentials);
+        },
       );
-
-      await storeCredentials(seCredentials);
-
-      return DataSuccess(seCredentials);
     } catch (e) {
-      return DataFailed("Unable to retrieve StreamElements token: $e");
+      return Left(Failure("Unable to retrieve StreamElements token: $e"));
     }
   }
 
   @override
-  Future<DataState<SeCredentials>> refreshAccessToken(
+  Future<Either<Failure, SeCredentials>> refreshAccessToken(
     SeCredentials seCredentials,
   ) async {
     Response response;
-    Dio dio = initDio();
     try {
       final remoteConfig = FirebaseRemoteConfig.instance;
       await remoteConfig.fetchAndActivate();
@@ -88,7 +95,7 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
             remoteConfig.getString('irllink_refresh_se_token_url_dev');
       }
 
-      response = await dio.get(
+      response = await dioClient.get(
         apiRefreshTokenUrl,
         queryParameters: {'refresh_token': seCredentials.refreshToken},
       );
@@ -105,9 +112,9 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
 
       await validateToken(newSeCredentials.accessToken);
 
-      return DataSuccess(newSeCredentials);
+      return Right(newSeCredentials);
     } on DioException catch (e) {
-      return DataFailed("Refresh SE token failed: ${e.message}");
+      return Left(Failure("Refresh SE token failed: ${e.message}"));
     }
   }
 
@@ -120,31 +127,28 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
     );
   }
 
-  Future<DataState<dynamic>> validateToken(String accessToken) async {
+  Future<Either<Failure, dynamic>> validateToken(String accessToken) async {
     try {
       Response response;
-      Dio dio = initDio();
-      dio.options.headers["authorization"] = "OAuth $accessToken";
-      response =
-          await dio.get('https://api.streamelements.com/oauth2/validate');
+      dioClient.options.headers["authorization"] = "OAuth $accessToken";
+      response = await dioClient.get('/oauth2/validate');
       talker.logTyped(StreamElementsLog('StreamElements token validated.'));
 
-      return DataSuccess(response.data);
+      return Right(response.data);
     } on DioException catch (e) {
       talker.error(e.message);
-      return DataFailed(
-        "Unable to validate StreamElements token: ${e.message}",
+      return Left(
+        Failure("Unable to validate StreamElements token: ${e.message}"),
       );
     }
   }
 
   @override
-  Future<DataState<void>> disconnect(String accessToken) async {
-    Dio dio = initDio();
-    dio.options.headers["authorization"] = "OAuth $accessToken";
+  Future<Either<Failure, void>> disconnect(String accessToken) async {
+    dioClient.options.headers["authorization"] = "OAuth $accessToken";
     try {
-      await dio.post(
-        'https://api.streamelements.com/oauth2/revoke',
+      await dioClient.post(
+        '/oauth2/revoke',
         queryParameters: {
           'client_id': kStreamelementsAuthClientId,
           'token': accessToken,
@@ -155,27 +159,32 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       talker.logTyped(
         StreamElementsLog('StreamElements credentials removed from local.'),
       );
-      return DataSuccess(null);
+      return const Right(null);
     } on DioException catch (e) {
-      return DataFailed("Unable to revoke StreamElements token: ${e.message}");
-    }
-  }
-
-  @override
-  Future<void> replayActivity(String token, SeActivity activity) async {
-    var dio = initDio();
-    try {
-      dio.options.headers["Authorization"] = "oAuth $token";
-      await dio.post(
-        'https://api.streamelements.com/kappa/v2/activities/${activity.channel}/${activity.id}/replay',
+      return Left(
+        Failure("Unable to revoke StreamElements token: ${e.message}"),
       );
-    } on DioException catch (e) {
-      debugPrint(e.toString());
     }
   }
 
   @override
-  Future<DataState<SeCredentials>> getSeCredentialsFromLocal() async {
+  Future<Either<Failure, void>> replayActivity(
+    String token,
+    SeActivity activity,
+  ) async {
+    try {
+      dioClient.options.headers["Authorization"] = "oAuth $token";
+      await dioClient.post(
+        '/kappa/v2/activities/${activity.channel}/${activity.id}/replay',
+      );
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, SeCredentials>> getSeCredentialsFromLocal() async {
     final box = GetStorage();
     talker.logTyped(
       StreamElementsLog(
@@ -208,39 +217,34 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
           ),
         );
         disconnect(seCredentialsDTO.accessToken);
-        return DataFailed("Scopes have been updated, please login again.");
+        return Left(Failure("Scopes have been updated, please login again."));
       }
 
-      Mappr mappr = Mappr();
       SeCredentials seCredentials =
-          mappr.convert<SeCredentialsDTO, SeCredentials>(seCredentialsDTO);
+          _mappr.convert<SeCredentialsDTO, SeCredentials>(seCredentialsDTO);
 
       //refresh the access token to be sure the token is going to be valid after starting the app
-      DataState<SeCredentials> creds = await refreshAccessToken(seCredentials);
-      if (creds is DataSuccess) {
-        seCredentials = creds.data!;
-      } else {
-        return DataFailed("Error refreshing SE Token");
-      }
-
-      return DataSuccess(seCredentials);
+      final refreshResult = await refreshAccessToken(seCredentials);
+      return refreshResult.fold(
+        (l) => Left(Failure("Error refreshing SE Token")),
+        (r) => Right(r),
+      );
     } else {
-      return DataFailed("No SE Data in local storage");
+      return Left(Failure("No SE Data in local storage"));
     }
   }
 
   @override
-  Future<DataState<List<SeActivity>>> getLastActivities(
+  Future<Either<Failure, List<SeActivity>>> getLastActivities(
     String token,
     String channel,
   ) async {
-    var dio = initDio();
     Response response;
     List<SeActivity> activities = [];
     try {
-      dio.options.headers["Authorization"] = "oAuth $token";
-      response = await dio.get(
-        'https://api.streamelements.com/kappa/v2/activities/$channel',
+      dioClient.options.headers["Authorization"] = "oAuth $token";
+      response = await dioClient.get(
+        '/kappa/v2/activities/$channel',
         queryParameters: {
           'after': DateTime.now().subtract(const Duration(days: 365)),
           'before': DateTime.now(),
@@ -256,111 +260,111 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
       response.data.reversed.forEach(
         (activity) {
           SeActivityDTO activityDTO = SeActivityDTO.fromJson(activity);
-          Mappr mappr = Mappr();
-          activities.add(mappr.convert<SeActivityDTO, SeActivity>(activityDTO));
+          activities
+              .add(_mappr.convert<SeActivityDTO, SeActivity>(activityDTO));
         },
       );
-      return DataSuccess(activities);
+      return Right(activities);
     } on DioException catch (e) {
-      return DataFailed(e.toString());
+      return Left(Failure(e.toString()));
     }
   }
 
   @override
-  Future<DataState<List<SeOverlay>>> getOverlays(
+  Future<Either<Failure, List<SeOverlay>>> getOverlays(
     String token,
     String channel,
   ) async {
-    var dio = initDio();
     List<SeOverlay> overlays = [];
     try {
-      dio.options.headers["Authorization"] = "oAuth $token";
-      Response response = await dio.get(
-        'https://api.streamelements.com/kappa/v2/overlays/$channel',
+      dioClient.options.headers["Authorization"] = "oAuth $token";
+      Response response = await dioClient.get(
+        '/kappa/v2/overlays/$channel',
         queryParameters: {'search': ' ', 'type': 'regular'},
       );
       response.data['docs'].forEach(
         (overlay) {
-          Mappr mappr = Mappr();
           SeOverlayDTO overlayDTO = SeOverlayDTO.fromJson(overlay);
-          overlays.add(mappr.convert<SeOverlayDTO, SeOverlay>(overlayDTO));
+          overlays.add(_mappr.convert<SeOverlayDTO, SeOverlay>(overlayDTO));
         },
       );
-      return DataSuccess(overlays);
+      return Right(overlays);
     } on DioException catch (e) {
-      return DataFailed(e.toString());
+      return Left(Failure(e.toString()));
     }
   }
 
   @override
-  Future<DataState<SeMe>> getMe(String token) async {
-    var dio = initDio();
+  Future<Either<Failure, SeMe>> getMe(String token) async {
     try {
-      dio.options.headers["Authorization"] = "oAuth $token";
-      Response response = await dio.get(
-        'https://api.streamelements.com/kappa/v2/channels/me',
+      dioClient.options.headers["Authorization"] = "oAuth $token";
+      Response response = await dioClient.get(
+        '/kappa/v2/channels/me',
       );
 
       SeMeDTO meDto = SeMeDTO.fromJson(response.data);
-      Mappr mappr = Mappr();
-      SeMe me = mappr.convert<SeMeDTO, SeMe>(meDto);
+      SeMe me = _mappr.convert<SeMeDTO, SeMe>(meDto);
 
-      return DataSuccess(me);
+      return Right(me);
     } on DioException catch (e) {
-      return DataFailed(e.toString());
+      return Left(Failure(e.toString()));
     }
   }
 
   @override
-  Future<void> nextSong(String token, String userId) async {
-    var dio = initDio();
+  Future<Either<Failure, void>> nextSong(String token, String userId) async {
     try {
-      dio.options.headers["Authorization"] = "Bearer $token";
-      await dio.post(
-        'https://api.streamelements.com/kappa/v2/songrequest/$userId/skip',
+      dioClient.options.headers["Authorization"] = "Bearer $token";
+      await dioClient.post(
+        '/kappa/v2/songrequest/$userId/skip',
       );
+      return const Right(null);
     } on DioException catch (e) {
-      debugPrint(e.toString());
+      return Left(Failure(e.toString()));
     }
   }
 
   @override
-  Future<void> removeSong(String token, String userId, String songId) async {
-    var dio = initDio();
+  Future<Either<Failure, void>> removeSong(
+    String token,
+    String userId,
+    String songId,
+  ) async {
     try {
-      dio.options.headers["Authorization"] = "Bearer $token";
-      await dio.delete(
-        'https://api.streamelements.com/kappa/v2/songrequest/$userId/queue/$songId',
+      dioClient.options.headers["Authorization"] = "Bearer $token";
+      await dioClient.delete(
+        '/kappa/v2/songrequest/$userId/queue/$songId',
       );
+      return const Right(null);
     } on DioException catch (e) {
-      debugPrint(e.toString());
+      return Left(Failure(e.toString()));
     }
   }
 
   @override
-  Future<void> resetQueue(String token, String userId) async {
-    var dio = initDio();
+  Future<Either<Failure, void>> resetQueue(String token, String userId) async {
     try {
-      dio.options.headers["Authorization"] = "Bearer $token";
-      await dio.delete(
-        'https://api.streamelements.com/kappa/v2/songrequest/$userId/queue/',
+      dioClient.options.headers["Authorization"] = "Bearer $token";
+      await dioClient.delete(
+        '/kappa/v2/songrequest/$userId/queue/',
       );
+      return const Right(null);
     } on DioException catch (e) {
-      debugPrint(e.toString());
+      return Left(Failure(e.toString()));
     }
   }
 
   @override
-  Future<DataState<List<SeSong>>> getSongQueue(
+  Future<Either<Failure, List<SeSong>>> getSongQueue(
     String token,
     String userId,
   ) async {
     List<SeSong> songs = [];
-    var dio = initDio();
+
     try {
-      dio.options.headers["Authorization"] = "Bearer $token";
-      Response response = await dio.get(
-        'https://api.streamelements.com/kappa/v2/songrequest/$userId/queue',
+      dioClient.options.headers["Authorization"] = "Bearer $token";
+      Response response = await dioClient.get(
+        '/kappa/v2/songrequest/$userId/queue',
       );
 
       response.data.forEach(
@@ -377,19 +381,21 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
         },
       );
 
-      return DataSuccess(songs);
+      return Right(songs);
     } on DioException catch (e) {
-      return DataFailed(e.toString());
+      return Left(Failure(e.toString()));
     }
   }
 
   @override
-  Future<DataState<SeSong>> getSongPlaying(String token, String userId) async {
-    var dio = initDio();
+  Future<Either<Failure, SeSong>> getSongPlaying(
+    String token,
+    String userId,
+  ) async {
     try {
-      dio.options.headers["Authorization"] = "oAuth $token";
-      Response response = await dio.get(
-        'https://api.streamelements.com/kappa/v2/songrequest/$userId/playing',
+      dioClient.options.headers["Authorization"] = "oAuth $token";
+      Response response = await dioClient.get(
+        '/kappa/v2/songrequest/$userId/playing',
       );
 
       if (response.data != null) {
@@ -400,29 +406,29 @@ class StreamelementsRepositoryImpl extends StreamelementsRepository {
           title: response.data['title'],
           videoId: response.data['videoId'],
         );
-        return DataSuccess(song);
+        return Right(song);
       } else {
-        return DataFailed('There is no playing song for this user.');
+        return Left(Failure('There is no playing song for this user.'));
       }
     } on DioException catch (e) {
-      return DataFailed(e.toString());
+      return Left(Failure(e.toString()));
     }
   }
 
   @override
-  Future<void> updatePlayerState(
+  Future<Either<Failure, void>> updatePlayerState(
     String token,
     String userId,
     String state,
   ) async {
-    var dio = initDio();
     try {
-      dio.options.headers["Authorization"] = "Bearer $token";
-      await dio.post(
-        'https://api.streamelements.com/kappa/v2/songrequest/$userId/player/$state',
+      dioClient.options.headers["Authorization"] = "Bearer $token";
+      await dioClient.post(
+        '/kappa/v2/songrequest/$userId/player/$state',
       );
+      return const Right(null);
     } on DioException catch (e) {
-      debugPrint(e.toString());
+      return Left(Failure(e.toString()));
     }
   }
 }

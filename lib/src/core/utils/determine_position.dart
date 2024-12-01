@@ -1,7 +1,8 @@
+import 'package:dartz/dartz.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:irllink/src/core/failure.dart';
 
-Future<DataState<Position>> determinePosition() async {
+Future<Either<Failure, Position>> determinePosition() async {
   bool serviceEnabled;
   LocationPermission permission;
 
@@ -11,8 +12,8 @@ Future<DataState<Position>> determinePosition() async {
     // Location services are not enabled don't continue
     // accessing the position and request users of the
     // App to enable the location services.
-    return DataFailed(
-      'Location services are disabled.',
+    return Left(
+      Failure('Location services are disabled.'),
     );
   }
 
@@ -25,8 +26,8 @@ Future<DataState<Position>> determinePosition() async {
       // Android's shouldShowRequestPermissionRationale
       // returned true. According to Android guidelines
       // your App should show an explanatory UI now.
-      return DataFailed(
-        'Location permissions are denied.',
+      return Left(
+        Failure('Location permissions are denied.'),
       );
     }
   }
@@ -35,13 +36,15 @@ Future<DataState<Position>> determinePosition() async {
     // Permissions are denied forever, handle appropriately.
 
     // TODO(LezdCS): await Geolocator.openLocationSettings();
-    return DataFailed(
-      'Location permissions are permanently denied, we cannot request permissions.',
+    return Left(
+      Failure(
+        'Location permissions are permanently denied, we cannot request permissions.',
+      ),
     );
   }
 
   // When we reach here, permissions are granted and we can
   // continue accessing the position of the device.
   Position p = await Geolocator.getCurrentPosition();
-  return DataSuccess(p);
+  return Right(p);
 }

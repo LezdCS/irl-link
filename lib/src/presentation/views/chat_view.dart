@@ -5,7 +5,7 @@ import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
-import 'package:irllink/src/presentation/widgets/alert_message_view.dart';
+import 'package:irllink/src/presentation/widgets/alert_message.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/event_container.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/message_container.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/twitch/moderation_bottom_sheet.dart';
@@ -207,7 +207,7 @@ class ChatView extends GetView<ChatViewController> {
                       return AnimatedOpacity(
                         opacity: value ? 0.0 : 1.0,
                         duration: const Duration(milliseconds: 2000),
-                        child: AlertMessageView(
+                        child: alertMessage(
                           color: value
                               ? const Color.fromARGB(255, 11, 135, 15)
                               : Colors.red,

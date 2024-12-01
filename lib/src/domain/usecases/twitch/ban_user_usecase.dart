@@ -1,3 +1,5 @@
+import 'package:dartz/dartz.dart';
+import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/usecases/usecase.dart';
 import 'package:irllink/src/domain/repositories/twitch_repository.dart';
 import 'package:twitch_chat/twitch_chat.dart';
@@ -16,13 +18,14 @@ class BanUserUseCaseParams {
   });
 }
 
-class BanUserUseCase implements UseCase<void, BanUserUseCaseParams> {
+class BanUserUseCase
+    implements UseCase<Either<Failure, void>, BanUserUseCaseParams> {
   final TwitchRepository twitchRepository;
 
   BanUserUseCase(this.twitchRepository);
 
   @override
-  Future<void> call({
+  Future<Either<Failure, void>> call({
     required BanUserUseCaseParams params,
   }) {
     return twitchRepository.banUser(

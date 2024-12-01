@@ -7,9 +7,19 @@ import 'package:talker_dio_logger/talker_dio_logger_interceptor.dart';
 import 'package:talker_dio_logger/talker_dio_logger_settings.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
-Dio initDio() {
+Dio initDio(String? baseUrl) {
   Talker talker = Get.find<TalkerService>().talker;
-  var dio = Dio();
+  var dio = Dio(
+    BaseOptions(
+      baseUrl: baseUrl ?? '',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      validateStatus: (status) =>
+          status != null && status >= 200 && status < 500,
+    ),
+  );
   dio.interceptors.add(
     TalkerDioLogger(
       talker: talker,

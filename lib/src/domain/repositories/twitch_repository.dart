@@ -1,6 +1,6 @@
-import 'package:dio/dio.dart';
+import 'package:dartz/dartz.dart';
+import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
-import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
@@ -8,48 +8,48 @@ import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 
 abstract class TwitchRepository {
-  Future<DataState<TwitchCredentials>> getTwitchOauth(
+  Future<Either<Failure, TwitchCredentials>> getTwitchOauth(
     TwitchAuthParams params,
   );
 
-  Future<DataState<TwitchCredentials>> refreshAccessToken(
+  Future<Either<Failure, TwitchCredentials>> refreshAccessToken(
     TwitchCredentials twitchData,
   );
 
-  Future<DataState<TwitchCredentials>> getTwitchFromLocal();
+  Future<Either<Failure, TwitchCredentials>> getTwitchFromLocal();
 
-  Future<DataState<String>> logout(
+  Future<Either<Failure, void>> logout(
     String accessToken,
   );
 
-  Future<DataState<List<TwitchUser>>> getTwitchUsers(
+  Future<Either<Failure, List<TwitchUser>>> getTwitchUsers(
     List ids,
     String accessToken,
   );
 
-  Future<DataState<TwitchUser>> getTwitchUser(
+  Future<Either<Failure, TwitchUser>> getTwitchUser(
     String? username,
     String accessToken,
   );
 
-  Future<DataState<TwitchStreamInfos>> getStreamInfo(
+  Future<Either<Failure, TwitchStreamInfos>> getStreamInfo(
     String accessToken,
     String broadcasterId,
   );
 
-  Future<DataState<Response<dynamic>>> setChatSettings(
+  Future<Either<Failure, void>> setChatSettings(
     String accessToken,
     String broadcasterId,
     TwitchStreamInfos? twitchStreamInfos,
   );
 
-  Future<DataState<void>> setStreamTitle(
+  Future<Either<Failure, void>> setStreamTitle(
     String accessToken,
     String broadcasterId,
     String title,
   );
 
-  Future<DataState<TwitchPoll>> createPoll(
+  Future<Either<Failure, TwitchPoll>> createPoll(
     String accessToken,
     String broadcasterId,
     TwitchPoll newPoll,
@@ -57,14 +57,14 @@ abstract class TwitchRepository {
 
   // status is either TERMINATED to end poll and display the result to viewer
   // or ARCHIVED to end the poll and hide it
-  Future<DataState<TwitchPoll>> endPoll(
+  Future<Either<Failure, TwitchPoll>> endPoll(
     String accessToken,
     String broadcasterId,
     String pollId,
     String status,
   );
 
-  Future endPrediction(
+  Future<Either<Failure, void>> endPrediction(
     String accessToken,
     String broadcasterId,
     String predictionId,
@@ -72,14 +72,14 @@ abstract class TwitchRepository {
     String? winningOutcomeId,
   );
 
-  Future<void> banUser(
+  Future<Either<Failure, void>> banUser(
     String accessToken,
     String broadcasterId,
     ChatMessage message,
     int? duration,
   );
 
-  Future<void> deleteMessage(
+  Future<Either<Failure, void>> deleteMessage(
     String accessToken,
     String broadcasterId,
     ChatMessage message,

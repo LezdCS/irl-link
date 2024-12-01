@@ -1,4 +1,5 @@
-import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:dartz/dartz.dart';
+import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/usecases/usecase.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_song.dart';
 import 'package:irllink/src/domain/repositories/streamelements_repository.dart';
@@ -15,13 +16,14 @@ class StreamElementsGetSongQueueParams {
 
 class StreamElementsGetSongQueueUseCase
     implements
-        UseCase<DataState<List<SeSong>>, StreamElementsGetSongQueueParams> {
+        UseCase<Either<Failure, List<SeSong>>,
+            StreamElementsGetSongQueueParams> {
   final StreamelementsRepository streamelementsRepository;
 
   StreamElementsGetSongQueueUseCase({required this.streamelementsRepository});
 
   @override
-  Future<DataState<List<SeSong>>> call({
+  Future<Either<Failure, List<SeSong>>> call({
     required StreamElementsGetSongQueueParams params,
   }) {
     return streamelementsRepository.getSongQueue(params.token, params.channel);

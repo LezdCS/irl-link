@@ -1,5 +1,6 @@
+import 'package:dartz/dartz.dart';
+import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
-import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_credentials.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
@@ -7,36 +8,53 @@ import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_song.dart';
 
 abstract class StreamelementsRepository {
-  Future<DataState<SeCredentials>> login(StreamelementsAuthParams params);
+  Future<Either<Failure, SeCredentials>> login(StreamelementsAuthParams params);
 
-  Future<DataState<SeCredentials>> refreshAccessToken(
+  Future<Either<Failure, SeCredentials>> refreshAccessToken(
     SeCredentials seCredentials,
   );
 
-  Future<DataState<void>> disconnect(String accessToken);
+  Future<Either<Failure, void>> disconnect(String accessToken);
 
-  Future<DataState<SeCredentials>> getSeCredentialsFromLocal();
+  Future<Either<Failure, SeCredentials>> getSeCredentialsFromLocal();
 
-  Future<void> replayActivity(String token, SeActivity activity);
+  Future<Either<Failure, void>> replayActivity(
+    String token,
+    SeActivity activity,
+  );
 
-  Future<DataState<List<SeActivity>>> getLastActivities(
+  Future<Either<Failure, List<SeActivity>>> getLastActivities(
     String token,
     String channel,
   );
 
-  Future<DataState<List<SeOverlay>>> getOverlays(String token, String channel);
+  Future<Either<Failure, List<SeOverlay>>> getOverlays(
+    String token,
+    String channel,
+  );
 
-  Future<DataState<SeMe>> getMe(String token);
+  Future<Either<Failure, SeMe>> getMe(String token);
 
-  Future<DataState<List<SeSong>>> getSongQueue(String token, String userId);
+  Future<Either<Failure, List<SeSong>>> getSongQueue(
+    String token,
+    String userId,
+  );
 
-  Future<DataState<SeSong>> getSongPlaying(String token, String userId);
+  Future<Either<Failure, SeSong>> getSongPlaying(String token, String userId);
 
-  Future<void> updatePlayerState(String token, String userId, String state);
+  Future<Either<Failure, void>> updatePlayerState(
+    String token,
+    String userId,
+    String state,
+  );
 
-  Future<void> nextSong(String token, String userId);
+  Future<Either<Failure, void>> nextSong(String token, String userId);
 
-  Future<void> removeSong(String token, String userId, String songId);
+  Future<Either<Failure, void>> removeSong(
+    String token,
+    String userId,
+    String songId,
+  );
 
-  Future<void> resetQueue(String token, String userId);
+  Future<Either<Failure, void>> resetQueue(String token, String userId);
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
-import 'package:irllink/src/core/resources/data_state.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/core/services/tts_service.dart';
@@ -99,9 +98,15 @@ class SettingsViewController extends GetxController {
     super.onReady();
   }
 
-  void logout() {
-    logoutUseCase(params: homeViewController.twitchData!.accessToken).then(
-      (value) => Get.offAllNamed(Routes.login),
+  Future<void> logout() async {
+    final logoutResult =
+        await logoutUseCase(params: homeViewController.twitchData!.accessToken);
+
+    logoutResult.fold(
+      (l) => {},
+      (r) {
+        Get.offAllNamed(Routes.login);
+      },
     );
   }
 
@@ -126,18 +131,21 @@ class SettingsViewController extends GetxController {
       return;
     }
     StreamelementsAuthParams params = const StreamelementsAuthParams();
-    await streamElementsLoginUseCase(params: params).then((value) {
-      if (value is DataFailed) {
+    final loginResult = await streamElementsLoginUseCase(params: params);
+    loginResult.fold(
+      (l) {
         Get.snackbar(
           "Error",
-          "Login failed: ${value.error}",
+          "Login failed: $l",
           snackPosition: SnackPosition.BOTTOM,
           icon: const Icon(Icons.error_outline, color: Colors.red),
           borderWidth: 1,
           borderColor: Colors.red,
         );
-      } else {
+      },
+      (r) {
         homeViewController.generateTabs();
+
         Get.snackbar(
           "StreamElements",
           "Login successfull",
@@ -146,8 +154,8 @@ class SettingsViewController extends GetxController {
           borderWidth: 1,
           borderColor: Colors.green,
         );
-      }
-    });
+      },
+    );
   }
 
   Future<void> disconnectStreamElements() async {
@@ -156,30 +164,25 @@ class SettingsViewController extends GetxController {
         null) {
       return;
     }
-    DataState<void> result = await streamElementsDisconnectUseCase(
+    final result = await streamElementsDisconnectUseCase(
       params: homeViewController
           .streamelementsViewController.value!.seCredentials.value!.accessToken,
     );
-    if (result is DataSuccess) {
-      Get.snackbar(
-        "StreamElements",
-        "Successfully disconnected.",
-        snackPosition: SnackPosition.BOTTOM,
-        icon: const Icon(Icons.check, color: Colors.green),
-        borderWidth: 1,
-        borderColor: Colors.green,
-      );
-      homeViewController.generateTabs();
-    } else {
-      Get.snackbar(
-        "Error",
-        "Logout failed: ${result.error}",
-        snackPosition: SnackPosition.BOTTOM,
-        icon: const Icon(Icons.error_outline, color: Colors.red),
-        borderWidth: 1,
-        borderColor: Colors.red,
-      );
-    }
+
+    result.fold(
+      (l) => debugPrint(l.message),
+      (r) {
+        Get.snackbar(
+          "StreamElements",
+          "Successfully disconnected.",
+          snackPosition: SnackPosition.BOTTOM,
+          icon: const Icon(Icons.check, color: Colors.green),
+          borderWidth: 1,
+          borderColor: Colors.green,
+        );
+        homeViewController.generateTabs();
+      },
+    );
   }
 
   void removeHiddenUser(userId) {
@@ -274,16 +277,21 @@ class SettingsViewController extends GetxController {
     Get.back();
   }
 
-  Future getUsernames() async {
+  Future<void> getUsernames() async {
     List<TwitchUser> users = [];
     Settings settings = settingsService.settings.value;
 
-    await getTwitchUsersUseCase(
+    final twitchUsersResult = await getTwitchUsersUseCase(
       params: GetTwitchUsersUseCaseParams(
         ids: settings.hiddenUsersIds,
         accessToken: homeViewController.twitchData!.accessToken,
       ),
-    ).then((value) => users = value.data!);
+    );
+
+    twitchUsersResult.fold(
+      (l) => {},
+      (r) => users = r,
+    );
 
     for (var user in users) {
       usernamesHiddenUsers.add(user.displayName);

@@ -7,7 +7,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:irllink/src/core/resources/data_state.dart';
 
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
@@ -23,6 +22,8 @@ class StoreService extends GetxService {
 
   final GetTwitchLocalUseCase getTwitchLocalUseCase;
   final Talker talker;
+
+  Dio dioClient = initDio('');
 
   late StreamSubscription<List<PurchaseDetails>> subscription;
   List<ProductDetails> products = [];
@@ -143,11 +144,11 @@ class StoreService extends GetxService {
     }
 
     TwitchCredentials? twitchCredentials;
-    await getTwitchLocalUseCase().then((value) {
-      if (value is DataSuccess) {
-        twitchCredentials = value.data;
-      }
-    });
+    final getLocalResult = await getTwitchLocalUseCase();
+    getLocalResult.fold(
+      (l) => {},
+      (r) => twitchCredentials = r,
+    );
 
     if (twitchCredentials == null) {
       return Future<bool>.value(false);
@@ -161,9 +162,8 @@ class StoreService extends GetxService {
     if (kDebugMode) {
       url = remoteConfig.getString('verify_android_purchase_dev');
     }
-    var dio = initDio();
     try {
-      await dio.post(
+      await dioClient.post(
         url,
         data: {
           'purchaseToken': pruchaseToken,

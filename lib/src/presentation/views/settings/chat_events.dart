@@ -7,10 +7,8 @@ import 'package:irllink/src/presentation/controllers/settings_view_controller.da
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/event_container.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 
-class ChatEvents extends StatelessWidget {
-  final SettingsViewController controller;
-
-  const ChatEvents({super.key, required this.controller});
+class ChatEvents extends GetView<SettingsViewController> {
+  const ChatEvents({super.key});
 
   @override
   Widget build(BuildContext context) {

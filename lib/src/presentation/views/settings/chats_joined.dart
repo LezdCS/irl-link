@@ -52,28 +52,31 @@ class ChatsJoined extends GetView<SettingsViewController> {
                 ),
                 child: Column(
                   children: [
-                    Row(
-                      children: [
-                        const Image(
-                          width: 18,
-                          height: 18,
-                          image: AssetImage(
-                            "lib/assets/twitch/twitch_logo.png",
+                    Visibility(
+                      visible: controller.homeViewController.twitchData != null,
+                      child: Row(
+                        children: [
+                          const Image(
+                            width: 18,
+                            height: 18,
+                            image: AssetImage(
+                              "lib/assets/twitch/twitch_logo.png",
+                            ),
+                            filterQuality: FilterQuality.high,
                           ),
-                          filterQuality: FilterQuality.high,
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Text(
-                          controller.homeViewController.twitchData?.twitchUser
-                                  .displayName ??
-                              '',
-                          style: const TextStyle(
-                            fontSize: 20,
+                          const SizedBox(
+                            width: 8,
                           ),
-                        ),
-                      ],
+                          Text(
+                            controller.homeViewController.twitchData?.twitchUser
+                                    .displayName ??
+                                '',
+                            style: const TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     ListView.builder(
                       shrinkWrap: true,

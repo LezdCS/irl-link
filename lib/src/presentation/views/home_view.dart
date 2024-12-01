@@ -14,18 +14,18 @@ import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
-import 'package:irllink/src/presentation/widgets/chats/chat_view.dart';
+import 'package:irllink/src/presentation/views/chat_view.dart';
+import 'package:irllink/src/presentation/views/dashboard.dart';
+import 'package:irllink/src/presentation/views/tabs/obs_tab_view.dart';
+import 'package:irllink/src/presentation/views/tabs/realtime_irl_tab_view.dart';
+import 'package:irllink/src/presentation/views/tabs/streamelements_tab_view.dart';
+import 'package:irllink/src/presentation/views/tabs/twitch_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/chats/select_channel_dialog.dart';
-import 'package:irllink/src/presentation/widgets/dashboard.dart';
 import 'package:irllink/src/presentation/widgets/emote_picker_view.dart';
 import 'package:irllink/src/presentation/widgets/hype_train.dart';
 import 'package:irllink/src/presentation/widgets/pinned_messages_sheet.dart';
 import 'package:irllink/src/presentation/widgets/poll.dart';
 import 'package:irllink/src/presentation/widgets/prediction.dart';
-import 'package:irllink/src/presentation/widgets/tabs/obs_tab_view.dart';
-import 'package:irllink/src/presentation/widgets/tabs/realtime_irl_tab_view.dart';
-import 'package:irllink/src/presentation/widgets/tabs/streamelements_tab_view.dart';
-import 'package:irllink/src/presentation/widgets/tabs/twitch_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/web_page_view.dart';
 import 'package:split_view/split_view.dart';
 import 'package:twitch_chat/twitch_chat.dart';
@@ -165,12 +165,14 @@ class HomeView extends GetView<HomeViewController> {
                             right: 8,
                             top: 4,
                           ),
-                          child: hypeTrain(
-                            context,
-                            Get.find<TwitchEventSubService>()
-                                .currentHypeTrain
-                                .value,
-                          ),
+                          child: Get.isRegistered<TwitchEventSubService>()
+                              ? hypeTrain(
+                                  context,
+                                  Get.find<TwitchEventSubService>()
+                                      .currentHypeTrain
+                                      .value,
+                                )
+                              : Container(),
                         ),
                       ),
                       Visibility(
@@ -263,33 +265,89 @@ class HomeView extends GetView<HomeViewController> {
       height: height * 0.06,
       child: Row(
         children: [
-          Expanded(
-            flex: 5,
-            child: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Color.fromARGB(255, 45, 2, 53),
-                    Color.fromARGB(255, 81, 16, 93),
-                  ],
-                ),
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-              ),
-              padding:
-                  const EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
-              child: Row(
-                children: [
-                  InkWell(
-                    onTap: () => controller.getEmotes(),
-                    child: const Image(
-                      image: AssetImage("lib/assets/twitchSmileEmoji.png"),
-                      width: 30,
-                    ),
+          Visibility(
+            visible: Get.find<HomeViewController>().twitchData != null,
+            child: Expanded(
+              flex: 5,
+              child: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Color.fromARGB(255, 45, 2, 53),
+                      Color.fromARGB(255, 81, 16, 93),
+                    ],
                   ),
-                  Expanded(
-                    child: TextField(
-                      controller: controller.chatInputController,
-                      onSubmitted: (String value) {
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                ),
+                padding:
+                    const EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
+                child: Row(
+                  children: [
+                    InkWell(
+                      onTap: () => controller.getEmotes(),
+                      child: const Image(
+                        image: AssetImage("lib/assets/twitchSmileEmoji.png"),
+                        width: 30,
+                      ),
+                    ),
+                    Expanded(
+                      child: TextField(
+                        controller: controller.chatInputController,
+                        onSubmitted: (String value) {
+                          if (controller.selectedChatGroup.value == null) {
+                            return;
+                          }
+                          ChatViewController chatViewController =
+                              Get.find<ChatViewController>(
+                            tag: controller.selectedChatGroup.value?.id,
+                          );
+                          List<TwitchChat> twitchChats = [];
+                          twitchChats
+                              .addAll(chatViewController.twitchChats.toList());
+                          if (twitchChats.length == 1) {
+                            controller.sendChatMessage(
+                              value,
+                              twitchChats.first.channel,
+                            );
+                            controller.chatInputController.text = '';
+                            FocusScope.of(context).unfocus();
+                          } else {
+                            selectChatToSend(
+                              context,
+                              controller,
+                              twitchChats,
+                              value,
+                            );
+                          }
+                        },
+                        onTap: () {
+                          controller.selectedMessage.value = null;
+                          controller.isPickingEmote.value = false;
+                        },
+                        textInputAction: TextInputAction.send,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: settings.generalSettings.displayViewerCount
+                              ? "viewers_number".trParams({
+                                  "number": Get.find<TwitchTabViewController>()
+                                      .twitchStreamInfos
+                                      .value
+                                      .viewerCount
+                                      .toString(),
+                                })
+                              : 'send_message'.tr,
+                          hintStyle: TextStyle(
+                            color: Theme.of(context).textTheme.bodyLarge!.color,
+                          ),
+                          isDense: true,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          contentPadding: const EdgeInsets.only(left: 5),
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
                         if (controller.selectedChatGroup.value == null) {
                           return;
                         }
@@ -302,7 +360,7 @@ class HomeView extends GetView<HomeViewController> {
                             .addAll(chatViewController.twitchChats.toList());
                         if (twitchChats.length == 1) {
                           controller.sendChatMessage(
-                            value,
+                            controller.chatInputController.text,
                             twitchChats.first.channel,
                           );
                           controller.chatInputController.text = '';
@@ -312,71 +370,18 @@ class HomeView extends GetView<HomeViewController> {
                             context,
                             controller,
                             twitchChats,
-                            value,
+                            controller.chatInputController.text,
                           );
                         }
                       },
-                      onTap: () {
-                        controller.selectedMessage.value = null;
-                        controller.isPickingEmote.value = false;
-                      },
-                      textInputAction: TextInputAction.send,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: settings.generalSettings.displayViewerCount
-                            ? "viewers_number".trParams({
-                                "number": Get.find<TwitchTabViewController>()
-                                    .twitchStreamInfos
-                                    .value
-                                    .viewerCount
-                                    .toString(),
-                              })
-                            : 'send_message'.tr,
-                        hintStyle: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge!.color,
-                        ),
-                        isDense: true,
-                        enabledBorder: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        contentPadding: const EdgeInsets.only(left: 5),
+                      child: Icon(
+                        Icons.send,
+                        color: Theme.of(context).primaryIconTheme.color,
+                        size: 21,
                       ),
                     ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      if (controller.selectedChatGroup.value == null) {
-                        return;
-                      }
-                      ChatViewController chatViewController =
-                          Get.find<ChatViewController>(
-                        tag: controller.selectedChatGroup.value?.id,
-                      );
-                      List<TwitchChat> twitchChats = [];
-                      twitchChats
-                          .addAll(chatViewController.twitchChats.toList());
-                      if (twitchChats.length == 1) {
-                        controller.sendChatMessage(
-                          controller.chatInputController.text,
-                          twitchChats.first.channel,
-                        );
-                        controller.chatInputController.text = '';
-                        FocusScope.of(context).unfocus();
-                      } else {
-                        selectChatToSend(
-                          context,
-                          controller,
-                          twitchChats,
-                          controller.chatInputController.text,
-                        );
-                      }
-                    },
-                    child: Icon(
-                      Icons.send,
-                      color: Theme.of(context).primaryIconTheme.color,
-                      size: 21,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

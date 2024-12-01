@@ -1,4 +1,5 @@
-import 'package:irllink/src/core/resources/data_state.dart';
+import 'package:dartz/dartz.dart';
+import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/usecases/usecase.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
 import 'package:irllink/src/domain/repositories/twitch_repository.dart';
@@ -11,13 +12,14 @@ class GetTwitchUserUseCaseParams {
 }
 
 class GetTwitchUserUseCase
-    implements UseCase<DataState<TwitchUser>, GetTwitchUserUseCaseParams> {
+    implements
+        UseCase<Either<Failure, TwitchUser>, GetTwitchUserUseCaseParams> {
   final TwitchRepository twitchRepository;
 
   GetTwitchUserUseCase(this.twitchRepository);
 
   @override
-  Future<DataState<TwitchUser>> call({
+  Future<Either<Failure, TwitchUser>> call({
     required GetTwitchUserUseCaseParams params,
   }) {
     return twitchRepository.getTwitchUser(params.username, params.accessToken);
