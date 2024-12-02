@@ -97,7 +97,7 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
         modifiedUrl = 'ws://$modifiedUrl';
       }
       talkerService.talker
-          .logTyped(ObsLog("Connecting to OBS at $modifiedUrl..."));
+          .logCustom(ObsLog("Connecting to OBS at $modifiedUrl..."));
       obsWebSocket = await ObsWebSocket.connect(
         modifiedUrl,
         password: password,
