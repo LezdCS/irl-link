@@ -60,11 +60,6 @@ To run the project, you need to have Flutter and Dart SDK installed.
 
 ## Quick links
 - Website : https://irllink.com
-- Wiki : https://github.com/LezdCS/irl_link/wiki
+- Wiki : https://www.irllink.com/blog
 - Bug Tracker : https://github.com/LezdCS/irl_link/issues
 - Support : https://discord.gg/irltools
-
-## To support me
-I develop IRL Link on my free time! <br /> Please consider helping me if you use and like the application 😄<br />
-<br />
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/J3J43ML34)
