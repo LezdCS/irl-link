@@ -8,8 +8,11 @@ class TalkerService extends GetxService {
   Future<TalkerService> init() async {
     final crashlyticsTalkerObserver = CrashlyticsTalkerObserver();
     talker = TalkerFlutter.init(
-      settings:
-          TalkerSettings(colors: {TalkerLogType.debug: AnsiPen()..yellow()}),
+      settings: TalkerSettings(
+        colors: {
+          TalkerLogType.debug.key: AnsiPen()..yellow(),
+        },
+      ),
       observer: crashlyticsTalkerObserver,
     );
     return this;

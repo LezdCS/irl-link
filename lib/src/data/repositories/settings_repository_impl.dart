@@ -18,13 +18,13 @@ class SettingsRepositoryImpl extends SettingsRepository {
   @override
   Future<Either<Failure, Settings>> getSettings() async {
     final box = GetStorage();
-    talker.logTyped(SettingsLog('Retrieving settings.'));
+    talker.logCustom(SettingsLog('Retrieving settings.'));
     var settingsString = box.read('settings');
     if (settingsString != null) {
-      talker.logTyped(SettingsLog('Settings found.'));
+      talker.logCustom(SettingsLog('Settings found.'));
       Map<String, dynamic> settingsJson = jsonDecode(settingsString);
       SettingsDTO settingsDTO = SettingsDTO.fromJson(settingsJson);
-      talker.logTyped(SettingsLog('Settings JSON: $settingsJson'));
+      talker.logCustom(SettingsLog('Settings JSON: $settingsJson'));
       Settings settings = _mappr.convert<SettingsDTO, Settings>(settingsDTO);
       return Right(settings);
     }
@@ -39,7 +39,7 @@ class SettingsRepositoryImpl extends SettingsRepository {
     final box = GetStorage();
     SettingsDTO settingsDTO = _mappr.convert<Settings, SettingsDTO>(settings);
     String settingsJson = jsonEncode(settingsDTO.toJson());
-    talker.logTyped(SettingsLog('Saving settings: $settingsJson'));
+    talker.logCustom(SettingsLog('Saving settings: $settingsJson'));
     box.write('settings', settingsJson);
     return const Right(null);
   }

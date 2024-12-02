@@ -53,7 +53,7 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
       String refreshToken = Uri.parse(result).queryParameters['refresh_token']!;
       int expiresIn =
           int.parse(Uri.parse(result).queryParameters['expires_in']!);
-      talker.logTyped(
+      talker.logCustom(
         StreamElementsLog('StreamElements login successful.'),
       );
 
@@ -100,7 +100,7 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
         queryParameters: {'refresh_token': seCredentials.refreshToken},
       );
 
-      talker.logTyped(StreamElementsLog('StreamElements token refreshed.'));
+      talker.logCustom(StreamElementsLog('StreamElements token refreshed.'));
 
       SeCredentials newSeCredentials = SeCredentials(
         accessToken: response.data['access_token'],
@@ -122,7 +122,7 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
     GetStorage box = GetStorage();
     String jsonData = jsonEncode(seCredentials);
     await box.write('seCredentials', jsonData);
-    talker.logTyped(
+    talker.logCustom(
       StreamElementsLog('StreamElements credentials saved in local.'),
     );
   }
@@ -132,7 +132,7 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
       Response response;
       dioClient.options.headers["authorization"] = "OAuth $accessToken";
       response = await dioClient.get('/oauth2/validate');
-      talker.logTyped(StreamElementsLog('StreamElements token validated.'));
+      talker.logCustom(StreamElementsLog('StreamElements token validated.'));
 
       return Right(response.data);
     } on DioException catch (e) {
@@ -156,7 +156,7 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
       );
       GetStorage box = GetStorage();
       box.remove('seCredentials');
-      talker.logTyped(
+      talker.logCustom(
         StreamElementsLog('StreamElements credentials removed from local.'),
       );
       return const Right(null);
@@ -186,7 +186,7 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
   @override
   Future<Either<Failure, SeCredentials>> getSeCredentialsFromLocal() async {
     final box = GetStorage();
-    talker.logTyped(
+    talker.logCustom(
       StreamElementsLog(
         'Getting StreamElements credentials from local storage.',
       ),
@@ -211,7 +211,7 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
       });
       String savedScopesOrdered = savedScopesList.join(' ');
       if (savedScopesOrdered != paramsScopesOrdered) {
-        talker.logTyped(
+        talker.logCustom(
           StreamElementsLog(
             'StreamElements scopes changed, user need to relogin.',
           ),
