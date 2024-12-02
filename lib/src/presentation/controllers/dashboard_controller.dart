@@ -18,9 +18,10 @@ class DashboardController extends GetxController {
   void addDashboardEvent(DashboardEvent event) {
     Settings settings = settingsService.settings.value;
 
-    List<DashboardEvent> events = [];
-    events.addAll(settings.dashboardSettings.userEvents);
-    events.add(event);
+    // Create a new list of events
+    List<DashboardEvent> events =
+        List.from(settings.dashboardSettings.userEvents)..add(event);
+
     settingsService.settings.value = settings.copyWith(
       dashboardSettings:
           settings.dashboardSettings.copyWith(userEvents: events),
@@ -34,8 +35,10 @@ class DashboardController extends GetxController {
   void removeDashboardEvent(DashboardEvent event) {
     Settings settings = settingsService.settings.value;
 
-    List<DashboardEvent> events = settings.dashboardSettings.userEvents;
-    events.remove(event);
+    // Create a new list of events without the removed event
+    List<DashboardEvent> events =
+        List.from(settings.dashboardSettings.userEvents)..remove(event);
+
     settingsService.settings.value = settings.copyWith(
       dashboardSettings:
           settings.dashboardSettings.copyWith(userEvents: events),

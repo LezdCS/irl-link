@@ -59,28 +59,22 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
 
       final validateTokenResult = await validateToken(accessToken);
 
-      if (validateTokenResult.isLeft()) {
-        return Left(Failure("Validate token issue."));
-      }
+      return validateTokenResult.fold(
+        (l) => Left(Failure("Validate token issue.")),
+        (r) async {
+          String scopes = r.data['scopes'].join(' ');
 
-      String scopes = '';
-      validateTokenResult.fold(
-        (l) {},
-        (r) {
-          scopes = r.data['scopes'].join(' ');
+          SeCredentials seCredentials = SeCredentials(
+            accessToken: accessToken,
+            refreshToken: refreshToken,
+            expiresIn: expiresIn,
+            scopes: scopes,
+          );
+
+          await storeCredentials(seCredentials);
+          return Right(seCredentials);
         },
       );
-
-      SeCredentials seCredentials = SeCredentials(
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-        expiresIn: expiresIn,
-        scopes: scopes,
-      );
-
-      await storeCredentials(seCredentials);
-
-      return Right(seCredentials);
     } catch (e) {
       return Left(Failure("Unable to retrieve StreamElements token: $e"));
     }
@@ -231,12 +225,10 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
 
       //refresh the access token to be sure the token is going to be valid after starting the app
       final refreshResult = await refreshAccessToken(seCredentials);
-      refreshResult.fold(
+      return refreshResult.fold(
         (l) => Left(Failure("Error refreshing SE Token")),
-        (r) => seCredentials = r,
+        (r) => Right(r),
       );
-
-      return Right(seCredentials);
     } else {
       return Left(Failure("No SE Data in local storage"));
     }

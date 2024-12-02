@@ -87,28 +87,28 @@ class TwitchRepositoryImpl implements TwitchRepository {
 
       final twitchUserResult = await getTwitchUser(null, accessToken);
 
-      if (twitchUserResult.isLeft()) {
-        return Left(Failure("Error getting the Twitch user."));
-      }
+      return twitchUserResult.fold(
+        (l) {
+          return Left(Failure("Error getting the Twitch user."));
+        },
+        (r) {
+          twitchUser = r;
 
-      twitchUserResult.fold(
-        (l) => {},
-        (r) => {twitchUser = r},
+          TwitchCredentials twitchData = TwitchCredentials(
+            accessToken: accessToken,
+            idToken: idToken,
+            refreshToken: refreshToken!,
+            expiresIn: expiresIn!,
+            decodedIdToken: decodedIdToken,
+            twitchUser: twitchUser,
+            scopes: scopes,
+          );
+
+          setTwitchOnLocal(twitchData);
+
+          return Right(twitchData);
+        },
       );
-
-      TwitchCredentials twitchData = TwitchCredentials(
-        accessToken: accessToken,
-        idToken: idToken,
-        refreshToken: refreshToken!,
-        expiresIn: expiresIn!,
-        decodedIdToken: decodedIdToken,
-        twitchUser: twitchUser,
-        scopes: scopes,
-      );
-
-      setTwitchOnLocal(twitchData);
-
-      return Right(twitchData);
     } catch (e) {
       return Left(Failure("Unable to retrieve Twitch Data from Auth: $e"));
     }
