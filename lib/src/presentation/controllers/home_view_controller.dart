@@ -38,7 +38,6 @@ import 'package:irllink/src/presentation/views/chat_view.dart';
 import 'package:irllink/src/presentation/views/tabs/obs_tab_view.dart';
 import 'package:irllink/src/presentation/views/tabs/realtime_irl_tab_view.dart';
 import 'package:irllink/src/presentation/views/tabs/streamelements_tab_view.dart';
-import 'package:irllink/src/presentation/views/tabs/twitch_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/web_page_view.dart';
 import 'package:split_view/split_view.dart';
 import 'package:twitch_chat/twitch_chat.dart';
@@ -107,69 +106,76 @@ class HomeViewController extends GetxController
     chatInputController = TextEditingController();
     chatTabsController = TabController(length: 0, vsync: this);
     emotesTabController = TabController(length: 0, vsync: this);
+
     if (Get.arguments != null) {
       twitchData = Get.arguments[0];
-
-      Dio dioTwitchClient = initDio(kTwitchApiUrlBase);
-      final twitchRepositoryImpl =
-          TwitchRepositoryImpl(dioClient: dioTwitchClient);
-      TwitchEventSubService subService = await Get.putAsync(
-        () => TwitchEventSubService(
-          createPollUseCase: CreatePollUseCase(
-            twitchRepository: twitchRepositoryImpl,
-          ),
-          endPollUseCase: EndPollUseCase(
-            twitchRepository: twitchRepositoryImpl,
-          ),
-          endPredictionUseCase: EndPredictionUseCase(
-            twitchRepository: twitchRepositoryImpl,
-          ),
-          homeViewController: this,
-          talker: talkerService.talker,
-          dioClient: dioTwitchClient,
-        ).init(
-          token: twitchData!.accessToken,
-          channel: twitchData!.twitchUser.login,
-        ),
-        permanent: true,
-      );
-      subService.connect();
-
-      TwitchPubSubService pubSubService = await Get.putAsync(
-        () => TwitchPubSubService().init(
-          accessToken: twitchData!.accessToken,
-          channelName: twitchData!.twitchUser.login,
-        ),
-        permanent: true,
-      );
-      pubSubService.connect();
-
-      TwitchTabView twitchPage = const TwitchTabView();
-      tabElements.add(twitchPage);
-
-      tabController = TabController(length: tabElements.length, vsync: this);
-
-      await FirebaseCrashlytics.instance.setUserIdentifier(
-        twitchData!.twitchUser.id,
-      );
-
-      timerRefreshToken =
-          Timer.periodic(const Duration(seconds: 13000), (Timer t) async {
-        final refreshTokenResult =
-            await refreshAccessTokenUseCase(params: twitchData!);
-
-        refreshTokenResult.fold(
-          (l) => {},
-          (r) => twitchData = r,
-        );
-      });
+      await _initializeTwitchServices();
     }
-    await applySettings();
 
-    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
-    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+    await applySettings();
+    await _setupCrashlytics();
 
     super.onInit();
+  }
+
+  Future<void> _initializeTwitchServices() async {
+    Dio dioTwitchClient = initDio(kTwitchApiUrlBase);
+    final twitchRepositoryImpl =
+        TwitchRepositoryImpl(dioClient: dioTwitchClient);
+
+    await _initializeEventSubService(twitchRepositoryImpl, dioTwitchClient);
+    await _initializePubSubService(dioTwitchClient);
+
+    tabController = TabController(length: tabElements.length, vsync: this);
+
+    timerRefreshToken =
+        Timer.periodic(const Duration(seconds: 13000), (Timer t) async {
+      final refreshTokenResult =
+          await refreshAccessTokenUseCase(params: twitchData!);
+      refreshTokenResult.fold((l) => {}, (r) => twitchData = r);
+    });
+  }
+
+  Future<void> _initializeEventSubService(
+    TwitchRepositoryImpl twitchRepositoryImpl,
+    Dio dioTwitchClient,
+  ) async {
+    TwitchEventSubService subService = await Get.putAsync(
+      () => TwitchEventSubService(
+        createPollUseCase:
+            CreatePollUseCase(twitchRepository: twitchRepositoryImpl),
+        endPollUseCase: EndPollUseCase(twitchRepository: twitchRepositoryImpl),
+        endPredictionUseCase:
+            EndPredictionUseCase(twitchRepository: twitchRepositoryImpl),
+        homeViewController: this,
+        talker: talkerService.talker,
+        dioClient: dioTwitchClient,
+      ).init(
+        token: twitchData!.accessToken,
+        channel: twitchData!.twitchUser.login,
+      ),
+      permanent: true,
+    );
+    subService.connect();
+  }
+
+  Future<void> _initializePubSubService(Dio dioTwitchClient) async {
+    TwitchPubSubService pubSubService = await Get.putAsync(
+      () => TwitchPubSubService().init(
+        accessToken: twitchData!.accessToken,
+        channelName: twitchData!.twitchUser.login,
+      ),
+      permanent: true,
+    );
+    pubSubService.connect();
+  }
+
+  Future<void> _setupCrashlytics() async {
+    await FirebaseCrashlytics.instance.setUserIdentifier(
+      twitchData!.twitchUser.id,
+    );
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   }
 
   @override
