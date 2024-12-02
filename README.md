@@ -49,14 +49,14 @@ Also available in the [Releases](https://github.com/LezdCS/irl_link/releases).
 - Translations in English, French and Cantonese
 - Prevent your speaker to go in sleep mode
 
-## Screenshots
-<div>
-<img src="https://user-images.githubusercontent.com/63884731/234930179-d560bf12-fe8a-4940-9608-dfa7ca974b16.png" width="200">
-<img src="https://user-images.githubusercontent.com/63884731/234930963-7874318f-37fe-4fdf-8daa-755c00db093b.png" width="200">
-<img src="https://user-images.githubusercontent.com/63884731/234930982-ae78c20a-ef54-416a-89e9-f58b06e79398.png" width="200">
-<img src="https://user-images.githubusercontent.com/63884731/234931180-c16d2cbe-0bbf-4a16-b18b-8965fb6de55b.png" width="200">
-<img src="https://user-images.githubusercontent.com/63884731/234931194-490a8f15-f6ec-46c9-8459-b7f5913b2a9c.png" width="200">
-</div>
+## For contributors
+To run the project, you need to have Flutter and Dart SDK installed.
+
+> [!IMPORTANT]
+> Run `scripts/install-hooks.bash` to install the pre-commit hooks.
+
+> [!WARNING]
+> Please make your new branches from `develop` branch and make your PR to `develop` branch.
 
 ## Quick links
 - Website : https://irllink.com
