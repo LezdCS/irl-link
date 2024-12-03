@@ -37,7 +37,7 @@
         />
          <meta-data
             android:name="dev.lezd.www.irllink.service.SMALL_ICON"
-            android:resource="@drawable-hdpi/ic_bg_service_small" />
+            android:resource="@drawable/service_icon" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
