@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -43,8 +44,8 @@ class HomeView extends GetView<HomeViewController> {
 
     return UpgradeAlert(
       upgrader: Upgrader(
-        minAppVersion: "2.7.2",
-        debugDisplayAlways: true,
+        minAppVersion: "2.8.0",
+        debugDisplayAlways: kDebugMode,
       ),
       child: PopScope(
         child: AnnotatedRegion(
