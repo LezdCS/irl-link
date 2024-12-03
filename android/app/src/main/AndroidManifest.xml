@@ -35,6 +35,9 @@
             android:foregroundServiceType="location"
             android:exported="false" 
         />
+         <meta-data
+            android:name="dev.lezd.www.irllink.service.SMALL_ICON"
+            android:resource="@drawable/service_icon" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

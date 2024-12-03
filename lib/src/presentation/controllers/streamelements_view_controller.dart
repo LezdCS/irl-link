@@ -407,7 +407,7 @@ class StreamelementsViewController extends GetxController
 
   Future<void> onAuthenticated(data) async {
     isSocketConnected.value = true;
-    talkerService.talker.logTyped(
+    talkerService.talker.logCustom(
       StreamElementsLog('StreamElements WebSocket authenticated.'),
     );
   }

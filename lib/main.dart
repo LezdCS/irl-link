@@ -75,20 +75,20 @@ class Main extends StatelessWidget {
     } else {
       if (text.startsWith('Instance')) {
         talkerService.talker
-            .logTyped(GetxInstanceLog(text, isDeleteAction: false));
+            .logCustom(GetxInstanceLog(text, isDeleteAction: false));
         return;
       }
       if (text.endsWith('onDelete() called') ||
           text.endsWith('deleted from memory')) {
         talkerService.talker
-            .logTyped(GetxInstanceLog(text, isDeleteAction: true));
+            .logCustom(GetxInstanceLog(text, isDeleteAction: true));
         return;
       }
       if (text.contains('GOING TO ROUTE') || text.contains('CLOSE TO ROUTE')) {
         return;
       }
       if (text.startsWith('REMOVING ROUTE')) {
-        talkerService.talker.logTyped(RouterLog(text));
+        talkerService.talker.logCustom(RouterLog(text));
         return;
       }
       talkerService.talker.log(text);
