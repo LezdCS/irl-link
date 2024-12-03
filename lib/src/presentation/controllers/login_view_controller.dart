@@ -50,7 +50,6 @@ class LoginViewController extends GetxController {
         isLoading.value = false;
       },
       (r) async {
-        debugPrint("twitchCredsResult: $r");
         twitchCredentials.value = r;
         loadingMessage.value = "refreshing_token".tr;
 
