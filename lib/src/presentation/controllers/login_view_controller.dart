@@ -46,25 +46,26 @@ class LoginViewController extends GetxController {
     final twitchCredsResult = await getTwitchLocalUseCase();
 
     twitchCredsResult.fold(
-      (l) => {},
+      (l) {
+        isLoading.value = false;
+      },
       (r) async {
+        debugPrint("twitchCredsResult: $r");
         twitchCredentials.value = r;
         loadingMessage.value = "refreshing_token".tr;
 
         final refreshResult = await refreshTwitchTokenUseCase(params: r);
 
-        isLoading.value = false;
-
         refreshResult.fold(
-          (l) => {},
+          (l) {
+            isLoading.value = false;
+          },
           (r) {
             Get.offAllNamed(Routes.home, arguments: [r]);
           },
         );
       },
     );
-
-    isLoading.value = false;
 
     super.onReady();
   }
@@ -75,13 +76,13 @@ class LoginViewController extends GetxController {
     final loginResult = await loginUseCase(params: params);
 
     loginResult.fold(
-      (l) => {},
+      (l) {
+        isLoading.value = false;
+      },
       (r) {
         Get.offAllNamed(Routes.home, arguments: [r]);
       },
     );
-
-    isLoading.value = false;
   }
 
   Future<bool> hasNoNetwork() async {

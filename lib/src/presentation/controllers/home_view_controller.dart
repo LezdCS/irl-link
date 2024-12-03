@@ -38,6 +38,7 @@ import 'package:irllink/src/presentation/views/chat_view.dart';
 import 'package:irllink/src/presentation/views/tabs/obs_tab_view.dart';
 import 'package:irllink/src/presentation/views/tabs/realtime_irl_tab_view.dart';
 import 'package:irllink/src/presentation/views/tabs/streamelements_tab_view.dart';
+import 'package:irllink/src/presentation/views/tabs/twitch_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/web_page_view.dart';
 import 'package:split_view/split_view.dart';
 import 'package:twitch_chat/twitch_chat.dart';
@@ -125,6 +126,9 @@ class HomeViewController extends GetxController
 
     await _initializeEventSubService(twitchRepositoryImpl, dioTwitchClient);
     await _initializePubSubService(dioTwitchClient);
+
+    TwitchTabView twitchPage = const TwitchTabView();
+    tabElements.add(twitchPage);
 
     tabController = TabController(length: tabElements.length, vsync: this);
 
