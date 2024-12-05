@@ -249,35 +249,23 @@ class HomeViewController extends GetxController
     Settings settings = settingsService.settings.value;
 
     // Check if WebTabs have to be removed
-    List webTabsToRemove = [];
-    tabElements.whereType<WebPageView>().forEach((tabElement) {
-      BrowserTab? tabExist = settings.browserTabs.tabs.firstWhereOrNull(
-        (settingsTab) => settingsTab.id == tabElement.tab.id,
-      );
-      if (tabExist == null) {
-        // if the tab does not exist in the settings anymore, we remove it
-        webTabsToRemove.add(tabElement);
-      } else if (!tabExist.toggled || tabExist.iOSAudioSource) {
-        // if the tab exist in the tabElements but is not toggled anymore, we remove it
-        webTabsToRemove.add(tabElement);
+    tabElements.removeWhere((tabElement) {
+      if (tabElement is WebPageView) {
+        BrowserTab? tabExist = settings.browserTabs.tabs.firstWhereOrNull(
+          (settingsTab) => settingsTab.id == tabElement.tab.id,
+        );
+        return tabExist == null || !tabExist.toggled || tabExist.iOSAudioSource;
       }
+      return false; // Keep other types of tabs
     });
-    tabElements.removeWhere((t) => webTabsToRemove.contains(t));
 
-    // Now we remove the audio sources that does no longer exist in the settings
-    // We also remove them if they got untoggled
-    List audioSourcesToRemove = [];
-    for (var tabElement in iOSAudioSources) {
+    // Now we remove the audio sources that do no longer exist in the settings
+    iOSAudioSources.removeWhere((tabElement) {
       BrowserTab? tabExist = settings.browserTabs.tabs.firstWhereOrNull(
         (settingsTab) => settingsTab.id == tabElement.tab.id,
       );
-      if (tabExist == null) {
-        audioSourcesToRemove.add(tabElement);
-      } else if (!tabExist.toggled || !tabExist.iOSAudioSource) {
-        audioSourcesToRemove.add(tabElement);
-      }
-    }
-    iOSAudioSources.removeWhere((a) => audioSourcesToRemove.contains(a));
+      return tabExist == null || !tabExist.toggled || !tabExist.iOSAudioSource;
+    });
 
     // Check if OBS have to be removed
     if (Get.isRegistered<ObsTabViewController>() && !settings.isObsConnected) {
@@ -299,7 +287,7 @@ class HomeViewController extends GetxController
 
     // Check if Realtime IRL have to be removed
     if (Get.isRegistered<RealtimeIrlViewController>() &&
-        (settings.rtIrlPushKey.isEmpty)) {
+        settings.rtIrlPushKey.isEmpty) {
       tabElements.removeWhere((t) => t is RealtimeIrlTabView);
       realtimeIrlViewController = null;
       await Get.delete<RealtimeIrlViewController>();
@@ -333,12 +321,8 @@ class HomeViewController extends GetxController
       tabElements.add(const RealtimeIrlTabView());
     }
 
-    // Check if WebTabs have to be added
-    for (BrowserTab tab in settings.browserTabs.tabs) {
-      if (!tab.toggled) {
-        continue;
-      }
-
+    // Only add the tabs that are toggled
+    for (BrowserTab tab in settings.browserTabs.tabs.where((t) => t.toggled)) {
       // Check if the tab already exists
       bool tabExists = tabElements
               .whereType<WebPageView>()
@@ -348,7 +332,7 @@ class HomeViewController extends GetxController
         continue;
       }
 
-      WebPageView page = WebPageView(tab);
+      WebPageView page = WebPageView(tab, key: GlobalKey());
       if (!tab.iOSAudioSource) {
         tabElements.add(page);
       } else {
