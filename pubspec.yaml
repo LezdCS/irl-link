@@ -54,7 +54,7 @@ dependencies:
   package_info_plus: ^8.1.1
   percent_indicator: ^4.2.4
   qr_flutter: ^4.1.0
-  quiver: ^3.2.1
+  quiver: ^3.2.2
   socket_io_client: ^3.0.0
   split_view: ^3.2.1
   talker_dio_logger: ^4.4.0
