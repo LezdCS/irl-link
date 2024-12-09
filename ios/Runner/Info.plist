@@ -9,7 +9,8 @@
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>fetch</string>
+		<string>fetch</string> <!-- for realtimeIRL position -->
+		<string>remote-notification</string> <!-- for firebase messaging -->
 	</array>
 	<!---->
 	<key>CADisableMinimumFrameDurationOnPhone</key>
