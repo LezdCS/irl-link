@@ -462,6 +462,10 @@ class ChatViewController extends GetxController
         kickChat.userDetails!.userId.toString(),
         kickChat.userDetails!.subBadges,
       );
+      // INFO: Temporary fix to prevent duplicate messages
+      if (chatMessages.firstWhereOrNull((e) => e.id == message.id) != null) {
+        return;
+      }
       Settings settings = settingsService.settings.value;
       if (settings.ttsSettings.ttsEnabled) {
         ttsService.readTts(message);
