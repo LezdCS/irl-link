@@ -114,6 +114,8 @@ PODS:
   - Flutter (1.0.0)
   - flutter_foreground_task (0.0.1):
     - Flutter
+  - flutter_local_notifications (0.0.1):
+    - Flutter
   - flutter_tts (0.0.1):
     - Flutter
   - flutter_web_auth (0.6.0):
@@ -248,6 +250,7 @@ DEPENDENCIES:
   - firebase_remote_config (from `.symlinks/plugins/firebase_remote_config/ios`)
   - Flutter (from `Flutter`)
   - flutter_foreground_task (from `.symlinks/plugins/flutter_foreground_task/ios`)
+  - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_tts (from `.symlinks/plugins/flutter_tts/ios`)
   - flutter_web_auth (from `.symlinks/plugins/flutter_web_auth/ios`)
   - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
@@ -314,6 +317,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_foreground_task:
     :path: ".symlinks/plugins/flutter_foreground_task/ios"
+  flutter_local_notifications:
+    :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_tts:
     :path: ".symlinks/plugins/flutter_tts/ios"
   flutter_web_auth:
@@ -369,6 +374,7 @@ SPEC CHECKSUMS:
   FirebaseSharedSwift: a4e5dfca3e210633bb3a3dfb94176c019211948b
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_foreground_task: 21ef182ab0a29a3005cc72cd70e5f45cb7f7f817
+  flutter_local_notifications: df98d66e515e1ca797af436137b4459b160ad8c9
   flutter_tts: 0f492aab6accf87059b72354fcb4ba934304771d
   flutter_web_auth: acc15a8fd7bba796a933c724a6dffc3d00f07c27
   geolocator_apple: 6cbaf322953988e009e5ecb481f07efece75c450

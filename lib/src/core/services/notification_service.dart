@@ -1,5 +1,4 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationService {
@@ -61,15 +60,11 @@ class NotificationService {
 
   Future<void> showNotification(RemoteMessage message) async {
     RemoteNotification? notification = message.notification;
-    AndroidNotification? android = message.notification?.android;
+    // AndroidNotification? android = message.notification?.android;
 
-    if (notification == null || android == null) {
+    if (notification == null) {
       return;
     }
-
-    debugPrint(
-      'NotificationService: showNotification - Title: ${notification.title}',
-    );
 
     await flutterLocalNotificationsPlugin.show(
       notification.hashCode,

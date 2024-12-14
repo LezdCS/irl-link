@@ -10,6 +10,7 @@
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		331C808B294A63AB00263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C807B294A618700263BE5 /* RunnerTests.swift */; };
 		48089297A9CB34E17AF3011B /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF632BF852D8C6FBE6F0482 /* Pods_Runner.framework */; };
+		4906C37BD9D5008B479F1378 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CD8E81B703A671ECBE2B44B5 /* GoogleService-Info.plist */; };
 		6E3AF5712C8F4F04002B6ADB /* watchkitappApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3AF5702C8F4F04002B6ADB /* watchkitappApp.swift */; };
 		6E3AF5752C8F4F06002B6ADB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E3AF5742C8F4F06002B6ADB /* Assets.xcassets */; };
 		6E3AF5782C8F4F06002B6ADB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E3AF5772C8F4F06002B6ADB /* Preview Assets.xcassets */; };
@@ -106,6 +107,7 @@
 		B0CA54A5D47D4BC39EE1C5C3 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		BAFDD61C4CB9236B1B4614BE /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
 		BF80A4DB2A6E5B290034CAD7 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
+		CD8E81B703A671ECBE2B44B5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Runner/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CFF632BF852D8C6FBE6F0482 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6F884C30D2D011C96977618 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -223,6 +225,7 @@
 				331C8082294A63A400263BE5 /* RunnerTests */,
 				928ABBACC74175FD3C21BB06 /* Pods */,
 				FDBEA1DF84A0AE4E38E71A18 /* Frameworks */,
+				CD8E81B703A671ECBE2B44B5 /* GoogleService-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -319,6 +322,7 @@
 				5672603D844CC853B3E35101 /* [firebase_crashlytics] Crashlytics Upload Symbols */,
 				3D0753EF9287E80E627BD700 /* [CP] Embed Pods Frameworks */,
 				DDC91F41B021A2A0E9EFE5E0 /* [CP] Copy Pods Resources */,
+				4F229EB1B0699F3F96623AA0 /* FlutterFire: "flutterfire upload-crashlytics-symbols" */,
 			);
 			buildRules = (
 			);
@@ -326,8 +330,6 @@
 				6E3AF57A2C8F4F06002B6ADB /* PBXTargetDependency */,
 			);
 			name = Runner;
-			packageProductDependencies = (
-			);
 			productName = Runner;
 			productReference = 97C146EE1CF9000F007C117D /* Runner.app */;
 			productType = "com.apple.product-type.application";
@@ -403,6 +405,7 @@
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
+				4906C37BD9D5008B479F1378 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -485,6 +488,24 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		4F229EB1B0699F3F96623AA0 /* FlutterFire: "flutterfire upload-crashlytics-symbols" */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "FlutterFire: \"flutterfire upload-crashlytics-symbols\"";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\n#!/bin/bash\nPATH=${PATH}:$FLUTTER_ROOT/bin:$HOME/.pub-cache/bin\nflutterfire upload-crashlytics-symbols --upload-symbols-script-path=$PODS_ROOT/FirebaseCrashlytics/upload-symbols --platform=ios --apple-project-path=${SRCROOT} --env-platform-name=${PLATFORM_NAME} --env-configuration=${CONFIGURATION} --env-project-dir=${PROJECT_DIR} --env-built-products-dir=${BUILT_PRODUCTS_DIR} --env-dwarf-dsym-folder-path=${DWARF_DSYM_FOLDER_PATH} --env-dwarf-dsym-file-name=${DWARF_DSYM_FILE_NAME} --env-infoplist-path=${INFOPLIST_PATH} --default-config=default\n";
 		};
 		5672603D844CC853B3E35101 /* [firebase_crashlytics] Crashlytics Upload Symbols */ = {
 			isa = PBXShellScriptBuildPhase;

@@ -51,7 +51,6 @@ void startCallback() {
 
 @pragma('vm:entry-point')
 Future<void> _handleFirebaseMessagingBackground(RemoteMessage message) async {
-  debugPrint('NotificationService: _handleFirebaseMessagingBackground');
   final notificationService = Get.find<NotificationService>();
   await notificationService.setupFlutterNotifications();
   await notificationService.showNotification(message);
