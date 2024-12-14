@@ -4,14 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:irllink/firebase_options.dart';
 import 'package:irllink/routes/app_pages.dart';
 import 'package:irllink/src/bindings/login_bindings.dart';
-import 'package:irllink/src/core/background/tasks_handlers/firebase_messaging_handler.dart';
 import 'package:irllink/src/core/background/tasks_handlers/realtime_irl_task_handler.dart';
 import 'package:irllink/src/core/depedency_injection.dart';
 import 'package:irllink/src/core/resources/app_translations.dart';
 import 'package:irllink/src/core/resources/themes.dart';
+import 'package:irllink/src/core/services/notification_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/presentation/views/login_view.dart';
@@ -26,12 +25,14 @@ void main() async {
   await WakelockPlus.enable();
   await KickChat.init();
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  FirebaseMessaging.onBackgroundMessage(handleFirebaseMessaging);
+      // options: DefaultFirebaseOptions.currentPlatform,
+      );
+
+  FirebaseMessaging.onBackgroundMessage(_handleFirebaseMessagingBackground);
   FirebaseMessaging.instance.getToken().then((token) {
     debugPrint('fcmToken: $token');
   });
+
   AppTranslations.initLanguages();
   FlutterForegroundTask.initCommunicationPort();
 
@@ -46,6 +47,13 @@ void startCallback() {
   // The setTaskHandler function must be called to handle the task
   //in the background.
   FlutterForegroundTask.setTaskHandler(RealtimeIrlTaskHandler());
+}
+
+@pragma('vm:entry-point')
+Future<void> _handleFirebaseMessagingBackground(RemoteMessage message) async {
+  final notificationService = Get.find<NotificationService>();
+  await notificationService.setupFlutterNotifications();
+  await notificationService.showNotification(message);
 }
 
 class Main extends StatelessWidget {

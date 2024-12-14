@@ -55,75 +55,69 @@ class HomeView extends GetView<HomeViewController> {
           child: Scaffold(
             resizeToAvoidBottomInset: true,
             body: Obx(
-              () => Listener(
-                onPointerUp: (_) => {
-                  FocusScope.of(context).unfocus(),
-                },
-                child: Container(
-                  constraints: const BoxConstraints.expand(),
-                  decoration: BoxDecoration(
-                    color: context.theme.colorScheme.surface,
-                  ),
-                  child: SafeArea(
-                    child: Stack(
-                      children: [
-                        Stack(
-                          children: List<Widget>.generate(
-                            controller.iOSAudioSources.length,
-                            (int index) => controller.iOSAudioSources[index],
-                          ),
+              () => Container(
+                constraints: const BoxConstraints.expand(),
+                decoration: BoxDecoration(
+                  color: context.theme.colorScheme.surface,
+                ),
+                child: SafeArea(
+                  child: Stack(
+                    children: [
+                      Stack(
+                        children: List<Widget>.generate(
+                          controller.iOSAudioSources.length,
+                          (int index) => controller.iOSAudioSources[index],
                         ),
-                        Listener(
-                          onPointerUp: (_) => {
-                            controller.displayDashboard.value = false,
-                          },
-                          child: SplitView(
-                            controller: controller.splitViewController,
-                            gripColor: context.theme.colorScheme.secondary,
-                            gripColorActive:
-                                context.theme.colorScheme.secondary,
-                            gripSize: 8,
+                      ),
+                      Listener(
+                        onPointerUp: (_) => {
+                          controller.displayDashboard.value = false,
+                        },
+                        child: SplitView(
+                          controller: controller.splitViewController,
+                          gripColor: context.theme.colorScheme.secondary,
+                          gripColorActive: context.theme.colorScheme.secondary,
+                          gripSize: 8,
+                          viewMode: context.isPortrait
+                              ? SplitViewMode.Vertical
+                              : SplitViewMode.Horizontal,
+                          indicator: SplitIndicator(
                             viewMode: context.isPortrait
                                 ? SplitViewMode.Vertical
                                 : SplitViewMode.Horizontal,
-                            indicator: SplitIndicator(
-                              viewMode: context.isPortrait
-                                  ? SplitViewMode.Vertical
-                                  : SplitViewMode.Horizontal,
-                              color: const Color(0xFF464444),
-                            ),
-                            activeIndicator: SplitIndicator(
-                              color: const Color(0xFF464444),
-                              viewMode: context.isPortrait
-                                  ? SplitViewMode.Vertical
-                                  : SplitViewMode.Horizontal,
-                              isActive: true,
-                            ),
-                            onWeightChanged: controller.onSplitResized,
-                            children: [
-                              if (controller.tabElements.isNotEmpty)
-                                _top(context, height, width)
-                              else
-                                const Text(
-                                  "No tabs",
-                                  textAlign: TextAlign.center,
-                                ),
-                              _bottom(context, height, width),
-                            ],
+                            color: const Color(0xFF464444),
                           ),
-                        ),
-                        Visibility(
-                          visible: controller.displayDashboard.value,
-                          child: const Dashboard(),
-                        ),
-                        Visibility(
-                          visible: storeService.purchasePending.value,
-                          child: CircularProgressIndicator(
-                            color: context.theme.colorScheme.tertiary,
+                          activeIndicator: SplitIndicator(
+                            color: const Color(0xFF464444),
+                            viewMode: context.isPortrait
+                                ? SplitViewMode.Vertical
+                                : SplitViewMode.Horizontal,
+                            isActive: true,
                           ),
+                          onWeightChanged: controller.onSplitResized,
+                          children: [
+                            if (controller.tabElements.isNotEmpty)
+                              _top(context, height, width)
+                            else
+                              const Text(
+                                "No tabs",
+                                textAlign: TextAlign.center,
+                              ),
+                            _bottom(context, height, width),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      Visibility(
+                        visible: controller.displayDashboard.value,
+                        child: const Dashboard(),
+                      ),
+                      Visibility(
+                        visible: storeService.purchasePending.value,
+                        child: CircularProgressIndicator(
+                          color: context.theme.colorScheme.tertiary,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
