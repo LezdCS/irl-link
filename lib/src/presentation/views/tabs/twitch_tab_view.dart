@@ -112,11 +112,11 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                               : Theme.of(context).colorScheme.tertiaryContainer;
                           Color shadowColor =
                               controller.twitchStreamInfos.value.isOnline!
-                                  ? Colors.red.shade900.withOpacity(0.5)
+                                  ? Colors.red.shade900.withValues(alpha: 0.5)
                                   : Theme.of(context)
                                       .colorScheme
                                       .tertiaryContainer
-                                      .withOpacity(0.5);
+                                      .withValues(alpha: 0.5);
                           return AnimatedBuilder(
                             animation: controller.circleShadowAnimation,
                             builder: (context, child) {

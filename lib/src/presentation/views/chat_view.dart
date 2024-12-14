@@ -168,7 +168,7 @@ class ChatView extends GetView<ChatViewController> {
                       },
                       child: Container(
                         padding: const EdgeInsets.only(left: 20, right: 20),
-                        color: Colors.white.withOpacity(0.8),
+                        color: Colors.white.withValues(alpha: 0.8),
                         child: const Icon(
                           Icons.keyboard_arrow_down,
                           color: Colors.black,

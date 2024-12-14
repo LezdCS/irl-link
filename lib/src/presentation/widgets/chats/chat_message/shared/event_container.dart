@@ -105,42 +105,42 @@ class EventContainer extends StatelessWidget {
       case EventType.bitDonation:
         return {
           "border": const Color(0xFF9147ff),
-          "background": const Color(0xFF9147ff).withOpacity(0.2),
+          "background": const Color(0xFF9147ff).withValues(alpha: 0.2),
         };
       case EventType.firstTimeChatter:
         return {
           "border": const Color(0xff0033b5),
-          "background": const Color(0xff0033b5).withOpacity(0.2),
+          "background": const Color(0xff0033b5).withValues(alpha: 0.2),
         };
       case EventType.channelPointRedemption:
         return {
           "border": const Color(0xff486d1a),
-          "background": const Color(0xff486d1a).withOpacity(0.2),
+          "background": const Color(0xff486d1a).withValues(alpha: 0.2),
         };
       case EventType.subscription:
         return {
           "border": const Color(0xFF9147ff),
-          "background": const Color(0xFF9147ff).withOpacity(0.2),
+          "background": const Color(0xFF9147ff).withValues(alpha: 0.2),
         };
       case EventType.announcement:
         return {
           "border": const Color(0xffff475c),
-          "background": const Color(0xffff475c).withOpacity(0.2),
+          "background": const Color(0xffff475c).withValues(alpha: 0.2),
         };
       case EventType.subscriptionGifted:
         return {
           "border": const Color(0xFF9147ff),
-          "background": const Color(0xFF9147ff).withOpacity(0.2),
+          "background": const Color(0xFF9147ff).withValues(alpha: 0.2),
         };
       case EventType.incomingRaid:
         return {
           "border": const Color(0xffb53600),
-          "background": const Color(0xffb53600).withOpacity(0.2),
+          "background": const Color(0xffb53600).withValues(alpha: 0.2),
         };
       default:
         return {
           "border": Colors.black,
-          "background": Colors.black.withOpacity(0.2),
+          "background": Colors.black.withValues(alpha: 0.2),
         };
     }
   }

@@ -29,7 +29,10 @@ class ColorConverter implements JsonConverter<Color, int> {
   }
 
   @override
-  int toJson(Color object) {
-    return object.value;
+  int toJson(Color color) {
+    return (color.a.toInt() << 24) |
+        (color.r.toInt() << 16) |
+        (color.g.toInt() << 8) |
+        color.b.toInt();
   }
 }
