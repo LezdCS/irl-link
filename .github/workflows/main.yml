@@ -30,7 +30,15 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-        
+
+      - name: Create google-services.json
+        run: cat /home/runner/work/irl-link/irl-link/android/app/google-services.json
+
+      - name: Add data to google-services.json
+        env:
+          DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: echo $DATA > /home/runner/work/irl-link/irl-link/android/app/google-services.json
+
       - name: Build APK and App Bundle
         run: |
           flutter pub get
