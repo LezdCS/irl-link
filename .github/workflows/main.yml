@@ -32,12 +32,12 @@ jobs:
           channel: 'stable'
 
       - name: Create google-services.json
-        run: cat /home/runner/work/irl-link/irl-link/android/app/google-services.json
+        run: cat /android/app/google-services.json | base64
 
       - name: Add data to google-services.json
         env:
           DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        run: echo $DATA > /home/runner/work/irl-link/irl-link/android/app/google-services.json
+        run: echo $DATA > /android/app/google-services.json
 
       - name: Build APK and App Bundle
         run: |
