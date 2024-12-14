@@ -45,5 +45,5 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-# SonarQube
-.scannerwork
+/android/app/google-services.json
+/ios/Runner/GoogleService-Info.plist
