@@ -44,17 +44,15 @@ class DefaultFirebaseOptions {
     appId: '1:1012029402006:android:850b5bda777692251bcbb7',
     messagingSenderId: '1012029402006',
     projectId: 'irl-link',
-    storageBucket: 'irl-link.appspot.com',
+    storageBucket: 'irl-link.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDKiqOZOszxMjPHzNUOmg7LTwlzVGYFRJc',
-    appId: '1:1012029402006:ios:b0dc75db1bc354e51bcbb7',
+    appId: '1:1012029402006:ios:6e75e32f3386b8061bcbb7',
     messagingSenderId: '1012029402006',
     projectId: 'irl-link',
-    storageBucket: 'irl-link.appspot.com',
-    iosClientId:
-        '1012029402006-s3d36cnvqn9au4slc0fhg3p1e1c28qds.apps.googleusercontent.com',
-    iosBundleId: 'dev.lezd.www.irllink',
+    storageBucket: 'irl-link.firebasestorage.app',
+    iosBundleId: 'com.irllink',
   );
 }

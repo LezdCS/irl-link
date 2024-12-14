@@ -111,10 +111,10 @@ class HomeViewController extends GetxController
     if (Get.arguments != null) {
       twitchData = Get.arguments[0];
       await _initializeTwitchServices();
+      await _setupCrashlytics();
     }
 
     await applySettings();
-    await _setupCrashlytics();
 
     super.onInit();
   }

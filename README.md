@@ -53,7 +53,7 @@ Also available in the [Releases](https://github.com/LezdCS/irl_link/releases).
 To run the project, you need to have Flutter and Dart SDK installed.
 
 > [!IMPORTANT]
-> Run `scripts/install-hooks.bash` to install the pre-commit hooks.
+> Run `chmod +x scripts/*.bash && ./scripts/install-hooks.bash` to install the pre-commit hooks.
 
 > [!WARNING]
 > Please make your new branches from `develop` branch and make your PR to `develop` branch.

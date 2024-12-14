@@ -166,7 +166,7 @@ class Dashboard extends GetView<DashboardController> {
           Obx(
             () => Slider(
               value: dashboardEvents[event.event]?.value.value,
-              inactiveColor: event.color.withOpacity(0.5),
+              inactiveColor: event.color.withValues(alpha: 0.5),
               activeColor: event.color,
               onChanged: (double value) {
                 dashboardEvents[event.event]?.action(value);

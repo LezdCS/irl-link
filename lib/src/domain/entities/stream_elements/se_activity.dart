@@ -43,7 +43,12 @@ class SeActivity {
         'message': message ?? "",
         'text': textFromEnum(),
         'username': username,
-        'colors': colorsForEnum().map((Color e) => e.value).toList(),
+        'colors': colorsForEnum().map((Color e) {
+          return (e.a.toInt() << 24) |
+              (e.r.toInt() << 16) |
+              (e.g.toInt() << 8) |
+              e.b.toInt();
+        }).toList(),
       };
 
   List<Color> colorsForEnum() {
