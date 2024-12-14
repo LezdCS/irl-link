@@ -35,6 +35,10 @@ jobs:
         env:
           DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: echo "$DATA" | base64 -d > ./android/app/google-services.json
+      
+      - name: Verify google-services.json
+        run: |
+          ls -l ./android/app/google-services.json | awk '{print $5 " bytes"}'
 
       - name: Build APK and App Bundle
         run: |
