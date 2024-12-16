@@ -114,7 +114,8 @@ class ChatViewController extends GetxController
       kickChat.connect();
     }
     for (YoutubeChat youtubeChat in youtubeChats) {
-      youtubeChat.startFetchingChat();
+      youtubeChat.close();
+      youtubeChat.connect();
     }
   }
 
@@ -305,7 +306,7 @@ class ChatViewController extends GetxController
         .where(
           (yc) =>
               youtubeChannels
-                  .firstWhereOrNull((yCa) => yCa.channel == yc.videoId) ==
+                  .firstWhereOrNull((yCa) => yCa.channel == yc.channelHandle) ==
               null,
         )
         .toList();
@@ -323,9 +324,9 @@ class ChatViewController extends GetxController
     }
 
     for (YoutubeChat y in youtubeChatToRemove) {
-      talker.info('Removing chat: ${y.videoId}');
-      y.closeStream();
-      youtubeChats.removeWhere((yc) => yc.videoId == y.videoId);
+      talker.info('Removing chat: ${y.channelHandle}');
+      y.close();
+      youtubeChats.removeWhere((yc) => yc.channelHandle == y.channelHandle);
     }
   }
 
@@ -393,16 +394,10 @@ class ChatViewController extends GetxController
   }
 
   Future<void> createYoutubeChat(String channelId) async {
-    String? videoId = await getLiveVideoId(channelId);
-    if (videoId == null) {
-      talker.error('VideoID not found for the channel: $channelId');
-      return;
-    }
-
-    YoutubeChat youtubeChat = YoutubeChat(
-      videoId,
-    );
-    youtubeChat.startFetchingChat();
+    YoutubeChat youtubeChat = await YoutubeChat(
+      talker: talker,
+    ).init(channel: channelId);
+    youtubeChat.connect();
     youtubeChat.chatStream.listen((ChatMessage message) {
       Settings settings = settingsService.settings.value;
       if (settings.ttsSettings.ttsEnabled) {
