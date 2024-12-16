@@ -199,17 +199,17 @@ class ChatMessage {
     Map<dynamic, dynamic> data,
     String channelId,
   ) {
-    String id = data['id'];
+    String id = data['unique_message_id'];
     String authorName = data['author'];
-    String content = data['content'];
-    String timestamp = data['timestampUsec'];
+    String message = data['message'];
+    String timestamp = data['timestamp'];
     return ChatMessage(
       id: id,
       authorId: '',
       displayName: authorName,
       username: authorName,
       color: '#FFFFFF',
-      message: content,
+      message: message,
       timestamp: int.parse(timestamp),
       isAction: false,
       isSubscriber: false,

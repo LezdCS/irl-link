@@ -16,9 +16,13 @@ class YoutubeChat {
   StreamSubscription? _streamSubscription;
   Rx<bool> isConnected = false.obs;
 
-  final StreamController<ChatMessage> _chatStreamController =
-      StreamController<ChatMessage>.broadcast();
-  Stream<ChatMessage> get chatStream => _chatStreamController.stream;
+  StreamController<ChatMessage>? _chatStreamController;
+  Stream<ChatMessage> get chatStream => _getChatStream();
+
+  Stream<ChatMessage> _getChatStream() {
+    _chatStreamController ??= StreamController<ChatMessage>.broadcast();
+    return _chatStreamController!.stream;
+  }
 
   late String channelHandle;
 
@@ -31,11 +35,16 @@ class YoutubeChat {
   }
 
   Future<void> connect() async {
+    if (_chatStreamController?.isClosed ?? false) {
+      _chatStreamController = StreamController<ChatMessage>.broadcast();
+    }
+
     String url = "wss://youtube-api.irlhosting.com";
 
     _webSocketChannel = IOWebSocketChannel.connect(url);
 
     try {
+      talker.info('Connecting to Youtube Chat Websocket');
       await _webSocketChannel?.ready;
     } catch (e) {
       talker.warning(
@@ -64,14 +73,14 @@ class YoutubeChat {
   }
 
   void _onDone() {
-    // talker.info("Twitch Sub Event: Connection closed");
+    talker.warning("Youtube Chat: Connection closed");
     isConnected.value = false;
     close();
   }
 
   void _onError(Object o, StackTrace s) {
     isConnected.value = false;
-    // talker.error("Twitch Sub Event: error", o, s);
+    talker.error("Youtube Chat: error", o, s);
   }
 
   void _eventListener(String data) {
@@ -87,6 +96,10 @@ class YoutubeChat {
 
       case 'messages':
         talker.debug('New messages: ${msgMapped['messages']}');
+        for (var message in msgMapped['messages']) {
+          _chatStreamController
+              ?.add(ChatMessage.fromYoutube(message, channelHandle));
+        }
         break;
 
       case 'error':
@@ -99,6 +112,7 @@ class YoutubeChat {
     _webSocketChannel?.sink.close();
     _streamSubscription?.cancel();
     _streamSubscription = null;
-    _chatStreamController.close();
+    _chatStreamController?.close();
+    _chatStreamController = null;
   }
 }

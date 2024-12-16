@@ -252,7 +252,7 @@ class ChatViewController extends GetxController
     }
   }
 
-  void createChats() {
+  Future<void> createChats() async {
     List<Channel> twitchChannels =
         chatGroup.channels.where((e) => e.platform == Platform.twitch).toList();
     List<Channel> kickChannels =
@@ -281,7 +281,7 @@ class ChatViewController extends GetxController
       bool alreadyCreated =
           kickChats.firstWhereOrNull((k) => k.username == kc.channel) != null;
       if (!alreadyCreated) {
-        createYoutubeChat(kc.channel);
+        await createYoutubeChat(kc.channel);
       }
     }
 
@@ -397,7 +397,7 @@ class ChatViewController extends GetxController
     YoutubeChat youtubeChat = await YoutubeChat(
       talker: talker,
     ).init(channel: channelId);
-    youtubeChat.connect();
+    await youtubeChat.connect();
     youtubeChat.chatStream.listen((ChatMessage message) {
       Settings settings = settingsService.settings.value;
       if (settings.ttsSettings.ttsEnabled) {
