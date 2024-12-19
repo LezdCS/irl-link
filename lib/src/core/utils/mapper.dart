@@ -80,6 +80,7 @@ import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
   MapType<TwitchPredictionDTO, TwitchPrediction>(),
   MapType<SeActivityDTO, SeActivity>(),
   MapType<SeCredentialsDTO, SeCredentials>(),
+  MapType<SeCredentials, SeCredentialsDTO>(),
   MapType<SeMeDTO, SeMe>(),
   MapType<SeOverlayDTO, SeOverlay>(),
   MapType<TwitchStreamInfosDto, TwitchStreamInfos>(),

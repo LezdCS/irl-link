@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'se_credentials_dto.freezed.dart';
+part 'se_credentials_dto.g.dart';
 
 @freezed
 class SeCredentialsDTO with _$SeCredentialsDTO {
@@ -11,12 +12,6 @@ class SeCredentialsDTO with _$SeCredentialsDTO {
     required String scopes,
   }) = _SeCredentialsDTO;
 
-  factory SeCredentialsDTO.fromJson(Map<String, dynamic> map) {
-    return SeCredentialsDTO(
-      accessToken: map['accessToken'] as String,
-      refreshToken: map['refreshToken'] as String,
-      expiresIn: map['expiresIn'] as int,
-      scopes: map['scopes'] as String,
-    );
-  }
+  factory SeCredentialsDTO.fromJson(Map<String, dynamic> json) =>
+      _$SeCredentialsDTOFromJson(json);
 }

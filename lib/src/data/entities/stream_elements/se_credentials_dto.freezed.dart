@@ -14,12 +14,19 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
+SeCredentialsDTO _$SeCredentialsDTOFromJson(Map<String, dynamic> json) {
+  return _SeCredentialsDTO.fromJson(json);
+}
+
 /// @nodoc
 mixin _$SeCredentialsDTO {
   String get accessToken => throw _privateConstructorUsedError;
   String get refreshToken => throw _privateConstructorUsedError;
   int get expiresIn => throw _privateConstructorUsedError;
   String get scopes => throw _privateConstructorUsedError;
+
+  /// Serializes this SeCredentialsDTO to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
   /// Create a copy of SeCredentialsDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -131,13 +138,16 @@ class __$$SeCredentialsDTOImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$SeCredentialsDTOImpl implements _SeCredentialsDTO {
   const _$SeCredentialsDTOImpl(
       {required this.accessToken,
       required this.refreshToken,
       required this.expiresIn,
       required this.scopes});
+
+  factory _$SeCredentialsDTOImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SeCredentialsDTOImplFromJson(json);
 
   @override
   final String accessToken;
@@ -167,6 +177,7 @@ class _$SeCredentialsDTOImpl implements _SeCredentialsDTO {
             (identical(other.scopes, scopes) || other.scopes == scopes));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, accessToken, refreshToken, expiresIn, scopes);
@@ -179,6 +190,13 @@ class _$SeCredentialsDTOImpl implements _SeCredentialsDTO {
   _$$SeCredentialsDTOImplCopyWith<_$SeCredentialsDTOImpl> get copyWith =>
       __$$SeCredentialsDTOImplCopyWithImpl<_$SeCredentialsDTOImpl>(
           this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SeCredentialsDTOImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _SeCredentialsDTO implements SeCredentialsDTO {
@@ -187,6 +205,9 @@ abstract class _SeCredentialsDTO implements SeCredentialsDTO {
       required final String refreshToken,
       required final int expiresIn,
       required final String scopes}) = _$SeCredentialsDTOImpl;
+
+  factory _SeCredentialsDTO.fromJson(Map<String, dynamic> json) =
+      _$SeCredentialsDTOImpl.fromJson;
 
   @override
   String get accessToken;
