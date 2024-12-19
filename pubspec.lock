@@ -1573,10 +1573,10 @@ packages:
     dependency: "direct main"
     description:
       name: upgrader
-      sha256: "9b907a8c956dbf3f2d0430d16134e27543cba98eab31f19a2240ab1c4d920506"
+      sha256: eb5a4888873d7998605306c4212491efdff8e59ee609d946dbcd6df83598d004
       url: "https://pub.dev"
     source: hosted
-    version: "11.3.0"
+    version: "11.3.1"
   url_launcher:
     dependency: "direct main"
     description:
