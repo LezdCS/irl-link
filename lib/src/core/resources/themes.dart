@@ -1,19 +1,36 @@
 import 'package:flutter/material.dart';
 
+const textPrimary = Color(0xFFFFFFFF);
+const textPrimaryLight = Color(0xFF000000);
+
 class Themes {
   final ThemeData darkTheme = ThemeData.dark().copyWith(
     colorScheme: ColorScheme.fromSwatch().copyWith(
       surface: const Color(0xFF0e0e10),
       secondary: const Color(0xFF18181b),
       error: const Color(0xFFEC0808),
+      surfaceContainerHigh: const Color(0xFF0e0e10),
 
       //buttons color
       tertiary: Colors.deepPurpleAccent[200],
       tertiaryContainer: Colors.grey[850],
     ),
     textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: Colors.white),
-      bodyMedium: TextStyle(color: Colors.white),
+      bodyLarge: TextStyle(color: textPrimary),
+      bodyMedium: TextStyle(color: textPrimary),
+      bodySmall: TextStyle(color: textPrimary),
+      titleLarge: TextStyle(color: textPrimary),
+      titleMedium: TextStyle(color: textPrimary),
+      titleSmall: TextStyle(color: textPrimary),
+      displayLarge: TextStyle(color: textPrimary),
+      displayMedium: TextStyle(color: textPrimary),
+      displaySmall: TextStyle(color: textPrimary),
+      headlineLarge: TextStyle(color: textPrimary),
+      headlineMedium: TextStyle(color: textPrimary),
+      headlineSmall: TextStyle(color: textPrimary),
+      labelLarge: TextStyle(color: textPrimary),
+      labelMedium: TextStyle(color: textPrimary),
+      labelSmall: TextStyle(color: textPrimary),
     ),
     primaryIconTheme: const IconThemeData(color: Colors.white),
     inputDecorationTheme: InputDecorationTheme(
@@ -147,14 +164,28 @@ class Themes {
       surface: const Color(0xFFffffff),
       secondary: const Color(0xFFefeff1),
       error: const Color(0xFFEC0808),
+      surfaceContainerHigh: const Color(0xFFffffff),
 
       //buttons color
       tertiary: Colors.deepPurpleAccent[200],
       tertiaryContainer: Colors.grey[850],
     ),
     textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: Colors.black),
-      bodyMedium: TextStyle(color: Colors.black),
+      bodyLarge: TextStyle(color: textPrimaryLight),
+      bodyMedium: TextStyle(color: textPrimaryLight),
+      bodySmall: TextStyle(color: textPrimaryLight),
+      titleLarge: TextStyle(color: textPrimaryLight),
+      titleMedium: TextStyle(color: textPrimaryLight),
+      titleSmall: TextStyle(color: textPrimaryLight),
+      displayLarge: TextStyle(color: textPrimaryLight),
+      displayMedium: TextStyle(color: textPrimaryLight),
+      displaySmall: TextStyle(color: textPrimaryLight),
+      headlineLarge: TextStyle(color: textPrimaryLight),
+      headlineMedium: TextStyle(color: textPrimaryLight),
+      headlineSmall: TextStyle(color: textPrimaryLight),
+      labelLarge: TextStyle(color: textPrimaryLight),
+      labelMedium: TextStyle(color: textPrimaryLight),
+      labelSmall: TextStyle(color: textPrimaryLight),
     ),
     primaryIconTheme: const IconThemeData(color: Colors.black),
     inputDecorationTheme: InputDecorationTheme(
@@ -211,7 +242,7 @@ class Themes {
             fontSize: 12,
           ),
         ),
-        foregroundColor: WidgetStatePropertyAll(Colors.white),
+        foregroundColor: WidgetStatePropertyAll(Colors.black),
       ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(

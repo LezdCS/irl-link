@@ -105,7 +105,7 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
         timeout: const Duration(seconds: 30),
       );
 
-      await obsWebSocket?.listen(EventSubscription.all.code);
+      obsWebSocket?.listen(EventSubscription.all.code);
 
       obsWebSocket?.addHandler<RecordStateChanged>(
           (RecordStateChanged recordingStateChanged) {
@@ -162,7 +162,7 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
       isConnected.value = true;
       Settings settings = Get.find<SettingsService>().settings.value;
 
-      List obsConnectionsHistory = settings.obsConnectionsHistory;
+      List obsConnectionsHistory = List.from(settings.obsConnectionsHistory);
       if (obsConnectionsHistory.firstWhereOrNull(
             (element) =>
                 element['url'] == url && element['password'] == password,
@@ -197,6 +197,7 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
         },
       );
     } catch (e) {
+      talkerService.talker.error("Failed to connect to OBS: $e");
       alertMessage.value = "Failed to connect to OBS";
       isConnected.value = false;
     }

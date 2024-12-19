@@ -90,6 +90,7 @@ import '../../domain/entities/twitch/twitch_user.dart' as _i22;
 /// - `TwitchPredictionDTO` → `TwitchPrediction`.
 /// - `SeActivityDTO` → `SeActivity`.
 /// - `SeCredentialsDTO` → `SeCredentials`.
+/// - `SeCredentials` → `SeCredentialsDTO`.
 /// - `SeMeDTO` → `SeMe`.
 /// - `SeOverlayDTO` → `SeOverlay`.
 /// - `TwitchStreamInfosDto` → `TwitchStreamInfos`.
@@ -336,6 +337,12 @@ class $Mappr implements _i1.AutoMapprInterface {
             sourceTypeOf == _typeOf<_i32.SeCredentialsDTO?>()) &&
         (targetTypeOf == _typeOf<_i33.SeCredentials>() ||
             targetTypeOf == _typeOf<_i33.SeCredentials?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i33.SeCredentials>() ||
+            sourceTypeOf == _typeOf<_i33.SeCredentials?>()) &&
+        (targetTypeOf == _typeOf<_i32.SeCredentialsDTO>() ||
+            targetTypeOf == _typeOf<_i32.SeCredentialsDTO?>())) {
       return true;
     }
     if ((sourceTypeOf == _typeOf<_i34.SeMeDTO>() ||
@@ -944,6 +951,16 @@ class $Mappr implements _i1.AutoMapprInterface {
       }
       return (_map__i32$SeCredentialsDTO_To__i33$SeCredentials(
           (model as _i32.SeCredentialsDTO?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i33.SeCredentials>() ||
+            sourceTypeOf == _typeOf<_i33.SeCredentials?>()) &&
+        (targetTypeOf == _typeOf<_i32.SeCredentialsDTO>() ||
+            targetTypeOf == _typeOf<_i32.SeCredentialsDTO?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i33$SeCredentials_To__i32$SeCredentialsDTO(
+          (model as _i33.SeCredentials?)) as TARGET);
     }
     if ((sourceTypeOf == _typeOf<_i34.SeMeDTO>() ||
             sourceTypeOf == _typeOf<_i34.SeMeDTO?>()) &&
@@ -1767,6 +1784,22 @@ class $Mappr implements _i1.AutoMapprInterface {
           r'Consider setting the whenSourceIsNull parameter on the MapType<SeCredentialsDTO, SeCredentials> to handle null values during mapping.');
     }
     return _i33.SeCredentials(
+      accessToken: model.accessToken,
+      refreshToken: model.refreshToken,
+      expiresIn: model.expiresIn,
+      scopes: model.scopes,
+    );
+  }
+
+  _i32.SeCredentialsDTO _map__i33$SeCredentials_To__i32$SeCredentialsDTO(
+      _i33.SeCredentials? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping SeCredentials → SeCredentialsDTO failed because SeCredentials was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<SeCredentials, SeCredentialsDTO> to handle null values during mapping.');
+    }
+    return _i32.SeCredentialsDTO(
       accessToken: model.accessToken,
       refreshToken: model.refreshToken,
       expiresIn: model.expiresIn,

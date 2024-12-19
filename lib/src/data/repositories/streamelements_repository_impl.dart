@@ -62,16 +62,19 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
       return validateTokenResult.fold(
         (l) => Left(Failure("Validate token issue.")),
         (r) async {
-          String scopes = r.data['scopes'].join(' ');
+          talker.debug(r.toString());
+          String scopes = r['scopes'].join(' ');
 
-          SeCredentials seCredentials = SeCredentials(
+          SeCredentialsDTO seCredentialDTO = SeCredentialsDTO(
             accessToken: accessToken,
             refreshToken: refreshToken,
             expiresIn: expiresIn,
             scopes: scopes,
           );
 
-          await storeCredentials(seCredentials);
+          await storeCredentials(seCredentialDTO);
+          SeCredentials seCredentials =
+              _mappr.convert<SeCredentialsDTO, SeCredentials>(seCredentialDTO);
           return Right(seCredentials);
         },
       );
@@ -102,15 +105,18 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
 
       talker.logCustom(StreamElementsLog('StreamElements token refreshed.'));
 
-      SeCredentials newSeCredentials = SeCredentials(
+      SeCredentialsDTO newSeCredentialDTO = SeCredentialsDTO(
         accessToken: response.data['access_token'],
         refreshToken: response.data['refresh_token'],
         expiresIn: response.data['expires_in'],
         scopes: seCredentials.scopes,
       );
-      await storeCredentials(newSeCredentials);
+      await storeCredentials(newSeCredentialDTO);
 
-      await validateToken(newSeCredentials.accessToken);
+      await validateToken(newSeCredentialDTO.accessToken);
+
+      SeCredentials newSeCredentials =
+          _mappr.convert<SeCredentialsDTO, SeCredentials>(newSeCredentialDTO);
 
       return Right(newSeCredentials);
     } on DioException catch (e) {
@@ -118,7 +124,7 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
     }
   }
 
-  Future<void> storeCredentials(SeCredentials seCredentials) async {
+  Future<void> storeCredentials(SeCredentialsDTO seCredentials) async {
     GetStorage box = GetStorage();
     String jsonData = jsonEncode(seCredentials);
     await box.write('seCredentials', jsonData);
