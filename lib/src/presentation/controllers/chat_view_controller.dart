@@ -396,6 +396,7 @@ class ChatViewController extends GetxController
   Future<void> createYoutubeChat(String channelId) async {
     YoutubeChat youtubeChat = await YoutubeChat(
       talker: talker,
+      twitchToken: twitchData!.accessToken,
     ).init(channel: channelId);
     await youtubeChat.connect();
     youtubeChat.chatStream.listen((ChatMessage message) {

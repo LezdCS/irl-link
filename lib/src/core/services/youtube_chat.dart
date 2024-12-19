@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:talker_flutter/talker_flutter.dart';
@@ -9,9 +10,11 @@ import 'package:web_socket_channel/io.dart';
 class YoutubeChat {
   YoutubeChat({
     required this.talker,
+    required this.twitchToken,
   });
 
   final Talker talker;
+  final String twitchToken;
   IOWebSocketChannel? _webSocketChannel;
   StreamSubscription? _streamSubscription;
   Rx<bool> isConnected = false.obs;
@@ -39,9 +42,18 @@ class YoutubeChat {
       _chatStreamController = StreamController<ChatMessage>.broadcast();
     }
 
-    String url = "wss://youtube-api.irlhosting.com";
+    final remoteConfig = FirebaseRemoteConfig.instance;
+    await remoteConfig.fetchAndActivate();
+    // String url = remoteConfig.getString('youtube_websocket_url');
+    String url = 'ws://10.0.2.2:8000/wss';
 
-    _webSocketChannel = IOWebSocketChannel.connect(url);
+    _webSocketChannel = IOWebSocketChannel.connect(
+      url,
+      protocols: [
+        'Authorization',
+        twitchToken,
+      ],
+    );
 
     try {
       talker.info('Connecting to Youtube Chat Websocket');
@@ -67,7 +79,9 @@ class YoutubeChat {
     _webSocketChannel?.sink.add(
       jsonEncode({
         'type': 'subscribe',
-        'channelId': channelHandle,
+        'data': {
+          'channelId': channelHandle,
+        },
       }),
     );
   }
