@@ -63,7 +63,7 @@ dependencies:
   upgrader: ^11.3.1
   url_launcher: ^6.3.1
   uuid:  ^4.5.1
-  wakelock_plus: ^1.2.8
+  wakelock_plus: ^1.2.10
   web_socket_channel: ^3.0.1
   webview_flutter: ^4.8.0
   webview_flutter_android: ^4.1.0
