@@ -44,8 +44,7 @@ class YoutubeChat {
 
     final remoteConfig = FirebaseRemoteConfig.instance;
     await remoteConfig.fetchAndActivate();
-    // String url = remoteConfig.getString('youtube_websocket_url');
-    String url = 'ws://10.0.2.2:8000/wss';
+    String url = remoteConfig.getString('youtube_websocket_url');
 
     _webSocketChannel = IOWebSocketChannel.connect(
       url,
