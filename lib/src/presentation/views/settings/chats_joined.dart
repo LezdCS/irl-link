@@ -475,7 +475,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
       case Platform.kick:
         return '';
       case Platform.youtube:
-        return 'Ex: youtube.com/@Lezd/streams';
+        return 'Ex: Lezd in youtube.com/@Lezd';
       default:
         return '';
     }
@@ -488,7 +488,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
       case Platform.kick:
         return 'Channel name';
       case Platform.youtube:
-        return 'Channel URL';
+        return 'Channel handle';
       default:
         return '';
     }
