@@ -20,15 +20,15 @@ import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart
 
 Future<void> initializeDependencies() async {
   await Get.putAsync(
-    () => DeeplinksService(
-      appLinks: AppLinks(),
-      talker: Get.find<TalkerService>().talker,
-    ).init(),
+    () => TalkerService().init(),
     permanent: true,
   );
 
   await Get.putAsync(
-    () => TalkerService().init(),
+    () => DeeplinksService(
+      appLinks: AppLinks(),
+      talker: Get.find<TalkerService>().talker,
+    ).init(),
     permanent: true,
   );
 
