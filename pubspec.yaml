@@ -88,14 +88,6 @@ dev_dependencies:
 
 dependency_overrides:
 
-flutter_icons:
-  android: true
-  ios: true
-  image_path: "lib/assets/icon/icon.png"
-  remove_alpha_ios: true
-  adaptive_icon_background: "lib/assets/icon/background.png"
-  adaptive_icon_foreground: "lib/assets/icon/foreground.png"
-
 # The following section is specific to Flutter.
 flutter:
 
