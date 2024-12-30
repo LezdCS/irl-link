@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/app_info_service.dart';
-import 'package:irllink/src/core/services/deeplinkks_service.dart';
+import 'package:irllink/src/core/services/deeplinks_service.dart';
 import 'package:irllink/src/core/services/notification_service.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
