@@ -37,7 +37,7 @@ dependencies:
   flutter_colorpicker: ^1.1.0
   flutter_foreground_task: ^8.17.0
   flutter_svg: ^2.0.10+1
-  flutter_tts: ^4.0.2
+  flutter_tts: ^4.2.1
   flutter_web_auth: ^0.6.0
   geolocator: ^13.0.2
   get: ^4.6.6

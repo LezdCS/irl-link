@@ -641,10 +641,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_tts
-      sha256: aed2a00c48c43af043ed81145fd8503ddd793dafa7088ab137dbef81a703e53d
+      sha256: ece61b9eca4311f72b674ddff8ab9b1aba1b13dcf4a5ded20f612c5cc871779c
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.2"
+    version: "4.2.1"
   flutter_web_auth:
     dependency: "direct main"
     description:
