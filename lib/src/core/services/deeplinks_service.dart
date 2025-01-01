@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:app_links/app_links.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
@@ -57,7 +58,7 @@ class DeeplinksService {
     }
   }
 
-  void _handleIrlTools(Map<String, String> params) {
+  Future<void> _handleIrlTools(Map<String, String> params) async {
     final apiKey = params['apiKey'];
     final config = params['config'];
 
@@ -70,11 +71,15 @@ class DeeplinksService {
     final settingsService = Get.find<SettingsService>();
     final settings = settingsService.settings.value;
 
+    final remoteConfig = FirebaseRemoteConfig.instance;
+    await remoteConfig.fetchAndActivate();
+    final baseUrl = remoteConfig.getString('irltools_obs_remote_base_url');
+
     // Create a new browser tab
     final tab = BrowserTab(
       id: const Uuid().v4(),
       title: 'IRL Tools',
-      url: 'https://........?apiKey=$apiKey&config=$config',
+      url: '$baseUrl?apiKey=$apiKey&config=$config',
       toggled: true,
       iOSAudioSource: false,
     );
