@@ -80,6 +80,8 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>FlutterDeepLinkingEnabled</key>
+	<false/>
 	<key>WKAppBundleIdentifier</key>
 	<string>com.irllink.watch</string>
 	<key>io.flutter.embedded_views_preview</key>

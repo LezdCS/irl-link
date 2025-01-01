@@ -1,7 +1,9 @@
+import 'package:app_links/app_links.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/app_info_service.dart';
+import 'package:irllink/src/core/services/deeplinks_service.dart';
 import 'package:irllink/src/core/services/notification_service.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
@@ -19,6 +21,14 @@ import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart
 Future<void> initializeDependencies() async {
   await Get.putAsync(
     () => TalkerService().init(),
+    permanent: true,
+  );
+
+  await Get.putAsync(
+    () => DeeplinksService(
+      appLinks: AppLinks(),
+      talker: Get.find<TalkerService>().talker,
+    ).init(),
     permanent: true,
   );
 

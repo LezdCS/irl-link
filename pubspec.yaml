@@ -42,8 +42,6 @@ dependencies:
   geolocator: ^13.0.2
   get: ^4.6.6
   get_storage: ^2.1.1
-  html: ^0.15.5
-  http: ^1.2.2
   in_app_purchase: ^3.2.0
   instant: ^0.5.1
   intl: ^0.20.1
@@ -74,6 +72,7 @@ dependencies:
   json_annotation: ^4.9.0
   dartz: ^0.10.1
   flutter_local_notifications: ^18.0.1
+  app_links: ^6.3.3
 
 dev_dependencies:
   flutter_test:
@@ -88,14 +87,6 @@ dev_dependencies:
     sdk: flutter
 
 dependency_overrides:
-
-flutter_icons:
-  android: true
-  ios: true
-  image_path: "lib/assets/icon/icon.png"
-  remove_alpha_ios: true
-  adaptive_icon_background: "lib/assets/icon/background.png"
-  adaptive_icon_foreground: "lib/assets/icon/foreground.png"
 
 # The following section is specific to Flutter.
 flutter:
