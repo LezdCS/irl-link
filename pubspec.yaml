@@ -56,7 +56,7 @@ dependencies:
   socket_io_client: ^3.0.2
   split_view: ^3.2.1
   talker_dio_logger: ^4.5.2
-  talker_flutter: ^4.5.1
+  talker_flutter: ^4.6.2
   twitch_chat: ^1.3.2
   upgrader: ^11.3.1
   url_launcher: ^6.3.1
