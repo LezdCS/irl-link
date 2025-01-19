@@ -330,35 +330,37 @@ class Tts extends GetView<SettingsViewController> {
                         description:
                             'Message starting with these prefixs will not be read aloud.',
                         textFieldHint: 'Prefix',
-                        list: settings.ttsSettings.prefixsToIgnore,
+                        rxList: RxList<String>.from(
+                          settings.ttsSettings.prefixsToIgnore.cast<String>(),
+                        ),
                         onDeleted: (index) {
-                          settings.ttsSettings.prefixsToIgnore.removeAt(index);
+                          final updatedList = List<String>.from(
+                            settings.ttsSettings.prefixsToIgnore,
+                          )..removeAt(index);
                           settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings.copyWith(
-                              prefixsToIgnore:
-                                  settings.ttsSettings.prefixsToIgnore,
+                              prefixsToIgnore: updatedList,
                             ),
                           );
                           settingsService.saveSettings();
-                          controller.nothingJustToRefreshDialog.refresh();
                         },
                         controller: controller,
                         textFieldController:
                             controller.addTtsIgnoredPrefixsController,
                         onAdd: () {
-                          settings.ttsSettings.prefixsToIgnore.add(
-                            controller.addTtsIgnoredPrefixsController.text
-                                .trim(),
-                          );
+                          final updatedList = List<String>.from(
+                            settings.ttsSettings.prefixsToIgnore,
+                          )..add(
+                              controller.addTtsIgnoredPrefixsController.text
+                                  .trim(),
+                            );
                           settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings.copyWith(
-                              prefixsToIgnore:
-                                  settings.ttsSettings.prefixsToIgnore,
+                              prefixsToIgnore: updatedList,
                             ),
                           );
                           controller.addTtsIgnoredPrefixsController.clear();
                           settingsService.saveSettings();
-                          controller.nothingJustToRefreshDialog.refresh();
                         },
                       );
                     },
@@ -401,34 +403,36 @@ class Tts extends GetView<SettingsViewController> {
                         description:
                             'Only messages starting with these prefixs will be read aloud.',
                         textFieldHint: 'Prefix',
-                        list: settings.ttsSettings.prefixsToUseTtsOnly,
-                        onDeleted: (index) {
+                        rxList: RxList<String>.from(
                           settings.ttsSettings.prefixsToUseTtsOnly
-                              .removeAt(index);
+                              .cast<String>(),
+                        ),
+                        onDeleted: (index) {
+                          final updatedList = List<String>.from(
+                            settings.ttsSettings.prefixsToUseTtsOnly,
+                          )..removeAt(index);
                           settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings.copyWith(
-                              prefixsToUseTtsOnly:
-                                  settings.ttsSettings.prefixsToUseTtsOnly,
+                              prefixsToUseTtsOnly: updatedList,
                             ),
                           );
-                          controller.nothingJustToRefreshDialog.refresh();
                           settingsService.saveSettings();
                         },
                         controller: controller,
                         textFieldController:
                             controller.addTtsAllowedPrefixsController,
                         onAdd: () {
-                          settings.ttsSettings.prefixsToUseTtsOnly.add(
-                            controller.addTtsAllowedPrefixsController.text
-                                .trim(),
-                          );
+                          final updatedList = List<String>.from(
+                            settings.ttsSettings.prefixsToUseTtsOnly,
+                          )..add(
+                              controller.addTtsAllowedPrefixsController.text
+                                  .trim(),
+                            );
                           settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings.copyWith(
-                              prefixsToUseTtsOnly:
-                                  settings.ttsSettings.prefixsToUseTtsOnly,
+                              prefixsToUseTtsOnly: updatedList,
                             ),
                           );
-                          controller.nothingJustToRefreshDialog.refresh();
                           controller.addTtsAllowedPrefixsController.clear();
                           settingsService.saveSettings();
                         },
@@ -472,34 +476,37 @@ class Tts extends GetView<SettingsViewController> {
                         title: 'Ignored users',
                         description: 'Users that will not be read aloud.',
                         textFieldHint: 'Username',
-                        list: settings.ttsSettings.ttsUsersToIgnore,
+                        rxList: RxList<String>.from(
+                          settings.ttsSettings.ttsUsersToIgnore.cast<String>(),
+                        ),
                         onDeleted: (index) {
-                          settings.ttsSettings.ttsUsersToIgnore.removeAt(index);
+                          final updatedList = List<String>.from(
+                            settings.ttsSettings.ttsUsersToIgnore,
+                          )..removeAt(index);
                           settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings.copyWith(
-                              ttsUsersToIgnore:
-                                  settings.ttsSettings.ttsUsersToIgnore,
+                              ttsUsersToIgnore: updatedList,
                             ),
                           );
                           settingsService.saveSettings();
-                          controller.nothingJustToRefreshDialog.refresh();
                         },
                         controller: controller,
                         textFieldController:
                             controller.addTtsIgnoredUsersController,
                         onAdd: () {
-                          settings.ttsSettings.ttsUsersToIgnore.add(
-                            controller.addTtsIgnoredUsersController.text.trim(),
-                          );
+                          final updatedList = List<String>.from(
+                            settings.ttsSettings.ttsUsersToIgnore,
+                          )..add(
+                              controller.addTtsIgnoredUsersController.text
+                                  .trim(),
+                            );
                           settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings.copyWith(
-                              ttsUsersToIgnore:
-                                  settings.ttsSettings.ttsUsersToIgnore,
+                              ttsUsersToIgnore: updatedList,
                             ),
                           );
                           controller.addTtsIgnoredUsersController.clear();
                           settingsService.saveSettings();
-                          controller.nothingJustToRefreshDialog.refresh();
                         },
                       );
                     },
@@ -545,7 +552,7 @@ class Tts extends GetView<SettingsViewController> {
     required String title,
     required String description,
     required String textFieldHint,
-    required List list,
+    required RxList<String> rxList,
     required Function onDeleted,
     required TextEditingController textFieldController,
     required Function onAdd,
@@ -563,28 +570,28 @@ class Tts extends GetView<SettingsViewController> {
           children: [
             Text(
               description,
-              style:
-                  TextStyle(color: controller.nothingJustToRefreshDialog.value),
+              style: const TextStyle(color: Colors.grey),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 10),
             Visibility(
-              visible: list.isNotEmpty,
+              visible: rxList.isNotEmpty,
               child: SizedBox(
                 width: double.maxFinite,
                 height: 50,
                 child: ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
-                  itemCount: list.length,
+                  itemCount: rxList.length,
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.only(right: 8),
                       child: Chip(
                         onDeleted: () {
                           onDeleted(index);
+                          rxList.refresh();
                         },
-                        label: Text(list[index]),
+                        label: Text(rxList[index]),
                       ),
                     );
                   },
