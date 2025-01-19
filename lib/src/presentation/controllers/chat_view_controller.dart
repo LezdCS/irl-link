@@ -394,6 +394,17 @@ class ChatViewController extends GetxController
   }
 
   Future<void> createYoutubeChat(String channelId) async {
+    if (twitchData == null) {
+      Get.snackbar(
+        'Error',
+        'Twitch authentication is required to use YouTube chat',
+        snackPosition: SnackPosition.BOTTOM,
+        icon: const Icon(Icons.error_outline, color: Colors.red),
+        borderWidth: 1,
+        borderColor: Colors.red,
+      );
+      return;
+    }
     YoutubeChat youtubeChat = await YoutubeChat(
       talker: talker,
       twitchToken: twitchData!.accessToken,
