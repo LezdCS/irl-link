@@ -41,6 +41,26 @@ class Tts extends GetView<SettingsViewController> {
               color: Theme.of(context).colorScheme.surface,
               child: Column(
                 children: [
+                  Visibility(
+                    visible: Platform.isIOS,
+                    child: const Row(
+                      spacing: 10,
+                      children: [
+                        Icon(
+                          Icons.notifications_off_outlined,
+                          color: Colors.amber,
+                        ),
+                        Expanded(
+                          child: Text(
+                            'If your device is currently in Silent Mode it could prevent the TTS to work.',
+                            style: TextStyle(
+                              color: Colors.amber,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
