@@ -5,6 +5,7 @@ import 'package:irllink/src/core/utils/string_casing_extension.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
+import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:uuid/uuid.dart';
 
@@ -397,6 +398,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
                   value: selectedPlatform.toString(),
                   items: List.generate(Platform.values.length, (index) {
                     String badge = '';
+                    bool enabled = true;
                     switch (Platform.values[index]) {
                       case Platform.twitch:
                         badge = "lib/assets/twitch/twitch_logo.png";
@@ -406,30 +408,96 @@ class ChatsJoined extends GetView<SettingsViewController> {
                         break;
                       case Platform.youtube:
                         badge = "lib/assets/youtube/youtubeLogo.png";
+                        enabled =
+                            Get.find<HomeViewController>().twitchData != null;
                         break;
                     }
                     return DropdownMenuItem(
                       value: Platform.values[index].toString(),
-                      child: Row(
-                        children: [
-                          Image(
-                            width: 18,
-                            height: 18,
-                            image: AssetImage(
-                              badge,
+                      enabled: enabled,
+                      child: enabled
+                          ? Container(
+                              decoration: BoxDecoration(
+                                color:
+                                    enabled ? null : Colors.grey.withAlpha(77),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
+                              child: Row(
+                                children: [
+                                  Image(
+                                    width: 18,
+                                    height: 18,
+                                    image: AssetImage(
+                                      badge,
+                                    ),
+                                    filterQuality: FilterQuality.high,
+                                    opacity: AlwaysStoppedAnimation(
+                                      enabled ? 1.0 : 0.5,
+                                    ),
+                                  ),
+                                  const Padding(
+                                    padding: EdgeInsets.only(right: 8),
+                                  ),
+                                  Text(
+                                    Platform.values[index].name.toCapitalized(),
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge!
+                                          .color
+                                          ?.withAlpha(enabled ? 255 : 50),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : Tooltip(
+                              message:
+                                  "YouTube chat requires Twitch authentication",
+                              triggerMode: TooltipTriggerMode.tap,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.withAlpha(77),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 4,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Image(
+                                      width: 18,
+                                      height: 18,
+                                      image: AssetImage(
+                                        badge,
+                                      ),
+                                      filterQuality: FilterQuality.high,
+                                      opacity:
+                                          const AlwaysStoppedAnimation(0.5),
+                                    ),
+                                    const Padding(
+                                      padding: EdgeInsets.only(right: 8),
+                                    ),
+                                    Text(
+                                      Platform.values[index].name
+                                          .toCapitalized(),
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge!
+                                            .color
+                                            ?.withAlpha(50),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                            filterQuality: FilterQuality.high,
-                          ),
-                          const Padding(padding: EdgeInsets.only(right: 8)),
-                          Text(
-                            Platform.values[index].name.toCapitalized(),
-                            style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                            ),
-                          ),
-                        ],
-                      ),
                     );
                   }),
                   onChanged: (value) {
