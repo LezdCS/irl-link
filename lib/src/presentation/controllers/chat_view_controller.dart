@@ -368,9 +368,9 @@ class ChatViewController extends GetxController
     twitchChat.connect();
     twitchChats.add(twitchChat);
 
-    Settings settings = settingsService.settings.value;
-
     twitchChat.chatStream.listen((twitchMessage) {
+      final settings = settingsService.settings.value;
+
       if (cheerEmotes.isEmpty) {
         cheerEmotes.value =
             twitchChat.cheerEmotes.map((e) => ChatEmote.fromTwitch(e)).toList();
