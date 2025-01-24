@@ -330,9 +330,7 @@ class Tts extends GetView<SettingsViewController> {
                         description:
                             'Message starting with these prefixs will not be read aloud.',
                         textFieldHint: 'Prefix',
-                        rxList: RxList<String>.from(
-                          settings.ttsSettings.prefixsToIgnore.cast<String>(),
-                        ),
+                        list: settings.ttsSettings.prefixsToIgnore,
                         onDeleted: (index) {
                           final updatedList = List<String>.from(
                             settings.ttsSettings.prefixsToIgnore,
@@ -403,10 +401,7 @@ class Tts extends GetView<SettingsViewController> {
                         description:
                             'Only messages starting with these prefixs will be read aloud.',
                         textFieldHint: 'Prefix',
-                        rxList: RxList<String>.from(
-                          settings.ttsSettings.prefixsToUseTtsOnly
-                              .cast<String>(),
-                        ),
+                        list: settings.ttsSettings.prefixsToUseTtsOnly,
                         onDeleted: (index) {
                           final updatedList = List<String>.from(
                             settings.ttsSettings.prefixsToUseTtsOnly,
@@ -476,9 +471,7 @@ class Tts extends GetView<SettingsViewController> {
                         title: 'Ignored users',
                         description: 'Users that will not be read aloud.',
                         textFieldHint: 'Username',
-                        rxList: RxList<String>.from(
-                          settings.ttsSettings.ttsUsersToIgnore.cast<String>(),
-                        ),
+                        list: settings.ttsSettings.ttsUsersToIgnore,
                         onDeleted: (index) {
                           final updatedList = List<String>.from(
                             settings.ttsSettings.ttsUsersToIgnore,
@@ -552,7 +545,7 @@ class Tts extends GetView<SettingsViewController> {
     required String title,
     required String description,
     required String textFieldHint,
-    required RxList<String> rxList,
+    required List list,
     required Function onDeleted,
     required TextEditingController textFieldController,
     required Function onAdd,
@@ -565,75 +558,74 @@ class Tts extends GetView<SettingsViewController> {
       cancelTextColor: const Color(0xFF9147ff),
       textCancel: "cancel".tr,
       radius: 10,
-      content: Obx(
-        () => Column(
-          children: [
-            Text(
-              description,
-              style: const TextStyle(color: Colors.grey),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 10),
-            Visibility(
-              visible: rxList.isNotEmpty,
-              child: SizedBox(
-                width: double.maxFinite,
-                height: 50,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: rxList.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: Chip(
-                        onDeleted: () {
-                          onDeleted(index);
-                          rxList.refresh();
-                        },
-                        label: Text(rxList[index]),
-                      ),
-                    );
-                  },
-                ),
+      content: Column(
+        children: [
+          Text(
+            description,
+            style: const TextStyle(color: Colors.grey),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 10),
+          Visibility(
+            visible: list.isNotEmpty,
+            child: SizedBox(
+              width: double.maxFinite,
+              height: 50,
+              child: ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: list.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Chip(
+                      onDeleted: () {
+                        onDeleted(index);
+                        Get.back();
+                      },
+                      label: Text(list[index]),
+                    ),
+                  );
+                },
               ),
             ),
-            Row(
-              children: [
-                Expanded(
-                  flex: 7,
-                  child: TextField(
-                    controller: textFieldController,
-                    decoration: InputDecoration(
-                      isDense: true,
-                      contentPadding: const EdgeInsets.all(10),
-                      hintText: textFieldHint,
-                      labelText: textFieldHint,
+          ),
+          Row(
+            children: [
+              Expanded(
+                flex: 7,
+                child: TextField(
+                  controller: textFieldController,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    contentPadding: const EdgeInsets.all(10),
+                    hintText: textFieldHint,
+                    labelText: textFieldHint,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 3,
+                child: Container(
+                  margin: const EdgeInsets.only(left: 10),
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor:
+                          Theme.of(Get.context!).colorScheme.tertiary,
+                    ),
+                    onPressed: () {
+                      onAdd();
+                      Get.back();
+                    },
+                    child: Text(
+                      "add".tr,
                     ),
                   ),
                 ),
-                Expanded(
-                  flex: 3,
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 10),
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor:
-                            Theme.of(Get.context!).colorScheme.tertiary,
-                      ),
-                      onPressed: () {
-                        onAdd();
-                      },
-                      child: Text(
-                        "add".tr,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
