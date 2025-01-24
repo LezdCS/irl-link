@@ -41,6 +41,26 @@ class Tts extends GetView<SettingsViewController> {
               color: Theme.of(context).colorScheme.surface,
               child: Column(
                 children: [
+                  Visibility(
+                    visible: Platform.isIOS,
+                    child: const Row(
+                      spacing: 10,
+                      children: [
+                        Icon(
+                          Icons.notifications_off_outlined,
+                          color: Colors.amber,
+                        ),
+                        Expanded(
+                          child: Text(
+                            'If your device is currently in Silent Mode it could prevent the TTS to work.',
+                            style: TextStyle(
+                              color: Colors.amber,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -312,33 +332,33 @@ class Tts extends GetView<SettingsViewController> {
                         textFieldHint: 'Prefix',
                         list: settings.ttsSettings.prefixsToIgnore,
                         onDeleted: (index) {
-                          settings.ttsSettings.prefixsToIgnore.removeAt(index);
+                          final updatedList = List<String>.from(
+                            settings.ttsSettings.prefixsToIgnore,
+                          )..removeAt(index);
                           settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings.copyWith(
-                              prefixsToIgnore:
-                                  settings.ttsSettings.prefixsToIgnore,
+                              prefixsToIgnore: updatedList,
                             ),
                           );
                           settingsService.saveSettings();
-                          controller.nothingJustToRefreshDialog.refresh();
                         },
                         controller: controller,
                         textFieldController:
                             controller.addTtsIgnoredPrefixsController,
                         onAdd: () {
-                          settings.ttsSettings.prefixsToIgnore.add(
-                            controller.addTtsIgnoredPrefixsController.text
-                                .trim(),
-                          );
+                          final updatedList = List<String>.from(
+                            settings.ttsSettings.prefixsToIgnore,
+                          )..add(
+                              controller.addTtsIgnoredPrefixsController.text
+                                  .trim(),
+                            );
                           settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings.copyWith(
-                              prefixsToIgnore:
-                                  settings.ttsSettings.prefixsToIgnore,
+                              prefixsToIgnore: updatedList,
                             ),
                           );
                           controller.addTtsIgnoredPrefixsController.clear();
                           settingsService.saveSettings();
-                          controller.nothingJustToRefreshDialog.refresh();
                         },
                       );
                     },
@@ -383,32 +403,31 @@ class Tts extends GetView<SettingsViewController> {
                         textFieldHint: 'Prefix',
                         list: settings.ttsSettings.prefixsToUseTtsOnly,
                         onDeleted: (index) {
-                          settings.ttsSettings.prefixsToUseTtsOnly
-                              .removeAt(index);
+                          final updatedList = List<String>.from(
+                            settings.ttsSettings.prefixsToUseTtsOnly,
+                          )..removeAt(index);
                           settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings.copyWith(
-                              prefixsToUseTtsOnly:
-                                  settings.ttsSettings.prefixsToUseTtsOnly,
+                              prefixsToUseTtsOnly: updatedList,
                             ),
                           );
-                          controller.nothingJustToRefreshDialog.refresh();
                           settingsService.saveSettings();
                         },
                         controller: controller,
                         textFieldController:
                             controller.addTtsAllowedPrefixsController,
                         onAdd: () {
-                          settings.ttsSettings.prefixsToUseTtsOnly.add(
-                            controller.addTtsAllowedPrefixsController.text
-                                .trim(),
-                          );
+                          final updatedList = List<String>.from(
+                            settings.ttsSettings.prefixsToUseTtsOnly,
+                          )..add(
+                              controller.addTtsAllowedPrefixsController.text
+                                  .trim(),
+                            );
                           settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings.copyWith(
-                              prefixsToUseTtsOnly:
-                                  settings.ttsSettings.prefixsToUseTtsOnly,
+                              prefixsToUseTtsOnly: updatedList,
                             ),
                           );
-                          controller.nothingJustToRefreshDialog.refresh();
                           controller.addTtsAllowedPrefixsController.clear();
                           settingsService.saveSettings();
                         },
@@ -454,32 +473,33 @@ class Tts extends GetView<SettingsViewController> {
                         textFieldHint: 'Username',
                         list: settings.ttsSettings.ttsUsersToIgnore,
                         onDeleted: (index) {
-                          settings.ttsSettings.ttsUsersToIgnore.removeAt(index);
+                          final updatedList = List<String>.from(
+                            settings.ttsSettings.ttsUsersToIgnore,
+                          )..removeAt(index);
                           settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings.copyWith(
-                              ttsUsersToIgnore:
-                                  settings.ttsSettings.ttsUsersToIgnore,
+                              ttsUsersToIgnore: updatedList,
                             ),
                           );
                           settingsService.saveSettings();
-                          controller.nothingJustToRefreshDialog.refresh();
                         },
                         controller: controller,
                         textFieldController:
                             controller.addTtsIgnoredUsersController,
                         onAdd: () {
-                          settings.ttsSettings.ttsUsersToIgnore.add(
-                            controller.addTtsIgnoredUsersController.text.trim(),
-                          );
+                          final updatedList = List<String>.from(
+                            settings.ttsSettings.ttsUsersToIgnore,
+                          )..add(
+                              controller.addTtsIgnoredUsersController.text
+                                  .trim(),
+                            );
                           settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings.copyWith(
-                              ttsUsersToIgnore:
-                                  settings.ttsSettings.ttsUsersToIgnore,
+                              ttsUsersToIgnore: updatedList,
                             ),
                           );
                           controller.addTtsIgnoredUsersController.clear();
                           settingsService.saveSettings();
-                          controller.nothingJustToRefreshDialog.refresh();
                         },
                       );
                     },
@@ -538,75 +558,74 @@ class Tts extends GetView<SettingsViewController> {
       cancelTextColor: const Color(0xFF9147ff),
       textCancel: "cancel".tr,
       radius: 10,
-      content: Obx(
-        () => Column(
-          children: [
-            Text(
-              description,
-              style:
-                  TextStyle(color: controller.nothingJustToRefreshDialog.value),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 10),
-            Visibility(
-              visible: list.isNotEmpty,
-              child: SizedBox(
-                width: double.maxFinite,
-                height: 50,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: list.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: Chip(
-                        onDeleted: () {
-                          onDeleted(index);
-                        },
-                        label: Text(list[index]),
-                      ),
-                    );
-                  },
-                ),
+      content: Column(
+        children: [
+          Text(
+            description,
+            style: const TextStyle(color: Colors.grey),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 10),
+          Visibility(
+            visible: list.isNotEmpty,
+            child: SizedBox(
+              width: double.maxFinite,
+              height: 50,
+              child: ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: list.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Chip(
+                      onDeleted: () {
+                        onDeleted(index);
+                        Get.back();
+                      },
+                      label: Text(list[index]),
+                    ),
+                  );
+                },
               ),
             ),
-            Row(
-              children: [
-                Expanded(
-                  flex: 7,
-                  child: TextField(
-                    controller: textFieldController,
-                    decoration: InputDecoration(
-                      isDense: true,
-                      contentPadding: const EdgeInsets.all(10),
-                      hintText: textFieldHint,
-                      labelText: textFieldHint,
+          ),
+          Row(
+            children: [
+              Expanded(
+                flex: 7,
+                child: TextField(
+                  controller: textFieldController,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    contentPadding: const EdgeInsets.all(10),
+                    hintText: textFieldHint,
+                    labelText: textFieldHint,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 3,
+                child: Container(
+                  margin: const EdgeInsets.only(left: 10),
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor:
+                          Theme.of(Get.context!).colorScheme.tertiary,
+                    ),
+                    onPressed: () {
+                      onAdd();
+                      Get.back();
+                    },
+                    child: Text(
+                      "add".tr,
                     ),
                   ),
                 ),
-                Expanded(
-                  flex: 3,
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 10),
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor:
-                            Theme.of(Get.context!).colorScheme.tertiary,
-                      ),
-                      onPressed: () {
-                        onAdd();
-                      },
-                      child: Text(
-                        "add".tr,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

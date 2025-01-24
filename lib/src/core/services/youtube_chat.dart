@@ -1,210 +1,131 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:get/instance_manager.dart';
-import 'package:html/dom.dart';
-import 'package:html/parser.dart' as parser;
-import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
-import 'package:irllink/src/core/services/talker_service.dart';
-
+import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:talker_flutter/talker_flutter.dart';
+import 'package:web_socket_channel/io.dart';
 
 class YoutubeChat {
-  String videoId;
+  YoutubeChat({
+    required this.talker,
+    required this.twitchToken,
+  });
 
-  final StreamController<ChatMessage> _chatStreamController =
-      StreamController<ChatMessage>.broadcast();
-  Stream<ChatMessage> get chatStream => _chatStreamController.stream;
+  final Talker talker;
+  final String twitchToken;
+  IOWebSocketChannel? _webSocketChannel;
+  StreamSubscription? _streamSubscription;
+  Rx<bool> isConnected = false.obs;
 
-  Talker talker = Get.find<TalkerService>().talker;
+  StreamController<ChatMessage>? _chatStreamController;
+  Stream<ChatMessage> get chatStream => _getChatStream();
 
-  YoutubeChat(
-    this.videoId,
-  );
-
-  void closeStream() {
-    _chatStreamController.close();
+  Stream<ChatMessage> _getChatStream() {
+    _chatStreamController ??= StreamController<ChatMessage>.broadcast();
+    return _chatStreamController!.stream;
   }
 
-  // Function to fetch the initial continuation token
-  Future<String?> fetchInitialContinuationToken() async {
-    var headers = {
-      'accept':
-          'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-      'accept-language': 'en-US,en;q=0.9',
-      'cache-control': 'no-cache',
-      'pragma': 'no-cache',
-      'user-agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
-    };
+  late String channelHandle;
 
-    String url = 'https://www.youtube.com/live_chat?is_popout=1&v=$videoId';
-    try {
-      Response response = await http.get(Uri.parse(url), headers: headers);
-      Document document = parser.parse(response.body);
-      List<Element> scripts = document.getElementsByTagName('script');
-      Element ytInitialDataScript = scripts
-          .firstWhere((script) => script.innerHtml.contains('ytInitialData'));
-      String scriptContent = ytInitialDataScript.innerHtml;
-      // Extracting ytInitialData JSON from the script tag
-      int dataStart = scriptContent.indexOf('{');
-      int dataEnd = scriptContent.lastIndexOf('}') + 1;
-      String jsonString = scriptContent.substring(dataStart, dataEnd);
-      dynamic ytInitialData = json.decode(jsonString);
+  Future<YoutubeChat> init({
+    required String channel,
+  }) async {
+    channelHandle = channel;
 
-      // Extract continuation token from ytInitialData
-      dynamic continuation = ytInitialData['contents']['liveChatRenderer']
-          ['continuations'][0]['invalidationContinuationData']['continuation'];
-      return continuation;
-    } catch (error) {
-      talker.error('Error fetching initial continuation token: $error');
-      return null;
+    return this;
+  }
+
+  Future<void> connect() async {
+    if (_chatStreamController?.isClosed ?? false) {
+      _chatStreamController = StreamController<ChatMessage>.broadcast();
     }
-  }
 
-  Future<String?> fetchChatMessages(String? continuationToken) async {
-    String body = json.encode({
-      'context': {
-        'client': {
-          'hl': 'en',
-          'gl': 'JP',
-          'remoteHost': '123.123.123.123',
-          'userAgent':
-              'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
-          'clientName': 'WEB',
-          'clientVersion': '2.20240411.09.00',
-        },
-        'user': {'lockedSafetyMode': false},
-      },
-      'continuation': continuationToken,
-    });
+    final remoteConfig = FirebaseRemoteConfig.instance;
+    await remoteConfig.fetchAndActivate();
+    String url = remoteConfig.getString('youtube_websocket_url');
 
-    Map<String, Map<String, String>> options = {
-      'headers': {'Content-Type': 'application/json'},
-    };
-
-    const url =
-        'https://www.youtube.com/youtubei/v1/live_chat/get_live_chat?prettyPrint=false';
+    _webSocketChannel = IOWebSocketChannel.connect(
+      url,
+      protocols: [
+        'Authorization',
+        twitchToken,
+      ],
+    );
 
     try {
-      Response response = await http.post(
-        Uri.parse(url),
-        headers: options['headers'],
-        body: body,
-      );
-      dynamic data = json.decode(response.body);
-
-      Iterable<dynamic>? messagesData = (data['continuationContents']
-              ['liveChatContinuation']['actions'] as List?)
-          ?.map(
-        (action) =>
-            action['addChatItemAction']['item']['liveChatTextMessageRenderer'],
+      talker.info('Connecting to Youtube Chat Websocket');
+      await _webSocketChannel?.ready;
+    } catch (e) {
+      talker.warning(
+        'Failed to connect to the Youtube Chat Websocket. Retrying in 20 seconds.',
       );
 
-      messagesData?.forEach((message) {
-        if (message['message'] == null) {
-          return;
-        }
-        List? messages = (message['message']['runs'] as List?)
-            ?.map((run) => run['text'])
-            .where((message) => message != null)
-            .toList();
-        if (messages == null) {
-          return;
-        }
-        if (messages.isEmpty) {
-          return;
-        }
-        ChatMessage msg = ChatMessage.fromYoutube(message, messages, videoId);
-        _chatStreamController.add(msg);
+      Future.delayed(const Duration(seconds: 20), () {
+        connect();
       });
-
-      dynamic newContinuationToken = data['continuationContents']
-              ['liveChatContinuation']['continuations'][0]
-          ['invalidationContinuationData']['continuation'];
-      if (newContinuationToken == null) {
-        talker.info('No continuation token found, terminating.');
-        return null;
-      }
-      return newContinuationToken;
-    } catch (error) {
-      talker.error('Error fetching chat messages: $error');
-      return continuationToken; // Retry with the same token
-    }
-  }
-
-  Future<void> startFetchingChat() async {
-    var continuationToken = await fetchInitialContinuationToken();
-    if (continuationToken == null) {
-      talker.error('Failed to fetch initial continuation token.');
       return;
     }
 
-    while (continuationToken != null) {
-      if (_chatStreamController.isClosed) {
-        return;
-      }
-      continuationToken = await fetchChatMessages(continuationToken);
-      await Future.delayed(const Duration(seconds: 5)); // 5-second pause
-    }
-  }
-}
-
-Future<String?> getLiveVideoId(String channelURL) async {
-  Talker talker = Get.find<TalkerService>().talker;
-
-  // Send GET request to the YouTube channel's live streams page
-  var response = await http.get(Uri.parse(channelURL));
-  if (response.statusCode != 200) {
-    talker.error(
-      'Failed to retrieve the page. Status code: ${response.statusCode}',
+    _streamSubscription = _webSocketChannel?.stream.listen(
+      (data) => _eventListener(data),
+      onDone: _onDone,
+      onError: _onError,
     );
-    return null;
+    isConnected.value = true;
+
+    _webSocketChannel?.sink.add(
+      jsonEncode({
+        'type': 'subscribe',
+        'data': {
+          'channelId': channelHandle,
+        },
+      }),
+    );
   }
 
-  // Extract the ytInitialData JSON data from the page content
-  var match = RegExp(r'ytInitialData\s*=\s*({.*?});</script>')
-      .firstMatch(response.body);
-  if (match == null) {
-    talker.error('Failed to find ytInitialData in the page content.');
-    return null;
+  void _onDone() {
+    talker.warning("Youtube Chat: Connection closed");
+    isConnected.value = false;
+    close();
   }
 
-  var ytInitialData = json.decode(match.group(1)!);
+  void _onError(Object o, StackTrace s) {
+    isConnected.value = false;
+    talker.error("Youtube Chat: error", o, s);
+  }
 
-  // Navigate through the JSON data to find the live video ID
-  try {
-    var tabs =
-        ytInitialData['contents']['twoColumnBrowseResultsRenderer']['tabs'];
-    for (var tab in tabs) {
-      if (tab is Map &&
-          tab['tabRenderer'] != null &&
-          tab['tabRenderer']['selected'] != null &&
-          tab['tabRenderer']['content'] != null) {
-        var contents =
-            tab['tabRenderer']['content']['richGridRenderer']['contents'];
-        for (var content in contents) {
-          if (content is Map &&
-              content['richItemRenderer'] != null &&
-              content['richItemRenderer']['content'] != null &&
-              content['richItemRenderer']['content']['videoRenderer'] != null &&
-              content['richItemRenderer']['content']['videoRenderer']
-                      ['upcomingEventData'] ==
-                  null) {
-            var videoId = content['richItemRenderer']['content']
-                ['videoRenderer']['videoId'];
-            return videoId;
-          }
+  void _eventListener(String data) {
+    Map msgMapped = jsonDecode(data);
+    switch (msgMapped['type']) {
+      case 'connected':
+        talker.info('Connection confirmed: ${msgMapped['message']}');
+        break;
+
+      case 'subscribed':
+        talker.info('Subscribed to channel: ${msgMapped['channelId']}');
+        break;
+
+      case 'messages':
+        talker.debug('New messages: ${msgMapped['messages']}');
+        for (var message in msgMapped['messages']) {
+          _chatStreamController
+              ?.add(ChatMessage.fromYoutube(message, channelHandle));
         }
-      }
+        break;
+
+      case 'error':
+        talker.error('Youtube Chat Server error: ${msgMapped['message']}');
+        break;
     }
-  } catch (e) {
-    talker.error('Error parsing ytInitialData: $e');
-    return null;
   }
 
-  talker.info('No live video found.');
-  return null;
+  void close() {
+    _webSocketChannel?.sink.close();
+    _streamSubscription?.cancel();
+    _streamSubscription = null;
+    _chatStreamController?.close();
+    _chatStreamController = null;
+  }
 }

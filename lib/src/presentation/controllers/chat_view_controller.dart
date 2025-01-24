@@ -114,7 +114,8 @@ class ChatViewController extends GetxController
       kickChat.connect();
     }
     for (YoutubeChat youtubeChat in youtubeChats) {
-      youtubeChat.startFetchingChat();
+      youtubeChat.close();
+      youtubeChat.connect();
     }
   }
 
@@ -251,7 +252,7 @@ class ChatViewController extends GetxController
     }
   }
 
-  void createChats() {
+  Future<void> createChats() async {
     List<Channel> twitchChannels =
         chatGroup.channels.where((e) => e.platform == Platform.twitch).toList();
     List<Channel> kickChannels =
@@ -276,11 +277,12 @@ class ChatViewController extends GetxController
       }
     }
 
-    for (Channel kc in youtubeChannels) {
+    for (Channel yc in youtubeChannels) {
       bool alreadyCreated =
-          kickChats.firstWhereOrNull((k) => k.username == kc.channel) != null;
+          youtubeChats.firstWhereOrNull((y) => y.channelHandle == yc.channel) !=
+              null;
       if (!alreadyCreated) {
-        createYoutubeChat(kc.channel);
+        await createYoutubeChat(yc.channel);
       }
     }
 
@@ -305,7 +307,7 @@ class ChatViewController extends GetxController
         .where(
           (yc) =>
               youtubeChannels
-                  .firstWhereOrNull((yCa) => yCa.channel == yc.videoId) ==
+                  .firstWhereOrNull((yCa) => yCa.channel == yc.channelHandle) ==
               null,
         )
         .toList();
@@ -323,9 +325,9 @@ class ChatViewController extends GetxController
     }
 
     for (YoutubeChat y in youtubeChatToRemove) {
-      talker.info('Removing chat: ${y.videoId}');
-      y.closeStream();
-      youtubeChats.removeWhere((yc) => yc.videoId == y.videoId);
+      talker.info('Removing chat: ${y.channelHandle}');
+      y.close();
+      youtubeChats.removeWhere((yc) => yc.channelHandle == y.channelHandle);
     }
   }
 
@@ -367,9 +369,9 @@ class ChatViewController extends GetxController
     twitchChat.connect();
     twitchChats.add(twitchChat);
 
-    Settings settings = settingsService.settings.value;
-
     twitchChat.chatStream.listen((twitchMessage) {
+      final settings = settingsService.settings.value;
+
       if (cheerEmotes.isEmpty) {
         cheerEmotes.value =
             twitchChat.cheerEmotes.map((e) => ChatEmote.fromTwitch(e)).toList();
@@ -393,16 +395,22 @@ class ChatViewController extends GetxController
   }
 
   Future<void> createYoutubeChat(String channelId) async {
-    String? videoId = await getLiveVideoId(channelId);
-    if (videoId == null) {
-      talker.error('VideoID not found for the channel: $channelId');
+    if (twitchData == null) {
+      Get.snackbar(
+        'Error',
+        'Twitch authentication is required to use YouTube chat',
+        snackPosition: SnackPosition.BOTTOM,
+        icon: const Icon(Icons.error_outline, color: Colors.red),
+        borderWidth: 1,
+        borderColor: Colors.red,
+      );
       return;
     }
-
-    YoutubeChat youtubeChat = YoutubeChat(
-      videoId,
-    );
-    youtubeChat.startFetchingChat();
+    YoutubeChat youtubeChat = await YoutubeChat(
+      talker: talker,
+      twitchToken: twitchData!.accessToken,
+    ).init(channel: channelId);
+    await youtubeChat.connect();
     youtubeChat.chatStream.listen((ChatMessage message) {
       Settings settings = settingsService.settings.value;
       if (settings.ttsSettings.ttsEnabled) {

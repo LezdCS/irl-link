@@ -196,20 +196,20 @@ class ChatMessage {
   }
 
   factory ChatMessage.fromYoutube(
-    messageRaw,
-    List? messages,
-    String videoId,
+    Map<dynamic, dynamic> data,
+    String channelId,
   ) {
-    String authorName = messageRaw['authorName']['simpleText'];
-    String id = messageRaw['id'];
-    String timestamp = messageRaw['timestampUsec'];
+    String id = data['unique_message_id'];
+    String authorName = data['author'];
+    String message = data['message'];
+    String timestamp = data['timestamp'];
     return ChatMessage(
       id: id,
       authorId: '',
       displayName: authorName,
       username: authorName,
       color: '#FFFFFF',
-      message: messages?[0],
+      message: message,
       timestamp: int.parse(timestamp),
       isAction: false,
       isSubscriber: false,
@@ -221,7 +221,7 @@ class ChatMessage {
       badgesList: const [],
       emotes: const {},
       platform: Platform.youtube,
-      channelId: videoId,
+      channelId: channelId,
 
       //implements
       raidingChannelName: '',
