@@ -277,11 +277,12 @@ class ChatViewController extends GetxController
       }
     }
 
-    for (Channel kc in youtubeChannels) {
+    for (Channel yc in youtubeChannels) {
       bool alreadyCreated =
-          kickChats.firstWhereOrNull((k) => k.username == kc.channel) != null;
+          youtubeChats.firstWhereOrNull((y) => y.channelHandle == yc.channel) !=
+              null;
       if (!alreadyCreated) {
-        await createYoutubeChat(kc.channel);
+        await createYoutubeChat(yc.channel);
       }
     }
 
