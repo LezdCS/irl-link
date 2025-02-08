@@ -4,7 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_web_auth/flutter_web_auth.dart';
+import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
@@ -43,10 +43,13 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
         'scope': params.scopes,
       });
 
-      String result = await FlutterWebAuth.authenticate(
+      String result = await FlutterWebAuth2.authenticate(
         url: url.toString(),
         callbackUrlScheme: kRedirectScheme,
-        preferEphemeral: true,
+        options: const FlutterWebAuth2Options(
+          preferEphemeral: true,
+          useWebview: true,
+        ),
       );
 
       String accessToken = Uri.parse(result).queryParameters['access_token']!;

@@ -139,10 +139,6 @@ class StoreService extends GetxService {
   }
 
   Future<bool> verifyPurchase(PurchaseDetails purchaseDetails) async {
-    // if (Platform.isIOS) {
-    //   return Future<bool>.value(true);
-    // }
-
     TwitchCredentials? twitchCredentials;
     final getLocalResult = await getTwitchLocalUseCase();
     getLocalResult.fold(

@@ -5,7 +5,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_web_auth/flutter_web_auth.dart';
+import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:get/get_core/get_core.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get_storage/get_storage.dart';
@@ -54,10 +54,13 @@ class TwitchRepositoryImpl implements TwitchRepository {
         'claims': params.claims,
       });
 
-      final result = await FlutterWebAuth.authenticate(
+      final result = await FlutterWebAuth2.authenticate(
         url: url.toString(),
         callbackUrlScheme: kRedirectScheme,
-        preferEphemeral: false,
+        options: const FlutterWebAuth2Options(
+          preferEphemeral: true,
+          useWebview: true,
+        ),
       );
 
       final accessToken = Uri.parse(result).queryParameters['access_token'];
