@@ -139,10 +139,6 @@ class StoreService extends GetxService {
   }
 
   Future<bool> verifyPurchase(PurchaseDetails purchaseDetails) async {
-    if (Platform.isIOS) {
-      return Future<bool>.value(true);
-    }
-
     TwitchCredentials? twitchCredentials;
     final getLocalResult = await getTwitchLocalUseCase();
     getLocalResult.fold(
@@ -154,20 +150,29 @@ class StoreService extends GetxService {
       return Future<bool>.value(false);
     }
 
-    String? pruchaseToken =
+    String? purchaseToken =
         purchaseDetails.verificationData.serverVerificationData;
     final remoteConfig = FirebaseRemoteConfig.instance;
     await remoteConfig.fetchAndActivate();
+
     String url = remoteConfig.getString('verify_android_purchase');
     if (kDebugMode) {
       url = remoteConfig.getString('verify_android_purchase_dev');
     }
+    if (Platform.isIOS) {
+      url = remoteConfig.getString('verify_ios_purchase');
+      if (kDebugMode) {
+        url = remoteConfig.getString('verify_ios_purchase_dev');
+      }
+    }
+
     try {
       await dioClient.post(
         url,
         data: {
-          'purchaseToken': pruchaseToken,
+          'purchaseToken': purchaseToken,
           'twitchId': twitchCredentials!.twitchUser.id,
+          'environment': kDebugMode ? 'Sandbox' : 'Production',
         },
       );
       return Future<bool>.value(true);
