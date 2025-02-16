@@ -162,7 +162,7 @@ class StoreService extends GetxService {
     if (Platform.isIOS) {
       url = remoteConfig.getString('verify_ios_purchase');
       if (kDebugMode) {
-        url = remoteConfig.getString('verify_ios_purchase_dev');
+        url = "http://192.168.0.97:3000/api/verify-ios-purchase";
       }
     }
 
@@ -172,6 +172,7 @@ class StoreService extends GetxService {
         data: {
           'purchaseToken': purchaseToken,
           'twitchId': twitchCredentials!.twitchUser.id,
+          'environment': kDebugMode ? 'Sandbox' : 'Production',
         },
       );
       return Future<bool>.value(true);
