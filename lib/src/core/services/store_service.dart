@@ -162,7 +162,7 @@ class StoreService extends GetxService {
     if (Platform.isIOS) {
       url = remoteConfig.getString('verify_ios_purchase');
       if (kDebugMode) {
-        url = "http://192.168.0.97:3000/api/verify-ios-purchase";
+        url = remoteConfig.getString('verify_ios_purchase_dev');
       }
     }
 
