@@ -17,7 +17,7 @@ Dio initDio(String? baseUrl) {
         'Accept': 'application/json',
       },
       validateStatus: (status) =>
-          status != null && status >= 200 && status < 500,
+          status != null && status >= 200 && status < 300,
     ),
   );
   dio.interceptors.add(
