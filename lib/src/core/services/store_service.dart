@@ -12,6 +12,7 @@ import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
+import 'package:store_checker/store_checker.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class StoreService extends GetxService {
@@ -161,7 +162,8 @@ class StoreService extends GetxService {
     }
     if (Platform.isIOS) {
       url = remoteConfig.getString('verify_ios_purchase');
-      if (kDebugMode) {
+      Source source = await StoreChecker.getSource;
+      if (kDebugMode || source == Source.IS_INSTALLED_FROM_TEST_FLIGHT) {
         url = remoteConfig.getString('verify_ios_purchase_dev');
       }
     }
