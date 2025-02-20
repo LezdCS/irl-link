@@ -48,7 +48,7 @@ dependencies:
   jwt_decoder: ^2.0.1
   kick_chat: ^1.6.0
   mobile_scanner: ^6.0.6
-  obs_websocket: ^5.1.0+9
+  obs_websocket: ^5.2.3
   package_info_plus: ^8.2.1
   percent_indicator: ^4.2.4
   qr_flutter: ^4.1.0
