@@ -162,10 +162,15 @@ class StoreService extends GetxService {
     }
     if (Platform.isIOS) {
       url = remoteConfig.getString('verify_ios_purchase');
-      Source source = await StoreChecker.getSource;
-      if (kDebugMode || source == Source.IS_INSTALLED_FROM_TEST_FLIGHT) {
+      if (kDebugMode) {
         url = remoteConfig.getString('verify_ios_purchase_dev');
       }
+    }
+
+    Source source = await StoreChecker.getSource;
+    String environment = kDebugMode ? 'Sandbox' : 'Production';
+    if (source == Source.IS_INSTALLED_FROM_TEST_FLIGHT) {
+      environment = 'Sandbox';
     }
 
     try {
@@ -174,7 +179,7 @@ class StoreService extends GetxService {
         data: {
           'purchaseToken': purchaseToken,
           'twitchId': twitchCredentials!.twitchUser.id,
-          'environment': kDebugMode ? 'Sandbox' : 'Production',
+          'environment': environment,
         },
       );
       return Future<bool>.value(true);
