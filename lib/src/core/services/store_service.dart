@@ -12,6 +12,7 @@ import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
+import 'package:store_checker/store_checker.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class StoreService extends GetxService {
@@ -166,13 +167,19 @@ class StoreService extends GetxService {
       }
     }
 
+    Source source = await StoreChecker.getSource;
+    String environment = kDebugMode ? 'Sandbox' : 'Production';
+    if (source == Source.IS_INSTALLED_FROM_TEST_FLIGHT) {
+      environment = 'Sandbox';
+    }
+
     try {
       await dioClient.post(
         url,
         data: {
           'purchaseToken': purchaseToken,
           'twitchId': twitchCredentials!.twitchUser.id,
-          'environment': kDebugMode ? 'Sandbox' : 'Production',
+          'environment': environment,
         },
       );
       return Future<bool>.value(true);
