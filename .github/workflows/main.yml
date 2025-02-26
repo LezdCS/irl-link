@@ -39,6 +39,5 @@ jobs:
       - name: Build APK and App Bundle
         run: |
           flutter pub get
-          dart analyze
           flutter build apk --debug
           flutter build appbundle --debug
