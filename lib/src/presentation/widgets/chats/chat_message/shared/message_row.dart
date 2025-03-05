@@ -43,13 +43,10 @@ class MessageRow extends StatelessWidget {
       switch (message.platform) {
         case Platform.twitch:
           badge = "lib/assets/twitch/twitch_logo.png";
-          break;
         case Platform.kick:
           badge = "lib/assets/kick/kickLogo.png";
-          break;
         case Platform.youtube:
           badge = "lib/assets/youtube/youtubeLogo.png";
-          break;
       }
       ChatBadge platformBadge = ChatBadge(
         imageUrl1x: badge,

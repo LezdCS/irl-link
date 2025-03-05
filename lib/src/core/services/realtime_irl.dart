@@ -57,10 +57,8 @@ class RealtimeIrl {
             },
           );
 
-          break;
         case 'rtirl_stop':
           await stopTracking();
-          break;
         default:
           talker.info("Unknown action: $action");
       }

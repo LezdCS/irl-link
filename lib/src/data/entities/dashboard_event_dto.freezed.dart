@@ -25,7 +25,10 @@ mixin _$DashboardEventDTO {
   Color get color => throw _privateConstructorUsedError;
   DashboardActionsTypes get dashboardActionsType =>
       throw _privateConstructorUsedError;
-  SupportedEvents get event => throw _privateConstructorUsedError;
+  SupportedEvents get event =>
+      throw _privateConstructorUsedError; // The customValue needs to be dynamic since it can be of different types
+// depending on the event type
+// ignore: avoid_annotating_with_dynamic
   dynamic get customValue => throw _privateConstructorUsedError;
 
   /// Serializes this DashboardEventDTO to a JSON map.
@@ -181,6 +184,9 @@ class _$DashboardEventDTOImpl implements _DashboardEventDTO {
   final DashboardActionsTypes dashboardActionsType;
   @override
   final SupportedEvents event;
+// The customValue needs to be dynamic since it can be of different types
+// depending on the event type
+// ignore: avoid_annotating_with_dynamic
   @override
   final dynamic customValue;
 
@@ -249,7 +255,10 @@ abstract class _DashboardEventDTO implements DashboardEventDTO {
   @override
   DashboardActionsTypes get dashboardActionsType;
   @override
-  SupportedEvents get event;
+  SupportedEvents
+      get event; // The customValue needs to be dynamic since it can be of different types
+// depending on the event type
+// ignore: avoid_annotating_with_dynamic
   @override
   dynamic get customValue;
 

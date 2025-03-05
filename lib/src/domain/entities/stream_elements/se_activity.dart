@@ -10,12 +10,19 @@ enum ActivityType {
   unsupported,
 }
 
+enum StreamProvider {
+  facebook,
+  twitch,
+  youtube,
+}
+
 @immutable
 class SeActivity {
   final String id;
   final String channel;
   final String username;
   final ActivityType activityType;
+  final StreamProvider provider;
   final String? message;
   final String? amount;
   final String? tier;
@@ -29,6 +36,7 @@ class SeActivity {
     required this.channel,
     required this.username,
     required this.activityType,
+    required this.provider,
     this.message,
     this.amount,
     this.tier,
@@ -37,6 +45,19 @@ class SeActivity {
     this.currency,
     this.isTest,
   });
+
+  static StreamProvider providerFromString(String providerStr) {
+    switch (providerStr.toLowerCase()) {
+      case 'facebook':
+        return StreamProvider.facebook;
+      case 'twitch':
+        return StreamProvider.twitch;
+      case 'youtube':
+        return StreamProvider.youtube;
+      default:
+        return StreamProvider.twitch;
+    }
+  }
 
   Map toJsonForWatch() => {
         'id': id,
@@ -59,43 +80,36 @@ class SeActivity {
         colors.add(const Color(0xFF1B98E0));
         //circle color
         colors.add(const Color(0xFF13293D));
-        break;
       case ActivityType.subscription:
         //background color
         colors.add(const Color(0xFFA47CED));
         //circle color
         colors.add(const Color(0xFF341D5B));
-        break;
       case ActivityType.cheer:
         //background color
         colors.add(const Color(0xFF8B52F3));
         //circle color
         colors.add(const Color(0xFF230D4C));
-        break;
       case ActivityType.tip:
         //background color
         colors.add(const Color(0xFF13C50F));
         //circle color
         colors.add(const Color(0xFF0C250A));
-        break;
       case ActivityType.raid:
         //background color
         colors.add(const Color(0xFFCE1260));
         //circle color
         colors.add(const Color(0xFF2E0219));
-        break;
       case ActivityType.host:
         //background color
         colors.add(const Color(0xFFCE1260));
         //circle color
         colors.add(const Color(0xFF2E0219));
-        break;
       case ActivityType.unsupported:
         //background color
         colors.add(const Color(0xFFA47CED));
         //circle color
         colors.add(const Color(0xFF341D5B));
-        break;
     }
     return colors;
   }
@@ -105,7 +119,6 @@ class SeActivity {
     switch (activityType) {
       case ActivityType.follow:
         s = "Follow";
-        break;
       case ActivityType.subscription:
         bool isPrime = tier == "prime";
         bool isGift = gifted ?? false;
@@ -114,22 +127,16 @@ class SeActivity {
         } else {
           s = 'Subscribed${isPrime ? " with prime" : ""}';
         }
-        break;
       case ActivityType.cheer:
         s = 'Cheered $amount bits!';
-        break;
       case ActivityType.tip:
         s = 'Donated $amount\$!';
-        break;
       case ActivityType.raid:
         s = '$amount Raiders';
-        break;
       case ActivityType.host:
         s = '$amount Hosted viewers';
-        break;
       case ActivityType.unsupported:
         s = 'Unsupported event';
-        break;
     }
     return s;
   }
@@ -142,43 +149,36 @@ class SeActivity {
           Icons.person_add,
           size: 18,
         );
-        break;
       case ActivityType.subscription:
         icon = const Icon(
           Icons.star,
           size: 18,
         );
-        break;
       case ActivityType.cheer:
         icon = const Icon(
           Icons.toll,
           size: 18,
         );
-        break;
       case ActivityType.tip:
         icon = const Icon(
           Icons.attach_money,
           size: 18,
         );
-        break;
       case ActivityType.raid:
         icon = const Icon(
           Icons.diversity_3,
           size: 18,
         );
-        break;
       case ActivityType.host:
         icon = const Icon(
           Icons.diversity_3,
           size: 18,
         );
-        break;
       case ActivityType.unsupported:
         icon = const Icon(
           Icons.block,
           size: 18,
         );
-        break;
     }
     return icon;
   }

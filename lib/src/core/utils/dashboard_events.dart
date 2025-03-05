@@ -81,8 +81,6 @@ String getSupportedEventString(SupportedEvents event) {
     //   return 'Twitch Cancel Poll';
     // case SupportedEvents.twitchEndPoll:
     //   return 'Twitch End Poll';
-    default:
-      return 'Unknown';
   }
 }
 
@@ -123,8 +121,6 @@ Widget? getSupportedEventIcon(SupportedEvents event) {
     //   return Icon(Icons.cancel);
     // case SupportedEvents.twitchEndPoll:
     //   return Icon(Icons.done);
-    default:
-      return null;
   }
 }
 

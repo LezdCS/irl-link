@@ -37,13 +37,11 @@ class WatchService extends GetxService {
     switch (call.method) {
       case "sendChangeObsSceneToFlutter":
         _obsController.setCurrentScene(data['scene']);
-        break;
       case "sendToggleObsSourceToFlutter":
         _obsController.setSourceVisibleState(
           data['sourceItemId'],
           sceneItemEnabled: data['sceneItemEnabled'],
         );
-        break;
     }
   }
 

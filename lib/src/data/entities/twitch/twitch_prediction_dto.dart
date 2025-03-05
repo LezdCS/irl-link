@@ -39,10 +39,8 @@ class TwitchPredictionDTO with _$TwitchPredictionDTO {
     switch (map["status"]) {
       case "resolved":
         status = PredictionStatus.resolved;
-        break;
       case "canceled":
         status = PredictionStatus.canceled;
-        break;
     }
 
     DateFormat df = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");

@@ -211,14 +211,12 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
         case 'channel.poll.progress':
           final pollDTO = TwitchPollDTO.fromJson(event);
           currentPoll.value = mappr.convert<TwitchPollDTO, TwitchPoll>(pollDTO);
-          break;
         case 'channel.poll.end':
           final pollDTO = TwitchPollDTO.fromJson(event);
           currentPoll.value = mappr.convert<TwitchPollDTO, TwitchPoll>(pollDTO);
           Future.delayed(const Duration(seconds: 20)).then(
             (value) => currentPoll.value = TwitchPoll.empty(),
           );
-          break;
 
         //PREDICTIONS
         case 'channel.prediction.begin':
@@ -227,7 +225,6 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
           final predictionDTO = TwitchPredictionDTO.fromJson(event);
           currentPrediction.value = mappr
               .convert<TwitchPredictionDTO, TwitchPrediction>(predictionDTO);
-          break;
         case 'channel.prediction.end':
           final predictionDTO = TwitchPredictionDTO.fromJson(event);
           currentPrediction.value = mappr
@@ -235,7 +232,6 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
           Future.delayed(const Duration(seconds: 20)).then(
             (value) => currentPrediction.value = TwitchPrediction.empty(),
           );
-          break;
 
         //HYPE TRAIN
         case 'channel.hype_train.begin':
@@ -243,7 +239,6 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
           final hypeTrainDTO = TwitchHypeTrainDTO.fromJson(event);
           currentHypeTrain.value =
               mappr.convert<TwitchHypeTrainDTO, TwitchHypeTrain>(hypeTrainDTO);
-          break;
         case 'channel.hype_train.end':
           final hypeTrainDTO = TwitchHypeTrainDTO.fromJson(event);
           currentHypeTrain.value =
@@ -251,7 +246,6 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
           Future.delayed(const Duration(seconds: 20)).then(
             (value) => currentHypeTrain.value = TwitchHypeTrain.empty(),
           );
-          break;
         default:
           break;
       }

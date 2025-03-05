@@ -136,25 +136,19 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
         switch (event.eventType) {
           case 'CurrentProgramSceneChanged':
             getCurrentScene();
-            break;
           case 'InputVolumeChanged':
             sourcesVolumesMap[event.eventData?['inputName']] =
                 event.eventData?['inputVolumeDb'];
             sourcesList.refresh();
             sourcesVolumesMap.refresh();
-            break;
           case 'SceneListChanged':
             getSceneList();
-            break;
           case 'SceneItemCreated':
             getCurrentScene();
-            break;
           case 'SceneItemRemoved':
             getCurrentScene();
-            break;
           case 'InputNameChanged':
             getCurrentScene();
-            break;
         }
       });
 

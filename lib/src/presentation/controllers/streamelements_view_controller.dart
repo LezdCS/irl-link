@@ -457,10 +457,10 @@ class StreamelementsViewController extends GetxController
           channel: "",
           username: event["name"],
           activityType: ActivityType.follow,
+          provider: SeActivity.providerFromString(event["provider"]),
           isTest: true,
         );
         activities.add(activity);
-        break;
       case "subscriber-latest":
         if (!settings.streamElementsSettings.showSubscriberActivity) {
           return;
@@ -474,10 +474,10 @@ class StreamelementsViewController extends GetxController
           gifted: event["gifted"],
           sender: event["sender"],
           activityType: ActivityType.subscription,
+          provider: SeActivity.providerFromString(event["provider"]),
           isTest: true,
         );
         activities.add(activity);
-        break;
       case "tip-latest":
         if (!settings.streamElementsSettings.showDonationActivity) {
           return;
@@ -489,10 +489,10 @@ class StreamelementsViewController extends GetxController
           message: event["message"],
           amount: event["amount"].toString(),
           activityType: ActivityType.tip,
+          provider: SeActivity.providerFromString(event["provider"]),
           isTest: true,
         );
         activities.add(activity);
-        break;
       case "cheer-latest":
         if (!settings.streamElementsSettings.showCheerActivity) {
           return;
@@ -503,11 +503,11 @@ class StreamelementsViewController extends GetxController
           username: event["name"],
           message: event["message"],
           amount: event["amount"].toString(),
+          provider: SeActivity.providerFromString(event["provider"]),
           activityType: ActivityType.cheer,
           isTest: true,
         );
         activities.add(activity);
-        break;
       case "host-latest":
         if (!settings.streamElementsSettings.showHostActivity) {
           return;
@@ -517,11 +517,11 @@ class StreamelementsViewController extends GetxController
           channel: "",
           username: event["name"],
           amount: event["amount"].toString(),
+          provider: SeActivity.providerFromString(event["provider"]),
           activityType: ActivityType.host,
           isTest: true,
         );
         activities.add(activity);
-        break;
       case "raid-latest":
         if (!settings.streamElementsSettings.showRaidActivity) {
           return;
@@ -531,11 +531,11 @@ class StreamelementsViewController extends GetxController
           id: "1",
           username: event["name"],
           amount: event["amount"].toString(),
+          provider: SeActivity.providerFromString(event["provider"]),
           activityType: ActivityType.raid,
           isTest: true,
         );
         activities.add(activity);
-        break;
       default:
         break;
     }
@@ -556,9 +556,9 @@ class StreamelementsViewController extends GetxController
           channel: event["channel"],
           username: event["data"]["username"],
           activityType: ActivityType.follow,
+          provider: SeActivity.providerFromString(event["provider"]),
         );
         activities.add(activity);
-        break;
       case "subscriber":
         if (!settings.streamElementsSettings.showSubscriberActivity) {
           return;
@@ -573,9 +573,9 @@ class StreamelementsViewController extends GetxController
           gifted: event["data"]["gifted"],
           sender: event["data"]["sender"],
           activityType: ActivityType.subscription,
+          provider: SeActivity.providerFromString(event["provider"]),
         );
         activities.add(activity);
-        break;
       case "tip":
         if (!settings.streamElementsSettings.showDonationActivity) {
           return;
@@ -587,9 +587,9 @@ class StreamelementsViewController extends GetxController
           amount: event["data"]["amount"].toString(),
           currency: event["data"]["currency"],
           activityType: ActivityType.tip,
+          provider: SeActivity.providerFromString(event["provider"]),
         );
         activities.add(activity);
-        break;
       case "cheer":
         if (!settings.streamElementsSettings.showCheerActivity) {
           return;
@@ -601,9 +601,9 @@ class StreamelementsViewController extends GetxController
           message: event["data"]["message"],
           amount: event["data"]["amount"].toString(),
           activityType: ActivityType.cheer,
+          provider: SeActivity.providerFromString(event["provider"]),
         );
         activities.add(activity);
-        break;
       case "host":
         if (!settings.streamElementsSettings.showHostActivity) {
           return;
@@ -614,9 +614,9 @@ class StreamelementsViewController extends GetxController
           username: event["data"]["username"],
           amount: event["data"]["amount"].toString(),
           activityType: ActivityType.host,
+          provider: SeActivity.providerFromString(event["provider"]),
         );
         activities.add(activity);
-        break;
       case "raid":
         if (!settings.streamElementsSettings.showRaidActivity) {
           return;
@@ -627,9 +627,9 @@ class StreamelementsViewController extends GetxController
           username: event["data"]["username"],
           amount: event["data"]["amount"].toString(),
           activityType: ActivityType.raid,
+          provider: SeActivity.providerFromString(event["provider"]),
         );
         activities.add(activity);
-        break;
       default:
         break;
     }

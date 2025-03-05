@@ -90,10 +90,8 @@ class TwitchPubSubService extends GetxService {
         switch (message['type']) {
           case 'pin-message':
             _handlePinnedMessage(message);
-            break;
           case 'unpin-message':
             _handleRemovePinnedMessage(message['data']['id']);
-            break;
           default:
             break;
         }
