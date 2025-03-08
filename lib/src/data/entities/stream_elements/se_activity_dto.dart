@@ -10,6 +10,7 @@ class SeActivityDTO with _$SeActivityDTO {
     required String channel,
     required String username,
     required ActivityType activityType,
+    required StreamProvider provider,
     String? message,
     String? amount,
     String? tier,
@@ -27,6 +28,7 @@ class SeActivityDTO with _$SeActivityDTO {
           channel: map["channel"],
           username: map["data"]["displayName"],
           activityType: ActivityType.follow,
+          provider: SeActivity.providerFromString(map["provider"]),
         );
       case "subscriber":
         return SeActivityDTO(
@@ -39,6 +41,7 @@ class SeActivityDTO with _$SeActivityDTO {
           gifted: map["data"]["gifted"],
           sender: map["data"]["sender"],
           activityType: ActivityType.subscription,
+          provider: SeActivity.providerFromString(map["provider"]),
         );
       case "tip":
         return SeActivityDTO(
@@ -48,6 +51,7 @@ class SeActivityDTO with _$SeActivityDTO {
           amount: map["data"]["amount"].toString(),
           currency: map["data"]["currency"],
           activityType: ActivityType.tip,
+          provider: SeActivity.providerFromString(map["provider"]),
         );
       case "cheer":
         return SeActivityDTO(
@@ -57,6 +61,7 @@ class SeActivityDTO with _$SeActivityDTO {
           message: map["data"]["message"],
           amount: map["data"]["amount"].toString(),
           activityType: ActivityType.cheer,
+          provider: SeActivity.providerFromString(map["provider"]),
         );
       case "host":
         return SeActivityDTO(
@@ -65,6 +70,7 @@ class SeActivityDTO with _$SeActivityDTO {
           username: map["data"]["displayName"],
           amount: map["data"]["amount"].toString(),
           activityType: ActivityType.host,
+          provider: SeActivity.providerFromString(map["provider"]),
         );
       case "raid":
         return SeActivityDTO(
@@ -73,6 +79,7 @@ class SeActivityDTO with _$SeActivityDTO {
           username: map["data"]["displayName"],
           amount: map["data"]["amount"].toString(),
           activityType: ActivityType.raid,
+          provider: SeActivity.providerFromString(map["provider"]),
         );
       default:
         return const SeActivityDTO(
@@ -81,6 +88,7 @@ class SeActivityDTO with _$SeActivityDTO {
           username: '',
           activityType: ActivityType.unsupported,
           isTest: true,
+          provider: StreamProvider.twitch,
         );
     }
   }

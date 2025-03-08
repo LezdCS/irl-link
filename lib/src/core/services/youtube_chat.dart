@@ -101,11 +101,9 @@ class YoutubeChat {
     switch (msgMapped['type']) {
       case 'connected':
         talker.info('Connection confirmed: ${msgMapped['message']}');
-        break;
 
       case 'subscribed':
         talker.info('Subscribed to channel: ${msgMapped['channelId']}');
-        break;
 
       case 'messages':
         talker.debug('New messages: ${msgMapped['messages']}');
@@ -113,11 +111,9 @@ class YoutubeChat {
           _chatStreamController
               ?.add(ChatMessage.fromYoutube(message, channelHandle));
         }
-        break;
 
       case 'error':
         talker.error('Youtube Chat Server error: ${msgMapped['message']}');
-        break;
     }
   }
 

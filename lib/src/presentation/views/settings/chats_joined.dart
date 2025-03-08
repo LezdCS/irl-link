@@ -201,13 +201,10 @@ class ChatsJoined extends GetView<SettingsViewController> {
     switch (channel.platform) {
       case Platform.twitch:
         badge = "lib/assets/twitch/twitch_logo.png";
-        break;
       case Platform.kick:
         badge = "lib/assets/kick/kickLogo.png";
-        break;
       case Platform.youtube:
         badge = "lib/assets/youtube/youtubeLogo.png";
-        break;
     }
     return Dismissible(
       direction: DismissDirection.endToStart,
@@ -402,15 +399,12 @@ class ChatsJoined extends GetView<SettingsViewController> {
                     switch (Platform.values[index]) {
                       case Platform.twitch:
                         badge = "lib/assets/twitch/twitch_logo.png";
-                        break;
                       case Platform.kick:
                         badge = "lib/assets/kick/kickLogo.png";
-                        break;
                       case Platform.youtube:
                         badge = "lib/assets/youtube/youtubeLogo.png";
                         enabled =
                             Get.find<HomeViewController>().twitchData != null;
-                        break;
                     }
                     return DropdownMenuItem(
                       value: Platform.values[index].toString(),
@@ -544,8 +538,6 @@ class ChatsJoined extends GetView<SettingsViewController> {
         return '';
       case Platform.youtube:
         return 'Ex: Lezd in youtube.com/@Lezd';
-      default:
-        return '';
     }
   }
 
@@ -557,8 +549,6 @@ class ChatsJoined extends GetView<SettingsViewController> {
         return 'Channel name';
       case Platform.youtube:
         return 'Channel handle';
-      default:
-        return '';
     }
   }
 }

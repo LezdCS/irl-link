@@ -33,7 +33,6 @@ class TwitchPollDTO with _$TwitchPollDTO {
     switch (map["status"]) {
       case "completed":
         status = PollStatus.completed;
-        break;
       default:
         status = PollStatus.active;
     }

@@ -60,8 +60,6 @@ class Dashboard extends GetView<DashboardController> {
                       return _eventSlider(event);
                     case DashboardActionsTypes.toggle:
                       return _eventToggle(event);
-                    default:
-                      return _eventButton(event);
                   }
                 },
               )
@@ -215,12 +213,10 @@ class Dashboard extends GetView<DashboardController> {
             return true;
           }
         }
-        break;
       case DashboardActionsProvider.streamElements:
         if (Get.isRegistered<StreamelementsViewController>()) {
           return true;
         }
-        break;
       case DashboardActionsProvider.twitch:
         return true;
 

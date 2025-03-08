@@ -41,28 +41,20 @@ class ChatBadge {
         } else {
           src = './lib/assets/kick/badges/sub.svg';
         }
-        break;
       case 'broadcaster':
         src = './lib/assets/kick/badges/broadcaster.svg';
-        break;
       case 'vip':
         src = './lib/assets/kick/badges/vip.svg';
-        break;
       case 'og':
         src = './lib/assets/kick/badges/og.svg';
-        break;
       case 'founder':
         src = './lib/assets/kick/badges/founder.svg';
-        break;
       case 'verified':
         src = './lib/assets/kick/badges/verified.svg';
-        break;
       case 'moderator':
         src = './lib/assets/kick/badges/moderator.svg';
-        break;
       case 'sub_gifter':
         src = './lib/assets/kick/badges/sub_gifter.svg';
-        break;
     }
 
     KickBadge correspondingBadge = KickBadge(

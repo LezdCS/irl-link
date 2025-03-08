@@ -554,8 +554,6 @@ class HomeView extends GetView<HomeViewController> {
           return const Color.fromARGB(255, 0, 231, 1);
         case Platform.youtube:
           return const Color.fromARGB(255, 255, 0, 0);
-        default:
-          return Colors.grey;
       }
     }
 

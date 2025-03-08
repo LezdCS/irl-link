@@ -20,6 +20,7 @@ mixin _$SeActivityDTO {
   String get channel => throw _privateConstructorUsedError;
   String get username => throw _privateConstructorUsedError;
   ActivityType get activityType => throw _privateConstructorUsedError;
+  StreamProvider get provider => throw _privateConstructorUsedError;
   String? get message => throw _privateConstructorUsedError;
   String? get amount => throw _privateConstructorUsedError;
   String? get tier => throw _privateConstructorUsedError;
@@ -46,6 +47,7 @@ abstract class $SeActivityDTOCopyWith<$Res> {
       String channel,
       String username,
       ActivityType activityType,
+      StreamProvider provider,
       String? message,
       String? amount,
       String? tier,
@@ -74,6 +76,7 @@ class _$SeActivityDTOCopyWithImpl<$Res, $Val extends SeActivityDTO>
     Object? channel = null,
     Object? username = null,
     Object? activityType = null,
+    Object? provider = null,
     Object? message = freezed,
     Object? amount = freezed,
     Object? tier = freezed,
@@ -99,6 +102,10 @@ class _$SeActivityDTOCopyWithImpl<$Res, $Val extends SeActivityDTO>
           ? _value.activityType
           : activityType // ignore: cast_nullable_to_non_nullable
               as ActivityType,
+      provider: null == provider
+          ? _value.provider
+          : provider // ignore: cast_nullable_to_non_nullable
+              as StreamProvider,
       message: freezed == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -144,6 +151,7 @@ abstract class _$$SeActivityDTOImplCopyWith<$Res>
       String channel,
       String username,
       ActivityType activityType,
+      StreamProvider provider,
       String? message,
       String? amount,
       String? tier,
@@ -170,6 +178,7 @@ class __$$SeActivityDTOImplCopyWithImpl<$Res>
     Object? channel = null,
     Object? username = null,
     Object? activityType = null,
+    Object? provider = null,
     Object? message = freezed,
     Object? amount = freezed,
     Object? tier = freezed,
@@ -195,6 +204,10 @@ class __$$SeActivityDTOImplCopyWithImpl<$Res>
           ? _value.activityType
           : activityType // ignore: cast_nullable_to_non_nullable
               as ActivityType,
+      provider: null == provider
+          ? _value.provider
+          : provider // ignore: cast_nullable_to_non_nullable
+              as StreamProvider,
       message: freezed == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -235,6 +248,7 @@ class _$SeActivityDTOImpl implements _SeActivityDTO {
       required this.channel,
       required this.username,
       required this.activityType,
+      required this.provider,
       this.message,
       this.amount,
       this.tier,
@@ -252,6 +266,8 @@ class _$SeActivityDTOImpl implements _SeActivityDTO {
   @override
   final ActivityType activityType;
   @override
+  final StreamProvider provider;
+  @override
   final String? message;
   @override
   final String? amount;
@@ -268,7 +284,7 @@ class _$SeActivityDTOImpl implements _SeActivityDTO {
 
   @override
   String toString() {
-    return 'SeActivityDTO(id: $id, channel: $channel, username: $username, activityType: $activityType, message: $message, amount: $amount, tier: $tier, gifted: $gifted, sender: $sender, currency: $currency, isTest: $isTest)';
+    return 'SeActivityDTO(id: $id, channel: $channel, username: $username, activityType: $activityType, provider: $provider, message: $message, amount: $amount, tier: $tier, gifted: $gifted, sender: $sender, currency: $currency, isTest: $isTest)';
   }
 
   @override
@@ -282,6 +298,8 @@ class _$SeActivityDTOImpl implements _SeActivityDTO {
                 other.username == username) &&
             (identical(other.activityType, activityType) ||
                 other.activityType == activityType) &&
+            (identical(other.provider, provider) ||
+                other.provider == provider) &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.amount, amount) || other.amount == amount) &&
             (identical(other.tier, tier) || other.tier == tier) &&
@@ -293,8 +311,20 @@ class _$SeActivityDTOImpl implements _SeActivityDTO {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, channel, username,
-      activityType, message, amount, tier, gifted, sender, currency, isTest);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      channel,
+      username,
+      activityType,
+      provider,
+      message,
+      amount,
+      tier,
+      gifted,
+      sender,
+      currency,
+      isTest);
 
   /// Create a copy of SeActivityDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -311,6 +341,7 @@ abstract class _SeActivityDTO implements SeActivityDTO {
       required final String channel,
       required final String username,
       required final ActivityType activityType,
+      required final StreamProvider provider,
       final String? message,
       final String? amount,
       final String? tier,
@@ -327,6 +358,8 @@ abstract class _SeActivityDTO implements SeActivityDTO {
   String get username;
   @override
   ActivityType get activityType;
+  @override
+  StreamProvider get provider;
   @override
   String? get message;
   @override

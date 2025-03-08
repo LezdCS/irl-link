@@ -191,9 +191,18 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
     StreamelementsViewController controller,
     SeActivity activity,
   ) {
+    String? badge;
+    switch (activity.provider) {
+      case StreamProvider.twitch:
+        badge = "lib/assets/twitch/twitch_logo.png";
+      case StreamProvider.youtube:
+        badge = "lib/assets/youtube/youtubeLogo.png";
+      case StreamProvider.facebook:
+        badge = null;
+    }
     return ExpandableButton(
       child: Container(
-        padding: const EdgeInsets.only(left: 3, right: 3, top: 5, bottom: 5),
+        padding: const EdgeInsets.only(left: 6, right: 6, top: 5, bottom: 5),
         decoration: BoxDecoration(
           color: activity.colorsForEnum()[1],
           borderRadius: const BorderRadius.all(
@@ -203,9 +212,15 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
         margin: const EdgeInsets.only(top: 8),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          spacing: 8,
           children: [
+            if (badge != null)
+              Image(
+                width: 18,
+                height: 18,
+                image: AssetImage(badge),
+              ),
             activity.getIcon(),
-            const SizedBox(width: 4),
             Expanded(
               child: Text.rich(
                 overflow: TextOverflow.ellipsis,

@@ -15,7 +15,8 @@ class TtsService extends GetxService {
   Future<TtsService> init() async {
     flutterTts = FlutterTts();
     if (Platform.isAndroid) {
-      await flutterTts.setEngine(flutterTts.getDefaultEngine.toString());
+      String engine = await flutterTts.getDefaultEngine;
+      await flutterTts.setEngine(engine);
     }
     await getTtsVoices();
     await getTtsLanguages();

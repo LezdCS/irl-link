@@ -10,6 +10,7 @@ import 'package:irllink/src/core/services/watch_service.dart';
 
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
+import 'package:obs_websocket/event.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 
 class ObsTabViewController extends GetxController with WidgetsBindingObserver {
@@ -105,7 +106,7 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
         timeout: const Duration(seconds: 30),
       );
 
-      obsWebSocket?.listen(EventSubscription.all.code);
+      obsWebSocket?.subscribe(EventSubscription.all);
 
       obsWebSocket?.addHandler<RecordStateChanged>(
           (RecordStateChanged recordingStateChanged) {
@@ -136,25 +137,19 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
         switch (event.eventType) {
           case 'CurrentProgramSceneChanged':
             getCurrentScene();
-            break;
           case 'InputVolumeChanged':
             sourcesVolumesMap[event.eventData?['inputName']] =
                 event.eventData?['inputVolumeDb'];
             sourcesList.refresh();
             sourcesVolumesMap.refresh();
-            break;
           case 'SceneListChanged':
             getSceneList();
-            break;
           case 'SceneItemCreated':
             getCurrentScene();
-            break;
           case 'SceneItemRemoved':
             getCurrentScene();
-            break;
           case 'InputNameChanged':
             getCurrentScene();
-            break;
         }
       });
 

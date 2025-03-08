@@ -16,8 +16,6 @@ String getDashboardActionTypeString(DashboardActionsTypes actionType) {
       return 'Button';
     case DashboardActionsTypes.slider:
       return 'Slider';
-    default:
-      return 'Unknown';
   }
 }
 

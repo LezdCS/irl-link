@@ -1,3 +1,4 @@
+// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 // **************************************************************************
@@ -1765,6 +1766,7 @@ class $Mappr implements _i1.AutoMapprInterface {
       channel: model.channel,
       username: model.username,
       activityType: model.activityType,
+      provider: model.provider,
       message: model.message,
       amount: model.amount,
       tier: model.tier,

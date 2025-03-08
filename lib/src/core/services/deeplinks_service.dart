@@ -52,7 +52,6 @@ class DeeplinksService {
     switch (service) {
       case 'irltools':
         _handleIrlTools(queryParams);
-        break;
       default:
         talker.error('Unknown service in deeplink: $service');
     }
