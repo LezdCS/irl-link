@@ -4,7 +4,7 @@ part 'stream_elements_settings_dto.freezed.dart';
 part 'stream_elements_settings_dto.g.dart';
 
 @freezed
-class StreamElementsSettingsDTO with _$StreamElementsSettingsDTO {
+abstract class StreamElementsSettingsDTO with _$StreamElementsSettingsDTO {
   const factory StreamElementsSettingsDTO({
     @Default(true) bool showFollowerActivity,
     @Default(true) bool showSubscriberActivity,

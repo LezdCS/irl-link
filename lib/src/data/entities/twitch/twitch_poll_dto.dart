@@ -6,7 +6,7 @@ part 'twitch_poll_dto.freezed.dart';
 part 'twitch_poll_dto.g.dart';
 
 @freezed
-class TwitchPollDTO with _$TwitchPollDTO {
+abstract class TwitchPollDTO with _$TwitchPollDTO {
   const factory TwitchPollDTO({
     required String id,
     required String title,
@@ -52,7 +52,7 @@ class TwitchPollDTO with _$TwitchPollDTO {
 }
 
 @freezed
-class ChoiceDTO with _$ChoiceDTO {
+abstract class ChoiceDTO with _$ChoiceDTO {
   const factory ChoiceDTO({
     required String id,
     required String title,

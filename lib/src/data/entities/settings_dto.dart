@@ -11,7 +11,7 @@ part 'settings_dto.freezed.dart';
 part 'settings_dto.g.dart';
 
 @freezed
-class SettingsDTO with _$SettingsDTO {
+abstract class SettingsDTO with _$SettingsDTO {
   const factory SettingsDTO({
     //CHAT SETTINGS
     @Default(true) bool isEmotes,

@@ -6,9 +6,9 @@ part of 'stream_elements_settings_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$StreamElementsSettingsDTOImpl _$$StreamElementsSettingsDTOImplFromJson(
+_StreamElementsSettingsDTO _$StreamElementsSettingsDTOFromJson(
         Map<String, dynamic> json) =>
-    _$StreamElementsSettingsDTOImpl(
+    _StreamElementsSettingsDTO(
       showFollowerActivity: json['showFollowerActivity'] as bool? ?? true,
       showSubscriberActivity: json['showSubscriberActivity'] as bool? ?? true,
       showDonationActivity: json['showDonationActivity'] as bool? ?? true,
@@ -24,8 +24,8 @@ _$StreamElementsSettingsDTOImpl _$$StreamElementsSettingsDTOImplFromJson(
           const [],
     );
 
-Map<String, dynamic> _$$StreamElementsSettingsDTOImplToJson(
-        _$StreamElementsSettingsDTOImpl instance) =>
+Map<String, dynamic> _$StreamElementsSettingsDTOToJson(
+        _StreamElementsSettingsDTO instance) =>
     <String, dynamic>{
       'showFollowerActivity': instance.showFollowerActivity,
       'showSubscriberActivity': instance.showSubscriberActivity,

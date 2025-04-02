@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,54 +10,110 @@ part of 'settings_dto.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-SettingsDTO _$SettingsDTOFromJson(Map<String, dynamic> json) {
-  return _SettingsDTO.fromJson(json);
-}
 
 /// @nodoc
 mixin _$SettingsDTO {
 //CHAT SETTINGS
-  bool get isEmotes => throw _privateConstructorUsedError;
-  double get textSize => throw _privateConstructorUsedError;
-  bool get displayTimestamp => throw _privateConstructorUsedError;
-  List<dynamic> get hiddenUsersIds => throw _privateConstructorUsedError;
-  ChatEventsSettingsDTO get chatEventsSettings =>
-      throw _privateConstructorUsedError;
-  ChatSettingsDTO get chatSettings =>
-      throw _privateConstructorUsedError; //GENERAL SETTINGS
-  GeneralSettingsDTO get generalSettings => throw _privateConstructorUsedError;
-  DashboardSettingsDTO get dashboardSettings =>
-      throw _privateConstructorUsedError; //CONNECTIONS SETTINGS
-  bool get isObsConnected => throw _privateConstructorUsedError;
-  String get obsWebsocketUrl => throw _privateConstructorUsedError;
-  String get obsWebsocketPassword => throw _privateConstructorUsedError;
-  BrowserTabSettingsDTO get browserTabs => throw _privateConstructorUsedError;
-  List<dynamic> get obsConnectionsHistory => throw _privateConstructorUsedError;
-  StreamElementsSettingsDTO get streamElementsSettings =>
-      throw _privateConstructorUsedError;
-  String get rtIrlPushKey => throw _privateConstructorUsedError; //TTS SETTINGS
-  TtsSettingsDTO get ttsSettings => throw _privateConstructorUsedError;
-
-  /// Serializes this SettingsDTO to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  bool get isEmotes;
+  double get textSize;
+  bool get displayTimestamp;
+  List get hiddenUsersIds;
+  ChatEventsSettingsDTO get chatEventsSettings;
+  ChatSettingsDTO get chatSettings; //GENERAL SETTINGS
+  GeneralSettingsDTO get generalSettings;
+  DashboardSettingsDTO get dashboardSettings; //CONNECTIONS SETTINGS
+  bool get isObsConnected;
+  String get obsWebsocketUrl;
+  String get obsWebsocketPassword;
+  BrowserTabSettingsDTO get browserTabs;
+  List get obsConnectionsHistory;
+  StreamElementsSettingsDTO get streamElementsSettings;
+  String get rtIrlPushKey; //TTS SETTINGS
+  TtsSettingsDTO get ttsSettings;
 
   /// Create a copy of SettingsDTO
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
   $SettingsDTOCopyWith<SettingsDTO> get copyWith =>
-      throw _privateConstructorUsedError;
+      _$SettingsDTOCopyWithImpl<SettingsDTO>(this as SettingsDTO, _$identity);
+
+  /// Serializes this SettingsDTO to a JSON map.
+  Map<String, dynamic> toJson();
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is SettingsDTO &&
+            (identical(other.isEmotes, isEmotes) ||
+                other.isEmotes == isEmotes) &&
+            (identical(other.textSize, textSize) ||
+                other.textSize == textSize) &&
+            (identical(other.displayTimestamp, displayTimestamp) ||
+                other.displayTimestamp == displayTimestamp) &&
+            const DeepCollectionEquality()
+                .equals(other.hiddenUsersIds, hiddenUsersIds) &&
+            (identical(other.chatEventsSettings, chatEventsSettings) ||
+                other.chatEventsSettings == chatEventsSettings) &&
+            (identical(other.chatSettings, chatSettings) ||
+                other.chatSettings == chatSettings) &&
+            (identical(other.generalSettings, generalSettings) ||
+                other.generalSettings == generalSettings) &&
+            (identical(other.dashboardSettings, dashboardSettings) ||
+                other.dashboardSettings == dashboardSettings) &&
+            (identical(other.isObsConnected, isObsConnected) ||
+                other.isObsConnected == isObsConnected) &&
+            (identical(other.obsWebsocketUrl, obsWebsocketUrl) ||
+                other.obsWebsocketUrl == obsWebsocketUrl) &&
+            (identical(other.obsWebsocketPassword, obsWebsocketPassword) ||
+                other.obsWebsocketPassword == obsWebsocketPassword) &&
+            (identical(other.browserTabs, browserTabs) ||
+                other.browserTabs == browserTabs) &&
+            const DeepCollectionEquality()
+                .equals(other.obsConnectionsHistory, obsConnectionsHistory) &&
+            (identical(other.streamElementsSettings, streamElementsSettings) ||
+                other.streamElementsSettings == streamElementsSettings) &&
+            (identical(other.rtIrlPushKey, rtIrlPushKey) ||
+                other.rtIrlPushKey == rtIrlPushKey) &&
+            (identical(other.ttsSettings, ttsSettings) ||
+                other.ttsSettings == ttsSettings));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      isEmotes,
+      textSize,
+      displayTimestamp,
+      const DeepCollectionEquality().hash(hiddenUsersIds),
+      chatEventsSettings,
+      chatSettings,
+      generalSettings,
+      dashboardSettings,
+      isObsConnected,
+      obsWebsocketUrl,
+      obsWebsocketPassword,
+      browserTabs,
+      const DeepCollectionEquality().hash(obsConnectionsHistory),
+      streamElementsSettings,
+      rtIrlPushKey,
+      ttsSettings);
+
+  @override
+  String toString() {
+    return 'SettingsDTO(isEmotes: $isEmotes, textSize: $textSize, displayTimestamp: $displayTimestamp, hiddenUsersIds: $hiddenUsersIds, chatEventsSettings: $chatEventsSettings, chatSettings: $chatSettings, generalSettings: $generalSettings, dashboardSettings: $dashboardSettings, isObsConnected: $isObsConnected, obsWebsocketUrl: $obsWebsocketUrl, obsWebsocketPassword: $obsWebsocketPassword, browserTabs: $browserTabs, obsConnectionsHistory: $obsConnectionsHistory, streamElementsSettings: $streamElementsSettings, rtIrlPushKey: $rtIrlPushKey, ttsSettings: $ttsSettings)';
+  }
 }
 
 /// @nodoc
-abstract class $SettingsDTOCopyWith<$Res> {
+abstract mixin class $SettingsDTOCopyWith<$Res> {
   factory $SettingsDTOCopyWith(
-          SettingsDTO value, $Res Function(SettingsDTO) then) =
-      _$SettingsDTOCopyWithImpl<$Res, SettingsDTO>;
+          SettingsDTO value, $Res Function(SettingsDTO) _then) =
+      _$SettingsDTOCopyWithImpl;
   @useResult
   $Res call(
       {bool isEmotes,
@@ -86,14 +143,11 @@ abstract class $SettingsDTOCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$SettingsDTOCopyWithImpl<$Res, $Val extends SettingsDTO>
-    implements $SettingsDTOCopyWith<$Res> {
-  _$SettingsDTOCopyWithImpl(this._value, this._then);
+class _$SettingsDTOCopyWithImpl<$Res> implements $SettingsDTOCopyWith<$Res> {
+  _$SettingsDTOCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final SettingsDTO _self;
+  final $Res Function(SettingsDTO) _then;
 
   /// Create a copy of SettingsDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -117,72 +171,72 @@ class _$SettingsDTOCopyWithImpl<$Res, $Val extends SettingsDTO>
     Object? rtIrlPushKey = null,
     Object? ttsSettings = null,
   }) {
-    return _then(_value.copyWith(
+    return _then(_self.copyWith(
       isEmotes: null == isEmotes
-          ? _value.isEmotes
+          ? _self.isEmotes
           : isEmotes // ignore: cast_nullable_to_non_nullable
               as bool,
       textSize: null == textSize
-          ? _value.textSize
+          ? _self.textSize
           : textSize // ignore: cast_nullable_to_non_nullable
               as double,
       displayTimestamp: null == displayTimestamp
-          ? _value.displayTimestamp
+          ? _self.displayTimestamp
           : displayTimestamp // ignore: cast_nullable_to_non_nullable
               as bool,
       hiddenUsersIds: null == hiddenUsersIds
-          ? _value.hiddenUsersIds
+          ? _self.hiddenUsersIds!
           : hiddenUsersIds // ignore: cast_nullable_to_non_nullable
               as List<dynamic>,
       chatEventsSettings: null == chatEventsSettings
-          ? _value.chatEventsSettings
+          ? _self.chatEventsSettings
           : chatEventsSettings // ignore: cast_nullable_to_non_nullable
               as ChatEventsSettingsDTO,
       chatSettings: null == chatSettings
-          ? _value.chatSettings
+          ? _self.chatSettings
           : chatSettings // ignore: cast_nullable_to_non_nullable
               as ChatSettingsDTO,
       generalSettings: null == generalSettings
-          ? _value.generalSettings
+          ? _self.generalSettings
           : generalSettings // ignore: cast_nullable_to_non_nullable
               as GeneralSettingsDTO,
       dashboardSettings: null == dashboardSettings
-          ? _value.dashboardSettings
+          ? _self.dashboardSettings
           : dashboardSettings // ignore: cast_nullable_to_non_nullable
               as DashboardSettingsDTO,
       isObsConnected: null == isObsConnected
-          ? _value.isObsConnected
+          ? _self.isObsConnected
           : isObsConnected // ignore: cast_nullable_to_non_nullable
               as bool,
       obsWebsocketUrl: null == obsWebsocketUrl
-          ? _value.obsWebsocketUrl
+          ? _self.obsWebsocketUrl
           : obsWebsocketUrl // ignore: cast_nullable_to_non_nullable
               as String,
       obsWebsocketPassword: null == obsWebsocketPassword
-          ? _value.obsWebsocketPassword
+          ? _self.obsWebsocketPassword
           : obsWebsocketPassword // ignore: cast_nullable_to_non_nullable
               as String,
       browserTabs: null == browserTabs
-          ? _value.browserTabs
+          ? _self.browserTabs
           : browserTabs // ignore: cast_nullable_to_non_nullable
               as BrowserTabSettingsDTO,
       obsConnectionsHistory: null == obsConnectionsHistory
-          ? _value.obsConnectionsHistory
+          ? _self.obsConnectionsHistory!
           : obsConnectionsHistory // ignore: cast_nullable_to_non_nullable
               as List<dynamic>,
       streamElementsSettings: null == streamElementsSettings
-          ? _value.streamElementsSettings
+          ? _self.streamElementsSettings
           : streamElementsSettings // ignore: cast_nullable_to_non_nullable
               as StreamElementsSettingsDTO,
       rtIrlPushKey: null == rtIrlPushKey
-          ? _value.rtIrlPushKey
+          ? _self.rtIrlPushKey
           : rtIrlPushKey // ignore: cast_nullable_to_non_nullable
               as String,
       ttsSettings: null == ttsSettings
-          ? _value.ttsSettings
+          ? _self.ttsSettings
           : ttsSettings // ignore: cast_nullable_to_non_nullable
               as TtsSettingsDTO,
-    ) as $Val);
+    ));
   }
 
   /// Create a copy of SettingsDTO
@@ -190,9 +244,9 @@ class _$SettingsDTOCopyWithImpl<$Res, $Val extends SettingsDTO>
   @override
   @pragma('vm:prefer-inline')
   $ChatEventsSettingsDTOCopyWith<$Res> get chatEventsSettings {
-    return $ChatEventsSettingsDTOCopyWith<$Res>(_value.chatEventsSettings,
+    return $ChatEventsSettingsDTOCopyWith<$Res>(_self.chatEventsSettings,
         (value) {
-      return _then(_value.copyWith(chatEventsSettings: value) as $Val);
+      return _then(_self.copyWith(chatEventsSettings: value));
     });
   }
 
@@ -201,8 +255,8 @@ class _$SettingsDTOCopyWithImpl<$Res, $Val extends SettingsDTO>
   @override
   @pragma('vm:prefer-inline')
   $ChatSettingsDTOCopyWith<$Res> get chatSettings {
-    return $ChatSettingsDTOCopyWith<$Res>(_value.chatSettings, (value) {
-      return _then(_value.copyWith(chatSettings: value) as $Val);
+    return $ChatSettingsDTOCopyWith<$Res>(_self.chatSettings, (value) {
+      return _then(_self.copyWith(chatSettings: value));
     });
   }
 
@@ -211,8 +265,8 @@ class _$SettingsDTOCopyWithImpl<$Res, $Val extends SettingsDTO>
   @override
   @pragma('vm:prefer-inline')
   $GeneralSettingsDTOCopyWith<$Res> get generalSettings {
-    return $GeneralSettingsDTOCopyWith<$Res>(_value.generalSettings, (value) {
-      return _then(_value.copyWith(generalSettings: value) as $Val);
+    return $GeneralSettingsDTOCopyWith<$Res>(_self.generalSettings, (value) {
+      return _then(_self.copyWith(generalSettings: value));
     });
   }
 
@@ -221,9 +275,9 @@ class _$SettingsDTOCopyWithImpl<$Res, $Val extends SettingsDTO>
   @override
   @pragma('vm:prefer-inline')
   $DashboardSettingsDTOCopyWith<$Res> get dashboardSettings {
-    return $DashboardSettingsDTOCopyWith<$Res>(_value.dashboardSettings,
+    return $DashboardSettingsDTOCopyWith<$Res>(_self.dashboardSettings,
         (value) {
-      return _then(_value.copyWith(dashboardSettings: value) as $Val);
+      return _then(_self.copyWith(dashboardSettings: value));
     });
   }
 
@@ -232,8 +286,8 @@ class _$SettingsDTOCopyWithImpl<$Res, $Val extends SettingsDTO>
   @override
   @pragma('vm:prefer-inline')
   $BrowserTabSettingsDTOCopyWith<$Res> get browserTabs {
-    return $BrowserTabSettingsDTOCopyWith<$Res>(_value.browserTabs, (value) {
-      return _then(_value.copyWith(browserTabs: value) as $Val);
+    return $BrowserTabSettingsDTOCopyWith<$Res>(_self.browserTabs, (value) {
+      return _then(_self.copyWith(browserTabs: value));
     });
   }
 
@@ -243,8 +297,8 @@ class _$SettingsDTOCopyWithImpl<$Res, $Val extends SettingsDTO>
   @pragma('vm:prefer-inline')
   $StreamElementsSettingsDTOCopyWith<$Res> get streamElementsSettings {
     return $StreamElementsSettingsDTOCopyWith<$Res>(
-        _value.streamElementsSettings, (value) {
-      return _then(_value.copyWith(streamElementsSettings: value) as $Val);
+        _self.streamElementsSettings, (value) {
+      return _then(_self.copyWith(streamElementsSettings: value));
     });
   }
 
@@ -253,157 +307,16 @@ class _$SettingsDTOCopyWithImpl<$Res, $Val extends SettingsDTO>
   @override
   @pragma('vm:prefer-inline')
   $TtsSettingsDTOCopyWith<$Res> get ttsSettings {
-    return $TtsSettingsDTOCopyWith<$Res>(_value.ttsSettings, (value) {
-      return _then(_value.copyWith(ttsSettings: value) as $Val);
+    return $TtsSettingsDTOCopyWith<$Res>(_self.ttsSettings, (value) {
+      return _then(_self.copyWith(ttsSettings: value));
     });
   }
 }
 
 /// @nodoc
-abstract class _$$SettingsDTOImplCopyWith<$Res>
-    implements $SettingsDTOCopyWith<$Res> {
-  factory _$$SettingsDTOImplCopyWith(
-          _$SettingsDTOImpl value, $Res Function(_$SettingsDTOImpl) then) =
-      __$$SettingsDTOImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {bool isEmotes,
-      double textSize,
-      bool displayTimestamp,
-      List<dynamic> hiddenUsersIds,
-      ChatEventsSettingsDTO chatEventsSettings,
-      ChatSettingsDTO chatSettings,
-      GeneralSettingsDTO generalSettings,
-      DashboardSettingsDTO dashboardSettings,
-      bool isObsConnected,
-      String obsWebsocketUrl,
-      String obsWebsocketPassword,
-      BrowserTabSettingsDTO browserTabs,
-      List<dynamic> obsConnectionsHistory,
-      StreamElementsSettingsDTO streamElementsSettings,
-      String rtIrlPushKey,
-      TtsSettingsDTO ttsSettings});
-
-  @override
-  $ChatEventsSettingsDTOCopyWith<$Res> get chatEventsSettings;
-  @override
-  $ChatSettingsDTOCopyWith<$Res> get chatSettings;
-  @override
-  $GeneralSettingsDTOCopyWith<$Res> get generalSettings;
-  @override
-  $DashboardSettingsDTOCopyWith<$Res> get dashboardSettings;
-  @override
-  $BrowserTabSettingsDTOCopyWith<$Res> get browserTabs;
-  @override
-  $StreamElementsSettingsDTOCopyWith<$Res> get streamElementsSettings;
-  @override
-  $TtsSettingsDTOCopyWith<$Res> get ttsSettings;
-}
-
-/// @nodoc
-class __$$SettingsDTOImplCopyWithImpl<$Res>
-    extends _$SettingsDTOCopyWithImpl<$Res, _$SettingsDTOImpl>
-    implements _$$SettingsDTOImplCopyWith<$Res> {
-  __$$SettingsDTOImplCopyWithImpl(
-      _$SettingsDTOImpl _value, $Res Function(_$SettingsDTOImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of SettingsDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? isEmotes = null,
-    Object? textSize = null,
-    Object? displayTimestamp = null,
-    Object? hiddenUsersIds = null,
-    Object? chatEventsSettings = null,
-    Object? chatSettings = null,
-    Object? generalSettings = null,
-    Object? dashboardSettings = null,
-    Object? isObsConnected = null,
-    Object? obsWebsocketUrl = null,
-    Object? obsWebsocketPassword = null,
-    Object? browserTabs = null,
-    Object? obsConnectionsHistory = null,
-    Object? streamElementsSettings = null,
-    Object? rtIrlPushKey = null,
-    Object? ttsSettings = null,
-  }) {
-    return _then(_$SettingsDTOImpl(
-      isEmotes: null == isEmotes
-          ? _value.isEmotes
-          : isEmotes // ignore: cast_nullable_to_non_nullable
-              as bool,
-      textSize: null == textSize
-          ? _value.textSize
-          : textSize // ignore: cast_nullable_to_non_nullable
-              as double,
-      displayTimestamp: null == displayTimestamp
-          ? _value.displayTimestamp
-          : displayTimestamp // ignore: cast_nullable_to_non_nullable
-              as bool,
-      hiddenUsersIds: null == hiddenUsersIds
-          ? _value._hiddenUsersIds
-          : hiddenUsersIds // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
-      chatEventsSettings: null == chatEventsSettings
-          ? _value.chatEventsSettings
-          : chatEventsSettings // ignore: cast_nullable_to_non_nullable
-              as ChatEventsSettingsDTO,
-      chatSettings: null == chatSettings
-          ? _value.chatSettings
-          : chatSettings // ignore: cast_nullable_to_non_nullable
-              as ChatSettingsDTO,
-      generalSettings: null == generalSettings
-          ? _value.generalSettings
-          : generalSettings // ignore: cast_nullable_to_non_nullable
-              as GeneralSettingsDTO,
-      dashboardSettings: null == dashboardSettings
-          ? _value.dashboardSettings
-          : dashboardSettings // ignore: cast_nullable_to_non_nullable
-              as DashboardSettingsDTO,
-      isObsConnected: null == isObsConnected
-          ? _value.isObsConnected
-          : isObsConnected // ignore: cast_nullable_to_non_nullable
-              as bool,
-      obsWebsocketUrl: null == obsWebsocketUrl
-          ? _value.obsWebsocketUrl
-          : obsWebsocketUrl // ignore: cast_nullable_to_non_nullable
-              as String,
-      obsWebsocketPassword: null == obsWebsocketPassword
-          ? _value.obsWebsocketPassword
-          : obsWebsocketPassword // ignore: cast_nullable_to_non_nullable
-              as String,
-      browserTabs: null == browserTabs
-          ? _value.browserTabs
-          : browserTabs // ignore: cast_nullable_to_non_nullable
-              as BrowserTabSettingsDTO,
-      obsConnectionsHistory: null == obsConnectionsHistory
-          ? _value._obsConnectionsHistory
-          : obsConnectionsHistory // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
-      streamElementsSettings: null == streamElementsSettings
-          ? _value.streamElementsSettings
-          : streamElementsSettings // ignore: cast_nullable_to_non_nullable
-              as StreamElementsSettingsDTO,
-      rtIrlPushKey: null == rtIrlPushKey
-          ? _value.rtIrlPushKey
-          : rtIrlPushKey // ignore: cast_nullable_to_non_nullable
-              as String,
-      ttsSettings: null == ttsSettings
-          ? _value.ttsSettings
-          : ttsSettings // ignore: cast_nullable_to_non_nullable
-              as TtsSettingsDTO,
-    ));
-  }
-}
-
-/// @nodoc
 @JsonSerializable()
-class _$SettingsDTOImpl implements _SettingsDTO {
-  const _$SettingsDTOImpl(
+class _SettingsDTO implements SettingsDTO {
+  const _SettingsDTO(
       {this.isEmotes = true,
       this.textSize = 19,
       this.displayTimestamp = false,
@@ -422,9 +335,8 @@ class _$SettingsDTOImpl implements _SettingsDTO {
       required this.ttsSettings})
       : _hiddenUsersIds = hiddenUsersIds,
         _obsConnectionsHistory = obsConnectionsHistory;
-
-  factory _$SettingsDTOImpl.fromJson(Map<String, dynamic> json) =>
-      _$$SettingsDTOImplFromJson(json);
+  factory _SettingsDTO.fromJson(Map<String, dynamic> json) =>
+      _$SettingsDTOFromJson(json);
 
 //CHAT SETTINGS
   @override
@@ -485,16 +397,26 @@ class _$SettingsDTOImpl implements _SettingsDTO {
   @override
   final TtsSettingsDTO ttsSettings;
 
+  /// Create a copy of SettingsDTO
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'SettingsDTO(isEmotes: $isEmotes, textSize: $textSize, displayTimestamp: $displayTimestamp, hiddenUsersIds: $hiddenUsersIds, chatEventsSettings: $chatEventsSettings, chatSettings: $chatSettings, generalSettings: $generalSettings, dashboardSettings: $dashboardSettings, isObsConnected: $isObsConnected, obsWebsocketUrl: $obsWebsocketUrl, obsWebsocketPassword: $obsWebsocketPassword, browserTabs: $browserTabs, obsConnectionsHistory: $obsConnectionsHistory, streamElementsSettings: $streamElementsSettings, rtIrlPushKey: $rtIrlPushKey, ttsSettings: $ttsSettings)';
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$SettingsDTOCopyWith<_SettingsDTO> get copyWith =>
+      __$SettingsDTOCopyWithImpl<_SettingsDTO>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$SettingsDTOToJson(
+      this,
+    );
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$SettingsDTOImpl &&
+            other is _SettingsDTO &&
             (identical(other.isEmotes, isEmotes) ||
                 other.isEmotes == isEmotes) &&
             (identical(other.textSize, textSize) ||
@@ -550,82 +472,223 @@ class _$SettingsDTOImpl implements _SettingsDTO {
       rtIrlPushKey,
       ttsSettings);
 
-  /// Create a copy of SettingsDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$SettingsDTOImplCopyWith<_$SettingsDTOImpl> get copyWith =>
-      __$$SettingsDTOImplCopyWithImpl<_$SettingsDTOImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$SettingsDTOImplToJson(
-      this,
-    );
+  String toString() {
+    return 'SettingsDTO(isEmotes: $isEmotes, textSize: $textSize, displayTimestamp: $displayTimestamp, hiddenUsersIds: $hiddenUsersIds, chatEventsSettings: $chatEventsSettings, chatSettings: $chatSettings, generalSettings: $generalSettings, dashboardSettings: $dashboardSettings, isObsConnected: $isObsConnected, obsWebsocketUrl: $obsWebsocketUrl, obsWebsocketPassword: $obsWebsocketPassword, browserTabs: $browserTabs, obsConnectionsHistory: $obsConnectionsHistory, streamElementsSettings: $streamElementsSettings, rtIrlPushKey: $rtIrlPushKey, ttsSettings: $ttsSettings)';
   }
 }
 
-abstract class _SettingsDTO implements SettingsDTO {
-  const factory _SettingsDTO(
-      {final bool isEmotes,
-      final double textSize,
-      final bool displayTimestamp,
-      final List<dynamic> hiddenUsersIds,
-      required final ChatEventsSettingsDTO chatEventsSettings,
-      required final ChatSettingsDTO chatSettings,
-      required final GeneralSettingsDTO generalSettings,
-      required final DashboardSettingsDTO dashboardSettings,
-      final bool isObsConnected,
-      final String obsWebsocketUrl,
-      final String obsWebsocketPassword,
-      required final BrowserTabSettingsDTO browserTabs,
-      final List<dynamic> obsConnectionsHistory,
-      required final StreamElementsSettingsDTO streamElementsSettings,
-      final String rtIrlPushKey,
-      required final TtsSettingsDTO ttsSettings}) = _$SettingsDTOImpl;
+/// @nodoc
+abstract mixin class _$SettingsDTOCopyWith<$Res>
+    implements $SettingsDTOCopyWith<$Res> {
+  factory _$SettingsDTOCopyWith(
+          _SettingsDTO value, $Res Function(_SettingsDTO) _then) =
+      __$SettingsDTOCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {bool isEmotes,
+      double textSize,
+      bool displayTimestamp,
+      List<dynamic> hiddenUsersIds,
+      ChatEventsSettingsDTO chatEventsSettings,
+      ChatSettingsDTO chatSettings,
+      GeneralSettingsDTO generalSettings,
+      DashboardSettingsDTO dashboardSettings,
+      bool isObsConnected,
+      String obsWebsocketUrl,
+      String obsWebsocketPassword,
+      BrowserTabSettingsDTO browserTabs,
+      List<dynamic> obsConnectionsHistory,
+      StreamElementsSettingsDTO streamElementsSettings,
+      String rtIrlPushKey,
+      TtsSettingsDTO ttsSettings});
 
-  factory _SettingsDTO.fromJson(Map<String, dynamic> json) =
-      _$SettingsDTOImpl.fromJson;
+  @override
+  $ChatEventsSettingsDTOCopyWith<$Res> get chatEventsSettings;
+  @override
+  $ChatSettingsDTOCopyWith<$Res> get chatSettings;
+  @override
+  $GeneralSettingsDTOCopyWith<$Res> get generalSettings;
+  @override
+  $DashboardSettingsDTOCopyWith<$Res> get dashboardSettings;
+  @override
+  $BrowserTabSettingsDTOCopyWith<$Res> get browserTabs;
+  @override
+  $StreamElementsSettingsDTOCopyWith<$Res> get streamElementsSettings;
+  @override
+  $TtsSettingsDTOCopyWith<$Res> get ttsSettings;
+}
 
-//CHAT SETTINGS
-  @override
-  bool get isEmotes;
-  @override
-  double get textSize;
-  @override
-  bool get displayTimestamp;
-  @override
-  List<dynamic> get hiddenUsersIds;
-  @override
-  ChatEventsSettingsDTO get chatEventsSettings;
-  @override
-  ChatSettingsDTO get chatSettings; //GENERAL SETTINGS
-  @override
-  GeneralSettingsDTO get generalSettings;
-  @override
-  DashboardSettingsDTO get dashboardSettings; //CONNECTIONS SETTINGS
-  @override
-  bool get isObsConnected;
-  @override
-  String get obsWebsocketUrl;
-  @override
-  String get obsWebsocketPassword;
-  @override
-  BrowserTabSettingsDTO get browserTabs;
-  @override
-  List<dynamic> get obsConnectionsHistory;
-  @override
-  StreamElementsSettingsDTO get streamElementsSettings;
-  @override
-  String get rtIrlPushKey; //TTS SETTINGS
-  @override
-  TtsSettingsDTO get ttsSettings;
+/// @nodoc
+class __$SettingsDTOCopyWithImpl<$Res> implements _$SettingsDTOCopyWith<$Res> {
+  __$SettingsDTOCopyWithImpl(this._self, this._then);
+
+  final _SettingsDTO _self;
+  final $Res Function(_SettingsDTO) _then;
 
   /// Create a copy of SettingsDTO
   /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$SettingsDTOImplCopyWith<_$SettingsDTOImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? isEmotes = null,
+    Object? textSize = null,
+    Object? displayTimestamp = null,
+    Object? hiddenUsersIds = null,
+    Object? chatEventsSettings = null,
+    Object? chatSettings = null,
+    Object? generalSettings = null,
+    Object? dashboardSettings = null,
+    Object? isObsConnected = null,
+    Object? obsWebsocketUrl = null,
+    Object? obsWebsocketPassword = null,
+    Object? browserTabs = null,
+    Object? obsConnectionsHistory = null,
+    Object? streamElementsSettings = null,
+    Object? rtIrlPushKey = null,
+    Object? ttsSettings = null,
+  }) {
+    return _then(_SettingsDTO(
+      isEmotes: null == isEmotes
+          ? _self.isEmotes
+          : isEmotes // ignore: cast_nullable_to_non_nullable
+              as bool,
+      textSize: null == textSize
+          ? _self.textSize
+          : textSize // ignore: cast_nullable_to_non_nullable
+              as double,
+      displayTimestamp: null == displayTimestamp
+          ? _self.displayTimestamp
+          : displayTimestamp // ignore: cast_nullable_to_non_nullable
+              as bool,
+      hiddenUsersIds: null == hiddenUsersIds
+          ? _self._hiddenUsersIds
+          : hiddenUsersIds // ignore: cast_nullable_to_non_nullable
+              as List<dynamic>,
+      chatEventsSettings: null == chatEventsSettings
+          ? _self.chatEventsSettings
+          : chatEventsSettings // ignore: cast_nullable_to_non_nullable
+              as ChatEventsSettingsDTO,
+      chatSettings: null == chatSettings
+          ? _self.chatSettings
+          : chatSettings // ignore: cast_nullable_to_non_nullable
+              as ChatSettingsDTO,
+      generalSettings: null == generalSettings
+          ? _self.generalSettings
+          : generalSettings // ignore: cast_nullable_to_non_nullable
+              as GeneralSettingsDTO,
+      dashboardSettings: null == dashboardSettings
+          ? _self.dashboardSettings
+          : dashboardSettings // ignore: cast_nullable_to_non_nullable
+              as DashboardSettingsDTO,
+      isObsConnected: null == isObsConnected
+          ? _self.isObsConnected
+          : isObsConnected // ignore: cast_nullable_to_non_nullable
+              as bool,
+      obsWebsocketUrl: null == obsWebsocketUrl
+          ? _self.obsWebsocketUrl
+          : obsWebsocketUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      obsWebsocketPassword: null == obsWebsocketPassword
+          ? _self.obsWebsocketPassword
+          : obsWebsocketPassword // ignore: cast_nullable_to_non_nullable
+              as String,
+      browserTabs: null == browserTabs
+          ? _self.browserTabs
+          : browserTabs // ignore: cast_nullable_to_non_nullable
+              as BrowserTabSettingsDTO,
+      obsConnectionsHistory: null == obsConnectionsHistory
+          ? _self._obsConnectionsHistory
+          : obsConnectionsHistory // ignore: cast_nullable_to_non_nullable
+              as List<dynamic>,
+      streamElementsSettings: null == streamElementsSettings
+          ? _self.streamElementsSettings
+          : streamElementsSettings // ignore: cast_nullable_to_non_nullable
+              as StreamElementsSettingsDTO,
+      rtIrlPushKey: null == rtIrlPushKey
+          ? _self.rtIrlPushKey
+          : rtIrlPushKey // ignore: cast_nullable_to_non_nullable
+              as String,
+      ttsSettings: null == ttsSettings
+          ? _self.ttsSettings
+          : ttsSettings // ignore: cast_nullable_to_non_nullable
+              as TtsSettingsDTO,
+    ));
+  }
+
+  /// Create a copy of SettingsDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ChatEventsSettingsDTOCopyWith<$Res> get chatEventsSettings {
+    return $ChatEventsSettingsDTOCopyWith<$Res>(_self.chatEventsSettings,
+        (value) {
+      return _then(_self.copyWith(chatEventsSettings: value));
+    });
+  }
+
+  /// Create a copy of SettingsDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ChatSettingsDTOCopyWith<$Res> get chatSettings {
+    return $ChatSettingsDTOCopyWith<$Res>(_self.chatSettings, (value) {
+      return _then(_self.copyWith(chatSettings: value));
+    });
+  }
+
+  /// Create a copy of SettingsDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $GeneralSettingsDTOCopyWith<$Res> get generalSettings {
+    return $GeneralSettingsDTOCopyWith<$Res>(_self.generalSettings, (value) {
+      return _then(_self.copyWith(generalSettings: value));
+    });
+  }
+
+  /// Create a copy of SettingsDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $DashboardSettingsDTOCopyWith<$Res> get dashboardSettings {
+    return $DashboardSettingsDTOCopyWith<$Res>(_self.dashboardSettings,
+        (value) {
+      return _then(_self.copyWith(dashboardSettings: value));
+    });
+  }
+
+  /// Create a copy of SettingsDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $BrowserTabSettingsDTOCopyWith<$Res> get browserTabs {
+    return $BrowserTabSettingsDTOCopyWith<$Res>(_self.browserTabs, (value) {
+      return _then(_self.copyWith(browserTabs: value));
+    });
+  }
+
+  /// Create a copy of SettingsDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $StreamElementsSettingsDTOCopyWith<$Res> get streamElementsSettings {
+    return $StreamElementsSettingsDTOCopyWith<$Res>(
+        _self.streamElementsSettings, (value) {
+      return _then(_self.copyWith(streamElementsSettings: value));
+    });
+  }
+
+  /// Create a copy of SettingsDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TtsSettingsDTOCopyWith<$Res> get ttsSettings {
+    return $TtsSettingsDTOCopyWith<$Res>(_self.ttsSettings, (value) {
+      return _then(_self.copyWith(ttsSettings: value));
+    });
+  }
 }
+
+// dart format on

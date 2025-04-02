@@ -4,7 +4,7 @@ part 'chat_events_settings_dto.freezed.dart';
 part 'chat_events_settings_dto.g.dart';
 
 @freezed
-class ChatEventsSettingsDTO with _$ChatEventsSettingsDTO {
+abstract class ChatEventsSettingsDTO with _$ChatEventsSettingsDTO {
   factory ChatEventsSettingsDTO({
     @Default(true) bool firstsMessages,
     @Default(true) bool subscriptions,

@@ -6,8 +6,7 @@ part of 'twitch_prediction_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$OutcomeDTOImpl _$$OutcomeDTOImplFromJson(Map<String, dynamic> json) =>
-    _$OutcomeDTOImpl(
+_OutcomeDTO _$OutcomeDTOFromJson(Map<String, dynamic> json) => _OutcomeDTO(
       id: json['id'] as String,
       title: json['title'] as String,
       users: (json['users'] as num?)?.toInt() ?? 0,
@@ -15,7 +14,7 @@ _$OutcomeDTOImpl _$$OutcomeDTOImplFromJson(Map<String, dynamic> json) =>
       color: const ColorConverter().fromJson(json['color'] as String),
     );
 
-Map<String, dynamic> _$$OutcomeDTOImplToJson(_$OutcomeDTOImpl instance) =>
+Map<String, dynamic> _$OutcomeDTOToJson(_OutcomeDTO instance) =>
     <String, dynamic>{
       'id': instance.id,
       'title': instance.title,

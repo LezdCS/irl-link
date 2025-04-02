@@ -5,7 +5,7 @@ part 'twitch_hype_train_dto.freezed.dart';
 part 'twitch_hype_train_dto.g.dart';
 
 @freezed
-class TwitchHypeTrainDTO with _$TwitchHypeTrainDTO {
+abstract class TwitchHypeTrainDTO with _$TwitchHypeTrainDTO {
   const factory TwitchHypeTrainDTO({
     required String id,
     required int total,
@@ -47,7 +47,7 @@ class TwitchHypeTrainDTO with _$TwitchHypeTrainDTO {
 }
 
 @freezed
-class ContributionDTO with _$ContributionDTO {
+abstract class ContributionDTO with _$ContributionDTO {
   const factory ContributionDTO({
     @JsonKey(name: 'user_id') required String userId,
     @JsonKey(name: 'user_login') required String userLogin,

@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,170 +10,32 @@ part of 'se_me_dto.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-SeMeDTO _$SeMeDTOFromJson(Map<String, dynamic> json) {
-  return _SeMeDTO.fromJson(json);
-}
 
 /// @nodoc
 mixin _$SeMeDTO {
   @JsonKey(name: '_id')
-  String get id => throw _privateConstructorUsedError;
-  String get avatar => throw _privateConstructorUsedError;
-  String get username => throw _privateConstructorUsedError;
-  String get displayName => throw _privateConstructorUsedError;
-
-  /// Serializes this SeMeDTO to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  String get id;
+  String get avatar;
+  String get username;
+  String get displayName;
 
   /// Create a copy of SeMeDTO
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $SeMeDTOCopyWith<SeMeDTO> get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $SeMeDTOCopyWith<$Res> {
-  factory $SeMeDTOCopyWith(SeMeDTO value, $Res Function(SeMeDTO) then) =
-      _$SeMeDTOCopyWithImpl<$Res, SeMeDTO>;
-  @useResult
-  $Res call(
-      {@JsonKey(name: '_id') String id,
-      String avatar,
-      String username,
-      String displayName});
-}
-
-/// @nodoc
-class _$SeMeDTOCopyWithImpl<$Res, $Val extends SeMeDTO>
-    implements $SeMeDTOCopyWith<$Res> {
-  _$SeMeDTOCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of SeMeDTO
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = null,
-    Object? avatar = null,
-    Object? username = null,
-    Object? displayName = null,
-  }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      avatar: null == avatar
-          ? _value.avatar
-          : avatar // ignore: cast_nullable_to_non_nullable
-              as String,
-      username: null == username
-          ? _value.username
-          : username // ignore: cast_nullable_to_non_nullable
-              as String,
-      displayName: null == displayName
-          ? _value.displayName
-          : displayName // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
-  }
-}
+  $SeMeDTOCopyWith<SeMeDTO> get copyWith =>
+      _$SeMeDTOCopyWithImpl<SeMeDTO>(this as SeMeDTO, _$identity);
 
-/// @nodoc
-abstract class _$$SeMeDTOImplCopyWith<$Res> implements $SeMeDTOCopyWith<$Res> {
-  factory _$$SeMeDTOImplCopyWith(
-          _$SeMeDTOImpl value, $Res Function(_$SeMeDTOImpl) then) =
-      __$$SeMeDTOImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {@JsonKey(name: '_id') String id,
-      String avatar,
-      String username,
-      String displayName});
-}
-
-/// @nodoc
-class __$$SeMeDTOImplCopyWithImpl<$Res>
-    extends _$SeMeDTOCopyWithImpl<$Res, _$SeMeDTOImpl>
-    implements _$$SeMeDTOImplCopyWith<$Res> {
-  __$$SeMeDTOImplCopyWithImpl(
-      _$SeMeDTOImpl _value, $Res Function(_$SeMeDTOImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of SeMeDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = null,
-    Object? avatar = null,
-    Object? username = null,
-    Object? displayName = null,
-  }) {
-    return _then(_$SeMeDTOImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      avatar: null == avatar
-          ? _value.avatar
-          : avatar // ignore: cast_nullable_to_non_nullable
-              as String,
-      username: null == username
-          ? _value.username
-          : username // ignore: cast_nullable_to_non_nullable
-              as String,
-      displayName: null == displayName
-          ? _value.displayName
-          : displayName // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$SeMeDTOImpl implements _SeMeDTO {
-  const _$SeMeDTOImpl(
-      {@JsonKey(name: '_id') required this.id,
-      required this.avatar,
-      required this.username,
-      required this.displayName});
-
-  factory _$SeMeDTOImpl.fromJson(Map<String, dynamic> json) =>
-      _$$SeMeDTOImplFromJson(json);
-
-  @override
-  @JsonKey(name: '_id')
-  final String id;
-  @override
-  final String avatar;
-  @override
-  final String username;
-  @override
-  final String displayName;
-
-  @override
-  String toString() {
-    return 'SeMeDTO(id: $id, avatar: $avatar, username: $username, displayName: $displayName)';
-  }
+  /// Serializes this SeMeDTO to a JSON map.
+  Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$SeMeDTOImpl &&
+            other is SeMeDTO &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.avatar, avatar) || other.avatar == avatar) &&
             (identical(other.username, username) ||
@@ -186,45 +49,171 @@ class _$SeMeDTOImpl implements _SeMeDTO {
   int get hashCode =>
       Object.hash(runtimeType, id, avatar, username, displayName);
 
-  /// Create a copy of SeMeDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$SeMeDTOImplCopyWith<_$SeMeDTOImpl> get copyWith =>
-      __$$SeMeDTOImplCopyWithImpl<_$SeMeDTOImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$SeMeDTOImplToJson(
-      this,
-    );
+  String toString() {
+    return 'SeMeDTO(id: $id, avatar: $avatar, username: $username, displayName: $displayName)';
   }
 }
 
-abstract class _SeMeDTO implements SeMeDTO {
-  const factory _SeMeDTO(
-      {@JsonKey(name: '_id') required final String id,
-      required final String avatar,
-      required final String username,
-      required final String displayName}) = _$SeMeDTOImpl;
+/// @nodoc
+abstract mixin class $SeMeDTOCopyWith<$Res> {
+  factory $SeMeDTOCopyWith(SeMeDTO value, $Res Function(SeMeDTO) _then) =
+      _$SeMeDTOCopyWithImpl;
+  @useResult
+  $Res call(
+      {@JsonKey(name: '_id') String id,
+      String avatar,
+      String username,
+      String displayName});
+}
 
-  factory _SeMeDTO.fromJson(Map<String, dynamic> json) = _$SeMeDTOImpl.fromJson;
+/// @nodoc
+class _$SeMeDTOCopyWithImpl<$Res> implements $SeMeDTOCopyWith<$Res> {
+  _$SeMeDTOCopyWithImpl(this._self, this._then);
+
+  final SeMeDTO _self;
+  final $Res Function(SeMeDTO) _then;
+
+  /// Create a copy of SeMeDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? avatar = null,
+    Object? username = null,
+    Object? displayName = null,
+  }) {
+    return _then(_self.copyWith(
+      id: null == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      avatar: null == avatar
+          ? _self.avatar
+          : avatar // ignore: cast_nullable_to_non_nullable
+              as String,
+      username: null == username
+          ? _self.username
+          : username // ignore: cast_nullable_to_non_nullable
+              as String,
+      displayName: null == displayName
+          ? _self.displayName
+          : displayName // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _SeMeDTO implements SeMeDTO {
+  const _SeMeDTO(
+      {@JsonKey(name: '_id') required this.id,
+      required this.avatar,
+      required this.username,
+      required this.displayName});
+  factory _SeMeDTO.fromJson(Map<String, dynamic> json) =>
+      _$SeMeDTOFromJson(json);
 
   @override
   @JsonKey(name: '_id')
-  String get id;
+  final String id;
   @override
-  String get avatar;
+  final String avatar;
   @override
-  String get username;
+  final String username;
   @override
-  String get displayName;
+  final String displayName;
 
   /// Create a copy of SeMeDTO
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$SeMeDTOImplCopyWith<_$SeMeDTOImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  _$SeMeDTOCopyWith<_SeMeDTO> get copyWith =>
+      __$SeMeDTOCopyWithImpl<_SeMeDTO>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$SeMeDTOToJson(
+      this,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _SeMeDTO &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.avatar, avatar) || other.avatar == avatar) &&
+            (identical(other.username, username) ||
+                other.username == username) &&
+            (identical(other.displayName, displayName) ||
+                other.displayName == displayName));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, id, avatar, username, displayName);
+
+  @override
+  String toString() {
+    return 'SeMeDTO(id: $id, avatar: $avatar, username: $username, displayName: $displayName)';
+  }
 }
+
+/// @nodoc
+abstract mixin class _$SeMeDTOCopyWith<$Res> implements $SeMeDTOCopyWith<$Res> {
+  factory _$SeMeDTOCopyWith(_SeMeDTO value, $Res Function(_SeMeDTO) _then) =
+      __$SeMeDTOCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {@JsonKey(name: '_id') String id,
+      String avatar,
+      String username,
+      String displayName});
+}
+
+/// @nodoc
+class __$SeMeDTOCopyWithImpl<$Res> implements _$SeMeDTOCopyWith<$Res> {
+  __$SeMeDTOCopyWithImpl(this._self, this._then);
+
+  final _SeMeDTO _self;
+  final $Res Function(_SeMeDTO) _then;
+
+  /// Create a copy of SeMeDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? id = null,
+    Object? avatar = null,
+    Object? username = null,
+    Object? displayName = null,
+  }) {
+    return _then(_SeMeDTO(
+      id: null == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      avatar: null == avatar
+          ? _self.avatar
+          : avatar // ignore: cast_nullable_to_non_nullable
+              as String,
+      username: null == username
+          ? _self.username
+          : username // ignore: cast_nullable_to_non_nullable
+              as String,
+      displayName: null == displayName
+          ? _self.displayName
+          : displayName // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+// dart format on

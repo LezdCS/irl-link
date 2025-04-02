@@ -4,7 +4,7 @@ part 'tts_settings_dto.freezed.dart';
 part 'tts_settings_dto.g.dart';
 
 @freezed
-class TtsSettingsDTO with _$TtsSettingsDTO {
+abstract class TtsSettingsDTO with _$TtsSettingsDTO {
   factory TtsSettingsDTO({
     @Default(false) bool ttsEnabled,
     @Default("en-US") String language,

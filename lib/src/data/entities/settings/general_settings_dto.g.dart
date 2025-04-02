@@ -6,9 +6,8 @@ part of 'general_settings_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$GeneralSettingsDTOImpl _$$GeneralSettingsDTOImplFromJson(
-        Map<String, dynamic> json) =>
-    _$GeneralSettingsDTOImpl(
+_GeneralSettingsDTO _$GeneralSettingsDTOFromJson(Map<String, dynamic> json) =>
+    _GeneralSettingsDTO(
       isDarkMode: json['isDarkMode'] as bool? ?? true,
       keepSpeakerOn: json['keepSpeakerOn'] as bool? ?? true,
       displayViewerCount: json['displayViewerCount'] as bool? ?? true,
@@ -20,8 +19,7 @@ _$GeneralSettingsDTOImpl _$$GeneralSettingsDTOImplFromJson(
           const [0.5, 0.5],
     );
 
-Map<String, dynamic> _$$GeneralSettingsDTOImplToJson(
-        _$GeneralSettingsDTOImpl instance) =>
+Map<String, dynamic> _$GeneralSettingsDTOToJson(_GeneralSettingsDTO instance) =>
     <String, dynamic>{
       'isDarkMode': instance.isDarkMode,
       'keepSpeakerOn': instance.keepSpeakerOn,

@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,89 +10,63 @@ part of 'dashboard_settings_dto.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-DashboardSettingsDTO _$DashboardSettingsDTOFromJson(Map<String, dynamic> json) {
-  return _DashboardSettingsDTO.fromJson(json);
-}
 
 /// @nodoc
 mixin _$DashboardSettingsDTO {
-  List<DashboardEventDTO> get userEvents => throw _privateConstructorUsedError;
-  bool get activated => throw _privateConstructorUsedError;
-
-  /// Serializes this DashboardSettingsDTO to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  List<DashboardEventDTO> get userEvents;
+  bool get activated;
 
   /// Create a copy of DashboardSettingsDTO
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $DashboardSettingsDTOCopyWith<DashboardSettingsDTO> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $DashboardSettingsDTOCopyWith<$Res> {
-  factory $DashboardSettingsDTOCopyWith(DashboardSettingsDTO value,
-          $Res Function(DashboardSettingsDTO) then) =
-      _$DashboardSettingsDTOCopyWithImpl<$Res, DashboardSettingsDTO>;
-  @useResult
-  $Res call({List<DashboardEventDTO> userEvents, bool activated});
-}
-
-/// @nodoc
-class _$DashboardSettingsDTOCopyWithImpl<$Res,
-        $Val extends DashboardSettingsDTO>
-    implements $DashboardSettingsDTOCopyWith<$Res> {
-  _$DashboardSettingsDTOCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of DashboardSettingsDTO
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
+  $DashboardSettingsDTOCopyWith<DashboardSettingsDTO> get copyWith =>
+      _$DashboardSettingsDTOCopyWithImpl<DashboardSettingsDTO>(
+          this as DashboardSettingsDTO, _$identity);
+
+  /// Serializes this DashboardSettingsDTO to a JSON map.
+  Map<String, dynamic> toJson();
+
   @override
-  $Res call({
-    Object? userEvents = null,
-    Object? activated = null,
-  }) {
-    return _then(_value.copyWith(
-      userEvents: null == userEvents
-          ? _value.userEvents
-          : userEvents // ignore: cast_nullable_to_non_nullable
-              as List<DashboardEventDTO>,
-      activated: null == activated
-          ? _value.activated
-          : activated // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is DashboardSettingsDTO &&
+            const DeepCollectionEquality()
+                .equals(other.userEvents, userEvents) &&
+            (identical(other.activated, activated) ||
+                other.activated == activated));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(userEvents), activated);
+
+  @override
+  String toString() {
+    return 'DashboardSettingsDTO(userEvents: $userEvents, activated: $activated)';
   }
 }
 
 /// @nodoc
-abstract class _$$DashboardSettingsDTOImplCopyWith<$Res>
-    implements $DashboardSettingsDTOCopyWith<$Res> {
-  factory _$$DashboardSettingsDTOImplCopyWith(_$DashboardSettingsDTOImpl value,
-          $Res Function(_$DashboardSettingsDTOImpl) then) =
-      __$$DashboardSettingsDTOImplCopyWithImpl<$Res>;
-  @override
+abstract mixin class $DashboardSettingsDTOCopyWith<$Res> {
+  factory $DashboardSettingsDTOCopyWith(DashboardSettingsDTO value,
+          $Res Function(DashboardSettingsDTO) _then) =
+      _$DashboardSettingsDTOCopyWithImpl;
   @useResult
   $Res call({List<DashboardEventDTO> userEvents, bool activated});
 }
 
 /// @nodoc
-class __$$DashboardSettingsDTOImplCopyWithImpl<$Res>
-    extends _$DashboardSettingsDTOCopyWithImpl<$Res, _$DashboardSettingsDTOImpl>
-    implements _$$DashboardSettingsDTOImplCopyWith<$Res> {
-  __$$DashboardSettingsDTOImplCopyWithImpl(_$DashboardSettingsDTOImpl _value,
-      $Res Function(_$DashboardSettingsDTOImpl) _then)
-      : super(_value, _then);
+class _$DashboardSettingsDTOCopyWithImpl<$Res>
+    implements $DashboardSettingsDTOCopyWith<$Res> {
+  _$DashboardSettingsDTOCopyWithImpl(this._self, this._then);
+
+  final DashboardSettingsDTO _self;
+  final $Res Function(DashboardSettingsDTO) _then;
 
   /// Create a copy of DashboardSettingsDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -101,13 +76,13 @@ class __$$DashboardSettingsDTOImplCopyWithImpl<$Res>
     Object? userEvents = null,
     Object? activated = null,
   }) {
-    return _then(_$DashboardSettingsDTOImpl(
+    return _then(_self.copyWith(
       userEvents: null == userEvents
-          ? _value._userEvents
+          ? _self.userEvents
           : userEvents // ignore: cast_nullable_to_non_nullable
               as List<DashboardEventDTO>,
       activated: null == activated
-          ? _value.activated
+          ? _self.activated
           : activated // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
@@ -116,15 +91,14 @@ class __$$DashboardSettingsDTOImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$DashboardSettingsDTOImpl extends _DashboardSettingsDTO {
-  _$DashboardSettingsDTOImpl(
+class _DashboardSettingsDTO extends DashboardSettingsDTO {
+  _DashboardSettingsDTO(
       {final List<DashboardEventDTO> userEvents = const [],
       this.activated = true})
       : _userEvents = userEvents,
         super._();
-
-  factory _$DashboardSettingsDTOImpl.fromJson(Map<String, dynamic> json) =>
-      _$$DashboardSettingsDTOImplFromJson(json);
+  factory _DashboardSettingsDTO.fromJson(Map<String, dynamic> json) =>
+      _$DashboardSettingsDTOFromJson(json);
 
   final List<DashboardEventDTO> _userEvents;
   @override
@@ -139,16 +113,27 @@ class _$DashboardSettingsDTOImpl extends _DashboardSettingsDTO {
   @JsonKey()
   final bool activated;
 
+  /// Create a copy of DashboardSettingsDTO
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'DashboardSettingsDTO(userEvents: $userEvents, activated: $activated)';
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$DashboardSettingsDTOCopyWith<_DashboardSettingsDTO> get copyWith =>
+      __$DashboardSettingsDTOCopyWithImpl<_DashboardSettingsDTO>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$DashboardSettingsDTOToJson(
+      this,
+    );
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$DashboardSettingsDTOImpl &&
+            other is _DashboardSettingsDTO &&
             const DeepCollectionEquality()
                 .equals(other._userEvents, _userEvents) &&
             (identical(other.activated, activated) ||
@@ -160,42 +145,50 @@ class _$DashboardSettingsDTOImpl extends _DashboardSettingsDTO {
   int get hashCode => Object.hash(
       runtimeType, const DeepCollectionEquality().hash(_userEvents), activated);
 
-  /// Create a copy of DashboardSettingsDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$DashboardSettingsDTOImplCopyWith<_$DashboardSettingsDTOImpl>
-      get copyWith =>
-          __$$DashboardSettingsDTOImplCopyWithImpl<_$DashboardSettingsDTOImpl>(
-              this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$DashboardSettingsDTOImplToJson(
-      this,
-    );
+  String toString() {
+    return 'DashboardSettingsDTO(userEvents: $userEvents, activated: $activated)';
   }
 }
 
-abstract class _DashboardSettingsDTO extends DashboardSettingsDTO {
-  factory _DashboardSettingsDTO(
-      {final List<DashboardEventDTO> userEvents,
-      final bool activated}) = _$DashboardSettingsDTOImpl;
-  _DashboardSettingsDTO._() : super._();
-
-  factory _DashboardSettingsDTO.fromJson(Map<String, dynamic> json) =
-      _$DashboardSettingsDTOImpl.fromJson;
-
+/// @nodoc
+abstract mixin class _$DashboardSettingsDTOCopyWith<$Res>
+    implements $DashboardSettingsDTOCopyWith<$Res> {
+  factory _$DashboardSettingsDTOCopyWith(_DashboardSettingsDTO value,
+          $Res Function(_DashboardSettingsDTO) _then) =
+      __$DashboardSettingsDTOCopyWithImpl;
   @override
-  List<DashboardEventDTO> get userEvents;
-  @override
-  bool get activated;
+  @useResult
+  $Res call({List<DashboardEventDTO> userEvents, bool activated});
+}
+
+/// @nodoc
+class __$DashboardSettingsDTOCopyWithImpl<$Res>
+    implements _$DashboardSettingsDTOCopyWith<$Res> {
+  __$DashboardSettingsDTOCopyWithImpl(this._self, this._then);
+
+  final _DashboardSettingsDTO _self;
+  final $Res Function(_DashboardSettingsDTO) _then;
 
   /// Create a copy of DashboardSettingsDTO
   /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$DashboardSettingsDTOImplCopyWith<_$DashboardSettingsDTOImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? userEvents = null,
+    Object? activated = null,
+  }) {
+    return _then(_DashboardSettingsDTO(
+      userEvents: null == userEvents
+          ? _self._userEvents
+          : userEvents // ignore: cast_nullable_to_non_nullable
+              as List<DashboardEventDTO>,
+      activated: null == activated
+          ? _self.activated
+          : activated // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
 }
+
+// dart format on

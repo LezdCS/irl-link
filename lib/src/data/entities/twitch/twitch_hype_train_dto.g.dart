@@ -6,9 +6,8 @@ part of 'twitch_hype_train_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ContributionDTOImpl _$$ContributionDTOImplFromJson(
-        Map<String, dynamic> json) =>
-    _$ContributionDTOImpl(
+_ContributionDTO _$ContributionDTOFromJson(Map<String, dynamic> json) =>
+    _ContributionDTO(
       userId: json['user_id'] as String,
       userLogin: json['user_login'] as String,
       userName: json['user_name'] as String,
@@ -16,8 +15,7 @@ _$ContributionDTOImpl _$$ContributionDTOImplFromJson(
       total: (json['total'] as num).toInt(),
     );
 
-Map<String, dynamic> _$$ContributionDTOImplToJson(
-        _$ContributionDTOImpl instance) =>
+Map<String, dynamic> _$ContributionDTOToJson(_ContributionDTO instance) =>
     <String, dynamic>{
       'user_id': instance.userId,
       'user_login': instance.userLogin,

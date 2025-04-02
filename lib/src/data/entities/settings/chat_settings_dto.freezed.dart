@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,37 +10,56 @@ part of 'chat_settings_dto.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-ChatSettingsDTO _$ChatSettingsDTOFromJson(Map<String, dynamic> json) {
-  return _ChatSettingsDTO.fromJson(json);
-}
 
 /// @nodoc
 mixin _$ChatSettingsDTO {
   @JsonKey(fromJson: _permanentGroupFromJson)
-  ChatGroupDTO get permanentFirstGroup => throw _privateConstructorUsedError;
-  List<ChatGroupDTO> get chatGroups => throw _privateConstructorUsedError;
-  bool get hideDeletedMessages => throw _privateConstructorUsedError;
-
-  /// Serializes this ChatSettingsDTO to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  ChatGroupDTO get permanentFirstGroup;
+  List<ChatGroupDTO> get chatGroups;
+  bool get hideDeletedMessages;
 
   /// Create a copy of ChatSettingsDTO
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
   $ChatSettingsDTOCopyWith<ChatSettingsDTO> get copyWith =>
-      throw _privateConstructorUsedError;
+      _$ChatSettingsDTOCopyWithImpl<ChatSettingsDTO>(
+          this as ChatSettingsDTO, _$identity);
+
+  /// Serializes this ChatSettingsDTO to a JSON map.
+  Map<String, dynamic> toJson();
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is ChatSettingsDTO &&
+            (identical(other.permanentFirstGroup, permanentFirstGroup) ||
+                other.permanentFirstGroup == permanentFirstGroup) &&
+            const DeepCollectionEquality()
+                .equals(other.chatGroups, chatGroups) &&
+            (identical(other.hideDeletedMessages, hideDeletedMessages) ||
+                other.hideDeletedMessages == hideDeletedMessages));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, permanentFirstGroup,
+      const DeepCollectionEquality().hash(chatGroups), hideDeletedMessages);
+
+  @override
+  String toString() {
+    return 'ChatSettingsDTO(permanentFirstGroup: $permanentFirstGroup, chatGroups: $chatGroups, hideDeletedMessages: $hideDeletedMessages)';
+  }
 }
 
 /// @nodoc
-abstract class $ChatSettingsDTOCopyWith<$Res> {
+abstract mixin class $ChatSettingsDTOCopyWith<$Res> {
   factory $ChatSettingsDTOCopyWith(
-          ChatSettingsDTO value, $Res Function(ChatSettingsDTO) then) =
-      _$ChatSettingsDTOCopyWithImpl<$Res, ChatSettingsDTO>;
+          ChatSettingsDTO value, $Res Function(ChatSettingsDTO) _then) =
+      _$ChatSettingsDTOCopyWithImpl;
   @useResult
   $Res call(
       {@JsonKey(fromJson: _permanentGroupFromJson)
@@ -51,14 +71,12 @@ abstract class $ChatSettingsDTOCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ChatSettingsDTOCopyWithImpl<$Res, $Val extends ChatSettingsDTO>
+class _$ChatSettingsDTOCopyWithImpl<$Res>
     implements $ChatSettingsDTOCopyWith<$Res> {
-  _$ChatSettingsDTOCopyWithImpl(this._value, this._then);
+  _$ChatSettingsDTOCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final ChatSettingsDTO _self;
+  final $Res Function(ChatSettingsDTO) _then;
 
   /// Create a copy of ChatSettingsDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -69,20 +87,20 @@ class _$ChatSettingsDTOCopyWithImpl<$Res, $Val extends ChatSettingsDTO>
     Object? chatGroups = null,
     Object? hideDeletedMessages = null,
   }) {
-    return _then(_value.copyWith(
+    return _then(_self.copyWith(
       permanentFirstGroup: null == permanentFirstGroup
-          ? _value.permanentFirstGroup
+          ? _self.permanentFirstGroup
           : permanentFirstGroup // ignore: cast_nullable_to_non_nullable
               as ChatGroupDTO,
       chatGroups: null == chatGroups
-          ? _value.chatGroups
+          ? _self.chatGroups
           : chatGroups // ignore: cast_nullable_to_non_nullable
               as List<ChatGroupDTO>,
       hideDeletedMessages: null == hideDeletedMessages
-          ? _value.hideDeletedMessages
+          ? _self.hideDeletedMessages
           : hideDeletedMessages // ignore: cast_nullable_to_non_nullable
               as bool,
-    ) as $Val);
+    ));
   }
 
   /// Create a copy of ChatSettingsDTO
@@ -90,77 +108,24 @@ class _$ChatSettingsDTOCopyWithImpl<$Res, $Val extends ChatSettingsDTO>
   @override
   @pragma('vm:prefer-inline')
   $ChatGroupDTOCopyWith<$Res> get permanentFirstGroup {
-    return $ChatGroupDTOCopyWith<$Res>(_value.permanentFirstGroup, (value) {
-      return _then(_value.copyWith(permanentFirstGroup: value) as $Val);
+    return $ChatGroupDTOCopyWith<$Res>(_self.permanentFirstGroup, (value) {
+      return _then(_self.copyWith(permanentFirstGroup: value));
     });
   }
 }
 
 /// @nodoc
-abstract class _$$ChatSettingsDTOImplCopyWith<$Res>
-    implements $ChatSettingsDTOCopyWith<$Res> {
-  factory _$$ChatSettingsDTOImplCopyWith(_$ChatSettingsDTOImpl value,
-          $Res Function(_$ChatSettingsDTOImpl) then) =
-      __$$ChatSettingsDTOImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {@JsonKey(fromJson: _permanentGroupFromJson)
-      ChatGroupDTO permanentFirstGroup,
-      List<ChatGroupDTO> chatGroups,
-      bool hideDeletedMessages});
-
-  @override
-  $ChatGroupDTOCopyWith<$Res> get permanentFirstGroup;
-}
-
-/// @nodoc
-class __$$ChatSettingsDTOImplCopyWithImpl<$Res>
-    extends _$ChatSettingsDTOCopyWithImpl<$Res, _$ChatSettingsDTOImpl>
-    implements _$$ChatSettingsDTOImplCopyWith<$Res> {
-  __$$ChatSettingsDTOImplCopyWithImpl(
-      _$ChatSettingsDTOImpl _value, $Res Function(_$ChatSettingsDTOImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of ChatSettingsDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? permanentFirstGroup = null,
-    Object? chatGroups = null,
-    Object? hideDeletedMessages = null,
-  }) {
-    return _then(_$ChatSettingsDTOImpl(
-      permanentFirstGroup: null == permanentFirstGroup
-          ? _value.permanentFirstGroup
-          : permanentFirstGroup // ignore: cast_nullable_to_non_nullable
-              as ChatGroupDTO,
-      chatGroups: null == chatGroups
-          ? _value._chatGroups
-          : chatGroups // ignore: cast_nullable_to_non_nullable
-              as List<ChatGroupDTO>,
-      hideDeletedMessages: null == hideDeletedMessages
-          ? _value.hideDeletedMessages
-          : hideDeletedMessages // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
-  }
-}
-
-/// @nodoc
 @JsonSerializable()
-class _$ChatSettingsDTOImpl extends _ChatSettingsDTO {
-  _$ChatSettingsDTOImpl(
+class _ChatSettingsDTO extends ChatSettingsDTO {
+  _ChatSettingsDTO(
       {@JsonKey(fromJson: _permanentGroupFromJson) this.permanentFirstGroup =
           const ChatGroupDTO(id: "permanentFirstGroup", channels: []),
       final List<ChatGroupDTO> chatGroups = const [],
       this.hideDeletedMessages = true})
       : _chatGroups = chatGroups,
         super._();
-
-  factory _$ChatSettingsDTOImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ChatSettingsDTOImplFromJson(json);
+  factory _ChatSettingsDTO.fromJson(Map<String, dynamic> json) =>
+      _$ChatSettingsDTOFromJson(json);
 
   @override
   @JsonKey(fromJson: _permanentGroupFromJson)
@@ -178,16 +143,26 @@ class _$ChatSettingsDTOImpl extends _ChatSettingsDTO {
   @JsonKey()
   final bool hideDeletedMessages;
 
+  /// Create a copy of ChatSettingsDTO
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'ChatSettingsDTO(permanentFirstGroup: $permanentFirstGroup, chatGroups: $chatGroups, hideDeletedMessages: $hideDeletedMessages)';
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$ChatSettingsDTOCopyWith<_ChatSettingsDTO> get copyWith =>
+      __$ChatSettingsDTOCopyWithImpl<_ChatSettingsDTO>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$ChatSettingsDTOToJson(
+      this,
+    );
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ChatSettingsDTOImpl &&
+            other is _ChatSettingsDTO &&
             (identical(other.permanentFirstGroup, permanentFirstGroup) ||
                 other.permanentFirstGroup == permanentFirstGroup) &&
             const DeepCollectionEquality()
@@ -201,127 +176,125 @@ class _$ChatSettingsDTOImpl extends _ChatSettingsDTO {
   int get hashCode => Object.hash(runtimeType, permanentFirstGroup,
       const DeepCollectionEquality().hash(_chatGroups), hideDeletedMessages);
 
-  /// Create a copy of ChatSettingsDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$ChatSettingsDTOImplCopyWith<_$ChatSettingsDTOImpl> get copyWith =>
-      __$$ChatSettingsDTOImplCopyWithImpl<_$ChatSettingsDTOImpl>(
-          this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$ChatSettingsDTOImplToJson(
-      this,
-    );
+  String toString() {
+    return 'ChatSettingsDTO(permanentFirstGroup: $permanentFirstGroup, chatGroups: $chatGroups, hideDeletedMessages: $hideDeletedMessages)';
   }
 }
 
-abstract class _ChatSettingsDTO extends ChatSettingsDTO {
-  factory _ChatSettingsDTO(
+/// @nodoc
+abstract mixin class _$ChatSettingsDTOCopyWith<$Res>
+    implements $ChatSettingsDTOCopyWith<$Res> {
+  factory _$ChatSettingsDTOCopyWith(
+          _ChatSettingsDTO value, $Res Function(_ChatSettingsDTO) _then) =
+      __$ChatSettingsDTOCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
       {@JsonKey(fromJson: _permanentGroupFromJson)
-      final ChatGroupDTO permanentFirstGroup,
-      final List<ChatGroupDTO> chatGroups,
-      final bool hideDeletedMessages}) = _$ChatSettingsDTOImpl;
-  _ChatSettingsDTO._() : super._();
-
-  factory _ChatSettingsDTO.fromJson(Map<String, dynamic> json) =
-      _$ChatSettingsDTOImpl.fromJson;
+      ChatGroupDTO permanentFirstGroup,
+      List<ChatGroupDTO> chatGroups,
+      bool hideDeletedMessages});
 
   @override
-  @JsonKey(fromJson: _permanentGroupFromJson)
-  ChatGroupDTO get permanentFirstGroup;
-  @override
-  List<ChatGroupDTO> get chatGroups;
-  @override
-  bool get hideDeletedMessages;
+  $ChatGroupDTOCopyWith<$Res> get permanentFirstGroup;
+}
+
+/// @nodoc
+class __$ChatSettingsDTOCopyWithImpl<$Res>
+    implements _$ChatSettingsDTOCopyWith<$Res> {
+  __$ChatSettingsDTOCopyWithImpl(this._self, this._then);
+
+  final _ChatSettingsDTO _self;
+  final $Res Function(_ChatSettingsDTO) _then;
 
   /// Create a copy of ChatSettingsDTO
   /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ChatSettingsDTOImplCopyWith<_$ChatSettingsDTOImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? permanentFirstGroup = null,
+    Object? chatGroups = null,
+    Object? hideDeletedMessages = null,
+  }) {
+    return _then(_ChatSettingsDTO(
+      permanentFirstGroup: null == permanentFirstGroup
+          ? _self.permanentFirstGroup
+          : permanentFirstGroup // ignore: cast_nullable_to_non_nullable
+              as ChatGroupDTO,
+      chatGroups: null == chatGroups
+          ? _self._chatGroups
+          : chatGroups // ignore: cast_nullable_to_non_nullable
+              as List<ChatGroupDTO>,
+      hideDeletedMessages: null == hideDeletedMessages
+          ? _self.hideDeletedMessages
+          : hideDeletedMessages // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
 
-ChatGroupDTO _$ChatGroupDTOFromJson(Map<String, dynamic> json) {
-  return _ChatGroupDTO.fromJson(json);
+  /// Create a copy of ChatSettingsDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ChatGroupDTOCopyWith<$Res> get permanentFirstGroup {
+    return $ChatGroupDTOCopyWith<$Res>(_self.permanentFirstGroup, (value) {
+      return _then(_self.copyWith(permanentFirstGroup: value));
+    });
+  }
 }
 
 /// @nodoc
 mixin _$ChatGroupDTO {
-  String get id => throw _privateConstructorUsedError;
-  List<ChannelDTO> get channels => throw _privateConstructorUsedError;
-
-  /// Serializes this ChatGroupDTO to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  String get id;
+  List<ChannelDTO> get channels;
 
   /// Create a copy of ChatGroupDTO
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $ChatGroupDTOCopyWith<ChatGroupDTO> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $ChatGroupDTOCopyWith<$Res> {
-  factory $ChatGroupDTOCopyWith(
-          ChatGroupDTO value, $Res Function(ChatGroupDTO) then) =
-      _$ChatGroupDTOCopyWithImpl<$Res, ChatGroupDTO>;
-  @useResult
-  $Res call({String id, List<ChannelDTO> channels});
-}
-
-/// @nodoc
-class _$ChatGroupDTOCopyWithImpl<$Res, $Val extends ChatGroupDTO>
-    implements $ChatGroupDTOCopyWith<$Res> {
-  _$ChatGroupDTOCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of ChatGroupDTO
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
+  $ChatGroupDTOCopyWith<ChatGroupDTO> get copyWith =>
+      _$ChatGroupDTOCopyWithImpl<ChatGroupDTO>(
+          this as ChatGroupDTO, _$identity);
+
+  /// Serializes this ChatGroupDTO to a JSON map.
+  Map<String, dynamic> toJson();
+
   @override
-  $Res call({
-    Object? id = null,
-    Object? channels = null,
-  }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      channels: null == channels
-          ? _value.channels
-          : channels // ignore: cast_nullable_to_non_nullable
-              as List<ChannelDTO>,
-    ) as $Val);
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is ChatGroupDTO &&
+            (identical(other.id, id) || other.id == id) &&
+            const DeepCollectionEquality().equals(other.channels, channels));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, id, const DeepCollectionEquality().hash(channels));
+
+  @override
+  String toString() {
+    return 'ChatGroupDTO(id: $id, channels: $channels)';
   }
 }
 
 /// @nodoc
-abstract class _$$ChatGroupDTOImplCopyWith<$Res>
-    implements $ChatGroupDTOCopyWith<$Res> {
-  factory _$$ChatGroupDTOImplCopyWith(
-          _$ChatGroupDTOImpl value, $Res Function(_$ChatGroupDTOImpl) then) =
-      __$$ChatGroupDTOImplCopyWithImpl<$Res>;
-  @override
+abstract mixin class $ChatGroupDTOCopyWith<$Res> {
+  factory $ChatGroupDTOCopyWith(
+          ChatGroupDTO value, $Res Function(ChatGroupDTO) _then) =
+      _$ChatGroupDTOCopyWithImpl;
   @useResult
   $Res call({String id, List<ChannelDTO> channels});
 }
 
 /// @nodoc
-class __$$ChatGroupDTOImplCopyWithImpl<$Res>
-    extends _$ChatGroupDTOCopyWithImpl<$Res, _$ChatGroupDTOImpl>
-    implements _$$ChatGroupDTOImplCopyWith<$Res> {
-  __$$ChatGroupDTOImplCopyWithImpl(
-      _$ChatGroupDTOImpl _value, $Res Function(_$ChatGroupDTOImpl) _then)
-      : super(_value, _then);
+class _$ChatGroupDTOCopyWithImpl<$Res> implements $ChatGroupDTOCopyWith<$Res> {
+  _$ChatGroupDTOCopyWithImpl(this._self, this._then);
+
+  final ChatGroupDTO _self;
+  final $Res Function(ChatGroupDTO) _then;
 
   /// Create a copy of ChatGroupDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -331,13 +304,13 @@ class __$$ChatGroupDTOImplCopyWithImpl<$Res>
     Object? id = null,
     Object? channels = null,
   }) {
-    return _then(_$ChatGroupDTOImpl(
+    return _then(_self.copyWith(
       id: null == id
-          ? _value.id
+          ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
       channels: null == channels
-          ? _value._channels
+          ? _self.channels
           : channels // ignore: cast_nullable_to_non_nullable
               as List<ChannelDTO>,
     ));
@@ -346,13 +319,12 @@ class __$$ChatGroupDTOImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$ChatGroupDTOImpl implements _ChatGroupDTO {
-  const _$ChatGroupDTOImpl(
+class _ChatGroupDTO implements ChatGroupDTO {
+  const _ChatGroupDTO(
       {required this.id, required final List<ChannelDTO> channels})
       : _channels = channels;
-
-  factory _$ChatGroupDTOImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ChatGroupDTOImplFromJson(json);
+  factory _ChatGroupDTO.fromJson(Map<String, dynamic> json) =>
+      _$ChatGroupDTOFromJson(json);
 
   @override
   final String id;
@@ -364,16 +336,26 @@ class _$ChatGroupDTOImpl implements _ChatGroupDTO {
     return EqualUnmodifiableListView(_channels);
   }
 
+  /// Create a copy of ChatGroupDTO
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'ChatGroupDTO(id: $id, channels: $channels)';
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$ChatGroupDTOCopyWith<_ChatGroupDTO> get copyWith =>
+      __$ChatGroupDTOCopyWithImpl<_ChatGroupDTO>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$ChatGroupDTOToJson(
+      this,
+    );
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ChatGroupDTOImpl &&
+            other is _ChatGroupDTO &&
             (identical(other.id, id) || other.id == id) &&
             const DeepCollectionEquality().equals(other._channels, _channels));
   }
@@ -383,179 +365,73 @@ class _$ChatGroupDTOImpl implements _ChatGroupDTO {
   int get hashCode => Object.hash(
       runtimeType, id, const DeepCollectionEquality().hash(_channels));
 
-  /// Create a copy of ChatGroupDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$ChatGroupDTOImplCopyWith<_$ChatGroupDTOImpl> get copyWith =>
-      __$$ChatGroupDTOImplCopyWithImpl<_$ChatGroupDTOImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$ChatGroupDTOImplToJson(
-      this,
-    );
-  }
-}
-
-abstract class _ChatGroupDTO implements ChatGroupDTO {
-  const factory _ChatGroupDTO(
-      {required final String id,
-      required final List<ChannelDTO> channels}) = _$ChatGroupDTOImpl;
-
-  factory _ChatGroupDTO.fromJson(Map<String, dynamic> json) =
-      _$ChatGroupDTOImpl.fromJson;
-
-  @override
-  String get id;
-  @override
-  List<ChannelDTO> get channels;
-
-  /// Create a copy of ChatGroupDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ChatGroupDTOImplCopyWith<_$ChatGroupDTOImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-ChannelDTO _$ChannelDTOFromJson(Map<String, dynamic> json) {
-  return _ChannelDTO.fromJson(json);
-}
-
-/// @nodoc
-mixin _$ChannelDTO {
-  Platform get platform => throw _privateConstructorUsedError;
-  String get channel => throw _privateConstructorUsedError;
-  bool get enabled => throw _privateConstructorUsedError;
-
-  /// Serializes this ChannelDTO to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of ChannelDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $ChannelDTOCopyWith<ChannelDTO> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $ChannelDTOCopyWith<$Res> {
-  factory $ChannelDTOCopyWith(
-          ChannelDTO value, $Res Function(ChannelDTO) then) =
-      _$ChannelDTOCopyWithImpl<$Res, ChannelDTO>;
-  @useResult
-  $Res call({Platform platform, String channel, bool enabled});
-}
-
-/// @nodoc
-class _$ChannelDTOCopyWithImpl<$Res, $Val extends ChannelDTO>
-    implements $ChannelDTOCopyWith<$Res> {
-  _$ChannelDTOCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of ChannelDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? platform = null,
-    Object? channel = null,
-    Object? enabled = null,
-  }) {
-    return _then(_value.copyWith(
-      platform: null == platform
-          ? _value.platform
-          : platform // ignore: cast_nullable_to_non_nullable
-              as Platform,
-      channel: null == channel
-          ? _value.channel
-          : channel // ignore: cast_nullable_to_non_nullable
-              as String,
-      enabled: null == enabled
-          ? _value.enabled
-          : enabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
+  String toString() {
+    return 'ChatGroupDTO(id: $id, channels: $channels)';
   }
 }
 
 /// @nodoc
-abstract class _$$ChannelDTOImplCopyWith<$Res>
-    implements $ChannelDTOCopyWith<$Res> {
-  factory _$$ChannelDTOImplCopyWith(
-          _$ChannelDTOImpl value, $Res Function(_$ChannelDTOImpl) then) =
-      __$$ChannelDTOImplCopyWithImpl<$Res>;
+abstract mixin class _$ChatGroupDTOCopyWith<$Res>
+    implements $ChatGroupDTOCopyWith<$Res> {
+  factory _$ChatGroupDTOCopyWith(
+          _ChatGroupDTO value, $Res Function(_ChatGroupDTO) _then) =
+      __$ChatGroupDTOCopyWithImpl;
   @override
   @useResult
-  $Res call({Platform platform, String channel, bool enabled});
+  $Res call({String id, List<ChannelDTO> channels});
 }
 
 /// @nodoc
-class __$$ChannelDTOImplCopyWithImpl<$Res>
-    extends _$ChannelDTOCopyWithImpl<$Res, _$ChannelDTOImpl>
-    implements _$$ChannelDTOImplCopyWith<$Res> {
-  __$$ChannelDTOImplCopyWithImpl(
-      _$ChannelDTOImpl _value, $Res Function(_$ChannelDTOImpl) _then)
-      : super(_value, _then);
+class __$ChatGroupDTOCopyWithImpl<$Res>
+    implements _$ChatGroupDTOCopyWith<$Res> {
+  __$ChatGroupDTOCopyWithImpl(this._self, this._then);
 
-  /// Create a copy of ChannelDTO
+  final _ChatGroupDTO _self;
+  final $Res Function(_ChatGroupDTO) _then;
+
+  /// Create a copy of ChatGroupDTO
   /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
   @override
+  @pragma('vm:prefer-inline')
   $Res call({
-    Object? platform = null,
-    Object? channel = null,
-    Object? enabled = null,
+    Object? id = null,
+    Object? channels = null,
   }) {
-    return _then(_$ChannelDTOImpl(
-      platform: null == platform
-          ? _value.platform
-          : platform // ignore: cast_nullable_to_non_nullable
-              as Platform,
-      channel: null == channel
-          ? _value.channel
-          : channel // ignore: cast_nullable_to_non_nullable
+    return _then(_ChatGroupDTO(
+      id: null == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
               as String,
-      enabled: null == enabled
-          ? _value.enabled
-          : enabled // ignore: cast_nullable_to_non_nullable
-              as bool,
+      channels: null == channels
+          ? _self._channels
+          : channels // ignore: cast_nullable_to_non_nullable
+              as List<ChannelDTO>,
     ));
   }
 }
 
 /// @nodoc
-@JsonSerializable()
-class _$ChannelDTOImpl implements _ChannelDTO {
-  const _$ChannelDTOImpl(
-      {required this.platform, required this.channel, required this.enabled});
+mixin _$ChannelDTO {
+  Platform get platform;
+  String get channel;
+  bool get enabled;
 
-  factory _$ChannelDTOImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ChannelDTOImplFromJson(json);
+  /// Create a copy of ChannelDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $ChannelDTOCopyWith<ChannelDTO> get copyWith =>
+      _$ChannelDTOCopyWithImpl<ChannelDTO>(this as ChannelDTO, _$identity);
 
-  @override
-  final Platform platform;
-  @override
-  final String channel;
-  @override
-  final bool enabled;
-
-  @override
-  String toString() {
-    return 'ChannelDTO(platform: $platform, channel: $channel, enabled: $enabled)';
-  }
+  /// Serializes this ChannelDTO to a JSON map.
+  Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ChannelDTOImpl &&
+            other is ChannelDTO &&
             (identical(other.platform, platform) ||
                 other.platform == platform) &&
             (identical(other.channel, channel) || other.channel == channel) &&
@@ -566,42 +442,147 @@ class _$ChannelDTOImpl implements _ChannelDTO {
   @override
   int get hashCode => Object.hash(runtimeType, platform, channel, enabled);
 
-  /// Create a copy of ChannelDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$ChannelDTOImplCopyWith<_$ChannelDTOImpl> get copyWith =>
-      __$$ChannelDTOImplCopyWithImpl<_$ChannelDTOImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$ChannelDTOImplToJson(
-      this,
-    );
+  String toString() {
+    return 'ChannelDTO(platform: $platform, channel: $channel, enabled: $enabled)';
   }
 }
 
-abstract class _ChannelDTO implements ChannelDTO {
-  const factory _ChannelDTO(
-      {required final Platform platform,
-      required final String channel,
-      required final bool enabled}) = _$ChannelDTOImpl;
+/// @nodoc
+abstract mixin class $ChannelDTOCopyWith<$Res> {
+  factory $ChannelDTOCopyWith(
+          ChannelDTO value, $Res Function(ChannelDTO) _then) =
+      _$ChannelDTOCopyWithImpl;
+  @useResult
+  $Res call({Platform platform, String channel, bool enabled});
+}
 
-  factory _ChannelDTO.fromJson(Map<String, dynamic> json) =
-      _$ChannelDTOImpl.fromJson;
+/// @nodoc
+class _$ChannelDTOCopyWithImpl<$Res> implements $ChannelDTOCopyWith<$Res> {
+  _$ChannelDTOCopyWithImpl(this._self, this._then);
+
+  final ChannelDTO _self;
+  final $Res Function(ChannelDTO) _then;
+
+  /// Create a copy of ChannelDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? platform = null,
+    Object? channel = null,
+    Object? enabled = null,
+  }) {
+    return _then(_self.copyWith(
+      platform: null == platform
+          ? _self.platform
+          : platform // ignore: cast_nullable_to_non_nullable
+              as Platform,
+      channel: null == channel
+          ? _self.channel
+          : channel // ignore: cast_nullable_to_non_nullable
+              as String,
+      enabled: null == enabled
+          ? _self.enabled
+          : enabled // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _ChannelDTO implements ChannelDTO {
+  const _ChannelDTO(
+      {required this.platform, required this.channel, required this.enabled});
+  factory _ChannelDTO.fromJson(Map<String, dynamic> json) =>
+      _$ChannelDTOFromJson(json);
 
   @override
-  Platform get platform;
+  final Platform platform;
   @override
-  String get channel;
+  final String channel;
   @override
-  bool get enabled;
+  final bool enabled;
 
   /// Create a copy of ChannelDTO
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ChannelDTOImplCopyWith<_$ChannelDTOImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  _$ChannelDTOCopyWith<_ChannelDTO> get copyWith =>
+      __$ChannelDTOCopyWithImpl<_ChannelDTO>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$ChannelDTOToJson(
+      this,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _ChannelDTO &&
+            (identical(other.platform, platform) ||
+                other.platform == platform) &&
+            (identical(other.channel, channel) || other.channel == channel) &&
+            (identical(other.enabled, enabled) || other.enabled == enabled));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, platform, channel, enabled);
+
+  @override
+  String toString() {
+    return 'ChannelDTO(platform: $platform, channel: $channel, enabled: $enabled)';
+  }
 }
+
+/// @nodoc
+abstract mixin class _$ChannelDTOCopyWith<$Res>
+    implements $ChannelDTOCopyWith<$Res> {
+  factory _$ChannelDTOCopyWith(
+          _ChannelDTO value, $Res Function(_ChannelDTO) _then) =
+      __$ChannelDTOCopyWithImpl;
+  @override
+  @useResult
+  $Res call({Platform platform, String channel, bool enabled});
+}
+
+/// @nodoc
+class __$ChannelDTOCopyWithImpl<$Res> implements _$ChannelDTOCopyWith<$Res> {
+  __$ChannelDTOCopyWithImpl(this._self, this._then);
+
+  final _ChannelDTO _self;
+  final $Res Function(_ChannelDTO) _then;
+
+  /// Create a copy of ChannelDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? platform = null,
+    Object? channel = null,
+    Object? enabled = null,
+  }) {
+    return _then(_ChannelDTO(
+      platform: null == platform
+          ? _self.platform
+          : platform // ignore: cast_nullable_to_non_nullable
+              as Platform,
+      channel: null == channel
+          ? _self.channel
+          : channel // ignore: cast_nullable_to_non_nullable
+              as String,
+      enabled: null == enabled
+          ? _self.enabled
+          : enabled // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
+}
+
+// dart format on

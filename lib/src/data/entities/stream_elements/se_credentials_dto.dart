@@ -4,7 +4,7 @@ part 'se_credentials_dto.freezed.dart';
 part 'se_credentials_dto.g.dart';
 
 @freezed
-class SeCredentialsDTO with _$SeCredentialsDTO {
+abstract class SeCredentialsDTO with _$SeCredentialsDTO {
   const factory SeCredentialsDTO({
     required String accessToken,
     required String refreshToken,

@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,107 +10,66 @@ part of 'twitch_prediction_dto.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$TwitchPredictionDTO {
-  String get id => throw _privateConstructorUsedError;
-  String get title => throw _privateConstructorUsedError;
-  String get winningOutcomeId => throw _privateConstructorUsedError;
-  int get totalUsers => throw _privateConstructorUsedError;
-  List<OutcomeDTO> get outcomes => throw _privateConstructorUsedError;
-  PredictionStatus get status => throw _privateConstructorUsedError;
-  DateTime get remainingTime => throw _privateConstructorUsedError;
+  String get id;
+  String get title;
+  String get winningOutcomeId;
+  int get totalUsers;
+  List<OutcomeDTO> get outcomes;
+  PredictionStatus get status;
+  DateTime get remainingTime;
 
   /// Create a copy of TwitchPredictionDTO
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $TwitchPredictionDTOCopyWith<TwitchPredictionDTO> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $TwitchPredictionDTOCopyWith<$Res> {
-  factory $TwitchPredictionDTOCopyWith(
-          TwitchPredictionDTO value, $Res Function(TwitchPredictionDTO) then) =
-      _$TwitchPredictionDTOCopyWithImpl<$Res, TwitchPredictionDTO>;
-  @useResult
-  $Res call(
-      {String id,
-      String title,
-      String winningOutcomeId,
-      int totalUsers,
-      List<OutcomeDTO> outcomes,
-      PredictionStatus status,
-      DateTime remainingTime});
-}
-
-/// @nodoc
-class _$TwitchPredictionDTOCopyWithImpl<$Res, $Val extends TwitchPredictionDTO>
-    implements $TwitchPredictionDTOCopyWith<$Res> {
-  _$TwitchPredictionDTOCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of TwitchPredictionDTO
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
+  $TwitchPredictionDTOCopyWith<TwitchPredictionDTO> get copyWith =>
+      _$TwitchPredictionDTOCopyWithImpl<TwitchPredictionDTO>(
+          this as TwitchPredictionDTO, _$identity);
+
   @override
-  $Res call({
-    Object? id = null,
-    Object? title = null,
-    Object? winningOutcomeId = null,
-    Object? totalUsers = null,
-    Object? outcomes = null,
-    Object? status = null,
-    Object? remainingTime = null,
-  }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      winningOutcomeId: null == winningOutcomeId
-          ? _value.winningOutcomeId
-          : winningOutcomeId // ignore: cast_nullable_to_non_nullable
-              as String,
-      totalUsers: null == totalUsers
-          ? _value.totalUsers
-          : totalUsers // ignore: cast_nullable_to_non_nullable
-              as int,
-      outcomes: null == outcomes
-          ? _value.outcomes
-          : outcomes // ignore: cast_nullable_to_non_nullable
-              as List<OutcomeDTO>,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as PredictionStatus,
-      remainingTime: null == remainingTime
-          ? _value.remainingTime
-          : remainingTime // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-    ) as $Val);
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is TwitchPredictionDTO &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.title, title) || other.title == title) &&
+            (identical(other.winningOutcomeId, winningOutcomeId) ||
+                other.winningOutcomeId == winningOutcomeId) &&
+            (identical(other.totalUsers, totalUsers) ||
+                other.totalUsers == totalUsers) &&
+            const DeepCollectionEquality().equals(other.outcomes, outcomes) &&
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.remainingTime, remainingTime) ||
+                other.remainingTime == remainingTime));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      title,
+      winningOutcomeId,
+      totalUsers,
+      const DeepCollectionEquality().hash(outcomes),
+      status,
+      remainingTime);
+
+  @override
+  String toString() {
+    return 'TwitchPredictionDTO(id: $id, title: $title, winningOutcomeId: $winningOutcomeId, totalUsers: $totalUsers, outcomes: $outcomes, status: $status, remainingTime: $remainingTime)';
   }
 }
 
 /// @nodoc
-abstract class _$$TwitchPredictionDTOImplCopyWith<$Res>
-    implements $TwitchPredictionDTOCopyWith<$Res> {
-  factory _$$TwitchPredictionDTOImplCopyWith(_$TwitchPredictionDTOImpl value,
-          $Res Function(_$TwitchPredictionDTOImpl) then) =
-      __$$TwitchPredictionDTOImplCopyWithImpl<$Res>;
-  @override
+abstract mixin class $TwitchPredictionDTOCopyWith<$Res> {
+  factory $TwitchPredictionDTOCopyWith(
+          TwitchPredictionDTO value, $Res Function(TwitchPredictionDTO) _then) =
+      _$TwitchPredictionDTOCopyWithImpl;
   @useResult
   $Res call(
       {String id,
@@ -122,12 +82,12 @@ abstract class _$$TwitchPredictionDTOImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$TwitchPredictionDTOImplCopyWithImpl<$Res>
-    extends _$TwitchPredictionDTOCopyWithImpl<$Res, _$TwitchPredictionDTOImpl>
-    implements _$$TwitchPredictionDTOImplCopyWith<$Res> {
-  __$$TwitchPredictionDTOImplCopyWithImpl(_$TwitchPredictionDTOImpl _value,
-      $Res Function(_$TwitchPredictionDTOImpl) _then)
-      : super(_value, _then);
+class _$TwitchPredictionDTOCopyWithImpl<$Res>
+    implements $TwitchPredictionDTOCopyWith<$Res> {
+  _$TwitchPredictionDTOCopyWithImpl(this._self, this._then);
+
+  final TwitchPredictionDTO _self;
+  final $Res Function(TwitchPredictionDTO) _then;
 
   /// Create a copy of TwitchPredictionDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -142,33 +102,33 @@ class __$$TwitchPredictionDTOImplCopyWithImpl<$Res>
     Object? status = null,
     Object? remainingTime = null,
   }) {
-    return _then(_$TwitchPredictionDTOImpl(
+    return _then(_self.copyWith(
       id: null == id
-          ? _value.id
+          ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
       title: null == title
-          ? _value.title
+          ? _self.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
       winningOutcomeId: null == winningOutcomeId
-          ? _value.winningOutcomeId
+          ? _self.winningOutcomeId
           : winningOutcomeId // ignore: cast_nullable_to_non_nullable
               as String,
       totalUsers: null == totalUsers
-          ? _value.totalUsers
+          ? _self.totalUsers
           : totalUsers // ignore: cast_nullable_to_non_nullable
               as int,
       outcomes: null == outcomes
-          ? _value._outcomes
+          ? _self.outcomes
           : outcomes // ignore: cast_nullable_to_non_nullable
               as List<OutcomeDTO>,
       status: null == status
-          ? _value.status
+          ? _self.status
           : status // ignore: cast_nullable_to_non_nullable
               as PredictionStatus,
       remainingTime: null == remainingTime
-          ? _value.remainingTime
+          ? _self.remainingTime
           : remainingTime // ignore: cast_nullable_to_non_nullable
               as DateTime,
     ));
@@ -177,8 +137,8 @@ class __$$TwitchPredictionDTOImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$TwitchPredictionDTOImpl implements _TwitchPredictionDTO {
-  const _$TwitchPredictionDTOImpl(
+class _TwitchPredictionDTO implements TwitchPredictionDTO {
+  const _TwitchPredictionDTO(
       {required this.id,
       required this.title,
       required this.winningOutcomeId,
@@ -209,16 +169,20 @@ class _$TwitchPredictionDTOImpl implements _TwitchPredictionDTO {
   @override
   final DateTime remainingTime;
 
+  /// Create a copy of TwitchPredictionDTO
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'TwitchPredictionDTO(id: $id, title: $title, winningOutcomeId: $winningOutcomeId, totalUsers: $totalUsers, outcomes: $outcomes, status: $status, remainingTime: $remainingTime)';
-  }
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$TwitchPredictionDTOCopyWith<_TwitchPredictionDTO> get copyWith =>
+      __$TwitchPredictionDTOCopyWithImpl<_TwitchPredictionDTO>(
+          this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$TwitchPredictionDTOImpl &&
+            other is _TwitchPredictionDTO &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.winningOutcomeId, winningOutcomeId) ||
@@ -242,140 +206,133 @@ class _$TwitchPredictionDTOImpl implements _TwitchPredictionDTO {
       status,
       remainingTime);
 
-  /// Create a copy of TwitchPredictionDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$TwitchPredictionDTOImplCopyWith<_$TwitchPredictionDTOImpl> get copyWith =>
-      __$$TwitchPredictionDTOImplCopyWithImpl<_$TwitchPredictionDTOImpl>(
-          this, _$identity);
-}
-
-abstract class _TwitchPredictionDTO implements TwitchPredictionDTO {
-  const factory _TwitchPredictionDTO(
-      {required final String id,
-      required final String title,
-      required final String winningOutcomeId,
-      required final int totalUsers,
-      required final List<OutcomeDTO> outcomes,
-      required final PredictionStatus status,
-      required final DateTime remainingTime}) = _$TwitchPredictionDTOImpl;
-
-  @override
-  String get id;
-  @override
-  String get title;
-  @override
-  String get winningOutcomeId;
-  @override
-  int get totalUsers;
-  @override
-  List<OutcomeDTO> get outcomes;
-  @override
-  PredictionStatus get status;
-  @override
-  DateTime get remainingTime;
-
-  /// Create a copy of TwitchPredictionDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$TwitchPredictionDTOImplCopyWith<_$TwitchPredictionDTOImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-OutcomeDTO _$OutcomeDTOFromJson(Map<String, dynamic> json) {
-  return _OutcomeDTO.fromJson(json);
-}
-
-/// @nodoc
-mixin _$OutcomeDTO {
-  String get id => throw _privateConstructorUsedError;
-  String get title => throw _privateConstructorUsedError;
-  int get users => throw _privateConstructorUsedError;
-  @JsonKey(name: 'channel_points')
-  int get channelPoints => throw _privateConstructorUsedError;
-  @ColorConverter()
-  Color get color => throw _privateConstructorUsedError;
-
-  /// Serializes this OutcomeDTO to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of OutcomeDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $OutcomeDTOCopyWith<OutcomeDTO> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $OutcomeDTOCopyWith<$Res> {
-  factory $OutcomeDTOCopyWith(
-          OutcomeDTO value, $Res Function(OutcomeDTO) then) =
-      _$OutcomeDTOCopyWithImpl<$Res, OutcomeDTO>;
-  @useResult
-  $Res call(
-      {String id,
-      String title,
-      int users,
-      @JsonKey(name: 'channel_points') int channelPoints,
-      @ColorConverter() Color color});
-}
-
-/// @nodoc
-class _$OutcomeDTOCopyWithImpl<$Res, $Val extends OutcomeDTO>
-    implements $OutcomeDTOCopyWith<$Res> {
-  _$OutcomeDTOCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of OutcomeDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = null,
-    Object? title = null,
-    Object? users = null,
-    Object? channelPoints = null,
-    Object? color = null,
-  }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      users: null == users
-          ? _value.users
-          : users // ignore: cast_nullable_to_non_nullable
-              as int,
-      channelPoints: null == channelPoints
-          ? _value.channelPoints
-          : channelPoints // ignore: cast_nullable_to_non_nullable
-              as int,
-      color: null == color
-          ? _value.color
-          : color // ignore: cast_nullable_to_non_nullable
-              as Color,
-    ) as $Val);
+  String toString() {
+    return 'TwitchPredictionDTO(id: $id, title: $title, winningOutcomeId: $winningOutcomeId, totalUsers: $totalUsers, outcomes: $outcomes, status: $status, remainingTime: $remainingTime)';
   }
 }
 
 /// @nodoc
-abstract class _$$OutcomeDTOImplCopyWith<$Res>
-    implements $OutcomeDTOCopyWith<$Res> {
-  factory _$$OutcomeDTOImplCopyWith(
-          _$OutcomeDTOImpl value, $Res Function(_$OutcomeDTOImpl) then) =
-      __$$OutcomeDTOImplCopyWithImpl<$Res>;
+abstract mixin class _$TwitchPredictionDTOCopyWith<$Res>
+    implements $TwitchPredictionDTOCopyWith<$Res> {
+  factory _$TwitchPredictionDTOCopyWith(_TwitchPredictionDTO value,
+          $Res Function(_TwitchPredictionDTO) _then) =
+      __$TwitchPredictionDTOCopyWithImpl;
   @override
+  @useResult
+  $Res call(
+      {String id,
+      String title,
+      String winningOutcomeId,
+      int totalUsers,
+      List<OutcomeDTO> outcomes,
+      PredictionStatus status,
+      DateTime remainingTime});
+}
+
+/// @nodoc
+class __$TwitchPredictionDTOCopyWithImpl<$Res>
+    implements _$TwitchPredictionDTOCopyWith<$Res> {
+  __$TwitchPredictionDTOCopyWithImpl(this._self, this._then);
+
+  final _TwitchPredictionDTO _self;
+  final $Res Function(_TwitchPredictionDTO) _then;
+
+  /// Create a copy of TwitchPredictionDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? id = null,
+    Object? title = null,
+    Object? winningOutcomeId = null,
+    Object? totalUsers = null,
+    Object? outcomes = null,
+    Object? status = null,
+    Object? remainingTime = null,
+  }) {
+    return _then(_TwitchPredictionDTO(
+      id: null == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      title: null == title
+          ? _self.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      winningOutcomeId: null == winningOutcomeId
+          ? _self.winningOutcomeId
+          : winningOutcomeId // ignore: cast_nullable_to_non_nullable
+              as String,
+      totalUsers: null == totalUsers
+          ? _self.totalUsers
+          : totalUsers // ignore: cast_nullable_to_non_nullable
+              as int,
+      outcomes: null == outcomes
+          ? _self._outcomes
+          : outcomes // ignore: cast_nullable_to_non_nullable
+              as List<OutcomeDTO>,
+      status: null == status
+          ? _self.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as PredictionStatus,
+      remainingTime: null == remainingTime
+          ? _self.remainingTime
+          : remainingTime // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+    ));
+  }
+}
+
+/// @nodoc
+mixin _$OutcomeDTO {
+  String get id;
+  String get title;
+  int get users;
+  @JsonKey(name: 'channel_points')
+  int get channelPoints;
+  @ColorConverter()
+  Color get color;
+
+  /// Create a copy of OutcomeDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $OutcomeDTOCopyWith<OutcomeDTO> get copyWith =>
+      _$OutcomeDTOCopyWithImpl<OutcomeDTO>(this as OutcomeDTO, _$identity);
+
+  /// Serializes this OutcomeDTO to a JSON map.
+  Map<String, dynamic> toJson();
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is OutcomeDTO &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.title, title) || other.title == title) &&
+            (identical(other.users, users) || other.users == users) &&
+            (identical(other.channelPoints, channelPoints) ||
+                other.channelPoints == channelPoints) &&
+            (identical(other.color, color) || other.color == color));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, id, title, users, channelPoints, color);
+
+  @override
+  String toString() {
+    return 'OutcomeDTO(id: $id, title: $title, users: $users, channelPoints: $channelPoints, color: $color)';
+  }
+}
+
+/// @nodoc
+abstract mixin class $OutcomeDTOCopyWith<$Res> {
+  factory $OutcomeDTOCopyWith(
+          OutcomeDTO value, $Res Function(OutcomeDTO) _then) =
+      _$OutcomeDTOCopyWithImpl;
   @useResult
   $Res call(
       {String id,
@@ -386,12 +343,11 @@ abstract class _$$OutcomeDTOImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$OutcomeDTOImplCopyWithImpl<$Res>
-    extends _$OutcomeDTOCopyWithImpl<$Res, _$OutcomeDTOImpl>
-    implements _$$OutcomeDTOImplCopyWith<$Res> {
-  __$$OutcomeDTOImplCopyWithImpl(
-      _$OutcomeDTOImpl _value, $Res Function(_$OutcomeDTOImpl) _then)
-      : super(_value, _then);
+class _$OutcomeDTOCopyWithImpl<$Res> implements $OutcomeDTOCopyWith<$Res> {
+  _$OutcomeDTOCopyWithImpl(this._self, this._then);
+
+  final OutcomeDTO _self;
+  final $Res Function(OutcomeDTO) _then;
 
   /// Create a copy of OutcomeDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -404,25 +360,25 @@ class __$$OutcomeDTOImplCopyWithImpl<$Res>
     Object? channelPoints = null,
     Object? color = null,
   }) {
-    return _then(_$OutcomeDTOImpl(
+    return _then(_self.copyWith(
       id: null == id
-          ? _value.id
+          ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
       title: null == title
-          ? _value.title
+          ? _self.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
       users: null == users
-          ? _value.users
+          ? _self.users
           : users // ignore: cast_nullable_to_non_nullable
               as int,
       channelPoints: null == channelPoints
-          ? _value.channelPoints
+          ? _self.channelPoints
           : channelPoints // ignore: cast_nullable_to_non_nullable
               as int,
       color: null == color
-          ? _value.color
+          ? _self.color
           : color // ignore: cast_nullable_to_non_nullable
               as Color,
     ));
@@ -431,16 +387,15 @@ class __$$OutcomeDTOImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$OutcomeDTOImpl implements _OutcomeDTO {
-  const _$OutcomeDTOImpl(
+class _OutcomeDTO implements OutcomeDTO {
+  const _OutcomeDTO(
       {required this.id,
       required this.title,
       this.users = 0,
       @JsonKey(name: 'channel_points') this.channelPoints = 0,
       @ColorConverter() required this.color});
-
-  factory _$OutcomeDTOImpl.fromJson(Map<String, dynamic> json) =>
-      _$$OutcomeDTOImplFromJson(json);
+  factory _OutcomeDTO.fromJson(Map<String, dynamic> json) =>
+      _$OutcomeDTOFromJson(json);
 
   @override
   final String id;
@@ -456,16 +411,26 @@ class _$OutcomeDTOImpl implements _OutcomeDTO {
   @ColorConverter()
   final Color color;
 
+  /// Create a copy of OutcomeDTO
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'OutcomeDTO(id: $id, title: $title, users: $users, channelPoints: $channelPoints, color: $color)';
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$OutcomeDTOCopyWith<_OutcomeDTO> get copyWith =>
+      __$OutcomeDTOCopyWithImpl<_OutcomeDTO>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$OutcomeDTOToJson(
+      this,
+    );
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$OutcomeDTOImpl &&
+            other is _OutcomeDTO &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.users, users) || other.users == users) &&
@@ -479,50 +444,69 @@ class _$OutcomeDTOImpl implements _OutcomeDTO {
   int get hashCode =>
       Object.hash(runtimeType, id, title, users, channelPoints, color);
 
-  /// Create a copy of OutcomeDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$OutcomeDTOImplCopyWith<_$OutcomeDTOImpl> get copyWith =>
-      __$$OutcomeDTOImplCopyWithImpl<_$OutcomeDTOImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$OutcomeDTOImplToJson(
-      this,
-    );
+  String toString() {
+    return 'OutcomeDTO(id: $id, title: $title, users: $users, channelPoints: $channelPoints, color: $color)';
   }
 }
 
-abstract class _OutcomeDTO implements OutcomeDTO {
-  const factory _OutcomeDTO(
-      {required final String id,
-      required final String title,
-      final int users,
-      @JsonKey(name: 'channel_points') final int channelPoints,
-      @ColorConverter() required final Color color}) = _$OutcomeDTOImpl;
+/// @nodoc
+abstract mixin class _$OutcomeDTOCopyWith<$Res>
+    implements $OutcomeDTOCopyWith<$Res> {
+  factory _$OutcomeDTOCopyWith(
+          _OutcomeDTO value, $Res Function(_OutcomeDTO) _then) =
+      __$OutcomeDTOCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {String id,
+      String title,
+      int users,
+      @JsonKey(name: 'channel_points') int channelPoints,
+      @ColorConverter() Color color});
+}
 
-  factory _OutcomeDTO.fromJson(Map<String, dynamic> json) =
-      _$OutcomeDTOImpl.fromJson;
+/// @nodoc
+class __$OutcomeDTOCopyWithImpl<$Res> implements _$OutcomeDTOCopyWith<$Res> {
+  __$OutcomeDTOCopyWithImpl(this._self, this._then);
 
-  @override
-  String get id;
-  @override
-  String get title;
-  @override
-  int get users;
-  @override
-  @JsonKey(name: 'channel_points')
-  int get channelPoints;
-  @override
-  @ColorConverter()
-  Color get color;
+  final _OutcomeDTO _self;
+  final $Res Function(_OutcomeDTO) _then;
 
   /// Create a copy of OutcomeDTO
   /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$OutcomeDTOImplCopyWith<_$OutcomeDTOImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? id = null,
+    Object? title = null,
+    Object? users = null,
+    Object? channelPoints = null,
+    Object? color = null,
+  }) {
+    return _then(_OutcomeDTO(
+      id: null == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      title: null == title
+          ? _self.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      users: null == users
+          ? _self.users
+          : users // ignore: cast_nullable_to_non_nullable
+              as int,
+      channelPoints: null == channelPoints
+          ? _self.channelPoints
+          : channelPoints // ignore: cast_nullable_to_non_nullable
+              as int,
+      color: null == color
+          ? _self.color
+          : color // ignore: cast_nullable_to_non_nullable
+              as Color,
+    ));
+  }
 }
+
+// dart format on

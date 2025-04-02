@@ -4,7 +4,7 @@ part 'twitch_user_dto.freezed.dart';
 part 'twitch_user_dto.g.dart';
 
 @freezed
-class TwitchUserDTO with _$TwitchUserDTO {
+abstract class TwitchUserDTO with _$TwitchUserDTO {
   const factory TwitchUserDTO({
     required String id,
     required String login,

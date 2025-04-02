@@ -5,7 +5,7 @@ part 'chat_settings_dto.freezed.dart';
 part 'chat_settings_dto.g.dart';
 
 @freezed
-class ChatSettingsDTO with _$ChatSettingsDTO {
+abstract class ChatSettingsDTO with _$ChatSettingsDTO {
   factory ChatSettingsDTO({
     @JsonKey(fromJson: _permanentGroupFromJson)
     @Default(ChatGroupDTO(id: "permanentFirstGroup", channels: []))
@@ -30,7 +30,7 @@ ChatGroupDTO _permanentGroupFromJson(permanentGroup) {
 }
 
 @freezed
-class ChatGroupDTO with _$ChatGroupDTO {
+abstract class ChatGroupDTO with _$ChatGroupDTO {
   const factory ChatGroupDTO({
     required String id,
     required List<ChannelDTO> channels,
@@ -41,7 +41,7 @@ class ChatGroupDTO with _$ChatGroupDTO {
 }
 
 @freezed
-class ChannelDTO with _$ChannelDTO {
+abstract class ChannelDTO with _$ChannelDTO {
   const factory ChannelDTO({
     required Platform platform,
     required String channel,

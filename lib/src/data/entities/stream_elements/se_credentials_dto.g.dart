@@ -6,17 +6,15 @@ part of 'se_credentials_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$SeCredentialsDTOImpl _$$SeCredentialsDTOImplFromJson(
-        Map<String, dynamic> json) =>
-    _$SeCredentialsDTOImpl(
+_SeCredentialsDTO _$SeCredentialsDTOFromJson(Map<String, dynamic> json) =>
+    _SeCredentialsDTO(
       accessToken: json['accessToken'] as String,
       refreshToken: json['refreshToken'] as String,
       expiresIn: (json['expiresIn'] as num).toInt(),
       scopes: json['scopes'] as String,
     );
 
-Map<String, dynamic> _$$SeCredentialsDTOImplToJson(
-        _$SeCredentialsDTOImpl instance) =>
+Map<String, dynamic> _$SeCredentialsDTOToJson(_SeCredentialsDTO instance) =>
     <String, dynamic>{
       'accessToken': instance.accessToken,
       'refreshToken': instance.refreshToken,

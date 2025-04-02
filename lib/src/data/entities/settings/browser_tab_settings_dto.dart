@@ -5,7 +5,7 @@ part 'browser_tab_settings_dto.freezed.dart';
 part 'browser_tab_settings_dto.g.dart';
 
 @freezed
-class BrowserTabSettingsDTO with _$BrowserTabSettingsDTO {
+abstract class BrowserTabSettingsDTO with _$BrowserTabSettingsDTO {
   factory BrowserTabSettingsDTO({
     @Default([]) List<BrowserTabDTO> tabs,
   }) = _BrowserTabSettingsDTO;
@@ -17,7 +17,7 @@ class BrowserTabSettingsDTO with _$BrowserTabSettingsDTO {
 }
 
 @freezed
-class BrowserTabDTO with _$BrowserTabDTO {
+abstract class BrowserTabDTO with _$BrowserTabDTO {
   const factory BrowserTabDTO({
     @JsonKey(fromJson: _idFromJson) required String id,
     required String title,

@@ -5,7 +5,7 @@ part 'dashboard_settings_dto.freezed.dart';
 part 'dashboard_settings_dto.g.dart';
 
 @freezed
-class DashboardSettingsDTO with _$DashboardSettingsDTO {
+abstract class DashboardSettingsDTO with _$DashboardSettingsDTO {
   factory DashboardSettingsDTO({
     @Default([]) List<DashboardEventDTO> userEvents,
     @Default(true) bool activated,

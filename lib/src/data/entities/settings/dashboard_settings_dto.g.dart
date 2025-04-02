@@ -6,9 +6,9 @@ part of 'dashboard_settings_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$DashboardSettingsDTOImpl _$$DashboardSettingsDTOImplFromJson(
+_DashboardSettingsDTO _$DashboardSettingsDTOFromJson(
         Map<String, dynamic> json) =>
-    _$DashboardSettingsDTOImpl(
+    _DashboardSettingsDTO(
       userEvents: (json['userEvents'] as List<dynamic>?)
               ?.map(
                   (e) => DashboardEventDTO.fromJson(e as Map<String, dynamic>))
@@ -17,8 +17,8 @@ _$DashboardSettingsDTOImpl _$$DashboardSettingsDTOImplFromJson(
       activated: json['activated'] as bool? ?? true,
     );
 
-Map<String, dynamic> _$$DashboardSettingsDTOImplToJson(
-        _$DashboardSettingsDTOImpl instance) =>
+Map<String, dynamic> _$DashboardSettingsDTOToJson(
+        _DashboardSettingsDTO instance) =>
     <String, dynamic>{
       'userEvents': instance.userEvents,
       'activated': instance.activated,
