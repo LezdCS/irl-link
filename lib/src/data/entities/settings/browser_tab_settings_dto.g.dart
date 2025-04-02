@@ -6,23 +6,23 @@ part of 'browser_tab_settings_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$BrowserTabSettingsDTOImpl _$$BrowserTabSettingsDTOImplFromJson(
+_BrowserTabSettingsDTO _$BrowserTabSettingsDTOFromJson(
         Map<String, dynamic> json) =>
-    _$BrowserTabSettingsDTOImpl(
+    _BrowserTabSettingsDTO(
       tabs: (json['tabs'] as List<dynamic>?)
               ?.map((e) => BrowserTabDTO.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
     );
 
-Map<String, dynamic> _$$BrowserTabSettingsDTOImplToJson(
-        _$BrowserTabSettingsDTOImpl instance) =>
+Map<String, dynamic> _$BrowserTabSettingsDTOToJson(
+        _BrowserTabSettingsDTO instance) =>
     <String, dynamic>{
       'tabs': instance.tabs,
     };
 
-_$BrowserTabDTOImpl _$$BrowserTabDTOImplFromJson(Map<String, dynamic> json) =>
-    _$BrowserTabDTOImpl(
+_BrowserTabDTO _$BrowserTabDTOFromJson(Map<String, dynamic> json) =>
+    _BrowserTabDTO(
       id: _idFromJson(json['id']),
       title: json['title'] as String,
       url: json['url'] as String,
@@ -30,7 +30,7 @@ _$BrowserTabDTOImpl _$$BrowserTabDTOImplFromJson(Map<String, dynamic> json) =>
       iOSAudioSource: json['iOSAudioSource'] as bool,
     );
 
-Map<String, dynamic> _$$BrowserTabDTOImplToJson(_$BrowserTabDTOImpl instance) =>
+Map<String, dynamic> _$BrowserTabDTOToJson(_BrowserTabDTO instance) =>
     <String, dynamic>{
       'id': instance.id,
       'title': instance.title,

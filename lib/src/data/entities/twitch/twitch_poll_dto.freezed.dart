@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,100 +10,55 @@ part of 'twitch_poll_dto.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$TwitchPollDTO {
-  String get id => throw _privateConstructorUsedError;
-  String get title => throw _privateConstructorUsedError;
-  List<ChoiceDTO> get choices => throw _privateConstructorUsedError;
-  int get totalVotes => throw _privateConstructorUsedError;
-  PollStatus get status => throw _privateConstructorUsedError;
-  DateTime get endsAt => throw _privateConstructorUsedError;
+  String get id;
+  String get title;
+  List<ChoiceDTO> get choices;
+  int get totalVotes;
+  PollStatus get status;
+  DateTime get endsAt;
 
   /// Create a copy of TwitchPollDTO
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $TwitchPollDTOCopyWith<TwitchPollDTO> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $TwitchPollDTOCopyWith<$Res> {
-  factory $TwitchPollDTOCopyWith(
-          TwitchPollDTO value, $Res Function(TwitchPollDTO) then) =
-      _$TwitchPollDTOCopyWithImpl<$Res, TwitchPollDTO>;
-  @useResult
-  $Res call(
-      {String id,
-      String title,
-      List<ChoiceDTO> choices,
-      int totalVotes,
-      PollStatus status,
-      DateTime endsAt});
-}
-
-/// @nodoc
-class _$TwitchPollDTOCopyWithImpl<$Res, $Val extends TwitchPollDTO>
-    implements $TwitchPollDTOCopyWith<$Res> {
-  _$TwitchPollDTOCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of TwitchPollDTO
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
+  $TwitchPollDTOCopyWith<TwitchPollDTO> get copyWith =>
+      _$TwitchPollDTOCopyWithImpl<TwitchPollDTO>(
+          this as TwitchPollDTO, _$identity);
+
   @override
-  $Res call({
-    Object? id = null,
-    Object? title = null,
-    Object? choices = null,
-    Object? totalVotes = null,
-    Object? status = null,
-    Object? endsAt = null,
-  }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      choices: null == choices
-          ? _value.choices
-          : choices // ignore: cast_nullable_to_non_nullable
-              as List<ChoiceDTO>,
-      totalVotes: null == totalVotes
-          ? _value.totalVotes
-          : totalVotes // ignore: cast_nullable_to_non_nullable
-              as int,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as PollStatus,
-      endsAt: null == endsAt
-          ? _value.endsAt
-          : endsAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-    ) as $Val);
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is TwitchPollDTO &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.title, title) || other.title == title) &&
+            const DeepCollectionEquality().equals(other.choices, choices) &&
+            (identical(other.totalVotes, totalVotes) ||
+                other.totalVotes == totalVotes) &&
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.endsAt, endsAt) || other.endsAt == endsAt));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, id, title,
+      const DeepCollectionEquality().hash(choices), totalVotes, status, endsAt);
+
+  @override
+  String toString() {
+    return 'TwitchPollDTO(id: $id, title: $title, choices: $choices, totalVotes: $totalVotes, status: $status, endsAt: $endsAt)';
   }
 }
 
 /// @nodoc
-abstract class _$$TwitchPollDTOImplCopyWith<$Res>
-    implements $TwitchPollDTOCopyWith<$Res> {
-  factory _$$TwitchPollDTOImplCopyWith(
-          _$TwitchPollDTOImpl value, $Res Function(_$TwitchPollDTOImpl) then) =
-      __$$TwitchPollDTOImplCopyWithImpl<$Res>;
-  @override
+abstract mixin class $TwitchPollDTOCopyWith<$Res> {
+  factory $TwitchPollDTOCopyWith(
+          TwitchPollDTO value, $Res Function(TwitchPollDTO) _then) =
+      _$TwitchPollDTOCopyWithImpl;
   @useResult
   $Res call(
       {String id,
@@ -114,12 +70,12 @@ abstract class _$$TwitchPollDTOImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$TwitchPollDTOImplCopyWithImpl<$Res>
-    extends _$TwitchPollDTOCopyWithImpl<$Res, _$TwitchPollDTOImpl>
-    implements _$$TwitchPollDTOImplCopyWith<$Res> {
-  __$$TwitchPollDTOImplCopyWithImpl(
-      _$TwitchPollDTOImpl _value, $Res Function(_$TwitchPollDTOImpl) _then)
-      : super(_value, _then);
+class _$TwitchPollDTOCopyWithImpl<$Res>
+    implements $TwitchPollDTOCopyWith<$Res> {
+  _$TwitchPollDTOCopyWithImpl(this._self, this._then);
+
+  final TwitchPollDTO _self;
+  final $Res Function(TwitchPollDTO) _then;
 
   /// Create a copy of TwitchPollDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -133,29 +89,29 @@ class __$$TwitchPollDTOImplCopyWithImpl<$Res>
     Object? status = null,
     Object? endsAt = null,
   }) {
-    return _then(_$TwitchPollDTOImpl(
+    return _then(_self.copyWith(
       id: null == id
-          ? _value.id
+          ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
       title: null == title
-          ? _value.title
+          ? _self.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
       choices: null == choices
-          ? _value._choices
+          ? _self.choices
           : choices // ignore: cast_nullable_to_non_nullable
               as List<ChoiceDTO>,
       totalVotes: null == totalVotes
-          ? _value.totalVotes
+          ? _self.totalVotes
           : totalVotes // ignore: cast_nullable_to_non_nullable
               as int,
       status: null == status
-          ? _value.status
+          ? _self.status
           : status // ignore: cast_nullable_to_non_nullable
               as PollStatus,
       endsAt: null == endsAt
-          ? _value.endsAt
+          ? _self.endsAt
           : endsAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
     ));
@@ -164,8 +120,8 @@ class __$$TwitchPollDTOImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$TwitchPollDTOImpl implements _TwitchPollDTO {
-  const _$TwitchPollDTOImpl(
+class _TwitchPollDTO implements TwitchPollDTO {
+  const _TwitchPollDTO(
       {required this.id,
       required this.title,
       required final List<ChoiceDTO> choices,
@@ -193,16 +149,19 @@ class _$TwitchPollDTOImpl implements _TwitchPollDTO {
   @override
   final DateTime endsAt;
 
+  /// Create a copy of TwitchPollDTO
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'TwitchPollDTO(id: $id, title: $title, choices: $choices, totalVotes: $totalVotes, status: $status, endsAt: $endsAt)';
-  }
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$TwitchPollDTOCopyWith<_TwitchPollDTO> get copyWith =>
+      __$TwitchPollDTOCopyWithImpl<_TwitchPollDTO>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$TwitchPollDTOImpl &&
+            other is _TwitchPollDTO &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             const DeepCollectionEquality().equals(other._choices, _choices) &&
@@ -222,181 +181,99 @@ class _$TwitchPollDTOImpl implements _TwitchPollDTO {
       status,
       endsAt);
 
-  /// Create a copy of TwitchPollDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$TwitchPollDTOImplCopyWith<_$TwitchPollDTOImpl> get copyWith =>
-      __$$TwitchPollDTOImplCopyWithImpl<_$TwitchPollDTOImpl>(this, _$identity);
-}
-
-abstract class _TwitchPollDTO implements TwitchPollDTO {
-  const factory _TwitchPollDTO(
-      {required final String id,
-      required final String title,
-      required final List<ChoiceDTO> choices,
-      required final int totalVotes,
-      required final PollStatus status,
-      required final DateTime endsAt}) = _$TwitchPollDTOImpl;
-
-  @override
-  String get id;
-  @override
-  String get title;
-  @override
-  List<ChoiceDTO> get choices;
-  @override
-  int get totalVotes;
-  @override
-  PollStatus get status;
-  @override
-  DateTime get endsAt;
-
-  /// Create a copy of TwitchPollDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$TwitchPollDTOImplCopyWith<_$TwitchPollDTOImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-ChoiceDTO _$ChoiceDTOFromJson(Map<String, dynamic> json) {
-  return _ChoiceDTO.fromJson(json);
-}
-
-/// @nodoc
-mixin _$ChoiceDTO {
-  String get id => throw _privateConstructorUsedError;
-  String get title => throw _privateConstructorUsedError;
-  int get votes => throw _privateConstructorUsedError;
-
-  /// Serializes this ChoiceDTO to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of ChoiceDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $ChoiceDTOCopyWith<ChoiceDTO> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $ChoiceDTOCopyWith<$Res> {
-  factory $ChoiceDTOCopyWith(ChoiceDTO value, $Res Function(ChoiceDTO) then) =
-      _$ChoiceDTOCopyWithImpl<$Res, ChoiceDTO>;
-  @useResult
-  $Res call({String id, String title, int votes});
-}
-
-/// @nodoc
-class _$ChoiceDTOCopyWithImpl<$Res, $Val extends ChoiceDTO>
-    implements $ChoiceDTOCopyWith<$Res> {
-  _$ChoiceDTOCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of ChoiceDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = null,
-    Object? title = null,
-    Object? votes = null,
-  }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      votes: null == votes
-          ? _value.votes
-          : votes // ignore: cast_nullable_to_non_nullable
-              as int,
-    ) as $Val);
+  String toString() {
+    return 'TwitchPollDTO(id: $id, title: $title, choices: $choices, totalVotes: $totalVotes, status: $status, endsAt: $endsAt)';
   }
 }
 
 /// @nodoc
-abstract class _$$ChoiceDTOImplCopyWith<$Res>
-    implements $ChoiceDTOCopyWith<$Res> {
-  factory _$$ChoiceDTOImplCopyWith(
-          _$ChoiceDTOImpl value, $Res Function(_$ChoiceDTOImpl) then) =
-      __$$ChoiceDTOImplCopyWithImpl<$Res>;
+abstract mixin class _$TwitchPollDTOCopyWith<$Res>
+    implements $TwitchPollDTOCopyWith<$Res> {
+  factory _$TwitchPollDTOCopyWith(
+          _TwitchPollDTO value, $Res Function(_TwitchPollDTO) _then) =
+      __$TwitchPollDTOCopyWithImpl;
   @override
   @useResult
-  $Res call({String id, String title, int votes});
+  $Res call(
+      {String id,
+      String title,
+      List<ChoiceDTO> choices,
+      int totalVotes,
+      PollStatus status,
+      DateTime endsAt});
 }
 
 /// @nodoc
-class __$$ChoiceDTOImplCopyWithImpl<$Res>
-    extends _$ChoiceDTOCopyWithImpl<$Res, _$ChoiceDTOImpl>
-    implements _$$ChoiceDTOImplCopyWith<$Res> {
-  __$$ChoiceDTOImplCopyWithImpl(
-      _$ChoiceDTOImpl _value, $Res Function(_$ChoiceDTOImpl) _then)
-      : super(_value, _then);
+class __$TwitchPollDTOCopyWithImpl<$Res>
+    implements _$TwitchPollDTOCopyWith<$Res> {
+  __$TwitchPollDTOCopyWithImpl(this._self, this._then);
 
-  /// Create a copy of ChoiceDTO
+  final _TwitchPollDTO _self;
+  final $Res Function(_TwitchPollDTO) _then;
+
+  /// Create a copy of TwitchPollDTO
   /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
   @override
+  @pragma('vm:prefer-inline')
   $Res call({
     Object? id = null,
     Object? title = null,
-    Object? votes = null,
+    Object? choices = null,
+    Object? totalVotes = null,
+    Object? status = null,
+    Object? endsAt = null,
   }) {
-    return _then(_$ChoiceDTOImpl(
+    return _then(_TwitchPollDTO(
       id: null == id
-          ? _value.id
+          ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
       title: null == title
-          ? _value.title
+          ? _self.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      votes: null == votes
-          ? _value.votes
-          : votes // ignore: cast_nullable_to_non_nullable
+      choices: null == choices
+          ? _self._choices
+          : choices // ignore: cast_nullable_to_non_nullable
+              as List<ChoiceDTO>,
+      totalVotes: null == totalVotes
+          ? _self.totalVotes
+          : totalVotes // ignore: cast_nullable_to_non_nullable
               as int,
+      status: null == status
+          ? _self.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as PollStatus,
+      endsAt: null == endsAt
+          ? _self.endsAt
+          : endsAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ));
   }
 }
 
 /// @nodoc
-@JsonSerializable()
-class _$ChoiceDTOImpl implements _ChoiceDTO {
-  const _$ChoiceDTOImpl(
-      {required this.id, required this.title, this.votes = 0});
+mixin _$ChoiceDTO {
+  String get id;
+  String get title;
+  int get votes;
 
-  factory _$ChoiceDTOImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ChoiceDTOImplFromJson(json);
+  /// Create a copy of ChoiceDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $ChoiceDTOCopyWith<ChoiceDTO> get copyWith =>
+      _$ChoiceDTOCopyWithImpl<ChoiceDTO>(this as ChoiceDTO, _$identity);
 
-  @override
-  final String id;
-  @override
-  final String title;
-  @override
-  @JsonKey()
-  final int votes;
-
-  @override
-  String toString() {
-    return 'ChoiceDTO(id: $id, title: $title, votes: $votes)';
-  }
+  /// Serializes this ChoiceDTO to a JSON map.
+  Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ChoiceDTOImpl &&
+            other is ChoiceDTO &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.votes, votes) || other.votes == votes));
@@ -406,42 +283,145 @@ class _$ChoiceDTOImpl implements _ChoiceDTO {
   @override
   int get hashCode => Object.hash(runtimeType, id, title, votes);
 
-  /// Create a copy of ChoiceDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$ChoiceDTOImplCopyWith<_$ChoiceDTOImpl> get copyWith =>
-      __$$ChoiceDTOImplCopyWithImpl<_$ChoiceDTOImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$ChoiceDTOImplToJson(
-      this,
-    );
+  String toString() {
+    return 'ChoiceDTO(id: $id, title: $title, votes: $votes)';
   }
 }
 
-abstract class _ChoiceDTO implements ChoiceDTO {
-  const factory _ChoiceDTO(
-      {required final String id,
-      required final String title,
-      final int votes}) = _$ChoiceDTOImpl;
+/// @nodoc
+abstract mixin class $ChoiceDTOCopyWith<$Res> {
+  factory $ChoiceDTOCopyWith(ChoiceDTO value, $Res Function(ChoiceDTO) _then) =
+      _$ChoiceDTOCopyWithImpl;
+  @useResult
+  $Res call({String id, String title, int votes});
+}
 
-  factory _ChoiceDTO.fromJson(Map<String, dynamic> json) =
-      _$ChoiceDTOImpl.fromJson;
+/// @nodoc
+class _$ChoiceDTOCopyWithImpl<$Res> implements $ChoiceDTOCopyWith<$Res> {
+  _$ChoiceDTOCopyWithImpl(this._self, this._then);
+
+  final ChoiceDTO _self;
+  final $Res Function(ChoiceDTO) _then;
+
+  /// Create a copy of ChoiceDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? title = null,
+    Object? votes = null,
+  }) {
+    return _then(_self.copyWith(
+      id: null == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      title: null == title
+          ? _self.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      votes: null == votes
+          ? _self.votes
+          : votes // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _ChoiceDTO implements ChoiceDTO {
+  const _ChoiceDTO({required this.id, required this.title, this.votes = 0});
+  factory _ChoiceDTO.fromJson(Map<String, dynamic> json) =>
+      _$ChoiceDTOFromJson(json);
 
   @override
-  String get id;
+  final String id;
   @override
-  String get title;
+  final String title;
   @override
-  int get votes;
+  @JsonKey()
+  final int votes;
 
   /// Create a copy of ChoiceDTO
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ChoiceDTOImplCopyWith<_$ChoiceDTOImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  _$ChoiceDTOCopyWith<_ChoiceDTO> get copyWith =>
+      __$ChoiceDTOCopyWithImpl<_ChoiceDTO>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$ChoiceDTOToJson(
+      this,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _ChoiceDTO &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.title, title) || other.title == title) &&
+            (identical(other.votes, votes) || other.votes == votes));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, title, votes);
+
+  @override
+  String toString() {
+    return 'ChoiceDTO(id: $id, title: $title, votes: $votes)';
+  }
 }
+
+/// @nodoc
+abstract mixin class _$ChoiceDTOCopyWith<$Res>
+    implements $ChoiceDTOCopyWith<$Res> {
+  factory _$ChoiceDTOCopyWith(
+          _ChoiceDTO value, $Res Function(_ChoiceDTO) _then) =
+      __$ChoiceDTOCopyWithImpl;
+  @override
+  @useResult
+  $Res call({String id, String title, int votes});
+}
+
+/// @nodoc
+class __$ChoiceDTOCopyWithImpl<$Res> implements _$ChoiceDTOCopyWith<$Res> {
+  __$ChoiceDTOCopyWithImpl(this._self, this._then);
+
+  final _ChoiceDTO _self;
+  final $Res Function(_ChoiceDTO) _then;
+
+  /// Create a copy of ChoiceDTO
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? id = null,
+    Object? title = null,
+    Object? votes = null,
+  }) {
+    return _then(_ChoiceDTO(
+      id: null == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      title: null == title
+          ? _self.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      votes: null == votes
+          ? _self.votes
+          : votes // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+// dart format on

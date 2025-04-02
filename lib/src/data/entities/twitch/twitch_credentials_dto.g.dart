@@ -6,9 +6,9 @@ part of 'twitch_credentials_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$TwitchCredentialsDTOImpl _$$TwitchCredentialsDTOImplFromJson(
+_TwitchCredentialsDTO _$TwitchCredentialsDTOFromJson(
         Map<String, dynamic> json) =>
-    _$TwitchCredentialsDTOImpl(
+    _TwitchCredentialsDTO(
       accessToken: json['accessToken'] as String,
       idToken: json['idToken'] as String,
       refreshToken: json['refreshToken'] as String,
@@ -18,8 +18,8 @@ _$TwitchCredentialsDTOImpl _$$TwitchCredentialsDTOImplFromJson(
       scopes: json['scopes'] as String,
     );
 
-Map<String, dynamic> _$$TwitchCredentialsDTOImplToJson(
-        _$TwitchCredentialsDTOImpl instance) =>
+Map<String, dynamic> _$TwitchCredentialsDTOToJson(
+        _TwitchCredentialsDTO instance) =>
     <String, dynamic>{
       'accessToken': instance.accessToken,
       'idToken': instance.idToken,

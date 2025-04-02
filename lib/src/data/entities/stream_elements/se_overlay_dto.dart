@@ -4,7 +4,7 @@ part 'se_overlay_dto.freezed.dart';
 part 'se_overlay_dto.g.dart';
 
 @freezed
-class SeOverlayDTO with _$SeOverlayDTO {
+abstract class SeOverlayDTO with _$SeOverlayDTO {
   const factory SeOverlayDTO({
     @JsonKey(name: '_id') required String id,
     required String name,

@@ -6,8 +6,8 @@ part of 'twitch_user_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$TwitchUserDTOImpl _$$TwitchUserDTOImplFromJson(Map<String, dynamic> json) =>
-    _$TwitchUserDTOImpl(
+_TwitchUserDTO _$TwitchUserDTOFromJson(Map<String, dynamic> json) =>
+    _TwitchUserDTO(
       id: json['id'] as String,
       login: json['login'] as String,
       displayName: json['display_name'] as String,
@@ -17,7 +17,7 @@ _$TwitchUserDTOImpl _$$TwitchUserDTOImplFromJson(Map<String, dynamic> json) =>
       viewCount: _stringToInt(json['view_count']),
     );
 
-Map<String, dynamic> _$$TwitchUserDTOImplToJson(_$TwitchUserDTOImpl instance) =>
+Map<String, dynamic> _$TwitchUserDTOToJson(_TwitchUserDTO instance) =>
     <String, dynamic>{
       'id': instance.id,
       'login': instance.login,

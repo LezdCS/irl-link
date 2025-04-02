@@ -4,7 +4,7 @@ import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
 part 'se_activity_dto.freezed.dart';
 
 @freezed
-class SeActivityDTO with _$SeActivityDTO {
+abstract class SeActivityDTO with _$SeActivityDTO {
   const factory SeActivityDTO({
     required String id,
     required String channel,

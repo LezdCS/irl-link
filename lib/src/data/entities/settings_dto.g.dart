@@ -6,8 +6,7 @@ part of 'settings_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$SettingsDTOImpl _$$SettingsDTOImplFromJson(Map<String, dynamic> json) =>
-    _$SettingsDTOImpl(
+_SettingsDTO _$SettingsDTOFromJson(Map<String, dynamic> json) => _SettingsDTO(
       isEmotes: json['isEmotes'] as bool? ?? true,
       textSize: (json['textSize'] as num?)?.toDouble() ?? 19,
       displayTimestamp: json['displayTimestamp'] as bool? ?? false,
@@ -34,7 +33,7 @@ _$SettingsDTOImpl _$$SettingsDTOImplFromJson(Map<String, dynamic> json) =>
           TtsSettingsDTO.fromJson(json['ttsSettings'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$$SettingsDTOImplToJson(_$SettingsDTOImpl instance) =>
+Map<String, dynamic> _$SettingsDTOToJson(_SettingsDTO instance) =>
     <String, dynamic>{
       'isEmotes': instance.isEmotes,
       'textSize': instance.textSize,

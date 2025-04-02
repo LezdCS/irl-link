@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,156 +10,94 @@ part of 'tts_settings_dto.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-TtsSettingsDTO _$TtsSettingsDTOFromJson(Map<String, dynamic> json) {
-  return _TtsSettingsDTO.fromJson(json);
-}
 
 /// @nodoc
 mixin _$TtsSettingsDTO {
-  bool get ttsEnabled => throw _privateConstructorUsedError;
-  String get language => throw _privateConstructorUsedError;
-  List<dynamic> get prefixsToIgnore => throw _privateConstructorUsedError;
-  List<dynamic> get prefixsToUseTtsOnly => throw _privateConstructorUsedError;
-  double get volume => throw _privateConstructorUsedError;
-  double get pitch => throw _privateConstructorUsedError;
-  double get rate => throw _privateConstructorUsedError;
-  Map<String, String> get voice => throw _privateConstructorUsedError;
-  List<dynamic> get ttsUsersToIgnore => throw _privateConstructorUsedError;
-  bool get ttsMuteViewerName => throw _privateConstructorUsedError;
-  bool get ttsOnlyVip => throw _privateConstructorUsedError;
-  bool get ttsOnlyMod => throw _privateConstructorUsedError;
-  bool get ttsOnlySubscriber => throw _privateConstructorUsedError;
-
-  /// Serializes this TtsSettingsDTO to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  bool get ttsEnabled;
+  String get language;
+  List get prefixsToIgnore;
+  List get prefixsToUseTtsOnly;
+  double get volume;
+  double get pitch;
+  double get rate;
+  Map<String, String> get voice;
+  List get ttsUsersToIgnore;
+  bool get ttsMuteViewerName;
+  bool get ttsOnlyVip;
+  bool get ttsOnlyMod;
+  bool get ttsOnlySubscriber;
 
   /// Create a copy of TtsSettingsDTO
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $TtsSettingsDTOCopyWith<TtsSettingsDTO> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $TtsSettingsDTOCopyWith<$Res> {
-  factory $TtsSettingsDTOCopyWith(
-          TtsSettingsDTO value, $Res Function(TtsSettingsDTO) then) =
-      _$TtsSettingsDTOCopyWithImpl<$Res, TtsSettingsDTO>;
-  @useResult
-  $Res call(
-      {bool ttsEnabled,
-      String language,
-      List<dynamic> prefixsToIgnore,
-      List<dynamic> prefixsToUseTtsOnly,
-      double volume,
-      double pitch,
-      double rate,
-      Map<String, String> voice,
-      List<dynamic> ttsUsersToIgnore,
-      bool ttsMuteViewerName,
-      bool ttsOnlyVip,
-      bool ttsOnlyMod,
-      bool ttsOnlySubscriber});
-}
-
-/// @nodoc
-class _$TtsSettingsDTOCopyWithImpl<$Res, $Val extends TtsSettingsDTO>
-    implements $TtsSettingsDTOCopyWith<$Res> {
-  _$TtsSettingsDTOCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of TtsSettingsDTO
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
+  $TtsSettingsDTOCopyWith<TtsSettingsDTO> get copyWith =>
+      _$TtsSettingsDTOCopyWithImpl<TtsSettingsDTO>(
+          this as TtsSettingsDTO, _$identity);
+
+  /// Serializes this TtsSettingsDTO to a JSON map.
+  Map<String, dynamic> toJson();
+
   @override
-  $Res call({
-    Object? ttsEnabled = null,
-    Object? language = null,
-    Object? prefixsToIgnore = null,
-    Object? prefixsToUseTtsOnly = null,
-    Object? volume = null,
-    Object? pitch = null,
-    Object? rate = null,
-    Object? voice = null,
-    Object? ttsUsersToIgnore = null,
-    Object? ttsMuteViewerName = null,
-    Object? ttsOnlyVip = null,
-    Object? ttsOnlyMod = null,
-    Object? ttsOnlySubscriber = null,
-  }) {
-    return _then(_value.copyWith(
-      ttsEnabled: null == ttsEnabled
-          ? _value.ttsEnabled
-          : ttsEnabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-      language: null == language
-          ? _value.language
-          : language // ignore: cast_nullable_to_non_nullable
-              as String,
-      prefixsToIgnore: null == prefixsToIgnore
-          ? _value.prefixsToIgnore
-          : prefixsToIgnore // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
-      prefixsToUseTtsOnly: null == prefixsToUseTtsOnly
-          ? _value.prefixsToUseTtsOnly
-          : prefixsToUseTtsOnly // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
-      volume: null == volume
-          ? _value.volume
-          : volume // ignore: cast_nullable_to_non_nullable
-              as double,
-      pitch: null == pitch
-          ? _value.pitch
-          : pitch // ignore: cast_nullable_to_non_nullable
-              as double,
-      rate: null == rate
-          ? _value.rate
-          : rate // ignore: cast_nullable_to_non_nullable
-              as double,
-      voice: null == voice
-          ? _value.voice
-          : voice // ignore: cast_nullable_to_non_nullable
-              as Map<String, String>,
-      ttsUsersToIgnore: null == ttsUsersToIgnore
-          ? _value.ttsUsersToIgnore
-          : ttsUsersToIgnore // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
-      ttsMuteViewerName: null == ttsMuteViewerName
-          ? _value.ttsMuteViewerName
-          : ttsMuteViewerName // ignore: cast_nullable_to_non_nullable
-              as bool,
-      ttsOnlyVip: null == ttsOnlyVip
-          ? _value.ttsOnlyVip
-          : ttsOnlyVip // ignore: cast_nullable_to_non_nullable
-              as bool,
-      ttsOnlyMod: null == ttsOnlyMod
-          ? _value.ttsOnlyMod
-          : ttsOnlyMod // ignore: cast_nullable_to_non_nullable
-              as bool,
-      ttsOnlySubscriber: null == ttsOnlySubscriber
-          ? _value.ttsOnlySubscriber
-          : ttsOnlySubscriber // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is TtsSettingsDTO &&
+            (identical(other.ttsEnabled, ttsEnabled) ||
+                other.ttsEnabled == ttsEnabled) &&
+            (identical(other.language, language) ||
+                other.language == language) &&
+            const DeepCollectionEquality()
+                .equals(other.prefixsToIgnore, prefixsToIgnore) &&
+            const DeepCollectionEquality()
+                .equals(other.prefixsToUseTtsOnly, prefixsToUseTtsOnly) &&
+            (identical(other.volume, volume) || other.volume == volume) &&
+            (identical(other.pitch, pitch) || other.pitch == pitch) &&
+            (identical(other.rate, rate) || other.rate == rate) &&
+            const DeepCollectionEquality().equals(other.voice, voice) &&
+            const DeepCollectionEquality()
+                .equals(other.ttsUsersToIgnore, ttsUsersToIgnore) &&
+            (identical(other.ttsMuteViewerName, ttsMuteViewerName) ||
+                other.ttsMuteViewerName == ttsMuteViewerName) &&
+            (identical(other.ttsOnlyVip, ttsOnlyVip) ||
+                other.ttsOnlyVip == ttsOnlyVip) &&
+            (identical(other.ttsOnlyMod, ttsOnlyMod) ||
+                other.ttsOnlyMod == ttsOnlyMod) &&
+            (identical(other.ttsOnlySubscriber, ttsOnlySubscriber) ||
+                other.ttsOnlySubscriber == ttsOnlySubscriber));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      ttsEnabled,
+      language,
+      const DeepCollectionEquality().hash(prefixsToIgnore),
+      const DeepCollectionEquality().hash(prefixsToUseTtsOnly),
+      volume,
+      pitch,
+      rate,
+      const DeepCollectionEquality().hash(voice),
+      const DeepCollectionEquality().hash(ttsUsersToIgnore),
+      ttsMuteViewerName,
+      ttsOnlyVip,
+      ttsOnlyMod,
+      ttsOnlySubscriber);
+
+  @override
+  String toString() {
+    return 'TtsSettingsDTO(ttsEnabled: $ttsEnabled, language: $language, prefixsToIgnore: $prefixsToIgnore, prefixsToUseTtsOnly: $prefixsToUseTtsOnly, volume: $volume, pitch: $pitch, rate: $rate, voice: $voice, ttsUsersToIgnore: $ttsUsersToIgnore, ttsMuteViewerName: $ttsMuteViewerName, ttsOnlyVip: $ttsOnlyVip, ttsOnlyMod: $ttsOnlyMod, ttsOnlySubscriber: $ttsOnlySubscriber)';
   }
 }
 
 /// @nodoc
-abstract class _$$TtsSettingsDTOImplCopyWith<$Res>
-    implements $TtsSettingsDTOCopyWith<$Res> {
-  factory _$$TtsSettingsDTOImplCopyWith(_$TtsSettingsDTOImpl value,
-          $Res Function(_$TtsSettingsDTOImpl) then) =
-      __$$TtsSettingsDTOImplCopyWithImpl<$Res>;
-  @override
+abstract mixin class $TtsSettingsDTOCopyWith<$Res> {
+  factory $TtsSettingsDTOCopyWith(
+          TtsSettingsDTO value, $Res Function(TtsSettingsDTO) _then) =
+      _$TtsSettingsDTOCopyWithImpl;
   @useResult
   $Res call(
       {bool ttsEnabled,
@@ -177,12 +116,12 @@ abstract class _$$TtsSettingsDTOImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$TtsSettingsDTOImplCopyWithImpl<$Res>
-    extends _$TtsSettingsDTOCopyWithImpl<$Res, _$TtsSettingsDTOImpl>
-    implements _$$TtsSettingsDTOImplCopyWith<$Res> {
-  __$$TtsSettingsDTOImplCopyWithImpl(
-      _$TtsSettingsDTOImpl _value, $Res Function(_$TtsSettingsDTOImpl) _then)
-      : super(_value, _then);
+class _$TtsSettingsDTOCopyWithImpl<$Res>
+    implements $TtsSettingsDTOCopyWith<$Res> {
+  _$TtsSettingsDTOCopyWithImpl(this._self, this._then);
+
+  final TtsSettingsDTO _self;
+  final $Res Function(TtsSettingsDTO) _then;
 
   /// Create a copy of TtsSettingsDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -203,57 +142,57 @@ class __$$TtsSettingsDTOImplCopyWithImpl<$Res>
     Object? ttsOnlyMod = null,
     Object? ttsOnlySubscriber = null,
   }) {
-    return _then(_$TtsSettingsDTOImpl(
+    return _then(_self.copyWith(
       ttsEnabled: null == ttsEnabled
-          ? _value.ttsEnabled
+          ? _self.ttsEnabled
           : ttsEnabled // ignore: cast_nullable_to_non_nullable
               as bool,
       language: null == language
-          ? _value.language
+          ? _self.language
           : language // ignore: cast_nullable_to_non_nullable
               as String,
       prefixsToIgnore: null == prefixsToIgnore
-          ? _value._prefixsToIgnore
+          ? _self.prefixsToIgnore!
           : prefixsToIgnore // ignore: cast_nullable_to_non_nullable
               as List<dynamic>,
       prefixsToUseTtsOnly: null == prefixsToUseTtsOnly
-          ? _value._prefixsToUseTtsOnly
+          ? _self.prefixsToUseTtsOnly!
           : prefixsToUseTtsOnly // ignore: cast_nullable_to_non_nullable
               as List<dynamic>,
       volume: null == volume
-          ? _value.volume
+          ? _self.volume
           : volume // ignore: cast_nullable_to_non_nullable
               as double,
       pitch: null == pitch
-          ? _value.pitch
+          ? _self.pitch
           : pitch // ignore: cast_nullable_to_non_nullable
               as double,
       rate: null == rate
-          ? _value.rate
+          ? _self.rate
           : rate // ignore: cast_nullable_to_non_nullable
               as double,
       voice: null == voice
-          ? _value._voice
+          ? _self.voice
           : voice // ignore: cast_nullable_to_non_nullable
               as Map<String, String>,
       ttsUsersToIgnore: null == ttsUsersToIgnore
-          ? _value._ttsUsersToIgnore
+          ? _self.ttsUsersToIgnore!
           : ttsUsersToIgnore // ignore: cast_nullable_to_non_nullable
               as List<dynamic>,
       ttsMuteViewerName: null == ttsMuteViewerName
-          ? _value.ttsMuteViewerName
+          ? _self.ttsMuteViewerName
           : ttsMuteViewerName // ignore: cast_nullable_to_non_nullable
               as bool,
       ttsOnlyVip: null == ttsOnlyVip
-          ? _value.ttsOnlyVip
+          ? _self.ttsOnlyVip
           : ttsOnlyVip // ignore: cast_nullable_to_non_nullable
               as bool,
       ttsOnlyMod: null == ttsOnlyMod
-          ? _value.ttsOnlyMod
+          ? _self.ttsOnlyMod
           : ttsOnlyMod // ignore: cast_nullable_to_non_nullable
               as bool,
       ttsOnlySubscriber: null == ttsOnlySubscriber
-          ? _value.ttsOnlySubscriber
+          ? _self.ttsOnlySubscriber
           : ttsOnlySubscriber // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
@@ -262,8 +201,8 @@ class __$$TtsSettingsDTOImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$TtsSettingsDTOImpl extends _TtsSettingsDTO {
-  _$TtsSettingsDTOImpl(
+class _TtsSettingsDTO extends TtsSettingsDTO {
+  _TtsSettingsDTO(
       {this.ttsEnabled = false,
       this.language = "en-US",
       final List<dynamic> prefixsToIgnore = const [],
@@ -285,9 +224,8 @@ class _$TtsSettingsDTOImpl extends _TtsSettingsDTO {
         _voice = voice,
         _ttsUsersToIgnore = ttsUsersToIgnore,
         super._();
-
-  factory _$TtsSettingsDTOImpl.fromJson(Map<String, dynamic> json) =>
-      _$$TtsSettingsDTOImplFromJson(json);
+  factory _TtsSettingsDTO.fromJson(Map<String, dynamic> json) =>
+      _$TtsSettingsDTOFromJson(json);
 
   @override
   @JsonKey()
@@ -355,16 +293,26 @@ class _$TtsSettingsDTOImpl extends _TtsSettingsDTO {
   @JsonKey()
   final bool ttsOnlySubscriber;
 
+  /// Create a copy of TtsSettingsDTO
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'TtsSettingsDTO(ttsEnabled: $ttsEnabled, language: $language, prefixsToIgnore: $prefixsToIgnore, prefixsToUseTtsOnly: $prefixsToUseTtsOnly, volume: $volume, pitch: $pitch, rate: $rate, voice: $voice, ttsUsersToIgnore: $ttsUsersToIgnore, ttsMuteViewerName: $ttsMuteViewerName, ttsOnlyVip: $ttsOnlyVip, ttsOnlyMod: $ttsOnlyMod, ttsOnlySubscriber: $ttsOnlySubscriber)';
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$TtsSettingsDTOCopyWith<_TtsSettingsDTO> get copyWith =>
+      __$TtsSettingsDTOCopyWithImpl<_TtsSettingsDTO>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$TtsSettingsDTOToJson(
+      this,
+    );
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$TtsSettingsDTOImpl &&
+            other is _TtsSettingsDTO &&
             (identical(other.ttsEnabled, ttsEnabled) ||
                 other.ttsEnabled == ttsEnabled) &&
             (identical(other.language, language) ||
@@ -407,74 +355,118 @@ class _$TtsSettingsDTOImpl extends _TtsSettingsDTO {
       ttsOnlyMod,
       ttsOnlySubscriber);
 
-  /// Create a copy of TtsSettingsDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$TtsSettingsDTOImplCopyWith<_$TtsSettingsDTOImpl> get copyWith =>
-      __$$TtsSettingsDTOImplCopyWithImpl<_$TtsSettingsDTOImpl>(
-          this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$TtsSettingsDTOImplToJson(
-      this,
-    );
+  String toString() {
+    return 'TtsSettingsDTO(ttsEnabled: $ttsEnabled, language: $language, prefixsToIgnore: $prefixsToIgnore, prefixsToUseTtsOnly: $prefixsToUseTtsOnly, volume: $volume, pitch: $pitch, rate: $rate, voice: $voice, ttsUsersToIgnore: $ttsUsersToIgnore, ttsMuteViewerName: $ttsMuteViewerName, ttsOnlyVip: $ttsOnlyVip, ttsOnlyMod: $ttsOnlyMod, ttsOnlySubscriber: $ttsOnlySubscriber)';
   }
 }
 
-abstract class _TtsSettingsDTO extends TtsSettingsDTO {
-  factory _TtsSettingsDTO(
-      {final bool ttsEnabled,
-      final String language,
-      final List<dynamic> prefixsToIgnore,
-      final List<dynamic> prefixsToUseTtsOnly,
-      final double volume,
-      final double pitch,
-      final double rate,
-      final Map<String, String> voice,
-      final List<dynamic> ttsUsersToIgnore,
-      final bool ttsMuteViewerName,
-      final bool ttsOnlyVip,
-      final bool ttsOnlyMod,
-      final bool ttsOnlySubscriber}) = _$TtsSettingsDTOImpl;
-  _TtsSettingsDTO._() : super._();
+/// @nodoc
+abstract mixin class _$TtsSettingsDTOCopyWith<$Res>
+    implements $TtsSettingsDTOCopyWith<$Res> {
+  factory _$TtsSettingsDTOCopyWith(
+          _TtsSettingsDTO value, $Res Function(_TtsSettingsDTO) _then) =
+      __$TtsSettingsDTOCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {bool ttsEnabled,
+      String language,
+      List<dynamic> prefixsToIgnore,
+      List<dynamic> prefixsToUseTtsOnly,
+      double volume,
+      double pitch,
+      double rate,
+      Map<String, String> voice,
+      List<dynamic> ttsUsersToIgnore,
+      bool ttsMuteViewerName,
+      bool ttsOnlyVip,
+      bool ttsOnlyMod,
+      bool ttsOnlySubscriber});
+}
 
-  factory _TtsSettingsDTO.fromJson(Map<String, dynamic> json) =
-      _$TtsSettingsDTOImpl.fromJson;
+/// @nodoc
+class __$TtsSettingsDTOCopyWithImpl<$Res>
+    implements _$TtsSettingsDTOCopyWith<$Res> {
+  __$TtsSettingsDTOCopyWithImpl(this._self, this._then);
 
-  @override
-  bool get ttsEnabled;
-  @override
-  String get language;
-  @override
-  List<dynamic> get prefixsToIgnore;
-  @override
-  List<dynamic> get prefixsToUseTtsOnly;
-  @override
-  double get volume;
-  @override
-  double get pitch;
-  @override
-  double get rate;
-  @override
-  Map<String, String> get voice;
-  @override
-  List<dynamic> get ttsUsersToIgnore;
-  @override
-  bool get ttsMuteViewerName;
-  @override
-  bool get ttsOnlyVip;
-  @override
-  bool get ttsOnlyMod;
-  @override
-  bool get ttsOnlySubscriber;
+  final _TtsSettingsDTO _self;
+  final $Res Function(_TtsSettingsDTO) _then;
 
   /// Create a copy of TtsSettingsDTO
   /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$TtsSettingsDTOImplCopyWith<_$TtsSettingsDTOImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? ttsEnabled = null,
+    Object? language = null,
+    Object? prefixsToIgnore = null,
+    Object? prefixsToUseTtsOnly = null,
+    Object? volume = null,
+    Object? pitch = null,
+    Object? rate = null,
+    Object? voice = null,
+    Object? ttsUsersToIgnore = null,
+    Object? ttsMuteViewerName = null,
+    Object? ttsOnlyVip = null,
+    Object? ttsOnlyMod = null,
+    Object? ttsOnlySubscriber = null,
+  }) {
+    return _then(_TtsSettingsDTO(
+      ttsEnabled: null == ttsEnabled
+          ? _self.ttsEnabled
+          : ttsEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
+      language: null == language
+          ? _self.language
+          : language // ignore: cast_nullable_to_non_nullable
+              as String,
+      prefixsToIgnore: null == prefixsToIgnore
+          ? _self._prefixsToIgnore
+          : prefixsToIgnore // ignore: cast_nullable_to_non_nullable
+              as List<dynamic>,
+      prefixsToUseTtsOnly: null == prefixsToUseTtsOnly
+          ? _self._prefixsToUseTtsOnly
+          : prefixsToUseTtsOnly // ignore: cast_nullable_to_non_nullable
+              as List<dynamic>,
+      volume: null == volume
+          ? _self.volume
+          : volume // ignore: cast_nullable_to_non_nullable
+              as double,
+      pitch: null == pitch
+          ? _self.pitch
+          : pitch // ignore: cast_nullable_to_non_nullable
+              as double,
+      rate: null == rate
+          ? _self.rate
+          : rate // ignore: cast_nullable_to_non_nullable
+              as double,
+      voice: null == voice
+          ? _self._voice
+          : voice // ignore: cast_nullable_to_non_nullable
+              as Map<String, String>,
+      ttsUsersToIgnore: null == ttsUsersToIgnore
+          ? _self._ttsUsersToIgnore
+          : ttsUsersToIgnore // ignore: cast_nullable_to_non_nullable
+              as List<dynamic>,
+      ttsMuteViewerName: null == ttsMuteViewerName
+          ? _self.ttsMuteViewerName
+          : ttsMuteViewerName // ignore: cast_nullable_to_non_nullable
+              as bool,
+      ttsOnlyVip: null == ttsOnlyVip
+          ? _self.ttsOnlyVip
+          : ttsOnlyVip // ignore: cast_nullable_to_non_nullable
+              as bool,
+      ttsOnlyMod: null == ttsOnlyMod
+          ? _self.ttsOnlyMod
+          : ttsOnlyMod // ignore: cast_nullable_to_non_nullable
+              as bool,
+      ttsOnlySubscriber: null == ttsOnlySubscriber
+          ? _self.ttsOnlySubscriber
+          : ttsOnlySubscriber // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
 }
+
+// dart format on

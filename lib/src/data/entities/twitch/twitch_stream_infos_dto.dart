@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 part 'twitch_stream_infos_dto.freezed.dart';
 
 @freezed
-class TwitchStreamInfosDto with _$TwitchStreamInfosDto {
+abstract class TwitchStreamInfosDto with _$TwitchStreamInfosDto {
   const factory TwitchStreamInfosDto({
     required String title,
     required int viewerCount,

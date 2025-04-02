@@ -6,9 +6,8 @@ part of 'chat_settings_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ChatSettingsDTOImpl _$$ChatSettingsDTOImplFromJson(
-        Map<String, dynamic> json) =>
-    _$ChatSettingsDTOImpl(
+_ChatSettingsDTO _$ChatSettingsDTOFromJson(Map<String, dynamic> json) =>
+    _ChatSettingsDTO(
       permanentFirstGroup: json['permanentFirstGroup'] == null
           ? const ChatGroupDTO(id: "permanentFirstGroup", channels: [])
           : _permanentGroupFromJson(json['permanentFirstGroup']),
@@ -19,36 +18,34 @@ _$ChatSettingsDTOImpl _$$ChatSettingsDTOImplFromJson(
       hideDeletedMessages: json['hideDeletedMessages'] as bool? ?? true,
     );
 
-Map<String, dynamic> _$$ChatSettingsDTOImplToJson(
-        _$ChatSettingsDTOImpl instance) =>
+Map<String, dynamic> _$ChatSettingsDTOToJson(_ChatSettingsDTO instance) =>
     <String, dynamic>{
       'permanentFirstGroup': instance.permanentFirstGroup,
       'chatGroups': instance.chatGroups,
       'hideDeletedMessages': instance.hideDeletedMessages,
     };
 
-_$ChatGroupDTOImpl _$$ChatGroupDTOImplFromJson(Map<String, dynamic> json) =>
-    _$ChatGroupDTOImpl(
+_ChatGroupDTO _$ChatGroupDTOFromJson(Map<String, dynamic> json) =>
+    _ChatGroupDTO(
       id: json['id'] as String,
       channels: (json['channels'] as List<dynamic>)
           .map((e) => ChannelDTO.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
-Map<String, dynamic> _$$ChatGroupDTOImplToJson(_$ChatGroupDTOImpl instance) =>
+Map<String, dynamic> _$ChatGroupDTOToJson(_ChatGroupDTO instance) =>
     <String, dynamic>{
       'id': instance.id,
       'channels': instance.channels,
     };
 
-_$ChannelDTOImpl _$$ChannelDTOImplFromJson(Map<String, dynamic> json) =>
-    _$ChannelDTOImpl(
+_ChannelDTO _$ChannelDTOFromJson(Map<String, dynamic> json) => _ChannelDTO(
       platform: $enumDecode(_$PlatformEnumMap, json['platform']),
       channel: json['channel'] as String,
       enabled: json['enabled'] as bool,
     );
 
-Map<String, dynamic> _$$ChannelDTOImplToJson(_$ChannelDTOImpl instance) =>
+Map<String, dynamic> _$ChannelDTOToJson(_ChannelDTO instance) =>
     <String, dynamic>{
       'platform': _$PlatformEnumMap[instance.platform]!,
       'channel': instance.channel,

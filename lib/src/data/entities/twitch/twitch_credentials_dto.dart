@@ -7,7 +7,7 @@ part 'twitch_credentials_dto.freezed.dart';
 part 'twitch_credentials_dto.g.dart';
 
 @freezed
-class TwitchCredentialsDTO with _$TwitchCredentialsDTO {
+abstract class TwitchCredentialsDTO with _$TwitchCredentialsDTO {
   const factory TwitchCredentialsDTO({
     required String accessToken,
     required String idToken,

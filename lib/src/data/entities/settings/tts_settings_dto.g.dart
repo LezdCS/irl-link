@@ -6,8 +6,8 @@ part of 'tts_settings_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$TtsSettingsDTOImpl _$$TtsSettingsDTOImplFromJson(Map<String, dynamic> json) =>
-    _$TtsSettingsDTOImpl(
+_TtsSettingsDTO _$TtsSettingsDTOFromJson(Map<String, dynamic> json) =>
+    _TtsSettingsDTO(
       ttsEnabled: json['ttsEnabled'] as bool? ?? false,
       language: json['language'] as String? ?? "en-US",
       prefixsToIgnore: json['prefixsToIgnore'] as List<dynamic>? ?? const [],
@@ -27,8 +27,7 @@ _$TtsSettingsDTOImpl _$$TtsSettingsDTOImplFromJson(Map<String, dynamic> json) =>
       ttsOnlySubscriber: json['ttsOnlySubscriber'] as bool? ?? false,
     );
 
-Map<String, dynamic> _$$TtsSettingsDTOImplToJson(
-        _$TtsSettingsDTOImpl instance) =>
+Map<String, dynamic> _$TtsSettingsDTOToJson(_TtsSettingsDTO instance) =>
     <String, dynamic>{
       'ttsEnabled': instance.ttsEnabled,
       'language': instance.language,

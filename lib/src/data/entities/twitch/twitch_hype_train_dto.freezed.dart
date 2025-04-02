@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,35 +10,69 @@ part of 'twitch_hype_train_dto.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$TwitchHypeTrainDTO {
-  String get id => throw _privateConstructorUsedError;
-  int get total => throw _privateConstructorUsedError;
-  int get progress => throw _privateConstructorUsedError;
-  int get goal => throw _privateConstructorUsedError;
-  int get level => throw _privateConstructorUsedError;
-  List<ContributionDTO> get topContributions =>
-      throw _privateConstructorUsedError;
-  ContributionDTO? get lastContribution => throw _privateConstructorUsedError;
-  DateTime get endsAt => throw _privateConstructorUsedError;
+  String get id;
+  int get total;
+  int get progress;
+  int get goal;
+  int get level;
+  List<ContributionDTO> get topContributions;
+  ContributionDTO? get lastContribution;
+  DateTime get endsAt;
 
   /// Create a copy of TwitchHypeTrainDTO
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
   $TwitchHypeTrainDTOCopyWith<TwitchHypeTrainDTO> get copyWith =>
-      throw _privateConstructorUsedError;
+      _$TwitchHypeTrainDTOCopyWithImpl<TwitchHypeTrainDTO>(
+          this as TwitchHypeTrainDTO, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is TwitchHypeTrainDTO &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.total, total) || other.total == total) &&
+            (identical(other.progress, progress) ||
+                other.progress == progress) &&
+            (identical(other.goal, goal) || other.goal == goal) &&
+            (identical(other.level, level) || other.level == level) &&
+            const DeepCollectionEquality()
+                .equals(other.topContributions, topContributions) &&
+            (identical(other.lastContribution, lastContribution) ||
+                other.lastContribution == lastContribution) &&
+            (identical(other.endsAt, endsAt) || other.endsAt == endsAt));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      total,
+      progress,
+      goal,
+      level,
+      const DeepCollectionEquality().hash(topContributions),
+      lastContribution,
+      endsAt);
+
+  @override
+  String toString() {
+    return 'TwitchHypeTrainDTO(id: $id, total: $total, progress: $progress, goal: $goal, level: $level, topContributions: $topContributions, lastContribution: $lastContribution, endsAt: $endsAt)';
+  }
 }
 
 /// @nodoc
-abstract class $TwitchHypeTrainDTOCopyWith<$Res> {
+abstract mixin class $TwitchHypeTrainDTOCopyWith<$Res> {
   factory $TwitchHypeTrainDTOCopyWith(
-          TwitchHypeTrainDTO value, $Res Function(TwitchHypeTrainDTO) then) =
-      _$TwitchHypeTrainDTOCopyWithImpl<$Res, TwitchHypeTrainDTO>;
+          TwitchHypeTrainDTO value, $Res Function(TwitchHypeTrainDTO) _then) =
+      _$TwitchHypeTrainDTOCopyWithImpl;
   @useResult
   $Res call(
       {String id,
@@ -53,14 +88,12 @@ abstract class $TwitchHypeTrainDTOCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$TwitchHypeTrainDTOCopyWithImpl<$Res, $Val extends TwitchHypeTrainDTO>
+class _$TwitchHypeTrainDTOCopyWithImpl<$Res>
     implements $TwitchHypeTrainDTOCopyWith<$Res> {
-  _$TwitchHypeTrainDTOCopyWithImpl(this._value, this._then);
+  _$TwitchHypeTrainDTOCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final TwitchHypeTrainDTO _self;
+  final $Res Function(TwitchHypeTrainDTO) _then;
 
   /// Create a copy of TwitchHypeTrainDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -76,40 +109,40 @@ class _$TwitchHypeTrainDTOCopyWithImpl<$Res, $Val extends TwitchHypeTrainDTO>
     Object? lastContribution = freezed,
     Object? endsAt = null,
   }) {
-    return _then(_value.copyWith(
+    return _then(_self.copyWith(
       id: null == id
-          ? _value.id
+          ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
       total: null == total
-          ? _value.total
+          ? _self.total
           : total // ignore: cast_nullable_to_non_nullable
               as int,
       progress: null == progress
-          ? _value.progress
+          ? _self.progress
           : progress // ignore: cast_nullable_to_non_nullable
               as int,
       goal: null == goal
-          ? _value.goal
+          ? _self.goal
           : goal // ignore: cast_nullable_to_non_nullable
               as int,
       level: null == level
-          ? _value.level
+          ? _self.level
           : level // ignore: cast_nullable_to_non_nullable
               as int,
       topContributions: null == topContributions
-          ? _value.topContributions
+          ? _self.topContributions
           : topContributions // ignore: cast_nullable_to_non_nullable
               as List<ContributionDTO>,
       lastContribution: freezed == lastContribution
-          ? _value.lastContribution
+          ? _self.lastContribution
           : lastContribution // ignore: cast_nullable_to_non_nullable
               as ContributionDTO?,
       endsAt: null == endsAt
-          ? _value.endsAt
+          ? _self.endsAt
           : endsAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
-    ) as $Val);
+    ));
   }
 
   /// Create a copy of TwitchHypeTrainDTO
@@ -117,101 +150,20 @@ class _$TwitchHypeTrainDTOCopyWithImpl<$Res, $Val extends TwitchHypeTrainDTO>
   @override
   @pragma('vm:prefer-inline')
   $ContributionDTOCopyWith<$Res>? get lastContribution {
-    if (_value.lastContribution == null) {
+    if (_self.lastContribution == null) {
       return null;
     }
 
-    return $ContributionDTOCopyWith<$Res>(_value.lastContribution!, (value) {
-      return _then(_value.copyWith(lastContribution: value) as $Val);
+    return $ContributionDTOCopyWith<$Res>(_self.lastContribution!, (value) {
+      return _then(_self.copyWith(lastContribution: value));
     });
   }
 }
 
 /// @nodoc
-abstract class _$$TwitchHypeTrainDTOImplCopyWith<$Res>
-    implements $TwitchHypeTrainDTOCopyWith<$Res> {
-  factory _$$TwitchHypeTrainDTOImplCopyWith(_$TwitchHypeTrainDTOImpl value,
-          $Res Function(_$TwitchHypeTrainDTOImpl) then) =
-      __$$TwitchHypeTrainDTOImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {String id,
-      int total,
-      int progress,
-      int goal,
-      int level,
-      List<ContributionDTO> topContributions,
-      ContributionDTO? lastContribution,
-      DateTime endsAt});
 
-  @override
-  $ContributionDTOCopyWith<$Res>? get lastContribution;
-}
-
-/// @nodoc
-class __$$TwitchHypeTrainDTOImplCopyWithImpl<$Res>
-    extends _$TwitchHypeTrainDTOCopyWithImpl<$Res, _$TwitchHypeTrainDTOImpl>
-    implements _$$TwitchHypeTrainDTOImplCopyWith<$Res> {
-  __$$TwitchHypeTrainDTOImplCopyWithImpl(_$TwitchHypeTrainDTOImpl _value,
-      $Res Function(_$TwitchHypeTrainDTOImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of TwitchHypeTrainDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = null,
-    Object? total = null,
-    Object? progress = null,
-    Object? goal = null,
-    Object? level = null,
-    Object? topContributions = null,
-    Object? lastContribution = freezed,
-    Object? endsAt = null,
-  }) {
-    return _then(_$TwitchHypeTrainDTOImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      total: null == total
-          ? _value.total
-          : total // ignore: cast_nullable_to_non_nullable
-              as int,
-      progress: null == progress
-          ? _value.progress
-          : progress // ignore: cast_nullable_to_non_nullable
-              as int,
-      goal: null == goal
-          ? _value.goal
-          : goal // ignore: cast_nullable_to_non_nullable
-              as int,
-      level: null == level
-          ? _value.level
-          : level // ignore: cast_nullable_to_non_nullable
-              as int,
-      topContributions: null == topContributions
-          ? _value._topContributions
-          : topContributions // ignore: cast_nullable_to_non_nullable
-              as List<ContributionDTO>,
-      lastContribution: freezed == lastContribution
-          ? _value.lastContribution
-          : lastContribution // ignore: cast_nullable_to_non_nullable
-              as ContributionDTO?,
-      endsAt: null == endsAt
-          ? _value.endsAt
-          : endsAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$TwitchHypeTrainDTOImpl implements _TwitchHypeTrainDTO {
-  const _$TwitchHypeTrainDTOImpl(
+class _TwitchHypeTrainDTO implements TwitchHypeTrainDTO {
+  const _TwitchHypeTrainDTO(
       {required this.id,
       required this.total,
       required this.progress,
@@ -246,16 +198,19 @@ class _$TwitchHypeTrainDTOImpl implements _TwitchHypeTrainDTO {
   @override
   final DateTime endsAt;
 
+  /// Create a copy of TwitchHypeTrainDTO
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'TwitchHypeTrainDTO(id: $id, total: $total, progress: $progress, goal: $goal, level: $level, topContributions: $topContributions, lastContribution: $lastContribution, endsAt: $endsAt)';
-  }
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$TwitchHypeTrainDTOCopyWith<_TwitchHypeTrainDTO> get copyWith =>
+      __$TwitchHypeTrainDTOCopyWithImpl<_TwitchHypeTrainDTO>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$TwitchHypeTrainDTOImpl &&
+            other is _TwitchHypeTrainDTO &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.total, total) || other.total == total) &&
             (identical(other.progress, progress) ||
@@ -281,144 +236,159 @@ class _$TwitchHypeTrainDTOImpl implements _TwitchHypeTrainDTO {
       lastContribution,
       endsAt);
 
+  @override
+  String toString() {
+    return 'TwitchHypeTrainDTO(id: $id, total: $total, progress: $progress, goal: $goal, level: $level, topContributions: $topContributions, lastContribution: $lastContribution, endsAt: $endsAt)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$TwitchHypeTrainDTOCopyWith<$Res>
+    implements $TwitchHypeTrainDTOCopyWith<$Res> {
+  factory _$TwitchHypeTrainDTOCopyWith(
+          _TwitchHypeTrainDTO value, $Res Function(_TwitchHypeTrainDTO) _then) =
+      __$TwitchHypeTrainDTOCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {String id,
+      int total,
+      int progress,
+      int goal,
+      int level,
+      List<ContributionDTO> topContributions,
+      ContributionDTO? lastContribution,
+      DateTime endsAt});
+
+  @override
+  $ContributionDTOCopyWith<$Res>? get lastContribution;
+}
+
+/// @nodoc
+class __$TwitchHypeTrainDTOCopyWithImpl<$Res>
+    implements _$TwitchHypeTrainDTOCopyWith<$Res> {
+  __$TwitchHypeTrainDTOCopyWithImpl(this._self, this._then);
+
+  final _TwitchHypeTrainDTO _self;
+  final $Res Function(_TwitchHypeTrainDTO) _then;
+
   /// Create a copy of TwitchHypeTrainDTO
   /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$TwitchHypeTrainDTOImplCopyWith<_$TwitchHypeTrainDTOImpl> get copyWith =>
-      __$$TwitchHypeTrainDTOImplCopyWithImpl<_$TwitchHypeTrainDTOImpl>(
-          this, _$identity);
-}
-
-abstract class _TwitchHypeTrainDTO implements TwitchHypeTrainDTO {
-  const factory _TwitchHypeTrainDTO(
-      {required final String id,
-      required final int total,
-      required final int progress,
-      required final int goal,
-      required final int level,
-      required final List<ContributionDTO> topContributions,
-      required final ContributionDTO? lastContribution,
-      required final DateTime endsAt}) = _$TwitchHypeTrainDTOImpl;
-
-  @override
-  String get id;
-  @override
-  int get total;
-  @override
-  int get progress;
-  @override
-  int get goal;
-  @override
-  int get level;
-  @override
-  List<ContributionDTO> get topContributions;
-  @override
-  ContributionDTO? get lastContribution;
-  @override
-  DateTime get endsAt;
+  $Res call({
+    Object? id = null,
+    Object? total = null,
+    Object? progress = null,
+    Object? goal = null,
+    Object? level = null,
+    Object? topContributions = null,
+    Object? lastContribution = freezed,
+    Object? endsAt = null,
+  }) {
+    return _then(_TwitchHypeTrainDTO(
+      id: null == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      total: null == total
+          ? _self.total
+          : total // ignore: cast_nullable_to_non_nullable
+              as int,
+      progress: null == progress
+          ? _self.progress
+          : progress // ignore: cast_nullable_to_non_nullable
+              as int,
+      goal: null == goal
+          ? _self.goal
+          : goal // ignore: cast_nullable_to_non_nullable
+              as int,
+      level: null == level
+          ? _self.level
+          : level // ignore: cast_nullable_to_non_nullable
+              as int,
+      topContributions: null == topContributions
+          ? _self._topContributions
+          : topContributions // ignore: cast_nullable_to_non_nullable
+              as List<ContributionDTO>,
+      lastContribution: freezed == lastContribution
+          ? _self.lastContribution
+          : lastContribution // ignore: cast_nullable_to_non_nullable
+              as ContributionDTO?,
+      endsAt: null == endsAt
+          ? _self.endsAt
+          : endsAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+    ));
+  }
 
   /// Create a copy of TwitchHypeTrainDTO
   /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$TwitchHypeTrainDTOImplCopyWith<_$TwitchHypeTrainDTOImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
+  @pragma('vm:prefer-inline')
+  $ContributionDTOCopyWith<$Res>? get lastContribution {
+    if (_self.lastContribution == null) {
+      return null;
+    }
 
-ContributionDTO _$ContributionDTOFromJson(Map<String, dynamic> json) {
-  return _ContributionDTO.fromJson(json);
+    return $ContributionDTOCopyWith<$Res>(_self.lastContribution!, (value) {
+      return _then(_self.copyWith(lastContribution: value));
+    });
+  }
 }
 
 /// @nodoc
 mixin _$ContributionDTO {
   @JsonKey(name: 'user_id')
-  String get userId => throw _privateConstructorUsedError;
+  String get userId;
   @JsonKey(name: 'user_login')
-  String get userLogin => throw _privateConstructorUsedError;
+  String get userLogin;
   @JsonKey(name: 'user_name')
-  String get userName => throw _privateConstructorUsedError;
-  String get type => throw _privateConstructorUsedError;
-  int get total => throw _privateConstructorUsedError;
-
-  /// Serializes this ContributionDTO to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  String get userName;
+  String get type;
+  int get total;
 
   /// Create a copy of ContributionDTO
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $ContributionDTOCopyWith<ContributionDTO> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $ContributionDTOCopyWith<$Res> {
-  factory $ContributionDTOCopyWith(
-          ContributionDTO value, $Res Function(ContributionDTO) then) =
-      _$ContributionDTOCopyWithImpl<$Res, ContributionDTO>;
-  @useResult
-  $Res call(
-      {@JsonKey(name: 'user_id') String userId,
-      @JsonKey(name: 'user_login') String userLogin,
-      @JsonKey(name: 'user_name') String userName,
-      String type,
-      int total});
-}
-
-/// @nodoc
-class _$ContributionDTOCopyWithImpl<$Res, $Val extends ContributionDTO>
-    implements $ContributionDTOCopyWith<$Res> {
-  _$ContributionDTOCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of ContributionDTO
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
+  $ContributionDTOCopyWith<ContributionDTO> get copyWith =>
+      _$ContributionDTOCopyWithImpl<ContributionDTO>(
+          this as ContributionDTO, _$identity);
+
+  /// Serializes this ContributionDTO to a JSON map.
+  Map<String, dynamic> toJson();
+
   @override
-  $Res call({
-    Object? userId = null,
-    Object? userLogin = null,
-    Object? userName = null,
-    Object? type = null,
-    Object? total = null,
-  }) {
-    return _then(_value.copyWith(
-      userId: null == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String,
-      userLogin: null == userLogin
-          ? _value.userLogin
-          : userLogin // ignore: cast_nullable_to_non_nullable
-              as String,
-      userName: null == userName
-          ? _value.userName
-          : userName // ignore: cast_nullable_to_non_nullable
-              as String,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as String,
-      total: null == total
-          ? _value.total
-          : total // ignore: cast_nullable_to_non_nullable
-              as int,
-    ) as $Val);
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is ContributionDTO &&
+            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.userLogin, userLogin) ||
+                other.userLogin == userLogin) &&
+            (identical(other.userName, userName) ||
+                other.userName == userName) &&
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.total, total) || other.total == total));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, userId, userLogin, userName, type, total);
+
+  @override
+  String toString() {
+    return 'ContributionDTO(userId: $userId, userLogin: $userLogin, userName: $userName, type: $type, total: $total)';
   }
 }
 
 /// @nodoc
-abstract class _$$ContributionDTOImplCopyWith<$Res>
-    implements $ContributionDTOCopyWith<$Res> {
-  factory _$$ContributionDTOImplCopyWith(_$ContributionDTOImpl value,
-          $Res Function(_$ContributionDTOImpl) then) =
-      __$$ContributionDTOImplCopyWithImpl<$Res>;
-  @override
+abstract mixin class $ContributionDTOCopyWith<$Res> {
+  factory $ContributionDTOCopyWith(
+          ContributionDTO value, $Res Function(ContributionDTO) _then) =
+      _$ContributionDTOCopyWithImpl;
   @useResult
   $Res call(
       {@JsonKey(name: 'user_id') String userId,
@@ -429,12 +399,12 @@ abstract class _$$ContributionDTOImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$ContributionDTOImplCopyWithImpl<$Res>
-    extends _$ContributionDTOCopyWithImpl<$Res, _$ContributionDTOImpl>
-    implements _$$ContributionDTOImplCopyWith<$Res> {
-  __$$ContributionDTOImplCopyWithImpl(
-      _$ContributionDTOImpl _value, $Res Function(_$ContributionDTOImpl) _then)
-      : super(_value, _then);
+class _$ContributionDTOCopyWithImpl<$Res>
+    implements $ContributionDTOCopyWith<$Res> {
+  _$ContributionDTOCopyWithImpl(this._self, this._then);
+
+  final ContributionDTO _self;
+  final $Res Function(ContributionDTO) _then;
 
   /// Create a copy of ContributionDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -447,25 +417,25 @@ class __$$ContributionDTOImplCopyWithImpl<$Res>
     Object? type = null,
     Object? total = null,
   }) {
-    return _then(_$ContributionDTOImpl(
+    return _then(_self.copyWith(
       userId: null == userId
-          ? _value.userId
+          ? _self.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String,
       userLogin: null == userLogin
-          ? _value.userLogin
+          ? _self.userLogin
           : userLogin // ignore: cast_nullable_to_non_nullable
               as String,
       userName: null == userName
-          ? _value.userName
+          ? _self.userName
           : userName // ignore: cast_nullable_to_non_nullable
               as String,
       type: null == type
-          ? _value.type
+          ? _self.type
           : type // ignore: cast_nullable_to_non_nullable
               as String,
       total: null == total
-          ? _value.total
+          ? _self.total
           : total // ignore: cast_nullable_to_non_nullable
               as int,
     ));
@@ -474,16 +444,15 @@ class __$$ContributionDTOImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$ContributionDTOImpl implements _ContributionDTO {
-  const _$ContributionDTOImpl(
+class _ContributionDTO implements ContributionDTO {
+  const _ContributionDTO(
       {@JsonKey(name: 'user_id') required this.userId,
       @JsonKey(name: 'user_login') required this.userLogin,
       @JsonKey(name: 'user_name') required this.userName,
       required this.type,
       required this.total});
-
-  factory _$ContributionDTOImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ContributionDTOImplFromJson(json);
+  factory _ContributionDTO.fromJson(Map<String, dynamic> json) =>
+      _$ContributionDTOFromJson(json);
 
   @override
   @JsonKey(name: 'user_id')
@@ -499,16 +468,26 @@ class _$ContributionDTOImpl implements _ContributionDTO {
   @override
   final int total;
 
+  /// Create a copy of ContributionDTO
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'ContributionDTO(userId: $userId, userLogin: $userLogin, userName: $userName, type: $type, total: $total)';
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$ContributionDTOCopyWith<_ContributionDTO> get copyWith =>
+      __$ContributionDTOCopyWithImpl<_ContributionDTO>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$ContributionDTOToJson(
+      this,
+    );
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ContributionDTOImpl &&
+            other is _ContributionDTO &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.userLogin, userLogin) ||
                 other.userLogin == userLogin) &&
@@ -523,52 +502,70 @@ class _$ContributionDTOImpl implements _ContributionDTO {
   int get hashCode =>
       Object.hash(runtimeType, userId, userLogin, userName, type, total);
 
-  /// Create a copy of ContributionDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$ContributionDTOImplCopyWith<_$ContributionDTOImpl> get copyWith =>
-      __$$ContributionDTOImplCopyWithImpl<_$ContributionDTOImpl>(
-          this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$ContributionDTOImplToJson(
-      this,
-    );
+  String toString() {
+    return 'ContributionDTO(userId: $userId, userLogin: $userLogin, userName: $userName, type: $type, total: $total)';
   }
 }
 
-abstract class _ContributionDTO implements ContributionDTO {
-  const factory _ContributionDTO(
-      {@JsonKey(name: 'user_id') required final String userId,
-      @JsonKey(name: 'user_login') required final String userLogin,
-      @JsonKey(name: 'user_name') required final String userName,
-      required final String type,
-      required final int total}) = _$ContributionDTOImpl;
+/// @nodoc
+abstract mixin class _$ContributionDTOCopyWith<$Res>
+    implements $ContributionDTOCopyWith<$Res> {
+  factory _$ContributionDTOCopyWith(
+          _ContributionDTO value, $Res Function(_ContributionDTO) _then) =
+      __$ContributionDTOCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'user_id') String userId,
+      @JsonKey(name: 'user_login') String userLogin,
+      @JsonKey(name: 'user_name') String userName,
+      String type,
+      int total});
+}
 
-  factory _ContributionDTO.fromJson(Map<String, dynamic> json) =
-      _$ContributionDTOImpl.fromJson;
+/// @nodoc
+class __$ContributionDTOCopyWithImpl<$Res>
+    implements _$ContributionDTOCopyWith<$Res> {
+  __$ContributionDTOCopyWithImpl(this._self, this._then);
 
-  @override
-  @JsonKey(name: 'user_id')
-  String get userId;
-  @override
-  @JsonKey(name: 'user_login')
-  String get userLogin;
-  @override
-  @JsonKey(name: 'user_name')
-  String get userName;
-  @override
-  String get type;
-  @override
-  int get total;
+  final _ContributionDTO _self;
+  final $Res Function(_ContributionDTO) _then;
 
   /// Create a copy of ContributionDTO
   /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ContributionDTOImplCopyWith<_$ContributionDTOImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? userId = null,
+    Object? userLogin = null,
+    Object? userName = null,
+    Object? type = null,
+    Object? total = null,
+  }) {
+    return _then(_ContributionDTO(
+      userId: null == userId
+          ? _self.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String,
+      userLogin: null == userLogin
+          ? _self.userLogin
+          : userLogin // ignore: cast_nullable_to_non_nullable
+              as String,
+      userName: null == userName
+          ? _self.userName
+          : userName // ignore: cast_nullable_to_non_nullable
+              as String,
+      type: null == type
+          ? _self.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
+      total: null == total
+          ? _self.total
+          : total // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
 }
+
+// dart format on

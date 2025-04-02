@@ -7,7 +7,7 @@ part 'twitch_prediction_dto.freezed.dart';
 part 'twitch_prediction_dto.g.dart';
 
 @freezed
-class TwitchPredictionDTO with _$TwitchPredictionDTO {
+abstract class TwitchPredictionDTO with _$TwitchPredictionDTO {
   const factory TwitchPredictionDTO({
     required String id,
     required String title,
@@ -60,7 +60,7 @@ class TwitchPredictionDTO with _$TwitchPredictionDTO {
 }
 
 @freezed
-class OutcomeDTO with _$OutcomeDTO {
+abstract class OutcomeDTO with _$OutcomeDTO {
   const factory OutcomeDTO({
     required String id,
     required String title,

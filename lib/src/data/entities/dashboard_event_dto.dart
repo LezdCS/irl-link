@@ -7,7 +7,7 @@ part 'dashboard_event_dto.freezed.dart';
 part 'dashboard_event_dto.g.dart';
 
 @freezed
-class DashboardEventDTO with _$DashboardEventDTO {
+abstract class DashboardEventDTO with _$DashboardEventDTO {
   const factory DashboardEventDTO({
     @Default('None') String title,
     @ColorConverter() required Color color,

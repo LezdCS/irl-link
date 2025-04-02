@@ -4,7 +4,7 @@ part 'twitch_decoded_idtoken_dto.freezed.dart';
 part 'twitch_decoded_idtoken_dto.g.dart';
 
 @freezed
-class TwitchDecodedIdTokenDTO with _$TwitchDecodedIdTokenDTO {
+abstract class TwitchDecodedIdTokenDTO with _$TwitchDecodedIdTokenDTO {
   const factory TwitchDecodedIdTokenDTO({
     required String preferredUsername,
     required String profilePicture,

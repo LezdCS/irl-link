@@ -4,7 +4,7 @@ part 'se_me_dto.freezed.dart';
 part 'se_me_dto.g.dart';
 
 @freezed
-class SeMeDTO with _$SeMeDTO {
+abstract class SeMeDTO with _$SeMeDTO {
   const factory SeMeDTO({
     @JsonKey(name: '_id') required String id,
     required String avatar,

@@ -4,7 +4,7 @@ part 'general_settings_dto.freezed.dart';
 part 'general_settings_dto.g.dart';
 
 @freezed
-class GeneralSettingsDTO with _$GeneralSettingsDTO {
+abstract class GeneralSettingsDTO with _$GeneralSettingsDTO {
   const factory GeneralSettingsDTO({
     @Default(true) bool isDarkMode,
     @Default(true) bool keepSpeakerOn,

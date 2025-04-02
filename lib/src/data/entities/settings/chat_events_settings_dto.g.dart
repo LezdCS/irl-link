@@ -6,9 +6,9 @@ part of 'chat_events_settings_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ChatEventsSettingsDTOImpl _$$ChatEventsSettingsDTOImplFromJson(
+_ChatEventsSettingsDTO _$ChatEventsSettingsDTOFromJson(
         Map<String, dynamic> json) =>
-    _$ChatEventsSettingsDTOImpl(
+    _ChatEventsSettingsDTO(
       firstsMessages: json['firstsMessages'] as bool? ?? true,
       subscriptions: json['subscriptions'] as bool? ?? true,
       bitsDonations: json['bitsDonations'] as bool? ?? true,
@@ -17,8 +17,8 @@ _$ChatEventsSettingsDTOImpl _$$ChatEventsSettingsDTOImplFromJson(
       redemptions: json['redemptions'] as bool? ?? true,
     );
 
-Map<String, dynamic> _$$ChatEventsSettingsDTOImplToJson(
-        _$ChatEventsSettingsDTOImpl instance) =>
+Map<String, dynamic> _$ChatEventsSettingsDTOToJson(
+        _ChatEventsSettingsDTO instance) =>
     <String, dynamic>{
       'firstsMessages': instance.firstsMessages,
       'subscriptions': instance.subscriptions,

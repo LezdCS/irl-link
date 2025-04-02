@@ -6,9 +6,8 @@ part of 'dashboard_event_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$DashboardEventDTOImpl _$$DashboardEventDTOImplFromJson(
-        Map<String, dynamic> json) =>
-    _$DashboardEventDTOImpl(
+_DashboardEventDTO _$DashboardEventDTOFromJson(Map<String, dynamic> json) =>
+    _DashboardEventDTO(
       title: json['title'] as String? ?? 'None',
       color: const ColorConverter().fromJson((json['color'] as num).toInt()),
       dashboardActionsType: $enumDecode(
@@ -17,8 +16,7 @@ _$DashboardEventDTOImpl _$$DashboardEventDTOImplFromJson(
       customValue: json['customValue'],
     );
 
-Map<String, dynamic> _$$DashboardEventDTOImplToJson(
-        _$DashboardEventDTOImpl instance) =>
+Map<String, dynamic> _$DashboardEventDTOToJson(_DashboardEventDTO instance) =>
     <String, dynamic>{
       'title': instance.title,
       'color': const ColorConverter().toJson(instance.color),
