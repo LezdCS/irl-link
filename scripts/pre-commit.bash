@@ -1,4 +1,3 @@
-
 #!/usr/bin/env bash
 
 printf "\e[33;1m%s\e[0m\n" 'Pre-Commit'
@@ -34,9 +33,24 @@ printf '%s\n' "${avar}"
 printf "\e[33;1m%s\e[0m\n" '=== Running Flutter analyzer ==='
 flutter analyze
 if [ $? -ne 0 ]; then
-  printf "\e[31;1m%s\e[0m\n" '=== Flutter analyzer error ==='
-  pop_stash_files
-  exit 1
+  printf "\e[33;1m%s\e[0m\n" '=== Attempting to fix analyzer issues ==='
+  dart fix --dry-run
+  if [ $? -eq 0 ]; then
+    printf "\e[33;1m%s\e[0m\n" '=== Applying automatic fixes ==='
+    dart fix --apply
+    git add .
+    printf "\e[33;1m%s\e[0m\n" '=== Re-running analyzer after fixes ==='
+    flutter analyze
+    if [ $? -ne 0 ]; then
+      printf "\e[31;1m%s\e[0m\n" '=== Flutter analyzer error (unfixable issues) ==='
+      pop_stash_files
+      exit 1
+    fi
+  else
+    printf "\e[31;1m%s\e[0m\n" '=== Flutter analyzer error (unfixable issues) ==='
+    pop_stash_files
+    exit 1
+  fi
 fi
 printf "\e[33;1m%s\e[0m\n" 'Finished running Flutter analyzer'
 printf '%s\n' "${avar}"
