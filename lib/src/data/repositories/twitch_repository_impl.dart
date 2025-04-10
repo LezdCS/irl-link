@@ -8,12 +8,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:get/get_core/get_core.dart';
 import 'package:get/get_instance/get_instance.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:irllink/src/core/services/app_info_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/mapper.dart';
+import 'package:irllink/src/data/datasources/local/twitch_local_data_source.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_credentials_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_poll_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_stream_infos_dto.dart';
@@ -26,12 +26,21 @@ import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
 import 'package:irllink/src/domain/repositories/twitch_repository.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:quiver/iterables.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 
 class TwitchRepositoryImpl implements TwitchRepository {
   final Mappr _mappr;
   final Dio dioClient;
-  TwitchRepositoryImpl({required this.dioClient}) : _mappr = Mappr();
+  final TwitchLocalDataSource _localDataSource;
+  final Talker talker;
+
+  TwitchRepositoryImpl({
+    required this.dioClient,
+    required TwitchLocalDataSource localDataSource,
+    required this.talker,
+  })  : _mappr = Mappr(),
+        _localDataSource = localDataSource;
 
   @override
   Future<Either<Failure, TwitchCredentials>> getTwitchOauth(
@@ -107,7 +116,9 @@ class TwitchRepositoryImpl implements TwitchRepository {
             scopes: scopes,
           );
 
-          setTwitchOnLocal(twitchData);
+          TwitchCredentialsDTO twitchDataDTO = _mappr
+              .convert<TwitchCredentials, TwitchCredentialsDTO>(twitchData);
+          _localDataSource.storeCredentials(twitchDataDTO);
 
           return Right(twitchData);
         },
@@ -151,7 +162,10 @@ class TwitchRepositoryImpl implements TwitchRepository {
         twitchUser: twitchData.twitchUser,
         scopes: twitchData.scopes,
       );
-      setTwitchOnLocal(newTwitchData);
+
+      TwitchCredentialsDTO twitchDataDTO = _mappr
+          .convert<TwitchCredentials, TwitchCredentialsDTO>(newTwitchData);
+      await _localDataSource.storeCredentials(twitchDataDTO);
 
       await validateToken(newTwitchData.accessToken);
 
@@ -175,9 +189,6 @@ class TwitchRepositoryImpl implements TwitchRepository {
 
   @override
   Future<Either<Failure, void>> logout(String accessToken) async {
-    final box = GetStorage();
-    box.remove('twitchData');
-
     try {
       await dioClient.post(
         'https://id.twitch.tv/oauth2/revoke',
@@ -186,6 +197,7 @@ class TwitchRepositoryImpl implements TwitchRepository {
           'token': accessToken,
         },
       );
+      await _localDataSource.removeCredentials();
       return const Right(null);
     } on DioException catch (e) {
       return Left(Failure(e.toString()));
@@ -194,14 +206,9 @@ class TwitchRepositoryImpl implements TwitchRepository {
 
   @override
   Future<Either<Failure, TwitchCredentials>> getTwitchFromLocal() async {
-    final box = GetStorage();
-    var twitchDataString = box.read('twitchData');
-    if (twitchDataString != null) {
-      Map<String, dynamic> twitchDataJson = jsonDecode(twitchDataString);
+    final twitchDataDTO = await _localDataSource.getCredentials();
 
-      TwitchCredentialsDTO twitchDataDTO =
-          TwitchCredentialsDTO.fromJson(twitchDataJson);
-
+    if (twitchDataDTO != null) {
       TwitchAuthParams params = const TwitchAuthParams();
 
       List paramsScopesList = params.scopes.split(' ');
@@ -227,14 +234,6 @@ class TwitchRepositoryImpl implements TwitchRepository {
     } else {
       return Left(Failure("No Twitch Data in local storage"));
     }
-  }
-
-  Future<void> setTwitchOnLocal(TwitchCredentials twitchData) async {
-    final box = GetStorage();
-    TwitchCredentialsDTO twitchDataDTO =
-        _mappr.convert<TwitchCredentials, TwitchCredentialsDTO>(twitchData);
-    String jsonTwitchData = jsonEncode(twitchDataDTO);
-    box.write('twitchData', jsonTwitchData);
   }
 
   @override

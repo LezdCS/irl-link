@@ -14,6 +14,7 @@ import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/data/datasources/local/settings_local_data_source.dart';
+import 'package:irllink/src/data/datasources/local/twitch_local_data_source.dart';
 import 'package:irllink/src/data/repositories/settings_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/usecases/settings/get_settings_usecase.dart';
@@ -51,6 +52,11 @@ Future<void> initializeDependencies() async {
   );
   final twitchRepository = TwitchRepositoryImpl(
     dioClient: dioTwitchClient,
+    localDataSource: TwitchLocalDataSourceImpl(
+      talker: talkerService.talker,
+      storage: GetStorage(),
+    ),
+    talker: talkerService.talker,
   );
 
   // Use cases

@@ -9,6 +9,7 @@ import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/data/datasources/local/streamelements_local_data_source.dart';
+import 'package:irllink/src/data/datasources/local/twitch_local_data_source.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_last_activities_usecase.dart';
@@ -33,22 +34,28 @@ import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dar
 import 'package:irllink/src/presentation/controllers/realtime_irl_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 class HomeBindings extends Bindings {
   @override
   Future<void> dependencies() async {
     Dio dioTwitchClient = initDio(kTwitchApiUrlBase);
     Dio streamElementsDioClient = initDio(kStreamelementsUrlBase);
-
+    Talker talker = Get.find<TalkerService>().talker;
     // Repositories
     final twitchRepository = TwitchRepositoryImpl(
       dioClient: dioTwitchClient,
+      talker: talker,
+      localDataSource: TwitchLocalDataSourceImpl(
+        talker: talker,
+        storage: GetStorage(),
+      ),
     );
     final streamelementsRepository = StreamelementsRepositoryImpl(
-      talker: Get.find<TalkerService>().talker,
+      talker: talker,
       dioClient: streamElementsDioClient,
       localDataSource: StreamelementsLocalDataSourceImpl(
-        talker: Get.find<TalkerService>().talker,
+        talker: talker,
         storage: GetStorage(),
       ),
     );
