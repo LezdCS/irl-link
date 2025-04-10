@@ -2,6 +2,7 @@ import 'package:app_links/app_links.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:irllink/src/core/services/app_info_service.dart';
 import 'package:irllink/src/core/services/deeplinks_service.dart';
 import 'package:irllink/src/core/services/notification_service.dart';
@@ -12,6 +13,7 @@ import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/init_dio.dart';
+import 'package:irllink/src/data/datasources/local/settings_local_data_source.dart';
 import 'package:irllink/src/data/repositories/settings_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/usecases/settings/get_settings_usecase.dart';
@@ -19,7 +21,7 @@ import 'package:irllink/src/domain/usecases/settings/set_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart';
 
 Future<void> initializeDependencies() async {
-  await Get.putAsync(
+  TalkerService talkerService = await Get.putAsync(
     () => TalkerService().init(),
     permanent: true,
   );
@@ -27,7 +29,7 @@ Future<void> initializeDependencies() async {
   await Get.putAsync(
     () => DeeplinksService(
       appLinks: AppLinks(),
-      talker: Get.find<TalkerService>().talker,
+      talker: talkerService.talker,
     ).init(),
     permanent: true,
   );
@@ -41,7 +43,11 @@ Future<void> initializeDependencies() async {
 
   // Repositories
   final settingsRepository = SettingsRepositoryImpl(
-    talker: Get.find<TalkerService>().talker,
+    talker: talkerService.talker,
+    localDataSource: SettingsLocalDataSourceImpl(
+      talker: talkerService.talker,
+      storage: GetStorage(),
+    ),
   );
   final twitchRepository = TwitchRepositoryImpl(
     dioClient: dioTwitchClient,
