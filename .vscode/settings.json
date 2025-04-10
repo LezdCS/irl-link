@@ -1,4 +1,8 @@
 {
     "lldb.library": "/Applications/Xcode.app/Contents/SharedFrameworks/LLDB.framework/Versions/A/LLDB",
-    "lldb.launch.expressions": "native"
+    "lldb.launch.expressions": "native",
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true,
+        "source.organizeImports": true
+    },
 }
