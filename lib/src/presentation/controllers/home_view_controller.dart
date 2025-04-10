@@ -21,6 +21,7 @@ import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/core/utils/list_move.dart';
 import 'package:irllink/src/data/datasources/local/twitch_local_data_source.dart';
+import 'package:irllink/src/data/datasources/remote/twitch_remote_data_source.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
@@ -133,9 +134,12 @@ class HomeViewController extends GetxController
   Future<void> _initializeTwitchServices() async {
     Dio dioTwitchClient = initDio(kTwitchApiUrlBase);
     final twitchRepositoryImpl = TwitchRepositoryImpl(
-      dioClient: dioTwitchClient,
+      remoteDataSource: TwitchRemoteDataSourceImpl(
+        dioClient: dioTwitchClient,
+        talker: talkerService.talker,
+      ),
       localDataSource: Get.find<TwitchLocalDataSource>(),
-      talker: Get.find<TalkerService>().talker,
+      talker: talkerService.talker,
     );
 
     await _initializeEventSubService(twitchRepositoryImpl, dioTwitchClient);

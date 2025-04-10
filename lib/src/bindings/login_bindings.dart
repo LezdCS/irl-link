@@ -7,6 +7,7 @@ import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/data/datasources/local/twitch_local_data_source.dart';
+import 'package:irllink/src/data/datasources/remote/twitch_remote_data_source.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/login_usecase.dart';
@@ -21,7 +22,10 @@ class LoginBindings extends Bindings {
     Talker talker = Get.find<TalkerService>().talker;
     // Repositories
     TwitchRepositoryImpl twitchRepository = TwitchRepositoryImpl(
-      dioClient: dioTwitchClient,
+      remoteDataSource: TwitchRemoteDataSourceImpl(
+        dioClient: dioTwitchClient,
+        talker: talker,
+      ),
       localDataSource: TwitchLocalDataSourceImpl(
         talker: talker,
         storage: GetStorage(),

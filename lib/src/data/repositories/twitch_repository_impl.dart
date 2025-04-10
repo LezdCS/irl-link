@@ -1,19 +1,9 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
-import 'package:firebase_remote_config/firebase_remote_config.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
-import 'package:get/get_core/get_core.dart';
-import 'package:get/get_instance/get_instance.dart';
 import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
-import 'package:irllink/src/core/services/app_info_service.dart';
-import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/mapper.dart';
 import 'package:irllink/src/data/datasources/local/twitch_local_data_source.dart';
+import 'package:irllink/src/data/datasources/remote/twitch_remote_data_source.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_credentials_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_poll_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_stream_infos_dto.dart';
@@ -24,22 +14,22 @@ import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
 import 'package:irllink/src/domain/repositories/twitch_repository.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:quiver/iterables.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 
 class TwitchRepositoryImpl implements TwitchRepository {
   final Mappr _mappr;
-  final Dio dioClient;
+  final TwitchRemoteDataSource _remoteDataSource;
   final TwitchLocalDataSource _localDataSource;
   final Talker talker;
 
   TwitchRepositoryImpl({
-    required this.dioClient,
+    required TwitchRemoteDataSource remoteDataSource,
     required TwitchLocalDataSource localDataSource,
     required this.talker,
   })  : _mappr = Mappr(),
+        _remoteDataSource = remoteDataSource,
         _localDataSource = localDataSource;
 
   @override
@@ -47,44 +37,11 @@ class TwitchRepositoryImpl implements TwitchRepository {
     TwitchAuthParams params,
   ) async {
     try {
-      final remoteConfig = FirebaseRemoteConfig.instance;
-      await remoteConfig.fetchAndActivate();
-      String redirectUri = remoteConfig.getString('irllink_auth_url');
-      if (kDebugMode) {
-        redirectUri = remoteConfig.getString('irllink_auth_url_dev');
-      }
-
-      final url = Uri.https(kTwitchAuthUrlBase, kTwitchAuthUrlPath, {
-        'client_id': params.clientId,
-        'redirect_uri': redirectUri,
-        'response_type': params.responseType,
-        'scope': params.scopes,
-        'force_verify': params.forceVerify,
-        'claims': params.claims,
-      });
-
-      final result = await FlutterWebAuth2.authenticate(
-        url: url.toString(),
-        callbackUrlScheme: kRedirectScheme,
-        options: const FlutterWebAuth2Options(
-          preferEphemeral: true,
-          useWebview: true,
-        ),
-      );
-
-      final accessToken = Uri.parse(result).queryParameters['access_token'];
-      final idToken = Uri.parse(result).queryParameters['id_token'];
-      final refreshToken = Uri.parse(result).queryParameters['refresh_token'];
-      final expiresIn = Uri.parse(result).queryParameters['expires_in'];
-
-      dynamic tokenInfos = await validateToken(accessToken!);
-      final String scopes = tokenInfos['scopes'].join(' ');
-
-      Map<String, dynamic> decodedToken = JwtDecoder.decode(idToken!);
+      final oauthData = await _remoteDataSource.getTwitchOauth(params);
 
       TwitchDecodedIdToken decodedIdToken = TwitchDecodedIdToken(
-        preferredUsername: decodedToken['preferred_username'],
-        profilePicture: decodedToken['picture'] ?? "",
+        preferredUsername: oauthData['decoded_token']['preferred_username'],
+        profilePicture: oauthData['decoded_token']['picture'] ?? "",
       );
 
       TwitchUser twitchUser = const TwitchUser(
@@ -97,7 +54,8 @@ class TwitchRepositoryImpl implements TwitchRepository {
         displayName: '',
       );
 
-      final twitchUserResult = await getTwitchUser(null, accessToken);
+      final twitchUserResult =
+          await getTwitchUser(null, oauthData['access_token']);
 
       return twitchUserResult.fold(
         (l) {
@@ -107,13 +65,13 @@ class TwitchRepositoryImpl implements TwitchRepository {
           twitchUser = r;
 
           TwitchCredentials twitchData = TwitchCredentials(
-            accessToken: accessToken,
-            idToken: idToken,
-            refreshToken: refreshToken!,
-            expiresIn: expiresIn!,
+            accessToken: oauthData['access_token'],
+            idToken: oauthData['id_token'],
+            refreshToken: oauthData['refresh_token'],
+            expiresIn: oauthData['expires_in'],
             decodedIdToken: decodedIdToken,
             twitchUser: twitchUser,
-            scopes: scopes,
+            scopes: oauthData['scopes'],
           );
 
           TwitchCredentialsDTO twitchDataDTO = _mappr
@@ -132,30 +90,13 @@ class TwitchRepositoryImpl implements TwitchRepository {
   Future<Either<Failure, TwitchCredentials>> refreshAccessToken(
     TwitchCredentials twitchData,
   ) async {
-    Response response;
-
     try {
-      final remoteConfig = FirebaseRemoteConfig.instance;
-      await remoteConfig.fetchAndActivate();
-      String apiRefreshTokenUrl =
-          remoteConfig.getString('irllink_refresh_token_url');
-      if (kDebugMode) {
-        apiRefreshTokenUrl =
-            remoteConfig.getString('irllink_refresh_token_url_dev');
-      }
-
-      response = await dioClient.get(
-        apiRefreshTokenUrl,
-        queryParameters: {
-          'refresh_token': twitchData.refreshToken,
-          'app_version': Get.find<AppInfoService>().version,
-          'platform': Platform.isAndroid ? 'android' : 'ios',
-        },
-      );
+      final response =
+          await _remoteDataSource.refreshAccessToken(twitchData.refreshToken);
 
       TwitchCredentials newTwitchData = TwitchCredentials(
-        accessToken: response.data['access_token'],
-        refreshToken: response.data['refresh_token'],
+        accessToken: response['access_token'],
+        refreshToken: response['refresh_token'],
         idToken: twitchData.idToken,
         decodedIdToken: twitchData.decodedIdToken,
         expiresIn: twitchData.expiresIn,
@@ -167,39 +108,21 @@ class TwitchRepositoryImpl implements TwitchRepository {
           .convert<TwitchCredentials, TwitchCredentialsDTO>(newTwitchData);
       await _localDataSource.storeCredentials(twitchDataDTO);
 
-      await validateToken(newTwitchData.accessToken);
+      await _remoteDataSource.validateToken(newTwitchData.accessToken);
 
       return Right(newTwitchData);
-    } on DioException catch (e) {
+    } catch (e) {
       return Left(Failure(e.toString()));
-    }
-  }
-
-  Future<dynamic> validateToken(String accessToken) async {
-    try {
-      Response response;
-
-      dioClient.options.headers["authorization"] = "Bearer $accessToken";
-      response = await dioClient.get('https://id.twitch.tv/oauth2/validate');
-      return response.data;
-    } on DioException catch (e) {
-      return e.toString();
     }
   }
 
   @override
   Future<Either<Failure, void>> logout(String accessToken) async {
     try {
-      await dioClient.post(
-        'https://id.twitch.tv/oauth2/revoke',
-        queryParameters: {
-          'client_id': kTwitchAuthClientId,
-          'token': accessToken,
-        },
-      );
+      await _remoteDataSource.logout(accessToken);
       await _localDataSource.removeCredentials();
       return const Right(null);
-    } on DioException catch (e) {
+    } catch (e) {
       return Left(Failure(e.toString()));
     }
   }
@@ -241,32 +164,13 @@ class TwitchRepositoryImpl implements TwitchRepository {
     String? username,
     String accessToken,
   ) async {
-    Response response;
-
     try {
-      dioClient.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dioClient.options.headers["authorization"] = "Bearer $accessToken";
-
-      if (username != null) {
-        response = await dioClient.get(
-          '/helix/users',
-          queryParameters: {'login': username},
-        );
-      } else {
-        //if no username then it get the user linked to the accessToken
-        response = await dioClient.get(
-          '/helix/users',
-        );
-      }
-
-      TwitchUserDTO twitchUserDTO =
-          TwitchUserDTO.fromJson(response.data['data'][0]);
-
+      final twitchUserDTO =
+          await _remoteDataSource.getTwitchUser(username, accessToken);
       TwitchUser twitchUser =
           _mappr.convert<TwitchUserDTO, TwitchUser>(twitchUserDTO);
-
       return Right(twitchUser);
-    } on DioException catch (e) {
+    } catch (e) {
       return Left(Failure(e.toString()));
     }
   }
@@ -276,36 +180,23 @@ class TwitchRepositoryImpl implements TwitchRepository {
     List ids,
     String accessToken,
   ) async {
-    Response response;
-
-    List<TwitchUser> twitchUsers = <TwitchUser>[];
     try {
-      dioClient.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dioClient.options.headers["authorization"] = "Bearer $accessToken";
-
       var chunks = partition(ids, 100);
+      List<TwitchUser> twitchUsers = <TwitchUser>[];
 
       for (var chunk in chunks) {
         await Future.delayed(const Duration(seconds: 5), () async {
-          response = await dioClient.get(
-            '/helix/users',
-            queryParameters: {'id': chunk},
-          );
-
-          response.data['data'].forEach(
-            (user) => {
-              twitchUsers.add(
-                _mappr.convert<TwitchUserDTO, TwitchUser>(
-                  TwitchUserDTO.fromJson(user),
-                ),
-              ),
-            },
+          final usersDTO =
+              await _remoteDataSource.getTwitchUsers(chunk, accessToken);
+          twitchUsers.addAll(
+            usersDTO
+                .map((user) => _mappr.convert<TwitchUserDTO, TwitchUser>(user)),
           );
         });
       }
 
       return Right(twitchUsers);
-    } on DioException catch (e) {
+    } catch (e) {
       return Left(Failure(e.toString()));
     }
   }
@@ -315,45 +206,13 @@ class TwitchRepositoryImpl implements TwitchRepository {
     String accessToken,
     String broadcasterId,
   ) async {
-    Response response;
-    Response response2;
-    Response response3;
-
     try {
-      dioClient.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dioClient.options.headers["authorization"] = "Bearer $accessToken";
-      response = await dioClient.get(
-        '/helix/channels',
-        queryParameters: {'broadcaster_id': broadcasterId},
-      );
-
-      response2 = await dioClient.get(
-        '/helix/streams',
-        queryParameters: {'user_id': broadcasterId},
-      );
-
-      response3 = await dioClient.patch(
-        '/helix/chat/settings',
-        queryParameters: {
-          'broadcaster_id': broadcasterId,
-          'moderator_id': broadcasterId,
-        },
-        data: jsonEncode({}),
-      );
-
-      TwitchStreamInfosDto twitchStreamInfosDto = TwitchStreamInfosDto.fromJson(
-        response.data['data'][0],
-        response2.data,
-        response3.data['data'][0],
-      );
-
-      TwitchStreamInfos twitchStreamInfos =
-          _mappr.convert<TwitchStreamInfosDto, TwitchStreamInfos>(
-        twitchStreamInfosDto,
-      );
-
-      return Right(twitchStreamInfos);
-    } on DioException catch (e) {
+      final streamInfosDto =
+          await _remoteDataSource.getStreamInfo(accessToken, broadcasterId);
+      TwitchStreamInfos streamInfos = _mappr
+          .convert<TwitchStreamInfosDto, TwitchStreamInfos>(streamInfosDto);
+      return Right(streamInfos);
+    } catch (e) {
       return Left(Failure(e.toString()));
     }
   }
@@ -364,38 +223,14 @@ class TwitchRepositoryImpl implements TwitchRepository {
     String broadcasterId,
     TwitchStreamInfos? twitchStreamInfos,
   ) async {
-    Map<String, dynamic> settings = {};
-
     try {
-      dioClient.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dioClient.options.headers["authorization"] = "Bearer $accessToken";
-
-      if (twitchStreamInfos != null) {
-        settings = {
-          'emote_mode': twitchStreamInfos.isEmoteMode,
-          'follower_mode': twitchStreamInfos.isFollowerMode,
-          'slow_mode': twitchStreamInfos.isSlowMode,
-          'subscriber_mode': twitchStreamInfos.isSubscriberMode,
-        };
-
-        if (twitchStreamInfos.isSlowMode!) {
-          // minimum 3, maximum 120
-          settings['slow_mode_wait_time'] =
-              twitchStreamInfos.slowModeWaitTime ?? 30;
-        }
-      }
-
-      await dioClient.patch(
-        '/helix/chat/settings',
-        queryParameters: {
-          'broadcaster_id': broadcasterId,
-          'moderator_id': broadcasterId,
-        },
-        data: jsonEncode(settings),
+      await _remoteDataSource.setChatSettings(
+        accessToken,
+        broadcasterId,
+        twitchStreamInfos,
       );
-
       return const Right(null);
-    } on DioException catch (e) {
+    } catch (e) {
       return Left(Failure(e.toString()));
     }
   }
@@ -407,19 +242,9 @@ class TwitchRepositoryImpl implements TwitchRepository {
     String title,
   ) async {
     try {
-      dioClient.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dioClient.options.headers["authorization"] = "Bearer $accessToken";
-      Map titleMap = {"title": title};
-      await dioClient.patch(
-        '/helix/channels',
-        queryParameters: {
-          'broadcaster_id': broadcasterId,
-          'moderator_id': broadcasterId,
-        },
-        data: jsonEncode(titleMap),
-      );
+      await _remoteDataSource.setStreamTitle(accessToken, broadcasterId, title);
       return const Right(null);
-    } on DioException catch (e) {
+    } catch (e) {
       return Left(Failure(e.toString()));
     }
   }
@@ -433,23 +258,15 @@ class TwitchRepositoryImpl implements TwitchRepository {
     String? winningOutcomeId,
   ) async {
     try {
-      dioClient.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dioClient.options.headers["authorization"] = "Bearer $accessToken";
-
-      Map body = {
-        "broadcaster_id": broadcasterId,
-        "id": predictionId,
-        "status": status,
-        "winning_outcome_id": winningOutcomeId ?? '',
-      };
-
-      await dioClient.patch(
-        '/helix/predictions',
-        data: jsonEncode(body),
+      await _remoteDataSource.endPrediction(
+        accessToken,
+        broadcasterId,
+        predictionId,
+        status,
+        winningOutcomeId,
       );
-
       return const Right(null);
-    } on DioException catch (e) {
+    } catch (e) {
       return Left(Failure(e.toString()));
     }
   }
@@ -461,28 +278,16 @@ class TwitchRepositoryImpl implements TwitchRepository {
     String pollId,
     String status,
   ) async {
-    Response response;
-
     try {
-      dioClient.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dioClient.options.headers["authorization"] = "Bearer $accessToken";
-
-      Map body = {
-        "broadcaster_id": broadcasterId,
-        "id": pollId,
-        "status": status,
-      };
-
-      response = await dioClient.patch(
-        '/helix/polls',
-        data: jsonEncode(body),
+      final pollDTO = await _remoteDataSource.endPoll(
+        accessToken,
+        broadcasterId,
+        pollId,
+        status,
       );
-
-      TwitchPollDTO pollDTO = TwitchPollDTO.fromJson(response.data['data'][0]);
       TwitchPoll poll = _mappr.convert<TwitchPollDTO, TwitchPoll>(pollDTO);
-
       return Right(poll);
-    } on DioException catch (e) {
+    } catch (e) {
       return Left(Failure(e.toString()));
     }
   }
@@ -493,17 +298,14 @@ class TwitchRepositoryImpl implements TwitchRepository {
     String broadcasterId,
     TwitchPoll newPoll,
   ) async {
-    // Response response;
-
-    // TwitchPrediction? prediction;
     try {
-      dioClient.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dioClient.options.headers["authorization"] = "Bearer $accessToken";
-      // response = await dioClient.post(
-      //     '/helix/predictions?broadcaster_id=$broadcasterId');
-
-      return Right(newPoll);
-    } on DioException catch (e) {
+      final poll = await _remoteDataSource.createPoll(
+        accessToken,
+        broadcasterId,
+        newPoll,
+      );
+      return Right(poll);
+    } catch (e) {
       return Left(Failure(e.toString()));
     }
   }
@@ -516,28 +318,15 @@ class TwitchRepositoryImpl implements TwitchRepository {
     int? duration,
   ) async {
     try {
-      dioClient.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dioClient.options.headers["authorization"] = "Bearer $accessToken";
-      Map body = {
-        "data": {
-          "user_id": message.authorId,
-        },
-      };
-      if (duration != null) {
-        body['data']['duration'] = duration.toString();
-      }
-
-      await dioClient.post(
-        '/helix/moderation/bans',
-        queryParameters: {
-          'broadcaster_id': broadcasterId,
-          'moderator_id': broadcasterId,
-        },
-        data: jsonEncode(body),
+      await _remoteDataSource.banUser(
+        accessToken,
+        broadcasterId,
+        message,
+        duration,
       );
       return const Right(null);
-    } on DioException catch (e) {
-      return Left(Failure(e.response.toString()));
+    } catch (e) {
+      return Left(Failure(e.toString()));
     }
   }
 
@@ -548,18 +337,13 @@ class TwitchRepositoryImpl implements TwitchRepository {
     ChatMessage message,
   ) async {
     try {
-      dioClient.options.headers['Client-Id'] = kTwitchAuthClientId;
-      dioClient.options.headers["authorization"] = "Bearer $accessToken";
-      await dioClient.delete(
-        '/helix/moderation/chat',
-        queryParameters: {
-          'broadcaster_id': broadcasterId,
-          'moderator_id': broadcasterId,
-          'message_id': message.id,
-        },
+      await _remoteDataSource.deleteMessage(
+        accessToken,
+        broadcasterId,
+        message,
       );
       return const Right(null);
-    } on DioException catch (e) {
+    } catch (e) {
       return Left(Failure(e.toString()));
     }
   }

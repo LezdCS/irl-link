@@ -12,6 +12,7 @@ import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/data/datasources/local/streamelements_local_data_source.dart';
 import 'package:irllink/src/data/datasources/local/twitch_local_data_source.dart';
 import 'package:irllink/src/data/datasources/remote/streamelements_remote_data_source.dart';
+import 'package:irllink/src/data/datasources/remote/twitch_remote_data_source.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/usecases/streamelements/disconnect_usecase.dart';
@@ -30,7 +31,10 @@ class SettingsBindings extends Bindings {
     Talker talker = Get.find<TalkerService>().talker;
     // Repositories
     final twitchRepository = TwitchRepositoryImpl(
-      dioClient: dioTwitchClient,
+      remoteDataSource: TwitchRemoteDataSourceImpl(
+        dioClient: dioTwitchClient,
+        talker: talker,
+      ),
       localDataSource: TwitchLocalDataSourceImpl(
         talker: talker,
         storage: GetStorage(),
