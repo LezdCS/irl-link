@@ -1,17 +1,14 @@
-import 'dart:convert';
-
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
 import 'package:irllink/src/core/utils/constants.dart';
-
 import 'package:irllink/src/core/utils/mapper.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
+import 'package:irllink/src/data/datasources/local/streamelements_local_data_source.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_activity_dto.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_credentials_dto.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_me_dto.dart';
@@ -28,8 +25,14 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
   final Mappr _mappr;
   final Talker talker;
   final Dio dioClient;
-  StreamelementsRepositoryImpl({required this.talker, required this.dioClient})
-      : _mappr = Mappr();
+  final StreamelementsLocalDataSource _localDataSource;
+
+  StreamelementsRepositoryImpl({
+    required this.talker,
+    required this.dioClient,
+    required StreamelementsLocalDataSource localDataSource,
+  })  : _mappr = Mappr(),
+        _localDataSource = localDataSource;
 
   @override
   Future<Either<Failure, SeCredentials>> login(
@@ -75,7 +78,7 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
             scopes: scopes,
           );
 
-          await storeCredentials(seCredentialDTO);
+          await _localDataSource.storeCredentials(seCredentialDTO);
           SeCredentials seCredentials =
               _mappr.convert<SeCredentialsDTO, SeCredentials>(seCredentialDTO);
           return Right(seCredentials);
@@ -114,7 +117,7 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
         expiresIn: response.data['expires_in'],
         scopes: seCredentials.scopes,
       );
-      await storeCredentials(newSeCredentialDTO);
+      await _localDataSource.storeCredentials(newSeCredentialDTO);
 
       await validateToken(newSeCredentialDTO.accessToken);
 
@@ -125,15 +128,6 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
     } on DioException catch (e) {
       return Left(Failure("Refresh SE token failed: ${e.message}"));
     }
-  }
-
-  Future<void> storeCredentials(SeCredentialsDTO seCredentials) async {
-    GetStorage box = GetStorage();
-    String jsonData = jsonEncode(seCredentials);
-    await box.write('seCredentials', jsonData);
-    talker.logCustom(
-      StreamElementsLog('StreamElements credentials saved in local.'),
-    );
   }
 
   Future<Either<Failure, dynamic>> validateToken(String accessToken) async {
@@ -163,11 +157,7 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
           'token': accessToken,
         },
       );
-      GetStorage box = GetStorage();
-      box.remove('seCredentials');
-      talker.logCustom(
-        StreamElementsLog('StreamElements credentials removed from local.'),
-      );
+      await _localDataSource.removeCredentials();
       return const Right(null);
     } on DioException catch (e) {
       return Left(
@@ -194,20 +184,9 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
 
   @override
   Future<Either<Failure, SeCredentials>> getSeCredentialsFromLocal() async {
-    final box = GetStorage();
-    talker.logCustom(
-      StreamElementsLog(
-        'Getting StreamElements credentials from local storage.',
-      ),
-    );
-    var seCredentialsString = box.read('seCredentials');
+    final seCredentialsDTO = await _localDataSource.getCredentials();
 
-    if (seCredentialsString != null) {
-      Map<String, dynamic> seCredentialsJson = jsonDecode(seCredentialsString);
-
-      SeCredentialsDTO seCredentialsDTO =
-          SeCredentialsDTO.fromJson(seCredentialsJson);
-
+    if (seCredentialsDTO != null) {
       StreamelementsAuthParams params = const StreamelementsAuthParams();
       List paramsScopesList = params.scopes.split(' ');
       paramsScopesList.sort((a, b) {

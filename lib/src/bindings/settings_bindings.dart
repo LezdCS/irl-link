@@ -2,12 +2,14 @@ import 'package:dio/dio.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/bindings_interface.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/init_dio.dart';
+import 'package:irllink/src/data/datasources/local/streamelements_local_data_source.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/usecases/streamelements/disconnect_usecase.dart';
@@ -29,6 +31,10 @@ class SettingsBindings extends Bindings {
     final streamelementsRepository = StreamelementsRepositoryImpl(
       talker: Get.find<TalkerService>().talker,
       dioClient: streamElementsDioClient,
+      localDataSource: StreamelementsLocalDataSourceImpl(
+        talker: Get.find<TalkerService>().talker,
+        storage: GetStorage(),
+      ),
     );
 
     // Use cases
