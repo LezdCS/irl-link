@@ -103,7 +103,7 @@ class TwitchRepositoryImpl implements TwitchRepository {
         (l) {
           return Left(Failure("Error getting the Twitch user."));
         },
-        (r) {
+        (r) async {
           twitchUser = r;
 
           TwitchCredentials twitchData = TwitchCredentials(
@@ -118,7 +118,7 @@ class TwitchRepositoryImpl implements TwitchRepository {
 
           TwitchCredentialsDTO twitchDataDTO = _mappr
               .convert<TwitchCredentials, TwitchCredentialsDTO>(twitchData);
-          _localDataSource.storeCredentials(twitchDataDTO);
+          await _localDataSource.storeCredentials(twitchDataDTO);
 
           return Right(twitchData);
         },
