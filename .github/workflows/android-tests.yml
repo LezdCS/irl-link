@@ -74,3 +74,4 @@ jobs:
            --orientations=portrait \
            --use-orchestrator \
            --timeout 3m \
+           --project irl-link \
