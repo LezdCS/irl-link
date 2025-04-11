@@ -43,6 +43,8 @@ Future<void> main() async {
   FirebaseMessaging.onBackgroundMessage(_handleFirebaseMessagingBackground);
   FirebaseMessaging.instance.getToken().then((token) {
     debugPrint('fcmToken: $token');
+  }).catchError((e) {
+    debugPrint('Failed to get FCM token: $e');
   });
 
   AppTranslations.initLanguages();
