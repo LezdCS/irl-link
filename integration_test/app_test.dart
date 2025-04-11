@@ -12,7 +12,7 @@ void main() {
     final appInit = app.main();
 
     // Wait for permission dialog and grant it
-    await $.native.grantPermissionWhenInUse();
+    // await $.native.grantPermissionWhenInUse();
 
     // Wait for app initialization to complete
     await appInit;
