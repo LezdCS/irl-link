@@ -29,6 +29,14 @@ jobs:
           channel: 'stable'
           flutter-version: '3.29.2'
 
+      - name: Install Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Create Android emulator
+        run: |
+          echo "y" | sdkmanager "system-images;android-33;google_apis;x86_64"
+          echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-33;google_apis;x86_64" -d "pixel_2"
+
       - name: Install dependencies
         run: flutter pub get
 
@@ -37,7 +45,7 @@ jobs:
 
       - name: Run integration tests
         run: |
-          flutter emulators --launch emulator
+          flutter emulators --launch test_emulator
           flutter drive --driver=integration_test/driver.dart --target=integration_test/app_test.dart
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }} 
