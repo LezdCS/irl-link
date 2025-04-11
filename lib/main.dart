@@ -7,7 +7,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:irllink/data/database/database_helper.dart';
 import 'package:irllink/routes/app_pages.dart';
 import 'package:irllink/src/bindings/login_bindings.dart';
 import 'package:irllink/src/core/background/tasks_handlers/realtime_irl_task_handler.dart';
@@ -39,7 +38,7 @@ void main() async {
       );
 
   // Initialize the database
-  await DatabaseHelper.instance.database;
+  // await DatabaseHelper.instance.database;
 
   FirebaseMessaging.onBackgroundMessage(_handleFirebaseMessagingBackground);
   FirebaseMessaging.instance.getToken().then((token) {
