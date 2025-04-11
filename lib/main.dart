@@ -21,7 +21,7 @@ import 'package:kick_chat/kick_chat.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (Platform.isAndroid) {
