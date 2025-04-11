@@ -44,6 +44,9 @@ jobs:
           api-level: 33
           arch: x86_64
           profile: pixel_2
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+          disable-animations: true
+          emulator-boot-timeout: 600
           script: |
             flutter drive --driver=integration_test/driver.dart --target=integration_test/app_test.dart
         env:
