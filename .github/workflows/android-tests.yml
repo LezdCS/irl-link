@@ -52,6 +52,9 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Install Patrol CLI
+        run: dart pub global activate patrol_cli
+
       - name: Run unit and widget tests
         run: flutter test
 
@@ -67,4 +70,4 @@ jobs:
           disable-linux-hw-accel: false
           channel: "stable"
           script: |
-            flutter drive --driver=integration_test/driver.dart --target=integration_test/app_test.dart
+            patrol test -t integration_test/app_test.dart

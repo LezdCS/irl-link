@@ -88,6 +88,7 @@ dev_dependencies:
   json_serializable: ^6.9.4
   integration_test:
     sdk: flutter
+  patrol: ^3.15.1
 
 dependency_overrides:
 
@@ -107,3 +108,10 @@ flutter:
      - lib/assets/kick/
      - lib/assets/streamelements/
      - lib/assets/youtube/
+
+patrol:
+  app_name: IRLink
+  android:
+    package_name: dev.lezd.www.irllink
+  ios:
+    bundle_id: com.irllink
