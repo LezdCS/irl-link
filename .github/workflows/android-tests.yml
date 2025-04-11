@@ -17,13 +17,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       
-      - name: Enable KVM group perms
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-          sudo usermod -a -G kvm $USER
-      
       - name: Set up Java environment
         uses: actions/setup-java@v4
         with:
@@ -58,16 +51,26 @@ jobs:
       - name: Run unit and widget tests
         run: flutter test
 
-      - name: Run integration tests
-        uses: reactivecircus/android-emulator-runner@v2
+      - name: Build Android App and Test APK with Patrol
+        run: patrol build android -t integration_test/app_test.dart
+
+      - name: Download gcloud config json file
+        id: gcloud_config
+        uses: timheuer/base64-to-file@v1.0.3
         with:
-          api-level: 33
-          arch: x86_64
-          profile: pixel_2
-        #   emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
-        #   disable-animations: true
-        #   emulator-boot-timeout: 600
-          disable-linux-hw-accel: false
-          channel: "stable"
-          script: |
-            patrol test -t integration_test/app_test.dart
+            fileName: integration_test_gcloud.json
+            encodedString: ${{ secrets.GOOGLE_SERVICES_JSON }}
+      
+      - name: Configure the gcloud account
+        run: |
+          
+           gcloud auth activate-service-account --key-file="${{ steps.gcloud_config.outputs.filePath }}"
+           pushd build
+           gcloud firebase test android run --type=instrumentation \
+           --app "app/outputs/apk/debug/app-debug.apk" \
+           --test "app/outputs/apk/androidTest/debug/app-debug-androidTest.apk" \
+           --device-ids=MediumPhone.arm \
+           --os-version-ids=33 \
+           --orientations=portrait \
+           --use-orchestrator \
+           --timeout 3m \
