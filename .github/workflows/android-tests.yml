@@ -44,6 +44,11 @@ jobs:
           platform-version: "33"
           ndk-version: "25.1.8937393"
 
+      - name: Create google-services.json
+        run: |
+          mkdir -p android/app/src/debug
+          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" > android/app/src/debug/google-services.json
+
       - name: Install dependencies
         run: flutter pub get
 
@@ -63,5 +68,3 @@ jobs:
           channel: "stable"
           script: |
             flutter drive --driver=integration_test/driver.dart --target=integration_test/app_test.dart
-        env:
-          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }} 
