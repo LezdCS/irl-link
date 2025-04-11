@@ -17,6 +17,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       
+      - name: Enable KVM group perms
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          sudo usermod -a -G kvm $USER
+      
       - name: Set up Java environment
         uses: actions/setup-java@v4
         with:
@@ -31,6 +38,11 @@ jobs:
 
       - name: Install Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          cmdline-tools-version: "latest"
+          build-tools-version: "34.0.0"
+          platform-version: "33"
+          ndk-version: "25.1.8937393"
 
       - name: Install dependencies
         run: flutter pub get
@@ -44,9 +56,11 @@ jobs:
           api-level: 33
           arch: x86_64
           profile: pixel_2
-          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
-          disable-animations: true
-          emulator-boot-timeout: 600
+        #   emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+        #   disable-animations: true
+        #   emulator-boot-timeout: 600
+          disable-linux-hw-accel: false
+          channel: "stable"
           script: |
             flutter drive --driver=integration_test/driver.dart --target=integration_test/app_test.dart
         env:
