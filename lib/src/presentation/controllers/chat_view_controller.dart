@@ -10,7 +10,6 @@ import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/services/youtube_chat.dart';
 import 'package:irllink/src/core/utils/constants.dart';
-
 import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/pinned_message.dart';
@@ -193,8 +192,7 @@ class ChatViewController extends GetxController
     }
     Settings settings = settingsService.settings.value;
 
-    List hiddenUsersIds =
-        settings.hiddenUsersIds != const [] ? settings.hiddenUsersIds : [];
+    List hiddenUsersIds = List.from(settings.hiddenUsersIds);
     if (hiddenUsersIds
             .firstWhereOrNull((userId) => userId == message.authorId) ==
         null) {

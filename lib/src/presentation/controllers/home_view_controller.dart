@@ -138,7 +138,10 @@ class HomeViewController extends GetxController
         dioClient: dioTwitchClient,
         talker: talkerService.talker,
       ),
-      localDataSource: Get.find<TwitchLocalDataSource>(),
+      localDataSource: TwitchLocalDataSourceImpl(
+        talker: talkerService.talker,
+        storage: GetStorage(),
+      ),
       talker: talkerService.talker,
     );
 
