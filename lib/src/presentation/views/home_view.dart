@@ -44,7 +44,7 @@ class HomeView extends GetView<HomeViewController> {
 
     return UpgradeAlert(
       upgrader: Upgrader(
-        minAppVersion: "2.8.0",
+        minAppVersion: controller.minimumVersion.value,
         debugDisplayAlways: kDebugMode,
       ),
       child: PopScope(

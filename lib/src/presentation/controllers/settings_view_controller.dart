@@ -187,7 +187,7 @@ class SettingsViewController extends GetxController {
   void removeHiddenUser(userId) {
     Settings settings = settingsService.settings.value;
 
-    List hiddenUsersIds = settings.hiddenUsersIds;
+    List hiddenUsersIds = List.from(settings.hiddenUsersIds);
     hiddenUsersIds.remove(userId);
     settingsService.settings.value =
         settings.copyWith(hiddenUsersIds: hiddenUsersIds);

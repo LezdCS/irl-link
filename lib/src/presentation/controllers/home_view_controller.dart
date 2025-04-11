@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:io' as io;
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -18,6 +20,8 @@ import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/core/utils/list_move.dart';
+import 'package:irllink/src/data/datasources/local/twitch_local_data_source.dart';
+import 'package:irllink/src/data/datasources/remote/twitch_remote_data_source.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
@@ -102,6 +106,8 @@ class HomeViewController extends GetxController
   RxList<PinnedMessage> pinnedMessages = <PinnedMessage>[].obs;
   RxBool showPinnedMessages = false.obs;
 
+  RxString minimumVersion = ''.obs;
+
   @override
   void onInit() async {
     chatInputController = TextEditingController();
@@ -114,6 +120,12 @@ class HomeViewController extends GetxController
       await _setupCrashlytics();
     }
 
+    final remoteConfig = FirebaseRemoteConfig.instance;
+    await remoteConfig.fetchAndActivate();
+    minimumVersion.value = io.Platform.isAndroid
+        ? remoteConfig.getString('minimum_version_android')
+        : remoteConfig.getString('minimum_version_ios');
+
     await applySettings();
 
     super.onInit();
@@ -121,8 +133,17 @@ class HomeViewController extends GetxController
 
   Future<void> _initializeTwitchServices() async {
     Dio dioTwitchClient = initDio(kTwitchApiUrlBase);
-    final twitchRepositoryImpl =
-        TwitchRepositoryImpl(dioClient: dioTwitchClient);
+    final twitchRepositoryImpl = TwitchRepositoryImpl(
+      remoteDataSource: TwitchRemoteDataSourceImpl(
+        dioClient: dioTwitchClient,
+        talker: talkerService.talker,
+      ),
+      localDataSource: TwitchLocalDataSourceImpl(
+        talker: talkerService.talker,
+        storage: GetStorage(),
+      ),
+      talker: talkerService.talker,
+    );
 
     await _initializeEventSubService(twitchRepositoryImpl, dioTwitchClient);
     await _initializePubSubService(dioTwitchClient);

@@ -37,6 +37,9 @@ void main() async {
       // options: DefaultFirebaseOptions.currentPlatform,
       );
 
+  // Initialize the database
+  // await DatabaseHelper.instance.database;
+
   FirebaseMessaging.onBackgroundMessage(_handleFirebaseMessagingBackground);
   FirebaseMessaging.instance.getToken().then((token) {
     debugPrint('fcmToken: $token');

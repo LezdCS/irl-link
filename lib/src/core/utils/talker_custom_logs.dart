@@ -60,3 +60,15 @@ class ObsLog extends TalkerLog {
   @override
   AnsiPen get pen => AnsiPen()..rgb(r: 51, g: 102, b: 204);
 }
+
+class TwitchLog extends TalkerLog {
+  TwitchLog(String super.message);
+
+  /// Your custom log title
+  @override
+  String get title => 'Twitch 🎮';
+
+  /// Your custom log color
+  @override
+  AnsiPen get pen => AnsiPen()..rgb(r: 145, g: 70, b: 255);
+}
