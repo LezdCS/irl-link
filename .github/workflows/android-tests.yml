@@ -59,7 +59,7 @@ jobs:
         uses: timheuer/base64-to-file@v1.0.3
         with:
             fileName: integration_test_gcloud.json
-            encodedString: ${{ secrets.GOOGLE_SERVICES_JSON }}
+            encodedString: ${{ secrets.GCLOUD_CONFIG_JSON }}
       
       - name: Configure the gcloud account
         run: |
