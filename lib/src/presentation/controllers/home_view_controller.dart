@@ -140,7 +140,6 @@ class HomeViewController extends GetxController
       ),
       localDataSource: TwitchLocalDataSourceImpl(
         talker: talkerService.talker,
-        storage: GetStorage(),
       ),
       talker: talkerService.talker,
     );

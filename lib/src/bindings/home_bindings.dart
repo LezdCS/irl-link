@@ -52,7 +52,6 @@ class HomeBindings extends Bindings {
       ),
       localDataSource: TwitchLocalDataSourceImpl(
         talker: talker,
-        storage: GetStorage(),
       ),
       talker: talker,
     );

@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/bindings_interface.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/init_dio.dart';
@@ -28,7 +27,6 @@ class LoginBindings extends Bindings {
       ),
       localDataSource: TwitchLocalDataSourceImpl(
         talker: talker,
-        storage: GetStorage(),
       ),
       talker: talker,
     );
