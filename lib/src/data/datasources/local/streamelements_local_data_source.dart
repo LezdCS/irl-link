@@ -1,6 +1,4 @@
-import 'dart:convert';
-
-import 'package:get_storage/get_storage.dart';
+import 'package:irllink/data/database/database_helper.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_credentials_dto.dart';
 import 'package:talker_flutter/talker_flutter.dart';
@@ -14,43 +12,66 @@ abstract class StreamelementsLocalDataSource {
 class StreamelementsLocalDataSourceImpl
     implements StreamelementsLocalDataSource {
   final Talker talker;
-  final GetStorage _storage;
+  final DatabaseHelper _databaseHelper;
 
   StreamelementsLocalDataSourceImpl({
     required this.talker,
-    GetStorage? storage,
-  }) : _storage = storage ?? GetStorage();
+    DatabaseHelper? databaseHelper,
+  }) : _databaseHelper = databaseHelper ?? DatabaseHelper.instance;
 
   @override
   Future<void> storeCredentials(SeCredentialsDTO credentials) async {
-    String jsonData = jsonEncode(credentials);
-    await _storage.write('seCredentials', jsonData);
+    final db = await _databaseHelper.database;
+
+    // First remove any existing credentials
+    await removeCredentials();
+
+    await db.insert(
+      'streamelements_credentials',
+      {
+        'access_token': credentials.accessToken,
+        'refresh_token': credentials.refreshToken,
+        'expires_in': credentials.expiresIn,
+        'scopes': credentials.scopes,
+      },
+    );
+
     talker.logCustom(
-      StreamElementsLog('StreamElements credentials saved in local.'),
+      StreamElementsLog('StreamElements credentials saved in database.'),
     );
   }
 
   @override
   Future<SeCredentialsDTO?> getCredentials() async {
     talker.logCustom(
-      StreamElementsLog(
-        'Getting StreamElements credentials from local storage.',
-      ),
+      StreamElementsLog('Getting StreamElements credentials from database.'),
     );
-    var seCredentialsString = _storage.read('seCredentials');
 
-    if (seCredentialsString != null) {
-      Map<String, dynamic> seCredentialsJson = jsonDecode(seCredentialsString);
-      return SeCredentialsDTO.fromJson(seCredentialsJson);
+    final db = await _databaseHelper.database;
+    final List<Map<String, dynamic>> maps =
+        await db.query('streamelements_credentials');
+
+    if (maps.isEmpty) {
+      return null;
     }
-    return null;
+
+    final credentials = maps.first;
+    final seCredentialsJson = {
+      'accessToken': credentials['access_token'],
+      'refreshToken': credentials['refresh_token'],
+      'expiresIn': credentials['expires_in'],
+      'scopes': credentials['scopes'],
+    };
+
+    return SeCredentialsDTO.fromJson(seCredentialsJson);
   }
 
   @override
   Future<void> removeCredentials() async {
-    await _storage.remove('seCredentials');
+    final db = await _databaseHelper.database;
+    await db.delete('streamelements_credentials');
     talker.logCustom(
-      StreamElementsLog('StreamElements credentials removed from local.'),
+      StreamElementsLog('StreamElements credentials removed from database.'),
     );
   }
 }

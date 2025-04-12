@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/rendering.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:irllink/src/data/entities/stream_elements/se_credentials_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_credentials_dto.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -28,6 +29,7 @@ class Migration1 extends Migration {
 
   @override
   Future<void> up(Database db) async {
+    // Create Twitch credentials table
     await db.execute('''
       CREATE TABLE twitch_credentials (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -42,21 +44,32 @@ class Migration1 extends Migration {
       )
     ''');
 
+    // Create StreamElements credentials table
+    await db.execute('''
+      CREATE TABLE streamelements_credentials (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        access_token TEXT NOT NULL,
+        refresh_token TEXT NOT NULL,
+        expires_in INTEGER NOT NULL,
+        scopes TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    ''');
+
     // Migrate existing data from GetStorage to SQLite
     await _migrateGetStorageToSQLite(db);
   }
 
   Future<void> _migrateGetStorageToSQLite(Database db) async {
     final storage = GetStorage();
-    final twitchDataString = storage.read('twitchData');
 
+    // Migrate Twitch credentials
+    final twitchDataString = storage.read('twitchData');
     if (twitchDataString != null) {
       try {
-        // Parse the existing data
         final twitchDataJson = jsonDecode(twitchDataString);
         final credentials = TwitchCredentialsDTO.fromJson(twitchDataJson);
 
-        // Insert into SQLite
         await db.insert(
           'twitch_credentials',
           {
@@ -70,12 +83,32 @@ class Migration1 extends Migration {
           },
         );
 
-        // Remove old data from GetStorage
         await storage.remove('twitchData');
       } catch (e) {
-        // If migration fails, we'll just start fresh with SQLite
-        // The old data will remain in GetStorage but won't be used
         debugPrint('Failed to migrate Twitch credentials: $e');
+      }
+    }
+
+    // Migrate StreamElements credentials
+    final seCredentialsString = storage.read('seCredentials');
+    if (seCredentialsString != null) {
+      try {
+        final seCredentialsJson = jsonDecode(seCredentialsString);
+        final credentials = SeCredentialsDTO.fromJson(seCredentialsJson);
+
+        await db.insert(
+          'streamelements_credentials',
+          {
+            'access_token': credentials.accessToken,
+            'refresh_token': credentials.refreshToken,
+            'expires_in': credentials.expiresIn,
+            'scopes': credentials.scopes,
+          },
+        );
+
+        await storage.remove('seCredentials');
+      } catch (e) {
+        debugPrint('Failed to migrate StreamElements credentials: $e');
       }
     }
   }
@@ -83,5 +116,6 @@ class Migration1 extends Migration {
   @override
   Future<void> down(Database db) async {
     await db.execute('DROP TABLE IF EXISTS twitch_credentials');
+    await db.execute('DROP TABLE IF EXISTS streamelements_credentials');
   }
 }
