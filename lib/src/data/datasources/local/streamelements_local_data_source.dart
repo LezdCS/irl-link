@@ -56,14 +56,8 @@ class StreamelementsLocalDataSourceImpl
     }
 
     final credentials = maps.first;
-    final seCredentialsJson = {
-      'accessToken': credentials['access_token'],
-      'refreshToken': credentials['refresh_token'],
-      'expiresIn': credentials['expires_in'],
-      'scopes': credentials['scopes'],
-    };
 
-    return SeCredentialsDTO.fromJson(seCredentialsJson);
+    return SeCredentialsDTO.fromJson(credentials);
   }
 
   @override
