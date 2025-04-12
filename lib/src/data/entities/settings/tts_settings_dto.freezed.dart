@@ -102,13 +102,13 @@ abstract mixin class $TtsSettingsDTOCopyWith<$Res> {
   $Res call(
       {bool ttsEnabled,
       String language,
-      List<dynamic> prefixsToIgnore,
-      List<dynamic> prefixsToUseTtsOnly,
+      List prefixsToIgnore,
+      List prefixsToUseTtsOnly,
       double volume,
       double pitch,
       double rate,
       Map<String, String> voice,
-      List<dynamic> ttsUsersToIgnore,
+      List ttsUsersToIgnore,
       bool ttsMuteViewerName,
       bool ttsOnlyVip,
       bool ttsOnlyMod,
@@ -152,13 +152,13 @@ class _$TtsSettingsDTOCopyWithImpl<$Res>
           : language // ignore: cast_nullable_to_non_nullable
               as String,
       prefixsToIgnore: null == prefixsToIgnore
-          ? _self.prefixsToIgnore!
+          ? _self.prefixsToIgnore
           : prefixsToIgnore // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
+              as List,
       prefixsToUseTtsOnly: null == prefixsToUseTtsOnly
-          ? _self.prefixsToUseTtsOnly!
+          ? _self.prefixsToUseTtsOnly
           : prefixsToUseTtsOnly // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
+              as List,
       volume: null == volume
           ? _self.volume
           : volume // ignore: cast_nullable_to_non_nullable
@@ -176,9 +176,9 @@ class _$TtsSettingsDTOCopyWithImpl<$Res>
           : voice // ignore: cast_nullable_to_non_nullable
               as Map<String, String>,
       ttsUsersToIgnore: null == ttsUsersToIgnore
-          ? _self.ttsUsersToIgnore!
+          ? _self.ttsUsersToIgnore
           : ttsUsersToIgnore // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
+              as List,
       ttsMuteViewerName: null == ttsMuteViewerName
           ? _self.ttsMuteViewerName
           : ttsMuteViewerName // ignore: cast_nullable_to_non_nullable
@@ -205,8 +205,8 @@ class _TtsSettingsDTO extends TtsSettingsDTO {
   _TtsSettingsDTO(
       {this.ttsEnabled = false,
       this.language = "en-US",
-      final List<dynamic> prefixsToIgnore = const [],
-      final List<dynamic> prefixsToUseTtsOnly = const [],
+      final List prefixsToIgnore = const [],
+      final List prefixsToUseTtsOnly = const [],
       this.volume = 1,
       this.pitch = 1,
       this.rate = 0.5,
@@ -214,7 +214,7 @@ class _TtsSettingsDTO extends TtsSettingsDTO {
         "name": "en-us-x-sfg-local",
         "locale": "en-US"
       },
-      final List<dynamic> ttsUsersToIgnore = const [],
+      final List ttsUsersToIgnore = const [],
       this.ttsMuteViewerName = false,
       this.ttsOnlyVip = false,
       this.ttsOnlyMod = false,
@@ -233,19 +233,19 @@ class _TtsSettingsDTO extends TtsSettingsDTO {
   @override
   @JsonKey()
   final String language;
-  final List<dynamic> _prefixsToIgnore;
+  final List _prefixsToIgnore;
   @override
   @JsonKey()
-  List<dynamic> get prefixsToIgnore {
+  List get prefixsToIgnore {
     if (_prefixsToIgnore is EqualUnmodifiableListView) return _prefixsToIgnore;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_prefixsToIgnore);
   }
 
-  final List<dynamic> _prefixsToUseTtsOnly;
+  final List _prefixsToUseTtsOnly;
   @override
   @JsonKey()
-  List<dynamic> get prefixsToUseTtsOnly {
+  List get prefixsToUseTtsOnly {
     if (_prefixsToUseTtsOnly is EqualUnmodifiableListView)
       return _prefixsToUseTtsOnly;
     // ignore: implicit_dynamic_type
@@ -270,10 +270,10 @@ class _TtsSettingsDTO extends TtsSettingsDTO {
     return EqualUnmodifiableMapView(_voice);
   }
 
-  final List<dynamic> _ttsUsersToIgnore;
+  final List _ttsUsersToIgnore;
   @override
   @JsonKey()
-  List<dynamic> get ttsUsersToIgnore {
+  List get ttsUsersToIgnore {
     if (_ttsUsersToIgnore is EqualUnmodifiableListView)
       return _ttsUsersToIgnore;
     // ignore: implicit_dynamic_type
@@ -372,13 +372,13 @@ abstract mixin class _$TtsSettingsDTOCopyWith<$Res>
   $Res call(
       {bool ttsEnabled,
       String language,
-      List<dynamic> prefixsToIgnore,
-      List<dynamic> prefixsToUseTtsOnly,
+      List prefixsToIgnore,
+      List prefixsToUseTtsOnly,
       double volume,
       double pitch,
       double rate,
       Map<String, String> voice,
-      List<dynamic> ttsUsersToIgnore,
+      List ttsUsersToIgnore,
       bool ttsMuteViewerName,
       bool ttsOnlyVip,
       bool ttsOnlyMod,
@@ -424,11 +424,11 @@ class __$TtsSettingsDTOCopyWithImpl<$Res>
       prefixsToIgnore: null == prefixsToIgnore
           ? _self._prefixsToIgnore
           : prefixsToIgnore // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
+              as List,
       prefixsToUseTtsOnly: null == prefixsToUseTtsOnly
           ? _self._prefixsToUseTtsOnly
           : prefixsToUseTtsOnly // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
+              as List,
       volume: null == volume
           ? _self.volume
           : volume // ignore: cast_nullable_to_non_nullable
@@ -448,7 +448,7 @@ class __$TtsSettingsDTOCopyWithImpl<$Res>
       ttsUsersToIgnore: null == ttsUsersToIgnore
           ? _self._ttsUsersToIgnore
           : ttsUsersToIgnore // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
+              as List,
       ttsMuteViewerName: null == ttsMuteViewerName
           ? _self.ttsMuteViewerName
           : ttsMuteViewerName // ignore: cast_nullable_to_non_nullable
