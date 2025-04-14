@@ -3,5 +3,5 @@
 # Launch OBS Studio
 open -a "OBS" &
 
-# Run ngrok on port 4455 in the background
-ngrok http 4455 &
+# Run ngrok in a new terminal window
+osascript -e 'tell app "Terminal" to do script "ngrok http 4455"'

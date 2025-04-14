@@ -5,28 +5,14 @@
         "label": "Start Custom Script",
         "type": "shell",
         "command": "./test/obs_test.sh",
-        "problemMatcher": {
-          "owner": "custom",
-          "pattern": {
-            "regexp": "^(.*)$",
-            "file": 1,
-            "message": 1
-          },
-          "background": {
-            "activeOnStart": true,
-            "beginsPattern": ".",
-            "endsPattern": "."
-          }
-        },
-        "isBackground": true,
+        "problemMatcher": [],
         "presentation": {
           "echo": true,
-          "reveal": "always",
+          "reveal": "never",
           "focus": false,
-          "panel": "shared",
-          "close": true
+          "panel": "shared"
         }
-      },
+      }
     ]
   }
   
