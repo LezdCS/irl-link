@@ -1,0 +1,32 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Start Custom Script",
+        "type": "shell",
+        "command": "./test/obs_test.sh",
+        "problemMatcher": {
+          "owner": "custom",
+          "pattern": {
+            "regexp": "^(.*)$",
+            "file": 1,
+            "message": 1
+          },
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": ".",
+            "endsPattern": "."
+          }
+        },
+        "isBackground": true,
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "shared",
+          "close": true
+        }
+      },
+    ]
+  }
+  
