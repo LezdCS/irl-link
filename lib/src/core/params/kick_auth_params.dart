@@ -9,6 +9,7 @@ class KickAuthParams {
   final String codeChallenge;
   final String codeChallengeMethod;
   final String state;
+  final String codeVerifier;
 
   const KickAuthParams({
     this.clientId = kKickAuthClientId,
@@ -18,6 +19,7 @@ class KickAuthParams {
     this.codeChallenge = "",
     this.codeChallengeMethod = "S256",
     this.state = "",
+    this.codeVerifier = "",
   });
 
   factory KickAuthParams.withPKCE() {
@@ -28,6 +30,7 @@ class KickAuthParams {
     return KickAuthParams(
       codeChallenge: codeChallenge,
       state: state,
+      codeVerifier: codeVerifier,
     );
   }
 }

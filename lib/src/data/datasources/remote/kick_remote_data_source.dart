@@ -32,14 +32,14 @@ class KickRemoteDataSourceImpl implements KickRemoteDataSource {
   Future<Map<String, dynamic>> getKickOauth(KickAuthParams params) async {
     final remoteConfig = FirebaseRemoteConfig.instance;
     await remoteConfig.fetchAndActivate();
-    String redirectUri = remoteConfig.getString('irllink_kick_auth_url');
-    if (kDebugMode) {
-      redirectUri = remoteConfig.getString('irllink_kick_auth_url_dev');
-    }
+    // String redirectUri = remoteConfig.getString('irllink_kick_auth_url');
+    // if (kDebugMode) {
+    //   redirectUri = remoteConfig.getString('irllink_kick_auth_url_dev');
+    // }
 
     final url = Uri.https(kKickAuthUrlBase, kKickAuthUrlPath, {
       'client_id': params.clientId,
-      'redirect_uri': redirectUri,
+      'redirect_uri': "http://localhost:3000/api/kick/auth",
       'response_type': params.responseType,
       'scope': params.scopes,
       'state': params.state,
