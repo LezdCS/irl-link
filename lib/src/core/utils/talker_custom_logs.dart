@@ -72,3 +72,11 @@ class TwitchLog extends TalkerLog {
   @override
   AnsiPen get pen => AnsiPen()..rgb(r: 145, g: 70, b: 255);
 }
+
+class KickLog extends TalkerLog {
+  KickLog(String super.message);
+
+  /// Your custom log title
+  @override
+  String get title => 'Kick 🎮';
+}

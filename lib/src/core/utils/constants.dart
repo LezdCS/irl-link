@@ -7,3 +7,8 @@ const kRedirectScheme = 'dev.lezd.www.irllink';
 
 const kStreamelementsAuthClientId = '77746eebf069856d';
 const kStreamelementsUrlBase = 'https://api.streamelements.com';
+
+const kKickAuthClientId = '01JRWDBTA5ZVQMX975KYEH07Q8';
+const kKickAuthUrlBase = 'id.kick.com';
+const kKickAuthUrlPath = '/oauth/authorize';
+const kKickApiUrlBase = 'https://api.kick.com';

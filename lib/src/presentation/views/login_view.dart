@@ -67,6 +67,36 @@ class LoginView extends GetView<LoginViewController> {
           },
         ),
         const SizedBox(
+          height: 16,
+        ),
+        TextButton.icon(
+          label: Text.rich(
+            TextSpan(
+              text: "Login with ",
+              style: const TextStyle(
+                color: Colors.grey,
+                fontSize: 20,
+              ),
+              children: [
+                TextSpan(
+                  text: 'Kick',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.tertiary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          style: TextButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.secondary,
+          ),
+          onPressed: () {
+            controller.loginKick();
+          },
+        ),
+        const SizedBox(
           height: 10,
         ),
         TextButton(
