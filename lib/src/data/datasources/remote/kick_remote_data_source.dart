@@ -44,8 +44,6 @@ class KickRemoteDataSourceImpl implements KickRemoteDataSource {
       redirectUri = remoteConfig.getString('irllink_kick_auth_url_dev');
     }
 
-    debugPrint(redirectUri);
-
     final url = Uri.https(kKickAuthUrlBase, kKickAuthUrlPath, {
       'client_id': params.clientId,
       'redirect_uri': redirectUri,
@@ -55,8 +53,6 @@ class KickRemoteDataSourceImpl implements KickRemoteDataSource {
       'code_challenge': params.codeChallenge,
       'code_challenge_method': params.codeChallengeMethod,
     });
-
-    debugPrint(url.toString());
 
     final result = await FlutterWebAuth2.authenticate(
       url: url.toString(),
@@ -77,6 +73,8 @@ class KickRemoteDataSourceImpl implements KickRemoteDataSource {
     );
 
     final data = response.data;
+
+    talker.logCustom(KickLog(data.toString()));
 
     final accessToken = data['access_token'];
     final refreshToken = data['refresh_token'];
@@ -128,7 +126,6 @@ class KickRemoteDataSourceImpl implements KickRemoteDataSource {
   Future<KickUserDTO> getKickUser(String accessToken) async {
     dioClient.options.headers["authorization"] = "Bearer $accessToken";
     final response = await dioClient.get('$kKickApiUrlBase/public/v1/users');
-    talker.logCustom(KickLog(response.data.toString()));
     return KickUserDTO.fromJson(response.data['data'][0]);
   }
 }

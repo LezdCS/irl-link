@@ -11,6 +11,7 @@
 import 'package:auto_mappr_annotation/auto_mappr_annotation.dart' as _i1;
 
 import '../../data/entities/dashboard_event_dto.dart' as _i11;
+import '../../data/entities/kick/kick_credentials_dto.dart' as _i45;
 import '../../data/entities/kick/kick_user_dto.dart' as _i43;
 import '../../data/entities/settings/browser_tab_settings_dto.dart' as _i7;
 import '../../data/entities/settings/chat_events_settings_dto.dart' as _i17;
@@ -32,6 +33,7 @@ import '../../data/entities/twitch/twitch_prediction_dto.dart' as _i28;
 import '../../data/entities/twitch/twitch_stream_infos_dto.dart' as _i38;
 import '../../data/entities/twitch/twitch_user_dto.dart' as _i23;
 import '../../domain/entities/dashboard_event.dart' as _i10;
+import '../../domain/entities/kick/kick_credentials.dart' as _i44;
 import '../../domain/entities/kick/kick_user.dart' as _i42;
 import '../../domain/entities/settings.dart' as _i2;
 import '../../domain/entities/settings/browser_tab_settings.dart' as _i6;
@@ -102,6 +104,8 @@ import '../../domain/entities/twitch/twitch_user.dart' as _i22;
 /// - `ContributionDTO` → `Contribution`.
 /// - `KickUser` → `KickUserDTO`.
 /// - `KickUserDTO` → `KickUser`.
+/// - `KickCredentials` → `KickCredentialsDTO`.
+/// - `KickCredentialsDTO` → `KickCredentials`.
 /// {@endtemplate}
 class $Mappr implements _i1.AutoMapprInterface {
   const $Mappr();
@@ -396,6 +400,18 @@ class $Mappr implements _i1.AutoMapprInterface {
             sourceTypeOf == _typeOf<_i43.KickUserDTO?>()) &&
         (targetTypeOf == _typeOf<_i42.KickUser>() ||
             targetTypeOf == _typeOf<_i42.KickUser?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i44.KickCredentials>() ||
+            sourceTypeOf == _typeOf<_i44.KickCredentials?>()) &&
+        (targetTypeOf == _typeOf<_i45.KickCredentialsDTO>() ||
+            targetTypeOf == _typeOf<_i45.KickCredentialsDTO?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i45.KickCredentialsDTO>() ||
+            sourceTypeOf == _typeOf<_i45.KickCredentialsDTO?>()) &&
+        (targetTypeOf == _typeOf<_i44.KickCredentials>() ||
+            targetTypeOf == _typeOf<_i44.KickCredentials?>())) {
       return true;
     }
     if (recursive) {
@@ -1058,6 +1074,26 @@ class $Mappr implements _i1.AutoMapprInterface {
       }
       return (_map__i43$KickUserDTO_To__i42$KickUser(
           (model as _i43.KickUserDTO?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i44.KickCredentials>() ||
+            sourceTypeOf == _typeOf<_i44.KickCredentials?>()) &&
+        (targetTypeOf == _typeOf<_i45.KickCredentialsDTO>() ||
+            targetTypeOf == _typeOf<_i45.KickCredentialsDTO?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i44$KickCredentials_To__i45$KickCredentialsDTO(
+          (model as _i44.KickCredentials?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i45.KickCredentialsDTO>() ||
+            sourceTypeOf == _typeOf<_i45.KickCredentialsDTO?>()) &&
+        (targetTypeOf == _typeOf<_i44.KickCredentials>() ||
+            targetTypeOf == _typeOf<_i44.KickCredentials?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i45$KickCredentialsDTO_To__i44$KickCredentials(
+          (model as _i45.KickCredentialsDTO?)) as TARGET);
     }
     throw Exception('No ${model.runtimeType} -> $targetTypeOf mapping.');
   }
@@ -1983,6 +2019,40 @@ class $Mappr implements _i1.AutoMapprInterface {
       name: model.name,
       email: model.email,
       profilePicture: model.profilePicture,
+    );
+  }
+
+  _i45.KickCredentialsDTO _map__i44$KickCredentials_To__i45$KickCredentialsDTO(
+      _i44.KickCredentials? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping KickCredentials → KickCredentialsDTO failed because KickCredentials was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<KickCredentials, KickCredentialsDTO> to handle null values during mapping.');
+    }
+    return _i45.KickCredentialsDTO(
+      accessToken: model.accessToken,
+      refreshToken: model.refreshToken,
+      expiresIn: model.expiresIn,
+      kickUser: _map__i42$KickUser_To__i43$KickUserDTO(model.kickUser),
+      scopes: model.scopes,
+    );
+  }
+
+  _i44.KickCredentials _map__i45$KickCredentialsDTO_To__i44$KickCredentials(
+      _i45.KickCredentialsDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping KickCredentialsDTO → KickCredentials failed because KickCredentialsDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<KickCredentialsDTO, KickCredentials> to handle null values during mapping.');
+    }
+    return _i44.KickCredentials(
+      accessToken: model.accessToken,
+      refreshToken: model.refreshToken,
+      expiresIn: model.expiresIn,
+      kickUser: _map__i43$KickUserDTO_To__i42$KickUser(model.kickUser),
+      scopes: model.scopes,
     );
   }
 

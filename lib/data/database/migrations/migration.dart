@@ -44,6 +44,32 @@ class Migration1 extends Migration {
       )
     ''');
 
+    // Create Kick users table
+    await db.execute('''
+      CREATE TABLE kick_users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL UNIQUE,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL,
+        profile_picture TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    ''');
+
+    // Create Kick credentials table
+    await db.execute('''
+      CREATE TABLE kick_credentials (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        access_token TEXT NOT NULL,
+        refresh_token TEXT NOT NULL,
+        expires_in INTEGER NOT NULL,
+        user_id INTEGER NOT NULL,
+        scopes TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES kick_users(user_id)
+      )
+    ''');
+
     // Create StreamElements credentials table
     await db.execute('''
       CREATE TABLE streamelements_credentials (
@@ -116,6 +142,8 @@ class Migration1 extends Migration {
   @override
   Future<void> down(Database db) async {
     await db.execute('DROP TABLE IF EXISTS twitch_credentials');
+    await db.execute('DROP TABLE IF EXISTS kick_credentials');
+    await db.execute('DROP TABLE IF EXISTS kick_users');
     await db.execute('DROP TABLE IF EXISTS streamelements_credentials');
   }
 }
