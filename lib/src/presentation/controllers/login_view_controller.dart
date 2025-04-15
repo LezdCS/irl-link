@@ -92,7 +92,7 @@ class LoginViewController extends GetxController {
 
   Future<void> loginKick() async {
     isLoading.value = true;
-    KickAuthParams params = const KickAuthParams();
+    KickAuthParams params = KickAuthParams.withPKCE();
     final loginResult = await loginKickUseCase(params: params);
 
     loginResult.fold(

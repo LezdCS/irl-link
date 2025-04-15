@@ -42,10 +42,12 @@ class KickRemoteDataSourceImpl implements KickRemoteDataSource {
       'redirect_uri': redirectUri,
       'response_type': params.responseType,
       'scope': params.scopes,
-      'state': "randomGeneratedString",
+      'state': params.state,
       'code_challenge': params.codeChallenge,
       'code_challenge_method': params.codeChallengeMethod,
     });
+
+    debugPrint(url.toString());
 
     final result = await FlutterWebAuth2.authenticate(
       url: url.toString(),
