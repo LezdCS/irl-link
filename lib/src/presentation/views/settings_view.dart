@@ -5,7 +5,6 @@ import 'package:irllink/src/core/resources/app_translations.dart';
 import 'package:irllink/src/core/services/app_info_service.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
-
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:irllink/src/presentation/views/settings/chat_events.dart';
@@ -90,6 +89,8 @@ class SettingsView extends GetView<SettingsViewController> {
                 endIndent: 0,
                 color: Theme.of(context).colorScheme.secondary,
               ),
+              if (controller.homeViewController.kickData != null)
+                kickProfileSettings(context, width),
               connectionsSettings(context, width, settingsService, settings),
               const Divider(
                 height: 20,
@@ -653,6 +654,87 @@ class SettingsView extends GetView<SettingsViewController> {
             Icons.arrow_forward_ios,
             color: Theme.of(context).primaryIconTheme.color,
             size: 18,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget kickProfileSettings(BuildContext context, double width) {
+    return ColoredBox(
+      color: Theme.of(context).colorScheme.surface,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Kick Profile",
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.tertiary,
+              fontSize: 20,
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.only(left: 4, right: 4),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(top: 10, bottom: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          ClipOval(
+                            child: Image.network(
+                              controller.homeViewController.kickData!.kickUser
+                                  .profilePicture,
+                              width: 60,
+                              height: 60,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container(
+                                  width: 60,
+                                  height: 60,
+                                  color: Colors.grey[300],
+                                  child: const Icon(
+                                    Icons.person,
+                                    size: 30,
+                                    color: Colors.grey,
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 15),
+                          Text(
+                            controller
+                                .homeViewController.kickData!.kickUser.name,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          controller.logoutKick();
+                        },
+                        style: TextButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          minimumSize: const Size(100, 40),
+                        ),
+                        child: Text(
+                          "logout".tr,
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

@@ -8,6 +8,7 @@ import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
+import 'package:irllink/src/domain/usecases/kick/logout_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/disconnect_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/login_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_users_usecase.dart';
@@ -25,12 +26,14 @@ class SettingsViewController extends GetxController {
     required this.homeViewController,
     required this.ttsService,
     required this.storeService,
+    required this.logoutKickUseCase,
   });
 
   final LogoutUseCase logoutUseCase;
   final StreamElementsLoginUseCase streamElementsLoginUseCase;
   final StreamElementsDisconnectUseCase streamElementsDisconnectUseCase;
   final GetTwitchUsersUseCase getTwitchUsersUseCase;
+  final LogoutKickUseCase logoutKickUseCase;
 
   final SettingsService settingsService;
   final HomeViewController homeViewController;
@@ -295,5 +298,39 @@ class SettingsViewController extends GetxController {
     for (var user in users) {
       usernamesHiddenUsers.add(user.displayName);
     }
+  }
+
+  Future<void> logoutKick() async {
+    if (homeViewController.kickData == null) {
+      return;
+    }
+
+    final logoutResult = await logoutKickUseCase(
+      params: homeViewController.kickData!.accessToken,
+    );
+
+    logoutResult.fold(
+      (l) {
+        Get.snackbar(
+          "Error",
+          "Logout failed: $l",
+          snackPosition: SnackPosition.BOTTOM,
+          icon: const Icon(Icons.error_outline, color: Colors.red),
+          borderWidth: 1,
+          borderColor: Colors.red,
+        );
+      },
+      (r) {
+        homeViewController.kickData = null;
+        Get.snackbar(
+          "Kick",
+          "Successfully logged out",
+          snackPosition: SnackPosition.BOTTOM,
+          icon: const Icon(Icons.check, color: Colors.green),
+          borderWidth: 1,
+          borderColor: Colors.green,
+        );
+      },
+    );
   }
 }

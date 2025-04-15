@@ -8,12 +8,16 @@ import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/init_dio.dart';
+import 'package:irllink/src/data/datasources/local/kick_local_data_source.dart';
 import 'package:irllink/src/data/datasources/local/streamelements_local_data_source.dart';
 import 'package:irllink/src/data/datasources/local/twitch_local_data_source.dart';
+import 'package:irllink/src/data/datasources/remote/kick_remote_data_source.dart';
 import 'package:irllink/src/data/datasources/remote/streamelements_remote_data_source.dart';
 import 'package:irllink/src/data/datasources/remote/twitch_remote_data_source.dart';
+import 'package:irllink/src/data/repositories/kick_repository_impl.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
+import 'package:irllink/src/domain/usecases/kick/logout_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/disconnect_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/login_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_users_usecase.dart';
@@ -27,6 +31,7 @@ class SettingsBindings extends Bindings {
   void dependencies() {
     Dio dioTwitchClient = initDio(kTwitchApiUrlBase);
     Dio streamElementsDioClient = initDio(kStreamelementsUrlBase);
+    Dio kickDioClient = initDio(kKickApiUrlBase);
     Talker talker = Get.find<TalkerService>().talker;
     // Repositories
     final twitchRepository = TwitchRepositoryImpl(
@@ -49,6 +54,16 @@ class SettingsBindings extends Bindings {
         talker: talker,
       ),
     );
+    final kickRepository = KickRepositoryImpl(
+      remoteDataSource: KickRemoteDataSourceImpl(
+        dioClient: kickDioClient,
+        talker: talker,
+      ),
+      localDataSource: KickLocalDataSourceImpl(
+        talker: talker,
+      ),
+      talker: talker,
+    );
 
     // Use cases
     GetTwitchUsersUseCase getTwitchUsersUseCase =
@@ -62,6 +77,7 @@ class SettingsBindings extends Bindings {
         StreamElementsDisconnectUseCase(
       streamelementsRepository: streamelementsRepository,
     );
+    LogoutKickUseCase logoutKickUseCase = LogoutKickUseCase(kickRepository);
 
     Get.lazyPut<SettingsViewController>(
       () => SettingsViewController(
@@ -73,6 +89,7 @@ class SettingsBindings extends Bindings {
         settingsService: Get.find<SettingsService>(),
         storeService: Get.find<StoreService>(),
         ttsService: Get.find<TtsService>(),
+        logoutKickUseCase: logoutKickUseCase,
       ),
     );
   }
