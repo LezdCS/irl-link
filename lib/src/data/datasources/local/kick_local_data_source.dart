@@ -1,7 +1,6 @@
 import 'package:irllink/data/database/database_helper.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/entities/kick/kick_credentials_dto.dart';
-import 'package:irllink/src/data/entities/kick/kick_user_dto.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 abstract class KickLocalDataSource {
@@ -84,22 +83,16 @@ class KickLocalDataSourceImpl implements KickLocalDataSource {
 
     final user = userMaps.first;
 
-    credentials['kickUser'] = KickUserDTO.fromJson(user);
+    // Create a new map with the combined data
+    final Map<String, dynamic> credentialsData = {
+      'accessToken': credentials['access_token'],
+      'refreshToken': credentials['refresh_token'],
+      'expiresIn': credentials['expires_in'],
+      'scopes': credentials['scopes'],
+      'kickUser': user,
+    };
 
-    KickCredentialsDTO.fromJson(credentials);
-    return KickCredentialsDTO.fromJson(credentials);
-    // return KickCredentialsDTO(
-    //   accessToken: credentials['access_token'],
-    //   refreshToken: credentials['refresh_token'],
-    //   expiresIn: credentials['expires_in'],
-    //   kickUser: KickUserDTO(
-    //     userId: user['user_id'],
-    //     name: user['name'],
-    //     email: user['email'],
-    //     profilePicture: user['profile_picture'],
-    //   ),
-    //   scopes: credentials['scopes'],
-    // );
+    return KickCredentialsDTO.fromJson(credentialsData);
   }
 
   @override

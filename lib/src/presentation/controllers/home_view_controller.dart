@@ -25,6 +25,7 @@ import 'package:irllink/src/data/datasources/remote/twitch_remote_data_source.da
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
+import 'package:irllink/src/domain/entities/kick/kick_credentials.dart';
 import 'package:irllink/src/domain/entities/pinned_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
@@ -71,6 +72,7 @@ class HomeViewController extends GetxController
   RxList<WebPageView> iOSAudioSources = <WebPageView>[].obs;
 
   TwitchCredentials? twitchData;
+  KickCredentials? kickData;
 
   // StreamElements
   Rxn<StreamelementsViewController> streamelementsViewController =
@@ -115,9 +117,27 @@ class HomeViewController extends GetxController
     emotesTabController = TabController(length: 0, vsync: this);
 
     if (Get.arguments != null) {
-      twitchData = Get.arguments[0];
-      await _initializeTwitchServices();
-      await _setupCrashlytics();
+      if (Get.arguments.length == 1) {
+        final credentials = Get.arguments[0];
+        if (credentials is TwitchCredentials) {
+          twitchData = credentials;
+          await _initializeTwitchServices();
+          await _setupCrashlytics();
+        } else if (credentials is KickCredentials) {
+          kickData = credentials;
+          // TODO(LezdCS): Initialize Kick services if needed
+        }
+      } else if (Get.arguments.length == 2) {
+        final twitchCreds = Get.arguments[0];
+        final kickCreds = Get.arguments[1];
+        if (twitchCreds is TwitchCredentials && kickCreds is KickCredentials) {
+          twitchData = twitchCreds;
+          kickData = kickCreds;
+          await _initializeTwitchServices();
+          await _setupCrashlytics();
+          // TODO(LezdCS): Initialize Kick services if needed
+        }
+      }
     }
 
     final remoteConfig = FirebaseRemoteConfig.instance;

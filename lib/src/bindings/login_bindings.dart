@@ -11,6 +11,7 @@ import 'package:irllink/src/data/datasources/remote/kick_remote_data_source.dart
 import 'package:irllink/src/data/datasources/remote/twitch_remote_data_source.dart';
 import 'package:irllink/src/data/repositories/kick_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
+import 'package:irllink/src/domain/usecases/kick/get_kick_local_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/login_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/login_usecase.dart';
@@ -55,6 +56,8 @@ class LoginBindings extends Bindings {
         RefreshTwitchTokenUseCase(twitchRepository);
     LoginUseCase loginUseCase = LoginUseCase(twitchRepository);
     LoginKickUseCase loginKickUseCase = LoginKickUseCase(kickRepository);
+    GetKickLocalUseCase getKickLocalUseCase =
+        GetKickLocalUseCase(kickRepository);
 
     Get.lazyPut<LoginViewController>(
       () => LoginViewController(
@@ -62,6 +65,7 @@ class LoginBindings extends Bindings {
         refreshTwitchTokenUseCase: refreshTwitchTokenUseCase,
         loginUseCase: loginUseCase,
         loginKickUseCase: loginKickUseCase,
+        getKickLocalUseCase: getKickLocalUseCase,
       ),
     );
   }
