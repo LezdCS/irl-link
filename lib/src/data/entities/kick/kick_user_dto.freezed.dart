@@ -15,11 +15,14 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$KickUserDTO {
-  String get id;
-  String get username;
-  String get bio;
+  @JsonKey(name: 'user_id')
+  int get userId;
+  @JsonKey(name: 'name')
+  String get name;
+  @JsonKey(name: 'email')
+  String get email;
+  @JsonKey(name: 'profile_picture')
   String get profilePicture;
-  String get displayName;
 
   /// Create a copy of KickUserDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -36,24 +39,21 @@ mixin _$KickUserDTO {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is KickUserDTO &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.username, username) ||
-                other.username == username) &&
-            (identical(other.bio, bio) || other.bio == bio) &&
+            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.email, email) || other.email == email) &&
             (identical(other.profilePicture, profilePicture) ||
-                other.profilePicture == profilePicture) &&
-            (identical(other.displayName, displayName) ||
-                other.displayName == displayName));
+                other.profilePicture == profilePicture));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, id, username, bio, profilePicture, displayName);
+      Object.hash(runtimeType, userId, name, email, profilePicture);
 
   @override
   String toString() {
-    return 'KickUserDTO(id: $id, username: $username, bio: $bio, profilePicture: $profilePicture, displayName: $displayName)';
+    return 'KickUserDTO(userId: $userId, name: $name, email: $email, profilePicture: $profilePicture)';
   }
 }
 
@@ -64,11 +64,10 @@ abstract mixin class $KickUserDTOCopyWith<$Res> {
       _$KickUserDTOCopyWithImpl;
   @useResult
   $Res call(
-      {String id,
-      String username,
-      String bio,
-      String profilePicture,
-      String displayName});
+      {@JsonKey(name: 'user_id') int userId,
+      @JsonKey(name: 'name') String name,
+      @JsonKey(name: 'email') String email,
+      @JsonKey(name: 'profile_picture') String profilePicture});
 }
 
 /// @nodoc
@@ -83,32 +82,27 @@ class _$KickUserDTOCopyWithImpl<$Res> implements $KickUserDTOCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? username = null,
-    Object? bio = null,
+    Object? userId = null,
+    Object? name = null,
+    Object? email = null,
     Object? profilePicture = null,
-    Object? displayName = null,
   }) {
     return _then(_self.copyWith(
-      id: null == id
-          ? _self.id
-          : id // ignore: cast_nullable_to_non_nullable
+      userId: null == userId
+          ? _self.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as int,
+      name: null == name
+          ? _self.name
+          : name // ignore: cast_nullable_to_non_nullable
               as String,
-      username: null == username
-          ? _self.username
-          : username // ignore: cast_nullable_to_non_nullable
-              as String,
-      bio: null == bio
-          ? _self.bio
-          : bio // ignore: cast_nullable_to_non_nullable
+      email: null == email
+          ? _self.email
+          : email // ignore: cast_nullable_to_non_nullable
               as String,
       profilePicture: null == profilePicture
           ? _self.profilePicture
           : profilePicture // ignore: cast_nullable_to_non_nullable
-              as String,
-      displayName: null == displayName
-          ? _self.displayName
-          : displayName // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -118,24 +112,25 @@ class _$KickUserDTOCopyWithImpl<$Res> implements $KickUserDTOCopyWith<$Res> {
 @JsonSerializable()
 class _KickUserDTO implements KickUserDTO {
   const _KickUserDTO(
-      {required this.id,
-      required this.username,
-      required this.bio,
-      required this.profilePicture,
-      required this.displayName});
+      {@JsonKey(name: 'user_id') required this.userId,
+      @JsonKey(name: 'name') required this.name,
+      @JsonKey(name: 'email') required this.email,
+      @JsonKey(name: 'profile_picture') required this.profilePicture});
   factory _KickUserDTO.fromJson(Map<String, dynamic> json) =>
       _$KickUserDTOFromJson(json);
 
   @override
-  final String id;
+  @JsonKey(name: 'user_id')
+  final int userId;
   @override
-  final String username;
+  @JsonKey(name: 'name')
+  final String name;
   @override
-  final String bio;
+  @JsonKey(name: 'email')
+  final String email;
   @override
+  @JsonKey(name: 'profile_picture')
   final String profilePicture;
-  @override
-  final String displayName;
 
   /// Create a copy of KickUserDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -157,24 +152,21 @@ class _KickUserDTO implements KickUserDTO {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _KickUserDTO &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.username, username) ||
-                other.username == username) &&
-            (identical(other.bio, bio) || other.bio == bio) &&
+            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.email, email) || other.email == email) &&
             (identical(other.profilePicture, profilePicture) ||
-                other.profilePicture == profilePicture) &&
-            (identical(other.displayName, displayName) ||
-                other.displayName == displayName));
+                other.profilePicture == profilePicture));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, id, username, bio, profilePicture, displayName);
+      Object.hash(runtimeType, userId, name, email, profilePicture);
 
   @override
   String toString() {
-    return 'KickUserDTO(id: $id, username: $username, bio: $bio, profilePicture: $profilePicture, displayName: $displayName)';
+    return 'KickUserDTO(userId: $userId, name: $name, email: $email, profilePicture: $profilePicture)';
   }
 }
 
@@ -187,11 +179,10 @@ abstract mixin class _$KickUserDTOCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id,
-      String username,
-      String bio,
-      String profilePicture,
-      String displayName});
+      {@JsonKey(name: 'user_id') int userId,
+      @JsonKey(name: 'name') String name,
+      @JsonKey(name: 'email') String email,
+      @JsonKey(name: 'profile_picture') String profilePicture});
 }
 
 /// @nodoc
@@ -206,32 +197,27 @@ class __$KickUserDTOCopyWithImpl<$Res> implements _$KickUserDTOCopyWith<$Res> {
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? id = null,
-    Object? username = null,
-    Object? bio = null,
+    Object? userId = null,
+    Object? name = null,
+    Object? email = null,
     Object? profilePicture = null,
-    Object? displayName = null,
   }) {
     return _then(_KickUserDTO(
-      id: null == id
-          ? _self.id
-          : id // ignore: cast_nullable_to_non_nullable
+      userId: null == userId
+          ? _self.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as int,
+      name: null == name
+          ? _self.name
+          : name // ignore: cast_nullable_to_non_nullable
               as String,
-      username: null == username
-          ? _self.username
-          : username // ignore: cast_nullable_to_non_nullable
-              as String,
-      bio: null == bio
-          ? _self.bio
-          : bio // ignore: cast_nullable_to_non_nullable
+      email: null == email
+          ? _self.email
+          : email // ignore: cast_nullable_to_non_nullable
               as String,
       profilePicture: null == profilePicture
           ? _self.profilePicture
           : profilePicture // ignore: cast_nullable_to_non_nullable
-              as String,
-      displayName: null == displayName
-          ? _self.displayName
-          : displayName // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }

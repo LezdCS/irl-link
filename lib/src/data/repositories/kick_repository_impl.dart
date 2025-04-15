@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/params/kick_auth_params.dart';
 import 'package:irllink/src/core/utils/mapper.dart';
+import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/datasources/local/kick_local_data_source.dart';
 import 'package:irllink/src/data/datasources/remote/kick_remote_data_source.dart';
 import 'package:irllink/src/data/entities/kick/kick_credentials_dto.dart';
@@ -33,6 +34,7 @@ class KickRepositoryImpl implements KickRepository {
       final oauthData = await _remoteDataSource.getKickOauth(params);
 
       final kickUserResult = await getKickUser(oauthData['access_token']);
+      talker.logCustom(KickLog(kickUserResult.toString()));
 
       return kickUserResult.fold(
         (l) {

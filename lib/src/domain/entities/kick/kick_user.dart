@@ -1,14 +1,16 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:flutter/material.dart';
 
-part 'kick_user.freezed.dart';
+@immutable
+class KickUser {
+  final int userId;
+  final String name;
+  final String email;
+  final String profilePicture;
 
-@freezed
-abstract class KickUser with _$KickUser {
-  const factory KickUser({
-    required String id,
-    required String username,
-    required String bio,
-    required String profilePicture,
-    required String displayName,
-  }) = _KickUser;
+  const KickUser({
+    required this.userId,
+    required this.name,
+    required this.email,
+    required this.profilePicture,
+  });
 }

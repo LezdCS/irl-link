@@ -9,6 +9,7 @@ import 'package:get/get_instance/get_instance.dart';
 import 'package:irllink/src/core/params/kick_auth_params.dart';
 import 'package:irllink/src/core/services/app_info_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
+import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/entities/kick/kick_user_dto.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
@@ -31,15 +32,23 @@ class KickRemoteDataSourceImpl implements KickRemoteDataSource {
   @override
   Future<Map<String, dynamic>> getKickOauth(KickAuthParams params) async {
     final remoteConfig = FirebaseRemoteConfig.instance;
+    await remoteConfig.setConfigSettings(
+      RemoteConfigSettings(
+        fetchTimeout: const Duration(minutes: 1),
+        minimumFetchInterval: const Duration(minutes: 5),
+      ),
+    );
     await remoteConfig.fetchAndActivate();
-    // String redirectUri = remoteConfig.getString('irllink_kick_auth_url');
-    // if (kDebugMode) {
-    //   redirectUri = remoteConfig.getString('irllink_kick_auth_url_dev');
-    // }
+    String redirectUri = remoteConfig.getString('irllink_kick_auth_url');
+    if (kDebugMode) {
+      redirectUri = remoteConfig.getString('irllink_kick_auth_url_dev');
+    }
+
+    debugPrint(redirectUri);
 
     final url = Uri.https(kKickAuthUrlBase, kKickAuthUrlPath, {
       'client_id': params.clientId,
-      'redirect_uri': "http://localhost:3000/api/kick/auth",
+      'redirect_uri': redirectUri,
       'response_type': params.responseType,
       'scope': params.scopes,
       'state': params.state,
@@ -58,10 +67,21 @@ class KickRemoteDataSourceImpl implements KickRemoteDataSource {
       ),
     );
 
-    final accessToken = Uri.parse(result).queryParameters['access_token'];
-    final refreshToken = Uri.parse(result).queryParameters['refresh_token'];
-    final expiresIn = Uri.parse(result).queryParameters['expires_in'];
-    final scopes = Uri.parse(result).queryParameters['scope'];
+    final code = Uri.parse(result).queryParameters['code'];
+    final response = await dioClient.get(
+      'https://dev.irllink.com/api/kick/token',
+      queryParameters: {
+        'code': code,
+        'code_verifier': params.codeVerifier,
+      },
+    );
+
+    final data = response.data;
+
+    final accessToken = data['access_token'];
+    final refreshToken = data['refresh_token'];
+    final expiresIn = data['expires_in'];
+    final scopes = data['scope'];
 
     return {
       'access_token': accessToken,
@@ -107,8 +127,8 @@ class KickRemoteDataSourceImpl implements KickRemoteDataSource {
   @override
   Future<KickUserDTO> getKickUser(String accessToken) async {
     dioClient.options.headers["authorization"] = "Bearer $accessToken";
-    final response =
-        await dioClient.get('https://$kKickApiUrlBase/api/v1/user');
-    return KickUserDTO.fromJson(response.data);
+    final response = await dioClient.get('$kKickApiUrlBase/public/v1/users');
+    talker.logCustom(KickLog(response.data.toString()));
+    return KickUserDTO.fromJson(response.data['data'][0]);
   }
 }

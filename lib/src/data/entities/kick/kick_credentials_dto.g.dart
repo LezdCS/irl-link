@@ -10,8 +10,8 @@ _KickCredentialsDTO _$KickCredentialsDTOFromJson(Map<String, dynamic> json) =>
     _KickCredentialsDTO(
       accessToken: json['accessToken'] as String,
       refreshToken: json['refreshToken'] as String,
-      expiresIn: json['expiresIn'] as String,
-      kickUser: _stringToKickUserDTO(json['kickUser']),
+      expiresIn: (json['expiresIn'] as num).toInt(),
+      kickUser: KickUserDTO.fromJson(json['kickUser'] as Map<String, dynamic>),
       scopes: json['scopes'] as String,
     );
 

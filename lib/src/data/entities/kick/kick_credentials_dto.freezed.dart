@@ -17,8 +17,7 @@ T _$identity<T>(T value) => value;
 mixin _$KickCredentialsDTO {
   String get accessToken;
   String get refreshToken;
-  String get expiresIn;
-  @JsonKey(fromJson: _stringToKickUserDTO)
+  int get expiresIn;
   KickUserDTO get kickUser;
   String get scopes;
 
@@ -69,8 +68,8 @@ abstract mixin class $KickCredentialsDTOCopyWith<$Res> {
   $Res call(
       {String accessToken,
       String refreshToken,
-      String expiresIn,
-      @JsonKey(fromJson: _stringToKickUserDTO) KickUserDTO kickUser,
+      int expiresIn,
+      KickUserDTO kickUser,
       String scopes});
 
   $KickUserDTOCopyWith<$Res> get kickUser;
@@ -107,7 +106,7 @@ class _$KickCredentialsDTOCopyWithImpl<$Res>
       expiresIn: null == expiresIn
           ? _self.expiresIn
           : expiresIn // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       kickUser: null == kickUser
           ? _self.kickUser
           : kickUser // ignore: cast_nullable_to_non_nullable
@@ -137,7 +136,7 @@ class _KickCredentialsDTO implements KickCredentialsDTO {
       {required this.accessToken,
       required this.refreshToken,
       required this.expiresIn,
-      @JsonKey(fromJson: _stringToKickUserDTO) required this.kickUser,
+      required this.kickUser,
       required this.scopes});
   factory _KickCredentialsDTO.fromJson(Map<String, dynamic> json) =>
       _$KickCredentialsDTOFromJson(json);
@@ -147,9 +146,8 @@ class _KickCredentialsDTO implements KickCredentialsDTO {
   @override
   final String refreshToken;
   @override
-  final String expiresIn;
+  final int expiresIn;
   @override
-  @JsonKey(fromJson: _stringToKickUserDTO)
   final KickUserDTO kickUser;
   @override
   final String scopes;
@@ -207,8 +205,8 @@ abstract mixin class _$KickCredentialsDTOCopyWith<$Res>
   $Res call(
       {String accessToken,
       String refreshToken,
-      String expiresIn,
-      @JsonKey(fromJson: _stringToKickUserDTO) KickUserDTO kickUser,
+      int expiresIn,
+      KickUserDTO kickUser,
       String scopes});
 
   @override
@@ -246,7 +244,7 @@ class __$KickCredentialsDTOCopyWithImpl<$Res>
       expiresIn: null == expiresIn
           ? _self.expiresIn
           : expiresIn // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       kickUser: null == kickUser
           ? _self.kickUser
           : kickUser // ignore: cast_nullable_to_non_nullable

@@ -6,11 +6,10 @@ part 'kick_user_dto.g.dart';
 @freezed
 abstract class KickUserDTO with _$KickUserDTO {
   const factory KickUserDTO({
-    required String id,
-    required String username,
-    required String bio,
-    required String profilePicture,
-    required String displayName,
+    @JsonKey(name: 'user_id') required int userId,
+    @JsonKey(name: 'name') required String name,
+    @JsonKey(name: 'email') required String email,
+    @JsonKey(name: 'profile_picture') required String profilePicture,
   }) = _KickUserDTO;
 
   factory KickUserDTO.fromJson(Map<String, dynamic> json) =>

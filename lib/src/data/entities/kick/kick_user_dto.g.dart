@@ -7,18 +7,16 @@ part of 'kick_user_dto.dart';
 // **************************************************************************
 
 _KickUserDTO _$KickUserDTOFromJson(Map<String, dynamic> json) => _KickUserDTO(
-      id: json['id'] as String,
-      username: json['username'] as String,
-      bio: json['bio'] as String,
-      profilePicture: json['profilePicture'] as String,
-      displayName: json['displayName'] as String,
+      userId: (json['user_id'] as num).toInt(),
+      name: json['name'] as String,
+      email: json['email'] as String,
+      profilePicture: json['profile_picture'] as String,
     );
 
 Map<String, dynamic> _$KickUserDTOToJson(_KickUserDTO instance) =>
     <String, dynamic>{
-      'id': instance.id,
-      'username': instance.username,
-      'bio': instance.bio,
-      'profilePicture': instance.profilePicture,
-      'displayName': instance.displayName,
+      'user_id': instance.userId,
+      'name': instance.name,
+      'email': instance.email,
+      'profile_picture': instance.profilePicture,
     };
