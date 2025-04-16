@@ -34,6 +34,10 @@ abstract class KickRemoteDataSource {
     String streamTitle,
     String categoryId,
   );
+  Future<Either<Failure, void>> sendChatMessage(
+    String accessToken,
+    String message,
+  );
 }
 
 class KickRemoteDataSourceImpl implements KickRemoteDataSource {
@@ -204,6 +208,7 @@ class KickRemoteDataSourceImpl implements KickRemoteDataSource {
     String categoryId,
   ) async {
     try {
+      dioClient.options.headers["authorization"] = "Bearer $accessToken";
       final response = await dioClient.patch(
         '$kKickApiUrlBase/public/v1/channels',
         data: {
@@ -219,6 +224,31 @@ class KickRemoteDataSourceImpl implements KickRemoteDataSource {
       }
     } catch (e) {
       talker.error('Failed to patch channel: $e');
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> sendChatMessage(
+    String accessToken,
+    String message,
+  ) async {
+    try {
+      dioClient.options.headers["authorization"] = "Bearer $accessToken";
+      final response = await dioClient.post(
+        '$kKickApiUrlBase/public/v1/chat',
+        data: {
+          'content': message,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return const Right(null);
+      } else {
+        return Left(Failure('Failed to send chat message'));
+      }
+    } catch (e) {
+      talker.error('Failed to send chat message: $e');
       return Left(Failure(e.toString()));
     }
   }

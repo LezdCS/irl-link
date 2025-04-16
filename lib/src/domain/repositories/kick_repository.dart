@@ -38,4 +38,9 @@ abstract class KickRepository {
   Future<Either<Failure, KickChannel>> patchChannel(
     PatchKickChannelParams params,
   );
+
+  Future<Either<Failure, void>> sendChatMessage(
+    String accessToken,
+    String message,
+  );
 }

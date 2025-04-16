@@ -196,4 +196,23 @@ class KickRepositoryImpl implements KickRepository {
       return Left(Failure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> sendChatMessage(
+    String accessToken,
+    String message,
+  ) async {
+    try {
+      final result = await _remoteDataSource.sendChatMessage(
+        accessToken,
+        message,
+      );
+      return result.fold(
+        (failure) => Left(failure),
+        (success) => Right(success),
+      );
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
 }
