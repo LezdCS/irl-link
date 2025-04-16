@@ -1,15 +1,18 @@
 import 'dart:io';
 
+import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:get/get_core/get_core.dart';
 import 'package:get/get_instance/get_instance.dart';
+import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/params/kick_auth_params.dart';
 import 'package:irllink/src/core/services/app_info_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
+import 'package:irllink/src/data/entities/kick/kick_category_dto.dart';
 import 'package:irllink/src/data/entities/kick/kick_user_dto.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
@@ -18,6 +21,10 @@ abstract class KickRemoteDataSource {
   Future<Map<String, dynamic>> refreshAccessToken(String refreshToken);
   Future<void> logout(String accessToken);
   Future<KickUserDTO> getKickUser(String accessToken);
+  Future<Either<Failure, List<KickCategoryDTO>>> getCategories({
+    String? searchQuery,
+    int? page,
+  });
 }
 
 class KickRemoteDataSourceImpl implements KickRemoteDataSource {
@@ -127,5 +134,33 @@ class KickRemoteDataSourceImpl implements KickRemoteDataSource {
     dioClient.options.headers["authorization"] = "Bearer $accessToken";
     final response = await dioClient.get('$kKickApiUrlBase/public/v1/users');
     return KickUserDTO.fromJson(response.data['data'][0]);
+  }
+
+  @override
+  Future<Either<Failure, List<KickCategoryDTO>>> getCategories({
+    String? searchQuery,
+    int? page,
+  }) async {
+    try {
+      final response = await dioClient.get(
+        '$kKickApiUrlBase/public/v1/categories',
+        queryParameters: {
+          if (searchQuery != null) 'q': searchQuery,
+          if (page != null) 'page': page,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data['data'];
+        final categories =
+            data.map((json) => KickCategoryDTO.fromJson(json)).toList();
+        return Right(categories);
+      } else {
+        return Left(Failure('Failed to fetch categories'));
+      }
+    } catch (e) {
+      talker.error('Failed to fetch categories: $e');
+      return Left(Failure(e.toString()));
+    }
   }
 }

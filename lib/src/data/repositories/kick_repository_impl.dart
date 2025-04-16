@@ -5,8 +5,10 @@ import 'package:irllink/src/core/utils/mapper.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/datasources/local/kick_local_data_source.dart';
 import 'package:irllink/src/data/datasources/remote/kick_remote_data_source.dart';
+import 'package:irllink/src/data/entities/kick/kick_category_dto.dart';
 import 'package:irllink/src/data/entities/kick/kick_credentials_dto.dart';
 import 'package:irllink/src/data/entities/kick/kick_user_dto.dart';
+import 'package:irllink/src/domain/entities/kick/category.dart';
 import 'package:irllink/src/domain/entities/kick/kick_credentials.dart';
 import 'package:irllink/src/domain/entities/kick/kick_user.dart';
 import 'package:irllink/src/domain/repositories/kick_repository.dart';
@@ -121,6 +123,32 @@ class KickRepositoryImpl implements KickRepository {
       KickUser kickUser = _mappr.convert<KickUserDTO, KickUser>(kickUserDTO);
       return Right(kickUser);
     } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<KickCategory>>> getCategories({
+    String? searchQuery,
+    int? page,
+  }) async {
+    try {
+      final result = await _remoteDataSource.getCategories(
+        searchQuery: searchQuery,
+        page: page,
+      );
+
+      return result.fold(
+        (failure) => Left(failure),
+        (dtos) {
+          final categories = dtos
+              .map((dto) => _mappr.convert<KickCategoryDTO, KickCategory>(dto))
+              .toList();
+          return Right(categories);
+        },
+      );
+    } catch (e) {
+      talker.error('Failed to fetch categories: $e');
       return Left(Failure(e.toString()));
     }
   }
