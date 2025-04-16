@@ -38,33 +38,6 @@ class SettingsView extends GetView<SettingsViewController> {
             ),
             onPressed: () => Get.back(),
           ),
-          actions: [
-            Container(
-              margin: const EdgeInsets.only(right: 6, top: 10, bottom: 10),
-              padding: const EdgeInsets.only(left: 8, right: 8),
-              child: TextButton(
-                onPressed: () {
-                  if (controller.homeViewController.twitchData != null) {
-                    controller.logout();
-                  } else {
-                    controller.login();
-                  }
-                },
-                style: TextButton.styleFrom(
-                  backgroundColor:
-                      controller.homeViewController.twitchData != null
-                          ? Colors.red
-                          : Colors.purple,
-                ),
-                child: Text(
-                  controller.homeViewController.twitchData != null
-                      ? "logout".tr
-                      : "login".tr,
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-          ],
           title: Text(
             "settings".tr,
           ),
@@ -77,6 +50,8 @@ class SettingsView extends GetView<SettingsViewController> {
             padding:
                 const EdgeInsets.only(top: 8, left: 10, right: 10, bottom: 8),
             children: [
+              twitchProfileSettings(context, width),
+              kickProfileSettings(context, width),
               const Subscription(),
               const Divider(
                 height: 20,
@@ -89,8 +64,6 @@ class SettingsView extends GetView<SettingsViewController> {
                 endIndent: 0,
                 color: Theme.of(context).colorScheme.secondary,
               ),
-              if (controller.homeViewController.kickData != null)
-                kickProfileSettings(context, width),
               connectionsSettings(context, width, settingsService, settings),
               const Divider(
                 height: 20,
@@ -660,6 +633,106 @@ class SettingsView extends GetView<SettingsViewController> {
     );
   }
 
+  Widget twitchProfileSettings(BuildContext context, double width) {
+    return ColoredBox(
+      color: Theme.of(context).colorScheme.surface,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Twitch Profile",
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.tertiary,
+              fontSize: 20,
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.only(left: 4, right: 4),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(top: 10, bottom: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      if (controller.homeViewController.twitchData != null)
+                        Row(
+                          children: [
+                            ClipOval(
+                              child: Image.network(
+                                controller.homeViewController.twitchData!
+                                    .twitchUser.profileImageUrl,
+                                width: 60,
+                                height: 60,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    width: 60,
+                                    height: 60,
+                                    color: Colors.grey[300],
+                                    child: const Icon(
+                                      Icons.person,
+                                      size: 30,
+                                      color: Colors.grey,
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 15),
+                            Text(
+                              controller.homeViewController.twitchData!
+                                  .twitchUser.displayName,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        )
+                      else
+                        const Text(
+                          "Not logged in",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      TextButton(
+                        onPressed: () {
+                          if (controller.homeViewController.twitchData !=
+                              null) {
+                            controller.logout();
+                          } else {
+                            controller.login();
+                          }
+                        },
+                        style: TextButton.styleFrom(
+                          backgroundColor:
+                              controller.homeViewController.twitchData != null
+                                  ? Colors.red
+                                  : Colors.purple,
+                          minimumSize: const Size(100, 40),
+                        ),
+                        child: Text(
+                          controller.homeViewController.twitchData != null
+                              ? "logout".tr
+                              : "login".tr,
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget kickProfileSettings(BuildContext context, double width) {
     return ColoredBox(
       color: Theme.of(context).colorScheme.surface,
@@ -683,50 +756,68 @@ class SettingsView extends GetView<SettingsViewController> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          ClipOval(
-                            child: Image.network(
-                              controller.homeViewController.kickData!.kickUser
-                                  .profilePicture,
-                              width: 60,
-                              height: 60,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  width: 60,
-                                  height: 60,
-                                  color: Colors.grey[300],
-                                  child: const Icon(
-                                    Icons.person,
-                                    size: 30,
-                                    color: Colors.grey,
-                                  ),
-                                );
-                              },
+                      if (controller.homeViewController.kickData != null)
+                        Row(
+                          children: [
+                            ClipOval(
+                              child: Image.network(
+                                controller.homeViewController.kickData!.kickUser
+                                    .profilePicture,
+                                width: 60,
+                                height: 60,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    width: 60,
+                                    height: 60,
+                                    color: Colors.grey[300],
+                                    child: const Icon(
+                                      Icons.person,
+                                      size: 30,
+                                      color: Colors.grey,
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 15),
-                          Text(
-                            controller
-                                .homeViewController.kickData!.kickUser.name,
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                            const SizedBox(width: 15),
+                            Text(
+                              controller
+                                  .homeViewController.kickData!.kickUser.name,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
+                          ],
+                        )
+                      else
+                        const Text(
+                          "Not logged in",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
                           ),
-                        ],
-                      ),
+                        ),
                       TextButton(
                         onPressed: () {
-                          controller.logoutKick();
+                          if (controller.homeViewController.kickData != null) {
+                            controller.logoutKick();
+                          } else {
+                            controller.loginKick();
+                          }
                         },
                         style: TextButton.styleFrom(
-                          backgroundColor: Colors.red,
+                          backgroundColor:
+                              controller.homeViewController.kickData != null
+                                  ? Colors.red
+                                  : Colors.purple,
                           minimumSize: const Size(100, 40),
                         ),
                         child: Text(
-                          "logout".tr,
+                          controller.homeViewController.kickData != null
+                              ? "logout".tr
+                              : "login".tr,
                           style: const TextStyle(color: Colors.white),
                         ),
                       ),

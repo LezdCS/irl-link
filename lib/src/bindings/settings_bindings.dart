@@ -17,10 +17,12 @@ import 'package:irllink/src/data/datasources/remote/twitch_remote_data_source.da
 import 'package:irllink/src/data/repositories/kick_repository_impl.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
+import 'package:irllink/src/domain/usecases/kick/login_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/logout_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/disconnect_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/login_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_users_usecase.dart';
+import 'package:irllink/src/domain/usecases/twitch/login_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/logout_usecase.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
@@ -79,10 +81,15 @@ class SettingsBindings extends Bindings {
     );
     LogoutKickUseCase logoutKickUseCase = LogoutKickUseCase(kickRepository);
 
+    // New use cases
+    final loginUseCase = LoginUseCase(twitchRepository);
+    final loginKickUseCase = LoginKickUseCase(kickRepository);
+
     Get.lazyPut<SettingsViewController>(
       () => SettingsViewController(
         getTwitchUsersUseCase: getTwitchUsersUseCase,
         logoutUseCase: logoutUseCase,
+        loginUseCase: loginUseCase,
         streamElementsLoginUseCase: streamElementsLoginUseCase,
         streamElementsDisconnectUseCase: streamElementsDisconnectUseCase,
         homeViewController: Get.find<HomeViewController>(),
@@ -90,6 +97,7 @@ class SettingsBindings extends Bindings {
         storeService: Get.find<StoreService>(),
         ttsService: Get.find<TtsService>(),
         logoutKickUseCase: logoutKickUseCase,
+        loginKickUseCase: loginKickUseCase,
       ),
     );
   }

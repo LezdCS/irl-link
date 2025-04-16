@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/routes/app_routes.dart';
+import 'package:irllink/src/core/params/kick_auth_params.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
+import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
+import 'package:irllink/src/domain/usecases/kick/login_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/logout_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/disconnect_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/login_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_users_usecase.dart';
+import 'package:irllink/src/domain/usecases/twitch/login_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/logout_usecase.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:uuid/uuid.dart';
@@ -19,6 +22,7 @@ import 'package:uuid/uuid.dart';
 class SettingsViewController extends GetxController {
   SettingsViewController({
     required this.logoutUseCase,
+    required this.loginUseCase,
     required this.streamElementsLoginUseCase,
     required this.streamElementsDisconnectUseCase,
     required this.getTwitchUsersUseCase,
@@ -27,13 +31,16 @@ class SettingsViewController extends GetxController {
     required this.ttsService,
     required this.storeService,
     required this.logoutKickUseCase,
+    required this.loginKickUseCase,
   });
 
   final LogoutUseCase logoutUseCase;
+  final LoginUseCase loginUseCase;
   final StreamElementsLoginUseCase streamElementsLoginUseCase;
   final StreamElementsDisconnectUseCase streamElementsDisconnectUseCase;
   final GetTwitchUsersUseCase getTwitchUsersUseCase;
   final LogoutKickUseCase logoutKickUseCase;
+  final LoginKickUseCase loginKickUseCase;
 
   final SettingsService settingsService;
   final HomeViewController homeViewController;
@@ -101,19 +108,96 @@ class SettingsViewController extends GetxController {
   }
 
   Future<void> logout() async {
+    if (homeViewController.twitchData == null) {
+      return;
+    }
+
     final logoutResult =
         await logoutUseCase(params: homeViewController.twitchData!.accessToken);
 
     logoutResult.fold(
-      (l) => {},
+      (l) {
+        Get.snackbar(
+          "Error",
+          "Logout failed: $l",
+          snackPosition: SnackPosition.BOTTOM,
+          icon: const Icon(Icons.error_outline, color: Colors.red),
+          borderWidth: 1,
+          borderColor: Colors.red,
+        );
+      },
       (r) {
-        Get.offAllNamed(Routes.login);
+        homeViewController.twitchData = null;
+        Get.snackbar(
+          "Twitch",
+          "Successfully logged out",
+          snackPosition: SnackPosition.BOTTOM,
+          icon: const Icon(Icons.check, color: Colors.green),
+          borderWidth: 1,
+          borderColor: Colors.green,
+        );
       },
     );
   }
 
-  void login() {
-    Get.offAllNamed(Routes.login);
+  Future<void> login() async {
+    final loginResult = await loginUseCase(
+      params: const TwitchAuthParams(),
+    );
+
+    loginResult.fold(
+      (l) {
+        Get.snackbar(
+          "Error",
+          "Login failed: $l",
+          snackPosition: SnackPosition.BOTTOM,
+          icon: const Icon(Icons.error_outline, color: Colors.red),
+          borderWidth: 1,
+          borderColor: Colors.red,
+        );
+      },
+      (r) {
+        homeViewController.twitchData = r;
+        Get.snackbar(
+          "Twitch",
+          "Successfully logged in",
+          snackPosition: SnackPosition.BOTTOM,
+          icon: const Icon(Icons.check, color: Colors.green),
+          borderWidth: 1,
+          borderColor: Colors.green,
+        );
+      },
+    );
+  }
+
+  Future<void> loginKick() async {
+    final loginResult = await loginKickUseCase(
+      params: KickAuthParams.withPKCE(),
+    );
+
+    loginResult.fold(
+      (l) {
+        Get.snackbar(
+          "Error",
+          "Login failed: $l",
+          snackPosition: SnackPosition.BOTTOM,
+          icon: const Icon(Icons.error_outline, color: Colors.red),
+          borderWidth: 1,
+          borderColor: Colors.red,
+        );
+      },
+      (r) {
+        homeViewController.kickData = r;
+        Get.snackbar(
+          "Kick",
+          "Successfully logged in",
+          snackPosition: SnackPosition.BOTTOM,
+          icon: const Icon(Icons.check, color: Colors.green),
+          borderWidth: 1,
+          borderColor: Colors.green,
+        );
+      },
+    );
   }
 
   List<dynamic> getVoiceForLanguage(String language) {
