@@ -13,6 +13,7 @@ import 'package:irllink/src/core/services/app_info_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/entities/kick/kick_category_dto.dart';
+import 'package:irllink/src/data/entities/kick/kick_channel_dto.dart';
 import 'package:irllink/src/data/entities/kick/kick_user_dto.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
@@ -25,6 +26,14 @@ abstract class KickRemoteDataSource {
     String? searchQuery,
     int? page,
   });
+  Future<Either<Failure, List<KickChannelDto>>> getChannels({
+    required String accessToken,
+  });
+  Future<Either<Failure, KickChannelDto>> patchChannel(
+    String accessToken,
+    String streamTitle,
+    String categoryId,
+  );
 }
 
 class KickRemoteDataSourceImpl implements KickRemoteDataSource {
@@ -160,6 +169,56 @@ class KickRemoteDataSourceImpl implements KickRemoteDataSource {
       }
     } catch (e) {
       talker.error('Failed to fetch categories: $e');
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<KickChannelDto>>> getChannels({
+    required String accessToken,
+  }) async {
+    try {
+      dioClient.options.headers["authorization"] = "Bearer $accessToken";
+      final response = await dioClient.get(
+        '$kKickApiUrlBase/public/v1/channels',
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data['data'];
+        final channels =
+            data.map((json) => KickChannelDto.fromJson(json)).toList();
+        return Right(channels);
+      } else {
+        return Left(Failure('Failed to fetch channels'));
+      }
+    } catch (e) {
+      talker.error('Failed to fetch channels: $e');
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, KickChannelDto>> patchChannel(
+    String accessToken,
+    String streamTitle,
+    String categoryId,
+  ) async {
+    try {
+      final response = await dioClient.patch(
+        '$kKickApiUrlBase/public/v1/channels',
+        data: {
+          'stream_title': streamTitle,
+          'category_id': categoryId,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return Right(KickChannelDto.fromJson(response.data['data']));
+      } else {
+        return Left(Failure('Failed to patch channel'));
+      }
+    } catch (e) {
+      talker.error('Failed to patch channel: $e');
       return Left(Failure(e.toString()));
     }
   }

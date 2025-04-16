@@ -2,6 +2,7 @@ import 'package:auto_mappr_annotation/auto_mappr_annotation.dart';
 import 'package:irllink/src/core/utils/mapper.auto_mappr.dart';
 import 'package:irllink/src/data/entities/dashboard_event_dto.dart';
 import 'package:irllink/src/data/entities/kick/kick_category_dto.dart';
+import 'package:irllink/src/data/entities/kick/kick_channel_dto.dart';
 import 'package:irllink/src/data/entities/kick/kick_credentials_dto.dart';
 import 'package:irllink/src/data/entities/kick/kick_user_dto.dart';
 import 'package:irllink/src/data/entities/settings/browser_tab_settings_dto.dart';
@@ -24,7 +25,8 @@ import 'package:irllink/src/data/entities/twitch/twitch_prediction_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_stream_infos_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_user_dto.dart';
 import 'package:irllink/src/domain/entities/dashboard_event.dart';
-import 'package:irllink/src/domain/entities/kick/category.dart';
+import 'package:irllink/src/domain/entities/kick/kick_category.dart';
+import 'package:irllink/src/domain/entities/kick/kick_channel.dart';
 import 'package:irllink/src/domain/entities/kick/kick_credentials.dart';
 import 'package:irllink/src/domain/entities/kick/kick_user.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
@@ -99,5 +101,9 @@ import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
   MapType<KickUserDTO, KickUser>(),
   MapType<KickCredentials, KickCredentialsDTO>(),
   MapType<KickCredentialsDTO, KickCredentials>(),
+  MapType<KickChannelStreamDto, KickChannelStream>(),
+  MapType<KickChannelStream, KickChannelStreamDto>(),
+  MapType<KickChannel, KickChannelDto>(),
+  MapType<KickChannelDto, KickChannel>(),
 ])
 class Mappr extends $Mappr {}

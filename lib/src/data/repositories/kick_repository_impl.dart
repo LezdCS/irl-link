@@ -6,12 +6,15 @@ import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/datasources/local/kick_local_data_source.dart';
 import 'package:irllink/src/data/datasources/remote/kick_remote_data_source.dart';
 import 'package:irllink/src/data/entities/kick/kick_category_dto.dart';
+import 'package:irllink/src/data/entities/kick/kick_channel_dto.dart';
 import 'package:irllink/src/data/entities/kick/kick_credentials_dto.dart';
 import 'package:irllink/src/data/entities/kick/kick_user_dto.dart';
-import 'package:irllink/src/domain/entities/kick/category.dart';
+import 'package:irllink/src/domain/entities/kick/kick_category.dart';
+import 'package:irllink/src/domain/entities/kick/kick_channel.dart';
 import 'package:irllink/src/domain/entities/kick/kick_credentials.dart';
 import 'package:irllink/src/domain/entities/kick/kick_user.dart';
 import 'package:irllink/src/domain/repositories/kick_repository.dart';
+import 'package:irllink/src/domain/usecases/kick/patch_kick_channel_usecase.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class KickRepositoryImpl implements KickRepository {
@@ -149,6 +152,47 @@ class KickRepositoryImpl implements KickRepository {
       );
     } catch (e) {
       talker.error('Failed to fetch categories: $e');
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<KickChannel>>> getChannels({
+    required String accessToken,
+  }) async {
+    try {
+      final result =
+          await _remoteDataSource.getChannels(accessToken: accessToken);
+      return result.fold(
+        (failure) => Left(failure),
+        (dtos) {
+          final channels = dtos
+              .map((dto) => _mappr.convert<KickChannelDto, KickChannel>(dto))
+              .toList();
+          return Right(channels);
+        },
+      );
+    } catch (e) {
+      talker.error('Failed to fetch channels: $e');
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, KickChannel>> patchChannel(
+    PatchKickChannelParams params,
+  ) async {
+    try {
+      final result = await _remoteDataSource.patchChannel(
+        params.accessToken,
+        params.streamTitle,
+        params.categoryId,
+      );
+      return result.fold(
+        (failure) => Left(failure),
+        (dto) => Right(_mappr.convert<KickChannelDto, KickChannel>(dto)),
+      );
+    } catch (e) {
       return Left(Failure(e.toString()));
     }
   }

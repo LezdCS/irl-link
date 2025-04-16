@@ -12,6 +12,7 @@ import 'package:auto_mappr_annotation/auto_mappr_annotation.dart' as _i1;
 
 import '../../data/entities/dashboard_event_dto.dart' as _i11;
 import '../../data/entities/kick/kick_category_dto.dart' as _i43;
+import '../../data/entities/kick/kick_channel_dto.dart' as _i48;
 import '../../data/entities/kick/kick_credentials_dto.dart' as _i47;
 import '../../data/entities/kick/kick_user_dto.dart' as _i45;
 import '../../data/entities/settings/browser_tab_settings_dto.dart' as _i7;
@@ -34,7 +35,8 @@ import '../../data/entities/twitch/twitch_prediction_dto.dart' as _i28;
 import '../../data/entities/twitch/twitch_stream_infos_dto.dart' as _i38;
 import '../../data/entities/twitch/twitch_user_dto.dart' as _i23;
 import '../../domain/entities/dashboard_event.dart' as _i10;
-import '../../domain/entities/kick/category.dart' as _i42;
+import '../../domain/entities/kick/kick_category.dart' as _i42;
+import '../../domain/entities/kick/kick_channel.dart' as _i49;
 import '../../domain/entities/kick/kick_credentials.dart' as _i46;
 import '../../domain/entities/kick/kick_user.dart' as _i44;
 import '../../domain/entities/settings.dart' as _i2;
@@ -110,6 +112,10 @@ import '../../domain/entities/twitch/twitch_user.dart' as _i22;
 /// - `KickUserDTO` → `KickUser`.
 /// - `KickCredentials` → `KickCredentialsDTO`.
 /// - `KickCredentialsDTO` → `KickCredentials`.
+/// - `KickChannelStreamDto` → `KickChannelStream`.
+/// - `KickChannelStream` → `KickChannelStreamDto`.
+/// - `KickChannel` → `KickChannelDto`.
+/// - `KickChannelDto` → `KickChannel`.
 /// {@endtemplate}
 class $Mappr implements _i1.AutoMapprInterface {
   const $Mappr();
@@ -428,6 +434,30 @@ class $Mappr implements _i1.AutoMapprInterface {
             sourceTypeOf == _typeOf<_i47.KickCredentialsDTO?>()) &&
         (targetTypeOf == _typeOf<_i46.KickCredentials>() ||
             targetTypeOf == _typeOf<_i46.KickCredentials?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i48.KickChannelStreamDto>() ||
+            sourceTypeOf == _typeOf<_i48.KickChannelStreamDto?>()) &&
+        (targetTypeOf == _typeOf<_i49.KickChannelStream>() ||
+            targetTypeOf == _typeOf<_i49.KickChannelStream?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i49.KickChannelStream>() ||
+            sourceTypeOf == _typeOf<_i49.KickChannelStream?>()) &&
+        (targetTypeOf == _typeOf<_i48.KickChannelStreamDto>() ||
+            targetTypeOf == _typeOf<_i48.KickChannelStreamDto?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i49.KickChannel>() ||
+            sourceTypeOf == _typeOf<_i49.KickChannel?>()) &&
+        (targetTypeOf == _typeOf<_i48.KickChannelDto>() ||
+            targetTypeOf == _typeOf<_i48.KickChannelDto?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i48.KickChannelDto>() ||
+            sourceTypeOf == _typeOf<_i48.KickChannelDto?>()) &&
+        (targetTypeOf == _typeOf<_i49.KickChannel>() ||
+            targetTypeOf == _typeOf<_i49.KickChannel?>())) {
       return true;
     }
     if (recursive) {
@@ -1130,6 +1160,46 @@ class $Mappr implements _i1.AutoMapprInterface {
       }
       return (_map__i47$KickCredentialsDTO_To__i46$KickCredentials(
           (model as _i47.KickCredentialsDTO?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i48.KickChannelStreamDto>() ||
+            sourceTypeOf == _typeOf<_i48.KickChannelStreamDto?>()) &&
+        (targetTypeOf == _typeOf<_i49.KickChannelStream>() ||
+            targetTypeOf == _typeOf<_i49.KickChannelStream?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i48$KickChannelStreamDto_To__i49$KickChannelStream(
+          (model as _i48.KickChannelStreamDto?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i49.KickChannelStream>() ||
+            sourceTypeOf == _typeOf<_i49.KickChannelStream?>()) &&
+        (targetTypeOf == _typeOf<_i48.KickChannelStreamDto>() ||
+            targetTypeOf == _typeOf<_i48.KickChannelStreamDto?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i49$KickChannelStream_To__i48$KickChannelStreamDto(
+          (model as _i49.KickChannelStream?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i49.KickChannel>() ||
+            sourceTypeOf == _typeOf<_i49.KickChannel?>()) &&
+        (targetTypeOf == _typeOf<_i48.KickChannelDto>() ||
+            targetTypeOf == _typeOf<_i48.KickChannelDto?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i49$KickChannel_To__i48$KickChannelDto(
+          (model as _i49.KickChannel?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i48.KickChannelDto>() ||
+            sourceTypeOf == _typeOf<_i48.KickChannelDto?>()) &&
+        (targetTypeOf == _typeOf<_i49.KickChannel>() ||
+            targetTypeOf == _typeOf<_i49.KickChannel?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i48$KickChannelDto_To__i49$KickChannel(
+          (model as _i48.KickChannelDto?)) as TARGET);
     }
     throw Exception('No ${model.runtimeType} -> $targetTypeOf mapping.');
   }
@@ -2119,6 +2189,88 @@ class $Mappr implements _i1.AutoMapprInterface {
       expiresIn: model.expiresIn,
       kickUser: _map__i45$KickUserDTO_To__i44$KickUser(model.kickUser),
       scopes: model.scopes,
+    );
+  }
+
+  _i49.KickChannelStream
+      _map__i48$KickChannelStreamDto_To__i49$KickChannelStream(
+          _i48.KickChannelStreamDto? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping KickChannelStreamDto → KickChannelStream failed because KickChannelStreamDto was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<KickChannelStreamDto, KickChannelStream> to handle null values during mapping.');
+    }
+    return _i49.KickChannelStream(
+      isLive: model.isLive,
+      isMature: model.isMature,
+      key: model.key,
+      language: model.language,
+      startTime: model.startTime,
+      thumbnail: model.thumbnail,
+      url: model.url,
+      viewerCount: model.viewerCount,
+    );
+  }
+
+  _i48.KickChannelStreamDto
+      _map__i49$KickChannelStream_To__i48$KickChannelStreamDto(
+          _i49.KickChannelStream? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping KickChannelStream → KickChannelStreamDto failed because KickChannelStream was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<KickChannelStream, KickChannelStreamDto> to handle null values during mapping.');
+    }
+    return _i48.KickChannelStreamDto(
+      isLive: model.isLive,
+      isMature: model.isMature,
+      key: model.key,
+      language: model.language,
+      startTime: model.startTime,
+      thumbnail: model.thumbnail,
+      url: model.url,
+      viewerCount: model.viewerCount,
+    );
+  }
+
+  _i48.KickChannelDto _map__i49$KickChannel_To__i48$KickChannelDto(
+      _i49.KickChannel? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping KickChannel → KickChannelDto failed because KickChannel was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<KickChannel, KickChannelDto> to handle null values during mapping.');
+    }
+    return _i48.KickChannelDto(
+      bannerPicture: model.bannerPicture,
+      broadcasterUserId: model.broadcasterUserId,
+      category: _map__i42$KickCategory_To__i43$KickCategoryDTO(model.category),
+      channelDescription: model.channelDescription,
+      slug: model.slug,
+      stream: _map__i49$KickChannelStream_To__i48$KickChannelStreamDto(
+          model.stream),
+      streamTitle: model.streamTitle,
+    );
+  }
+
+  _i49.KickChannel _map__i48$KickChannelDto_To__i49$KickChannel(
+      _i48.KickChannelDto? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping KickChannelDto → KickChannel failed because KickChannelDto was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<KickChannelDto, KickChannel> to handle null values during mapping.');
+    }
+    return _i49.KickChannel(
+      bannerPicture: model.bannerPicture,
+      broadcasterUserId: model.broadcasterUserId,
+      category: _map__i43$KickCategoryDTO_To__i42$KickCategory(model.category),
+      channelDescription: model.channelDescription,
+      slug: model.slug,
+      stream: _map__i48$KickChannelStreamDto_To__i49$KickChannelStream(
+          model.stream),
+      streamTitle: model.streamTitle,
     );
   }
 

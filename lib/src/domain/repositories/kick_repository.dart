@@ -1,9 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/params/kick_auth_params.dart';
-import 'package:irllink/src/domain/entities/kick/category.dart';
+import 'package:irllink/src/domain/entities/kick/kick_category.dart';
+import 'package:irllink/src/domain/entities/kick/kick_channel.dart';
 import 'package:irllink/src/domain/entities/kick/kick_credentials.dart';
 import 'package:irllink/src/domain/entities/kick/kick_user.dart';
+import 'package:irllink/src/domain/usecases/kick/patch_kick_channel_usecase.dart';
 
 abstract class KickRepository {
   Future<Either<Failure, KickCredentials>> getKickOauth(
@@ -28,4 +30,12 @@ abstract class KickRepository {
     String? searchQuery,
     int? page,
   });
+
+  Future<Either<Failure, List<KickChannel>>> getChannels({
+    required String accessToken,
+  });
+
+  Future<Either<Failure, KickChannel>> patchChannel(
+    PatchKickChannelParams params,
+  );
 }
