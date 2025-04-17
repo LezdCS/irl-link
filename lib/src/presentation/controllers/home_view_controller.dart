@@ -31,6 +31,7 @@ import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
+import 'package:irllink/src/domain/usecases/kick/kick_refresh_token_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/create_poll_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/end_poll_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/end_prediction_usecase.dart';
@@ -52,11 +53,13 @@ class HomeViewController extends GetxController
     with GetTickerProviderStateMixin {
   HomeViewController({
     required this.refreshAccessTokenUseCase,
+    required this.refreshKickAccessTokenUseCase,
     required this.settingsService,
     required this.talkerService,
   });
 
   final RefreshTwitchTokenUseCase refreshAccessTokenUseCase;
+  final KickRefreshTokenUseCase refreshKickAccessTokenUseCase;
   final SettingsService settingsService;
   final TalkerService talkerService;
 
@@ -177,6 +180,10 @@ class HomeViewController extends GetxController
       final refreshTokenResult =
           await refreshAccessTokenUseCase(params: twitchData!);
       refreshTokenResult.fold((l) => {}, (r) => twitchData = r);
+
+      final refreshTokenResultKick =
+          await refreshKickAccessTokenUseCase(params: kickData!);
+      refreshTokenResultKick.fold((l) => {}, (r) => kickData = r);
     });
   }
 

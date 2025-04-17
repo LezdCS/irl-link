@@ -7,12 +7,16 @@ import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/init_dio.dart';
+import 'package:irllink/src/data/datasources/local/kick_local_data_source.dart';
 import 'package:irllink/src/data/datasources/local/streamelements_local_data_source.dart';
 import 'package:irllink/src/data/datasources/local/twitch_local_data_source.dart';
+import 'package:irllink/src/data/datasources/remote/kick_remote_data_source.dart';
 import 'package:irllink/src/data/datasources/remote/streamelements_remote_data_source.dart';
 import 'package:irllink/src/data/datasources/remote/twitch_remote_data_source.dart';
+import 'package:irllink/src/data/repositories/kick_repository_impl.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
+import 'package:irllink/src/domain/usecases/kick/kick_refresh_token_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_last_activities_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_local_credentials_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_me_usecase.dart';
@@ -42,6 +46,7 @@ class HomeBindings extends Bindings {
   Future<void> dependencies() async {
     Dio dioTwitchClient = initDio(kTwitchApiUrlBase);
     Dio streamElementsDioClient = initDio(kStreamelementsUrlBase);
+    Dio dioKickClient = initDio(null);
     Talker talker = Get.find<TalkerService>().talker;
     // Repositories
     final twitchRepository = TwitchRepositoryImpl(
@@ -64,6 +69,16 @@ class HomeBindings extends Bindings {
         talker: talker,
       ),
     );
+    final kickRepository = KickRepositoryImpl(
+      remoteDataSource: KickRemoteDataSourceImpl(
+        dioClient: dioKickClient,
+        talker: talker,
+      ),
+      localDataSource: KickLocalDataSourceImpl(
+        talker: talker,
+      ),
+      talker: talker,
+    );
 
     // Services
     final settingsService = Get.find<SettingsService>();
@@ -73,6 +88,8 @@ class HomeBindings extends Bindings {
     // Use cases
     final refreshTwitchAccessTokenUseCase =
         RefreshTwitchTokenUseCase(twitchRepository);
+    final refreshKickAccessTokenUseCase =
+        KickRefreshTokenUseCase(kickRepository);
     final getStreamInfoUseCase = GetStreamInfoUseCase(twitchRepository);
     final setChatSettingsUseCase = SetChatSettingsUseCase(twitchRepository);
     final setStreamTitleUseCase = SetStreamTitleUseCase(twitchRepository);
@@ -116,6 +133,7 @@ class HomeBindings extends Bindings {
     Get.lazyPut<HomeViewController>(
       () => HomeViewController(
         refreshAccessTokenUseCase: refreshTwitchAccessTokenUseCase,
+        refreshKickAccessTokenUseCase: refreshKickAccessTokenUseCase,
         settingsService: settingsService,
         talkerService: talkerService,
       ),
