@@ -160,9 +160,28 @@ class ObsTabView extends GetView<ObsTabViewController> {
                     ),
                     Wrap(
                       children: [
-                        Text(
-                          "scenes".tr,
-                          style: const TextStyle(color: Colors.white),
+                        Row(
+                          children: [
+                            Text(
+                              "scenes".tr,
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                            const SizedBox(width: 10),
+                            Obx(
+                              () => IconButton(
+                                onPressed: () => controller.toggleScenesOrder(),
+                                icon: Icon(
+                                  controller.isScenesReversed.value
+                                      ? Icons.sort_by_alpha
+                                      : Icons.sort_by_alpha_outlined,
+                                  color: Colors.white,
+                                ),
+                                tooltip: controller.isScenesReversed.value
+                                    ? "Sort scenes in normal order"
+                                    : "Sort scenes in reverse order",
+                              ),
+                            ),
+                          ],
                         ),
                         Container(
                           margin: const EdgeInsets.only(top: 10),
