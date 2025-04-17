@@ -29,8 +29,8 @@ class ObsTabView extends GetView<ObsTabViewController> {
                             onTap: () {
                               Get.defaultDialog(
                                 title: controller.isStreaming.value
-                                    ? "stop_stream_confirmation".tr
-                                    : "start_stream_confirmation".tr,
+                                    ? "Stop stream".tr
+                                    : "Start stream".tr,
                                 titleStyle:
                                     const TextStyle(color: Colors.white),
                                 backgroundColor: const Color(0xFF0e0e10),
@@ -38,6 +38,14 @@ class ObsTabView extends GetView<ObsTabViewController> {
                                 cancelTextColor: const Color(0xFF9147ff),
                                 textCancel: "cancel".tr,
                                 textConfirm: "confirm".tr,
+                                content: Column(
+                                  children: [
+                                    Text(
+                                      "Are you sure you want to ${controller.isStreaming.value ? "stop" : "start"} stream?"
+                                          .tr,
+                                    ),
+                                  ],
+                                ),
                                 confirmTextColor: Colors.white,
                                 onConfirm: () {
                                   controller.isStreaming.value
@@ -172,8 +180,8 @@ class ObsTabView extends GetView<ObsTabViewController> {
                                 onPressed: () => controller.toggleScenesOrder(),
                                 icon: Icon(
                                   controller.isScenesReversed.value
-                                      ? Icons.sort_by_alpha
-                                      : Icons.sort_by_alpha_outlined,
+                                      ? Icons.arrow_downward
+                                      : Icons.arrow_upward,
                                   color: Colors.white,
                                 ),
                                 tooltip: controller.isScenesReversed.value
