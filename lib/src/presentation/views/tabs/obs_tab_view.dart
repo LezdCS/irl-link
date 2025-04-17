@@ -27,9 +27,26 @@ class ObsTabView extends GetView<ObsTabViewController> {
                         children: [
                           InkWell(
                             onTap: () {
-                              controller.isStreaming.value
-                                  ? controller.stopStream()
-                                  : controller.startStream();
+                              Get.defaultDialog(
+                                title: controller.isStreaming.value
+                                    ? "stop_stream_confirmation".tr
+                                    : "start_stream_confirmation".tr,
+                                titleStyle:
+                                    const TextStyle(color: Colors.white),
+                                backgroundColor: const Color(0xFF0e0e10),
+                                buttonColor: const Color(0xFF9147ff),
+                                cancelTextColor: const Color(0xFF9147ff),
+                                textCancel: "cancel".tr,
+                                textConfirm: "confirm".tr,
+                                confirmTextColor: Colors.white,
+                                onConfirm: () {
+                                  controller.isStreaming.value
+                                      ? controller.stopStream()
+                                      : controller.startStream();
+                                  Get.back();
+                                },
+                                radius: 10,
+                              );
                             },
                             child: Container(
                               constraints: const BoxConstraints(
