@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -658,29 +659,22 @@ class SettingsView extends GetView<SettingsViewController> {
                     children: [
                       if (controller.homeViewController.twitchData != null)
                         Row(
+                          spacing: 15,
                           children: [
-                            ClipOval(
-                              child: Image.network(
-                                controller.homeViewController.twitchData!
-                                    .twitchUser.profileImageUrl,
-                                width: 60,
-                                height: 60,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Container(
-                                    width: 60,
-                                    height: 60,
-                                    color: Colors.grey[300],
-                                    child: const Icon(
-                                      Icons.person,
-                                      size: 30,
-                                      color: Colors.grey,
-                                    ),
-                                  );
-                                },
+                            CachedNetworkImage(
+                              imageUrl: controller.homeViewController
+                                  .twitchData!.twitchUser.profileImageUrl,
+                              placeholder: (BuildContext context, String url) =>
+                                  const CircularProgressIndicator(),
+                              errorWidget:
+                                  (BuildContext context, String url, error) =>
+                                      const Icon(Icons.error),
+                              imageBuilder: (context, imageProvider) =>
+                                  CircleAvatar(
+                                radius: 24,
+                                backgroundImage: imageProvider,
                               ),
                             ),
-                            const SizedBox(width: 15),
                             Text(
                               controller.homeViewController.twitchData!
                                   .twitchUser.displayName,
@@ -758,29 +752,22 @@ class SettingsView extends GetView<SettingsViewController> {
                     children: [
                       if (controller.homeViewController.kickData != null)
                         Row(
+                          spacing: 15,
                           children: [
-                            ClipOval(
-                              child: Image.network(
-                                controller.homeViewController.kickData!.kickUser
-                                    .profilePicture,
-                                width: 60,
-                                height: 60,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Container(
-                                    width: 60,
-                                    height: 60,
-                                    color: Colors.grey[300],
-                                    child: const Icon(
-                                      Icons.person,
-                                      size: 30,
-                                      color: Colors.grey,
-                                    ),
-                                  );
-                                },
+                            CachedNetworkImage(
+                              imageUrl: controller.homeViewController.kickData!
+                                  .kickUser.profilePicture,
+                              placeholder: (BuildContext context, String url) =>
+                                  const CircularProgressIndicator(),
+                              errorWidget:
+                                  (BuildContext context, String url, error) =>
+                                      const Icon(Icons.error),
+                              imageBuilder: (context, imageProvider) =>
+                                  CircleAvatar(
+                                radius: 24,
+                                backgroundImage: imageProvider,
                               ),
                             ),
-                            const SizedBox(width: 15),
                             Text(
                               controller
                                   .homeViewController.kickData!.kickUser.name,

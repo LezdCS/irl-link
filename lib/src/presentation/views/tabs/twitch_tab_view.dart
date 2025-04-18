@@ -251,7 +251,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                 childAspectRatio: 4,
                 children: [
                   Obx(
-                    () => _shortcutButton(
+                    () => shortcutButton(
                       context: context,
                       text: 'follower_only'.tr,
                       onTap: () => {
@@ -261,7 +261,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                     ),
                   ),
                   Obx(
-                    () => _shortcutButton(
+                    () => shortcutButton(
                       context: context,
                       text: 'subscriber_only'.tr,
                       onTap: () => {
@@ -272,7 +272,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                     ),
                   ),
                   Obx(
-                    () => _shortcutButton(
+                    () => shortcutButton(
                       context: context,
                       text: 'emote_only'.tr,
                       onTap: () => {
@@ -282,7 +282,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                     ),
                   ),
                   Obx(
-                    () => _shortcutButton(
+                    () => shortcutButton(
                       context: context,
                       text: 'slow_mode'.tr,
                       onTap: () => {
@@ -299,7 +299,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
               const Divider(
                 height: 30,
               ),
-              _shortcutButton(
+              shortcutButton(
                 onTap: () {
                   Get.dialog(
                     GestureDetector(
@@ -353,7 +353,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                 height: 30,
               ),
               Obx(
-                () => _shortcutButton(
+                () => shortcutButton(
                   context: context,
                   text: controller.displayTwitchPlayer.value
                       ? "hide_stream".tr
@@ -415,7 +415,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
   }
 }
 
-Widget _shortcutButton({
+Widget shortcutButton({
   required BuildContext context,
   required String text,
   required Function onTap,

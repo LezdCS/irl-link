@@ -23,10 +23,12 @@ class KickTabViewController extends GetxController
 
   RxList<KickCategory> kickCategories = <KickCategory>[].obs;
 
-  RxBool displayTwitchPlayer = false.obs;
+  RxBool displayKickPlayer = false.obs;
+
   @override
   void onInit() {
     getKickCategories();
+    titleFormController = TextEditingController();
     super.onInit();
   }
 
@@ -54,7 +56,6 @@ class KickTabViewController extends GetxController
         failure.message,
       ),
       (categories) => {
-        debugPrint(categories.toString()),
         kickCategories.value = categories,
       },
     );
