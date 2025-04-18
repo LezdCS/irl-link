@@ -17,6 +17,7 @@ import 'package:irllink/src/data/repositories/kick_repository_impl.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/usecases/kick/get_kick_categories_usecase.dart';
+import 'package:irllink/src/domain/usecases/kick/get_kick_channels_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/kick_refresh_token_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/patch_kick_channel_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/post_kick_chat_nessage_usecase.dart';
@@ -98,6 +99,7 @@ class HomeBindings extends Bindings {
         PostKickChatMessageUseCase(kickRepository);
     final getKickCategoriesUseCase = GetKickCategoriesUseCase(kickRepository);
     final patchKickChannelUseCase = PatchKickChannelUseCase(kickRepository);
+    final getKickChannelsUseCase = GetKickChannelsUseCase(kickRepository);
     final getStreamInfoUseCase = GetStreamInfoUseCase(twitchRepository);
     final setChatSettingsUseCase = SetChatSettingsUseCase(twitchRepository);
     final setStreamTitleUseCase = SetStreamTitleUseCase(twitchRepository);
@@ -192,6 +194,7 @@ class HomeBindings extends Bindings {
       () => KickTabViewController(
         getKickCategoriesUseCase: getKickCategoriesUseCase,
         patchKickChannelUseCase: patchKickChannelUseCase,
+        getKickChannelsUseCase: getKickChannelsUseCase,
         homeViewController: Get.find<HomeViewController>(),
       ),
     );

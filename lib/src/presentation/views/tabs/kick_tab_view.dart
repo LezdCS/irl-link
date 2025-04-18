@@ -7,15 +7,44 @@ import 'package:irllink/src/presentation/widgets/web_page_view.dart';
 
 class KickTabView extends GetView<KickTabViewController> {
   const KickTabView({super.key});
-// https://player.kick.com/hardisk
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 10,
           children: [
+            Wrap(
+              children: [
+                SizedBox(
+                  width: 14,
+                  height: 14,
+                  child: AnimatedBuilder(
+                    animation: controller.refreshDataAnimationController,
+                    builder: (context, child) {
+                      return CircularProgressIndicator(
+                        value: controller.refreshDataAnimationController.value,
+                        strokeWidth: 2,
+                        color: Theme.of(context).colorScheme.tertiary,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.tertiaryContainer,
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  "refresh_data".tr,
+                  style: const TextStyle(
+                    fontSize: 10,
+                  ),
+                ),
+              ],
+            ),
             Obx(
               () => controller.kickCategories.isEmpty
                   ? const SizedBox.shrink()
