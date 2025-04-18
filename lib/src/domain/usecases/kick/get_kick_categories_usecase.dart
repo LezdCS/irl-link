@@ -14,12 +14,12 @@ class KickCategoriesParams {
   });
 }
 
-class GetCategoriesUseCase
+class GetKickCategoriesUseCase
     implements
         UseCase<Either<Failure, List<KickCategory>>, KickCategoriesParams> {
   final KickRepository repository;
 
-  GetCategoriesUseCase(this.repository);
+  GetKickCategoriesUseCase(this.repository);
 
   @override
   Future<Either<Failure, List<KickCategory>>> call({

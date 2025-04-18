@@ -43,6 +43,7 @@ import 'package:irllink/src/presentation/controllers/realtime_irl_view_controlle
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 import 'package:irllink/src/presentation/views/chat_view.dart';
 import 'package:irllink/src/presentation/views/home_view.dart';
+import 'package:irllink/src/presentation/views/tabs/kick_tab_view.dart';
 import 'package:irllink/src/presentation/views/tabs/obs_tab_view.dart';
 import 'package:irllink/src/presentation/views/tabs/realtime_irl_tab_view.dart';
 import 'package:irllink/src/presentation/views/tabs/streamelements_tab_view.dart';
@@ -132,7 +133,7 @@ class HomeViewController extends GetxController
           await _setupCrashlytics();
         } else if (credentials is KickCredentials) {
           kickData = credentials;
-          // TODO(LezdCS): Initialize Kick services if needed
+          await _initializeKickServices();
         }
       } else if (Get.arguments.length == 2) {
         final twitchCreds = Get.arguments[0];
@@ -141,8 +142,8 @@ class HomeViewController extends GetxController
           twitchData = twitchCreds;
           kickData = kickCreds;
           await _initializeTwitchServices();
+          await _initializeKickServices();
           await _setupCrashlytics();
-          // TODO(LezdCS): Initialize Kick services if needed
         }
       }
     }
@@ -156,6 +157,11 @@ class HomeViewController extends GetxController
     await applySettings();
 
     super.onInit();
+  }
+
+  Future<void> _initializeKickServices() async {
+    KickTabView kickPage = const KickTabView();
+    tabElements.add(kickPage);
   }
 
   Future<void> _initializeTwitchServices() async {
