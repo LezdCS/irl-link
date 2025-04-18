@@ -189,11 +189,9 @@ class KickRemoteDataSourceImpl implements KickRemoteDataSource {
       );
 
       if (response.statusCode == 200) {
-        debugPrint(response.data.toString());
         final List<dynamic> data = response.data['data'];
         final channels =
             data.map((json) => KickChannelDto.fromJson(json)).toList();
-        debugPrint(channels.toString());
         return Right(channels);
       } else {
         return Left(Failure('Failed to fetch channels'));

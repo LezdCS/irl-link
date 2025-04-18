@@ -75,7 +75,6 @@ class LoginViewController extends GetxController {
     final kickCredsResult = await getKickLocalUseCase();
     kickCredsResult.fold(
       (l) {
-        debugPrint("No Kick credentials found");
         // If we have Twitch credentials but no Kick, navigate with just Twitch
         if (twitchCredentials.value != null) {
           Get.offAllNamed(Routes.home, arguments: [twitchCredentials.value!]);
@@ -83,7 +82,6 @@ class LoginViewController extends GetxController {
       },
       (r) {
         kickCredentials.value = r;
-        debugPrint("Kick credentials found");
         // If we have both credentials, navigate with both
         if (twitchCredentials.value != null) {
           Get.offAllNamed(

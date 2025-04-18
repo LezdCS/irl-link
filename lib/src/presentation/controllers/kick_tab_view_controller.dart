@@ -25,6 +25,7 @@ class KickTabViewController extends GetxController
 
   late TextEditingController titleFormController;
   RxString streamTitle = "".obs;
+  RxInt selectedCategoryId = 0.obs;
   Rxn<KickChannel> kickChannel = Rxn<KickChannel>();
   FocusNode focus = FocusNode();
 
@@ -96,6 +97,7 @@ class KickTabViewController extends GetxController
     );
     if (!focus.hasFocus) {
       titleFormController.text = kickChannel.value!.streamTitle;
+      selectedCategoryId.value = kickChannel.value!.category.id;
     }
     refreshDataAnimationController.forward();
   }
@@ -122,8 +124,8 @@ class KickTabViewController extends GetxController
     final categories = await patchKickChannelUseCase(
       params: PatchKickChannelParams(
         accessToken: homeViewController.kickData!.accessToken,
-        streamTitle: "",
-        categoryId: "",
+        streamTitle: streamTitle.value,
+        categoryId: selectedCategoryId.value.toString(),
       ),
     );
     categories.fold(
