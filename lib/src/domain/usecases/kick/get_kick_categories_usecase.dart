@@ -5,11 +5,13 @@ import 'package:irllink/src/domain/entities/kick/kick_category.dart';
 import 'package:irllink/src/domain/repositories/kick_repository.dart';
 
 class KickCategoriesParams {
-  final String? searchQuery;
+  final String accessToken;
+  final String searchQuery;
   final int? page;
 
   const KickCategoriesParams({
-    this.searchQuery,
+    required this.accessToken,
+    required this.searchQuery,
     this.page,
   });
 }
@@ -26,8 +28,7 @@ class GetKickCategoriesUseCase
     required KickCategoriesParams params,
   }) {
     return repository.getCategories(
-      searchQuery: params.searchQuery,
-      page: params.page,
+      params: params,
     );
   }
 }

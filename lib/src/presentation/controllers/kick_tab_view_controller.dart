@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/domain/entities/kick/kick_category.dart';
 import 'package:irllink/src/domain/usecases/kick/get_kick_categories_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/patch_kick_channel_usecase.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
@@ -20,12 +21,14 @@ class KickTabViewController extends GetxController
   RxString streamTitle = "".obs;
   FocusNode focus = FocusNode();
 
-  RxBool displayTwitchPlayer = false.obs;
-  // @override
-  // void onInit() {
+  List<KickCategory> kickCategories = [];
 
-  //   super.onInit();
-  // }
+  RxBool displayTwitchPlayer = false.obs;
+  @override
+  void onInit() {
+    getKickCategories();
+    super.onInit();
+  }
 
   // @override
   // void onReady() async {
@@ -37,4 +40,44 @@ class KickTabViewController extends GetxController
   // void onClose() {
   //   super.onClose();
   // }
+
+  void getKickCategories() async {
+    final categories = await getKickCategoriesUseCase(
+      params: KickCategoriesParams(
+        accessToken: homeViewController.kickData!.accessToken,
+        searchQuery: "a",
+      ),
+    );
+    categories.fold(
+      (failure) => Get.snackbar(
+        "Error",
+        failure.message,
+      ),
+      (categories) => {
+        kickCategories = categories,
+      },
+    );
+  }
+
+  void updateKickChannel() async {
+    final categories = await patchKickChannelUseCase(
+      params: PatchKickChannelParams(
+        accessToken: homeViewController.kickData!.accessToken,
+        streamTitle: "",
+        categoryId: "",
+      ),
+    );
+    categories.fold(
+      (failure) => Get.snackbar(
+        "Error",
+        failure.message,
+      ),
+      (categories) => {
+        Get.snackbar(
+          "Success",
+          "Channel updated",
+        ),
+      },
+    );
+  }
 }

@@ -16,7 +16,9 @@ import 'package:irllink/src/data/datasources/remote/twitch_remote_data_source.da
 import 'package:irllink/src/data/repositories/kick_repository_impl.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
+import 'package:irllink/src/domain/usecases/kick/get_kick_categories_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/kick_refresh_token_usecase.dart';
+import 'package:irllink/src/domain/usecases/kick/patch_kick_channel_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/post_kick_chat_nessage_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_last_activities_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_local_credentials_usecase.dart';
@@ -36,6 +38,7 @@ import 'package:irllink/src/domain/usecases/twitch/set_chat_settings_usecase.dar
 import 'package:irllink/src/domain/usecases/twitch/set_stream_title_usecase.dart';
 import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/kick_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/realtime_irl_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
@@ -93,6 +96,8 @@ class HomeBindings extends Bindings {
         KickRefreshTokenUseCase(kickRepository);
     final postKickChatMessageUseCase =
         PostKickChatMessageUseCase(kickRepository);
+    final getKickCategoriesUseCase = GetKickCategoriesUseCase(kickRepository);
+    final patchKickChannelUseCase = PatchKickChannelUseCase(kickRepository);
     final getStreamInfoUseCase = GetStreamInfoUseCase(twitchRepository);
     final setChatSettingsUseCase = SetChatSettingsUseCase(twitchRepository);
     final setStreamTitleUseCase = SetStreamTitleUseCase(twitchRepository);
@@ -180,6 +185,14 @@ class HomeBindings extends Bindings {
         setStreamTitleUseCase: setStreamTitleUseCase,
         homeViewController: Get.find<HomeViewController>(),
         watchService: watchService,
+      ),
+    );
+
+    Get.lazyPut<KickTabViewController>(
+      () => KickTabViewController(
+        getKickCategoriesUseCase: getKickCategoriesUseCase,
+        patchKickChannelUseCase: patchKickChannelUseCase,
+        homeViewController: Get.find<HomeViewController>(),
       ),
     );
 

@@ -15,6 +15,7 @@ import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/entities/kick/kick_category_dto.dart';
 import 'package:irllink/src/data/entities/kick/kick_channel_dto.dart';
 import 'package:irllink/src/data/entities/kick/kick_user_dto.dart';
+import 'package:irllink/src/domain/usecases/kick/get_kick_categories_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/post_kick_chat_nessage_usecase.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
@@ -24,8 +25,7 @@ abstract class KickRemoteDataSource {
   Future<void> logout(String accessToken);
   Future<KickUserDTO> getKickUser(String accessToken);
   Future<Either<Failure, List<KickCategoryDTO>>> getCategories({
-    String? searchQuery,
-    int? page,
+    required KickCategoriesParams params,
   });
   Future<Either<Failure, List<KickChannelDto>>> getChannels({
     required String accessToken,
@@ -151,15 +151,16 @@ class KickRemoteDataSourceImpl implements KickRemoteDataSource {
 
   @override
   Future<Either<Failure, List<KickCategoryDTO>>> getCategories({
-    String? searchQuery,
-    int? page,
+    required KickCategoriesParams params,
   }) async {
     try {
+      dioClient.options.headers["Authorization"] =
+          "Bearer ${params.accessToken}";
       final response = await dioClient.get(
         '$kKickApiUrlBase/public/v1/categories',
         queryParameters: {
-          if (searchQuery != null) 'q': searchQuery,
-          if (page != null) 'page': page,
+          'q': params.searchQuery,
+          if (params.page != null) 'page': params.page,
         },
       );
 
