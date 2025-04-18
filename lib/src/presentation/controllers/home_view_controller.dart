@@ -32,6 +32,7 @@ import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/domain/usecases/kick/kick_refresh_token_usecase.dart';
+import 'package:irllink/src/domain/usecases/kick/post_kick_chat_nessage_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/create_poll_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/end_poll_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/end_prediction_usecase.dart';
@@ -47,6 +48,7 @@ import 'package:irllink/src/presentation/views/tabs/realtime_irl_tab_view.dart';
 import 'package:irllink/src/presentation/views/tabs/streamelements_tab_view.dart';
 import 'package:irllink/src/presentation/views/tabs/twitch_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/web_page_view.dart';
+import 'package:kick_chat/kick_chat.dart';
 import 'package:split_view/split_view.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 
@@ -57,13 +59,14 @@ class HomeViewController extends GetxController
     required this.refreshKickAccessTokenUseCase,
     required this.settingsService,
     required this.talkerService,
+    required this.postKickChatMessageUseCase,
   });
 
   final RefreshTwitchTokenUseCase refreshAccessTokenUseCase;
   final KickRefreshTokenUseCase refreshKickAccessTokenUseCase;
   final SettingsService settingsService;
   final TalkerService talkerService;
-
+  final PostKickChatMessageUseCase postKickChatMessageUseCase;
   SplitViewController? splitViewController = SplitViewController(
     limits: [null, WeightLimit(min: 0.12, max: 0.92)],
   );
@@ -504,10 +507,6 @@ class HomeViewController extends GetxController
   }
 
   void sendChatMessage(String message, [String? channel]) {
-    if (twitchData == null) {
-      return;
-    }
-
     if (selectedChatGroup.value == null) {
       return;
     }
@@ -516,30 +515,56 @@ class HomeViewController extends GetxController
       tag: selectedChatGroup.value?.id,
     );
     List<TwitchChat> twitchChats = chatViewController.twitchChats.toList();
+    List<KickChat> kickChats = chatViewController.kickChats.toList();
 
-    if (twitchChats.length > 1) {
-      // If channel is provided, find the matching chat
-      if (channel != null) {
-        _sendMessageToChat(channel, message);
-      } else {
-        // If no channel specified, show selection dialog
-        selectChatToSend(
-          Get.context!,
-          this,
-          twitchChats,
-          message,
-        );
-      }
-    } else {
-      _sendMessageToChat(twitchChats.first.channel, message);
+    if (kickChats.isNotEmpty && twitchChats.isNotEmpty ||
+        kickChats.length > 1 ||
+        twitchChats.length > 1) {
+      selectChatToSend(
+        Get.context!,
+        this,
+        twitchChats,
+        kickChats,
+        message,
+      );
     }
 
+    if (kickChats.isNotEmpty && twitchChats.isEmpty) {
+      sendKickMessageToChat(kickChats.first.username, message);
+    }
+
+    if (kickChats.isEmpty && twitchChats.isNotEmpty) {
+      sendTwitchMessageToChat(twitchChats.first.channel, message);
+    }
+
+    _clearChatInput();
+  }
+
+  void _clearChatInput() {
     chatInputController.text = '';
     selectedMessage.value = null;
     isPickingEmote.value = false;
   }
 
-  void _sendMessageToChat(String channel, String message) {
+  void sendKickMessageToChat(String username, String message) {
+    if (kickData == null) {
+      return;
+    }
+
+    postKickChatMessageUseCase(
+      params: PostKickChatMessageParams(
+        accessToken: kickData!.accessToken,
+        message: message,
+        broadcasterUserId: kickData!.kickUser.userId,
+      ),
+    );
+  }
+
+  void sendTwitchMessageToChat(String channel, String message) {
+    if (twitchData == null) {
+      return;
+    }
+
     final twitchChat = TwitchChat(
       channel,
       twitchData!.twitchUser.login,

@@ -15,6 +15,7 @@ import 'package:irllink/src/domain/entities/kick/kick_credentials.dart';
 import 'package:irllink/src/domain/entities/kick/kick_user.dart';
 import 'package:irllink/src/domain/repositories/kick_repository.dart';
 import 'package:irllink/src/domain/usecases/kick/patch_kick_channel_usecase.dart';
+import 'package:irllink/src/domain/usecases/kick/post_kick_chat_nessage_usecase.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class KickRepositoryImpl implements KickRepository {
@@ -199,13 +200,11 @@ class KickRepositoryImpl implements KickRepository {
 
   @override
   Future<Either<Failure, void>> sendChatMessage(
-    String accessToken,
-    String message,
+    PostKickChatMessageParams params,
   ) async {
     try {
       final result = await _remoteDataSource.sendChatMessage(
-        accessToken,
-        message,
+        params,
       );
       return result.fold(
         (failure) => Left(failure),

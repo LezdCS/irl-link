@@ -6,10 +6,11 @@ import 'package:irllink/src/domain/repositories/kick_repository.dart';
 class PostKickChatMessageParams {
   final String accessToken;
   final String message;
-
+  final int broadcasterUserId;
   const PostKickChatMessageParams({
     required this.accessToken,
     required this.message,
+    required this.broadcasterUserId,
   });
 }
 
@@ -24,8 +25,7 @@ class PostKickChatMessageUseCase
     required PostKickChatMessageParams params,
   }) {
     return repository.sendChatMessage(
-      params.accessToken,
-      params.message,
+      params,
     );
   }
 }

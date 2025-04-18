@@ -6,6 +6,7 @@ import 'package:irllink/src/domain/entities/kick/kick_channel.dart';
 import 'package:irllink/src/domain/entities/kick/kick_credentials.dart';
 import 'package:irllink/src/domain/entities/kick/kick_user.dart';
 import 'package:irllink/src/domain/usecases/kick/patch_kick_channel_usecase.dart';
+import 'package:irllink/src/domain/usecases/kick/post_kick_chat_nessage_usecase.dart';
 
 abstract class KickRepository {
   Future<Either<Failure, KickCredentials>> getKickOauth(
@@ -40,7 +41,6 @@ abstract class KickRepository {
   );
 
   Future<Either<Failure, void>> sendChatMessage(
-    String accessToken,
-    String message,
+    PostKickChatMessageParams params,
   );
 }

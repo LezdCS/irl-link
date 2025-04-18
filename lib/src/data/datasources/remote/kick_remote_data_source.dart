@@ -15,6 +15,7 @@ import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/entities/kick/kick_category_dto.dart';
 import 'package:irllink/src/data/entities/kick/kick_channel_dto.dart';
 import 'package:irllink/src/data/entities/kick/kick_user_dto.dart';
+import 'package:irllink/src/domain/usecases/kick/post_kick_chat_nessage_usecase.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 abstract class KickRemoteDataSource {
@@ -35,8 +36,7 @@ abstract class KickRemoteDataSource {
     String categoryId,
   );
   Future<Either<Failure, void>> sendChatMessage(
-    String accessToken,
-    String message,
+    PostKickChatMessageParams params,
   );
 }
 
@@ -230,15 +230,17 @@ class KickRemoteDataSourceImpl implements KickRemoteDataSource {
 
   @override
   Future<Either<Failure, void>> sendChatMessage(
-    String accessToken,
-    String message,
+    PostKickChatMessageParams params,
   ) async {
     try {
-      dioClient.options.headers["authorization"] = "Bearer $accessToken";
+      dioClient.options.headers["Authorization"] =
+          "Bearer ${params.accessToken}";
       final response = await dioClient.post(
         '$kKickApiUrlBase/public/v1/chat',
         data: {
-          'content': message,
+          "content": params.message,
+          "type": "user",
+          "broadcaster_user_id": params.broadcasterUserId,
         },
       );
 

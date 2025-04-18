@@ -28,6 +28,7 @@ import 'package:irllink/src/presentation/widgets/pinned_messages_sheet.dart';
 import 'package:irllink/src/presentation/widgets/poll.dart';
 import 'package:irllink/src/presentation/widgets/prediction.dart';
 import 'package:irllink/src/presentation/widgets/web_page_view.dart';
+import 'package:kick_chat/kick_chat.dart';
 import 'package:split_view/split_view.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 import 'package:upgrader/upgrader.dart';
@@ -589,6 +590,7 @@ void selectChatToSend(
   BuildContext context,
   HomeViewController controller,
   List<TwitchChat> twitchChats,
+  List<KickChat> kickChats,
   String message,
 ) {
   Get.defaultDialog(
@@ -604,6 +606,7 @@ void selectChatToSend(
     },
     content: SelectChannelDialog(
       twitchChats: twitchChats,
+      kickChats: kickChats,
       controller: controller,
       message: message,
     ),
