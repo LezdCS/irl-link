@@ -47,7 +47,11 @@ class SelectChannelDialog extends StatelessWidget {
                   padding: const EdgeInsets.all(8),
                   child: Row(
                     children: [
-                      const Icon(Icons.live_tv, color: Colors.purple),
+                      Image.asset(
+                        'lib/assets/twitch/twitch_logo.png',
+                        width: 20,
+                        height: 20,
+                      ),
                       const SizedBox(width: 8),
                       Text(chat.channel),
                     ],
@@ -76,7 +80,11 @@ class SelectChannelDialog extends StatelessWidget {
                   padding: const EdgeInsets.all(8),
                   child: Row(
                     children: [
-                      const Icon(Icons.sports_esports, color: Colors.green),
+                      Image.asset(
+                        'lib/assets/kick/kickLogo.png',
+                        width: 20,
+                        height: 20,
+                      ),
                       const SizedBox(width: 8),
                       Text(chat.username),
                     ],
