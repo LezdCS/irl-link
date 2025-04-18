@@ -288,38 +288,11 @@ class HomeView extends GetView<HomeViewController> {
                     Expanded(
                       child: TextField(
                         controller: controller.chatInputController,
-                        onSubmitted: (String value) {
-                          if (controller.selectedChatGroup.value == null) {
-                            return;
-                          }
-                          ChatViewController chatViewController =
-                              Get.find<ChatViewController>(
-                            tag: controller.selectedChatGroup.value?.id,
-                          );
-                          List<TwitchChat> twitchChats = [];
-                          twitchChats
-                              .addAll(chatViewController.twitchChats.toList());
-                          if (twitchChats.length == 1) {
-                            controller.sendChatMessage(
-                              value,
-                              twitchChats.first.channel,
-                            );
-                            controller.chatInputController.text = '';
-                            FocusScope.of(context).unfocus();
-                          } else {
-                            selectChatToSend(
-                              context,
-                              controller,
-                              twitchChats,
-                              value,
-                            );
-                          }
-                        },
                         onTap: () {
                           controller.selectedMessage.value = null;
                           controller.isPickingEmote.value = false;
                         },
-                        textInputAction: TextInputAction.send,
+                        textInputAction: TextInputAction.done,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: settings.generalSettings.displayViewerCount
@@ -343,31 +316,9 @@ class HomeView extends GetView<HomeViewController> {
                     ),
                     InkWell(
                       onTap: () {
-                        if (controller.selectedChatGroup.value == null) {
-                          return;
-                        }
-                        ChatViewController chatViewController =
-                            Get.find<ChatViewController>(
-                          tag: controller.selectedChatGroup.value?.id,
+                        controller.sendChatMessage(
+                          controller.chatInputController.text,
                         );
-                        List<TwitchChat> twitchChats = [];
-                        twitchChats
-                            .addAll(chatViewController.twitchChats.toList());
-                        if (twitchChats.length == 1) {
-                          controller.sendChatMessage(
-                            controller.chatInputController.text,
-                            twitchChats.first.channel,
-                          );
-                          controller.chatInputController.text = '';
-                          FocusScope.of(context).unfocus();
-                        } else {
-                          selectChatToSend(
-                            context,
-                            controller,
-                            twitchChats,
-                            controller.chatInputController.text,
-                          );
-                        }
                       },
                       child: Icon(
                         Icons.send,

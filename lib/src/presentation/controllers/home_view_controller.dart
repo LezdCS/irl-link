@@ -41,6 +41,7 @@ import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dar
 import 'package:irllink/src/presentation/controllers/realtime_irl_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 import 'package:irllink/src/presentation/views/chat_view.dart';
+import 'package:irllink/src/presentation/views/home_view.dart';
 import 'package:irllink/src/presentation/views/tabs/obs_tab_view.dart';
 import 'package:irllink/src/presentation/views/tabs/realtime_irl_tab_view.dart';
 import 'package:irllink/src/presentation/views/tabs/streamelements_tab_view.dart';
@@ -502,12 +503,44 @@ class HomeViewController extends GetxController
     }
   }
 
-  void sendChatMessage(String message, String channel) {
+  void sendChatMessage(String message, [String? channel]) {
     if (twitchData == null) {
       return;
     }
 
-    TwitchChat twitchChat = TwitchChat(
+    if (selectedChatGroup.value == null) {
+      return;
+    }
+
+    ChatViewController chatViewController = Get.find<ChatViewController>(
+      tag: selectedChatGroup.value?.id,
+    );
+    List<TwitchChat> twitchChats = chatViewController.twitchChats.toList();
+
+    if (twitchChats.length > 1) {
+      // If channel is provided, find the matching chat
+      if (channel != null) {
+        _sendMessageToChat(channel, message);
+      } else {
+        // If no channel specified, show selection dialog
+        selectChatToSend(
+          Get.context!,
+          this,
+          twitchChats,
+          message,
+        );
+      }
+    } else {
+      _sendMessageToChat(twitchChats.first.channel, message);
+    }
+
+    chatInputController.text = '';
+    selectedMessage.value = null;
+    isPickingEmote.value = false;
+  }
+
+  void _sendMessageToChat(String channel, String message) {
+    final twitchChat = TwitchChat(
       channel,
       twitchData!.twitchUser.login,
       twitchData!.accessToken,
@@ -521,10 +554,6 @@ class HomeViewController extends GetxController
         twitchChat.close();
       }
     });
-
-    chatInputController.text = '';
-    selectedMessage.value = null;
-    isPickingEmote.value = false;
   }
 
   void getEmotes() {
