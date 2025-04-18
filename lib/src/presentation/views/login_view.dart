@@ -29,87 +29,109 @@ class LoginView extends GetView<LoginViewController> {
   Widget _loginButton(context) {
     return Column(
       children: [
-        TextButton.icon(
-          label: Text.rich(
-            TextSpan(
-              text: "Login with ",
-              style: const TextStyle(
-                color: Colors.grey,
-                fontSize: 20,
-              ),
-              children: [
-                TextSpan(
-                  text: 'Twitch',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.tertiary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
+        SizedBox(
+          width: 250,
+          child: TextButton.icon(
+            label: Text.rich(
+              TextSpan(
+                text: "Login with ",
+                style: const TextStyle(
+                  color: Colors.grey,
+                  fontSize: 20,
                 ),
-              ],
-            ),
-          ),
-          icon: const Padding(
-            padding: EdgeInsets.all(8),
-            child: Image(
-              height: 24,
-              width: 24,
-              image: AssetImage(
-                'lib/assets/twitch/twitch_logo.png',
+                children: [
+                  TextSpan(
+                    text: 'Twitch',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.tertiary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
               ),
             ),
+            icon: const Padding(
+              padding: EdgeInsets.all(8),
+              child: Image(
+                height: 24,
+                width: 24,
+                image: AssetImage(
+                  'lib/assets/twitch/twitch_logo.png',
+                ),
+              ),
+            ),
+            style: TextButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+            ),
+            onPressed: () {
+              controller.login();
+            },
           ),
-          style: TextButton.styleFrom(
-            backgroundColor: Theme.of(context).colorScheme.secondary,
-          ),
-          onPressed: () {
-            controller.login();
-          },
         ),
         const SizedBox(
           height: 16,
         ),
-        TextButton.icon(
-          label: Text.rich(
-            TextSpan(
-              text: "Login with ",
-              style: const TextStyle(
-                color: Colors.grey,
-                fontSize: 20,
-              ),
-              children: [
-                TextSpan(
-                  text: 'Kick',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.tertiary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
+        SizedBox(
+          width: 250,
+          child: TextButton.icon(
+            label: const Text.rich(
+              TextSpan(
+                text: "Login with ",
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 20,
                 ),
-              ],
+                children: [
+                  TextSpan(
+                    text: 'Kick',
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
+              ),
             ),
+            icon: const Padding(
+              padding: EdgeInsets.all(8),
+              child: Image(
+                height: 24,
+                width: 24,
+                image: AssetImage(
+                  'lib/assets/kick/kickLogo.png',
+                ),
+              ),
+            ),
+            style: TextButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+            ),
+            onPressed: () {
+              controller.loginKick();
+            },
           ),
-          style: TextButton.styleFrom(
-            backgroundColor: Theme.of(context).colorScheme.secondary,
-          ),
-          onPressed: () {
-            controller.loginKick();
-          },
         ),
-        const SizedBox(
-          height: 10,
+        Divider(
+          height: 30,
+          indent: 60,
+          endIndent: 60,
+          color: Colors.grey[900],
         ),
-        TextButton(
-          key: const Key("maybe_later_key"),
-          style: TextButton.styleFrom(
-            backgroundColor: Theme.of(context).colorScheme.secondary,
-          ),
-          onPressed: () {
-            controller.homeWitoutLogin();
-          },
-          child: Text(
-            "maybe_later".tr,
-            style: const TextStyle(color: Colors.grey),
+        SizedBox(
+          width: 250,
+          child: TextButton(
+            key: const Key("maybe_later_key"),
+            style: TextButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+            ),
+            onPressed: () {
+              controller.homeWitoutLogin();
+            },
+            child: Text(
+              "maybe_later".tr,
+              style: const TextStyle(color: Colors.grey),
+            ),
           ),
         ),
       ],

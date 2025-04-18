@@ -162,6 +162,7 @@ class HomeViewController extends GetxController
   Future<void> _initializeKickServices() async {
     KickTabView kickPage = const KickTabView();
     tabElements.add(kickPage);
+    tabController = TabController(length: tabElements.length, vsync: this);
   }
 
   Future<void> _initializeTwitchServices() async {

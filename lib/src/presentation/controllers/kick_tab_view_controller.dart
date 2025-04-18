@@ -21,7 +21,7 @@ class KickTabViewController extends GetxController
   RxString streamTitle = "".obs;
   FocusNode focus = FocusNode();
 
-  List<KickCategory> kickCategories = [];
+  RxList<KickCategory> kickCategories = <KickCategory>[].obs;
 
   RxBool displayTwitchPlayer = false.obs;
   @override
@@ -54,7 +54,8 @@ class KickTabViewController extends GetxController
         failure.message,
       ),
       (categories) => {
-        kickCategories = categories,
+        debugPrint(categories.toString()),
+        kickCategories.value = categories,
       },
     );
   }
