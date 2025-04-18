@@ -23,10 +23,10 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
       child: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.only(
-            left: 20,
-            top: 12,
-            right: 20,
-            bottom: 12,
+            left: 10,
+            top: 10,
+            right: 10,
+            bottom: 10,
           ),
           color: Theme.of(context).colorScheme.surface,
           child: Column(

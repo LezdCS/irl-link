@@ -34,6 +34,8 @@ class KickTabViewController extends GetxController
 
   Timer? refreshDataTimer;
   late AnimationController refreshDataAnimationController;
+  late AnimationController controllerLiveCircleAnimation;
+  late Animation<double> circleShadowAnimation;
 
   @override
   void onInit() {
@@ -45,6 +47,18 @@ class KickTabViewController extends GetxController
     refreshDataAnimationController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 15),
+    );
+
+    controllerLiveCircleAnimation = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    )..repeat(reverse: true);
+
+    circleShadowAnimation = Tween<double>(begin: 3, end: 20).animate(
+      CurvedAnimation(
+        parent: controllerLiveCircleAnimation,
+        curve: Curves.easeInOut,
+      ),
     );
     super.onInit();
   }
@@ -61,6 +75,7 @@ class KickTabViewController extends GetxController
 
   @override
   void onClose() {
+    controllerLiveCircleAnimation.dispose();
     refreshDataAnimationController.dispose();
     refreshDataTimer?.cancel();
     super.onClose();

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/presentation/controllers/kick_tab_view_controller.dart';
 import 'package:irllink/src/presentation/views/tabs/twitch_tab_view.dart';
@@ -45,6 +46,90 @@ class KickTabView extends GetView<KickTabViewController> {
                 ),
               ],
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Obx(
+                      () {
+                        Color circleColor = controller
+                                .kickChannel.value!.stream.isLive
+                            ? Colors.red
+                            : Theme.of(context).colorScheme.tertiaryContainer;
+                        Color shadowColor =
+                            controller.kickChannel.value!.stream.isLive
+                                ? Colors.red.shade900.withValues(alpha: 0.5)
+                                : Theme.of(context)
+                                    .colorScheme
+                                    .tertiaryContainer
+                                    .withValues(alpha: 0.5);
+                        return AnimatedBuilder(
+                          animation: controller.circleShadowAnimation,
+                          builder: (context, child) {
+                            return Container(
+                              width: 12,
+                              height: 12,
+                              decoration: BoxDecoration(
+                                color: circleColor,
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: shadowColor,
+                                    spreadRadius:
+                                        controller.circleShadowAnimation.value *
+                                            0.1,
+                                    blurRadius:
+                                        controller.circleShadowAnimation.value *
+                                            0.4,
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                    const Padding(padding: EdgeInsets.only(right: 6)),
+                    Obx(
+                      () => Text(
+                        controller.kickChannel.value!.stream.isLive
+                            ? "live".tr
+                            : "offline".tr,
+                      ),
+                    ),
+                  ],
+                ),
+                Obx(
+                  () => Visibility(
+                    visible: Get.find<SettingsService>()
+                        .settings
+                        .value
+                        .generalSettings
+                        .displayViewerCount,
+                    child: Row(
+                      children: [
+                        const Icon(Icons.person_outline, color: Colors.red),
+                        const SizedBox(
+                          width: 2,
+                        ),
+                        Text(
+                          controller.kickChannel.value!.stream.viewerCount
+                              .toString(),
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                        const SizedBox(
+                          width: 6,
+                        ),
+                        Text(
+                          "viewers".tr,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
             Obx(
               () => controller.kickCategories.isEmpty
                   ? const SizedBox.shrink()
@@ -72,6 +157,9 @@ class KickTabView extends GetView<KickTabViewController> {
                 labelText: 'Stream Title',
                 border: OutlineInputBorder(),
               ),
+            ),
+            const Divider(
+              height: 30,
             ),
             Obx(
               () => shortcutButton(
