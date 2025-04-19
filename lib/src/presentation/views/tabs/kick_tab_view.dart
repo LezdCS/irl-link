@@ -147,12 +147,14 @@ class KickTabView extends GetView<KickTabViewController> {
                           labelText: 'Select Category',
                           border: OutlineInputBorder(),
                         ),
-                        items: controller.kickCategories.map((category) {
-                          return DropdownMenuItem<int>(
-                            value: category.id,
-                            child: Text(category.name),
-                          );
-                        }).toList(),
+                        items: controller.kickChannel.value!.stream.isLive
+                            ? controller.kickCategories.map((category) {
+                                return DropdownMenuItem<int>(
+                                  value: category.id,
+                                  child: Text(category.name),
+                                );
+                              }).toList()
+                            : [],
                         onChanged: (int? newValue) {
                           if (newValue != null) {
                             controller.selectedCategoryId.value = newValue;
