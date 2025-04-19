@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
+import 'package:irllink/src/core/utils/username_color.dart';
 import 'package:irllink/src/domain/entities/chat/chat_badge.dart';
 import 'package:kick_chat/kick_chat.dart';
 import 'package:twitch_chat/twitch_chat.dart' as twitch;
@@ -208,7 +209,7 @@ class ChatMessage {
       authorId: '',
       displayName: authorName,
       username: authorName,
-      color: '#FFFFFF',
+      color: randomUsernameColor(authorName),
       message: message,
       timestamp: int.parse(timestamp),
       isAction: false,
