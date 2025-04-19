@@ -90,14 +90,14 @@ class TwitchTabViewController extends GetxController
 
   Future<void> refreshData() async {
     refreshDataAnimationController.reset();
-    if (homeViewController.twitchData == null) {
+    if (homeViewController.twitchData.value == null) {
       return;
     }
 
     final streamInfosResult = await getStreamInfoUseCase(
       params: GetStreamInfoUseCaseParams(
-        accessToken: homeViewController.twitchData!.accessToken,
-        broadcasterId: homeViewController.twitchData!.twitchUser.id,
+        accessToken: homeViewController.twitchData.value!.accessToken,
+        broadcasterId: homeViewController.twitchData.value!.twitchUser.id,
       ),
     );
     streamInfosResult.fold(
@@ -139,8 +139,8 @@ class TwitchTabViewController extends GetxController
   void changeChatSettings() {
     setChatSettingsUseCase(
       params: SetChatSettingsUseCaseParams(
-        accessToken: homeViewController.twitchData!.accessToken,
-        broadcasterId: homeViewController.twitchData!.twitchUser.id,
+        accessToken: homeViewController.twitchData.value!.accessToken,
+        broadcasterId: homeViewController.twitchData.value!.twitchUser.id,
         twitchStreamInfos: twitchStreamInfos.value,
       ),
     );
@@ -149,8 +149,8 @@ class TwitchTabViewController extends GetxController
   void setStreamTitle() {
     setStreamTitleUseCase(
       params: SetStreamTitleUseCaseParams(
-        accessToken: homeViewController.twitchData!.accessToken,
-        broadcasterId: homeViewController.twitchData!.twitchUser.id,
+        accessToken: homeViewController.twitchData.value!.accessToken,
+        broadcasterId: homeViewController.twitchData.value!.twitchUser.id,
         title: titleFormController.text,
       ),
     );

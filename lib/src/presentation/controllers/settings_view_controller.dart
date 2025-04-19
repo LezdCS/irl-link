@@ -100,7 +100,7 @@ class SettingsViewController extends GetxController {
 
   @override
   void onReady() {
-    if (homeViewController.twitchData != null) {
+    if (homeViewController.twitchData.value != null) {
       getUsernames();
     }
 
@@ -108,12 +108,13 @@ class SettingsViewController extends GetxController {
   }
 
   Future<void> logout() async {
-    if (homeViewController.twitchData == null) {
+    if (homeViewController.twitchData.value == null) {
       return;
     }
 
-    final logoutResult =
-        await logoutUseCase(params: homeViewController.twitchData!.accessToken);
+    final logoutResult = await logoutUseCase(
+      params: homeViewController.twitchData.value!.accessToken,
+    );
 
     logoutResult.fold(
       (l) {
@@ -127,7 +128,7 @@ class SettingsViewController extends GetxController {
         );
       },
       (r) {
-        homeViewController.twitchData = null;
+        homeViewController.twitchData.value = null;
         Get.snackbar(
           "Twitch",
           "Successfully logged out",
@@ -157,7 +158,7 @@ class SettingsViewController extends GetxController {
         );
       },
       (r) {
-        homeViewController.twitchData = r;
+        homeViewController.twitchData.value = r;
         Get.snackbar(
           "Twitch",
           "Successfully logged in",
@@ -370,7 +371,7 @@ class SettingsViewController extends GetxController {
     final twitchUsersResult = await getTwitchUsersUseCase(
       params: GetTwitchUsersUseCaseParams(
         ids: settings.hiddenUsersIds,
-        accessToken: homeViewController.twitchData!.accessToken,
+        accessToken: homeViewController.twitchData.value!.accessToken,
       ),
     );
 

@@ -657,13 +657,14 @@ class SettingsView extends GetView<SettingsViewController> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      if (controller.homeViewController.twitchData != null)
+                      if (controller.homeViewController.twitchData.value !=
+                          null)
                         Row(
                           spacing: 15,
                           children: [
                             CachedNetworkImage(
-                              imageUrl: controller.homeViewController
-                                  .twitchData!.twitchUser.profileImageUrl,
+                              imageUrl: controller.homeViewController.twitchData
+                                  .value!.twitchUser.profileImageUrl,
                               placeholder: (BuildContext context, String url) =>
                                   const CircularProgressIndicator(),
                               errorWidget:
@@ -676,7 +677,7 @@ class SettingsView extends GetView<SettingsViewController> {
                               ),
                             ),
                             Text(
-                              controller.homeViewController.twitchData!
+                              controller.homeViewController.twitchData.value!
                                   .twitchUser.displayName,
                               style: const TextStyle(
                                 fontSize: 20,
@@ -695,7 +696,7 @@ class SettingsView extends GetView<SettingsViewController> {
                         ),
                       TextButton(
                         onPressed: () {
-                          if (controller.homeViewController.twitchData !=
+                          if (controller.homeViewController.twitchData.value !=
                               null) {
                             controller.logout();
                           } else {
@@ -704,13 +705,14 @@ class SettingsView extends GetView<SettingsViewController> {
                         },
                         style: TextButton.styleFrom(
                           backgroundColor:
-                              controller.homeViewController.twitchData != null
+                              controller.homeViewController.twitchData.value !=
+                                      null
                                   ? Colors.red
                                   : Colors.purple,
                           minimumSize: const Size(100, 40),
                         ),
                         child: Text(
-                          controller.homeViewController.twitchData != null
+                          controller.homeViewController.twitchData.value != null
                               ? "logout".tr
                               : "login".tr,
                           style: const TextStyle(color: Colors.white),

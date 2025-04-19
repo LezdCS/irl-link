@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/convert_to_device_timezone.dart';
-
 import 'package:irllink/src/core/utils/mapper.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_hype_train_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_poll_dto.dart';
@@ -391,8 +390,8 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
     );
     final createPollResult = await createPollUseCase(
       params: CreatePollUseCaseParams(
-        accessToken: homeViewController.twitchData!.accessToken,
-        broadcasterId: homeViewController.twitchData!.twitchUser.id,
+        accessToken: homeViewController.twitchData.value!.accessToken,
+        broadcasterId: homeViewController.twitchData.value!.twitchUser.id,
         newPoll: newPoll,
       ),
     );
@@ -407,8 +406,8 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
   Future<void> endPoll(String status) async {
     final endPollResult = await endPollUseCase(
       params: EndPollUseCaseParams(
-        accessToken: homeViewController.twitchData!.accessToken,
-        broadcasterId: homeViewController.twitchData!.twitchUser.id,
+        accessToken: homeViewController.twitchData.value!.accessToken,
+        broadcasterId: homeViewController.twitchData.value!.twitchUser.id,
         pollId: currentPoll.value.id,
         status: status,
       ),
@@ -425,8 +424,8 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
   void endPrediction(String status, String? winningOutcomeId) {
     endPredictionUseCase(
       params: EndPredictionUseCaseParams(
-        accessToken: homeViewController.twitchData!.accessToken,
-        broadcasterId: homeViewController.twitchData!.twitchUser.id,
+        accessToken: homeViewController.twitchData.value!.accessToken,
+        broadcasterId: homeViewController.twitchData.value!.twitchUser.id,
         predictionId: currentPrediction.value.id,
         status: status,
         winningOutcomeId: winningOutcomeId,

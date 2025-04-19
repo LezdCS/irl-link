@@ -79,7 +79,7 @@ class HomeViewController extends GetxController
   RxList<Widget> tabElements = <Widget>[].obs;
   RxList<WebPageView> iOSAudioSources = <WebPageView>[].obs;
 
-  TwitchCredentials? twitchData;
+  Rxn<TwitchCredentials> twitchData = Rxn<TwitchCredentials>();
   Rxn<KickCredentials> kickData = Rxn<KickCredentials>();
 
   // StreamElements
@@ -128,7 +128,7 @@ class HomeViewController extends GetxController
       if (Get.arguments.length == 1) {
         final credentials = Get.arguments[0];
         if (credentials is TwitchCredentials) {
-          twitchData = credentials;
+          twitchData.value = credentials;
           await _initializeTwitchServices();
           await _setupCrashlytics();
         } else if (credentials is KickCredentials) {
@@ -139,7 +139,7 @@ class HomeViewController extends GetxController
         final twitchCreds = Get.arguments[0];
         final kickCreds = Get.arguments[1];
         if (twitchCreds is TwitchCredentials && kickCreds is KickCredentials) {
-          twitchData = twitchCreds;
+          twitchData.value = twitchCreds;
           kickData.value = kickCreds;
           await _initializeTwitchServices();
           await _initializeKickServices();
@@ -189,8 +189,8 @@ class HomeViewController extends GetxController
     timerRefreshToken =
         Timer.periodic(const Duration(seconds: 13000), (Timer t) async {
       final refreshTokenResult =
-          await refreshAccessTokenUseCase(params: twitchData!);
-      refreshTokenResult.fold((l) => {}, (r) => twitchData = r);
+          await refreshAccessTokenUseCase(params: twitchData.value!);
+      refreshTokenResult.fold((l) => {}, (r) => twitchData.value = r);
 
       final refreshTokenResultKick =
           await refreshKickAccessTokenUseCase(params: kickData.value!);
@@ -213,8 +213,8 @@ class HomeViewController extends GetxController
         talker: talkerService.talker,
         dioClient: dioTwitchClient,
       ).init(
-        token: twitchData!.accessToken,
-        channel: twitchData!.twitchUser.login,
+        token: twitchData.value!.accessToken,
+        channel: twitchData.value!.twitchUser.login,
       ),
       permanent: true,
     );
@@ -224,8 +224,8 @@ class HomeViewController extends GetxController
   Future<void> _initializePubSubService(Dio dioTwitchClient) async {
     TwitchPubSubService pubSubService = await Get.putAsync(
       () => TwitchPubSubService().init(
-        accessToken: twitchData!.accessToken,
-        channelName: twitchData!.twitchUser.login,
+        accessToken: twitchData.value!.accessToken,
+        channelName: twitchData.value!.twitchUser.login,
       ),
       permanent: true,
     );
@@ -234,7 +234,7 @@ class HomeViewController extends GetxController
 
   Future<void> _setupCrashlytics() async {
     await FirebaseCrashlytics.instance.setUserIdentifier(
-      twitchData!.twitchUser.id,
+      twitchData.value!.twitchUser.id,
     );
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
@@ -459,14 +459,14 @@ class HomeViewController extends GetxController
     if (!chatsViews.any(
       (groupView) => groupView.chatGroup.id == permanentFirstGroup?.id,
     )) {
-      if (twitchData != null) {
+      if (twitchData.value != null) {
         // We add the Twitch Chat of the user to the first position of the channels of this group
         List<Channel> updatedChannels = List.from(permanentFirstGroup.channels);
         updatedChannels.insert(
           0,
           Channel(
             platform: Platform.twitch,
-            channel: twitchData!.twitchUser.login,
+            channel: twitchData.value!.twitchUser.login,
             enabled: true,
           ),
         );
@@ -486,14 +486,14 @@ class HomeViewController extends GetxController
       if (c.chatGroup.id == permanentFirstGroup.id) {
         c.controller.updateChannels(
           permanentFirstGroup.channels,
-          twitchData?.twitchUser.login,
+          twitchData.value!.twitchUser.login,
         );
       } else {
         ChatGroup group =
             settingsGroups.firstWhere((g) => g.id == c.chatGroup.id);
         c.controller.updateChannels(
           group.channels,
-          twitchData?.twitchUser.login,
+          twitchData.value!.twitchUser.login,
         );
       }
       c.controller.createChats();
@@ -544,10 +544,10 @@ class HomeViewController extends GetxController
       sendTwitchMessageToChat(twitchChats.first.channel, message);
     }
 
-    _clearChatInput();
+    clearChatInput();
   }
 
-  void _clearChatInput() {
+  void clearChatInput() {
     chatInputController.text = '';
     selectedMessage.value = null;
     isPickingEmote.value = false;
@@ -564,14 +564,14 @@ class HomeViewController extends GetxController
   }
 
   void sendTwitchMessageToChat(String channel, String message) {
-    if (twitchData == null) {
+    if (twitchData.value == null) {
       return;
     }
 
     final twitchChat = TwitchChat(
       channel,
-      twitchData!.twitchUser.login,
-      twitchData!.accessToken,
+      twitchData.value!.twitchUser.login,
+      twitchData.value!.accessToken,
       clientId: kTwitchAuthClientId,
     );
     twitchChat.connect();

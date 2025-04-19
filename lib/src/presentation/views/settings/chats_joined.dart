@@ -54,7 +54,8 @@ class ChatsJoined extends GetView<SettingsViewController> {
                 child: Column(
                   children: [
                     Visibility(
-                      visible: controller.homeViewController.twitchData != null,
+                      visible: controller.homeViewController.twitchData.value !=
+                          null,
                       child: Row(
                         children: [
                           const Image(
@@ -69,8 +70,8 @@ class ChatsJoined extends GetView<SettingsViewController> {
                             width: 8,
                           ),
                           Text(
-                            controller.homeViewController.twitchData?.twitchUser
-                                    .displayName ??
+                            controller.homeViewController.twitchData.value
+                                    ?.twitchUser.displayName ??
                                 '',
                             style: const TextStyle(
                               fontSize: 20,
@@ -404,7 +405,8 @@ class ChatsJoined extends GetView<SettingsViewController> {
                       case Platform.youtube:
                         badge = "lib/assets/youtube/youtubeLogo.png";
                         enabled =
-                            Get.find<HomeViewController>().twitchData != null;
+                            Get.find<HomeViewController>().twitchData.value !=
+                                null;
                     }
                     return DropdownMenuItem(
                       value: Platform.values[index].toString(),

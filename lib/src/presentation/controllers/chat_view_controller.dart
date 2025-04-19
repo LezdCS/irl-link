@@ -142,14 +142,13 @@ class ChatViewController extends GetxController
 
   /// Delete [message] by his id
   void deleteMessageInstruction(ChatMessage message) {
-    if (homeViewController.twitchData == null) {
+    if (homeViewController.twitchData.value == null) {
       message.isDeleted = true;
       homeViewController.selectedMessage.value = null;
       return;
     }
-
     TwitchApi.deleteMessage(
-      homeViewController.twitchData!.accessToken,
+      homeViewController.twitchData.value!.accessToken,
       message.channelId,
       message.id,
       kTwitchAuthClientId,
@@ -160,11 +159,11 @@ class ChatViewController extends GetxController
 
   /// Ban user for specific [duration] based on the author name in the [message]
   void timeoutMessageInstruction(ChatMessage message, int duration) {
-    if (homeViewController.twitchData == null) {
+    if (homeViewController.twitchData.value == null) {
       return;
     }
     TwitchApi.banUser(
-      homeViewController.twitchData!.accessToken,
+      homeViewController.twitchData.value!.accessToken,
       message.channelId,
       message.authorId,
       duration,
@@ -176,11 +175,11 @@ class ChatViewController extends GetxController
 
   /// Ban user based on the author name in the [message]
   void banMessageInstruction(ChatMessage message) {
-    if (homeViewController.twitchData == null) {
+    if (homeViewController.twitchData.value == null) {
       return;
     }
     TwitchApi.banUser(
-      homeViewController.twitchData!.accessToken,
+      homeViewController.twitchData.value!.accessToken,
       message.channelId,
       message.authorId,
       null,
@@ -191,7 +190,7 @@ class ChatViewController extends GetxController
 
   /// Hide every future messages from an user (only on this application, not on Twitch)
   void hideUser(ChatMessage message) {
-    if (homeViewController.twitchData == null) {
+    if (homeViewController.twitchData.value == null) {
       return;
     }
     Settings settings = settingsService.settings.value;
@@ -335,13 +334,13 @@ class ChatViewController extends GetxController
 
   void createTwitchChat(Channel tc) {
     TwitchChat twitchChat;
-    if (homeViewController.twitchData == null) {
+    if (homeViewController.twitchData.value == null) {
       twitchChat = TwitchChat.anonymous(tc.channel);
     } else {
       twitchChat = TwitchChat(
         tc.channel,
-        homeViewController.twitchData!.twitchUser.login,
-        homeViewController.twitchData!.accessToken,
+        homeViewController.twitchData.value!.twitchUser.login,
+        homeViewController.twitchData.value!.accessToken,
         clientId: kTwitchAuthClientId,
         onConnected: () {},
         onClearChat: () {
@@ -397,7 +396,7 @@ class ChatViewController extends GetxController
   }
 
   Future<void> createYoutubeChat(String channelId) async {
-    if (homeViewController.twitchData == null) {
+    if (homeViewController.twitchData.value == null) {
       Get.snackbar(
         'Error',
         'Twitch authentication is required to use YouTube chat',
@@ -410,7 +409,7 @@ class ChatViewController extends GetxController
     }
     YoutubeChat youtubeChat = await YoutubeChat(
       talker: talker,
-      twitchToken: homeViewController.twitchData!.accessToken,
+      twitchToken: homeViewController.twitchData.value!.accessToken,
     ).init(channel: channelId);
     await youtubeChat.connect();
     youtubeChat.chatStream.listen((ChatMessage message) {

@@ -324,7 +324,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                               ),
                               QrImageView(
                                 data:
-                                    'https://www.twitch.tv/${controller.homeViewController.twitchData?.twitchUser.login}',
+                                    'https://www.twitch.tv/${controller.homeViewController.twitchData.value?.twitchUser.login}',
                                 backgroundColor: Colors.white,
                                 size: 200,
                               ),
@@ -332,7 +332,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                                 height: 10,
                               ),
                               Text(
-                                "https://www.twitch.tv/${controller.homeViewController.twitchData?.twitchUser.login}",
+                                "https://www.twitch.tv/${controller.homeViewController.twitchData.value?.twitchUser.login}",
                                 style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
@@ -377,7 +377,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         title: '',
                         toggled: true,
                         url:
-                            'https://player.twitch.tv/?channel=${controller.homeViewController.twitchData?.twitchUser.login}&parent=www.irllink.com&muted=true',
+                            'https://player.twitch.tv/?channel=${controller.homeViewController.twitchData.value?.twitchUser.login}&parent=www.irllink.com&muted=true',
                       ),
                     ),
                   ),
