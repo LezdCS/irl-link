@@ -361,7 +361,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                   onTap: () => {
                     controller.displayTwitchPlayer.toggle(),
                   },
-                  isOn: controller.twitchStreamInfos.value.isSlowMode!,
+                  isOn: false,
                 ),
               ),
               Obx(

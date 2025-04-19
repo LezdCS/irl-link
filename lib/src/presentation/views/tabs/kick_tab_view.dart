@@ -5,6 +5,7 @@ import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/presentation/controllers/kick_tab_view_controller.dart';
 import 'package:irllink/src/presentation/views/tabs/twitch_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/web_page_view.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class KickTabView extends GetView<KickTabViewController> {
   const KickTabView({super.key});
@@ -184,7 +185,7 @@ class KickTabView extends GetView<KickTabViewController> {
                 ),
               ),
               const Divider(
-                height: 30,
+                height: 10,
               ),
               Obx(
                 () => shortcutButton(
@@ -195,7 +196,7 @@ class KickTabView extends GetView<KickTabViewController> {
                   onTap: () => {
                     controller.displayKickPlayer.toggle(),
                   },
-                  isOn: controller.displayKickPlayer.value,
+                  isOn: false,
                 ),
               ),
               Obx(
@@ -216,6 +217,59 @@ class KickTabView extends GetView<KickTabViewController> {
                     ),
                   ),
                 ),
+              ),
+              const Divider(
+                height: 10,
+              ),
+              shortcutButton(
+                onTap: () {
+                  Get.dialog(
+                    GestureDetector(
+                      onTap: () {
+                        Get.back();
+                      },
+                      child: Scaffold(
+                        backgroundColor: Colors.transparent,
+                        body: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "channel_qr_code".tr,
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              QrImageView(
+                                data:
+                                    'https://www.kick.com/${controller.homeViewController.kickData?.kickUser.name}',
+                                backgroundColor: Colors.white,
+                                size: 200,
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                "https://www.kick.com/${controller.homeViewController.kickData?.kickUser.name}",
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                text: "channel_qr_code".tr,
+                context: context,
+                isOn: false,
               ),
             ],
           ),
