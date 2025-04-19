@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
@@ -139,51 +141,86 @@ class KickTabView extends GetView<KickTabViewController> {
                 ],
               ),
               Obx(
-                () => controller.kickCategories.isEmpty
-                    ? const SizedBox.shrink()
-                    : DropdownButtonFormField<int>(
-                        isExpanded: true,
-                        decoration: const InputDecoration(
-                          labelText: 'Select Category',
-                          border: OutlineInputBorder(),
+                () => Stack(
+                  children: [
+                    Column(
+                      spacing: 10,
+                      children: [
+                        Obx(
+                          () => controller.kickCategories.isEmpty
+                              ? const SizedBox.shrink()
+                              : DropdownButtonFormField<int>(
+                                  isExpanded: true,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Select Category',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  items: controller
+                                          .kickChannel.value!.stream.isLive
+                                      ? controller.kickCategories
+                                          .map((category) {
+                                          return DropdownMenuItem<int>(
+                                            value: category.id,
+                                            child: Text(category.name),
+                                          );
+                                        }).toList()
+                                      : [],
+                                  onChanged: (int? newValue) {
+                                    if (newValue != null) {
+                                      controller.selectedCategoryId.value =
+                                          newValue;
+                                    }
+                                  },
+                                ),
                         ),
-                        items: controller.kickChannel.value!.stream.isLive
-                            ? controller.kickCategories.map((category) {
-                                return DropdownMenuItem<int>(
-                                  value: category.id,
-                                  child: Text(category.name),
-                                );
-                              }).toList()
-                            : [],
-                        onChanged: (int? newValue) {
-                          if (newValue != null) {
-                            controller.selectedCategoryId.value = newValue;
-                          }
-                        },
+                        Obx(
+                          () => TextFormField(
+                            controller: controller.titleFormController,
+                            focusNode: controller.focus,
+                            readOnly:
+                                !controller.kickChannel.value!.stream.isLive,
+                            decoration: const InputDecoration(
+                              labelText: 'Stream Title',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                        Obx(
+                          () => shortcutButton(
+                            context: context,
+                            text: "Update",
+                            onTap: () => {
+                              if (controller.kickChannel.value!.stream.isLive)
+                                {
+                                  controller.updateKickChannel(),
+                                },
+                            },
+                            isOn: controller.kickChannel.value!.stream.isLive,
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (!controller.kickChannel.value!.stream.isLive)
+                      Positioned.fill(
+                        child: ColoredBox(
+                          color: Colors.grey[900]!.withValues(alpha: 0.5),
+                          child: ClipRect(
+                            child: BackdropFilter(
+                              filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                              child: const Center(
+                                child: Text(
+                                  "You need to be live to modify your stream details",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-              ),
-              Obx(
-                () => TextFormField(
-                  controller: controller.titleFormController,
-                  focusNode: controller.focus,
-                  readOnly: !controller.kickChannel.value!.stream.isLive,
-                  decoration: const InputDecoration(
-                    labelText: 'Stream Title',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
-              Obx(
-                () => shortcutButton(
-                  context: context,
-                  text: "Update",
-                  onTap: () => {
-                    if (controller.kickChannel.value!.stream.isLive)
-                      {
-                        controller.updateKickChannel(),
-                      },
-                  },
-                  isOn: controller.kickChannel.value!.stream.isLive,
+                  ],
                 ),
               ),
               const Divider(
