@@ -80,7 +80,7 @@ class HomeViewController extends GetxController
   RxList<WebPageView> iOSAudioSources = <WebPageView>[].obs;
 
   TwitchCredentials? twitchData;
-  KickCredentials? kickData;
+  Rxn<KickCredentials> kickData = Rxn<KickCredentials>();
 
   // StreamElements
   Rxn<StreamelementsViewController> streamelementsViewController =
@@ -132,7 +132,7 @@ class HomeViewController extends GetxController
           await _initializeTwitchServices();
           await _setupCrashlytics();
         } else if (credentials is KickCredentials) {
-          kickData = credentials;
+          kickData.value = credentials;
           await _initializeKickServices();
         }
       } else if (Get.arguments.length == 2) {
@@ -140,7 +140,7 @@ class HomeViewController extends GetxController
         final kickCreds = Get.arguments[1];
         if (twitchCreds is TwitchCredentials && kickCreds is KickCredentials) {
           twitchData = twitchCreds;
-          kickData = kickCreds;
+          kickData.value = kickCreds;
           await _initializeTwitchServices();
           await _initializeKickServices();
           await _setupCrashlytics();
@@ -193,8 +193,8 @@ class HomeViewController extends GetxController
       refreshTokenResult.fold((l) => {}, (r) => twitchData = r);
 
       final refreshTokenResultKick =
-          await refreshKickAccessTokenUseCase(params: kickData!);
-      refreshTokenResultKick.fold((l) => {}, (r) => kickData = r);
+          await refreshKickAccessTokenUseCase(params: kickData.value!);
+      refreshTokenResultKick.fold((l) => {}, (r) => kickData.value = r);
     });
   }
 
@@ -554,15 +554,11 @@ class HomeViewController extends GetxController
   }
 
   void sendKickMessageToChat(String username, String message) {
-    if (kickData == null) {
-      return;
-    }
-
     postKickChatMessageUseCase(
       params: PostKickChatMessageParams(
-        accessToken: kickData!.accessToken,
+        accessToken: kickData.value!.accessToken,
         message: message,
-        broadcasterUserId: kickData!.kickUser.userId,
+        broadcasterUserId: kickData.value!.kickUser.userId,
       ),
     );
   }

@@ -750,13 +750,13 @@ class SettingsView extends GetView<SettingsViewController> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      if (controller.homeViewController.kickData != null)
+                      if (controller.homeViewController.kickData.value != null)
                         Row(
                           spacing: 15,
                           children: [
                             CachedNetworkImage(
-                              imageUrl: controller.homeViewController.kickData!
-                                  .kickUser.profilePicture,
+                              imageUrl: controller.homeViewController.kickData
+                                  .value!.kickUser.profilePicture,
                               placeholder: (BuildContext context, String url) =>
                                   const CircularProgressIndicator(),
                               errorWidget:
@@ -769,8 +769,8 @@ class SettingsView extends GetView<SettingsViewController> {
                               ),
                             ),
                             Text(
-                              controller
-                                  .homeViewController.kickData!.kickUser.name,
+                              controller.homeViewController.kickData.value!
+                                  .kickUser.name,
                               style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -788,7 +788,8 @@ class SettingsView extends GetView<SettingsViewController> {
                         ),
                       TextButton(
                         onPressed: () {
-                          if (controller.homeViewController.kickData != null) {
+                          if (controller.homeViewController.kickData.value !=
+                              null) {
                             controller.logoutKick();
                           } else {
                             controller.loginKick();
@@ -796,13 +797,14 @@ class SettingsView extends GetView<SettingsViewController> {
                         },
                         style: TextButton.styleFrom(
                           backgroundColor:
-                              controller.homeViewController.kickData != null
+                              controller.homeViewController.kickData.value !=
+                                      null
                                   ? Colors.red
                                   : Colors.purple,
                           minimumSize: const Size(100, 40),
                         ),
                         child: Text(
-                          controller.homeViewController.kickData != null
+                          controller.homeViewController.kickData.value != null
                               ? "logout".tr
                               : "login".tr,
                           style: const TextStyle(color: Colors.white),

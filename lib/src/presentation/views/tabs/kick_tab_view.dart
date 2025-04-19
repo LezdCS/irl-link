@@ -251,7 +251,7 @@ class KickTabView extends GetView<KickTabViewController> {
                         title: '',
                         toggled: true,
                         url:
-                            'https://player.kick.com/${controller.homeViewController.kickData?.kickUser.name}',
+                            'https://player.kick.com/${controller.homeViewController.kickData.value?.kickUser.name}',
                       ),
                     ),
                   ),
@@ -285,7 +285,7 @@ class KickTabView extends GetView<KickTabViewController> {
                               ),
                               QrImageView(
                                 data:
-                                    'https://www.kick.com/${controller.homeViewController.kickData?.kickUser.name}',
+                                    'https://www.kick.com/${controller.homeViewController.kickData.value?.kickUser.name}',
                                 backgroundColor: Colors.white,
                                 size: 200,
                               ),
@@ -293,7 +293,7 @@ class KickTabView extends GetView<KickTabViewController> {
                                 height: 10,
                               ),
                               Text(
-                                "https://www.kick.com/${controller.homeViewController.kickData?.kickUser.name}",
+                                "https://www.kick.com/${controller.homeViewController.kickData.value?.kickUser.name}",
                                 style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,

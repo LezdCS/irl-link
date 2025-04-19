@@ -84,12 +84,12 @@ class KickTabViewController extends GetxController
 
   void refreshData() async {
     refreshDataAnimationController.reset();
-    if (homeViewController.kickData == null) {
+    if (homeViewController.kickData.value == null) {
       return;
     }
 
     final channelsResult = await getKickChannelsUseCase(
-      params: homeViewController.kickData!.accessToken,
+      params: homeViewController.kickData.value!.accessToken,
     );
     channelsResult.fold(
       (l) => {},
@@ -105,7 +105,7 @@ class KickTabViewController extends GetxController
   void getKickCategories() async {
     final categories = await getKickCategoriesUseCase(
       params: KickCategoriesParams(
-        accessToken: homeViewController.kickData!.accessToken,
+        accessToken: homeViewController.kickData.value!.accessToken,
         searchQuery: "a",
       ),
     );
@@ -123,7 +123,7 @@ class KickTabViewController extends GetxController
   void updateKickChannel() async {
     final categories = await patchKickChannelUseCase(
       params: PatchKickChannelParams(
-        accessToken: homeViewController.kickData!.accessToken,
+        accessToken: homeViewController.kickData.value!.accessToken,
         streamTitle: streamTitle.value,
         categoryId: selectedCategoryId.value.toString(),
       ),

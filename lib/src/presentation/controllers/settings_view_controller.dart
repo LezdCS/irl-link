@@ -187,7 +187,7 @@ class SettingsViewController extends GetxController {
         );
       },
       (r) {
-        homeViewController.kickData = r;
+        homeViewController.kickData.value = r;
         Get.snackbar(
           "Kick",
           "Successfully logged in",
@@ -385,12 +385,12 @@ class SettingsViewController extends GetxController {
   }
 
   Future<void> logoutKick() async {
-    if (homeViewController.kickData == null) {
+    if (homeViewController.kickData.value == null) {
       return;
     }
 
     final logoutResult = await logoutKickUseCase(
-      params: homeViewController.kickData!.accessToken,
+      params: homeViewController.kickData.value!.accessToken,
     );
 
     logoutResult.fold(
@@ -405,7 +405,7 @@ class SettingsViewController extends GetxController {
         );
       },
       (r) {
-        homeViewController.kickData = null;
+        homeViewController.kickData.value = null;
         Get.snackbar(
           "Kick",
           "Successfully logged out",

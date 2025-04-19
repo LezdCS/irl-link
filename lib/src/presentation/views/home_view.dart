@@ -266,7 +266,7 @@ class HomeView extends GetView<HomeViewController> {
         children: [
           Visibility(
             visible: Get.find<HomeViewController>().twitchData != null ||
-                Get.find<HomeViewController>().kickData != null,
+                Get.find<HomeViewController>().kickData.value != null,
             child: Expanded(
               flex: 5,
               child: Container(
