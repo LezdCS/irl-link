@@ -14,6 +14,7 @@ import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/kick_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:irllink/src/presentation/views/chat_view.dart';
 import 'package:irllink/src/presentation/views/dashboard.dart';
@@ -302,11 +303,19 @@ class HomeView extends GetView<HomeViewController> {
                           border: InputBorder.none,
                           hintText: settings.generalSettings.displayViewerCount
                               ? "viewers_number".trParams({
-                                  "number": Get.find<TwitchTabViewController>()
-                                      .twitchStreamInfos
-                                      .value
-                                      .viewerCount
-                                      .toString(),
+                                  "number":
+                                      ((Get.find<TwitchTabViewController>()
+                                                      .twitchStreamInfos
+                                                      .value
+                                                      .viewerCount ??
+                                                  0) +
+                                              (Get.find<KickTabViewController>()
+                                                      .kickChannel
+                                                      .value
+                                                      ?.stream
+                                                      .viewerCount ??
+                                                  0))
+                                          .toString(),
                                 })
                               : 'send_message'.tr,
                           hintStyle: TextStyle(
