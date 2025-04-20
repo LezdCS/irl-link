@@ -474,11 +474,27 @@ class HomeViewController extends GetxController
           channels: updatedChannels,
         );
       }
+      if (kickData.value != null) {
+        List<Channel> updatedChannels = List.from(permanentFirstGroup.channels);
+        updatedChannels.insert(
+          0,
+          Channel(
+            platform: Platform.kick,
+            channel: kickData.value!.kickUser.name,
+            enabled: true,
+          ),
+        );
+        permanentFirstGroup = permanentFirstGroup.copyWith(
+          channels: updatedChannels,
+        );
+      }
       ChatView groupView = ChatView(
         chatGroup: permanentFirstGroup,
       );
       await putChat(permanentFirstGroup);
       chatsViews.insert(0, groupView);
+      chatTabsController =
+          TabController(length: chatsViews.length, vsync: this);
     }
 
     // 4. Call the createChats function for each group to update the chats inside

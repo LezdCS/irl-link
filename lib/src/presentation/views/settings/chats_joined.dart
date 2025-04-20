@@ -74,11 +74,41 @@ class ChatsJoined extends GetView<SettingsViewController> {
                                     ?.twitchUser.displayName ??
                                 '',
                             style: const TextStyle(
-                              fontSize: 20,
+                              fontSize: 18,
                             ),
                           ),
                         ],
                       ),
+                    ),
+                    Visibility(
+                      visible:
+                          controller.homeViewController.kickData.value != null,
+                      child: Row(
+                        children: [
+                          const Image(
+                            width: 18,
+                            height: 18,
+                            image: AssetImage(
+                              "lib/assets/kick/kickLogo.png",
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          Text(
+                            controller.homeViewController.kickData.value
+                                    ?.kickUser.name ??
+                                '',
+                            style: const TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Divider(
+                      color: Colors.grey[800],
+                      height: 12,
                     ),
                     ListView.builder(
                       shrinkWrap: true,

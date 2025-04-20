@@ -55,7 +55,7 @@ class LoginViewController extends GetxController {
 
     // Handle Twitch credentials independently
     final twitchCredsResult = await getTwitchLocalUseCase();
-    twitchCredsResult.fold(
+    await twitchCredsResult.fold(
       (l) => null, // Do nothing if no Twitch credentials found
       (r) async {
         twitchCredentials.value = r;
