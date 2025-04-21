@@ -125,26 +125,16 @@ class HomeViewController extends GetxController
     emotesTabController = TabController(length: 0, vsync: this);
 
     if (Get.arguments != null) {
-      if (Get.arguments.length == 1) {
-        final credentials = Get.arguments[0];
-        if (credentials is TwitchCredentials) {
-          twitchData.value = credentials;
-          await _initializeTwitchServices();
-          await _setupCrashlytics();
-        } else if (credentials is KickCredentials) {
-          kickData.value = credentials;
-          await _initializeKickServices();
-        }
-      } else if (Get.arguments.length == 2) {
-        final twitchCreds = Get.arguments[0];
-        final kickCreds = Get.arguments[1];
-        if (twitchCreds is TwitchCredentials && kickCreds is KickCredentials) {
-          twitchData.value = twitchCreds;
-          kickData.value = kickCreds;
-          await _initializeTwitchServices();
-          await _initializeKickServices();
-          await _setupCrashlytics();
-        }
+      final twitchCreds = Get.arguments[0];
+      final kickCreds = Get.arguments[1];
+      if (twitchCreds is TwitchCredentials) {
+        twitchData.value = twitchCreds;
+        await _initializeTwitchServices();
+        await _setupCrashlytics();
+      }
+      if (kickCreds is KickCredentials) {
+        kickData.value = kickCreds;
+        await _initializeKickServices();
       }
     }
 
@@ -163,6 +153,17 @@ class HomeViewController extends GetxController
     KickTabView kickPage = const KickTabView();
     tabElements.add(kickPage);
     tabController = TabController(length: tabElements.length, vsync: this);
+
+    final refreshTokenResultKick =
+        await refreshKickAccessTokenUseCase(params: kickData.value!);
+    refreshTokenResultKick.fold(
+      (l) {
+        talkerService.talker.error('Failed to refresh Kick access token');
+      },
+      (r) {
+        kickData.value = r;
+      },
+    );
   }
 
   Future<void> _initializeTwitchServices() async {
@@ -190,11 +191,14 @@ class HomeViewController extends GetxController
         Timer.periodic(const Duration(seconds: 13000), (Timer t) async {
       final refreshTokenResult =
           await refreshAccessTokenUseCase(params: twitchData.value!);
-      refreshTokenResult.fold((l) => {}, (r) => twitchData.value = r);
-
-      final refreshTokenResultKick =
-          await refreshKickAccessTokenUseCase(params: kickData.value!);
-      refreshTokenResultKick.fold((l) => {}, (r) => kickData.value = r);
+      refreshTokenResult.fold(
+        (l) {
+          talkerService.talker.error('Failed to refresh Twitch access token');
+        },
+        (r) {
+          twitchData.value = r;
+        },
+      );
     });
   }
 

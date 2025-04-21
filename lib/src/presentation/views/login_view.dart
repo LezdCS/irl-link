@@ -141,6 +141,7 @@ class LoginView extends GetView<LoginViewController> {
   Widget _loadingCircle(context) {
     return Obx(
       () => Column(
+        spacing: 20,
         children: [
           Visibility(
             visible: controller.twitchCredentials.value == null,
@@ -148,31 +149,51 @@ class LoginView extends GetView<LoginViewController> {
               color: Theme.of(context).colorScheme.tertiary,
             ),
           ),
-          if (controller.twitchCredentials.value != null)
-            CachedNetworkImage(
-              imageUrl: controller
-                  .twitchCredentials.value!.twitchUser.profileImageUrl,
-              placeholder: (BuildContext context, String url) =>
-                  CircularProgressIndicator(
-                color: Theme.of(context).colorScheme.tertiary,
-              ),
-              errorWidget: (BuildContext context, String url, error) =>
-                  const Icon(Icons.error),
-              imageBuilder: (context, imageProvider) => CircleAvatar(
-                radius: 36,
-                backgroundImage: imageProvider,
-              ),
-            )
-          else
-            const SizedBox(),
+          Row(
+            spacing: 15,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (controller.twitchCredentials.value != null)
+                CachedNetworkImage(
+                  imageUrl: controller
+                      .twitchCredentials.value!.twitchUser.profileImageUrl,
+                  placeholder: (BuildContext context, String url) =>
+                      CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.tertiary,
+                  ),
+                  errorWidget: (BuildContext context, String url, error) =>
+                      const Icon(Icons.error),
+                  imageBuilder: (context, imageProvider) => CircleAvatar(
+                    radius: 36,
+                    backgroundImage: imageProvider,
+                  ),
+                )
+              else
+                const SizedBox(),
+              if (controller.kickCredentials.value != null)
+                CachedNetworkImage(
+                  imageUrl:
+                      controller.kickCredentials.value!.kickUser.profilePicture,
+                  placeholder: (BuildContext context, String url) =>
+                      CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.tertiary,
+                  ),
+                  errorWidget: (BuildContext context, String url, error) =>
+                      const Icon(Icons.error),
+                  imageBuilder: (context, imageProvider) => CircleAvatar(
+                    radius: 36,
+                    backgroundImage: imageProvider,
+                  ),
+                )
+              else
+                const SizedBox(),
+            ],
+          ),
           Visibility(
             visible: controller.twitchCredentials.value != null,
             child: Text(
               'Hey ${controller.twitchCredentials.value?.twitchUser.displayName ?? ""}',
             ),
-          ),
-          const SizedBox(
-            height: 10,
           ),
           Text(
             controller.loadingMessage.value,

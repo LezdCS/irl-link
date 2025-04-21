@@ -9,6 +9,7 @@ import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:irllink/src/domain/entities/kick/kick_credentials.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/domain/usecases/kick/get_kick_local_usecase.dart';
+import 'package:irllink/src/domain/usecases/kick/kick_refresh_token_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/login_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/login_usecase.dart';
@@ -19,6 +20,7 @@ class LoginViewController extends GetxController {
   LoginViewController({
     required this.getTwitchLocalUseCase,
     required this.refreshTwitchTokenUseCase,
+    required this.kickRefreshTokenUseCase,
     required this.loginUseCase,
     required this.loginKickUseCase,
     required this.getKickLocalUseCase,
@@ -26,6 +28,7 @@ class LoginViewController extends GetxController {
 
   final GetTwitchLocalUseCase getTwitchLocalUseCase;
   final RefreshTwitchTokenUseCase refreshTwitchTokenUseCase;
+  final KickRefreshTokenUseCase kickRefreshTokenUseCase;
   final LoginUseCase loginUseCase;
   final LoginKickUseCase loginKickUseCase;
   final GetKickLocalUseCase getKickLocalUseCase;
@@ -63,7 +66,7 @@ class LoginViewController extends GetxController {
 
         final refreshResult = await refreshTwitchTokenUseCase(params: r);
         refreshResult.fold(
-          (l) => null, // Do nothing if refresh fails
+          (l) => twitchCredentials.value = null,
           (r) {
             twitchCredentials.value = r;
           },
@@ -73,26 +76,28 @@ class LoginViewController extends GetxController {
 
     // Handle Kick credentials independently
     final kickCredsResult = await getKickLocalUseCase();
-    kickCredsResult.fold(
-      (l) {
-        // If we have Twitch credentials but no Kick, navigate with just Twitch
-        if (twitchCredentials.value != null) {
-          Get.offAllNamed(Routes.home, arguments: [twitchCredentials.value!]);
-        }
-      },
-      (r) {
+    await kickCredsResult.fold(
+      (l) => null,
+      (r) async {
         kickCredentials.value = r;
-        // If we have both credentials, navigate with both
-        if (twitchCredentials.value != null) {
-          Get.offAllNamed(
-            Routes.home,
-            arguments: [twitchCredentials.value!, r],
-          );
-        } else {
-          // If we only have Kick credentials, navigate with just Kick
-          Get.offAllNamed(Routes.home, arguments: [r]);
-        }
+        loadingMessage.value = "refreshing_token".tr;
+
+        final refreshResult = await kickRefreshTokenUseCase(params: r);
+        refreshResult.fold(
+          (l) => kickCredentials.value = null,
+          (r) {
+            kickCredentials.value = r;
+          },
+        );
       },
+    );
+
+    await Get.offAllNamed(
+      Routes.home,
+      arguments: [
+        twitchCredentials.value,
+        kickCredentials.value,
+      ],
     );
 
     // If we haven't navigated away yet (no valid credentials), stop loading
