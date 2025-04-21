@@ -414,34 +414,40 @@ class HomeViewController extends GetxController
   Future<void> generateChats() async {
     Settings settings = settingsService.settings.value;
 
-    RxList<ChatView> groupsViews = RxList<ChatView>.from(chatsViews);
+    List<ChatView> groupsViews = List<ChatView>.from(chatsViews);
 
     // 1. Find the groups that are in the groupsViews but not in the settings to remove them
     List<ChatGroup> settingsGroups =
         settings.chatSettings.copyWith().chatGroups;
     List<ChatGroup> groupsToRemove = groupsViews
         .where(
-          (groupView) => !settingsGroups
-              .any((sGroup) => sGroup.id == groupView.chatGroup.id),
+          (groupView) =>
+              !settingsGroups
+                  .any((sGroup) => sGroup.id == groupView.chatGroup.id) ||
+              groupView.chatGroup.channels.isEmpty,
         )
         .map((groupView) => groupView.chatGroup)
         .toList();
-    for (var group in groupsToRemove) {
-      // We do not remove the 'Permanent First Group'
-      if (group.id == 'permanentFirstGroup') {
-        continue;
+
+    // Remove groups that are no longer in settings
+    chatsViews.removeWhere((groupView) {
+      if (groupView.chatGroup.id == 'permanentFirstGroup') {
+        return false;
       }
-      ChatView groupView =
-          groupsViews.firstWhere((g) => g.chatGroup.id == group.id);
-      chatsViews.remove(groupView);
-      Get.delete<ChatViewController>(tag: group.id);
-    }
+      if (groupsToRemove.any((g) => g.id == groupView.chatGroup.id)) {
+        Get.delete<ChatViewController>(tag: groupView.chatGroup.id);
+        return true;
+      }
+      return false;
+    });
 
     // 2. Find the groups that are in the settings but not in the groupsViews to add them
     List<ChatGroup> groupsToAdd = settingsGroups
         .where(
-          (sGroup) => !groupsViews
-              .any((groupView) => groupView.chatGroup.id == sGroup.id),
+          (sGroup) =>
+              !groupsViews
+                  .any((groupView) => groupView.chatGroup.id == sGroup.id) &&
+              sGroup.channels.isNotEmpty, // Only add groups with channels
         )
         .toList();
     for (var group in groupsToAdd) {
@@ -499,19 +505,14 @@ class HomeViewController extends GetxController
 
     // 4. Call the createChats function for each group to update the chats inside
     for (ChatView c in chatsViews) {
-      if (c.chatGroup.id == permanentFirstGroup.id) {
-        c.controller.updateChannels(
-          permanentFirstGroup.channels,
-          twitchData.value!.twitchUser.login,
-        );
-      } else {
-        ChatGroup group =
-            settingsGroups.firstWhere((g) => g.id == c.chatGroup.id);
-        c.controller.updateChannels(
-          group.channels,
-          twitchData.value!.twitchUser.login,
-        );
-      }
+      final channels = c.chatGroup.id == permanentFirstGroup.id
+          ? permanentFirstGroup.channels
+          : settingsGroups.firstWhere((g) => g.id == c.chatGroup.id).channels;
+
+      c.controller.updateChannels(
+        channels,
+        twitchData.value!.twitchUser.login,
+      );
       c.controller.createChats();
     }
 
@@ -519,9 +520,7 @@ class HomeViewController extends GetxController
     if (chatsViews.isEmpty) {
       selectedChatIndex = null;
       selectedChatGroup.value = null;
-    }
-
-    if (selectedChatIndex != null) {
+    } else if (selectedChatIndex != null) {
       if (selectedChatIndex! >= chatsViews.length) {
         selectedChatIndex = 0;
       }
