@@ -21,6 +21,7 @@ import 'package:irllink/src/presentation/views/dashboard.dart';
 import 'package:irllink/src/presentation/views/tabs/kick_tab_view.dart';
 import 'package:irllink/src/presentation/views/tabs/obs_tab_view.dart';
 import 'package:irllink/src/presentation/views/tabs/realtime_irl_tab_view.dart';
+import 'package:irllink/src/presentation/views/tabs/rtmp_tab_view.dart';
 import 'package:irllink/src/presentation/views/tabs/streamelements_tab_view.dart';
 import 'package:irllink/src/presentation/views/tabs/twitch_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/chats/select_channel_dialog.dart';
@@ -244,12 +245,15 @@ class HomeView extends GetView<HomeViewController> {
                               ? "Twitch"
                               : controller.tabElements[index] is KickTabView
                                   ? "Kick"
-                                  : controller.tabElements[index] is WebPageView
-                                      ? (controller.tabElements[index]
-                                              as WebPageView)
-                                          .tab
-                                          .title
-                                      : "",
+                                  : controller.tabElements[index] is RtmpTabView
+                                      ? "RTMP"
+                                      : controller.tabElements[index]
+                                              is WebPageView
+                                          ? (controller.tabElements[index]
+                                                  as WebPageView)
+                                              .tab
+                                              .title
+                                          : "",
             ),
           ),
         ),

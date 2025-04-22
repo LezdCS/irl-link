@@ -67,6 +67,10 @@ android {
         jvmTarget = '17'
     }
 
+    packagingOptions {
+        exclude 'project.clj'
+    }
+
     signingConfigs {
         release {
             keyAlias keystoreProperties['keyAlias']

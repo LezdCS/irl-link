@@ -40,12 +40,14 @@ import 'package:irllink/src/domain/usecases/twitch/refresh_token_usecase.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/realtime_irl_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/rtmp_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 import 'package:irllink/src/presentation/views/chat_view.dart';
 import 'package:irllink/src/presentation/views/home_view.dart';
 import 'package:irllink/src/presentation/views/tabs/kick_tab_view.dart';
 import 'package:irllink/src/presentation/views/tabs/obs_tab_view.dart';
 import 'package:irllink/src/presentation/views/tabs/realtime_irl_tab_view.dart';
+import 'package:irllink/src/presentation/views/tabs/rtmp_tab_view.dart';
 import 'package:irllink/src/presentation/views/tabs/streamelements_tab_view.dart';
 import 'package:irllink/src/presentation/views/tabs/twitch_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/web_page_view.dart';
@@ -104,6 +106,7 @@ class HomeViewController extends GetxController
   AudioPlayer audioPlayer = AudioPlayer();
 
   RxBool displayDashboard = false.obs;
+  RtmpTabViewController? rtmpTabViewController;
 
   // Chats
   RxList<ChatView> chatsViews = <ChatView>[].obs;
@@ -137,6 +140,15 @@ class HomeViewController extends GetxController
         await _initializeKickServices();
       }
     }
+
+    // Initialize RTMP Controller
+    rtmpTabViewController = await Get.putAsync<RtmpTabViewController>(
+      () async => RtmpTabViewController(
+        settingsService: settingsService,
+        talkerService: talkerService,
+      ),
+      permanent: true,
+    );
 
     final remoteConfig = FirebaseRemoteConfig.instance;
     await remoteConfig.fetchAndActivate();
@@ -354,6 +366,14 @@ class HomeViewController extends GetxController
       realtimeIrlViewController = null;
       await Get.delete<RealtimeIrlViewController>();
     }
+
+    // Check if RTMP tab has to be removed (e.g., based on settings in the future)
+    // For now, we assume it stays if initialized
+    // if (rtmpTabViewController != null && !shouldShowRtmpTab) { // Example condition
+    //   tabElements.removeWhere((t) => t is RtmpTabView);
+    //   rtmpTabViewController = null;
+    //   await Get.delete<RtmpTabViewController>();
+    // }
   }
 
   void addTabs() {
@@ -381,6 +401,12 @@ class HomeViewController extends GetxController
     if (settings.rtIrlPushKey.isNotEmpty && realtimeIrlViewController == null) {
       realtimeIrlViewController = Get.find<RealtimeIrlViewController>();
       tabElements.add(const RealtimeIrlTabView());
+    }
+
+    // Check if RTMP tab has to be added
+    if (rtmpTabViewController != null &&
+        !tabElements.any((t) => t is RtmpTabView)) {
+      tabElements.add(const RtmpTabView());
     }
 
     // Only add the tabs that are toggled

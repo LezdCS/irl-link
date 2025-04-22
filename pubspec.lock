@@ -1319,6 +1319,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.2.2"
+  rtmp_broadcaster:
+    dependency: "direct main"
+    description:
+      name: rtmp_broadcaster
+      sha256: cb560637b3d6c03283260684b707a770e24ba711478a04b71b5a7e78bb90d59e
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.4"
   rxdart:
     dependency: transitive
     description:
