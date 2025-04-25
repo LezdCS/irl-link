@@ -510,58 +510,86 @@ class HomeViewController extends GetxController
     }
 
     // 3. We add the 'Permanent First Group' from the settings to the first position if it does not exist yet in the channels
-    ChatGroup? permanentFirstGroup =
+    ChatGroup? permanentFirstGroupFromSettings =
         settings.chatSettings.permanentFirstGroup.copyWith();
-    // if the permanentFirstGroup is not in the channels, we add it
-    if (!chatsViews.any(
-      (groupView) => groupView.chatGroup.id == permanentFirstGroup?.id,
-    )) {
-      if (twitchData.value != null) {
-        // We add the Twitch Chat of the user to the first position of the channels of this group
-        List<Channel> updatedChannels = List.from(permanentFirstGroup.channels);
-        updatedChannels.insert(
-          0,
-          Channel(
-            platform: Platform.twitch,
-            channel: twitchData.value!.twitchUser.login,
-            enabled: true,
-          ),
-        );
-        permanentFirstGroup = permanentFirstGroup.copyWith(
-          channels: updatedChannels,
-        );
-      }
-      if (kickData.value != null) {
-        List<Channel> updatedChannels = List.from(permanentFirstGroup.channels);
-        updatedChannels.insert(
-          0,
-          Channel(
-            platform: Platform.kick,
-            channel: kickData.value!.kickUser.name,
-            enabled: true,
-          ),
-        );
-        permanentFirstGroup = permanentFirstGroup.copyWith(
-          channels: updatedChannels,
-        );
-      }
-      ChatView groupView = ChatView(
-        chatGroup: permanentFirstGroup,
+    List<Channel> targetPermanentChannels =
+        List.from(permanentFirstGroupFromSettings.channels);
+
+    // Prepare user's channels if logged in
+    Channel? userTwitchChannel;
+    if (twitchData.value != null) {
+      userTwitchChannel = Channel(
+        platform: Platform.twitch,
+        channel: twitchData.value!.twitchUser.login,
+        enabled: true,
       );
-      await putChat(permanentFirstGroup);
-      chatsViews.insert(0, groupView);
-      chatTabsController =
-          TabController(length: chatsViews.length, vsync: this);
+    }
+    Channel? userKickChannel;
+    if (kickData.value != null) {
+      userKickChannel = Channel(
+        platform: Platform.kick,
+        channel: kickData.value!.kickUser.name,
+        enabled: true,
+      );
     }
 
-    // 4. Call the createChats function for each group to update the chats inside
+    // Add user's channels to the target list if they don't exist
+    if (userKickChannel != null &&
+        !targetPermanentChannels.any(
+          (c) =>
+              c.platform == Platform.kick &&
+              c.channel == userKickChannel!.channel,
+        )) {
+      targetPermanentChannels.insert(0, userKickChannel);
+    }
+    if (userTwitchChannel != null &&
+        !targetPermanentChannels.any(
+          (c) =>
+              c.platform == Platform.twitch &&
+              c.channel == userTwitchChannel!.channel,
+        )) {
+      targetPermanentChannels.insert(0, userTwitchChannel);
+    }
+
+    // Find the existing permanent group view
+    int permanentGroupIndex = chatsViews.indexWhere(
+      (groupView) =>
+          groupView.chatGroup.id == permanentFirstGroupFromSettings.id,
+    );
+
+    // If the permanent group view doesn't exist, create and add it
+    if (permanentGroupIndex == -1) {
+      ChatGroup permanentGroup = permanentFirstGroupFromSettings.copyWith(
+        channels: targetPermanentChannels,
+      );
+      ChatView groupView = ChatView(
+        chatGroup: permanentGroup,
+      );
+      await putChat(permanentGroup);
+      chatsViews.insert(0, groupView);
+      // Update the index as we just inserted it
+      permanentGroupIndex = 0;
+    }
+    // No else needed here, the update happens in the loop below
+
+    // 4. Call the updateChannels and createChats function for each group controller
     for (ChatView c in chatsViews) {
-      final channels = c.chatGroup.id == permanentFirstGroup.id
-          ? permanentFirstGroup.channels
-          : settingsGroups.firstWhere((g) => g.id == c.chatGroup.id).channels;
+      List<Channel> channelsToUpdate;
+      if (c.chatGroup.id == permanentFirstGroupFromSettings.id) {
+        // Use the definitive target list for the permanent group
+        channelsToUpdate = targetPermanentChannels;
+      } else {
+        // Use the channels from settings for other groups
+        channelsToUpdate = settingsGroups
+            .firstWhere(
+              (g) => g.id == c.chatGroup.id,
+              orElse: () => const ChatGroup(id: 'fallback', channels: []),
+            )
+            .channels;
+      }
 
       c.controller.updateChannels(
-        channels,
+        channelsToUpdate,
         twitchData.value?.twitchUser.login,
         kickData.value?.kickUser.name,
       );
