@@ -227,11 +227,20 @@ class ChatViewController extends GetxController
     isAutoScrolldown.value = true;
   }
 
-  void updateChannels(List<Channel> channels, String? twitchUsername) {
+  void updateChannels(
+    List<Channel> channels,
+    String? twitchUsername,
+    String? kickUsername,
+  ) {
     // check chatGroup channels not existings in channels and remove them
     List<Channel> channelsToRemove = [];
     for (var channel in chatGroup.channels) {
-      if (channel.channel == twitchUsername) {
+      if (channel.channel == twitchUsername &&
+          homeViewController.twitchData.value != null) {
+        continue;
+      }
+      if (channel.channel == kickUsername &&
+          homeViewController.kickData.value != null) {
         continue;
       }
       if (channels.firstWhereOrNull((e) => e.channel == channel.channel) ==

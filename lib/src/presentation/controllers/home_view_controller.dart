@@ -562,7 +562,8 @@ class HomeViewController extends GetxController
 
       c.controller.updateChannels(
         channels,
-        twitchData.value!.twitchUser.login,
+        twitchData.value?.twitchUser.login,
+        kickData.value?.kickUser.name,
       );
       c.controller.createChats();
     }
