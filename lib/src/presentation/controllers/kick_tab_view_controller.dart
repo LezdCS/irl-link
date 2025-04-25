@@ -96,13 +96,16 @@ class KickTabViewController extends GetxController
       (r) => kickChannel.value = r.first,
     );
     if (!focus.hasFocus) {
-      titleFormController.text = kickChannel.value!.streamTitle;
-      selectedCategoryId.value = kickChannel.value!.category.id;
+      titleFormController.text = kickChannel.value?.streamTitle ?? "";
+      selectedCategoryId.value = kickChannel.value?.category.id ?? 0;
     }
     refreshDataAnimationController.forward();
   }
 
   void getKickCategories() async {
+    if (homeViewController.kickData.value == null) {
+      return;
+    }
     final categories = await getKickCategoriesUseCase(
       params: KickCategoriesParams(
         accessToken: homeViewController.kickData.value!.accessToken,

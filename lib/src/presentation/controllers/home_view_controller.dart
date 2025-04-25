@@ -38,10 +38,12 @@ import 'package:irllink/src/domain/usecases/twitch/end_poll_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/end_prediction_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/refresh_token_usecase.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/kick_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/realtime_irl_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/rtmp_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:irllink/src/presentation/views/chat_view.dart';
 import 'package:irllink/src/presentation/views/home_view.dart';
 import 'package:irllink/src/presentation/views/tabs/kick_tab_view.dart';
@@ -107,6 +109,8 @@ class HomeViewController extends GetxController
 
   RxBool displayDashboard = false.obs;
   RtmpTabViewController? rtmpTabViewController;
+  TwitchTabViewController? twitchTabViewController;
+  KickTabViewController? kickTabViewController;
 
   // Chats
   RxList<ChatView> chatsViews = <ChatView>[].obs;
@@ -162,10 +166,6 @@ class HomeViewController extends GetxController
   }
 
   Future<void> _initializeKickServices() async {
-    KickTabView kickPage = const KickTabView();
-    tabElements.add(kickPage);
-    tabController = TabController(length: tabElements.length, vsync: this);
-
     final refreshTokenResultKick =
         await refreshKickAccessTokenUseCase(params: kickData.value!);
     refreshTokenResultKick.fold(
@@ -193,11 +193,6 @@ class HomeViewController extends GetxController
 
     await _initializeEventSubService(twitchRepositoryImpl, dioTwitchClient);
     await _initializePubSubService(dioTwitchClient);
-
-    TwitchTabView twitchPage = const TwitchTabView();
-    tabElements.add(twitchPage);
-
-    tabController = TabController(length: tabElements.length, vsync: this);
 
     timerRefreshToken =
         Timer.periodic(const Duration(seconds: 13000), (Timer t) async {
@@ -359,6 +354,20 @@ class HomeViewController extends GetxController
       }
     }
 
+    // Check if Twitch have to be removed
+    if (twitchTabViewController != null && twitchData.value == null) {
+      tabElements.removeWhere((t) => t is TwitchTabView);
+      twitchTabViewController = null;
+      await Get.delete<TwitchTabViewController>();
+    }
+
+    // Check if Kick have to be removed
+    if (kickTabViewController != null && kickData.value == null) {
+      tabElements.removeWhere((t) => t is KickTabView);
+      kickTabViewController = null;
+      await Get.delete<KickTabViewController>();
+    }
+
     // Check if Realtime IRL have to be removed
     if (Get.isRegistered<RealtimeIrlViewController>() &&
         settings.rtIrlPushKey.isEmpty) {
@@ -383,7 +392,19 @@ class HomeViewController extends GetxController
     // Check if OBS have to be added
     if (obsTabViewController == null && settings.isObsConnected) {
       obsTabViewController = Get.find<ObsTabViewController>();
-      tabElements.insert(1, const ObsTabView());
+      tabElements.insert(0, const ObsTabView());
+    }
+
+    // Check if Twitch have to be added
+    if (twitchTabViewController == null && twitchData.value != null) {
+      twitchTabViewController = Get.find<TwitchTabViewController>();
+      tabElements.insert(0, const TwitchTabView());
+    }
+
+    // Check if Kick have to be added
+    if (kickTabViewController == null && kickData.value != null) {
+      kickTabViewController = Get.find<KickTabViewController>();
+      tabElements.insert(0, const KickTabView());
     }
 
     // Check if StreamElements have to be added
@@ -393,7 +414,7 @@ class HomeViewController extends GetxController
       if (seCredentialsString != null) {
         streamelementsViewController.value =
             Get.find<StreamelementsViewController>();
-        tabElements.insert(1, const StreamelementsTabView());
+        tabElements.insert(0, const StreamelementsTabView());
       }
     }
 

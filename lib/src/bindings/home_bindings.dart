@@ -188,6 +188,7 @@ class HomeBindings extends Bindings {
         homeViewController: Get.find<HomeViewController>(),
         watchService: watchService,
       ),
+      fenix: true,
     );
 
     Get.lazyPut<KickTabViewController>(
@@ -197,6 +198,7 @@ class HomeBindings extends Bindings {
         getKickChannelsUseCase: getKickChannelsUseCase,
         homeViewController: Get.find<HomeViewController>(),
       ),
+      fenix: true,
     );
 
     Get.lazyPut<DashboardController>(
