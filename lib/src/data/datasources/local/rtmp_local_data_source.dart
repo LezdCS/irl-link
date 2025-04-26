@@ -1,3 +1,4 @@
+import 'package:irllink/data/database/database_helper.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/entities/rtmp_dto.dart';
 import 'package:sqflite/sqflite.dart';
@@ -13,18 +14,19 @@ abstract class RtmpLocalDataSource {
 
 class RtmpLocalDataSourceImpl implements RtmpLocalDataSource {
   final Talker talker;
-  final Database _database;
+  final DatabaseHelper _databaseHelper;
 
   RtmpLocalDataSourceImpl({
     required this.talker,
-    required Database database,
-  }) : _database = database;
+    DatabaseHelper? databaseHelper,
+  }) : _databaseHelper = databaseHelper ?? DatabaseHelper.instance;
 
   @override
   Future<List<RtmpDTO>> getRtmpList() async {
+    final db = await _databaseHelper.database;
     talker.logCustom(RtmpLog('Retrieving RTMP list from database.'));
 
-    final List<Map<String, dynamic>> maps = await _database.query('rtmp');
+    final List<Map<String, dynamic>> maps = await db.query('rtmp');
 
     return List.generate(maps.length, (i) {
       return RtmpDTO(
@@ -39,9 +41,10 @@ class RtmpLocalDataSourceImpl implements RtmpLocalDataSource {
 
   @override
   Future<RtmpDTO?> getRtmpById(int id) async {
+    final db = await _databaseHelper.database;
     talker.logCustom(RtmpLog('Retrieving RTMP with id $id from database.'));
 
-    final List<Map<String, dynamic>> maps = await _database.query(
+    final List<Map<String, dynamic>> maps = await db.query(
       'rtmp',
       where: 'id = ?',
       whereArgs: [id],
@@ -65,7 +68,8 @@ class RtmpLocalDataSourceImpl implements RtmpLocalDataSource {
   Future<int> addRtmp(RtmpDTO rtmp) async {
     talker.logCustom(RtmpLog('Adding new RTMP to database.'));
 
-    return _database.insert(
+    final db = await _databaseHelper.database;
+    return db.insert(
       'rtmp',
       {
         'name': rtmp.name,
@@ -80,7 +84,8 @@ class RtmpLocalDataSourceImpl implements RtmpLocalDataSource {
   Future<void> updateRtmp(RtmpDTO rtmp) async {
     talker.logCustom(RtmpLog('Updating RTMP with id ${rtmp.id} in database.'));
 
-    await _database.update(
+    final db = await _databaseHelper.database;
+    await db.update(
       'rtmp',
       {
         'name': rtmp.name,
@@ -96,7 +101,8 @@ class RtmpLocalDataSourceImpl implements RtmpLocalDataSource {
   Future<void> deleteRtmp(int id) async {
     talker.logCustom(RtmpLog('Deleting RTMP with id $id from database.'));
 
-    await _database.delete(
+    final db = await _databaseHelper.database;
+    await db.delete(
       'rtmp',
       where: 'id = ?',
       whereArgs: [id],

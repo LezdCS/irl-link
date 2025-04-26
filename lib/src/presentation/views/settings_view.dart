@@ -15,6 +15,7 @@ import 'package:irllink/src/presentation/views/settings/manage_list_browser_tabs
 import 'package:irllink/src/presentation/views/settings/manage_list_hidden_users.dart';
 import 'package:irllink/src/presentation/views/settings/obs_settings.dart';
 import 'package:irllink/src/presentation/views/settings/realtime_irl.dart';
+import 'package:irllink/src/presentation/views/settings/rtmp_settings.dart';
 import 'package:irllink/src/presentation/views/settings/stream_elements.dart';
 import 'package:irllink/src/presentation/views/settings/subscription.dart';
 import 'package:irllink/src/presentation/views/settings/talker_screen.dart';
@@ -473,6 +474,16 @@ class SettingsView extends GetView<SettingsViewController> {
                 const RealtimeIrl(),
               ],
             ),
+          ),
+          settingsGoToRow(
+            context,
+            "rtmp".tr,
+            Icons.wechat_sharp,
+            () {
+              Get.to(
+                () => const RtmpSettings(),
+              );
+            },
           ),
         ],
       ),
