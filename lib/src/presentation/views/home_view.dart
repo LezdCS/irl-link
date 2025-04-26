@@ -487,6 +487,7 @@ class HomeView extends GetView<HomeViewController> {
                 controller.obsTabViewController?.applySettings();
                 controller.streamelementsViewController.value?.applySettings();
                 controller.realtimeIrlViewController?.applySettings();
+                controller.rtmpTabViewController?.getRtmpList();
               },
               child: Icon(
                 Icons.settings,

@@ -8,12 +8,14 @@ import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/data/datasources/local/kick_local_data_source.dart';
+import 'package:irllink/src/data/datasources/local/rtmp_local_data_source.dart';
 import 'package:irllink/src/data/datasources/local/streamelements_local_data_source.dart';
 import 'package:irllink/src/data/datasources/local/twitch_local_data_source.dart';
 import 'package:irllink/src/data/datasources/remote/kick_remote_data_source.dart';
 import 'package:irllink/src/data/datasources/remote/streamelements_remote_data_source.dart';
 import 'package:irllink/src/data/datasources/remote/twitch_remote_data_source.dart';
 import 'package:irllink/src/data/repositories/kick_repository_impl.dart';
+import 'package:irllink/src/data/repositories/rtmp_repository_impl.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/usecases/kick/get_kick_categories_usecase.dart';
@@ -21,6 +23,7 @@ import 'package:irllink/src/domain/usecases/kick/get_kick_channels_usecase.dart'
 import 'package:irllink/src/domain/usecases/kick/kick_refresh_token_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/patch_kick_channel_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/post_kick_chat_nessage_usecase.dart';
+import 'package:irllink/src/domain/usecases/rtmp/get_rtmp_list_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_last_activities_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_local_credentials_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_me_usecase.dart';
@@ -42,6 +45,7 @@ import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/kick_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/realtime_irl_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/rtmp_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:talker_flutter/talker_flutter.dart';
@@ -154,6 +158,22 @@ class HomeBindings extends Bindings {
       () => ObsTabViewController(
         watchService: watchService,
         talkerService: talkerService,
+      ),
+      fenix: true,
+    );
+
+    final rtmpRepository = RtmpRepositoryImpl(
+      talker: talkerService.talker,
+      localDataSource: RtmpLocalDataSourceImpl(
+        talker: talkerService.talker,
+      ),
+    );
+    final getRtmpListUseCase = GetRtmpListUseCase(rtmpRepository);
+    Get.lazyPut<RtmpTabViewController>(
+      () => RtmpTabViewController(
+        settingsService: settingsService,
+        talkerService: talkerService,
+        getRtmpListUseCase: getRtmpListUseCase,
       ),
       fenix: true,
     );

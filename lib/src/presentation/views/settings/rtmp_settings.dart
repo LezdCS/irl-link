@@ -28,7 +28,33 @@ class RtmpSettings extends GetView<RtmpSettingsController> {
                       onDismissed: (direction) {
                         controller.deleteRtmp(e.id);
                       },
-                      child: Text(e.name),
+                      direction: DismissDirection.endToStart,
+                      background: Container(
+                        alignment: Alignment.centerRight,
+                        child: Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          spacing: 10,
+                          children: [
+                            const Icon(
+                              Icons.edit,
+                              color: Colors.red,
+                            ),
+                            Text(
+                              'delete'.tr,
+                            ),
+                          ],
+                        ),
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        margin: const EdgeInsets.only(bottom: 10),
+                        alignment: Alignment.centerLeft,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.secondary,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(e.name),
+                      ),
                     ),
                   ),
                 ),

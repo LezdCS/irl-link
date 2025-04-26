@@ -145,15 +145,6 @@ class HomeViewController extends GetxController
       }
     }
 
-    // Initialize RTMP Controller
-    rtmpTabViewController = await Get.putAsync<RtmpTabViewController>(
-      () async => RtmpTabViewController(
-        settingsService: settingsService,
-        talkerService: talkerService,
-      ),
-      permanent: true,
-    );
-
     final remoteConfig = FirebaseRemoteConfig.instance;
     await remoteConfig.fetchAndActivate();
     minimumVersion.value = io.Platform.isAndroid
@@ -337,7 +328,7 @@ class HomeViewController extends GetxController
     });
 
     // Check if OBS have to be removed
-    if (Get.isRegistered<ObsTabViewController>() && !settings.isObsConnected) {
+    if (obsTabViewController != null && !settings.isObsConnected) {
       tabElements.removeWhere((t) => t is ObsTabView);
       obsTabViewController = null;
       await Get.delete<ObsTabViewController>();
@@ -369,20 +360,17 @@ class HomeViewController extends GetxController
     }
 
     // Check if Realtime IRL have to be removed
-    if (Get.isRegistered<RealtimeIrlViewController>() &&
-        settings.rtIrlPushKey.isEmpty) {
+    if (realtimeIrlViewController != null && settings.rtIrlPushKey.isEmpty) {
       tabElements.removeWhere((t) => t is RealtimeIrlTabView);
       realtimeIrlViewController = null;
       await Get.delete<RealtimeIrlViewController>();
     }
 
-    // Check if RTMP tab has to be removed (e.g., based on settings in the future)
-    // For now, we assume it stays if initialized
-    // if (rtmpTabViewController != null && !shouldShowRtmpTab) { // Example condition
-    //   tabElements.removeWhere((t) => t is RtmpTabView);
-    //   rtmpTabViewController = null;
-    //   await Get.delete<RtmpTabViewController>();
-    // }
+    if (rtmpTabViewController != null) {
+      tabElements.removeWhere((t) => t is RtmpTabView);
+      rtmpTabViewController = null;
+      await Get.delete<RtmpTabViewController>();
+    }
   }
 
   void addTabs() {
@@ -425,8 +413,7 @@ class HomeViewController extends GetxController
     }
 
     // Check if RTMP tab has to be added
-    if (rtmpTabViewController != null &&
-        !tabElements.any((t) => t is RtmpTabView)) {
+    if (rtmpTabViewController == null) {
       tabElements.add(const RtmpTabView());
     }
 

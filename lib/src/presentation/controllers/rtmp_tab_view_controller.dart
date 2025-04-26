@@ -5,16 +5,20 @@ import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
+import 'package:irllink/src/domain/entities/rtmp.dart';
+import 'package:irllink/src/domain/usecases/rtmp/get_rtmp_list_usecase.dart';
 import 'package:rtmp_broadcaster/camera.dart';
 
 class RtmpTabViewController extends GetxController {
   RtmpTabViewController({
     required this.settingsService,
     required this.talkerService,
+    required this.getRtmpListUseCase,
   });
 
   final SettingsService settingsService;
   final TalkerService talkerService;
+  final GetRtmpListUseCase getRtmpListUseCase;
 
   List<CameraDescription> cameras = [];
   CameraController? controller;
@@ -23,6 +27,7 @@ class RtmpTabViewController extends GetxController {
   RxString rtmpUrl = ''.obs; // TODO(LezdCS): Get from settings or dialog
   TextEditingController urlController = TextEditingController();
   Rxn<CameraDescription> selectedCamera = Rxn<CameraDescription>();
+  RxList<Rtmp> rtmpList = <Rtmp>[].obs;
 
   @override
   void onInit() {
@@ -32,6 +37,7 @@ class RtmpTabViewController extends GetxController {
     urlController.text =
         'rtmp://your_rtmp_server/live/stream_key'; // Example URL
     rtmpUrl.value = urlController.text;
+    getRtmpList();
   }
 
   @override
@@ -39,6 +45,14 @@ class RtmpTabViewController extends GetxController {
     controller?.dispose();
     urlController.dispose();
     super.onClose();
+  }
+
+  Future<void> getRtmpList() async {
+    final result = await getRtmpListUseCase();
+    result.fold(
+      (l) => talkerService.talker.error(l.toString()),
+      (r) => rtmpList.value = r,
+    );
   }
 
   Future<void> _initializeCamera() async {
