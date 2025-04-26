@@ -186,31 +186,88 @@ class RtmpTabViewController extends GetxController {
     talkerService.talker.error('Camera Error: $code ${message ?? ""}');
   }
 
-  void switchCamera() {
-    if (cameras.length < 2 || selectedCamera.value == null) {
+  Future<void> switchCamera() async {
+    if (cameras.length < 2 ||
+        selectedCamera.value == null ||
+        controller == null) {
+      Get.snackbar(
+        'Info',
+        'Not enough cameras available or controller not ready.',
+      );
       return;
     }
 
-    final currentLensDirection = selectedCamera.value!.lensDirection;
-    CameraDescription? newCamera;
+    final bool wasStreaming = isStreamingVideoRtmp.value;
 
-    if (currentLensDirection == CameraLensDirection.back) {
-      newCamera = cameras.firstWhereOrNull(
-        (cam) => cam.lensDirection == CameraLensDirection.front,
-      );
-    } else {
-      newCamera = cameras.firstWhereOrNull(
-        (cam) => cam.lensDirection == CameraLensDirection.back,
-      );
-    }
+    try {
+      // Stop streaming if it was active
+      if (wasStreaming) {
+        await stopVideoStreaming();
+        // Small delay to allow resources to release, might help prevent surface issues
+        await Future.delayed(const Duration(milliseconds: 100));
+      }
 
-    if (newCamera != null) {
-      onNewCameraSelected(newCamera);
-    } else {
-      // If only one type of camera is available (e.g., only back cameras), cycle through them.
-      int currentIndex = cameras.indexOf(selectedCamera.value!);
-      int nextIndex = (currentIndex + 1) % cameras.length;
-      onNewCameraSelected(cameras[nextIndex]);
+      // Find the next camera
+      final currentLensDirection = selectedCamera.value!.lensDirection;
+      CameraDescription? newCamera;
+
+      if (currentLensDirection == CameraLensDirection.back) {
+        newCamera = cameras.firstWhereOrNull(
+          (cam) => cam.lensDirection == CameraLensDirection.front,
+        );
+      } else {
+        newCamera = cameras.firstWhereOrNull(
+          (cam) => cam.lensDirection == CameraLensDirection.back,
+        );
+      }
+
+      // If no opposite camera found, cycle through available ones
+      if (newCamera == null) {
+        int currentIndex = cameras.indexOf(selectedCamera.value!);
+        int nextIndex = (currentIndex + 1) % cameras.length;
+        newCamera = cameras[nextIndex];
+      }
+
+      // Switch to the new camera
+      if (newCamera != selectedCamera.value) {
+        // Set controller initialized to false before switching
+        isControllerInitialized.value = false;
+        await onNewCameraSelected(newCamera);
+        // Ensure the new controller is initialized before potentially restarting stream
+        // `onNewCameraSelected` already sets `isControllerInitialized.value = true` on success
+        if (!isControllerInitialized.value) {
+          talkerService.talker
+              .warning('New camera failed to initialize after switch.');
+          return; // Don't restart stream if initialization failed
+        }
+      } else {
+        talkerService.talker.info('No different camera to switch to.');
+        // If we stopped streaming but didn't actually switch, restart it.
+        if (wasStreaming) {
+          await startVideoStreaming();
+        }
+        return;
+      }
+
+      // Restart streaming if it was active before the switch
+      if (wasStreaming) {
+        // Add a small delay before restarting stream, sometimes helps surface availability
+        await Future.delayed(const Duration(milliseconds: 100));
+        await startVideoStreaming();
+      }
+    } catch (e, stackTrace) {
+      talkerService.talker.error('Error switching camera: $e, $stackTrace');
+      Get.snackbar('Error', 'Failed to switch camera.');
+      // Attempt to restart streaming if it was active, although state might be uncertain
+      if (wasStreaming) {
+        try {
+          await startVideoStreaming();
+        } catch (startError) {
+          talkerService.talker.error(
+            'Failed to restart stream after switch error: $startError',
+          );
+        }
+      }
     }
   }
 }

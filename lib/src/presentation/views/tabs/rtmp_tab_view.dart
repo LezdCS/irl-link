@@ -74,25 +74,25 @@ class RtmpTabView extends GetView<RtmpTabViewController> {
                   : null,
             ),
           ),
-          Obx(
-            () => IconButton(
-              icon: const Icon(Icons.pause),
-              color: Colors.blue,
-              onPressed: controller.isStreamingVideoRtmp.value
-                  ? controller.pauseVideoStreaming
-                  : null,
-            ),
-          ),
-          Obx(
-            () => IconButton(
-              icon: const Icon(Icons.play_circle_outline), // Resume Icon
-              color: Colors.blue,
-              // TODO(LezdCS): Need state to track if paused to enable this correctly
-              onPressed: controller.isStreamingVideoRtmp.value
-                  ? controller.resumeVideoStreaming
-                  : null,
-            ),
-          ),
+          // Obx(
+          //   () => IconButton(
+          //     icon: const Icon(Icons.pause),
+          //     color: Colors.blue,
+          //     onPressed: controller.isStreamingVideoRtmp.value
+          //         ? controller.pauseVideoStreaming
+          //         : null,
+          //   ),
+          // ),
+          // Obx(
+          //   () => IconButton(
+          //     icon: const Icon(Icons.play_circle_outline), // Resume Icon
+          //     color: Colors.blue,
+          //     // TODO(LezdCS): Need state to track if paused to enable this correctly
+          //     onPressed: controller.isStreamingVideoRtmp.value
+          //         ? controller.resumeVideoStreaming
+          //         : null,
+          //   ),
+          // ),
           IconButton(
             icon: const Icon(Icons.switch_camera),
             color: Colors.blue,
