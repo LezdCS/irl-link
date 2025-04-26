@@ -15,28 +15,113 @@ class RtmpSettings extends GetView<RtmpSettingsController> {
         title: const Text('RTMP Settings'),
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Obx(
-            () => Column(
-              children: List.from(controller.rtmpList.map((e) => Text(e.name))),
+            () => Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
+              child: Column(
+                children: List.from(
+                  controller.rtmpList.map(
+                    (e) => Dismissible(
+                      key: Key(e.id.toString()),
+                      onDismissed: (direction) {
+                        controller.deleteRtmp(e.id);
+                      },
+                      child: Text(e.name),
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
-          ElevatedButton(
-            onPressed: () {
-              controller.addRtmp(
-                Rtmp(
-                  id: 0,
-                  name: 'test',
-                  url: 'test',
-                  key: 'test',
-                  createdAt: DateTime.now(),
-                ),
-              );
-            },
-            child: const Text('Add RTMP'),
-          ),
+          const SizedBox(height: 10),
+          _addRtmpButton(context, controller),
         ],
       ),
     );
   }
+}
+
+Widget _addDialog(
+  BuildContext context,
+  RtmpSettingsController controller,
+) {
+  return Column(
+    spacing: 10,
+    children: [
+      TextField(
+        controller: controller.nameController,
+        decoration: const InputDecoration(
+          labelText: 'Name',
+        ),
+      ),
+      TextField(
+        controller: controller.urlController,
+        decoration: const InputDecoration(
+          labelText: 'URL',
+        ),
+      ),
+      TextField(
+        controller: controller.keyController,
+        decoration: const InputDecoration(
+          labelText: 'Key',
+        ),
+      ),
+    ],
+  );
+}
+
+Widget _addRtmpButton(
+  BuildContext context,
+  RtmpSettingsController controller,
+) {
+  return InkWell(
+    onTap: () {
+      Get.defaultDialog(
+        content: _addDialog(context, controller),
+        title: "add".tr,
+        textCancel: "cancel".tr,
+        textConfirm: "add".tr,
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        buttonColor: const Color(0xFF9147ff),
+        cancelTextColor: const Color(0xFF9147ff),
+        confirmTextColor: Colors.white,
+        radius: 10,
+        onConfirm: () {
+          controller.addRtmp(
+            Rtmp(
+              id: 0,
+              name: controller.nameController.text,
+              url: controller.urlController.text,
+              key: controller.keyController.text,
+              createdAt: DateTime.now(),
+            ),
+          );
+          controller.nameController.clear();
+          controller.urlController.clear();
+          controller.keyController.clear();
+          Get.back();
+        },
+      );
+    },
+    child: Container(
+      padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
+      margin: const EdgeInsets.only(left: 12, right: 12),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Theme.of(context).colorScheme.secondary,
+          width: 2,
+        ),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: const Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text('New RTMP target'),
+          Icon(Icons.add),
+        ],
+      ),
+    ),
+  );
 }

@@ -22,6 +22,7 @@ import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/usecases/kick/login_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/logout_usecase.dart';
 import 'package:irllink/src/domain/usecases/rtmp/add_rtmp_usecase.dart';
+import 'package:irllink/src/domain/usecases/rtmp/delete_rtmp_usecase.dart';
 import 'package:irllink/src/domain/usecases/rtmp/get_rtmp_by_id_usecase.dart';
 import 'package:irllink/src/domain/usecases/rtmp/get_rtmp_list_usecase.dart';
 import 'package:irllink/src/domain/usecases/rtmp/update_rtmp_usecase.dart';
@@ -117,14 +118,16 @@ class SettingsBindings extends Bindings {
     final addRtmpUseCase = AddRtmpUseCase(rtmpRepository);
     final updateRtmpUseCase = UpdateRtmpUseCase(rtmpRepository);
     final getRtmpByIdUseCase = GetRtmpByIdUseCase(rtmpRepository);
-
+    final deleteRtmpUseCase = DeleteRtmpUseCase(rtmpRepository);
     Get.lazyPut<RtmpSettingsController>(
       () => RtmpSettingsController(
         getRtmpListUseCase: getRtmpListUseCase,
         addRtmpUseCase: addRtmpUseCase,
         updateRtmpUseCase: updateRtmpUseCase,
         getRtmpByIdUseCase: getRtmpByIdUseCase,
+        deleteRtmpUseCase: deleteRtmpUseCase,
       ),
+      fenix: true,
     );
   }
 }
