@@ -44,6 +44,17 @@ class Migration1 extends Migration {
       )
     ''');
 
+    // Create RTMP settings table
+    await db.execute('''
+      CREATE TABLE rtmp (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        url TEXT NOT NULL,
+        key TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    ''');
+
     // Create Kick users table
     await db.execute('''
       CREATE TABLE kick_users (
@@ -142,6 +153,7 @@ class Migration1 extends Migration {
   @override
   Future<void> down(Database db) async {
     await db.execute('DROP TABLE IF EXISTS twitch_credentials');
+    await db.execute('DROP TABLE IF EXISTS rtmp');
     await db.execute('DROP TABLE IF EXISTS kick_credentials');
     await db.execute('DROP TABLE IF EXISTS kick_users');
     await db.execute('DROP TABLE IF EXISTS streamelements_credentials');
