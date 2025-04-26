@@ -5,6 +5,7 @@ import 'package:irllink/src/data/entities/kick/kick_category_dto.dart';
 import 'package:irllink/src/data/entities/kick/kick_channel_dto.dart';
 import 'package:irllink/src/data/entities/kick/kick_credentials_dto.dart';
 import 'package:irllink/src/data/entities/kick/kick_user_dto.dart';
+import 'package:irllink/src/data/entities/rtmp_dto.dart';
 import 'package:irllink/src/data/entities/settings/browser_tab_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/chat_events_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/chat_settings_dto.dart';
@@ -29,6 +30,7 @@ import 'package:irllink/src/domain/entities/kick/kick_category.dart';
 import 'package:irllink/src/domain/entities/kick/kick_channel.dart';
 import 'package:irllink/src/domain/entities/kick/kick_credentials.dart';
 import 'package:irllink/src/domain/entities/kick/kick_user.dart';
+import 'package:irllink/src/domain/entities/rtmp.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_events_settings.dart';
@@ -105,5 +107,7 @@ import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
   MapType<KickChannelStream, KickChannelStreamDto>(),
   MapType<KickChannel, KickChannelDto>(),
   MapType<KickChannelDto, KickChannel>(),
+  MapType<Rtmp, RtmpDTO>(),
+  MapType<RtmpDTO, Rtmp>(),
 ])
 class Mappr extends $Mappr {}

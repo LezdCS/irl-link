@@ -478,7 +478,7 @@ class SettingsView extends GetView<SettingsViewController> {
           settingsGoToRow(
             context,
             "rtmp".tr,
-            Icons.wechat_sharp,
+            Icons.camera,
             () {
               Get.to(
                 () => const RtmpSettings(),

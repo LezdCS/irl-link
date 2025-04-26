@@ -15,6 +15,7 @@ import '../../data/entities/kick/kick_category_dto.dart' as _i43;
 import '../../data/entities/kick/kick_channel_dto.dart' as _i48;
 import '../../data/entities/kick/kick_credentials_dto.dart' as _i47;
 import '../../data/entities/kick/kick_user_dto.dart' as _i45;
+import '../../data/entities/rtmp_dto.dart' as _i51;
 import '../../data/entities/settings/browser_tab_settings_dto.dart' as _i7;
 import '../../data/entities/settings/chat_events_settings_dto.dart' as _i17;
 import '../../data/entities/settings/chat_settings_dto.dart' as _i5;
@@ -39,6 +40,7 @@ import '../../domain/entities/kick/kick_category.dart' as _i42;
 import '../../domain/entities/kick/kick_channel.dart' as _i49;
 import '../../domain/entities/kick/kick_credentials.dart' as _i46;
 import '../../domain/entities/kick/kick_user.dart' as _i44;
+import '../../domain/entities/rtmp.dart' as _i50;
 import '../../domain/entities/settings.dart' as _i2;
 import '../../domain/entities/settings/browser_tab_settings.dart' as _i6;
 import '../../domain/entities/settings/chat_events_settings.dart' as _i16;
@@ -116,6 +118,8 @@ import '../../domain/entities/twitch/twitch_user.dart' as _i22;
 /// - `KickChannelStream` → `KickChannelStreamDto`.
 /// - `KickChannel` → `KickChannelDto`.
 /// - `KickChannelDto` → `KickChannel`.
+/// - `Rtmp` → `RtmpDTO`.
+/// - `RtmpDTO` → `Rtmp`.
 /// {@endtemplate}
 class $Mappr implements _i1.AutoMapprInterface {
   const $Mappr();
@@ -458,6 +462,18 @@ class $Mappr implements _i1.AutoMapprInterface {
             sourceTypeOf == _typeOf<_i48.KickChannelDto?>()) &&
         (targetTypeOf == _typeOf<_i49.KickChannel>() ||
             targetTypeOf == _typeOf<_i49.KickChannel?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i50.Rtmp>() ||
+            sourceTypeOf == _typeOf<_i50.Rtmp?>()) &&
+        (targetTypeOf == _typeOf<_i51.RtmpDTO>() ||
+            targetTypeOf == _typeOf<_i51.RtmpDTO?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i51.RtmpDTO>() ||
+            sourceTypeOf == _typeOf<_i51.RtmpDTO?>()) &&
+        (targetTypeOf == _typeOf<_i50.Rtmp>() ||
+            targetTypeOf == _typeOf<_i50.Rtmp?>())) {
       return true;
     }
     if (recursive) {
@@ -1200,6 +1216,25 @@ class $Mappr implements _i1.AutoMapprInterface {
       }
       return (_map__i48$KickChannelDto_To__i49$KickChannel(
           (model as _i48.KickChannelDto?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i50.Rtmp>() ||
+            sourceTypeOf == _typeOf<_i50.Rtmp?>()) &&
+        (targetTypeOf == _typeOf<_i51.RtmpDTO>() ||
+            targetTypeOf == _typeOf<_i51.RtmpDTO?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i50$Rtmp_To__i51$RtmpDTO((model as _i50.Rtmp?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i51.RtmpDTO>() ||
+            sourceTypeOf == _typeOf<_i51.RtmpDTO?>()) &&
+        (targetTypeOf == _typeOf<_i50.Rtmp>() ||
+            targetTypeOf == _typeOf<_i50.Rtmp?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i51$RtmpDTO_To__i50$Rtmp((model as _i51.RtmpDTO?))
+          as TARGET);
     }
     throw Exception('No ${model.runtimeType} -> $targetTypeOf mapping.');
   }
@@ -2271,6 +2306,38 @@ class $Mappr implements _i1.AutoMapprInterface {
       stream: _map__i48$KickChannelStreamDto_To__i49$KickChannelStream(
           model.stream),
       streamTitle: model.streamTitle,
+    );
+  }
+
+  _i51.RtmpDTO _map__i50$Rtmp_To__i51$RtmpDTO(_i50.Rtmp? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping Rtmp → RtmpDTO failed because Rtmp was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<Rtmp, RtmpDTO> to handle null values during mapping.');
+    }
+    return _i51.RtmpDTO(
+      id: model.id,
+      name: model.name,
+      url: model.url,
+      key: model.key,
+      createdAt: model.createdAt,
+    );
+  }
+
+  _i50.Rtmp _map__i51$RtmpDTO_To__i50$Rtmp(_i51.RtmpDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping RtmpDTO → Rtmp failed because RtmpDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<RtmpDTO, Rtmp> to handle null values during mapping.');
+    }
+    return _i50.Rtmp(
+      id: model.id,
+      name: model.name,
+      url: model.url,
+      key: model.key,
+      createdAt: model.createdAt,
     );
   }
 

@@ -92,13 +92,15 @@ class LoginViewController extends GetxController {
       },
     );
 
-    await Get.offAllNamed(
-      Routes.home,
-      arguments: [
-        twitchCredentials.value,
-        kickCredentials.value,
-      ],
-    );
+    if (twitchCredentials.value != null && kickCredentials.value != null) {
+      await Get.offAllNamed(
+        Routes.home,
+        arguments: [
+          twitchCredentials.value,
+          kickCredentials.value,
+        ],
+      );
+    }
 
     // If we haven't navigated away yet (no valid credentials), stop loading
     if (!Get.isRegistered<HomeViewController>()) {
