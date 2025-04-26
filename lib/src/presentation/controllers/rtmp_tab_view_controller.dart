@@ -24,7 +24,6 @@ class RtmpTabViewController extends GetxController {
   CameraController? controller;
   RxBool isControllerInitialized = false.obs;
   RxBool isStreamingVideoRtmp = false.obs;
-  RxString rtmpUrl = ''.obs; // TODO(LezdCS): Get from settings or dialog
   TextEditingController urlController = TextEditingController();
   Rxn<CameraDescription> selectedCamera = Rxn<CameraDescription>();
   RxList<Rtmp> rtmpList = <Rtmp>[].obs;
@@ -34,10 +33,6 @@ class RtmpTabViewController extends GetxController {
   void onInit() {
     super.onInit();
     _initializeCamera();
-    // TODO(LezdCS): Load URL from settings or show dialog on stream start
-    urlController.text =
-        'rtmp://your_rtmp_server/live/stream_key'; // Example URL
-    rtmpUrl.value = urlController.text;
     getRtmpList();
   }
 
@@ -57,19 +52,9 @@ class RtmpTabViewController extends GetxController {
         // Set default selected RTMP to the first in the list if available
         if (rtmpList.isNotEmpty && selectedRtmp.value == null) {
           selectedRtmp.value = rtmpList.first;
-          // Update the URL with the selected RTMP URL
-          rtmpUrl.value = selectedRtmp.value!.url;
-          urlController.text = rtmpUrl.value;
         }
       },
     );
-  }
-
-  // Update selected RTMP and URL
-  void updateSelectedRtmp(Rtmp rtmp) {
-    selectedRtmp.value = rtmp;
-    rtmpUrl.value = rtmp.url;
-    urlController.text = rtmp.url;
   }
 
   Future<void> _initializeCamera() async {
@@ -162,16 +147,18 @@ class RtmpTabViewController extends GetxController {
       return null;
     }
 
-    rtmpUrl.value = urlController.text; // Update URL from text field
-    if (rtmpUrl.value.isEmpty) {
+    if (selectedRtmp.value!.url.isEmpty) {
       Get.snackbar('Error', 'RTMP URL is required.');
       return null;
     }
 
     try {
-      await controller!.startVideoStreaming(rtmpUrl.value);
+      await controller!.startVideoStreaming(selectedRtmp.value!.url);
       isStreamingVideoRtmp.value = true;
-      Get.snackbar('Success', 'Streaming started to: ${rtmpUrl.value}');
+      Get.snackbar(
+        'Success',
+        'Streaming started to: ${selectedRtmp.value!.url}',
+      );
     } on CameraException catch (e) {
       _showCameraException(e);
       return null;
@@ -181,7 +168,7 @@ class RtmpTabViewController extends GetxController {
       isStreamingVideoRtmp.value = false;
       return null;
     }
-    return rtmpUrl.value;
+    return null;
   }
 
   Future<void> stopVideoStreaming() async {

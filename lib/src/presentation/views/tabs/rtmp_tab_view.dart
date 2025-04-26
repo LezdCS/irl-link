@@ -41,15 +41,6 @@ class RtmpTabView extends GetView<RtmpTabViewController> {
               child: Column(
                 children: [
                   _rtmpSelectorDropdown(),
-                  const SizedBox(height: 8),
-                  TextField(
-                    controller: controller.urlController,
-                    decoration: const InputDecoration(
-                      labelText: 'RTMP URL',
-                      hintText: 'rtmp://server/live/key',
-                    ),
-                    onChanged: (value) => controller.rtmpUrl.value = value,
-                  ),
                 ],
               ),
             ),
@@ -76,7 +67,7 @@ class RtmpTabView extends GetView<RtmpTabViewController> {
             padding: const EdgeInsets.symmetric(horizontal: 12),
             onChanged: (Rtmp? newValue) {
               if (newValue != null) {
-                controller.updateSelectedRtmp(newValue);
+                controller.selectedRtmp.value = newValue;
               }
             },
             items: controller.rtmpList.map<DropdownMenuItem<Rtmp>>((Rtmp rtmp) {
