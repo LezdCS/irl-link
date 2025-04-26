@@ -93,16 +93,58 @@ class RtmpTabView extends GetView<RtmpTabViewController> {
           //         : null,
           //   ),
           // ),
-          IconButton(
-            icon: const Icon(Icons.switch_camera),
-            color: Colors.blue,
-            onPressed: controller.isControllerInitialized.value &&
-                    controller.cameras.length > 1
-                ? controller.switchCamera
-                : null,
-          ),
+          _cameraSelectorDropdown(),
         ],
       ),
     );
+  }
+
+  // New widget for the camera selector dropdown
+  Widget _cameraSelectorDropdown() {
+    return Obx(() {
+      // Disable dropdown if controller is not initialized or less than 2 cameras
+      bool isEnabled = controller.isControllerInitialized.value &&
+          controller.cameras.length > 1;
+
+      // Ensure selected camera is in the list of available cameras
+      CameraDescription? currentSelection = controller.selectedCamera.value;
+      if (currentSelection != null &&
+          !controller.cameras
+              .any((cam) => cam.name == currentSelection?.name)) {
+        currentSelection = null; // Reset if selected camera is not available
+      }
+
+      // If no valid selection or only one camera, default to the first camera if available
+      if (currentSelection == null && controller.cameras.isNotEmpty) {
+        currentSelection = controller.cameras.first;
+      }
+
+      return DropdownButton<CameraDescription>(
+        value: currentSelection, // Use the potentially updated selection
+        // Hint displayed when no item is selected (though we try to default)
+        hint: const Text('Select Camera'),
+        // Disable the dropdown visually and functionally if not enabled
+        onChanged: isEnabled
+            ? (CameraDescription? newValue) {
+                if (newValue != null) {
+                  controller.onNewCameraSelected(newValue);
+                }
+              }
+            : null,
+        items: controller.cameras.map<DropdownMenuItem<CameraDescription>>(
+            (CameraDescription camera) {
+          return DropdownMenuItem<CameraDescription>(
+            value: camera,
+            // Display camera name and direction
+            child: Text(
+              '${camera.name} (${camera.lensDirection?.name ?? 'Unknown'})',
+            ),
+          );
+        }).toList(),
+        // Style the dropdown button
+        icon: const Icon(Icons.camera_alt),
+        underline: Container(), // Remove the default underline
+      );
+    });
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
@@ -64,26 +65,56 @@ class RtmpTabViewController extends GetxController {
   }
 
   Future<void> onNewCameraSelected(CameraDescription cameraDescription) async {
-    if (controller != null) {
-      await controller!.dispose();
+    // Stop streaming if currently active
+    if (isStreamingVideoRtmp.value) {
+      await stopVideoStreaming();
     }
 
-    controller = CameraController(
-      cameraDescription,
-      ResolutionPreset.medium, // Or choose based on settings
-    );
+    // Signal that the controller is about to be re-initialized
+    isControllerInitialized.value = false;
 
-    selectedCamera.value = cameraDescription;
+    // Dispose the old controller
+    if (controller != null) {
+      await controller!.dispose();
+      controller = null; // Ensure controller is null before creating a new one
+    }
 
-    try {
-      await controller!.initialize();
-      isControllerInitialized.value = true;
-    } on CameraException catch (e) {
-      _showCameraException(e);
-    } catch (e) {
-      talkerService.talker.error("Error initializing camera controller: $e");
-      Get.snackbar('Error', 'Failed to initialize camera controller.');
-      isControllerInitialized.value = false;
+    // Allow the UI to update and resources to potentially release
+    // Needs import 'package:flutter/scheduler.dart';
+    await SchedulerBinding.instance.endOfFrame;
+
+    // Check if the widget is still mounted before proceeding
+    if (!isClosed) {
+      controller = CameraController(
+        cameraDescription,
+        ResolutionPreset.medium, // Or choose based on settings
+      );
+
+      selectedCamera.value = cameraDescription;
+
+      try {
+        await controller!.initialize();
+        // Check again if mounted before updating state
+        if (!isClosed) {
+          isControllerInitialized.value = true;
+        }
+      } on CameraException catch (e) {
+        // Check if mounted before showing snackbar
+        if (!isClosed) {
+          _showCameraException(e);
+          isControllerInitialized.value =
+              false; // Ensure state reflects failure
+        }
+      } catch (e) {
+        // Check if mounted before showing snackbar/logging
+        if (!isClosed) {
+          talkerService.talker
+              .error("Error initializing camera controller: $e");
+          Get.snackbar('Error', 'Failed to initialize camera controller.');
+          isControllerInitialized.value =
+              false; // Ensure state reflects failure
+        }
+      }
     }
   }
 
@@ -184,90 +215,5 @@ class RtmpTabViewController extends GetxController {
 
   void _logError(String code, String? message) {
     talkerService.talker.error('Camera Error: $code ${message ?? ""}');
-  }
-
-  Future<void> switchCamera() async {
-    if (cameras.length < 2 ||
-        selectedCamera.value == null ||
-        controller == null) {
-      Get.snackbar(
-        'Info',
-        'Not enough cameras available or controller not ready.',
-      );
-      return;
-    }
-
-    final bool wasStreaming = isStreamingVideoRtmp.value;
-
-    try {
-      // Stop streaming if it was active
-      if (wasStreaming) {
-        await stopVideoStreaming();
-        // Small delay to allow resources to release, might help prevent surface issues
-        await Future.delayed(const Duration(milliseconds: 100));
-      }
-
-      // Find the next camera
-      final currentLensDirection = selectedCamera.value!.lensDirection;
-      CameraDescription? newCamera;
-
-      if (currentLensDirection == CameraLensDirection.back) {
-        newCamera = cameras.firstWhereOrNull(
-          (cam) => cam.lensDirection == CameraLensDirection.front,
-        );
-      } else {
-        newCamera = cameras.firstWhereOrNull(
-          (cam) => cam.lensDirection == CameraLensDirection.back,
-        );
-      }
-
-      // If no opposite camera found, cycle through available ones
-      if (newCamera == null) {
-        int currentIndex = cameras.indexOf(selectedCamera.value!);
-        int nextIndex = (currentIndex + 1) % cameras.length;
-        newCamera = cameras[nextIndex];
-      }
-
-      // Switch to the new camera
-      if (newCamera != selectedCamera.value) {
-        // Set controller initialized to false before switching
-        isControllerInitialized.value = false;
-        await onNewCameraSelected(newCamera);
-        // Ensure the new controller is initialized before potentially restarting stream
-        // `onNewCameraSelected` already sets `isControllerInitialized.value = true` on success
-        if (!isControllerInitialized.value) {
-          talkerService.talker
-              .warning('New camera failed to initialize after switch.');
-          return; // Don't restart stream if initialization failed
-        }
-      } else {
-        talkerService.talker.info('No different camera to switch to.');
-        // If we stopped streaming but didn't actually switch, restart it.
-        if (wasStreaming) {
-          await startVideoStreaming();
-        }
-        return;
-      }
-
-      // Restart streaming if it was active before the switch
-      if (wasStreaming) {
-        // Add a small delay before restarting stream, sometimes helps surface availability
-        await Future.delayed(const Duration(milliseconds: 100));
-        await startVideoStreaming();
-      }
-    } catch (e, stackTrace) {
-      talkerService.talker.error('Error switching camera: $e, $stackTrace');
-      Get.snackbar('Error', 'Failed to switch camera.');
-      // Attempt to restart streaming if it was active, although state might be uncertain
-      if (wasStreaming) {
-        try {
-          await startVideoStreaming();
-        } catch (startError) {
-          talkerService.talker.error(
-            'Failed to restart stream after switch error: $startError',
-          );
-        }
-      }
-    }
   }
 }
