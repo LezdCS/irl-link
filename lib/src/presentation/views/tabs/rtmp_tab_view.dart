@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/domain/entities/rtmp.dart';
 import 'package:irllink/src/presentation/controllers/rtmp_tab_view_controller.dart';
 import 'package:rtmp_broadcaster/camera.dart';
 
@@ -37,19 +38,57 @@ class RtmpTabView extends GetView<RtmpTabViewController> {
             _controlRowWidget(context),
             Padding(
               padding: const EdgeInsets.all(5),
-              child: TextField(
-                controller: controller.urlController,
-                decoration: const InputDecoration(
-                  labelText: 'RTMP URL',
-                  hintText: 'rtmp://server/live/key',
-                ),
-                onChanged: (value) => controller.rtmpUrl.value = value,
+              child: Column(
+                children: [
+                  _rtmpSelectorDropdown(),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: controller.urlController,
+                    decoration: const InputDecoration(
+                      labelText: 'RTMP URL',
+                      hintText: 'rtmp://server/live/key',
+                    ),
+                    onChanged: (value) => controller.rtmpUrl.value = value,
+                  ),
+                ],
               ),
             ),
           ],
         );
       }),
     );
+  }
+
+  // RTMP selector dropdown
+  Widget _rtmpSelectorDropdown() {
+    return Obx(() {
+      return Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton<Rtmp>(
+            value: controller.selectedRtmp.value,
+            hint: const Text('Select RTMP Server'),
+            isExpanded: true,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            onChanged: (Rtmp? newValue) {
+              if (newValue != null) {
+                controller.updateSelectedRtmp(newValue);
+              }
+            },
+            items: controller.rtmpList.map<DropdownMenuItem<Rtmp>>((Rtmp rtmp) {
+              return DropdownMenuItem<Rtmp>(
+                value: rtmp,
+                child: Text(rtmp.name),
+              );
+            }).toList(),
+          ),
+        ),
+      );
+    });
   }
 
   /// Display the control bar with buttons to take pictures and record videos.

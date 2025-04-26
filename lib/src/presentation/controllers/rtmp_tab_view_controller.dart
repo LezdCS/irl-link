@@ -28,6 +28,7 @@ class RtmpTabViewController extends GetxController {
   TextEditingController urlController = TextEditingController();
   Rxn<CameraDescription> selectedCamera = Rxn<CameraDescription>();
   RxList<Rtmp> rtmpList = <Rtmp>[].obs;
+  Rxn<Rtmp> selectedRtmp = Rxn<Rtmp>();
 
   @override
   void onInit() {
@@ -51,8 +52,24 @@ class RtmpTabViewController extends GetxController {
     final result = await getRtmpListUseCase();
     result.fold(
       (l) => talkerService.talker.error(l.toString()),
-      (r) => rtmpList.value = r,
+      (r) {
+        rtmpList.value = r;
+        // Set default selected RTMP to the first in the list if available
+        if (rtmpList.isNotEmpty && selectedRtmp.value == null) {
+          selectedRtmp.value = rtmpList.first;
+          // Update the URL with the selected RTMP URL
+          rtmpUrl.value = selectedRtmp.value!.url;
+          urlController.text = rtmpUrl.value;
+        }
+      },
     );
+  }
+
+  // Update selected RTMP and URL
+  void updateSelectedRtmp(Rtmp rtmp) {
+    selectedRtmp.value = rtmp;
+    rtmpUrl.value = rtmp.url;
+    urlController.text = rtmp.url;
   }
 
   Future<void> _initializeCamera() async {
