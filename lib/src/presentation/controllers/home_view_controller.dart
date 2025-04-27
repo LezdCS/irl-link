@@ -3,7 +3,6 @@ import 'dart:io' as io;
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:collection/collection.dart';
-import 'package:dio/dio.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
@@ -14,15 +13,10 @@ import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/services/tts_service.dart';
-import 'package:irllink/src/core/services/twitch_event_sub_service.dart';
 import 'package:irllink/src/core/services/twitch_pub_sub_service.dart';
 import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
-import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/core/utils/list_move.dart';
-import 'package:irllink/src/data/datasources/local/twitch_local_data_source.dart';
-import 'package:irllink/src/data/datasources/remote/twitch_remote_data_source.dart';
-import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/kick/kick_credentials.dart';
@@ -34,9 +28,6 @@ import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/domain/usecases/kick/kick_refresh_token_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/post_kick_chat_nessage_usecase.dart';
 import 'package:irllink/src/domain/usecases/rtmp/get_rtmp_list_usecase.dart';
-import 'package:irllink/src/domain/usecases/twitch/create_poll_usecase.dart';
-import 'package:irllink/src/domain/usecases/twitch/end_poll_usecase.dart';
-import 'package:irllink/src/domain/usecases/twitch/end_prediction_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/refresh_token_usecase.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/kick_tab_view_controller.dart';
@@ -173,20 +164,7 @@ class HomeViewController extends GetxController
   }
 
   Future<void> _initializeTwitchServices() async {
-    Dio dioTwitchClient = initDio(kTwitchApiUrlBase);
-    final twitchRepositoryImpl = TwitchRepositoryImpl(
-      remoteDataSource: TwitchRemoteDataSourceImpl(
-        dioClient: dioTwitchClient,
-        talker: talkerService.talker,
-      ),
-      localDataSource: TwitchLocalDataSourceImpl(
-        talker: talkerService.talker,
-      ),
-      talker: talkerService.talker,
-    );
-
-    await _initializeEventSubService(twitchRepositoryImpl, dioTwitchClient);
-    await _initializePubSubService(dioTwitchClient);
+    await _initializePubSubService();
 
     timerRefreshToken =
         Timer.periodic(const Duration(seconds: 13000), (Timer t) async {
@@ -203,36 +181,11 @@ class HomeViewController extends GetxController
     });
   }
 
-  Future<void> _initializeEventSubService(
-    TwitchRepositoryImpl twitchRepositoryImpl,
-    Dio dioTwitchClient,
-  ) async {
-    TwitchEventSubService subService = await Get.putAsync(
-      () => TwitchEventSubService(
-        createPollUseCase:
-            CreatePollUseCase(twitchRepository: twitchRepositoryImpl),
-        endPollUseCase: EndPollUseCase(twitchRepository: twitchRepositoryImpl),
-        endPredictionUseCase:
-            EndPredictionUseCase(twitchRepository: twitchRepositoryImpl),
-        homeViewController: this,
-        talker: talkerService.talker,
-        dioClient: dioTwitchClient,
-      ).init(
-        token: twitchData.value!.accessToken,
-        channel: twitchData.value!.twitchUser.login,
-      ),
-      permanent: true,
-    );
-    subService.connect();
-  }
-
-  Future<void> _initializePubSubService(Dio dioTwitchClient) async {
-    TwitchPubSubService pubSubService = await Get.putAsync(
-      () => TwitchPubSubService().init(
-        accessToken: twitchData.value!.accessToken,
-        channelName: twitchData.value!.twitchUser.login,
-      ),
-      permanent: true,
+  Future<void> _initializePubSubService() async {
+    TwitchPubSubService pubSubService = Get.find<TwitchPubSubService>();
+    pubSubService.init(
+      accessToken: twitchData.value!.accessToken,
+      channelName: twitchData.value!.twitchUser.login,
     );
     pubSubService.connect();
   }

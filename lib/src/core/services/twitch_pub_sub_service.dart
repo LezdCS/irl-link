@@ -10,7 +10,7 @@ import 'package:talker_flutter/talker_flutter.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 import 'package:web_socket_channel/io.dart';
 
-class TwitchPubSubService extends GetxService {
+class TwitchPubSubService extends GetxController {
   TwitchPubSubService();
 
   late String accessToken;
@@ -25,13 +25,12 @@ class TwitchPubSubService extends GetxService {
 
   Talker talker = Get.find<TalkerService>().talker;
 
-  Future<TwitchPubSubService> init({
+  void init({
     required String accessToken,
     required String channelName,
-  }) async {
+  }) {
     this.accessToken = accessToken;
     this.channelName = channelName;
-    return this;
   }
 
   Future<void> connect() async {

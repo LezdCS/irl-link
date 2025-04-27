@@ -4,6 +4,8 @@ import 'package:get/get_instance/src/bindings_interface.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
+import 'package:irllink/src/core/services/twitch_event_sub_service.dart';
+import 'package:irllink/src/core/services/twitch_pub_sub_service.dart';
 import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/init_dio.dart';
@@ -36,6 +38,9 @@ import 'package:irllink/src/domain/usecases/streamelements/remove_song_usecase.d
 import 'package:irllink/src/domain/usecases/streamelements/replay_activity_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/reset_queue_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/update_player_state_usecase.dart';
+import 'package:irllink/src/domain/usecases/twitch/create_poll_usecase.dart';
+import 'package:irllink/src/domain/usecases/twitch/end_poll_usecase.dart';
+import 'package:irllink/src/domain/usecases/twitch/end_prediction_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_stream_info_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/refresh_token_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/set_chat_settings_usecase.dart';
@@ -229,8 +234,31 @@ class HomeBindings extends Bindings {
       ),
       fenix: true,
     );
+
     Get.lazyPut<RealtimeIrlViewController>(
       () => RealtimeIrlViewController(),
+      fenix: true,
+    );
+
+    final createPollUseCase =
+        CreatePollUseCase(twitchRepository: twitchRepository);
+    final endPollUseCase = EndPollUseCase(twitchRepository: twitchRepository);
+    final endPredictionUseCase =
+        EndPredictionUseCase(twitchRepository: twitchRepository);
+    Get.lazyPut<TwitchEventSubService>(
+      () => TwitchEventSubService(
+        createPollUseCase: createPollUseCase,
+        endPollUseCase: endPollUseCase,
+        endPredictionUseCase: endPredictionUseCase,
+        homeViewController: Get.find<HomeViewController>(),
+        talker: talkerService.talker,
+        dioClient: dioTwitchClient,
+      ),
+      fenix: true,
+    );
+
+    Get.lazyPut<TwitchPubSubService>(
+      () => TwitchPubSubService(),
       fenix: true,
     );
   }

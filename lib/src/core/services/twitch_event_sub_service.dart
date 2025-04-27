@@ -22,7 +22,7 @@ import 'package:talker_flutter/talker_flutter.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 import 'package:web_socket_channel/io.dart';
 
-class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
+class TwitchEventSubService extends GetxController with WidgetsBindingObserver {
   TwitchEventSubService({
     required this.createPollUseCase,
     required this.endPollUseCase,
@@ -58,17 +58,16 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
   Rx<TwitchHypeTrain> currentHypeTrain = TwitchHypeTrain.empty().obs;
   Rx<Duration> remainingTimeHypeTrain = Duration.zero.obs;
 
-  Future<TwitchEventSubService> init({
+  void init({
     required String token,
     required String channel,
-  }) async {
+  }) {
     channelName = channel;
     accessToken = token;
 
     listenToPoll();
     listenToPrediction();
     listenToHypeTrain();
-    return this;
   }
 
   Rx<bool> isConnected = false.obs;
