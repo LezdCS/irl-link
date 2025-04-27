@@ -217,6 +217,17 @@ class KickTabView extends GetView<KickTabViewController> {
               const Divider(
                 height: 10,
               ),
+              shortcutButton(
+                context: context,
+                text: "Start streaming on Kick",
+                onTap: () => {
+                  controller.startStreaming(),
+                },
+                isOn: false,
+              ),
+              const Divider(
+                height: 10,
+              ),
               Obx(
                 () => shortcutButton(
                   context: context,

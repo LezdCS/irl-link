@@ -57,6 +57,11 @@ class RtmpTabViewController extends GetxController {
     );
   }
 
+  Future<void> addTemporaryRtmp(Rtmp rtmp) async {
+    rtmpList.add(rtmp);
+    selectedRtmp.value = rtmp;
+  }
+
   Future<void> _initializeCamera() async {
     try {
       WidgetsFlutterBinding.ensureInitialized();

@@ -92,7 +92,7 @@ class LoginViewController extends GetxController {
       },
     );
 
-    if (twitchCredentials.value != null && kickCredentials.value != null) {
+    if (twitchCredentials.value != null || kickCredentials.value != null) {
       await Get.offAllNamed(
         Routes.home,
         arguments: [

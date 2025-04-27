@@ -143,7 +143,14 @@ class HomeBindings extends Bindings {
     final getSongQueueUseCase = StreamElementsGetSongQueueUseCase(
       streamelementsRepository: streamelementsRepository,
     );
+    final rtmpRepository = RtmpRepositoryImpl(
+      talker: talkerService.talker,
+      localDataSource: RtmpLocalDataSourceImpl(
+        talker: talkerService.talker,
+      ),
+    );
 
+    final getRtmpListUseCase = GetRtmpListUseCase(rtmpRepository);
     Get.lazyPut<HomeViewController>(
       () => HomeViewController(
         refreshAccessTokenUseCase: refreshTwitchAccessTokenUseCase,
@@ -151,6 +158,7 @@ class HomeBindings extends Bindings {
         settingsService: settingsService,
         talkerService: talkerService,
         postKickChatMessageUseCase: postKickChatMessageUseCase,
+        getRtmpListUseCase: getRtmpListUseCase,
       ),
     );
 
@@ -162,13 +170,6 @@ class HomeBindings extends Bindings {
       fenix: true,
     );
 
-    final rtmpRepository = RtmpRepositoryImpl(
-      talker: talkerService.talker,
-      localDataSource: RtmpLocalDataSourceImpl(
-        talker: talkerService.talker,
-      ),
-    );
-    final getRtmpListUseCase = GetRtmpListUseCase(rtmpRepository);
     Get.lazyPut<RtmpTabViewController>(
       () => RtmpTabViewController(
         settingsService: settingsService,

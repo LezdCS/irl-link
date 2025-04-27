@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/kick/kick_category.dart';
 import 'package:irllink/src/domain/entities/kick/kick_channel.dart';
+import 'package:irllink/src/domain/entities/rtmp.dart';
 import 'package:irllink/src/domain/usecases/kick/get_kick_categories_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/get_kick_channels_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/patch_kick_channel_usecase.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
+import 'package:irllink/src/presentation/views/tabs/rtmp_tab_view.dart';
 
 class KickTabViewController extends GetxController
     with GetTickerProviderStateMixin {
@@ -143,5 +145,35 @@ class KickTabViewController extends GetxController
         ),
       },
     );
+  }
+
+  void startStreaming() async {
+    if (kickChannel.value == null) {
+      return;
+    }
+    // Check if rmptTabViewController is not null in homeViewController
+    // If null, we need to init it (might just create a function for that in homeViewController)
+    // If not null, we need to call the addTemporaryRtmp function in rtmpTabViewController
+    if (homeViewController.rtmpTabViewController == null) {
+      homeViewController.initRtmpTabViewController();
+    }
+    // await for 1 second
+    await Future.delayed(const Duration(seconds: 1));
+    homeViewController.rtmpTabViewController?.addTemporaryRtmp(
+      Rtmp(
+        id: 0,
+        name: "Kick",
+        key: kickChannel.value!.stream.key,
+        createdAt: DateTime.now(),
+        url: kickChannel.value!.stream.url,
+      ),
+    );
+    // find the rtmp tab view in the homeViewController.tabElements
+    final rtmpTabView = homeViewController.tabElements
+        .firstWhere((element) => element is RtmpTabView);
+    // animate to the rtmp tab view
+    final indexToGo = homeViewController.tabElements.indexOf(rtmpTabView);
+    homeViewController.tabIndex.value = indexToGo;
+    homeViewController.tabController.animateTo(indexToGo);
   }
 }

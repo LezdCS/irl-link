@@ -33,6 +33,7 @@ import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/domain/usecases/kick/kick_refresh_token_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/post_kick_chat_nessage_usecase.dart';
+import 'package:irllink/src/domain/usecases/rtmp/get_rtmp_list_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/create_poll_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/end_poll_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/end_prediction_usecase.dart';
@@ -65,6 +66,7 @@ class HomeViewController extends GetxController
     required this.settingsService,
     required this.talkerService,
     required this.postKickChatMessageUseCase,
+    required this.getRtmpListUseCase,
   });
 
   final RefreshTwitchTokenUseCase refreshAccessTokenUseCase;
@@ -72,6 +74,7 @@ class HomeViewController extends GetxController
   final SettingsService settingsService;
   final TalkerService talkerService;
   final PostKickChatMessageUseCase postKickChatMessageUseCase;
+  final GetRtmpListUseCase getRtmpListUseCase;
   SplitViewController? splitViewController = SplitViewController(
     limits: [null, WeightLimit(min: 0.12, max: 0.92)],
   );
@@ -366,14 +369,15 @@ class HomeViewController extends GetxController
       await Get.delete<RealtimeIrlViewController>();
     }
 
-    if (rtmpTabViewController != null) {
-      tabElements.removeWhere((t) => t is RtmpTabView);
-      rtmpTabViewController = null;
-      await Get.delete<RtmpTabViewController>();
-    }
+    // Check if RTMP have to be removed
+    // if (rtmpTabViewController != null) {
+    //   tabElements.removeWhere((t) => t is RtmpTabView);
+    //   rtmpTabViewController = null;
+    //   await Get.delete<RtmpTabViewController>();
+    // }
   }
 
-  void addTabs() {
+  Future<void> addTabs() async {
     bool isSubscribed = Get.find<StoreService>().isSubscribed();
     Settings settings = settingsService.settings.value;
 
@@ -412,10 +416,18 @@ class HomeViewController extends GetxController
       tabElements.add(const RealtimeIrlTabView());
     }
 
-    // Check if RTMP tab has to be added
-    if (rtmpTabViewController == null) {
-      tabElements.add(const RtmpTabView());
-    }
+    final rtmpListResult = await getRtmpListUseCase();
+    rtmpListResult.fold(
+      (l) {
+        talkerService.talker.error('Failed to get RTMP list');
+      },
+      (r) {
+        // Check if RTMP tab has to be added
+        if (rtmpTabViewController == null && r.isNotEmpty) {
+          initRtmpTabViewController();
+        }
+      },
+    );
 
     // Only add the tabs that are toggled
     for (BrowserTab tab in settings.browserTabs.tabs.where((t) => t.toggled)) {
@@ -447,6 +459,12 @@ class HomeViewController extends GetxController
       tabIndex.value = 0;
     }
     tabController.animateTo(tabIndex.value);
+  }
+
+  void initRtmpTabViewController() {
+    rtmpTabViewController = Get.find<RtmpTabViewController>();
+    tabElements.add(const RtmpTabView());
+    tabController = TabController(length: tabElements.length, vsync: this);
   }
 
   Future<void> generateChats() async {
