@@ -157,19 +157,18 @@ class HomeView extends GetView<HomeViewController> {
                 ? Column(
                     children: [
                       Visibility(
-                        visible: Get.isRegistered<TwitchEventSubService>(),
+                        visible: controller.twitchEventSubService != null,
                         child: Padding(
                           padding: const EdgeInsets.only(
                             left: 8,
                             right: 8,
                             top: 4,
                           ),
-                          child: Get.isRegistered<TwitchEventSubService>()
+                          child: controller.twitchEventSubService != null
                               ? hypeTrain(
                                   context,
-                                  Get.find<TwitchEventSubService>()
-                                      .currentHypeTrain
-                                      .value,
+                                  controller.twitchEventSubService!
+                                      .currentHypeTrain.value,
                                 )
                               : Container(),
                         ),
@@ -349,13 +348,11 @@ class HomeView extends GetView<HomeViewController> {
               ),
             ),
           ),
-          if (Get.isRegistered<TwitchEventSubService>())
+          if (controller.twitchEventSubService != null)
             Obx(
               () => Visibility(
-                visible: Get.find<TwitchEventSubService>()
-                        .currentPoll
-                        .value
-                        .status !=
+                visible: controller
+                        .twitchEventSubService!.currentPoll.value.status !=
                     PollStatus.empty,
                 child: Expanded(
                   child: InkWell(
@@ -397,13 +394,11 @@ class HomeView extends GetView<HomeViewController> {
             )
           else
             Container(),
-          if (Get.isRegistered<TwitchEventSubService>())
+          if (controller.twitchEventSubService != null)
             Obx(
               () => Visibility(
-                visible: Get.find<TwitchEventSubService>()
-                        .currentPrediction
-                        .value
-                        .status !=
+                visible: controller.twitchEventSubService!.currentPrediction
+                        .value.status !=
                     PredictionStatus.empty,
                 child: Expanded(
                   child: InkWell(

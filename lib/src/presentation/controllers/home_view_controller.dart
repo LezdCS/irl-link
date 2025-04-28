@@ -12,6 +12,7 @@ import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/services/tts_service.dart';
+import 'package:irllink/src/core/services/twitch_event_sub_service.dart';
 import 'package:irllink/src/core/services/twitch_pub_sub_service.dart';
 import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
@@ -104,6 +105,8 @@ class HomeViewController extends GetxController
   RtmpTabViewController? rtmpTabViewController;
   TwitchTabViewController? twitchTabViewController;
   KickTabViewController? kickTabViewController;
+  TwitchPubSubService? twitchPubSubService;
+  TwitchEventSubService? twitchEventSubService;
 
   // Chats
   RxList<ChatView> chatsViews = <ChatView>[].obs;
@@ -163,8 +166,8 @@ class HomeViewController extends GetxController
   }
 
   Future<void> _initializeTwitchServices() async {
-    await _initializePubSubService();
-
+    _initializePubSubService();
+    _initializeEventSubService();
     timerRefreshToken =
         Timer.periodic(const Duration(seconds: 13000), (Timer t) async {
       final refreshTokenResult =
@@ -181,12 +184,21 @@ class HomeViewController extends GetxController
   }
 
   Future<void> _initializePubSubService() async {
-    TwitchPubSubService pubSubService = Get.find<TwitchPubSubService>();
-    pubSubService.init(
+    twitchPubSubService = Get.find<TwitchPubSubService>();
+    twitchPubSubService?.init(
       accessToken: twitchData.value!.accessToken,
       channelName: twitchData.value!.twitchUser.login,
     );
-    pubSubService.connect();
+    twitchPubSubService?.connect();
+  }
+
+  Future<void> _initializeEventSubService() async {
+    twitchEventSubService = Get.find<TwitchEventSubService>();
+    twitchEventSubService?.init(
+      token: twitchData.value!.accessToken,
+      channel: twitchData.value!.twitchUser.login,
+    );
+    twitchEventSubService?.connect();
   }
 
   Future<void> _setupCrashlytics() async {
