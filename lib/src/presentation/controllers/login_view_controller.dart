@@ -56,41 +56,46 @@ class LoginViewController extends GetxController {
           .then((_) => hasNoNetwork()),
     );
 
-    // Handle Twitch credentials independently
-    final twitchCredsResult = await getTwitchLocalUseCase();
-    await twitchCredsResult.fold(
-      (l) => null, // Do nothing if no Twitch credentials found
-      (r) async {
-        twitchCredentials.value = r;
-        loadingMessage.value = "refreshing_token".tr;
+    Future<TwitchCredentials?> handleTwitchCredentials() async {
+      final twitchCredsResult = await getTwitchLocalUseCase();
+      return await twitchCredsResult.fold(
+        (l) async => null, // Do nothing if no Twitch credentials found
+        (r) async {
+          loadingMessage.value = "refreshing_token".tr;
+          twitchCredentials.value = r;
+          final refreshResult = await refreshTwitchTokenUseCase(params: r);
+          return refreshResult.fold(
+            (l) => null,
+            (r) => r,
+          );
+        },
+      );
+    }
 
-        final refreshResult = await refreshTwitchTokenUseCase(params: r);
-        refreshResult.fold(
-          (l) => twitchCredentials.value = null,
-          (r) {
-            twitchCredentials.value = r;
-          },
-        );
-      },
-    );
+    Future<KickCredentials?> handleKickCredentials() async {
+      final kickCredsResult = await getKickLocalUseCase();
+      return await kickCredsResult.fold(
+        (l) async => null,
+        (r) async {
+          loadingMessage.value = "refreshing_token".tr;
+          kickCredentials.value = r;
+          final refreshResult = await kickRefreshTokenUseCase(params: r);
+          return refreshResult.fold(
+            (l) => null,
+            (r) => r,
+          );
+        },
+      );
+    }
 
-    // Handle Kick credentials independently
-    final kickCredsResult = await getKickLocalUseCase();
-    await kickCredsResult.fold(
-      (l) => null,
-      (r) async {
-        kickCredentials.value = r;
-        loadingMessage.value = "refreshing_token".tr;
+    // Run credential handling in parallel
+    final results = await Future.wait([
+      handleTwitchCredentials(),
+      handleKickCredentials(),
+    ]);
 
-        final refreshResult = await kickRefreshTokenUseCase(params: r);
-        refreshResult.fold(
-          (l) => kickCredentials.value = null,
-          (r) {
-            kickCredentials.value = r;
-          },
-        );
-      },
-    );
+    twitchCredentials.value = results[0] as TwitchCredentials?;
+    kickCredentials.value = results[1] as KickCredentials?;
 
     if (twitchCredentials.value != null || kickCredentials.value != null) {
       await Get.offAllNamed(

@@ -130,12 +130,12 @@ class HomeViewController extends GetxController
       final kickCreds = Get.arguments[1];
       if (twitchCreds is TwitchCredentials) {
         twitchData.value = twitchCreds;
-        await _initializeTwitchServices();
-        await _setupCrashlytics();
+        _initializeTwitchServices();
+        _setupCrashlytics();
       }
       if (kickCreds is KickCredentials) {
         kickData.value = kickCreds;
-        await _initializeKickServices();
+        _initializeKickServices();
       }
     }
 
