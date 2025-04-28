@@ -163,7 +163,6 @@ class RtmpTabViewController extends GetxController {
 
     try {
       _connection?.connect(baseUrl);
-      Get.snackbar('Info', 'Connecting to $baseUrl...');
     } catch (e) {
       talkerService.talker.error("Error connecting to RTMP server: $e");
       Get.snackbar('Error', 'Failed to connect to RTMP server.');
