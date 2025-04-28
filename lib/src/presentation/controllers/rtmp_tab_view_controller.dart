@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:haishin_kit/audio_settings.dart';
 import 'package:haishin_kit/audio_source.dart';
 import 'package:haishin_kit/rtmp_connection.dart';
 import 'package:haishin_kit/rtmp_stream.dart';
+import 'package:haishin_kit/video_settings.dart';
 import 'package:haishin_kit/video_source.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
@@ -90,6 +92,13 @@ class RtmpTabViewController extends GetxController {
       });
 
       _stream = await RtmpStream.create(_connection!);
+      _stream?.audioSettings = AudioSettings(bitrate: 64 * 1000);
+      _stream?.videoSettings = VideoSettings(
+        height: 1080,
+        width: 1920,
+        bitrate: 2700 * 1000,
+        profileLevel: ProfileLevel.h264HighAutoLevel,
+      );
       await _stream?.attachVideo(VideoSource(position: currentPosition));
       await _stream?.attachAudio(AudioSource());
 
@@ -196,6 +205,7 @@ class RtmpTabViewController extends GetxController {
       _connection?.close();
       Get.snackbar('Success', 'Streaming stopped.');
       talkerService.talker.debug("Streaming stopped via connection close.");
+      isStreamingVideoRtmp.value = false;
     } catch (e) {
       talkerService.talker
           .error("Error stopping stream (closing connection): $e");
