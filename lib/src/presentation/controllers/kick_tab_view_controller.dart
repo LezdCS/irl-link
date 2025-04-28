@@ -25,6 +25,7 @@ class KickTabViewController extends GetxController
   final HomeViewController homeViewController;
   final GetKickChannelsUseCase getKickChannelsUseCase;
 
+  late TextEditingController categoryFormController;
   late TextEditingController titleFormController;
   RxString streamTitle = "".obs;
   RxInt selectedCategoryId = 0.obs;
@@ -42,10 +43,11 @@ class KickTabViewController extends GetxController
 
   @override
   void onInit() {
-    getKickCategories();
     titleFormController = TextEditingController();
+    categoryFormController = TextEditingController();
     if (!focus.hasFocus) {
       titleFormController.text = "";
+      categoryFormController.text = "";
     }
     refreshDataAnimationController = AnimationController(
       vsync: this,
@@ -68,6 +70,8 @@ class KickTabViewController extends GetxController
 
   @override
   void onReady() async {
+    getKickCategories();
+
     refreshData();
     refreshDataTimer = Timer.periodic(const Duration(seconds: 15), (timer) {
       refreshData();
@@ -126,19 +130,19 @@ class KickTabViewController extends GetxController
   }
 
   void updateKickChannel() async {
-    final categories = await patchKickChannelUseCase(
+    final resultUpdate = await patchKickChannelUseCase(
       params: PatchKickChannelParams(
         accessToken: homeViewController.kickData.value!.accessToken,
         streamTitle: streamTitle.value,
         categoryId: selectedCategoryId.value.toString(),
       ),
     );
-    categories.fold(
-      (failure) => Get.snackbar(
+    resultUpdate.fold(
+      (l) => Get.snackbar(
         "Error",
-        failure.message,
+        l.message,
       ),
-      (categories) => {
+      (r) => {
         Get.snackbar(
           "Success",
           "Channel updated",
