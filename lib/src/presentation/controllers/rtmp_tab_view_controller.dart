@@ -1,13 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
+import 'package:haishin_kit/audio_source.dart';
+import 'package:haishin_kit/rtmp_connection.dart';
+import 'package:haishin_kit/rtmp_stream.dart';
+import 'package:haishin_kit/video_source.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/domain/entities/rtmp.dart';
 import 'package:irllink/src/domain/usecases/rtmp/get_rtmp_list_usecase.dart';
-import 'package:rtmp_broadcaster/camera.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class RtmpTabViewController extends GetxController {
   RtmpTabViewController({
@@ -20,25 +23,31 @@ class RtmpTabViewController extends GetxController {
   final TalkerService talkerService;
   final GetRtmpListUseCase getRtmpListUseCase;
 
-  List<CameraDescription> cameras = [];
-  CameraController? controller;
-  RxBool isControllerInitialized = false.obs;
+  RtmpConnection? _connection;
+  RtmpStream? _stream;
+  StreamSubscription? _connectionSubscription;
+  CameraPosition currentPosition = CameraPosition.back;
+
   RxBool isStreamingVideoRtmp = false.obs;
+  RxBool isStreamReady = false.obs;
   TextEditingController urlController = TextEditingController();
-  Rxn<CameraDescription> selectedCamera = Rxn<CameraDescription>();
   RxList<Rtmp> rtmpList = <Rtmp>[].obs;
   Rxn<Rtmp> selectedRtmp = Rxn<Rtmp>();
+
+  RtmpStream? get stream => _stream;
 
   @override
   void onInit() {
     super.onInit();
-    _initializeCamera();
+    _initializeStreaming();
     getRtmpList();
   }
 
   @override
   void onClose() {
-    controller?.dispose();
+    _connectionSubscription?.cancel();
+    _connection?.close();
+    _stream?.dispose();
     urlController.dispose();
     super.onClose();
   }
@@ -49,7 +58,6 @@ class RtmpTabViewController extends GetxController {
       (l) => talkerService.talker.error(l.toString()),
       (r) {
         rtmpList.value = r;
-        // Set default selected RTMP to the first in the list if available
         if (rtmpList.isNotEmpty && selectedRtmp.value == null) {
           selectedRtmp.value = rtmpList.first;
         }
@@ -62,96 +70,69 @@ class RtmpTabViewController extends GetxController {
     selectedRtmp.value = rtmp;
   }
 
-  Future<void> _initializeCamera() async {
+  Future<void> _initializeStreaming() async {
     try {
-      WidgetsFlutterBinding.ensureInitialized();
-      cameras = await availableCameras();
-      if (cameras.isNotEmpty) {
-        // Select the first available camera initially
-        await onNewCameraSelected(cameras.first);
-      }
-    } on CameraException catch (e) {
-      _logError(e.code, e.description);
-      Get.snackbar(
-        'Camera Error',
-        'Failed to initialize camera: ${e.description}',
-      );
+      await Permission.camera.request();
+      await Permission.microphone.request();
+
+      _connection = await RtmpConnection.create();
+      _connectionSubscription =
+          _connection?.eventChannel.receiveBroadcastStream().listen((event) {
+        talkerService.talker.debug("RtmpConnection event: $event");
+        switch (event["data"]["code"]) {
+          case 'NetConnection.Connect.Success':
+            _publishStream();
+          case 'NetConnection.Connect.Closed':
+          case 'NetConnection.Connect.Failed':
+            isStreamingVideoRtmp.value = false;
+            Get.snackbar('Info', 'Connection closed or failed.');
+        }
+      });
+
+      _stream = await RtmpStream.create(_connection!);
+      await _stream?.attachVideo(VideoSource(position: currentPosition));
+      await _stream?.attachAudio(AudioSource());
+
+      isStreamReady.value = true;
+      update();
     } catch (e) {
-      talkerService.talker.error("Error initializing cameras: $e");
+      talkerService.talker.error("Error initializing HaishinKit: $e");
       Get.snackbar(
         'Error',
-        'An unexpected error occurred while initializing cameras.',
+        'An unexpected error occurred during initialization.',
       );
+      isStreamingVideoRtmp.value = false;
+      isStreamReady.value = false;
     }
   }
 
-  Future<void> onNewCameraSelected(CameraDescription cameraDescription) async {
-    // Stop streaming if currently active
-    if (isStreamingVideoRtmp.value) {
-      await stopVideoStreaming();
-    }
+  Future<void> switchCamera() async {
+    final newPosition = currentPosition == CameraPosition.back
+        ? CameraPosition.front
+        : CameraPosition.back;
 
-    // Signal that the controller is about to be re-initialized
-    isControllerInitialized.value = false;
-
-    // Dispose the old controller
-    if (controller != null) {
-      await controller!.dispose();
-      controller = null; // Ensure controller is null before creating a new one
-    }
-
-    // Allow the UI to update and resources to potentially release
-    // Needs import 'package:flutter/scheduler.dart';
-    await SchedulerBinding.instance.endOfFrame;
-
-    // Check if the widget is still mounted before proceeding
-    if (!isClosed) {
-      controller = CameraController(
-        cameraDescription,
-        ResolutionPreset.high,
-        androidUseOpenGL: true,
-        streamingPreset: ResolutionPreset.high,
-      );
-
-      selectedCamera.value = cameraDescription;
-
-      try {
-        await controller?.initialize();
-        // Check again if mounted before updating state
-        if (!isClosed) {
-          isControllerInitialized.value = true;
-        }
-      } on CameraException catch (e) {
-        // Check if mounted before showing snackbar
-        if (!isClosed) {
-          _showCameraException(e);
-          isControllerInitialized.value =
-              false; // Ensure state reflects failure
-        }
-      } catch (e) {
-        // Check if mounted before showing snackbar/logging
-        if (!isClosed) {
-          talkerService.talker
-              .error("Error initializing camera controller: $e");
-          Get.snackbar('Error', 'Failed to initialize camera controller.');
-          isControllerInitialized.value =
-              false; // Ensure state reflects failure
-        }
-      }
+    try {
+      await _stream?.attachVideo(VideoSource(position: newPosition));
+      currentPosition = newPosition;
+      update();
+      talkerService.talker.debug("Switched camera to $newPosition");
+    } catch (e) {
+      talkerService.talker.error("Error switching camera: $e");
+      Get.snackbar('Error', 'Failed to switch camera.');
     }
   }
 
   String timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
 
-  Future<String?> startVideoStreaming() async {
-    if (!isControllerInitialized.value || controller == null) {
-      Get.snackbar('Error', 'Select a camera first.');
-      return null;
+  Future<void> startVideoStreaming() async {
+    if (_connection == null || _stream == null) {
+      Get.snackbar('Error', 'Streaming components not initialized.');
+      return;
     }
 
     if (isStreamingVideoRtmp.value) {
       Get.snackbar('Info', 'Already streaming.');
-      return null;
+      return;
     }
 
     final rtmpConfig = selectedRtmp.value;
@@ -159,111 +140,67 @@ class RtmpTabViewController extends GetxController {
       talkerService.talker
           .error("Cannot start stream: No RTMP configuration selected.");
       Get.snackbar('Error', 'Please select an RTMP destination.');
-      return null;
+      return;
     }
     final baseUrl = rtmpConfig.url;
-    final streamKey = rtmpConfig.key;
 
     if (baseUrl.isEmpty) {
       talkerService.talker
           .error("Cannot start stream: RTMP base URL is null or empty.");
       Get.snackbar('Error', 'RTMP configuration is missing a URL.');
-      return null;
-    }
-    if (streamKey.isEmpty) {
-      talkerService.talker
-          .error("Cannot start stream: RTMP stream key is null or empty.");
-      Get.snackbar('Error', 'RTMP configuration is missing a stream key.');
-      return null;
+      return;
     }
 
     talkerService.talker.debug("RTMP Base URL: $baseUrl");
-    talkerService.talker.debug("RTMP Stream Key: $streamKey");
-
-    final urlToStream = "$baseUrl/$streamKey";
-    talkerService.talker
-        .debug("Attempting to stream to final URL: $urlToStream");
 
     try {
-      await controller?.startVideoStreaming(urlToStream);
+      _connection?.connect(baseUrl);
+      Get.snackbar('Info', 'Connecting to $baseUrl...');
+    } catch (e) {
+      talkerService.talker.error("Error connecting to RTMP server: $e");
+      Get.snackbar('Error', 'Failed to connect to RTMP server.');
+      isStreamingVideoRtmp.value = false;
+    }
+  }
+
+  Future<void> _publishStream() async {
+    final rtmpConfig = selectedRtmp.value;
+    final streamKey = rtmpConfig?.key;
+
+    if (streamKey == null || streamKey.isEmpty) {
+      talkerService.talker
+          .error("Cannot publish stream: RTMP stream key is null or empty.");
+      Get.snackbar('Error', 'RTMP configuration is missing a stream key.');
+      await stopVideoStreaming();
+      return;
+    }
+
+    try {
+      await _stream?.publish(streamKey);
       isStreamingVideoRtmp.value = true;
       Get.snackbar(
         'Success',
-        'Streaming started to: $urlToStream',
+        'Streaming started to ${rtmpConfig?.url}/$streamKey',
       );
-    } on CameraException catch (e) {
-      _showCameraException(e);
-      return null;
+      talkerService.talker.debug("Streaming published with key: $streamKey");
     } catch (e) {
-      talkerService.talker.error("Error starting stream: $e");
-      Get.snackbar('Error', 'Failed to start stream.');
+      talkerService.talker.error("Error publishing stream: $e");
+      Get.snackbar('Error', 'Failed to publish stream.');
       isStreamingVideoRtmp.value = false;
-      return null;
+      _connection?.close();
     }
-    return null;
   }
 
   Future<void> stopVideoStreaming() async {
-    if (!isStreamingVideoRtmp.value ||
-        controller == null ||
-        !isControllerInitialized.value) {
-      Get.snackbar('Info', 'Not streaming.');
-      return;
-    }
-
     try {
-      await controller?.stopVideoStreaming();
-      isStreamingVideoRtmp.value = false;
+      _connection?.close();
       Get.snackbar('Success', 'Streaming stopped.');
-    } on CameraException catch (e) {
-      _showCameraException(e);
+      talkerService.talker.debug("Streaming stopped via connection close.");
     } catch (e) {
-      talkerService.talker.error("Error stopping stream: $e");
+      talkerService.talker
+          .error("Error stopping stream (closing connection): $e");
       Get.snackbar('Error', 'Failed to stop stream.');
-      // We might still be streaming? Keep state as true or set to false?
-      // isStreamingVideoRtmp.value = false; // Let's assume it stopped
+      isStreamingVideoRtmp.value = false;
     }
-  }
-
-  Future<void> pauseVideoStreaming() async {
-    if (!isStreamingVideoRtmp.value || controller == null) {
-      return;
-    }
-    try {
-      await controller?.pauseVideoStreaming();
-      Get.snackbar('Info', 'Streaming paused.');
-    } on CameraException catch (e) {
-      _showCameraException(e);
-    } catch (e) {
-      talkerService.talker.error("Error pausing stream: $e");
-      Get.snackbar('Error', 'Failed to pause stream.');
-    }
-  }
-
-  Future<void> resumeVideoStreaming() async {
-    if (!isStreamingVideoRtmp.value || controller == null) {
-      return;
-    }
-    try {
-      await controller?.resumeVideoStreaming();
-      Get.snackbar('Info', 'Streaming resumed.');
-    } on CameraException catch (e) {
-      _showCameraException(e);
-    } catch (e) {
-      talkerService.talker.error("Error resuming stream: $e");
-      Get.snackbar('Error', 'Failed to resume stream.');
-    }
-  }
-
-  void _showCameraException(CameraException e) {
-    _logError(e.code, e.description);
-    Get.snackbar(
-      'Camera Error',
-      'Error: ${e.code}\n${e.description ?? "No description"}',
-    );
-  }
-
-  void _logError(String code, String? message) {
-    talkerService.talker.error('Camera Error: $code ${message ?? ""}');
   }
 }

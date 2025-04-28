@@ -77,7 +77,8 @@ dependencies:
   store_checker: ^1.8.0
   sqflite: ^2.4.2
   path: ^1.9.1
-  rtmp_broadcaster: ^2.3.4
+  permission_handler: ^11.3.1
+  haishin_kit: ^0.14.2
 
 dev_dependencies:
   flutter_test:
