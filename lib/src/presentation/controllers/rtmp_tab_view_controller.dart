@@ -108,13 +108,15 @@ class RtmpTabViewController extends GetxController {
     if (!isClosed) {
       controller = CameraController(
         cameraDescription,
-        ResolutionPreset.medium, // Or choose based on settings
+        ResolutionPreset.high,
+        androidUseOpenGL: true,
+        streamingPreset: ResolutionPreset.high,
       );
 
       selectedCamera.value = cameraDescription;
 
       try {
-        await controller!.initialize();
+        await controller?.initialize();
         // Check again if mounted before updating state
         if (!isClosed) {
           isControllerInitialized.value = true;
@@ -152,17 +154,42 @@ class RtmpTabViewController extends GetxController {
       return null;
     }
 
-    if (selectedRtmp.value!.url.isEmpty) {
-      Get.snackbar('Error', 'RTMP URL is required.');
+    final rtmpConfig = selectedRtmp.value;
+    if (rtmpConfig == null) {
+      talkerService.talker
+          .error("Cannot start stream: No RTMP configuration selected.");
+      Get.snackbar('Error', 'Please select an RTMP destination.');
+      return null;
+    }
+    final baseUrl = rtmpConfig.url;
+    final streamKey = rtmpConfig.key;
+
+    if (baseUrl.isEmpty) {
+      talkerService.talker
+          .error("Cannot start stream: RTMP base URL is null or empty.");
+      Get.snackbar('Error', 'RTMP configuration is missing a URL.');
+      return null;
+    }
+    if (streamKey.isEmpty) {
+      talkerService.talker
+          .error("Cannot start stream: RTMP stream key is null or empty.");
+      Get.snackbar('Error', 'RTMP configuration is missing a stream key.');
       return null;
     }
 
+    talkerService.talker.debug("RTMP Base URL: $baseUrl");
+    talkerService.talker.debug("RTMP Stream Key: $streamKey");
+
+    final urlToStream = "$baseUrl/$streamKey";
+    talkerService.talker
+        .debug("Attempting to stream to final URL: $urlToStream");
+
     try {
-      await controller!.startVideoStreaming(selectedRtmp.value!.url);
+      await controller?.startVideoStreaming(urlToStream);
       isStreamingVideoRtmp.value = true;
       Get.snackbar(
         'Success',
-        'Streaming started to: ${selectedRtmp.value!.url}',
+        'Streaming started to: $urlToStream',
       );
     } on CameraException catch (e) {
       _showCameraException(e);
@@ -185,7 +212,7 @@ class RtmpTabViewController extends GetxController {
     }
 
     try {
-      await controller!.stopVideoStreaming();
+      await controller?.stopVideoStreaming();
       isStreamingVideoRtmp.value = false;
       Get.snackbar('Success', 'Streaming stopped.');
     } on CameraException catch (e) {
@@ -199,11 +226,11 @@ class RtmpTabViewController extends GetxController {
   }
 
   Future<void> pauseVideoStreaming() async {
-    if (!isStreamingVideoRtmp.value) {
+    if (!isStreamingVideoRtmp.value || controller == null) {
       return;
     }
     try {
-      await controller!.pauseVideoStreaming();
+      await controller?.pauseVideoStreaming();
       Get.snackbar('Info', 'Streaming paused.');
     } on CameraException catch (e) {
       _showCameraException(e);
@@ -214,11 +241,11 @@ class RtmpTabViewController extends GetxController {
   }
 
   Future<void> resumeVideoStreaming() async {
-    if (!isStreamingVideoRtmp.value) {
+    if (!isStreamingVideoRtmp.value || controller == null) {
       return;
     }
     try {
-      await controller!.resumeVideoStreaming();
+      await controller?.resumeVideoStreaming();
       Get.snackbar('Info', 'Streaming resumed.');
     } on CameraException catch (e) {
       _showCameraException(e);

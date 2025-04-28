@@ -165,7 +165,7 @@ class KickTabViewController extends GetxController
         name: "Kick",
         key: kickChannel.value!.stream.key,
         createdAt: DateTime.now(),
-        url: kickChannel.value!.stream.url,
+        url: "${kickChannel.value!.stream.url}/app",
       ),
     );
     // find the rtmp tab view in the homeViewController.tabElements

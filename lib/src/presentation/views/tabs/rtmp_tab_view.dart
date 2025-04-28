@@ -167,7 +167,7 @@ class RtmpTabView extends GetView<RtmpTabViewController> {
             value: camera,
             // Display camera name and direction
             child: Text(
-              '${camera.name} (${camera.lensDirection?.name ?? 'Unknown'})',
+              '${camera.lensDirection?.name ?? 'Unknown'})',
             ),
           );
         }).toList(),
