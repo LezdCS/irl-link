@@ -11,7 +11,11 @@ class RtmpTabView extends GetView<RtmpTabViewController> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Obx(() {
-        if (!controller.isStreamReady.value || controller.stream == null) {
+        final isReady = controller.isStreamReady.value;
+        final isStreaming = controller.isStreamingVideoRtmp.value;
+        final currentStream = controller.stream.value;
+
+        if (!isReady || currentStream == null) {
           return const Center(child: CircularProgressIndicator());
         }
         return Column(
@@ -21,13 +25,16 @@ class RtmpTabView extends GetView<RtmpTabViewController> {
                 decoration: BoxDecoration(
                   color: Colors.black,
                   border: Border.all(
-                    color: controller.isStreamingVideoRtmp.value
-                        ? Colors.redAccent
-                        : Colors.grey,
+                    color: isStreaming ? Colors.redAccent : Colors.grey,
                     width: 3,
                   ),
                 ),
-                child: StreamViewTexture(controller.stream),
+                child: Padding(
+                  padding: const EdgeInsets.all(3),
+                  child: StreamViewTexture(
+                    currentStream,
+                  ),
+                ),
               ),
             ),
             _controlRowWidget(context),

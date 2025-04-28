@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:haishin_kit/audio_settings.dart';
 import 'package:haishin_kit/audio_source.dart';
+import 'package:haishin_kit/av_capture_session_preset.dart';
 import 'package:haishin_kit/rtmp_connection.dart';
 import 'package:haishin_kit/rtmp_stream.dart';
 import 'package:haishin_kit/video_settings.dart';
@@ -26,17 +27,15 @@ class RtmpTabViewController extends GetxController {
   final GetRtmpListUseCase getRtmpListUseCase;
 
   RtmpConnection? _connection;
-  RtmpStream? _stream;
+  final Rxn<RtmpStream> stream = Rxn<RtmpStream>();
   StreamSubscription? _connectionSubscription;
-  CameraPosition currentPosition = CameraPosition.back;
+  final Rx<CameraPosition> currentPosition = Rx(CameraPosition.back);
 
   RxBool isStreamingVideoRtmp = false.obs;
   RxBool isStreamReady = false.obs;
   TextEditingController urlController = TextEditingController();
   RxList<Rtmp> rtmpList = <Rtmp>[].obs;
   Rxn<Rtmp> selectedRtmp = Rxn<Rtmp>();
-
-  RtmpStream? get stream => _stream;
 
   @override
   void onInit() {
@@ -49,7 +48,7 @@ class RtmpTabViewController extends GetxController {
   void onClose() {
     _connectionSubscription?.cancel();
     _connection?.close();
-    _stream?.dispose();
+    stream.value?.dispose();
     urlController.dispose();
     super.onClose();
   }
@@ -91,19 +90,20 @@ class RtmpTabViewController extends GetxController {
         }
       });
 
-      _stream = await RtmpStream.create(_connection!);
-      _stream?.audioSettings = AudioSettings(bitrate: 64 * 1000);
-      _stream?.videoSettings = VideoSettings(
+      stream.value = await RtmpStream.create(_connection!);
+      stream.value?.audioSettings = AudioSettings(bitrate: 64 * 1000);
+      stream.value?.videoSettings = VideoSettings(
         height: 1080,
         width: 1920,
         bitrate: 2700 * 1000,
         profileLevel: ProfileLevel.h264HighAutoLevel,
       );
-      await _stream?.attachVideo(VideoSource(position: currentPosition));
-      await _stream?.attachAudio(AudioSource());
+      stream.value?.sessionPreset = AVCaptureSessionPreset.high;
+      await stream.value
+          ?.attachVideo(VideoSource(position: currentPosition.value));
+      await stream.value?.attachAudio(AudioSource());
 
       isStreamReady.value = true;
-      update();
     } catch (e) {
       talkerService.talker.error("Error initializing HaishinKit: $e");
       Get.snackbar(
@@ -116,14 +116,13 @@ class RtmpTabViewController extends GetxController {
   }
 
   Future<void> switchCamera() async {
-    final newPosition = currentPosition == CameraPosition.back
+    final newPosition = currentPosition.value == CameraPosition.back
         ? CameraPosition.front
         : CameraPosition.back;
 
     try {
-      await _stream?.attachVideo(VideoSource(position: newPosition));
-      currentPosition = newPosition;
-      update();
+      await stream.value?.attachVideo(VideoSource(position: newPosition));
+      currentPosition.value = newPosition;
       talkerService.talker.debug("Switched camera to $newPosition");
     } catch (e) {
       talkerService.talker.error("Error switching camera: $e");
@@ -134,7 +133,7 @@ class RtmpTabViewController extends GetxController {
   String timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
 
   Future<void> startVideoStreaming() async {
-    if (_connection == null || _stream == null) {
+    if (_connection == null || stream.value == null) {
       Get.snackbar('Error', 'Streaming components not initialized.');
       return;
     }
@@ -185,7 +184,7 @@ class RtmpTabViewController extends GetxController {
     }
 
     try {
-      await _stream?.publish(streamKey);
+      await stream.value?.publish(streamKey);
       isStreamingVideoRtmp.value = true;
       Get.snackbar(
         'Success',
