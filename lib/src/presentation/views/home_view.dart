@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
-import 'package:irllink/src/core/services/twitch_event_sub_service.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
@@ -169,6 +168,8 @@ class HomeView extends GetView<HomeViewController> {
                                   context,
                                   controller.twitchEventSubService!
                                       .currentHypeTrain.value,
+                                  controller.twitchEventSubService!
+                                      .remainingTimeHypeTrain.value,
                                 )
                               : Container(),
                         ),
@@ -372,9 +373,9 @@ class HomeView extends GetView<HomeViewController> {
                                 Obx(
                                   () => poll(
                                     context,
-                                    Get.find<TwitchEventSubService>()
-                                        .currentPoll
-                                        .value,
+                                    controller.twitchEventSubService!
+                                        .currentPoll.value,
+                                    controller.twitchEventSubService,
                                   ),
                                 ),
                               ],
@@ -418,9 +419,9 @@ class HomeView extends GetView<HomeViewController> {
                                 Obx(
                                   () => prediction(
                                     context,
-                                    Get.find<TwitchEventSubService>()
-                                        .currentPrediction
-                                        .value,
+                                    controller.twitchEventSubService!
+                                        .currentPrediction.value,
+                                    controller.twitchEventSubService!,
                                   ),
                                 ),
                               ],

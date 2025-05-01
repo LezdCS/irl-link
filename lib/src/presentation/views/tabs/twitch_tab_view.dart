@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
-import 'package:irllink/src/core/services/twitch_event_sub_service.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/poll.dart';
@@ -78,20 +77,28 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                       const SizedBox(
                         width: 8,
                       ),
-                      Obx(
-                        () =>
-                            Get.find<TwitchEventSubService>().isConnected.value
-                                ? const Icon(
-                                    Icons.stream_sharp,
-                                    size: 12,
-                                    color: Colors.green,
-                                  )
-                                : const Icon(
-                                    Icons.close,
-                                    size: 12,
-                                    color: Colors.red,
-                                  ),
-                      ),
+                      if (controller.homeViewController.twitchEventSubService !=
+                          null)
+                        Obx(
+                          () => controller.homeViewController
+                                  .twitchEventSubService!.isConnected.value
+                              ? const Icon(
+                                  Icons.stream_sharp,
+                                  size: 12,
+                                  color: Colors.green,
+                                )
+                              : const Icon(
+                                  Icons.close,
+                                  size: 12,
+                                  color: Colors.red,
+                                ),
+                        )
+                      else
+                        const Icon(
+                          Icons.close,
+                          size: 12,
+                          color: Colors.red,
+                        ),
                     ],
                   ),
                 ],
@@ -386,27 +393,33 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
               const Divider(
                 height: 30,
               ),
-              Obx(
-                () => Get.find<TwitchEventSubService>().isConnected.value
-                    ? prediction(
-                        context,
-                        Get.find<TwitchEventSubService>()
-                            .currentPrediction
-                            .value,
-                      )
-                    : Container(),
-              ),
+              if (controller.homeViewController.twitchEventSubService != null)
+                Obx(
+                  () => controller.homeViewController.twitchEventSubService!
+                          .isConnected.value
+                      ? prediction(
+                          context,
+                          controller.homeViewController.twitchEventSubService!
+                              .currentPrediction.value,
+                          controller.homeViewController.twitchEventSubService!,
+                        )
+                      : Container(),
+                ),
               const Divider(
                 height: 30,
               ),
-              Obx(
-                () => Get.find<TwitchEventSubService>().isConnected.value
-                    ? poll(
-                        context,
-                        Get.find<TwitchEventSubService>().currentPoll.value,
-                      )
-                    : Container(),
-              ),
+              if (controller.homeViewController.twitchEventSubService != null)
+                Obx(
+                  () => controller.homeViewController.twitchEventSubService!
+                          .isConnected.value
+                      ? poll(
+                          context,
+                          controller.homeViewController.twitchEventSubService!
+                              .currentPoll.value,
+                          controller.homeViewController.twitchEventSubService,
+                        )
+                      : Container(),
+                ),
             ],
           ),
         ),

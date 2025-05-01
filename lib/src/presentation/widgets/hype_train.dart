@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/services/twitch_event_sub_service.dart';
 import 'package:irllink/src/core/utils/print_duration.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_hype_train.dart';
 
 Widget hypeTrain(
   BuildContext context,
   TwitchHypeTrain? hypetrain,
+  Duration? remainingTime,
 ) {
   if (hypetrain == null || hypetrain.id == '') {
     return Container();
@@ -38,7 +38,7 @@ Widget hypeTrain(
       Obx(
         () => Text(
           printDuration(
-            Get.find<TwitchEventSubService>().remainingTimeHypeTrain.value,
+            remainingTime ?? Duration.zero,
           ),
         ),
       ),

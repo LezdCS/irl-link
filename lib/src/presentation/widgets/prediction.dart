@@ -9,6 +9,7 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 Widget prediction(
   BuildContext context,
   TwitchPrediction? prediction,
+  TwitchEventSubService twitchEventSubService,
 ) {
   if (prediction == null) {
     return Container();
@@ -24,8 +25,6 @@ Widget prediction(
       ],
     );
   }
-
-  final twitchEventSubService = Get.find<TwitchEventSubService>();
 
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
