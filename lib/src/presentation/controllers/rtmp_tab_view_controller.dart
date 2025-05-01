@@ -58,6 +58,8 @@ class RtmpTabViewController extends GetxController {
     result.fold(
       (l) => talkerService.talker.error(l.toString()),
       (r) {
+        rtmpList.clear();
+        selectedRtmp.value = null;
         rtmpList.value = r;
         if (rtmpList.isNotEmpty && selectedRtmp.value == null) {
           selectedRtmp.value = rtmpList.first;

@@ -119,7 +119,7 @@ class HomeViewController extends GetxController
   RxList<PinnedMessage> pinnedMessages = <PinnedMessage>[].obs;
   RxBool showPinnedMessages = false.obs;
 
-  RxString minimumVersion = ''.obs;
+  RxnString minimumVersion = RxnString();
 
   @override
   void onInit() async {
@@ -141,13 +141,13 @@ class HomeViewController extends GetxController
       }
     }
 
+    await applySettings();
+
     final remoteConfig = FirebaseRemoteConfig.instance;
     await remoteConfig.fetchAndActivate();
     minimumVersion.value = io.Platform.isAndroid
         ? remoteConfig.getString('minimum_version_android')
         : remoteConfig.getString('minimum_version_ios');
-
-    await applySettings();
 
     super.onInit();
   }
