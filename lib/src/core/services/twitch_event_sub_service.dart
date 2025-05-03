@@ -58,22 +58,7 @@ class TwitchEventSubService extends GetxController with WidgetsBindingObserver {
   Rx<TwitchHypeTrain> currentHypeTrain = TwitchHypeTrain.empty().obs;
   Rx<Duration> remainingTimeHypeTrain = Duration.zero.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    init(
-      token: homeViewController.twitchData.value!.accessToken,
-      channel: homeViewController.twitchData.value!.twitchUser.login,
-    );
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-    connect();
-  }
-
-  void init({
+  void setup({
     required String token,
     required String channel,
   }) {

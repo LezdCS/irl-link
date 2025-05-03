@@ -7,7 +7,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart';
@@ -190,6 +189,9 @@ class StoreService extends GetxService {
   }
 
   Future<void> deliverProduct(PurchaseDetails purchaseDetails) async {
+    if (purchases.contains(purchaseDetails)) {
+      return;
+    }
     purchases.add(purchaseDetails);
     purchasePending.value = false;
     if (Get.isRegistered<HomeViewController>()) {

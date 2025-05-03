@@ -185,7 +185,7 @@ class HomeViewController extends GetxController
 
   Future<void> _initializePubSubService() async {
     twitchPubSubService = Get.find<TwitchPubSubService>();
-    twitchPubSubService?.init(
+    twitchPubSubService?.setup(
       accessToken: twitchData.value!.accessToken,
       channelName: twitchData.value!.twitchUser.login,
     );
@@ -194,7 +194,7 @@ class HomeViewController extends GetxController
 
   Future<void> _initializeEventSubService() async {
     twitchEventSubService = Get.find<TwitchEventSubService>();
-    twitchEventSubService?.init(
+    twitchEventSubService?.setup(
       token: twitchData.value!.accessToken,
       channel: twitchData.value!.twitchUser.login,
     );

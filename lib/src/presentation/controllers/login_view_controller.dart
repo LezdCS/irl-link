@@ -125,7 +125,7 @@ class LoginViewController extends GetxController {
         isLoading.value = false;
       },
       (r) {
-        Get.offAllNamed(Routes.home, arguments: [r]);
+        Get.offAllNamed(Routes.home, arguments: [r, null]);
       },
     );
   }
@@ -140,7 +140,7 @@ class LoginViewController extends GetxController {
         isLoading.value = false;
       },
       (r) {
-        Get.offAllNamed(Routes.home, arguments: [r]);
+        Get.offAllNamed(Routes.home, arguments: [null, r]);
       },
     );
   }

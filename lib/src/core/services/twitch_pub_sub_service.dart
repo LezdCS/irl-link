@@ -25,7 +25,7 @@ class TwitchPubSubService extends GetxController {
 
   Talker talker = Get.find<TalkerService>().talker;
 
-  void init({
+  void setup({
     required String accessToken,
     required String channelName,
   }) {
