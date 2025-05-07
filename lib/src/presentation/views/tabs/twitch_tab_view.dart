@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
+import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/poll.dart';
 import 'package:irllink/src/presentation/widgets/prediction.dart';
@@ -77,11 +78,14 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                       const SizedBox(
                         width: 8,
                       ),
-                      if (controller.homeViewController.twitchEventSubService !=
+                      if (Get.find<HomeViewController>()
+                              .twitchEventSubService !=
                           null)
                         Obx(
-                          () => controller.homeViewController
-                                  .twitchEventSubService!.isConnected.value
+                          () => Get.find<HomeViewController>()
+                                  .twitchEventSubService!
+                                  .isConnected
+                                  .value
                               ? const Icon(
                                   Icons.stream_sharp,
                                   size: 12,
@@ -331,7 +335,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                               ),
                               QrImageView(
                                 data:
-                                    'https://www.twitch.tv/${controller.homeViewController.twitchData.value?.twitchUser.login}',
+                                    'https://www.twitch.tv/${Get.find<HomeViewController>().twitchData.value?.twitchUser.login}',
                                 backgroundColor: Colors.white,
                                 size: 200,
                               ),
@@ -339,7 +343,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                                 height: 10,
                               ),
                               Text(
-                                "https://www.twitch.tv/${controller.homeViewController.twitchData.value?.twitchUser.login}",
+                                "https://www.twitch.tv/${Get.find<HomeViewController>().twitchData.value?.twitchUser.login}",
                                 style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
@@ -384,7 +388,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         title: '',
                         toggled: true,
                         url:
-                            'https://player.twitch.tv/?channel=${controller.homeViewController.twitchData.value?.twitchUser.login}&parent=www.irllink.com&muted=true',
+                            'https://player.twitch.tv/?channel=${Get.find<HomeViewController>().twitchData.value?.twitchUser.login}&parent=www.irllink.com&muted=true',
                       ),
                     ),
                   ),
@@ -393,30 +397,38 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
               const Divider(
                 height: 30,
               ),
-              if (controller.homeViewController.twitchEventSubService != null)
+              if (Get.find<HomeViewController>().twitchEventSubService != null)
                 Obx(
-                  () => controller.homeViewController.twitchEventSubService!
-                          .isConnected.value
+                  () => Get.find<HomeViewController>()
+                          .twitchEventSubService!
+                          .isConnected
+                          .value
                       ? prediction(
                           context,
-                          controller.homeViewController.twitchEventSubService!
-                              .currentPrediction.value,
-                          controller.homeViewController.twitchEventSubService!,
+                          Get.find<HomeViewController>()
+                              .twitchEventSubService!
+                              .currentPrediction
+                              .value,
+                          Get.find<HomeViewController>().twitchEventSubService!,
                         )
                       : Container(),
                 ),
               const Divider(
                 height: 30,
               ),
-              if (controller.homeViewController.twitchEventSubService != null)
+              if (Get.find<HomeViewController>().twitchEventSubService != null)
                 Obx(
-                  () => controller.homeViewController.twitchEventSubService!
-                          .isConnected.value
+                  () => Get.find<HomeViewController>()
+                          .twitchEventSubService!
+                          .isConnected
+                          .value
                       ? poll(
                           context,
-                          controller.homeViewController.twitchEventSubService!
-                              .currentPoll.value,
-                          controller.homeViewController.twitchEventSubService,
+                          Get.find<HomeViewController>()
+                              .twitchEventSubService!
+                              .currentPoll
+                              .value,
+                          Get.find<HomeViewController>().twitchEventSubService,
                         )
                       : Container(),
                 ),

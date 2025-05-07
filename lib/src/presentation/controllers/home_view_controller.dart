@@ -103,11 +103,10 @@ class HomeViewController extends GetxController
 
   RxBool displayDashboard = false.obs;
   RtmpTabViewController? rtmpTabViewController;
-  TwitchTabViewController? twitchTabViewController;
   KickTabViewController? kickTabViewController;
   TwitchPubSubService? twitchPubSubService;
   TwitchEventSubService? twitchEventSubService;
-
+  TwitchTabViewController? twitchTabViewController;
   // Chats
   RxList<ChatView> chatsViews = <ChatView>[].obs;
   Rxn<ChatGroup> selectedChatGroup = Rxn<ChatGroup>();
@@ -126,6 +125,9 @@ class HomeViewController extends GetxController
     chatInputController = TextEditingController();
     chatTabsController = TabController(length: 0, vsync: this);
     emotesTabController = TabController(length: 0, vsync: this);
+    debugPrint("--------");
+    debugPrint("On init");
+    debugPrint("--------");
 
     if (Get.arguments != null) {
       final twitchCreds = Get.arguments[0];
@@ -168,6 +170,7 @@ class HomeViewController extends GetxController
   Future<void> _initializeTwitchServices() async {
     _initializePubSubService();
     _initializeEventSubService();
+
     timerRefreshToken =
         Timer.periodic(const Duration(seconds: 13000), (Timer t) async {
       final refreshTokenResult =
@@ -178,6 +181,14 @@ class HomeViewController extends GetxController
         },
         (r) {
           twitchData.value = r;
+          // Update TwitchTabViewController with new token
+          if (Get.isRegistered<TwitchTabViewController>()) {
+            final twitchTabController = Get.find<TwitchTabViewController>();
+            twitchTabController.setup(
+              token: r.accessToken,
+              broadcasterId: r.twitchUser.id,
+            );
+          }
         },
       );
     });
@@ -185,20 +196,24 @@ class HomeViewController extends GetxController
 
   Future<void> _initializePubSubService() async {
     twitchPubSubService = Get.find<TwitchPubSubService>();
-    twitchPubSubService?.setup(
-      accessToken: twitchData.value!.accessToken,
-      channelName: twitchData.value!.twitchUser.login,
-    );
-    twitchPubSubService?.connect();
+    if (twitchData.value != null) {
+      twitchPubSubService?.setup(
+        accessToken: twitchData.value!.accessToken,
+        channelName: twitchData.value!.twitchUser.login,
+      );
+      twitchPubSubService?.connect();
+    }
   }
 
   Future<void> _initializeEventSubService() async {
     twitchEventSubService = Get.find<TwitchEventSubService>();
-    twitchEventSubService?.setup(
-      token: twitchData.value!.accessToken,
-      channel: twitchData.value!.twitchUser.login,
-    );
-    twitchEventSubService?.connect();
+    if (twitchData.value != null) {
+      twitchEventSubService?.setup(
+        token: twitchData.value!.accessToken,
+        channel: twitchData.value!.twitchUser.login,
+      );
+      twitchEventSubService?.connect();
+    }
   }
 
   Future<void> _setupCrashlytics() async {
@@ -354,6 +369,10 @@ class HomeViewController extends GetxController
     // Check if Twitch have to be added
     if (twitchTabViewController == null && twitchData.value != null) {
       twitchTabViewController = Get.find<TwitchTabViewController>();
+      twitchTabViewController?.setup(
+        token: twitchData.value!.accessToken,
+        broadcasterId: twitchData.value!.twitchUser.id,
+      );
       tabElements.insert(0, const TwitchTabView());
     }
 
