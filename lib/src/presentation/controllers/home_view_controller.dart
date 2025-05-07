@@ -137,7 +137,7 @@ class HomeViewController extends GetxController
       }
       if (kickCreds is KickCredentials) {
         kickData.value = kickCreds;
-        _initializeKickServices();
+        await _initializeKickServices();
       }
     }
 
