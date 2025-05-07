@@ -125,9 +125,7 @@ class HomeViewController extends GetxController
     chatInputController = TextEditingController();
     chatTabsController = TabController(length: 0, vsync: this);
     emotesTabController = TabController(length: 0, vsync: this);
-    debugPrint("--------");
-    debugPrint("On init");
-    debugPrint("--------");
+    tabController = TabController(length: 0, vsync: this);
 
     if (Get.arguments != null) {
       final twitchCreds = Get.arguments[0];

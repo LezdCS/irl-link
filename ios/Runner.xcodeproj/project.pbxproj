@@ -376,7 +376,7 @@
 			mainGroup = 97C146E51CF9000F007C117D;
 			packageReferences = (
 				6E212BB42CA18B9B00C66A0F /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
-				F963631E2DC8BB4D00C6A0F1 /* XCLocalSwiftPackageReference "Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage" */,
+				F98CEAD62DCB6F4400F96128 /* XCLocalSwiftPackageReference "Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 97C146EF1CF9000F007C117D /* Products */;
@@ -1121,7 +1121,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		F963631E2DC8BB4D00C6A0F1 /* XCLocalSwiftPackageReference "Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage" */ = {
+		F98CEAD62DCB6F4400F96128 /* XCLocalSwiftPackageReference "Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage;
 		};
