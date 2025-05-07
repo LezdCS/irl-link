@@ -2,15 +2,12 @@ import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/dashboard_event.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
-import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 
 class DashboardController extends GetxController {
-  final HomeViewController homeViewController;
   final SettingsService settingsService;
 
   // Constructor with dependency injection
   DashboardController({
-    required this.homeViewController,
     required this.settingsService,
   });
 

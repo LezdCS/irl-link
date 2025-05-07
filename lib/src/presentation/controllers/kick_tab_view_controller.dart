@@ -16,13 +16,11 @@ class KickTabViewController extends GetxController
   KickTabViewController({
     required this.patchKickChannelUseCase,
     required this.getKickCategoriesUseCase,
-    required this.homeViewController,
     required this.getKickChannelsUseCase,
   });
 
   final PatchKickChannelUseCase patchKickChannelUseCase;
   final GetKickCategoriesUseCase getKickCategoriesUseCase;
-  final HomeViewController homeViewController;
   final GetKickChannelsUseCase getKickChannelsUseCase;
 
   late TextEditingController categoryFormController;
@@ -90,12 +88,12 @@ class KickTabViewController extends GetxController
 
   void refreshData() async {
     refreshDataAnimationController.reset();
-    if (homeViewController.kickData.value == null) {
+    if (Get.find<HomeViewController>().kickData.value == null) {
       return;
     }
 
     final channelsResult = await getKickChannelsUseCase(
-      params: homeViewController.kickData.value!.accessToken,
+      params: Get.find<HomeViewController>().kickData.value!.accessToken,
     );
     channelsResult.fold(
       (l) => {},
@@ -109,12 +107,12 @@ class KickTabViewController extends GetxController
   }
 
   void getKickCategories() async {
-    if (homeViewController.kickData.value == null) {
+    if (Get.find<HomeViewController>().kickData.value == null) {
       return;
     }
     final categories = await getKickCategoriesUseCase(
       params: KickCategoriesParams(
-        accessToken: homeViewController.kickData.value!.accessToken,
+        accessToken: Get.find<HomeViewController>().kickData.value!.accessToken,
         searchQuery: "a",
       ),
     );
@@ -132,7 +130,7 @@ class KickTabViewController extends GetxController
   void updateKickChannel() async {
     final resultUpdate = await patchKickChannelUseCase(
       params: PatchKickChannelParams(
-        accessToken: homeViewController.kickData.value!.accessToken,
+        accessToken: Get.find<HomeViewController>().kickData.value!.accessToken,
         streamTitle: streamTitle.value,
         categoryId: selectedCategoryId.value.toString(),
       ),
@@ -158,26 +156,28 @@ class KickTabViewController extends GetxController
     // Check if rmptTabViewController is not null in homeViewController
     // If null, we need to init it (might just create a function for that in homeViewController)
     // If not null, we need to call the addTemporaryRtmp function in rtmpTabViewController
-    if (homeViewController.rtmpTabViewController == null) {
-      homeViewController.initRtmpTabViewController();
+    if (Get.find<HomeViewController>().rtmpTabViewController == null) {
+      Get.find<HomeViewController>().initRtmpTabViewController();
     }
     // await for 1 second
     await Future.delayed(const Duration(seconds: 1));
-    homeViewController.rtmpTabViewController?.addTemporaryRtmp(
-      Rtmp(
-        id: 0,
-        name: "Kick",
-        key: kickChannel.value!.stream.key,
-        createdAt: DateTime.now(),
-        url: "${kickChannel.value!.stream.url}/app",
-      ),
-    );
+    Get.find<HomeViewController>().rtmpTabViewController?.addTemporaryRtmp(
+          Rtmp(
+            id: 0,
+            name: "Kick",
+            key: kickChannel.value!.stream.key,
+            createdAt: DateTime.now(),
+            url: "${kickChannel.value!.stream.url}/app",
+          ),
+        );
     // find the rtmp tab view in the homeViewController.tabElements
-    final rtmpTabView = homeViewController.tabElements
+    final rtmpTabView = Get.find<HomeViewController>()
+        .tabElements
         .firstWhere((element) => element is RtmpTabView);
     // animate to the rtmp tab view
-    final indexToGo = homeViewController.tabElements.indexOf(rtmpTabView);
-    homeViewController.tabIndex.value = indexToGo;
-    homeViewController.tabController.animateTo(indexToGo);
+    final indexToGo =
+        Get.find<HomeViewController>().tabElements.indexOf(rtmpTabView);
+    Get.find<HomeViewController>().tabIndex.value = indexToGo;
+    Get.find<HomeViewController>().tabController.animateTo(indexToGo);
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
+import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/kick_tab_view_controller.dart';
 import 'package:irllink/src/presentation/views/tabs/twitch_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/web_page_view.dart';
@@ -253,7 +254,7 @@ class KickTabView extends GetView<KickTabViewController> {
                         title: '',
                         toggled: true,
                         url:
-                            'https://player.kick.com/${controller.homeViewController.kickData.value?.kickUser.name}',
+                            'https://player.kick.com/${Get.find<HomeViewController>().kickData.value?.kickUser.name}',
                       ),
                     ),
                   ),
@@ -287,7 +288,7 @@ class KickTabView extends GetView<KickTabViewController> {
                               ),
                               QrImageView(
                                 data:
-                                    'https://www.kick.com/${controller.homeViewController.kickData.value?.kickUser.name}',
+                                    'https://www.kick.com/${Get.find<HomeViewController>().kickData.value?.kickUser.name}',
                                 backgroundColor: Colors.white,
                                 size: 200,
                               ),
@@ -295,7 +296,7 @@ class KickTabView extends GetView<KickTabViewController> {
                                 height: 10,
                               ),
                               Text(
-                                "https://www.kick.com/${controller.homeViewController.kickData.value?.kickUser.name}",
+                                "https://www.kick.com/${Get.find<HomeViewController>().kickData.value?.kickUser.name}",
                                 style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,

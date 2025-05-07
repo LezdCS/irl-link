@@ -198,7 +198,6 @@ class HomeBindings extends Bindings {
         getLastActivitiesUseCase: getLastActivitiesUseCase,
         getSongPlayingUseCase: getSongPlayingUseCase,
         getSongQueueUseCase: getSongQueueUseCase,
-        homeViewController: Get.find<HomeViewController>(),
         watchService: watchService,
         settingsService: settingsService,
         talkerService: talkerService,
@@ -221,14 +220,12 @@ class HomeBindings extends Bindings {
         getKickCategoriesUseCase: getKickCategoriesUseCase,
         patchKickChannelUseCase: patchKickChannelUseCase,
         getKickChannelsUseCase: getKickChannelsUseCase,
-        homeViewController: Get.find<HomeViewController>(),
       ),
       fenix: true,
     );
 
     Get.lazyPut<DashboardController>(
       () => DashboardController(
-        homeViewController: Get.find<HomeViewController>(),
         settingsService: settingsService,
       ),
       fenix: true,

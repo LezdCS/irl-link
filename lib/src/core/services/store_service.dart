@@ -189,7 +189,10 @@ class StoreService extends GetxService {
   }
 
   Future<void> deliverProduct(PurchaseDetails purchaseDetails) async {
-    if (purchases.contains(purchaseDetails)) {
+    if (purchases.firstWhereOrNull(
+          (p) => p.productID == purchaseDetails.productID,
+        ) !=
+        null) {
       return;
     }
     purchases.add(purchaseDetails);

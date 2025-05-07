@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/services/watch_service.dart';
-
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
@@ -25,7 +24,6 @@ import 'package:irllink/src/domain/usecases/streamelements/remove_song_usecase.d
 import 'package:irllink/src/domain/usecases/streamelements/replay_activity_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/reset_queue_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/update_player_state_usecase.dart';
-import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 class StreamelementsViewController extends GetxController
@@ -46,7 +44,6 @@ class StreamelementsViewController extends GetxController
     required this.settingsService,
     required this.watchService,
     required this.talkerService,
-    required this.homeViewController,
   });
 
   final StreamElementsGetOverlaysUseCase getOverlaysUseCase;
@@ -65,7 +62,6 @@ class StreamelementsViewController extends GetxController
   final SettingsService settingsService;
   final WatchService watchService;
   final TalkerService talkerService;
-  final HomeViewController homeViewController;
 
   late TabController tabController;
 
