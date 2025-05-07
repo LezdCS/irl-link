@@ -38,6 +38,7 @@ jobs:
       
       - name: Build APK and App Bundle
         run: |
+          flutter config --enable-swift-package-manager
           flutter pub get
           flutter build apk --debug
           flutter build appbundle --debug
