@@ -68,9 +68,10 @@ class KickTabViewController extends GetxController
 
   @override
   void onReady() async {
+    await refreshData();
+
     await getKickCategories();
 
-    refreshData();
     refreshDataTimer = Timer.periodic(const Duration(seconds: 15), (timer) {
       refreshData();
     });
@@ -86,7 +87,7 @@ class KickTabViewController extends GetxController
     super.onClose();
   }
 
-  void refreshData() async {
+  Future<void> refreshData() async {
     refreshDataAnimationController.reset();
     if (Get.find<HomeViewController>().kickData.value == null) {
       return;
