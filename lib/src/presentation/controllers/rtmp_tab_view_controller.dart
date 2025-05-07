@@ -189,7 +189,7 @@ class RtmpTabViewController extends GetxController {
       isStreamingVideoRtmp.value = true;
       Get.snackbar(
         'Success',
-        'Streaming started to ${rtmpConfig?.url}/$streamKey',
+        'Streaming started to ${rtmpConfig?.url}',
       );
       talkerService.talker.debug("Streaming published with key: $streamKey");
     } catch (e) {
