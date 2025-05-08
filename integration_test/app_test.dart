@@ -1,25 +1,23 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:integration_test/integration_test.dart';
-import 'package:irllink/main.dart';
-import 'package:irllink/src/core/depedency_injection.dart';
+import 'package:get/get.dart';
+import 'package:irllink/main.dart' as app;
+import 'package:patrol/patrol.dart';
 
 void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  Get.testMode = true;
 
-  group('App test', () {
-    setUpAll(() async {
-      await initializeDependencies();
-    });
+  patrolTest('App test', ($) async {
+    // Start app initialization
+    final appInit = app.main();
 
-    setUp(() async {});
+    // Wait for permission dialog and grant it
+    // await $.native.grantPermissionWhenInUse();
 
-    tearDown(() {});
+    // Wait for app initialization to complete
+    await appInit;
 
-    testWidgets('We arrive on the login screen', (WidgetTester tester) async {
-      await tester.pumpWidget(const Main());
-      await tester.pumpAndSettle();
-      expect(find.byKey(const Key('maybe_later_key')), findsOneWidget);
-    });
+    await $.pumpWidgetAndSettle(const app.Main());
+    expect($(const Key('maybe_later_key')), findsOneWidget);
   });
 }

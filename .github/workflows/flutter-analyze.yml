@@ -16,6 +16,9 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
 
+      - name: Enable Swift Package Manager
+        run: flutter config --enable-swift-package-manager
+
       - name: Get Flutter dependencies
         run: flutter pub get
       

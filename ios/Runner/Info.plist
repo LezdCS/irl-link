@@ -86,5 +86,9 @@
 	<string>com.irllink.watch</string>
 	<key>io.flutter.embedded_views_preview</key>
 	<string>YES</string>
+	<key>NSCameraUsageDescription</key>
+    <string>App requires access to the camera for live streaming feature.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>App requires access to the microphone for live streaming feature.</string>
 </dict>
 </plist>

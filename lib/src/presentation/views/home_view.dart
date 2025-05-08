@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
-import 'package:irllink/src/core/services/twitch_event_sub_service.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
@@ -14,11 +13,14 @@ import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/kick_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:irllink/src/presentation/views/chat_view.dart';
 import 'package:irllink/src/presentation/views/dashboard.dart';
+import 'package:irllink/src/presentation/views/tabs/kick_tab_view.dart';
 import 'package:irllink/src/presentation/views/tabs/obs_tab_view.dart';
 import 'package:irllink/src/presentation/views/tabs/realtime_irl_tab_view.dart';
+import 'package:irllink/src/presentation/views/tabs/rtmp_tab_view.dart';
 import 'package:irllink/src/presentation/views/tabs/streamelements_tab_view.dart';
 import 'package:irllink/src/presentation/views/tabs/twitch_tab_view.dart';
 import 'package:irllink/src/presentation/widgets/chats/select_channel_dialog.dart';
@@ -28,6 +30,7 @@ import 'package:irllink/src/presentation/widgets/pinned_messages_sheet.dart';
 import 'package:irllink/src/presentation/widgets/poll.dart';
 import 'package:irllink/src/presentation/widgets/prediction.dart';
 import 'package:irllink/src/presentation/widgets/web_page_view.dart';
+import 'package:kick_chat/kick_chat.dart';
 import 'package:split_view/split_view.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 import 'package:upgrader/upgrader.dart';
@@ -153,19 +156,20 @@ class HomeView extends GetView<HomeViewController> {
                 ? Column(
                     children: [
                       Visibility(
-                        visible: Get.isRegistered<TwitchEventSubService>(),
+                        visible: controller.twitchEventSubService != null,
                         child: Padding(
                           padding: const EdgeInsets.only(
                             left: 8,
                             right: 8,
                             top: 4,
                           ),
-                          child: Get.isRegistered<TwitchEventSubService>()
+                          child: controller.twitchEventSubService != null
                               ? hypeTrain(
                                   context,
-                                  Get.find<TwitchEventSubService>()
-                                      .currentHypeTrain
-                                      .value,
+                                  controller.twitchEventSubService!
+                                      .currentHypeTrain.value,
+                                  controller.twitchEventSubService!
+                                      .remainingTimeHypeTrain.value,
                                 )
                               : Container(),
                         ),
@@ -239,12 +243,17 @@ class HomeView extends GetView<HomeViewController> {
                           ? "RealtimeIRL"
                           : controller.tabElements[index] is TwitchTabView
                               ? "Twitch"
-                              : controller.tabElements[index] is WebPageView
-                                  ? (controller.tabElements[index]
-                                          as WebPageView)
-                                      .tab
-                                      .title
-                                  : "",
+                              : controller.tabElements[index] is KickTabView
+                                  ? "Kick"
+                                  : controller.tabElements[index] is RtmpTabView
+                                      ? "RTMP"
+                                      : controller.tabElements[index]
+                                              is WebPageView
+                                          ? (controller.tabElements[index]
+                                                  as WebPageView)
+                                              .tab
+                                              .title
+                                          : "",
             ),
           ),
         ),
@@ -261,7 +270,8 @@ class HomeView extends GetView<HomeViewController> {
       child: Row(
         children: [
           Visibility(
-            visible: Get.find<HomeViewController>().twitchData != null,
+            visible: Get.find<HomeViewController>().twitchData.value != null ||
+                Get.find<HomeViewController>().kickData.value != null,
             child: Expanded(
               flex: 5,
               child: Container(
@@ -288,47 +298,28 @@ class HomeView extends GetView<HomeViewController> {
                     Expanded(
                       child: TextField(
                         controller: controller.chatInputController,
-                        onSubmitted: (String value) {
-                          if (controller.selectedChatGroup.value == null) {
-                            return;
-                          }
-                          ChatViewController chatViewController =
-                              Get.find<ChatViewController>(
-                            tag: controller.selectedChatGroup.value?.id,
-                          );
-                          List<TwitchChat> twitchChats = [];
-                          twitchChats
-                              .addAll(chatViewController.twitchChats.toList());
-                          if (twitchChats.length == 1) {
-                            controller.sendChatMessage(
-                              value,
-                              twitchChats.first.channel,
-                            );
-                            controller.chatInputController.text = '';
-                            FocusScope.of(context).unfocus();
-                          } else {
-                            selectChatToSend(
-                              context,
-                              controller,
-                              twitchChats,
-                              value,
-                            );
-                          }
-                        },
                         onTap: () {
                           controller.selectedMessage.value = null;
                           controller.isPickingEmote.value = false;
                         },
-                        textInputAction: TextInputAction.send,
+                        textInputAction: TextInputAction.done,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: settings.generalSettings.displayViewerCount
                               ? "viewers_number".trParams({
-                                  "number": Get.find<TwitchTabViewController>()
-                                      .twitchStreamInfos
-                                      .value
-                                      .viewerCount
-                                      .toString(),
+                                  "number":
+                                      ((Get.find<TwitchTabViewController>()
+                                                      .twitchStreamInfos
+                                                      .value
+                                                      .viewerCount ??
+                                                  0) +
+                                              (Get.find<KickTabViewController>()
+                                                      .kickChannel
+                                                      .value
+                                                      ?.stream
+                                                      .viewerCount ??
+                                                  0))
+                                          .toString(),
                                 })
                               : 'send_message'.tr,
                           hintStyle: TextStyle(
@@ -343,31 +334,9 @@ class HomeView extends GetView<HomeViewController> {
                     ),
                     InkWell(
                       onTap: () {
-                        if (controller.selectedChatGroup.value == null) {
-                          return;
-                        }
-                        ChatViewController chatViewController =
-                            Get.find<ChatViewController>(
-                          tag: controller.selectedChatGroup.value?.id,
+                        controller.sendChatMessage(
+                          controller.chatInputController.text,
                         );
-                        List<TwitchChat> twitchChats = [];
-                        twitchChats
-                            .addAll(chatViewController.twitchChats.toList());
-                        if (twitchChats.length == 1) {
-                          controller.sendChatMessage(
-                            controller.chatInputController.text,
-                            twitchChats.first.channel,
-                          );
-                          controller.chatInputController.text = '';
-                          FocusScope.of(context).unfocus();
-                        } else {
-                          selectChatToSend(
-                            context,
-                            controller,
-                            twitchChats,
-                            controller.chatInputController.text,
-                          );
-                        }
                       },
                       child: Icon(
                         Icons.send,
@@ -380,13 +349,11 @@ class HomeView extends GetView<HomeViewController> {
               ),
             ),
           ),
-          if (Get.isRegistered<TwitchEventSubService>())
+          if (controller.twitchEventSubService != null)
             Obx(
               () => Visibility(
-                visible: Get.find<TwitchEventSubService>()
-                        .currentPoll
-                        .value
-                        .status !=
+                visible: controller
+                        .twitchEventSubService!.currentPoll.value.status !=
                     PollStatus.empty,
                 child: Expanded(
                   child: InkWell(
@@ -406,9 +373,9 @@ class HomeView extends GetView<HomeViewController> {
                                 Obx(
                                   () => poll(
                                     context,
-                                    Get.find<TwitchEventSubService>()
-                                        .currentPoll
-                                        .value,
+                                    controller.twitchEventSubService!
+                                        .currentPoll.value,
+                                    controller.twitchEventSubService,
                                   ),
                                 ),
                               ],
@@ -428,13 +395,11 @@ class HomeView extends GetView<HomeViewController> {
             )
           else
             Container(),
-          if (Get.isRegistered<TwitchEventSubService>())
+          if (controller.twitchEventSubService != null)
             Obx(
               () => Visibility(
-                visible: Get.find<TwitchEventSubService>()
-                        .currentPrediction
-                        .value
-                        .status !=
+                visible: controller.twitchEventSubService!.currentPrediction
+                        .value.status !=
                     PredictionStatus.empty,
                 child: Expanded(
                   child: InkWell(
@@ -454,9 +419,9 @@ class HomeView extends GetView<HomeViewController> {
                                 Obx(
                                   () => prediction(
                                     context,
-                                    Get.find<TwitchEventSubService>()
-                                        .currentPrediction
-                                        .value,
+                                    controller.twitchEventSubService!
+                                        .currentPrediction.value,
+                                    controller.twitchEventSubService!,
                                   ),
                                 ),
                               ],
@@ -518,6 +483,7 @@ class HomeView extends GetView<HomeViewController> {
                 controller.obsTabViewController?.applySettings();
                 controller.streamelementsViewController.value?.applySettings();
                 controller.realtimeIrlViewController?.applySettings();
+                controller.rtmpTabViewController?.getRtmpList();
               },
               child: Icon(
                 Icons.settings,
@@ -638,6 +604,7 @@ void selectChatToSend(
   BuildContext context,
   HomeViewController controller,
   List<TwitchChat> twitchChats,
+  List<KickChat> kickChats,
   String message,
 ) {
   Get.defaultDialog(
@@ -653,6 +620,7 @@ void selectChatToSend(
     },
     content: SelectChannelDialog(
       twitchChats: twitchChats,
+      kickChats: kickChats,
       controller: controller,
       message: message,
     ),

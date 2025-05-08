@@ -1,3 +1,9 @@
+import 'dart:convert';
+
+import 'package:flutter/rendering.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:irllink/src/data/entities/stream_elements/se_credentials_dto.dart';
+import 'package:irllink/src/data/entities/twitch/twitch_credentials_dto.dart';
 import 'package:sqflite/sqflite.dart';
 
 abstract class Migration {
@@ -23,21 +29,133 @@ class Migration1 extends Migration {
 
   @override
   Future<void> up(Database db) async {
-    // Add your initial table creation SQL here
-    // Example:
-    // await db.execute('''
-    //   CREATE TABLE example (
-    //     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    //     name TEXT NOT NULL,
-    //     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    //   )
-    // ''');
+    // Create Twitch credentials table
+    await db.execute('''
+      CREATE TABLE twitch_credentials (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        access_token TEXT NOT NULL,
+        id_token TEXT NOT NULL,
+        refresh_token TEXT NOT NULL,
+        expires_in TEXT NOT NULL,
+        decoded_id_token TEXT NOT NULL,
+        twitch_user TEXT NOT NULL,
+        scopes TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    ''');
+
+    // Create RTMP settings table
+    await db.execute('''
+      CREATE TABLE rtmp (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        url TEXT NOT NULL,
+        key TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    ''');
+
+    // Create Kick users table
+    await db.execute('''
+      CREATE TABLE kick_users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL UNIQUE,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL,
+        profile_picture TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    ''');
+
+    // Create Kick credentials table
+    await db.execute('''
+      CREATE TABLE kick_credentials (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        access_token TEXT NOT NULL,
+        refresh_token TEXT NOT NULL,
+        expires_in INTEGER NOT NULL,
+        user_id INTEGER NOT NULL,
+        scopes TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES kick_users(user_id)
+      )
+    ''');
+
+    // Create StreamElements credentials table
+    await db.execute('''
+      CREATE TABLE streamelements_credentials (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        access_token TEXT NOT NULL,
+        refresh_token TEXT NOT NULL,
+        expires_in INTEGER NOT NULL,
+        scopes TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    ''');
+
+    // Migrate existing data from GetStorage to SQLite
+    await _migrateGetStorageToSQLite(db);
+  }
+
+  Future<void> _migrateGetStorageToSQLite(Database db) async {
+    final storage = GetStorage();
+
+    // Migrate Twitch credentials
+    final twitchDataString = storage.read('twitchData');
+    if (twitchDataString != null) {
+      try {
+        final twitchDataJson = jsonDecode(twitchDataString);
+        final credentials = TwitchCredentialsDTO.fromJson(twitchDataJson);
+
+        await db.insert(
+          'twitch_credentials',
+          {
+            'access_token': credentials.accessToken,
+            'id_token': credentials.idToken,
+            'refresh_token': credentials.refreshToken,
+            'expires_in': credentials.expiresIn,
+            'decoded_id_token': jsonEncode(credentials.decodedIdToken),
+            'twitch_user': jsonEncode(credentials.twitchUser),
+            'scopes': credentials.scopes,
+          },
+        );
+
+        await storage.remove('twitchData');
+      } catch (e) {
+        debugPrint('Failed to migrate Twitch credentials: $e');
+      }
+    }
+
+    // Migrate StreamElements credentials
+    final seCredentialsString = storage.read('seCredentials');
+    if (seCredentialsString != null) {
+      try {
+        final seCredentialsJson = jsonDecode(seCredentialsString);
+        final credentials = SeCredentialsDTO.fromJson(seCredentialsJson);
+
+        await db.insert(
+          'streamelements_credentials',
+          {
+            'access_token': credentials.accessToken,
+            'refresh_token': credentials.refreshToken,
+            'expires_in': credentials.expiresIn,
+            'scopes': credentials.scopes,
+          },
+        );
+
+        await storage.remove('seCredentials');
+      } catch (e) {
+        debugPrint('Failed to migrate StreamElements credentials: $e');
+      }
+    }
   }
 
   @override
   Future<void> down(Database db) async {
-    // Add your table deletion SQL here
-    // Example:
-    // await db.execute('DROP TABLE IF EXISTS example');
+    await db.execute('DROP TABLE IF EXISTS twitch_credentials');
+    await db.execute('DROP TABLE IF EXISTS rtmp');
+    await db.execute('DROP TABLE IF EXISTS kick_credentials');
+    await db.execute('DROP TABLE IF EXISTS kick_users');
+    await db.execute('DROP TABLE IF EXISTS streamelements_credentials');
   }
 }

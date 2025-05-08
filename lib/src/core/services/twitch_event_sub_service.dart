@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/convert_to_device_timezone.dart';
-
 import 'package:irllink/src/core/utils/mapper.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_hype_train_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_poll_dto.dart';
@@ -18,17 +17,15 @@ import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 import 'package:irllink/src/domain/usecases/twitch/create_poll_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/end_poll_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/end_prediction_usecase.dart';
-import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 import 'package:web_socket_channel/io.dart';
 
-class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
+class TwitchEventSubService extends GetxController with WidgetsBindingObserver {
   TwitchEventSubService({
     required this.createPollUseCase,
     required this.endPollUseCase,
     required this.endPredictionUseCase,
-    required this.homeViewController,
     required this.talker,
     required this.dioClient,
   }) : mappr = Mappr();
@@ -36,8 +33,6 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
   final CreatePollUseCase createPollUseCase;
   final EndPollUseCase endPollUseCase;
   final EndPredictionUseCase endPredictionUseCase;
-
-  final HomeViewController homeViewController;
 
   final Talker talker;
   final Mappr mappr;
@@ -59,17 +54,16 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
   Rx<TwitchHypeTrain> currentHypeTrain = TwitchHypeTrain.empty().obs;
   Rx<Duration> remainingTimeHypeTrain = Duration.zero.obs;
 
-  Future<TwitchEventSubService> init({
+  void setup({
     required String token,
     required String channel,
-  }) async {
+  }) {
     channelName = channel;
     accessToken = token;
 
     listenToPoll();
     listenToPrediction();
     listenToHypeTrain();
-    return this;
   }
 
   Rx<bool> isConnected = false.obs;
@@ -391,8 +385,8 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
     );
     final createPollResult = await createPollUseCase(
       params: CreatePollUseCaseParams(
-        accessToken: homeViewController.twitchData!.accessToken,
-        broadcasterId: homeViewController.twitchData!.twitchUser.id,
+        accessToken: accessToken,
+        broadcasterId: _broadcasterId!,
         newPoll: newPoll,
       ),
     );
@@ -407,8 +401,8 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
   Future<void> endPoll(String status) async {
     final endPollResult = await endPollUseCase(
       params: EndPollUseCaseParams(
-        accessToken: homeViewController.twitchData!.accessToken,
-        broadcasterId: homeViewController.twitchData!.twitchUser.id,
+        accessToken: accessToken,
+        broadcasterId: _broadcasterId!,
         pollId: currentPoll.value.id,
         status: status,
       ),
@@ -425,8 +419,8 @@ class TwitchEventSubService extends GetxService with WidgetsBindingObserver {
   void endPrediction(String status, String? winningOutcomeId) {
     endPredictionUseCase(
       params: EndPredictionUseCaseParams(
-        accessToken: homeViewController.twitchData!.accessToken,
-        broadcasterId: homeViewController.twitchData!.twitchUser.id,
+        accessToken: accessToken,
+        broadcasterId: _broadcasterId!,
         predictionId: currentPrediction.value.id,
         status: status,
         winningOutcomeId: winningOutcomeId,

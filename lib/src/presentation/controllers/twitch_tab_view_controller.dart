@@ -7,7 +7,6 @@ import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_stream_info_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/set_chat_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/set_stream_title_usecase.dart';
-import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 
 class TwitchTabViewController extends GetxController
     with GetTickerProviderStateMixin {
@@ -15,14 +14,12 @@ class TwitchTabViewController extends GetxController
     required this.getStreamInfoUseCase,
     required this.setChatSettingsUseCase,
     required this.setStreamTitleUseCase,
-    required this.homeViewController,
     required this.watchService,
   });
 
   final GetStreamInfoUseCase getStreamInfoUseCase;
   final SetChatSettingsUseCase setChatSettingsUseCase;
   final SetStreamTitleUseCase setStreamTitleUseCase;
-  final HomeViewController homeViewController;
   final WatchService watchService;
 
   late TextEditingController titleFormController;
@@ -39,6 +36,18 @@ class TwitchTabViewController extends GetxController
   late AnimationController refreshDataAnimationController;
 
   RxBool displayTwitchPlayer = false.obs;
+
+  // Store the necessary Twitch data
+  String? accessToken;
+  String? broadcasterId;
+
+  void setup({
+    required String token,
+    required String broadcasterId,
+  }) {
+    accessToken = token;
+    this.broadcasterId = broadcasterId;
+  }
 
   @override
   void onInit() {
@@ -90,14 +99,14 @@ class TwitchTabViewController extends GetxController
 
   Future<void> refreshData() async {
     refreshDataAnimationController.reset();
-    if (homeViewController.twitchData == null) {
+    if (accessToken == null || broadcasterId == null) {
       return;
     }
 
     final streamInfosResult = await getStreamInfoUseCase(
       params: GetStreamInfoUseCaseParams(
-        accessToken: homeViewController.twitchData!.accessToken,
-        broadcasterId: homeViewController.twitchData!.twitchUser.id,
+        accessToken: accessToken!,
+        broadcasterId: broadcasterId!,
       ),
     );
     streamInfosResult.fold(
@@ -137,20 +146,28 @@ class TwitchTabViewController extends GetxController
   }
 
   void changeChatSettings() {
+    if (accessToken == null || broadcasterId == null) {
+      return;
+    }
+
     setChatSettingsUseCase(
       params: SetChatSettingsUseCaseParams(
-        accessToken: homeViewController.twitchData!.accessToken,
-        broadcasterId: homeViewController.twitchData!.twitchUser.id,
+        accessToken: accessToken!,
+        broadcasterId: broadcasterId!,
         twitchStreamInfos: twitchStreamInfos.value,
       ),
     );
   }
 
   void setStreamTitle() {
+    if (accessToken == null || broadcasterId == null) {
+      return;
+    }
+
     setStreamTitleUseCase(
       params: SetStreamTitleUseCaseParams(
-        accessToken: homeViewController.twitchData!.accessToken,
-        broadcasterId: homeViewController.twitchData!.twitchUser.id,
+        accessToken: accessToken!,
+        broadcasterId: broadcasterId!,
         title: titleFormController.text,
       ),
     );

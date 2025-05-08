@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
-import 'package:irllink/src/core/services/twitch_event_sub_service.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
+import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/poll.dart';
 import 'package:irllink/src/presentation/widgets/prediction.dart';
@@ -23,10 +23,10 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
       child: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.only(
-            left: 20,
-            top: 12,
-            right: 20,
-            bottom: 12,
+            left: 10,
+            top: 10,
+            right: 10,
+            bottom: 10,
           ),
           color: Theme.of(context).colorScheme.surface,
           child: Column(
@@ -78,20 +78,31 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                       const SizedBox(
                         width: 8,
                       ),
-                      Obx(
-                        () =>
-                            Get.find<TwitchEventSubService>().isConnected.value
-                                ? const Icon(
-                                    Icons.stream_sharp,
-                                    size: 12,
-                                    color: Colors.green,
-                                  )
-                                : const Icon(
-                                    Icons.close,
-                                    size: 12,
-                                    color: Colors.red,
-                                  ),
-                      ),
+                      if (Get.find<HomeViewController>()
+                              .twitchEventSubService !=
+                          null)
+                        Obx(
+                          () => Get.find<HomeViewController>()
+                                  .twitchEventSubService!
+                                  .isConnected
+                                  .value
+                              ? const Icon(
+                                  Icons.stream_sharp,
+                                  size: 12,
+                                  color: Colors.green,
+                                )
+                              : const Icon(
+                                  Icons.close,
+                                  size: 12,
+                                  color: Colors.red,
+                                ),
+                        )
+                      else
+                        const Icon(
+                          Icons.close,
+                          size: 12,
+                          color: Colors.red,
+                        ),
                     ],
                   ),
                 ],
@@ -251,7 +262,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                 childAspectRatio: 4,
                 children: [
                   Obx(
-                    () => _shortcutButton(
+                    () => shortcutButton(
                       context: context,
                       text: 'follower_only'.tr,
                       onTap: () => {
@@ -261,7 +272,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                     ),
                   ),
                   Obx(
-                    () => _shortcutButton(
+                    () => shortcutButton(
                       context: context,
                       text: 'subscriber_only'.tr,
                       onTap: () => {
@@ -272,7 +283,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                     ),
                   ),
                   Obx(
-                    () => _shortcutButton(
+                    () => shortcutButton(
                       context: context,
                       text: 'emote_only'.tr,
                       onTap: () => {
@@ -282,7 +293,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                     ),
                   ),
                   Obx(
-                    () => _shortcutButton(
+                    () => shortcutButton(
                       context: context,
                       text: 'slow_mode'.tr,
                       onTap: () => {
@@ -299,7 +310,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
               const Divider(
                 height: 30,
               ),
-              _shortcutButton(
+              shortcutButton(
                 onTap: () {
                   Get.dialog(
                     GestureDetector(
@@ -324,7 +335,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                               ),
                               QrImageView(
                                 data:
-                                    'https://www.twitch.tv/${controller.homeViewController.twitchData?.twitchUser.login}',
+                                    'https://www.twitch.tv/${Get.find<HomeViewController>().twitchData.value?.twitchUser.login}',
                                 backgroundColor: Colors.white,
                                 size: 200,
                               ),
@@ -332,7 +343,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                                 height: 10,
                               ),
                               Text(
-                                "https://www.twitch.tv/${controller.homeViewController.twitchData?.twitchUser.login}",
+                                "https://www.twitch.tv/${Get.find<HomeViewController>().twitchData.value?.twitchUser.login}",
                                 style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
@@ -353,7 +364,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                 height: 30,
               ),
               Obx(
-                () => _shortcutButton(
+                () => shortcutButton(
                   context: context,
                   text: controller.displayTwitchPlayer.value
                       ? "hide_stream".tr
@@ -361,7 +372,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                   onTap: () => {
                     controller.displayTwitchPlayer.toggle(),
                   },
-                  isOn: controller.twitchStreamInfos.value.isSlowMode!,
+                  isOn: false,
                 ),
               ),
               Obx(
@@ -377,7 +388,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                         title: '',
                         toggled: true,
                         url:
-                            'https://player.twitch.tv/?channel=${controller.homeViewController.twitchData?.twitchUser.login}&parent=www.irllink.com&muted=true',
+                            'https://player.twitch.tv/?channel=${Get.find<HomeViewController>().twitchData.value?.twitchUser.login}&parent=www.irllink.com&muted=true',
                       ),
                     ),
                   ),
@@ -386,27 +397,41 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
               const Divider(
                 height: 30,
               ),
-              Obx(
-                () => Get.find<TwitchEventSubService>().isConnected.value
-                    ? prediction(
-                        context,
-                        Get.find<TwitchEventSubService>()
-                            .currentPrediction
-                            .value,
-                      )
-                    : Container(),
-              ),
+              if (Get.find<HomeViewController>().twitchEventSubService != null)
+                Obx(
+                  () => Get.find<HomeViewController>()
+                          .twitchEventSubService!
+                          .isConnected
+                          .value
+                      ? prediction(
+                          context,
+                          Get.find<HomeViewController>()
+                              .twitchEventSubService!
+                              .currentPrediction
+                              .value,
+                          Get.find<HomeViewController>().twitchEventSubService!,
+                        )
+                      : Container(),
+                ),
               const Divider(
                 height: 30,
               ),
-              Obx(
-                () => Get.find<TwitchEventSubService>().isConnected.value
-                    ? poll(
-                        context,
-                        Get.find<TwitchEventSubService>().currentPoll.value,
-                      )
-                    : Container(),
-              ),
+              if (Get.find<HomeViewController>().twitchEventSubService != null)
+                Obx(
+                  () => Get.find<HomeViewController>()
+                          .twitchEventSubService!
+                          .isConnected
+                          .value
+                      ? poll(
+                          context,
+                          Get.find<HomeViewController>()
+                              .twitchEventSubService!
+                              .currentPoll
+                              .value,
+                          Get.find<HomeViewController>().twitchEventSubService,
+                        )
+                      : Container(),
+                ),
             ],
           ),
         ),
@@ -415,7 +440,7 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
   }
 }
 
-Widget _shortcutButton({
+Widget shortcutButton({
   required BuildContext context,
   required String text,
   required Function onTap,

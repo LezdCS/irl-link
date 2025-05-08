@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Flutter Debug with Script",
+        "request": "launch",
+        "type": "dart",
+        "program": "lib/main.dart",
+        "preLaunchTask": "Start Custom Script"
+      },
+      {
+        "name": "Flutter Debug without Script",
+        "request": "launch",
+        "type": "dart",
+        "program": "lib/main.dart",
+        "preLaunchTask": ""
+      }
+    ]
+  }
+  

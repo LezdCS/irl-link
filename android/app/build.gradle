@@ -39,6 +39,10 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
+    testOptions {
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
+    }
+
     defaultConfig {
         applicationId "dev.lezd.www.irllink"
         minSdkVersion 26
@@ -48,7 +52,9 @@ android {
         manifestPlaceholders = [
                 'appAuthRedirectScheme': 'dev.lezd.www.irllink',
         ]
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "pl.leancode.patrol.PatrolJUnitRunner"
+        testInstrumentationRunnerArguments["clearPackageData"] = "true"
+
     }
 
     compileOptions {
@@ -59,6 +65,10 @@ android {
 
     kotlinOptions {
         jvmTarget = '17'
+    }
+
+    packagingOptions {
+        exclude 'project.clj'
     }
 
     signingConfigs {
@@ -78,10 +88,10 @@ android {
 
 dependencies {
     testImplementation 'junit:junit: 4.13.2'
-
+    androidTestUtil "androidx.test:orchestrator:1.5.1"
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
 }
 
 flutter {

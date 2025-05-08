@@ -58,7 +58,6 @@ Future<void> initializeDependencies() async {
     ),
     localDataSource: TwitchLocalDataSourceImpl(
       talker: talkerService.talker,
-      storage: GetStorage(),
     ),
     talker: talkerService.talker,
   );

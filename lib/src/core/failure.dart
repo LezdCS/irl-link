@@ -7,3 +7,11 @@ class Failure {
     Get.find<TalkerService>().talker.error(message);
   }
 }
+
+class DatabaseFailure extends Failure {
+  DatabaseFailure() : super('Database operation failed');
+}
+
+class NotFoundFailure extends Failure {
+  NotFoundFailure() : super('Resource not found');
+}

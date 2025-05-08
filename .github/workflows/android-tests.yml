@@ -1,0 +1,81 @@
+name: Android Tests
+
+on:
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Java environment
+        uses: actions/setup-java@v4
+        with:
+          distribution: "zulu"
+          java-version: "17"
+
+      - name: Set up Flutter environment
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          flutter-version: '3.29.2'
+
+      - name: Install Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          cmdline-tools-version: "latest"
+          build-tools-version: "34.0.0"
+          platform-version: "33"
+          ndk-version: "25.1.8937393"
+
+      - name: Add google-services.json
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: echo "$GOOGLE_SERVICES_JSON" | base64 -di > ./android/app/google-services.json
+
+      - name: Enable Swift Package Manager
+        run: flutter config --enable-swift-package-manager
+        
+      - name: Install dependencies
+        run: flutter pub get
+        env:
+          FLUTTER_USE_SWIFT_PACKAGE_MANAGER: true
+
+      - name: Install Patrol CLI
+        run: dart pub global activate patrol_cli
+
+      - name: Run unit and widget tests
+        run: flutter test
+
+      - name: Build Android App and Test APK with Patrol
+        run: patrol build android -t integration_test/app_test.dart
+
+      - name: Download gcloud config json file
+        id: gcloud_config
+        uses: timheuer/base64-to-file@v1.0.3
+        with:
+            fileName: integration_test_gcloud.json
+            encodedString: ${{ secrets.GCLOUD_CONFIG_JSON }}
+      
+      - name: Configure the gcloud account
+        run: |
+          
+           gcloud auth activate-service-account --key-file="${{ steps.gcloud_config.outputs.filePath }}"
+           pushd build
+           gcloud firebase test android run --type=instrumentation \
+           --app "app/outputs/apk/debug/app-debug.apk" \
+           --test "app/outputs/apk/androidTest/debug/app-debug-androidTest.apk" \
+           --device-ids=MediumPhone.arm \
+           --os-version-ids=33 \
+           --orientations=portrait \
+           --use-orchestrator \
+           --timeout 3m \
+           --project irl-link \

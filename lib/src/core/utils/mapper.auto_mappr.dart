@@ -11,6 +11,11 @@
 import 'package:auto_mappr_annotation/auto_mappr_annotation.dart' as _i1;
 
 import '../../data/entities/dashboard_event_dto.dart' as _i11;
+import '../../data/entities/kick/kick_category_dto.dart' as _i43;
+import '../../data/entities/kick/kick_channel_dto.dart' as _i48;
+import '../../data/entities/kick/kick_credentials_dto.dart' as _i47;
+import '../../data/entities/kick/kick_user_dto.dart' as _i45;
+import '../../data/entities/rtmp_dto.dart' as _i51;
 import '../../data/entities/settings/browser_tab_settings_dto.dart' as _i7;
 import '../../data/entities/settings/chat_events_settings_dto.dart' as _i17;
 import '../../data/entities/settings/chat_settings_dto.dart' as _i5;
@@ -31,6 +36,11 @@ import '../../data/entities/twitch/twitch_prediction_dto.dart' as _i28;
 import '../../data/entities/twitch/twitch_stream_infos_dto.dart' as _i38;
 import '../../data/entities/twitch/twitch_user_dto.dart' as _i23;
 import '../../domain/entities/dashboard_event.dart' as _i10;
+import '../../domain/entities/kick/kick_category.dart' as _i42;
+import '../../domain/entities/kick/kick_channel.dart' as _i49;
+import '../../domain/entities/kick/kick_credentials.dart' as _i46;
+import '../../domain/entities/kick/kick_user.dart' as _i44;
+import '../../domain/entities/rtmp.dart' as _i50;
 import '../../domain/entities/settings.dart' as _i2;
 import '../../domain/entities/settings/browser_tab_settings.dart' as _i6;
 import '../../domain/entities/settings/chat_events_settings.dart' as _i16;
@@ -96,8 +106,20 @@ import '../../domain/entities/twitch/twitch_user.dart' as _i22;
 /// - `SeOverlayDTO` → `SeOverlay`.
 /// - `TwitchStreamInfosDto` → `TwitchStreamInfos`.
 /// - `TwitchHypeTrainDTO` → `TwitchHypeTrain`.
+/// - `KickCategory` → `KickCategoryDTO`.
+/// - `KickCategoryDTO` → `KickCategory`.
 /// - `Contribution` → `ContributionDTO`.
 /// - `ContributionDTO` → `Contribution`.
+/// - `KickUser` → `KickUserDTO`.
+/// - `KickUserDTO` → `KickUser`.
+/// - `KickCredentials` → `KickCredentialsDTO`.
+/// - `KickCredentialsDTO` → `KickCredentials`.
+/// - `KickChannelStreamDto` → `KickChannelStream`.
+/// - `KickChannelStream` → `KickChannelStreamDto`.
+/// - `KickChannel` → `KickChannelDto`.
+/// - `KickChannelDto` → `KickChannel`.
+/// - `Rtmp` → `RtmpDTO`.
+/// - `RtmpDTO` → `Rtmp`.
 /// {@endtemplate}
 class $Mappr implements _i1.AutoMapprInterface {
   const $Mappr();
@@ -370,6 +392,18 @@ class $Mappr implements _i1.AutoMapprInterface {
             targetTypeOf == _typeOf<_i41.TwitchHypeTrain?>())) {
       return true;
     }
+    if ((sourceTypeOf == _typeOf<_i42.KickCategory>() ||
+            sourceTypeOf == _typeOf<_i42.KickCategory?>()) &&
+        (targetTypeOf == _typeOf<_i43.KickCategoryDTO>() ||
+            targetTypeOf == _typeOf<_i43.KickCategoryDTO?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i43.KickCategoryDTO>() ||
+            sourceTypeOf == _typeOf<_i43.KickCategoryDTO?>()) &&
+        (targetTypeOf == _typeOf<_i42.KickCategory>() ||
+            targetTypeOf == _typeOf<_i42.KickCategory?>())) {
+      return true;
+    }
     if ((sourceTypeOf == _typeOf<_i41.Contribution>() ||
             sourceTypeOf == _typeOf<_i41.Contribution?>()) &&
         (targetTypeOf == _typeOf<_i40.ContributionDTO>() ||
@@ -380,6 +414,66 @@ class $Mappr implements _i1.AutoMapprInterface {
             sourceTypeOf == _typeOf<_i40.ContributionDTO?>()) &&
         (targetTypeOf == _typeOf<_i41.Contribution>() ||
             targetTypeOf == _typeOf<_i41.Contribution?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i44.KickUser>() ||
+            sourceTypeOf == _typeOf<_i44.KickUser?>()) &&
+        (targetTypeOf == _typeOf<_i45.KickUserDTO>() ||
+            targetTypeOf == _typeOf<_i45.KickUserDTO?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i45.KickUserDTO>() ||
+            sourceTypeOf == _typeOf<_i45.KickUserDTO?>()) &&
+        (targetTypeOf == _typeOf<_i44.KickUser>() ||
+            targetTypeOf == _typeOf<_i44.KickUser?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i46.KickCredentials>() ||
+            sourceTypeOf == _typeOf<_i46.KickCredentials?>()) &&
+        (targetTypeOf == _typeOf<_i47.KickCredentialsDTO>() ||
+            targetTypeOf == _typeOf<_i47.KickCredentialsDTO?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i47.KickCredentialsDTO>() ||
+            sourceTypeOf == _typeOf<_i47.KickCredentialsDTO?>()) &&
+        (targetTypeOf == _typeOf<_i46.KickCredentials>() ||
+            targetTypeOf == _typeOf<_i46.KickCredentials?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i48.KickChannelStreamDto>() ||
+            sourceTypeOf == _typeOf<_i48.KickChannelStreamDto?>()) &&
+        (targetTypeOf == _typeOf<_i49.KickChannelStream>() ||
+            targetTypeOf == _typeOf<_i49.KickChannelStream?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i49.KickChannelStream>() ||
+            sourceTypeOf == _typeOf<_i49.KickChannelStream?>()) &&
+        (targetTypeOf == _typeOf<_i48.KickChannelStreamDto>() ||
+            targetTypeOf == _typeOf<_i48.KickChannelStreamDto?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i49.KickChannel>() ||
+            sourceTypeOf == _typeOf<_i49.KickChannel?>()) &&
+        (targetTypeOf == _typeOf<_i48.KickChannelDto>() ||
+            targetTypeOf == _typeOf<_i48.KickChannelDto?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i48.KickChannelDto>() ||
+            sourceTypeOf == _typeOf<_i48.KickChannelDto?>()) &&
+        (targetTypeOf == _typeOf<_i49.KickChannel>() ||
+            targetTypeOf == _typeOf<_i49.KickChannel?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i50.Rtmp>() ||
+            sourceTypeOf == _typeOf<_i50.Rtmp?>()) &&
+        (targetTypeOf == _typeOf<_i51.RtmpDTO>() ||
+            targetTypeOf == _typeOf<_i51.RtmpDTO?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i51.RtmpDTO>() ||
+            sourceTypeOf == _typeOf<_i51.RtmpDTO?>()) &&
+        (targetTypeOf == _typeOf<_i50.Rtmp>() ||
+            targetTypeOf == _typeOf<_i50.Rtmp?>())) {
       return true;
     }
     if (recursive) {
@@ -1003,6 +1097,26 @@ class $Mappr implements _i1.AutoMapprInterface {
       return (_map__i40$TwitchHypeTrainDTO_To__i41$TwitchHypeTrain(
           (model as _i40.TwitchHypeTrainDTO?)) as TARGET);
     }
+    if ((sourceTypeOf == _typeOf<_i42.KickCategory>() ||
+            sourceTypeOf == _typeOf<_i42.KickCategory?>()) &&
+        (targetTypeOf == _typeOf<_i43.KickCategoryDTO>() ||
+            targetTypeOf == _typeOf<_i43.KickCategoryDTO?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i42$KickCategory_To__i43$KickCategoryDTO(
+          (model as _i42.KickCategory?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i43.KickCategoryDTO>() ||
+            sourceTypeOf == _typeOf<_i43.KickCategoryDTO?>()) &&
+        (targetTypeOf == _typeOf<_i42.KickCategory>() ||
+            targetTypeOf == _typeOf<_i42.KickCategory?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i43$KickCategoryDTO_To__i42$KickCategory(
+          (model as _i43.KickCategoryDTO?)) as TARGET);
+    }
     if ((sourceTypeOf == _typeOf<_i41.Contribution>() ||
             sourceTypeOf == _typeOf<_i41.Contribution?>()) &&
         (targetTypeOf == _typeOf<_i40.ContributionDTO>() ||
@@ -1022,6 +1136,105 @@ class $Mappr implements _i1.AutoMapprInterface {
       }
       return (_map__i40$ContributionDTO_To__i41$Contribution(
           (model as _i40.ContributionDTO?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i44.KickUser>() ||
+            sourceTypeOf == _typeOf<_i44.KickUser?>()) &&
+        (targetTypeOf == _typeOf<_i45.KickUserDTO>() ||
+            targetTypeOf == _typeOf<_i45.KickUserDTO?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i44$KickUser_To__i45$KickUserDTO((model as _i44.KickUser?))
+          as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i45.KickUserDTO>() ||
+            sourceTypeOf == _typeOf<_i45.KickUserDTO?>()) &&
+        (targetTypeOf == _typeOf<_i44.KickUser>() ||
+            targetTypeOf == _typeOf<_i44.KickUser?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i45$KickUserDTO_To__i44$KickUser(
+          (model as _i45.KickUserDTO?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i46.KickCredentials>() ||
+            sourceTypeOf == _typeOf<_i46.KickCredentials?>()) &&
+        (targetTypeOf == _typeOf<_i47.KickCredentialsDTO>() ||
+            targetTypeOf == _typeOf<_i47.KickCredentialsDTO?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i46$KickCredentials_To__i47$KickCredentialsDTO(
+          (model as _i46.KickCredentials?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i47.KickCredentialsDTO>() ||
+            sourceTypeOf == _typeOf<_i47.KickCredentialsDTO?>()) &&
+        (targetTypeOf == _typeOf<_i46.KickCredentials>() ||
+            targetTypeOf == _typeOf<_i46.KickCredentials?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i47$KickCredentialsDTO_To__i46$KickCredentials(
+          (model as _i47.KickCredentialsDTO?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i48.KickChannelStreamDto>() ||
+            sourceTypeOf == _typeOf<_i48.KickChannelStreamDto?>()) &&
+        (targetTypeOf == _typeOf<_i49.KickChannelStream>() ||
+            targetTypeOf == _typeOf<_i49.KickChannelStream?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i48$KickChannelStreamDto_To__i49$KickChannelStream(
+          (model as _i48.KickChannelStreamDto?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i49.KickChannelStream>() ||
+            sourceTypeOf == _typeOf<_i49.KickChannelStream?>()) &&
+        (targetTypeOf == _typeOf<_i48.KickChannelStreamDto>() ||
+            targetTypeOf == _typeOf<_i48.KickChannelStreamDto?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i49$KickChannelStream_To__i48$KickChannelStreamDto(
+          (model as _i49.KickChannelStream?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i49.KickChannel>() ||
+            sourceTypeOf == _typeOf<_i49.KickChannel?>()) &&
+        (targetTypeOf == _typeOf<_i48.KickChannelDto>() ||
+            targetTypeOf == _typeOf<_i48.KickChannelDto?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i49$KickChannel_To__i48$KickChannelDto(
+          (model as _i49.KickChannel?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i48.KickChannelDto>() ||
+            sourceTypeOf == _typeOf<_i48.KickChannelDto?>()) &&
+        (targetTypeOf == _typeOf<_i49.KickChannel>() ||
+            targetTypeOf == _typeOf<_i49.KickChannel?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i48$KickChannelDto_To__i49$KickChannel(
+          (model as _i48.KickChannelDto?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i50.Rtmp>() ||
+            sourceTypeOf == _typeOf<_i50.Rtmp?>()) &&
+        (targetTypeOf == _typeOf<_i51.RtmpDTO>() ||
+            targetTypeOf == _typeOf<_i51.RtmpDTO?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i50$Rtmp_To__i51$RtmpDTO((model as _i50.Rtmp?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i51.RtmpDTO>() ||
+            sourceTypeOf == _typeOf<_i51.RtmpDTO?>()) &&
+        (targetTypeOf == _typeOf<_i50.Rtmp>() ||
+            targetTypeOf == _typeOf<_i50.Rtmp?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i51$RtmpDTO_To__i50$Rtmp((model as _i51.RtmpDTO?))
+          as TARGET);
     }
     throw Exception('No ${model.runtimeType} -> $targetTypeOf mapping.');
   }
@@ -1884,6 +2097,36 @@ class $Mappr implements _i1.AutoMapprInterface {
     );
   }
 
+  _i43.KickCategoryDTO _map__i42$KickCategory_To__i43$KickCategoryDTO(
+      _i42.KickCategory? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping KickCategory → KickCategoryDTO failed because KickCategory was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<KickCategory, KickCategoryDTO> to handle null values during mapping.');
+    }
+    return _i43.KickCategoryDTO(
+      id: model.id,
+      name: model.name,
+      thumbnail: model.thumbnail,
+    );
+  }
+
+  _i42.KickCategory _map__i43$KickCategoryDTO_To__i42$KickCategory(
+      _i43.KickCategoryDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping KickCategoryDTO → KickCategory failed because KickCategoryDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<KickCategoryDTO, KickCategory> to handle null values during mapping.');
+    }
+    return _i42.KickCategory(
+      id: model.id,
+      name: model.name,
+      thumbnail: model.thumbnail,
+    );
+  }
+
   _i40.ContributionDTO _map__i41$Contribution_To__i40$ContributionDTO(
       _i41.Contribution? input) {
     final model = input;
@@ -1915,6 +2158,186 @@ class $Mappr implements _i1.AutoMapprInterface {
       userName: model.userName,
       type: model.type,
       total: model.total,
+    );
+  }
+
+  _i45.KickUserDTO _map__i44$KickUser_To__i45$KickUserDTO(
+      _i44.KickUser? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping KickUser → KickUserDTO failed because KickUser was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<KickUser, KickUserDTO> to handle null values during mapping.');
+    }
+    return _i45.KickUserDTO(
+      userId: model.userId,
+      name: model.name,
+      email: model.email,
+      profilePicture: model.profilePicture,
+    );
+  }
+
+  _i44.KickUser _map__i45$KickUserDTO_To__i44$KickUser(
+      _i45.KickUserDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping KickUserDTO → KickUser failed because KickUserDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<KickUserDTO, KickUser> to handle null values during mapping.');
+    }
+    return _i44.KickUser(
+      userId: model.userId,
+      name: model.name,
+      email: model.email,
+      profilePicture: model.profilePicture,
+    );
+  }
+
+  _i47.KickCredentialsDTO _map__i46$KickCredentials_To__i47$KickCredentialsDTO(
+      _i46.KickCredentials? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping KickCredentials → KickCredentialsDTO failed because KickCredentials was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<KickCredentials, KickCredentialsDTO> to handle null values during mapping.');
+    }
+    return _i47.KickCredentialsDTO(
+      accessToken: model.accessToken,
+      refreshToken: model.refreshToken,
+      expiresIn: model.expiresIn,
+      kickUser: _map__i44$KickUser_To__i45$KickUserDTO(model.kickUser),
+      scopes: model.scopes,
+    );
+  }
+
+  _i46.KickCredentials _map__i47$KickCredentialsDTO_To__i46$KickCredentials(
+      _i47.KickCredentialsDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping KickCredentialsDTO → KickCredentials failed because KickCredentialsDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<KickCredentialsDTO, KickCredentials> to handle null values during mapping.');
+    }
+    return _i46.KickCredentials(
+      accessToken: model.accessToken,
+      refreshToken: model.refreshToken,
+      expiresIn: model.expiresIn,
+      kickUser: _map__i45$KickUserDTO_To__i44$KickUser(model.kickUser),
+      scopes: model.scopes,
+    );
+  }
+
+  _i49.KickChannelStream
+      _map__i48$KickChannelStreamDto_To__i49$KickChannelStream(
+          _i48.KickChannelStreamDto? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping KickChannelStreamDto → KickChannelStream failed because KickChannelStreamDto was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<KickChannelStreamDto, KickChannelStream> to handle null values during mapping.');
+    }
+    return _i49.KickChannelStream(
+      isLive: model.isLive,
+      isMature: model.isMature,
+      key: model.key,
+      language: model.language,
+      startTime: model.startTime,
+      thumbnail: model.thumbnail,
+      url: model.url,
+      viewerCount: model.viewerCount,
+    );
+  }
+
+  _i48.KickChannelStreamDto
+      _map__i49$KickChannelStream_To__i48$KickChannelStreamDto(
+          _i49.KickChannelStream? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping KickChannelStream → KickChannelStreamDto failed because KickChannelStream was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<KickChannelStream, KickChannelStreamDto> to handle null values during mapping.');
+    }
+    return _i48.KickChannelStreamDto(
+      isLive: model.isLive,
+      isMature: model.isMature,
+      key: model.key,
+      language: model.language,
+      startTime: model.startTime,
+      thumbnail: model.thumbnail,
+      url: model.url,
+      viewerCount: model.viewerCount,
+    );
+  }
+
+  _i48.KickChannelDto _map__i49$KickChannel_To__i48$KickChannelDto(
+      _i49.KickChannel? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping KickChannel → KickChannelDto failed because KickChannel was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<KickChannel, KickChannelDto> to handle null values during mapping.');
+    }
+    return _i48.KickChannelDto(
+      bannerPicture: model.bannerPicture,
+      broadcasterUserId: model.broadcasterUserId,
+      category: _map__i42$KickCategory_To__i43$KickCategoryDTO(model.category),
+      channelDescription: model.channelDescription,
+      slug: model.slug,
+      stream: _map__i49$KickChannelStream_To__i48$KickChannelStreamDto(
+          model.stream),
+      streamTitle: model.streamTitle,
+    );
+  }
+
+  _i49.KickChannel _map__i48$KickChannelDto_To__i49$KickChannel(
+      _i48.KickChannelDto? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping KickChannelDto → KickChannel failed because KickChannelDto was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<KickChannelDto, KickChannel> to handle null values during mapping.');
+    }
+    return _i49.KickChannel(
+      bannerPicture: model.bannerPicture,
+      broadcasterUserId: model.broadcasterUserId,
+      category: _map__i43$KickCategoryDTO_To__i42$KickCategory(model.category),
+      channelDescription: model.channelDescription,
+      slug: model.slug,
+      stream: _map__i48$KickChannelStreamDto_To__i49$KickChannelStream(
+          model.stream),
+      streamTitle: model.streamTitle,
+    );
+  }
+
+  _i51.RtmpDTO _map__i50$Rtmp_To__i51$RtmpDTO(_i50.Rtmp? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping Rtmp → RtmpDTO failed because Rtmp was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<Rtmp, RtmpDTO> to handle null values during mapping.');
+    }
+    return _i51.RtmpDTO(
+      id: model.id,
+      name: model.name,
+      url: model.url,
+      key: model.key,
+      createdAt: model.createdAt,
+    );
+  }
+
+  _i50.Rtmp _map__i51$RtmpDTO_To__i50$Rtmp(_i51.RtmpDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping RtmpDTO → Rtmp failed because RtmpDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<RtmpDTO, Rtmp> to handle null values during mapping.');
+    }
+    return _i50.Rtmp(
+      id: model.id,
+      name: model.name,
+      url: model.url,
+      key: model.key,
+      createdAt: model.createdAt,
     );
   }
 

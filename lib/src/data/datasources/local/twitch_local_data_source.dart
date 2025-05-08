@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:get_storage/get_storage.dart';
+import 'package:irllink/data/database/database_helper.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_credentials_dto.dart';
 import 'package:talker_flutter/talker_flutter.dart';
@@ -13,43 +13,72 @@ abstract class TwitchLocalDataSource {
 
 class TwitchLocalDataSourceImpl implements TwitchLocalDataSource {
   final Talker talker;
-  final GetStorage _storage;
+  final DatabaseHelper _databaseHelper;
 
   TwitchLocalDataSourceImpl({
     required this.talker,
-    GetStorage? storage,
-  }) : _storage = storage ?? GetStorage();
+    DatabaseHelper? databaseHelper,
+  }) : _databaseHelper = databaseHelper ?? DatabaseHelper.instance;
 
   @override
   Future<void> storeCredentials(TwitchCredentialsDTO credentials) async {
-    String jsonData = jsonEncode(credentials);
-    await _storage.write('twitchData', jsonData);
+    final db = await _databaseHelper.database;
+
+    // First remove any existing credentials
+    await removeCredentials();
+
+    await db.insert(
+      'twitch_credentials',
+      {
+        'access_token': credentials.accessToken,
+        'id_token': credentials.idToken,
+        'refresh_token': credentials.refreshToken,
+        'expires_in': credentials.expiresIn,
+        'decoded_id_token': jsonEncode(credentials.decodedIdToken),
+        'twitch_user': jsonEncode(credentials.twitchUser),
+        'scopes': credentials.scopes,
+      },
+    );
+
     talker.logCustom(
-      TwitchLog('Twitch credentials saved in local.'),
+      TwitchLog('Twitch credentials saved in database.'),
     );
   }
 
   @override
   Future<TwitchCredentialsDTO?> getCredentials() async {
     talker.logCustom(
-      TwitchLog(
-        'Getting Twitch credentials from local storage.',
-      ),
+      TwitchLog('Getting Twitch credentials from database.'),
     );
-    var twitchDataString = _storage.read('twitchData');
 
-    if (twitchDataString != null) {
-      Map<String, dynamic> twitchDataJson = jsonDecode(twitchDataString);
-      return TwitchCredentialsDTO.fromJson(twitchDataJson);
+    final db = await _databaseHelper.database;
+    final List<Map<String, dynamic>> maps =
+        await db.query('twitch_credentials');
+
+    if (maps.isEmpty) {
+      return null;
     }
-    return null;
+
+    final credentials = maps.first;
+    final twitchDataJson = {
+      'accessToken': credentials['access_token'],
+      'idToken': credentials['id_token'],
+      'refreshToken': credentials['refresh_token'],
+      'expiresIn': credentials['expires_in'],
+      'decodedIdToken': jsonDecode(credentials['decoded_id_token']),
+      'twitchUser': jsonDecode(credentials['twitch_user']),
+      'scopes': credentials['scopes'],
+    };
+
+    return TwitchCredentialsDTO.fromJson(twitchDataJson);
   }
 
   @override
   Future<void> removeCredentials() async {
-    await _storage.remove('twitchData');
+    final db = await _databaseHelper.database;
+    await db.delete('twitch_credentials');
     talker.logCustom(
-      TwitchLog('Twitch credentials removed from local.'),
+      TwitchLog('Twitch credentials removed from database.'),
     );
   }
 }

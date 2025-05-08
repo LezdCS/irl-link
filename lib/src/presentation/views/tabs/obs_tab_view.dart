@@ -27,9 +27,34 @@ class ObsTabView extends GetView<ObsTabViewController> {
                         children: [
                           InkWell(
                             onTap: () {
-                              controller.isStreaming.value
-                                  ? controller.stopStream()
-                                  : controller.startStream();
+                              Get.defaultDialog(
+                                title: controller.isStreaming.value
+                                    ? "Stop stream".tr
+                                    : "Start stream".tr,
+                                titleStyle:
+                                    const TextStyle(color: Colors.white),
+                                backgroundColor: const Color(0xFF0e0e10),
+                                buttonColor: const Color(0xFF9147ff),
+                                cancelTextColor: const Color(0xFF9147ff),
+                                textCancel: "cancel".tr,
+                                textConfirm: "confirm".tr,
+                                content: Column(
+                                  children: [
+                                    Text(
+                                      "Are you sure you want to ${controller.isStreaming.value ? "stop" : "start"} stream?"
+                                          .tr,
+                                    ),
+                                  ],
+                                ),
+                                confirmTextColor: Colors.white,
+                                onConfirm: () {
+                                  controller.isStreaming.value
+                                      ? controller.stopStream()
+                                      : controller.startStream();
+                                  Get.back();
+                                },
+                                radius: 10,
+                              );
                             },
                             child: Container(
                               constraints: const BoxConstraints(
@@ -143,9 +168,28 @@ class ObsTabView extends GetView<ObsTabViewController> {
                     ),
                     Wrap(
                       children: [
-                        Text(
-                          "scenes".tr,
-                          style: const TextStyle(color: Colors.white),
+                        Row(
+                          children: [
+                            Text(
+                              "scenes".tr,
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                            const SizedBox(width: 10),
+                            Obx(
+                              () => IconButton(
+                                onPressed: () => controller.toggleScenesOrder(),
+                                icon: Icon(
+                                  controller.isScenesReversed.value
+                                      ? Icons.arrow_downward
+                                      : Icons.arrow_upward,
+                                  color: Colors.white,
+                                ),
+                                tooltip: controller.isScenesReversed.value
+                                    ? "Sort scenes in normal order"
+                                    : "Sort scenes in reverse order",
+                              ),
+                            ),
+                          ],
                         ),
                         Container(
                           margin: const EdgeInsets.only(top: 10),

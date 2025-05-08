@@ -1,0 +1,9 @@
+# Add directories or file patterns to ignore during indexing (e.g. foo/ or *.csv)
+android/app/build/
+android/build/ios
+android/app/src/main/assets/
+android/app/src/main/res/
+android/app/src/main/res/values/
+android/app/src/main/res/values-v21/
+android/app/src/main/res/values-v22/
+android/app/src/main/res/values-v23/

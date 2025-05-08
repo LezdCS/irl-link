@@ -1,0 +1,18 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Start Custom Script",
+        "type": "shell",
+        "command": "./test/obs_test.sh",
+        "problemMatcher": [],
+        "presentation": {
+          "echo": true,
+          "reveal": "never",
+          "focus": false,
+          "panel": "shared"
+        }
+      }
+    ]
+  }
+  

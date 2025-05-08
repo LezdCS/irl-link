@@ -8,6 +8,7 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 Widget poll(
   BuildContext context,
   TwitchPoll? poll,
+  TwitchEventSubService? twitchEventSubService,
 ) {
   if (poll == null) {
     return Container();
@@ -86,7 +87,8 @@ Widget poll(
               "ends_in".trParams(
                 {
                   "time": printDuration(
-                    Get.find<TwitchEventSubService>().remainingTimePoll.value,
+                    twitchEventSubService?.remainingTimePoll.value ??
+                        Duration.zero,
                   ),
                 },
               ),
@@ -103,7 +105,7 @@ Widget poll(
                         Theme.of(context).colorScheme.tertiaryContainer,
                   ),
                   onPressed: () {
-                    Get.find<TwitchEventSubService>().endPoll("ARCHIVED");
+                    twitchEventSubService?.endPoll("ARCHIVED");
                   },
                   child: Text(
                     "cancel".tr,
@@ -117,7 +119,7 @@ Widget poll(
                     backgroundColor: Colors.green,
                   ),
                   onPressed: () {
-                    Get.find<TwitchEventSubService>().endPoll("TERMINATED");
+                    twitchEventSubService?.endPoll("TERMINATED");
                   },
                   child: Text(
                     'end'.tr,

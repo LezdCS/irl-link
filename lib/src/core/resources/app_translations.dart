@@ -8,6 +8,7 @@ const List<Map<String, String>> supportedLanguages = [
   {"name": "Français ", "languageCode": "fr", "countryCode": "FR"},
   {"name": "繁體中文", "languageCode": "zh", "countryCode": "TW"},
   {"name": "Español", "languageCode": "es", "countryCode": "ES"},
+  {"name": "Italiano", "languageCode": "it", "countryCode": "IT"},
 ];
 
 class AppTranslations extends Translations {

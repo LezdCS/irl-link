@@ -119,7 +119,7 @@ abstract mixin class $SettingsDTOCopyWith<$Res> {
       {bool isEmotes,
       double textSize,
       bool displayTimestamp,
-      List<dynamic> hiddenUsersIds,
+      List hiddenUsersIds,
       ChatEventsSettingsDTO chatEventsSettings,
       ChatSettingsDTO chatSettings,
       GeneralSettingsDTO generalSettings,
@@ -128,7 +128,7 @@ abstract mixin class $SettingsDTOCopyWith<$Res> {
       String obsWebsocketUrl,
       String obsWebsocketPassword,
       BrowserTabSettingsDTO browserTabs,
-      List<dynamic> obsConnectionsHistory,
+      List obsConnectionsHistory,
       StreamElementsSettingsDTO streamElementsSettings,
       String rtIrlPushKey,
       TtsSettingsDTO ttsSettings});
@@ -185,9 +185,9 @@ class _$SettingsDTOCopyWithImpl<$Res> implements $SettingsDTOCopyWith<$Res> {
           : displayTimestamp // ignore: cast_nullable_to_non_nullable
               as bool,
       hiddenUsersIds: null == hiddenUsersIds
-          ? _self.hiddenUsersIds!
+          ? _self.hiddenUsersIds
           : hiddenUsersIds // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
+              as List,
       chatEventsSettings: null == chatEventsSettings
           ? _self.chatEventsSettings
           : chatEventsSettings // ignore: cast_nullable_to_non_nullable
@@ -221,9 +221,9 @@ class _$SettingsDTOCopyWithImpl<$Res> implements $SettingsDTOCopyWith<$Res> {
           : browserTabs // ignore: cast_nullable_to_non_nullable
               as BrowserTabSettingsDTO,
       obsConnectionsHistory: null == obsConnectionsHistory
-          ? _self.obsConnectionsHistory!
+          ? _self.obsConnectionsHistory
           : obsConnectionsHistory // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
+              as List,
       streamElementsSettings: null == streamElementsSettings
           ? _self.streamElementsSettings
           : streamElementsSettings // ignore: cast_nullable_to_non_nullable
@@ -320,7 +320,7 @@ class _SettingsDTO implements SettingsDTO {
       {this.isEmotes = true,
       this.textSize = 19,
       this.displayTimestamp = false,
-      final List<dynamic> hiddenUsersIds = const [],
+      final List hiddenUsersIds = const [],
       required this.chatEventsSettings,
       required this.chatSettings,
       required this.generalSettings,
@@ -329,7 +329,7 @@ class _SettingsDTO implements SettingsDTO {
       this.obsWebsocketUrl = "",
       this.obsWebsocketPassword = "",
       required this.browserTabs,
-      final List<dynamic> obsConnectionsHistory = const [],
+      final List obsConnectionsHistory = const [],
       required this.streamElementsSettings,
       this.rtIrlPushKey = "",
       required this.ttsSettings})
@@ -348,10 +348,10 @@ class _SettingsDTO implements SettingsDTO {
   @override
   @JsonKey()
   final bool displayTimestamp;
-  final List<dynamic> _hiddenUsersIds;
+  final List _hiddenUsersIds;
   @override
   @JsonKey()
-  List<dynamic> get hiddenUsersIds {
+  List get hiddenUsersIds {
     if (_hiddenUsersIds is EqualUnmodifiableListView) return _hiddenUsersIds;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_hiddenUsersIds);
@@ -378,10 +378,10 @@ class _SettingsDTO implements SettingsDTO {
   final String obsWebsocketPassword;
   @override
   final BrowserTabSettingsDTO browserTabs;
-  final List<dynamic> _obsConnectionsHistory;
+  final List _obsConnectionsHistory;
   @override
   @JsonKey()
-  List<dynamic> get obsConnectionsHistory {
+  List get obsConnectionsHistory {
     if (_obsConnectionsHistory is EqualUnmodifiableListView)
       return _obsConnectionsHistory;
     // ignore: implicit_dynamic_type
@@ -490,7 +490,7 @@ abstract mixin class _$SettingsDTOCopyWith<$Res>
       {bool isEmotes,
       double textSize,
       bool displayTimestamp,
-      List<dynamic> hiddenUsersIds,
+      List hiddenUsersIds,
       ChatEventsSettingsDTO chatEventsSettings,
       ChatSettingsDTO chatSettings,
       GeneralSettingsDTO generalSettings,
@@ -499,7 +499,7 @@ abstract mixin class _$SettingsDTOCopyWith<$Res>
       String obsWebsocketUrl,
       String obsWebsocketPassword,
       BrowserTabSettingsDTO browserTabs,
-      List<dynamic> obsConnectionsHistory,
+      List obsConnectionsHistory,
       StreamElementsSettingsDTO streamElementsSettings,
       String rtIrlPushKey,
       TtsSettingsDTO ttsSettings});
@@ -565,7 +565,7 @@ class __$SettingsDTOCopyWithImpl<$Res> implements _$SettingsDTOCopyWith<$Res> {
       hiddenUsersIds: null == hiddenUsersIds
           ? _self._hiddenUsersIds
           : hiddenUsersIds // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
+              as List,
       chatEventsSettings: null == chatEventsSettings
           ? _self.chatEventsSettings
           : chatEventsSettings // ignore: cast_nullable_to_non_nullable
@@ -601,7 +601,7 @@ class __$SettingsDTOCopyWithImpl<$Res> implements _$SettingsDTOCopyWith<$Res> {
       obsConnectionsHistory: null == obsConnectionsHistory
           ? _self._obsConnectionsHistory
           : obsConnectionsHistory // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
+              as List,
       streamElementsSettings: null == streamElementsSettings
           ? _self.streamElementsSettings
           : streamElementsSettings // ignore: cast_nullable_to_non_nullable

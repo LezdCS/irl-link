@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/services/watch_service.dart';
-
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:obs_websocket/event.dart';
@@ -33,6 +32,7 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
 
   RxBool isStreaming = false.obs;
   RxBool isRecording = false.obs;
+  RxBool isScenesReversed = false.obs;
 
   Rxn<StatsResponse> statsResponse = Rxn<StatsResponse>();
 
@@ -234,10 +234,19 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
     scenesList.clear();
 
     List<Scene> respScenes = response.scenes;
+    if (isScenesReversed.value) {
+      respScenes = respScenes.reversed.toList();
+    }
 
     for (var i = 0; i < respScenes.length; i++) {
       scenesList.add(respScenes[i].sceneName);
     }
+  }
+
+  /// Toggle scenes list order
+  void toggleScenesOrder() {
+    isScenesReversed.value = !isScenesReversed.value;
+    getSceneList();
   }
 
   /// Fetch current scene and its sources

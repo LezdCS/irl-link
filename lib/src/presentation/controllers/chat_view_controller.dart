@@ -15,7 +15,6 @@ import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/pinned_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
-import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:kick_chat/kick_chat.dart';
 import 'package:talker_flutter/talker_flutter.dart';
@@ -43,7 +42,6 @@ class ChatViewController extends GetxController
   late ScrollController scrollController;
   RxBool isAutoScrolldown = true.obs;
 
-  TwitchCredentials? twitchData;
   RxList<ChatMessage> chatMessages = <ChatMessage>[].obs;
   RxList<ChatEmote> cheerEmotes = <ChatEmote>[].obs;
   RxList<ChatEmote> thirdPartEmotes = <ChatEmote>[].obs;
@@ -58,11 +56,8 @@ class ChatViewController extends GetxController
   void onInit() async {
     scrollController = ScrollController();
     banDurationInputController = TextEditingController();
-    if (Get.arguments != null) {
-      twitchData = Get.arguments[0];
-      await applySettings();
-      homeViewController.selectedChatGroup.value = chatGroup;
-    }
+    await applySettings();
+    homeViewController.selectedChatGroup.value = chatGroup;
 
     chatMessages.listen((value) {
       // Send to watchOS
@@ -147,23 +142,28 @@ class ChatViewController extends GetxController
 
   /// Delete [message] by his id
   void deleteMessageInstruction(ChatMessage message) {
+    if (homeViewController.twitchData.value == null) {
+      message.isDeleted = true;
+      homeViewController.selectedMessage.value = null;
+      return;
+    }
     TwitchApi.deleteMessage(
-      twitchData!.accessToken,
+      homeViewController.twitchData.value!.accessToken,
       message.channelId,
       message.id,
       kTwitchAuthClientId,
     );
 
-    if (twitchData == null) {
-      message.isDeleted = true;
-    }
     homeViewController.selectedMessage.value = null;
   }
 
   /// Ban user for specific [duration] based on the author name in the [message]
   void timeoutMessageInstruction(ChatMessage message, int duration) {
+    if (homeViewController.twitchData.value == null) {
+      return;
+    }
     TwitchApi.banUser(
-      twitchData!.accessToken,
+      homeViewController.twitchData.value!.accessToken,
       message.channelId,
       message.authorId,
       duration,
@@ -175,8 +175,11 @@ class ChatViewController extends GetxController
 
   /// Ban user based on the author name in the [message]
   void banMessageInstruction(ChatMessage message) {
+    if (homeViewController.twitchData.value == null) {
+      return;
+    }
     TwitchApi.banUser(
-      twitchData!.accessToken,
+      homeViewController.twitchData.value!.accessToken,
       message.channelId,
       message.authorId,
       null,
@@ -187,7 +190,7 @@ class ChatViewController extends GetxController
 
   /// Hide every future messages from an user (only on this application, not on Twitch)
   void hideUser(ChatMessage message) {
-    if (twitchData == null) {
+    if (homeViewController.twitchData.value == null) {
       return;
     }
     Settings settings = settingsService.settings.value;
@@ -224,11 +227,20 @@ class ChatViewController extends GetxController
     isAutoScrolldown.value = true;
   }
 
-  void updateChannels(List<Channel> channels, String? twitchUsername) {
+  void updateChannels(
+    List<Channel> channels,
+    String? twitchUsername,
+    String? kickUsername,
+  ) {
     // check chatGroup channels not existings in channels and remove them
     List<Channel> channelsToRemove = [];
     for (var channel in chatGroup.channels) {
-      if (channel.channel == twitchUsername) {
+      if (channel.channel == twitchUsername &&
+          homeViewController.twitchData.value != null) {
+        continue;
+      }
+      if (channel.channel == kickUsername &&
+          homeViewController.kickData.value != null) {
         continue;
       }
       if (channels.firstWhereOrNull((e) => e.channel == channel.channel) ==
@@ -331,13 +343,13 @@ class ChatViewController extends GetxController
 
   void createTwitchChat(Channel tc) {
     TwitchChat twitchChat;
-    if (twitchData == null) {
+    if (homeViewController.twitchData.value == null) {
       twitchChat = TwitchChat.anonymous(tc.channel);
     } else {
       twitchChat = TwitchChat(
         tc.channel,
-        twitchData!.twitchUser.login,
-        twitchData!.accessToken,
+        homeViewController.twitchData.value!.twitchUser.login,
+        homeViewController.twitchData.value!.accessToken,
         clientId: kTwitchAuthClientId,
         onConnected: () {},
         onClearChat: () {
@@ -393,7 +405,7 @@ class ChatViewController extends GetxController
   }
 
   Future<void> createYoutubeChat(String channelId) async {
-    if (twitchData == null) {
+    if (homeViewController.twitchData.value == null) {
       Get.snackbar(
         'Error',
         'Twitch authentication is required to use YouTube chat',
@@ -406,7 +418,7 @@ class ChatViewController extends GetxController
     }
     YoutubeChat youtubeChat = await YoutubeChat(
       talker: talker,
-      twitchToken: twitchData!.accessToken,
+      twitchToken: homeViewController.twitchData.value!.accessToken,
     ).init(channel: channelId);
     await youtubeChat.connect();
     youtubeChat.chatStream.listen((ChatMessage message) {

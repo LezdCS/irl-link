@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -5,7 +6,6 @@ import 'package:irllink/src/core/resources/app_translations.dart';
 import 'package:irllink/src/core/services/app_info_service.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
-
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:irllink/src/presentation/views/settings/chat_events.dart';
@@ -15,6 +15,7 @@ import 'package:irllink/src/presentation/views/settings/manage_list_browser_tabs
 import 'package:irllink/src/presentation/views/settings/manage_list_hidden_users.dart';
 import 'package:irllink/src/presentation/views/settings/obs_settings.dart';
 import 'package:irllink/src/presentation/views/settings/realtime_irl.dart';
+import 'package:irllink/src/presentation/views/settings/rtmp_settings.dart';
 import 'package:irllink/src/presentation/views/settings/stream_elements.dart';
 import 'package:irllink/src/presentation/views/settings/subscription.dart';
 import 'package:irllink/src/presentation/views/settings/talker_screen.dart';
@@ -39,33 +40,6 @@ class SettingsView extends GetView<SettingsViewController> {
             ),
             onPressed: () => Get.back(),
           ),
-          actions: [
-            Container(
-              margin: const EdgeInsets.only(right: 6, top: 10, bottom: 10),
-              padding: const EdgeInsets.only(left: 8, right: 8),
-              child: TextButton(
-                onPressed: () {
-                  if (controller.homeViewController.twitchData != null) {
-                    controller.logout();
-                  } else {
-                    controller.login();
-                  }
-                },
-                style: TextButton.styleFrom(
-                  backgroundColor:
-                      controller.homeViewController.twitchData != null
-                          ? Colors.red
-                          : Colors.purple,
-                ),
-                child: Text(
-                  controller.homeViewController.twitchData != null
-                      ? "logout".tr
-                      : "login".tr,
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-          ],
           title: Text(
             "settings".tr,
           ),
@@ -78,6 +52,8 @@ class SettingsView extends GetView<SettingsViewController> {
             padding:
                 const EdgeInsets.only(top: 8, left: 10, right: 10, bottom: 8),
             children: [
+              twitchProfileSettings(context, width),
+              kickProfileSettings(context, width),
               const Subscription(),
               const Divider(
                 height: 20,
@@ -499,6 +475,16 @@ class SettingsView extends GetView<SettingsViewController> {
               ],
             ),
           ),
+          settingsGoToRow(
+            context,
+            "rtmp".tr,
+            Icons.camera,
+            () {
+              Get.to(
+                () => const RtmpSettings(),
+              );
+            },
+          ),
         ],
       ),
     );
@@ -653,6 +639,195 @@ class SettingsView extends GetView<SettingsViewController> {
             Icons.arrow_forward_ios,
             color: Theme.of(context).primaryIconTheme.color,
             size: 18,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget twitchProfileSettings(BuildContext context, double width) {
+    return ColoredBox(
+      color: Theme.of(context).colorScheme.surface,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Twitch Profile",
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.tertiary,
+              fontSize: 20,
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.only(left: 4, right: 4),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(top: 10, bottom: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      if (controller.homeViewController.twitchData.value !=
+                          null)
+                        Row(
+                          spacing: 15,
+                          children: [
+                            CachedNetworkImage(
+                              imageUrl: controller.homeViewController.twitchData
+                                  .value!.twitchUser.profileImageUrl,
+                              placeholder: (BuildContext context, String url) =>
+                                  const CircularProgressIndicator(),
+                              errorWidget:
+                                  (BuildContext context, String url, error) =>
+                                      const Icon(Icons.error),
+                              imageBuilder: (context, imageProvider) =>
+                                  CircleAvatar(
+                                radius: 24,
+                                backgroundImage: imageProvider,
+                              ),
+                            ),
+                            Text(
+                              controller.homeViewController.twitchData.value!
+                                  .twitchUser.displayName,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        )
+                      else
+                        const Text(
+                          "Not logged in",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      TextButton(
+                        onPressed: () {
+                          if (controller.homeViewController.twitchData.value !=
+                              null) {
+                            controller.logout();
+                          } else {
+                            controller.login();
+                          }
+                        },
+                        style: TextButton.styleFrom(
+                          backgroundColor:
+                              controller.homeViewController.twitchData.value !=
+                                      null
+                                  ? Colors.red
+                                  : Colors.purple,
+                          minimumSize: const Size(100, 40),
+                        ),
+                        child: Text(
+                          controller.homeViewController.twitchData.value != null
+                              ? "logout".tr
+                              : "login".tr,
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget kickProfileSettings(BuildContext context, double width) {
+    return ColoredBox(
+      color: Theme.of(context).colorScheme.surface,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Kick Profile",
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.tertiary,
+              fontSize: 20,
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.only(left: 4, right: 4),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(top: 10, bottom: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      if (controller.homeViewController.kickData.value != null)
+                        Row(
+                          spacing: 15,
+                          children: [
+                            CachedNetworkImage(
+                              imageUrl: controller.homeViewController.kickData
+                                  .value!.kickUser.profilePicture,
+                              placeholder: (BuildContext context, String url) =>
+                                  const CircularProgressIndicator(),
+                              errorWidget:
+                                  (BuildContext context, String url, error) =>
+                                      const Icon(Icons.error),
+                              imageBuilder: (context, imageProvider) =>
+                                  CircleAvatar(
+                                radius: 24,
+                                backgroundImage: imageProvider,
+                              ),
+                            ),
+                            Text(
+                              controller.homeViewController.kickData.value!
+                                  .kickUser.name,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        )
+                      else
+                        const Text(
+                          "Not logged in",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      TextButton(
+                        onPressed: () {
+                          if (controller.homeViewController.kickData.value !=
+                              null) {
+                            controller.logoutKick();
+                          } else {
+                            controller.loginKick();
+                          }
+                        },
+                        style: TextButton.styleFrom(
+                          backgroundColor:
+                              controller.homeViewController.kickData.value !=
+                                      null
+                                  ? Colors.red
+                                  : Colors.purple,
+                          minimumSize: const Size(100, 40),
+                        ),
+                        child: Text(
+                          controller.homeViewController.kickData.value != null
+                              ? "logout".tr
+                              : "login".tr,
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

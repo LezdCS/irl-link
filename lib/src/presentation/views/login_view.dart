@@ -29,57 +29,109 @@ class LoginView extends GetView<LoginViewController> {
   Widget _loginButton(context) {
     return Column(
       children: [
-        TextButton.icon(
-          label: Text.rich(
-            TextSpan(
-              text: "Login with ",
-              style: const TextStyle(
-                color: Colors.grey,
-                fontSize: 20,
-              ),
-              children: [
-                TextSpan(
-                  text: 'Twitch',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.tertiary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
+        SizedBox(
+          width: 250,
+          child: TextButton.icon(
+            label: Text.rich(
+              TextSpan(
+                text: "Login with ",
+                style: const TextStyle(
+                  color: Colors.grey,
+                  fontSize: 20,
                 ),
-              ],
-            ),
-          ),
-          icon: const Padding(
-            padding: EdgeInsets.all(8),
-            child: Image(
-              height: 24,
-              width: 24,
-              image: AssetImage(
-                'lib/assets/twitch/twitch_logo.png',
+                children: [
+                  TextSpan(
+                    text: 'Twitch',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.tertiary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
               ),
             ),
+            icon: const Padding(
+              padding: EdgeInsets.all(8),
+              child: Image(
+                height: 24,
+                width: 24,
+                image: AssetImage(
+                  'lib/assets/twitch/twitch_logo.png',
+                ),
+              ),
+            ),
+            style: TextButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+            ),
+            onPressed: () {
+              controller.login();
+            },
           ),
-          style: TextButton.styleFrom(
-            backgroundColor: Theme.of(context).colorScheme.secondary,
-          ),
-          onPressed: () {
-            controller.login();
-          },
         ),
         const SizedBox(
-          height: 10,
+          height: 16,
         ),
-        TextButton(
-          key: const Key("maybe_later_key"),
-          style: TextButton.styleFrom(
-            backgroundColor: Theme.of(context).colorScheme.secondary,
+        SizedBox(
+          width: 250,
+          child: TextButton.icon(
+            label: const Text.rich(
+              TextSpan(
+                text: "Login with ",
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 20,
+                ),
+                children: [
+                  TextSpan(
+                    text: 'Kick',
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            icon: const Padding(
+              padding: EdgeInsets.all(8),
+              child: Image(
+                height: 24,
+                width: 24,
+                image: AssetImage(
+                  'lib/assets/kick/kickLogo.png',
+                ),
+              ),
+            ),
+            style: TextButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+            ),
+            onPressed: () {
+              controller.loginKick();
+            },
           ),
-          onPressed: () {
-            controller.homeWitoutLogin();
-          },
-          child: Text(
-            "maybe_later".tr,
-            style: const TextStyle(color: Colors.grey),
+        ),
+        Divider(
+          height: 30,
+          indent: 60,
+          endIndent: 60,
+          color: Colors.grey[900],
+        ),
+        SizedBox(
+          width: 250,
+          child: TextButton(
+            key: const Key("maybe_later_key"),
+            style: TextButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+            ),
+            onPressed: () {
+              controller.homeWitoutLogin();
+            },
+            child: Text(
+              "maybe_later".tr,
+              style: const TextStyle(color: Colors.grey),
+            ),
           ),
         ),
       ],
@@ -89,6 +141,7 @@ class LoginView extends GetView<LoginViewController> {
   Widget _loadingCircle(context) {
     return Obx(
       () => Column(
+        spacing: 20,
         children: [
           Visibility(
             visible: controller.twitchCredentials.value == null,
@@ -96,31 +149,51 @@ class LoginView extends GetView<LoginViewController> {
               color: Theme.of(context).colorScheme.tertiary,
             ),
           ),
-          if (controller.twitchCredentials.value != null)
-            CachedNetworkImage(
-              imageUrl: controller
-                  .twitchCredentials.value!.twitchUser.profileImageUrl,
-              placeholder: (BuildContext context, String url) =>
-                  CircularProgressIndicator(
-                color: Theme.of(context).colorScheme.tertiary,
-              ),
-              errorWidget: (BuildContext context, String url, error) =>
-                  const Icon(Icons.error),
-              imageBuilder: (context, imageProvider) => CircleAvatar(
-                radius: 36,
-                backgroundImage: imageProvider,
-              ),
-            )
-          else
-            const SizedBox(),
+          Row(
+            spacing: 15,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (controller.twitchCredentials.value != null)
+                CachedNetworkImage(
+                  imageUrl: controller
+                      .twitchCredentials.value!.twitchUser.profileImageUrl,
+                  placeholder: (BuildContext context, String url) =>
+                      CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.tertiary,
+                  ),
+                  errorWidget: (BuildContext context, String url, error) =>
+                      const Icon(Icons.error),
+                  imageBuilder: (context, imageProvider) => CircleAvatar(
+                    radius: 36,
+                    backgroundImage: imageProvider,
+                  ),
+                )
+              else
+                const SizedBox(),
+              if (controller.kickCredentials.value != null)
+                CachedNetworkImage(
+                  imageUrl:
+                      controller.kickCredentials.value!.kickUser.profilePicture,
+                  placeholder: (BuildContext context, String url) =>
+                      CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.tertiary,
+                  ),
+                  errorWidget: (BuildContext context, String url, error) =>
+                      const Icon(Icons.error),
+                  imageBuilder: (context, imageProvider) => CircleAvatar(
+                    radius: 36,
+                    backgroundImage: imageProvider,
+                  ),
+                )
+              else
+                const SizedBox(),
+            ],
+          ),
           Visibility(
             visible: controller.twitchCredentials.value != null,
             child: Text(
               'Hey ${controller.twitchCredentials.value?.twitchUser.displayName ?? ""}',
             ),
-          ),
-          const SizedBox(
-            height: 10,
           ),
           Text(
             controller.loadingMessage.value,
