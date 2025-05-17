@@ -63,6 +63,11 @@ jobs:
             fileName: integration_test_gcloud.json
             encodedString: ${{ secrets.GCLOUD_CONFIG_JSON }}
       
+      - name: Install Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          install_components: 'gcloud'
+      
       - name: Configure the gcloud account
         run: |
           
