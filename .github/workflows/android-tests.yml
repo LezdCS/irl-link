@@ -40,9 +40,6 @@ jobs:
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: echo "$GOOGLE_SERVICES_JSON" | base64 -di > ./android/app/google-services.json
-
-      - name: Remove haishin_kit from pubspec.yaml in CI
-        run: sed -i '/haishin_kit:/,+1 d' pubspec.yaml
         
       - name: Install dependencies
         run: flutter pub get
