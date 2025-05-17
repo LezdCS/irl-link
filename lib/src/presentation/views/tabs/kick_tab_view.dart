@@ -157,6 +157,9 @@ class KickTabView extends GetView<KickTabViewController> {
                                         ? controller.kickCategories
                                         : [];
                                   }
+                                  controller.onCategorySearchChanged(
+                                    textEditingValue.text,
+                                  );
                                   return controller.kickCategories.where(
                                     (category) => category.name
                                         .toLowerCase()

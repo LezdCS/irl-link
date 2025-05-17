@@ -40,6 +40,11 @@ class KickTabViewController extends GetxController
   late AnimationController controllerLiveCircleAnimation;
   late Animation<double> circleShadowAnimation;
 
+  void onCategorySearchChanged(String value) {
+    categorySearchQuery.value = value;
+    getKickCategories();
+  }
+
   @override
   void onInit() {
     titleFormController = TextEditingController();
@@ -116,7 +121,7 @@ class KickTabViewController extends GetxController
       params: KickCategoriesParams(
         accessToken: Get.find<HomeViewController>().kickData.value!.accessToken,
         searchQuery:
-            categorySearchQuery.value.isEmpty ? "" : categorySearchQuery.value,
+            categorySearchQuery.value.isEmpty ? "a" : categorySearchQuery.value,
       ),
     );
     categories.fold(
