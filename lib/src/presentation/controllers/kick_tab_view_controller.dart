@@ -31,6 +31,7 @@ class KickTabViewController extends GetxController
   FocusNode focus = FocusNode();
 
   RxList<KickCategory> kickCategories = <KickCategory>[].obs;
+  RxString categorySearchQuery = "".obs;
 
   RxBool displayKickPlayer = false.obs;
 
@@ -38,6 +39,11 @@ class KickTabViewController extends GetxController
   late AnimationController refreshDataAnimationController;
   late AnimationController controllerLiveCircleAnimation;
   late Animation<double> circleShadowAnimation;
+
+  void onCategorySearchChanged(String value) {
+    categorySearchQuery.value = value;
+    getKickCategories();
+  }
 
   @override
   void onInit() {
@@ -114,7 +120,8 @@ class KickTabViewController extends GetxController
     final categories = await getKickCategoriesUseCase(
       params: KickCategoriesParams(
         accessToken: Get.find<HomeViewController>().kickData.value!.accessToken,
-        searchQuery: "a",
+        searchQuery:
+            categorySearchQuery.value.isEmpty ? "a" : categorySearchQuery.value,
       ),
     );
     categories.fold(

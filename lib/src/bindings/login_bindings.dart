@@ -14,8 +14,10 @@ import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/usecases/kick/get_kick_local_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/kick_refresh_token_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/login_usecase.dart';
+import 'package:irllink/src/domain/usecases/kick/logout_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/login_usecase.dart';
+import 'package:irllink/src/domain/usecases/twitch/logout_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/refresh_token_usecase.dart';
 import 'package:irllink/src/presentation/controllers/login_view_controller.dart';
 import 'package:talker_flutter/talker_flutter.dart';
@@ -57,6 +59,8 @@ class LoginBindings extends Bindings {
         RefreshTwitchTokenUseCase(twitchRepository);
     LoginUseCase loginUseCase = LoginUseCase(twitchRepository);
     LoginKickUseCase loginKickUseCase = LoginKickUseCase(kickRepository);
+    LogoutUseCase logoutUseCase = LogoutUseCase(twitchRepository);
+    LogoutKickUseCase logoutKickUseCase = LogoutKickUseCase(kickRepository);
     GetKickLocalUseCase getKickLocalUseCase =
         GetKickLocalUseCase(kickRepository);
     final refreshKickAccessTokenUseCase =
@@ -69,6 +73,8 @@ class LoginBindings extends Bindings {
         loginUseCase: loginUseCase,
         loginKickUseCase: loginKickUseCase,
         getKickLocalUseCase: getKickLocalUseCase,
+        logoutTwitchUseCase: logoutUseCase,
+        logoutKickUseCase: logoutKickUseCase,
       ),
     );
   }
