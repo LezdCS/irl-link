@@ -48,6 +48,9 @@ jobs:
         run: flutter pub get
         env:
           FLUTTER_USE_SWIFT_PACKAGE_MANAGER: true
+      
+      - name: Set FLUTTER_TARGET_PLATFORM to Android
+        run: echo "FLUTTER_TARGET_PLATFORM=android" >> $GITHUB_ENV
 
       - name: Install Patrol CLI
         run: dart pub global activate patrol_cli
