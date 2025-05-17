@@ -11,8 +11,10 @@ import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/domain/usecases/kick/get_kick_local_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/kick_refresh_token_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/login_usecase.dart';
+import 'package:irllink/src/domain/usecases/kick/logout_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/login_usecase.dart';
+import 'package:irllink/src/domain/usecases/twitch/logout_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/refresh_token_usecase.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 
@@ -24,6 +26,8 @@ class LoginViewController extends GetxController {
     required this.loginUseCase,
     required this.loginKickUseCase,
     required this.getKickLocalUseCase,
+    required this.logoutTwitchUseCase,
+    required this.logoutKickUseCase,
   });
 
   final GetTwitchLocalUseCase getTwitchLocalUseCase;
@@ -32,6 +36,8 @@ class LoginViewController extends GetxController {
   final LoginUseCase loginUseCase;
   final LoginKickUseCase loginKickUseCase;
   final GetKickLocalUseCase getKickLocalUseCase;
+  final LogoutUseCase logoutTwitchUseCase;
+  final LogoutKickUseCase logoutKickUseCase;
 
   RxBool isLoading = true.obs;
   RxString loadingMessage = "retrieving_data".tr.obs;
@@ -65,8 +71,14 @@ class LoginViewController extends GetxController {
           twitchCredentials.value = r;
           final refreshResult = await refreshTwitchTokenUseCase(params: r);
           return refreshResult.fold(
-            (l) => null,
-            (r) => r,
+            (l) async {
+              await logoutTwitchUseCase(params: r.accessToken);
+              return null;
+            },
+            (r) async {
+              twitchCredentials.value = r;
+              return r;
+            },
           );
         },
       );
@@ -81,8 +93,14 @@ class LoginViewController extends GetxController {
           kickCredentials.value = r;
           final refreshResult = await kickRefreshTokenUseCase(params: r);
           return refreshResult.fold(
-            (l) => null,
-            (r) => r,
+            (l) async {
+              await logoutKickUseCase(params: r.accessToken);
+              return null;
+            },
+            (r) async {
+              kickCredentials.value = r;
+              return r;
+            },
           );
         },
       );
