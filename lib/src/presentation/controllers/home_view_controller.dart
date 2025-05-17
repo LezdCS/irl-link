@@ -137,7 +137,7 @@ class HomeViewController extends GetxController
       }
       if (kickCreds is KickCredentials) {
         kickData.value = kickCreds;
-        await _initializeKickServices();
+        _initializeKickServices();
       }
     }
 
@@ -153,16 +153,19 @@ class HomeViewController extends GetxController
   }
 
   Future<void> _initializeKickServices() async {
-    final refreshTokenResultKick =
-        await refreshKickAccessTokenUseCase(params: kickData.value!);
-    refreshTokenResultKick.fold(
-      (l) {
-        talkerService.talker.error('Failed to refresh Kick access token');
-      },
-      (r) {
-        kickData.value = r;
-      },
-    );
+    // Add periodic token refresh for Kick
+    Timer.periodic(const Duration(seconds: 13000), (Timer t) async {
+      final refreshTokenResultKick =
+          await refreshKickAccessTokenUseCase(params: kickData.value!);
+      refreshTokenResultKick.fold(
+        (l) {
+          talkerService.talker.error('Failed to refresh Kick access token');
+        },
+        (r) {
+          kickData.value = r;
+        },
+      );
+    });
   }
 
   Future<void> _initializeTwitchServices() async {

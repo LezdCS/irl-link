@@ -76,7 +76,6 @@ class LoginViewController extends GetxController {
               return null;
             },
             (r) async {
-              twitchCredentials.value = r;
               return r;
             },
           );
@@ -98,7 +97,6 @@ class LoginViewController extends GetxController {
               return null;
             },
             (r) async {
-              kickCredentials.value = r;
               return r;
             },
           );
