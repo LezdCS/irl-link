@@ -79,6 +79,7 @@ dependencies:
   path: ^1.9.1
   permission_handler: ^12.0.0+1
   haishin_kit: ^0.14.3
+  dropdown_search: ^6.0.2
 
 dev_dependencies:
   flutter_test:

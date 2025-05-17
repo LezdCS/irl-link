@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/domain/entities/kick/kick_category.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/kick_tab_view_controller.dart';
@@ -147,26 +148,44 @@ class KickTabView extends GetView<KickTabViewController> {
                       Obx(
                         () => controller.kickCategories.isEmpty
                             ? const SizedBox.shrink()
-                            : DropdownButtonFormField<int>(
-                                isExpanded: true,
-                                decoration: const InputDecoration(
-                                  labelText: 'Select Category',
-                                  border: OutlineInputBorder(),
-                                ),
-                                items: controller
-                                        .kickChannel.value!.stream.isLive
-                                    ? controller.kickCategories.map((category) {
-                                        return DropdownMenuItem<int>(
-                                          value: category.id,
-                                          child: Text(category.name),
-                                        );
-                                      }).toList()
-                                    : [],
-                                onChanged: (int? newValue) {
-                                  if (newValue != null) {
-                                    controller.selectedCategoryId.value =
-                                        newValue;
+                            : Autocomplete<KickCategory>(
+                                optionsBuilder:
+                                    (TextEditingValue textEditingValue) {
+                                  if (textEditingValue.text.isEmpty) {
+                                    return controller
+                                            .kickChannel.value!.stream.isLive
+                                        ? controller.kickCategories
+                                        : [];
                                   }
+                                  return controller.kickCategories.where(
+                                    (category) => category.name
+                                        .toLowerCase()
+                                        .contains(
+                                          textEditingValue.text.toLowerCase(),
+                                        ),
+                                  );
+                                },
+                                displayStringForOption:
+                                    (KickCategory category) => category.name,
+                                onSelected: (KickCategory category) {
+                                  controller.selectedCategoryId.value =
+                                      category.id;
+                                },
+                                fieldViewBuilder: (
+                                  BuildContext context,
+                                  TextEditingController fieldController,
+                                  FocusNode fieldFocusNode,
+                                  VoidCallback onFieldSubmitted,
+                                ) {
+                                  return TextFormField(
+                                    controller: fieldController,
+                                    focusNode: fieldFocusNode,
+                                    decoration: const InputDecoration(
+                                      labelText: 'Search and Select Category',
+                                      border: OutlineInputBorder(),
+                                      prefixIcon: Icon(Icons.search),
+                                    ),
+                                  );
                                 },
                               ),
                       ),

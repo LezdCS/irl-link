@@ -31,6 +31,7 @@ class KickTabViewController extends GetxController
   FocusNode focus = FocusNode();
 
   RxList<KickCategory> kickCategories = <KickCategory>[].obs;
+  RxString categorySearchQuery = "".obs;
 
   RxBool displayKickPlayer = false.obs;
 
@@ -114,7 +115,8 @@ class KickTabViewController extends GetxController
     final categories = await getKickCategoriesUseCase(
       params: KickCategoriesParams(
         accessToken: Get.find<HomeViewController>().kickData.value!.accessToken,
-        searchQuery: "a",
+        searchQuery:
+            categorySearchQuery.value.isEmpty ? "" : categorySearchQuery.value,
       ),
     );
     categories.fold(
