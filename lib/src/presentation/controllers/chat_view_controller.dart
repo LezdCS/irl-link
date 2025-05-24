@@ -10,6 +10,7 @@ import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/services/youtube_chat.dart';
 import 'package:irllink/src/core/utils/constants.dart';
+import 'package:irllink/src/core/utils/rfc_2812_parser.dart';
 import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/pinned_message.dart';
@@ -366,27 +367,13 @@ class ChatViewController extends GetxController
             (l) => talker.error(l.message),
             (r) {
               for (String message in r) {
-                final Map<String, String> messageMapped = {};
-                //We split the message by ';' to get the different parts
-                List<String> messageSplited = message.split(';');
-                //We split each part by '=' to get the key and the value
-                for (var element in messageSplited) {
-                  List elementSplited = element.split('=');
-                  messageMapped[elementSplited[0]] = elementSplited[1];
+                final parsedMessage = RFC2812Parser.parseMessage(message);
+                if (parsedMessage?.command == 'PRIVMSG') {
+                  final message = parsedMessage?.trailing;
+                  if (message != null) {
+                    // TODO(LezdCS): Implement
+                  }
                 }
-                twitch_chat.ChatMessage twitchMessage =
-                    twitch_chat.ChatMessage.fromString(
-                  twitchBadges: [],
-                  cheerEmotes: [],
-                  thirdPartEmotes: [],
-                  message: message,
-                  params: const twitch_chat.TwitchChatParameters(
-                    addFirstMessages: true,
-                  ),
-                  messageSplited: messageSplited,
-                  messageMapped: messageMapped,
-                );
-                addMessage(ChatMessage.fromTwitch(twitchMessage, tc.channel));
               }
             },
           );
