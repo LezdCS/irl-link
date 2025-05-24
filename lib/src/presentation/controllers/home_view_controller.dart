@@ -28,6 +28,7 @@ import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/domain/usecases/kick/kick_refresh_token_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/post_kick_chat_nessage_usecase.dart';
 import 'package:irllink/src/domain/usecases/rtmp/get_rtmp_list_usecase.dart';
+import 'package:irllink/src/domain/usecases/twitch/get_recent_messages.dart';
 import 'package:irllink/src/domain/usecases/twitch/refresh_token_usecase.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/kick_tab_view_controller.dart';
@@ -58,6 +59,7 @@ class HomeViewController extends GetxController
     required this.talkerService,
     required this.postKickChatMessageUseCase,
     required this.getRtmpListUseCase,
+    required this.getRecentMessagesUseCase,
   });
 
   final RefreshTwitchTokenUseCase refreshAccessTokenUseCase;
@@ -66,6 +68,7 @@ class HomeViewController extends GetxController
   final TalkerService talkerService;
   final PostKickChatMessageUseCase postKickChatMessageUseCase;
   final GetRtmpListUseCase getRtmpListUseCase;
+  final GetRecentMessagesUseCase getRecentMessagesUseCase;
   SplitViewController? splitViewController = SplitViewController(
     limits: [null, WeightLimit(min: 0.12, max: 0.92)],
   );
@@ -260,6 +263,7 @@ class HomeViewController extends GetxController
           talker: talkerService.talker,
           ttsService: Get.find<TtsService>(),
           watchService: Get.find<WatchService>(),
+          getRecentMessagesUseCase: getRecentMessagesUseCase,
         );
         return controller;
       },

@@ -347,4 +347,18 @@ class TwitchRepositoryImpl implements TwitchRepository {
       return Left(Failure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, List<String>>> getRecentMessages(
+    String channelName,
+    int limit,
+  ) async {
+    try {
+      final messages =
+          await _remoteDataSource.getRecentMessages(channelName, limit);
+      return Right(messages);
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
 }

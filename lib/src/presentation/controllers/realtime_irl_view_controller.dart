@@ -12,7 +12,8 @@ import 'package:irllink/src/core/utils/determine_position.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 
-class RealtimeIrlViewController extends GetxController {
+class RealtimeIrlViewController extends GetxController
+    with WidgetsBindingObserver {
   late RealtimeIrl realtimeIrl;
 
   final HomeViewController homeViewController = Get.find<HomeViewController>();
@@ -33,6 +34,18 @@ class RealtimeIrlViewController extends GetxController {
     FlutterForegroundTask.stopService();
     FlutterForegroundTask.removeTaskDataCallback(realtimeIrl.onReceiveTaskData);
     super.onClose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.resumed) {
+      // The app is back to the foreground
+      start(); // Reconnect to RealtimeIRL service
+    } else if (state == AppLifecycleState.paused) {
+      // The app is sent to the background
+    }
   }
 
   Future<void> _initService() async {
