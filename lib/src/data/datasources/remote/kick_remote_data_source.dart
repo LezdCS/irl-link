@@ -15,8 +15,10 @@ import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/entities/kick/kick_category_dto.dart';
 import 'package:irllink/src/data/entities/kick/kick_channel_dto.dart';
 import 'package:irllink/src/data/entities/kick/kick_user_dto.dart';
+import 'package:irllink/src/domain/usecases/kick/ban_kick_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/get_kick_categories_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/post_kick_chat_nessage_usecase.dart';
+import 'package:irllink/src/domain/usecases/kick/unban_kick_user_usecase.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 abstract class KickRemoteDataSource {
@@ -37,6 +39,12 @@ abstract class KickRemoteDataSource {
   );
   Future<Either<Failure, void>> sendChatMessage(
     PostKickChatMessageParams params,
+  );
+  Future<Either<Failure, void>> banUser(
+    BanKickUserParams params,
+  );
+  Future<Either<Failure, void>> unbanUser(
+    UnbanKickUserParams params,
   );
 }
 
@@ -260,6 +268,54 @@ class KickRemoteDataSourceImpl implements KickRemoteDataSource {
       }
     } catch (e) {
       talker.error('Failed to send chat message: $e');
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> banUser(BanKickUserParams params) async {
+    try {
+      dioClient.options.headers["Authorization"] =
+          "Bearer ${params.accessToken}";
+      final response = await dioClient.post(
+        '$kKickApiUrlBase/public/v1/moderation/v1/bans',
+        data: {
+          "broadcaster_user_id": params.broadcasterUserId,
+          "duration": params.duration,
+          "reason": params.reason,
+          "user_id": params.userToBanId,
+        },
+      );
+      if (response.statusCode == 200) {
+        return const Right(null);
+      } else {
+        return Left(Failure('Failed to ban user'));
+      }
+    } catch (e) {
+      talker.error('Failed to ban user: $e');
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> unbanUser(UnbanKickUserParams params) async {
+    try {
+      dioClient.options.headers["Authorization"] =
+          "Bearer ${params.accessToken}";
+      final response = await dioClient.delete(
+        '$kKickApiUrlBase/public/v1/moderation/v1/bans',
+        data: {
+          "broadcaster_user_id": params.broadcasterUserId,
+          "user_id": params.userToUnbanId,
+        },
+      );
+      if (response.statusCode == 200) {
+        return const Right(null);
+      } else {
+        return Left(Failure('Failed to unban user'));
+      }
+    } catch (e) {
+      talker.error('Failed to unban user: $e');
       return Left(Failure(e.toString()));
     }
   }

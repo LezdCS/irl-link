@@ -20,11 +20,13 @@ import 'package:irllink/src/data/repositories/kick_repository_impl.dart';
 import 'package:irllink/src/data/repositories/rtmp_repository_impl.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
+import 'package:irllink/src/domain/usecases/kick/ban_kick_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/get_kick_categories_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/get_kick_channels_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/kick_refresh_token_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/patch_kick_channel_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/post_kick_chat_nessage_usecase.dart';
+import 'package:irllink/src/domain/usecases/kick/unban_kick_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/rtmp/get_rtmp_list_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_last_activities_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_local_credentials_usecase.dart';
@@ -104,6 +106,8 @@ class HomeBindings extends Bindings {
     final refreshTwitchAccessTokenUseCase =
         RefreshTwitchTokenUseCase(twitchRepository);
     final getRecentMessagesUseCase = GetRecentMessagesUseCase(twitchRepository);
+    final banKickUserUseCase = BanKickUserUseCase(kickRepository);
+    final unbanKickUserUseCase = UnbanKickUserUseCase(kickRepository);
     final refreshKickAccessTokenUseCase =
         KickRefreshTokenUseCase(kickRepository);
     final postKickChatMessageUseCase =
@@ -167,6 +171,8 @@ class HomeBindings extends Bindings {
         postKickChatMessageUseCase: postKickChatMessageUseCase,
         getRtmpListUseCase: getRtmpListUseCase,
         getRecentMessagesUseCase: getRecentMessagesUseCase,
+        banKickUserUseCase: banKickUserUseCase,
+        unbanKickUserUseCase: unbanKickUserUseCase,
       ),
     );
 

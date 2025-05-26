@@ -5,8 +5,8 @@ import 'package:irllink/src/domain/repositories/kick_repository.dart';
 
 class BanKickUserParams {
   final String accessToken;
-  final String broadcasterUserId;
-  final String userToBanId;
+  final int broadcasterUserId;
+  final int userToBanId;
   final String? reason;
   final int? duration;
 

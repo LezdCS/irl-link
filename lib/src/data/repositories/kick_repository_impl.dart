@@ -215,16 +215,32 @@ class KickRepositoryImpl implements KickRepository {
   }
 
   @override
-  Future<Either<Failure, void>> banUser({required BanKickUserParams params}) {
-    // TODO(LezdCS): implement banUser
-    throw UnimplementedError();
+  Future<Either<Failure, void>> banUser({
+    required BanKickUserParams params,
+  }) async {
+    try {
+      final result = await _remoteDataSource.banUser(params);
+      return result.fold(
+        (failure) => Left(failure),
+        (success) => Right(success),
+      );
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
   }
 
   @override
   Future<Either<Failure, void>> unbanUser({
     required UnbanKickUserParams params,
-  }) {
-    // TODO(LezdCS): implement unbanUser
-    throw UnimplementedError();
+  }) async {
+    try {
+      final result = await _remoteDataSource.unbanUser(params);
+      return result.fold(
+        (failure) => Left(failure),
+        (success) => Right(success),
+      );
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
   }
 }
