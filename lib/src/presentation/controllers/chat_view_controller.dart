@@ -146,11 +146,13 @@ class ChatViewController extends GetxController
 
   /// Delete [message] by his id
   void deleteMessageInstruction(ChatMessage message) {
-    if (homeViewController.twitchData.value == null) {
+    if (homeViewController.twitchData.value == null ||
+        message.platform != Platform.twitch) {
       message.isDeleted = true;
       homeViewController.selectedMessage.value = null;
       return;
     }
+
     twitch_chat.TwitchApi.deleteMessage(
       homeViewController.twitchData.value!.accessToken,
       message.channelId,
@@ -164,6 +166,9 @@ class ChatViewController extends GetxController
   /// Ban user for specific [duration] based on the author name in the [message]
   void timeoutMessageInstruction(ChatMessage message, int duration) {
     if (homeViewController.twitchData.value == null) {
+      return;
+    }
+    if (message.platform != Platform.twitch) {
       return;
     }
     twitch_chat.TwitchApi.banUser(
@@ -182,6 +187,9 @@ class ChatViewController extends GetxController
     if (homeViewController.twitchData.value == null) {
       return;
     }
+    if (message.platform != Platform.twitch) {
+      return;
+    }
     twitch_chat.TwitchApi.banUser(
       homeViewController.twitchData.value!.accessToken,
       message.channelId,
@@ -195,6 +203,9 @@ class ChatViewController extends GetxController
   /// Hide every future messages from an user (only on this application, not on Twitch)
   void hideUser(ChatMessage message) {
     if (homeViewController.twitchData.value == null) {
+      return;
+    }
+    if (message.platform != Platform.twitch) {
       return;
     }
     Settings settings = settingsService.settings.value;

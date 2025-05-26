@@ -31,10 +31,13 @@ class RtmpTabView extends GetView<RtmpTabViewController> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(3),
-                  child: StreamViewTexture(
-                    currentStream,
-                    key: ValueKey(
-                      '${currentStream.hashCode}_${controller.currentPosition.value}_${controller.isStreamingVideoRtmp.value}',
+                  child: AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: StreamViewTexture(
+                      currentStream,
+                      key: ValueKey(
+                        '${currentStream.hashCode}_${controller.currentPosition.value}_${controller.isStreamingVideoRtmp.value}',
+                      ),
                     ),
                   ),
                 ),

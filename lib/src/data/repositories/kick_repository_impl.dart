@@ -14,9 +14,11 @@ import 'package:irllink/src/domain/entities/kick/kick_channel.dart';
 import 'package:irllink/src/domain/entities/kick/kick_credentials.dart';
 import 'package:irllink/src/domain/entities/kick/kick_user.dart';
 import 'package:irllink/src/domain/repositories/kick_repository.dart';
+import 'package:irllink/src/domain/usecases/kick/ban_kick_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/get_kick_categories_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/patch_kick_channel_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/post_kick_chat_nessage_usecase.dart';
+import 'package:irllink/src/domain/usecases/kick/unban_kick_user_usecase.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class KickRepositoryImpl implements KickRepository {
@@ -210,5 +212,19 @@ class KickRepositoryImpl implements KickRepository {
     } catch (e) {
       return Left(Failure(e.toString()));
     }
+  }
+
+  @override
+  Future<Either<Failure, void>> banUser({required BanKickUserParams params}) {
+    // TODO(LezdCS): implement banUser
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, void>> unbanUser({
+    required UnbanKickUserParams params,
+  }) {
+    // TODO(LezdCS): implement unbanUser
+    throw UnimplementedError();
   }
 }

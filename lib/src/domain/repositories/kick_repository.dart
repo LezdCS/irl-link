@@ -5,9 +5,11 @@ import 'package:irllink/src/domain/entities/kick/kick_category.dart';
 import 'package:irllink/src/domain/entities/kick/kick_channel.dart';
 import 'package:irllink/src/domain/entities/kick/kick_credentials.dart';
 import 'package:irllink/src/domain/entities/kick/kick_user.dart';
+import 'package:irllink/src/domain/usecases/kick/ban_kick_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/get_kick_categories_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/patch_kick_channel_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/post_kick_chat_nessage_usecase.dart';
+import 'package:irllink/src/domain/usecases/kick/unban_kick_user_usecase.dart';
 
 abstract class KickRepository {
   Future<Either<Failure, KickCredentials>> getKickOauth(
@@ -43,4 +45,12 @@ abstract class KickRepository {
   Future<Either<Failure, void>> sendChatMessage(
     PostKickChatMessageParams params,
   );
+
+  Future<Either<Failure, void>> banUser({
+    required BanKickUserParams params,
+  });
+
+  Future<Either<Failure, void>> unbanUser({
+    required UnbanKickUserParams params,
+  });
 }
