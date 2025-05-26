@@ -10,7 +10,6 @@ import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/services/youtube_chat.dart';
 import 'package:irllink/src/core/utils/constants.dart';
-import 'package:irllink/src/core/utils/rfc_2812_parser.dart';
 import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/pinned_message.dart';
@@ -357,26 +356,26 @@ class ChatViewController extends GetxController
         homeViewController.twitchData.value!.accessToken,
         clientId: kTwitchAuthClientId,
         onConnected: () async {
-          final result = await getRecentMessagesUseCase(
-            params: GetRecentMessagesUseCaseParams(
-              channelName: tc.channel,
-              limit: 20,
-            ),
-          );
-          result.fold(
-            (l) => talker.error(l.message),
-            (r) {
-              for (String message in r) {
-                final parsedMessage = RFC2812Parser.parseMessage(message);
-                if (parsedMessage?.command == 'PRIVMSG') {
-                  final message = parsedMessage?.trailing;
-                  if (message != null) {
-                    // TODO(LezdCS): Implement
-                  }
-                }
-              }
-            },
-          );
+          // final result = await getRecentMessagesUseCase(
+          //   params: GetRecentMessagesUseCaseParams(
+          //     channelName: tc.channel,
+          //     limit: 20,
+          //   ),
+          // );
+          // result.fold(
+          //   (l) => talker.error(l.message),
+          //   (r) {
+          //     for (String message in r) {
+          //       final parsedMessage = RFC2812Parser.parseMessage(message);
+          //       if (parsedMessage?.command == 'PRIVMSG') {
+          //         final message = parsedMessage?.trailing;
+          //         if (message != null) {
+          //           // TODO(LezdCS): Implement
+          //         }
+          //       }
+          //     }
+          //   },
+          // );
         },
         onClearChat: () {
           chatMessages.clear();
