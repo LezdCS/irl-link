@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -63,45 +64,73 @@ class LoginViewController extends GetxController {
     );
 
     Future<TwitchCredentials?> handleTwitchCredentials() async {
-      final twitchCredsResult = await getTwitchLocalUseCase();
-      return await twitchCredsResult.fold(
-        (l) async => null, // Do nothing if no Twitch credentials found
-        (r) async {
-          loadingMessage.value = "refreshing_token".tr;
-          twitchCredentials.value = r;
-          final refreshResult = await refreshTwitchTokenUseCase(params: r);
-          return refreshResult.fold(
-            (l) async {
-              await logoutTwitchUseCase(params: r.accessToken);
-              return null;
-            },
-            (r) async {
-              return r;
-            },
+      try {
+        final twitchCredsResult = await getTwitchLocalUseCase();
+        return await twitchCredsResult.fold(
+          (l) async => null, // Do nothing if no Twitch credentials found
+          (r) async {
+            loadingMessage.value = "refreshing_token".tr;
+            twitchCredentials.value = r;
+            final refreshResult =
+                await refreshTwitchTokenUseCase(params: r).timeout(
+              const Duration(seconds: 15),
+              onTimeout: () =>
+                  throw TimeoutException('Twitch token refresh timed out'),
+            );
+            return refreshResult.fold(
+              (l) async {
+                await logoutTwitchUseCase(params: r.accessToken);
+                return null;
+              },
+              (r) async {
+                return r;
+              },
+            );
+          },
+        );
+      } on TimeoutException catch (_) {
+        loadingMessage.value = "token_refresh_timeout".tr;
+        if (twitchCredentials.value != null) {
+          await logoutTwitchUseCase(
+            params: twitchCredentials.value!.accessToken,
           );
-        },
-      );
+        }
+        return null;
+      }
     }
 
     Future<KickCredentials?> handleKickCredentials() async {
-      final kickCredsResult = await getKickLocalUseCase();
-      return await kickCredsResult.fold(
-        (l) async => null,
-        (r) async {
-          loadingMessage.value = "refreshing_token".tr;
-          kickCredentials.value = r;
-          final refreshResult = await kickRefreshTokenUseCase(params: r);
-          return refreshResult.fold(
-            (l) async {
-              await logoutKickUseCase(params: r.accessToken);
-              return null;
-            },
-            (r) async {
-              return r;
-            },
-          );
-        },
-      );
+      try {
+        final kickCredsResult = await getKickLocalUseCase();
+        return await kickCredsResult.fold(
+          (l) async => null,
+          (r) async {
+            loadingMessage.value = "refreshing_token".tr;
+            kickCredentials.value = r;
+            final refreshResult =
+                await kickRefreshTokenUseCase(params: r).timeout(
+              const Duration(seconds: 15),
+              onTimeout: () =>
+                  throw TimeoutException('Kick token refresh timed out'),
+            );
+            return refreshResult.fold(
+              (l) async {
+                await logoutKickUseCase(params: r.accessToken);
+                return null;
+              },
+              (r) async {
+                return r;
+              },
+            );
+          },
+        );
+      } on TimeoutException catch (_) {
+        loadingMessage.value = "token_refresh_timeout".tr;
+        if (kickCredentials.value != null) {
+          await logoutKickUseCase(params: kickCredentials.value!.accessToken);
+        }
+        return null;
+      }
     }
 
     // Run credential handling in parallel

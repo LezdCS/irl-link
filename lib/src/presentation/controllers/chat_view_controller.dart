@@ -15,10 +15,11 @@ import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/pinned_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
+import 'package:irllink/src/domain/usecases/twitch/get_recent_messages.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:kick_chat/kick_chat.dart';
 import 'package:talker_flutter/talker_flutter.dart';
-import 'package:twitch_chat/twitch_chat.dart' hide ChatMessage;
+import 'package:twitch_chat/twitch_chat.dart' as twitch_chat;
 
 class ChatViewController extends GetxController
     with GetTickerProviderStateMixin, WidgetsBindingObserver {
@@ -29,6 +30,7 @@ class ChatViewController extends GetxController
     required this.watchService,
     required this.settingsService,
     required this.talker,
+    required this.getRecentMessagesUseCase,
   });
 
   final ChatGroup chatGroup;
@@ -37,6 +39,8 @@ class ChatViewController extends GetxController
   final WatchService watchService;
   final SettingsService settingsService;
   final Talker talker;
+
+  final GetRecentMessagesUseCase getRecentMessagesUseCase;
 
   //CHAT
   late ScrollController scrollController;
@@ -48,7 +52,7 @@ class ChatViewController extends GetxController
 
   late TextEditingController banDurationInputController;
 
-  List<TwitchChat> twitchChats = [];
+  List<twitch_chat.TwitchChat> twitchChats = [];
   List<KickChat> kickChats = [];
   List<YoutubeChat> youtubeChats = [];
 
@@ -97,7 +101,7 @@ class ChatViewController extends GetxController
   }
 
   void reconnectAllChats() {
-    for (TwitchChat twitchChat in twitchChats) {
+    for (twitch_chat.TwitchChat twitchChat in twitchChats) {
       if (!twitchChat.isConnected.value) {
         twitchChat.close();
         twitchChat.connect();
@@ -147,7 +151,7 @@ class ChatViewController extends GetxController
       homeViewController.selectedMessage.value = null;
       return;
     }
-    TwitchApi.deleteMessage(
+    twitch_chat.TwitchApi.deleteMessage(
       homeViewController.twitchData.value!.accessToken,
       message.channelId,
       message.id,
@@ -162,7 +166,7 @@ class ChatViewController extends GetxController
     if (homeViewController.twitchData.value == null) {
       return;
     }
-    TwitchApi.banUser(
+    twitch_chat.TwitchApi.banUser(
       homeViewController.twitchData.value!.accessToken,
       message.channelId,
       message.authorId,
@@ -178,7 +182,7 @@ class ChatViewController extends GetxController
     if (homeViewController.twitchData.value == null) {
       return;
     }
-    TwitchApi.banUser(
+    twitch_chat.TwitchApi.banUser(
       homeViewController.twitchData.value!.accessToken,
       message.channelId,
       message.authorId,
@@ -297,7 +301,7 @@ class ChatViewController extends GetxController
     }
 
     // Remove
-    List<TwitchChat> twitchChatToRemove = twitchChats
+    List<twitch_chat.TwitchChat> twitchChatToRemove = twitchChats
         .where(
           (tc) =>
               twitchChannels
@@ -322,7 +326,7 @@ class ChatViewController extends GetxController
         )
         .toList();
 
-    for (TwitchChat t in twitchChatToRemove) {
+    for (twitch_chat.TwitchChat t in twitchChatToRemove) {
       talker.info('Removing chat: ${t.channel}');
       t.close();
       twitchChats.removeWhere((tc) => tc.channelId == t.channelId);
@@ -342,16 +346,37 @@ class ChatViewController extends GetxController
   }
 
   void createTwitchChat(Channel tc) {
-    TwitchChat twitchChat;
+    twitch_chat.TwitchChat twitchChat;
     if (homeViewController.twitchData.value == null) {
-      twitchChat = TwitchChat.anonymous(tc.channel);
+      twitchChat = twitch_chat.TwitchChat.anonymous(tc.channel);
     } else {
-      twitchChat = TwitchChat(
+      twitchChat = twitch_chat.TwitchChat(
         tc.channel,
         homeViewController.twitchData.value!.twitchUser.login,
         homeViewController.twitchData.value!.accessToken,
         clientId: kTwitchAuthClientId,
-        onConnected: () {},
+        onConnected: () async {
+          // final result = await getRecentMessagesUseCase(
+          //   params: GetRecentMessagesUseCaseParams(
+          //     channelName: tc.channel,
+          //     limit: 20,
+          //   ),
+          // );
+          // result.fold(
+          //   (l) => talker.error(l.message),
+          //   (r) {
+          //     for (String message in r) {
+          //       final parsedMessage = RFC2812Parser.parseMessage(message);
+          //       if (parsedMessage?.command == 'PRIVMSG') {
+          //         final message = parsedMessage?.trailing;
+          //         if (message != null) {
+          //           // TODO(LezdCS): Implement
+          //         }
+          //       }
+          //     }
+          //   },
+          // );
+        },
         onClearChat: () {
           chatMessages.clear();
         },
@@ -373,7 +398,7 @@ class ChatViewController extends GetxController
         },
         onDone: () {},
         onError: () {},
-        params: const TwitchChatParameters(addFirstMessages: true),
+        params: const twitch_chat.TwitchChatParameters(addFirstMessages: true),
       );
     }
     twitchChat.connect();

@@ -84,4 +84,9 @@ abstract class TwitchRepository {
     String broadcasterId,
     ChatMessage message,
   );
+
+  Future<Either<Failure, List<String>>> getRecentMessages(
+    String channelName,
+    int limit,
+  );
 }

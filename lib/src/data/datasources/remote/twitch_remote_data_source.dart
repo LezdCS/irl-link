@@ -69,6 +69,10 @@ abstract class TwitchRemoteDataSource {
     String broadcasterId,
     ChatMessage message,
   );
+  Future<List<String>> getRecentMessages(
+    String channelName,
+    int limit,
+  );
 }
 
 class TwitchRemoteDataSourceImpl implements TwitchRemoteDataSource {
@@ -393,5 +397,35 @@ class TwitchRemoteDataSourceImpl implements TwitchRemoteDataSource {
         'message_id': message.id,
       },
     );
+  }
+
+  @override
+  Future<List<String>> getRecentMessages(
+    String channelName,
+    int limit,
+  ) async {
+    final Dio dio = Dio();
+    try {
+      dio.options.baseUrl = 'https://recent-messages.robotty.de';
+      final response = await dio.get(
+        '/api/v2/recent-messages/$channelName',
+        queryParameters: {
+          'limit': limit,
+          'hide_moderation_messages': false,
+          'hide_moderated_messages': false,
+          'clearchat_to_notice': false,
+        },
+      );
+
+      if (response.data != null && response.data['messages'] != null) {
+        final messages = List<String>.from(response.data['messages']);
+        return messages;
+      }
+
+      return [];
+    } catch (e, stackTrace) {
+      talker.handle(e, stackTrace);
+      return [];
+    }
   }
 }

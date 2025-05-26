@@ -41,6 +41,7 @@ import 'package:irllink/src/domain/usecases/streamelements/update_player_state_u
 import 'package:irllink/src/domain/usecases/twitch/create_poll_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/end_poll_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/end_prediction_usecase.dart';
+import 'package:irllink/src/domain/usecases/twitch/get_recent_messages.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_stream_info_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/refresh_token_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/set_chat_settings_usecase.dart';
@@ -102,6 +103,7 @@ class HomeBindings extends Bindings {
     // Use cases
     final refreshTwitchAccessTokenUseCase =
         RefreshTwitchTokenUseCase(twitchRepository);
+    final getRecentMessagesUseCase = GetRecentMessagesUseCase(twitchRepository);
     final refreshKickAccessTokenUseCase =
         KickRefreshTokenUseCase(kickRepository);
     final postKickChatMessageUseCase =
@@ -164,6 +166,7 @@ class HomeBindings extends Bindings {
         talkerService: talkerService,
         postKickChatMessageUseCase: postKickChatMessageUseCase,
         getRtmpListUseCase: getRtmpListUseCase,
+        getRecentMessagesUseCase: getRecentMessagesUseCase,
       ),
     );
 

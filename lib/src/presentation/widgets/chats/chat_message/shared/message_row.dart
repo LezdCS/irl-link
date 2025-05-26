@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/youtube_chat.dart';
 import 'package:irllink/src/domain/entities/chat/chat_badge.dart';
 import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
@@ -155,6 +157,12 @@ class MessageRow extends StatelessWidget {
           }
         }
       }
+      String youtubeEmotesUrl = '';
+      if (message.platform == Platform.youtube) {
+        if (emojiUrls.containsKey(word)) {
+          youtubeEmotesUrl = emojiUrls[word]!;
+        }
+      }
 
       ChatEmote? thirdPartyEmote =
           thirdPartEmotes.firstWhereOrNull((element) => element.name == word);
@@ -193,6 +201,22 @@ class MessageRow extends StatelessWidget {
                 height: textSize,
               ),
             ),
+          ),
+        );
+      } else if (youtubeEmotesUrl.isNotEmpty) {
+        messageWidgetsBuild.add(
+          Wrap(
+            children: [
+              CachedNetworkImage(
+                imageUrl: youtubeEmotesUrl,
+                width: 24,
+                height: 24,
+                placeholder: (BuildContext context, String url) =>
+                    const CircularProgressIndicator(),
+                errorWidget: (BuildContext context, String url, error) =>
+                    const Icon(Icons.error),
+              ),
+            ],
           ),
         );
       } else if (message.eventType == EventType.bitDonation &&
