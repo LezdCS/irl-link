@@ -278,7 +278,7 @@ class KickRemoteDataSourceImpl implements KickRemoteDataSource {
       dioClient.options.headers["Authorization"] =
           "Bearer ${params.accessToken}";
       final response = await dioClient.post(
-        '$kKickApiUrlBase/public/v1/moderation/v1/bans',
+        '$kKickApiUrlBase/public/v1/moderation/bans',
         data: {
           "broadcaster_user_id": params.broadcasterUserId,
           "duration": params.duration,
@@ -303,7 +303,7 @@ class KickRemoteDataSourceImpl implements KickRemoteDataSource {
       dioClient.options.headers["Authorization"] =
           "Bearer ${params.accessToken}";
       final response = await dioClient.delete(
-        '$kKickApiUrlBase/public/v1/moderation/v1/bans',
+        '$kKickApiUrlBase/public/v1/moderation/bans',
         data: {
           "broadcaster_user_id": params.broadcasterUserId,
           "user_id": params.userToUnbanId,
