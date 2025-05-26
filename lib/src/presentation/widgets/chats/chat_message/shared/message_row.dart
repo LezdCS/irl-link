@@ -115,131 +115,167 @@ class MessageRow extends StatelessWidget {
     List<ChatEmote> thirdPartEmotes,
   ) {
     List<Widget> messageWidgetsBuild = [];
+    final List<String> words = message.message.trim().split(' ');
 
-    for (int i = 0; i < message.message.trim().split(' ').length; i++) {
-      String word = message.message.trim().split(' ')[i];
-
-      MapEntry? emote = message.emotes.entries.firstWhereOrNull(
-        (element) => element.value
-            .where(
-              (position) =>
-                  message.message.substring(
-                    int.parse(position[0]),
-                    int.parse(position[1]) + 1,
-                  ) ==
-                  word,
-            )
-            .isNotEmpty,
-      );
-
-      // [emote:37227:LULW]
-      List<String> kickEmotesIds = [];
-      if (word.startsWith('[') &&
-          word.endsWith(']') &&
-          message.platform == Platform.kick) {
-        if ('['.allMatches(word).length > 1) {
-          int numberOfLeft = '['.allMatches(word).length;
-          int numberOfRight = ']'.allMatches(word).length;
-          if (numberOfLeft == numberOfRight) {
-            // it might means we are in a scenario where there is no spacing between the emotes
-            // [emote:37227:LULW][emote:37227:LULW][emote:37227:LULW]
-            List<String> emotesSplit = word.split(']');
-            kickEmotesIds = [];
-            for (String e in emotesSplit) {
-              if (':'.allMatches(e).length == 2) {
-                kickEmotesIds.add(word.split(':')[1]);
-              }
-            }
-          }
-        } else {
-          if (':'.allMatches(word).length == 2) {
-            kickEmotesIds.add(word.split(':')[1]);
-          }
-        }
-      }
-      String youtubeEmotesUrl = '';
-      if (message.platform == Platform.youtube) {
-        if (emojiUrls.containsKey(word)) {
-          youtubeEmotesUrl = emojiUrls[word]!;
-        }
+    for (final String word in words) {
+      // Handle YouTube emotes first as it's the simplest check
+      if (message.platform == Platform.youtube && emojiUrls.containsKey(word)) {
+        messageWidgetsBuild.add(_buildYoutubeEmote(emojiUrls[word]!, textSize));
+        continue;
       }
 
-      ChatEmote? thirdPartyEmote =
-          thirdPartEmotes.firstWhereOrNull((element) => element.name == word);
-
+      // Check for Twitch emotes
+      final emote = _findTwitchEmote(message, word);
       if (emote != null) {
-        messageWidgetsBuild.add(
-          Wrap(
-            children: [
-              TwitchEmote(
-                height: textSize,
-                emote: emote,
-              ),
-              const Text(' '),
-            ],
-          ),
-        );
-      } else if (thirdPartyEmote != null) {
-        messageWidgetsBuild.add(
-          Wrap(
-            children: [
-              ThirdPartEmote(
-                emote: thirdPartyEmote,
-                height: textSize,
-              ),
-              const Text(' '),
-            ],
-          ),
-        );
-      } else if (kickEmotesIds.isNotEmpty) {
-        messageWidgetsBuild.add(
-          Wrap(
-            children: List.generate(
-              kickEmotesIds.length,
-              (index) => KickEmote(
-                emoteId: kickEmotesIds[index],
-                height: textSize,
-              ),
-            ),
-          ),
-        );
-      } else if (youtubeEmotesUrl.isNotEmpty) {
-        messageWidgetsBuild.add(
-          Wrap(
-            children: [
-              CachedNetworkImage(
-                imageUrl: youtubeEmotesUrl,
-                width: 24,
-                height: 24,
-                placeholder: (BuildContext context, String url) =>
-                    const CircularProgressIndicator(),
-                errorWidget: (BuildContext context, String url, error) =>
-                    const Icon(Icons.error),
-              ),
-            ],
-          ),
-        );
-      } else if (message.eventType == EventType.bitDonation &&
-          cheerEmotes.firstWhereOrNull((emote) => emote.name == word) != null) {
-        messageWidgetsBuild.add(
-          CheerEmote(
-            cheerEmote:
-                cheerEmotes.firstWhereOrNull((emote) => emote.name == word)!,
-            textSize: textSize,
-          ),
-        );
-      } else {
-        messageWidgetsBuild.add(
-          Word(
-            word: word,
-            isAction: message.isAction,
-            color: message.color,
-            textSize: textSize,
-          ),
-        );
+        messageWidgetsBuild.add(_buildTwitchEmoteWidget(emote, textSize));
+        continue;
       }
+
+      // Check for third-party emotes
+      final thirdPartyEmote = thirdPartEmotes.firstWhereOrNull(
+        (element) => element.name == word,
+      );
+      if (thirdPartyEmote != null) {
+        messageWidgetsBuild
+            .add(_buildThirdPartyEmoteWidget(thirdPartyEmote, textSize));
+        continue;
+      }
+
+      // Handle Kick emotes
+      if (message.platform == Platform.kick &&
+          word.startsWith('[') &&
+          word.endsWith(']')) {
+        final kickEmoteIds = _extractKickEmoteIds(word);
+        if (kickEmoteIds.isNotEmpty) {
+          messageWidgetsBuild
+              .add(_buildKickEmoteWidget(kickEmoteIds, textSize));
+          continue;
+        }
+      }
+
+      // Handle cheer emotes
+      if (message.eventType == EventType.bitDonation) {
+        final cheerEmote =
+            cheerEmotes.firstWhereOrNull((emote) => emote.name == word);
+        if (cheerEmote != null) {
+          messageWidgetsBuild.add(_buildCheerEmoteWidget(cheerEmote, textSize));
+          continue;
+        }
+      }
+
+      // Default case: regular word
+      messageWidgetsBuild.add(
+        Word(
+          word: word,
+          isAction: message.isAction,
+          color: message.color,
+          textSize: textSize,
+        ),
+      );
     }
 
     return messageWidgetsBuild;
+  }
+
+  MapEntry? _findTwitchEmote(ChatMessage message, String word) {
+    return message.emotes.entries.firstWhereOrNull(
+      (element) => element.value
+          .where(
+            (position) =>
+                message.message.substring(
+                  int.parse(position[0]),
+                  int.parse(position[1]) + 1,
+                ) ==
+                word,
+          )
+          .isNotEmpty,
+    );
+  }
+
+  List<String> _extractKickEmoteIds(String word) {
+    List<String> kickEmoteIds = [];
+    final numberOfLeft = '['.allMatches(word).length;
+    final numberOfRight = ']'.allMatches(word).length;
+
+    if (numberOfLeft > 1 && numberOfLeft == numberOfRight) {
+      // Multiple emotes case: [emote:id:name][emote:id:name]
+      final emotesSplit = word.split(']');
+      for (final e in emotesSplit) {
+        if (e.isEmpty) {
+          continue;
+        }
+        if (':'.allMatches(e).length == 2) {
+          final id = e.split(':')[1];
+          if (id.isNotEmpty) {
+            kickEmoteIds.add(id);
+          }
+        }
+      }
+    } else if (':'.allMatches(word).length == 2) {
+      // Single emote case: [emote:id:name]
+      final id = word.split(':')[1];
+      if (id.isNotEmpty) {
+        kickEmoteIds.add(id);
+      }
+    }
+
+    return kickEmoteIds;
+  }
+
+  Widget _buildYoutubeEmote(String url, double textSize) {
+    return Wrap(
+      children: [
+        CachedNetworkImage(
+          imageUrl: url,
+          width: 24,
+          height: 24,
+          placeholder: (context, url) => const CircularProgressIndicator(),
+          errorWidget: (context, url, error) => const Icon(Icons.error),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTwitchEmoteWidget(MapEntry emote, double textSize) {
+    return Wrap(
+      children: [
+        TwitchEmote(
+          height: textSize,
+          emote: emote,
+        ),
+        const Text(' '),
+      ],
+    );
+  }
+
+  Widget _buildThirdPartyEmoteWidget(ChatEmote emote, double textSize) {
+    return Wrap(
+      children: [
+        ThirdPartEmote(
+          emote: emote,
+          height: textSize,
+        ),
+        const Text(' '),
+      ],
+    );
+  }
+
+  Widget _buildKickEmoteWidget(List<String> emoteIds, double textSize) {
+    return Wrap(
+      children: List.generate(
+        emoteIds.length,
+        (index) => KickEmote(
+          emoteId: emoteIds[index],
+          height: textSize,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCheerEmoteWidget(ChatEmote emote, double textSize) {
+    return CheerEmote(
+      cheerEmote: emote,
+      textSize: textSize,
+    );
   }
 }
