@@ -30,11 +30,11 @@ dependencies:
   dio: ^5.8.0+1
   expandable: ^5.0.1
 
-  firebase_analytics: ^11.4.5
-  firebase_core: ^3.13.0
-  firebase_remote_config: ^5.4.3
-  firebase_crashlytics: ^4.3.5
-  firebase_messaging: ^15.2.5
+  firebase_analytics: ^11.4.6
+  firebase_core: ^3.13.1
+  firebase_remote_config: ^5.4.4
+  firebase_crashlytics: ^4.3.6
+  firebase_messaging: ^15.2.6
   flutter_colorpicker: ^1.1.0
   flutter_foreground_task: ^9.1.0
   flutter_svg: ^2.0.17
@@ -43,7 +43,7 @@ dependencies:
   geolocator: ^14.0.1
   get: ^4.7.2
   get_storage: ^2.1.1
-  in_app_purchase: ^3.2.1
+  in_app_purchase: ^3.2.3
   instant: ^0.5.1
   intl: ^0.20.2
   jwt_decoder: ^2.0.1
@@ -64,9 +64,9 @@ dependencies:
   uuid:  ^4.5.1
   wakelock_plus: ^1.2.11
   web_socket_channel: ^3.0.2
-  webview_flutter: ^4.10.0
-  webview_flutter_android: ^4.3.4
-  webview_flutter_wkwebview: ^3.20.0
+  webview_flutter: ^4.13.0
+  webview_flutter_android: ^4.7.0
+  webview_flutter_wkwebview: ^3.22.0
   cached_network_image: ^3.4.1
   auto_mappr_annotation: ^2.3.0
   freezed_annotation: ^3.0.0
@@ -87,12 +87,12 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.3
   flutter_lints: ^5.0.0
   build_runner: ^2.4.15
-  auto_mappr: ^2.8.0
+  auto_mappr: ^2.9.0
   freezed: ^3.0.6
   json_serializable: ^6.9.4
   integration_test:
     sdk: flutter
-  patrol: ^3.15.1
+  patrol: ^3.15.2
 
   test_api: any
 dependency_overrides:
