@@ -15,6 +15,8 @@ import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/pinned_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
+import 'package:irllink/src/domain/usecases/kick/ban_kick_user_usecase.dart';
+import 'package:irllink/src/domain/usecases/kick/unban_kick_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_recent_messages.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:kick_chat/kick_chat.dart';
@@ -31,6 +33,8 @@ class ChatViewController extends GetxController
     required this.settingsService,
     required this.talker,
     required this.getRecentMessagesUseCase,
+    required this.banKickUserUseCase,
+    required this.unbanKickUserUseCase,
   });
 
   final ChatGroup chatGroup;
@@ -41,6 +45,8 @@ class ChatViewController extends GetxController
   final Talker talker;
 
   final GetRecentMessagesUseCase getRecentMessagesUseCase;
+  final BanKickUserUseCase banKickUserUseCase;
+  final UnbanKickUserUseCase unbanKickUserUseCase;
 
   //CHAT
   late ScrollController scrollController;
@@ -146,11 +152,13 @@ class ChatViewController extends GetxController
 
   /// Delete [message] by his id
   void deleteMessageInstruction(ChatMessage message) {
-    if (homeViewController.twitchData.value == null) {
+    if (homeViewController.twitchData.value == null ||
+        message.platform != Platform.twitch) {
       message.isDeleted = true;
       homeViewController.selectedMessage.value = null;
       return;
     }
+
     twitch_chat.TwitchApi.deleteMessage(
       homeViewController.twitchData.value!.accessToken,
       message.channelId,
@@ -163,38 +171,66 @@ class ChatViewController extends GetxController
 
   /// Ban user for specific [duration] based on the author name in the [message]
   void timeoutMessageInstruction(ChatMessage message, int duration) {
-    if (homeViewController.twitchData.value == null) {
-      return;
+    if (homeViewController.twitchData.value != null &&
+        message.platform == Platform.twitch) {
+      twitch_chat.TwitchApi.banUser(
+        homeViewController.twitchData.value!.accessToken,
+        message.channelId,
+        message.authorId,
+        duration,
+        kTwitchAuthClientId,
+      );
     }
-    twitch_chat.TwitchApi.banUser(
-      homeViewController.twitchData.value!.accessToken,
-      message.channelId,
-      message.authorId,
-      duration,
-      kTwitchAuthClientId,
-    );
+
+    if (homeViewController.kickData.value != null &&
+        message.platform == Platform.kick) {
+      banKickUserUseCase(
+        params: BanKickUserParams(
+          accessToken: homeViewController.kickData.value!.accessToken,
+          broadcasterUserId: homeViewController.kickData.value!.kickUser.userId,
+          userToBanId: int.parse(message.authorId),
+          duration: duration,
+        ),
+      );
+    }
+
     Get.back();
     homeViewController.selectedMessage.value = null;
   }
 
   /// Ban user based on the author name in the [message]
   void banMessageInstruction(ChatMessage message) {
-    if (homeViewController.twitchData.value == null) {
-      return;
+    if (message.platform == Platform.twitch &&
+        homeViewController.twitchData.value != null) {
+      twitch_chat.TwitchApi.banUser(
+        homeViewController.twitchData.value!.accessToken,
+        message.channelId,
+        message.authorId,
+        null,
+        kTwitchAuthClientId,
+      );
     }
-    twitch_chat.TwitchApi.banUser(
-      homeViewController.twitchData.value!.accessToken,
-      message.channelId,
-      message.authorId,
-      null,
-      kTwitchAuthClientId,
-    );
+
+    if (message.platform == Platform.kick &&
+        homeViewController.kickData.value != null) {
+      banKickUserUseCase(
+        params: BanKickUserParams(
+          accessToken: homeViewController.kickData.value!.accessToken,
+          broadcasterUserId: homeViewController.kickData.value!.kickUser.userId,
+          userToBanId: int.parse(message.authorId),
+        ),
+      );
+    }
+
     homeViewController.selectedMessage.value = null;
   }
 
   /// Hide every future messages from an user (only on this application, not on Twitch)
   void hideUser(ChatMessage message) {
     if (homeViewController.twitchData.value == null) {
+      return;
+    }
+    if (message.platform != Platform.twitch) {
       return;
     }
     Settings settings = settingsService.settings.value;

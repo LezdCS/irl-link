@@ -122,7 +122,8 @@ class ModerationBottomSheet extends GetView {
           ),
           const SizedBox(height: 15),
           Visibility(
-            visible: message.platform == Platform.twitch,
+            visible: message.platform == Platform.twitch ||
+                message.platform == Platform.kick,
             child: Row(
               children: [
                 InkWell(

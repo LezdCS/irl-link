@@ -10,13 +10,10 @@ import 'package:irllink/src/core/services/realtime_irl.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/utils/determine_position.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
-import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 
 class RealtimeIrlViewController extends GetxController
     with WidgetsBindingObserver {
   late RealtimeIrl realtimeIrl;
-
-  final HomeViewController homeViewController = Get.find<HomeViewController>();
 
   @override
   void onInit() {

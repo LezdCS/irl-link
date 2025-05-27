@@ -56,7 +56,7 @@ class Themes {
       iconColor: Colors.white,
       prefixIconColor: Colors.white,
     ),
-    tabBarTheme: TabBarTheme(
+    tabBarTheme: TabBarThemeData(
       labelColor: Colors.deepPurpleAccent[200],
       unselectedLabelColor: Colors.white,
       dividerColor: Colors.transparent,
@@ -209,7 +209,7 @@ class Themes {
       iconColor: Colors.black,
       prefixIconColor: Colors.black,
     ),
-    tabBarTheme: TabBarTheme(
+    tabBarTheme: TabBarThemeData(
       labelColor: Colors.deepPurpleAccent[200],
       unselectedLabelColor: Colors.black,
       dividerColor: Colors.transparent,

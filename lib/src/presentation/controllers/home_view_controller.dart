@@ -25,8 +25,10 @@ import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
+import 'package:irllink/src/domain/usecases/kick/ban_kick_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/kick_refresh_token_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/post_kick_chat_nessage_usecase.dart';
+import 'package:irllink/src/domain/usecases/kick/unban_kick_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/rtmp/get_rtmp_list_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_recent_messages.dart';
 import 'package:irllink/src/domain/usecases/twitch/refresh_token_usecase.dart';
@@ -60,6 +62,8 @@ class HomeViewController extends GetxController
     required this.postKickChatMessageUseCase,
     required this.getRtmpListUseCase,
     required this.getRecentMessagesUseCase,
+    required this.banKickUserUseCase,
+    required this.unbanKickUserUseCase,
   });
 
   final RefreshTwitchTokenUseCase refreshAccessTokenUseCase;
@@ -69,6 +73,8 @@ class HomeViewController extends GetxController
   final PostKickChatMessageUseCase postKickChatMessageUseCase;
   final GetRtmpListUseCase getRtmpListUseCase;
   final GetRecentMessagesUseCase getRecentMessagesUseCase;
+  final BanKickUserUseCase banKickUserUseCase;
+  final UnbanKickUserUseCase unbanKickUserUseCase;
   SplitViewController? splitViewController = SplitViewController(
     limits: [null, WeightLimit(min: 0.12, max: 0.92)],
   );
@@ -264,6 +270,8 @@ class HomeViewController extends GetxController
           ttsService: Get.find<TtsService>(),
           watchService: Get.find<WatchService>(),
           getRecentMessagesUseCase: getRecentMessagesUseCase,
+          banKickUserUseCase: banKickUserUseCase,
+          unbanKickUserUseCase: unbanKickUserUseCase,
         );
         return controller;
       },

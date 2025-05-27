@@ -18,10 +18,10 @@ class RtmpTabView extends GetView<RtmpTabViewController> {
         if (!isReady || currentStream == null) {
           return const Center(child: CircularProgressIndicator());
         }
-        return Column(
-          children: <Widget>[
-            Expanded(
-              child: DecoratedBox(
+        return SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              DecoratedBox(
                 decoration: BoxDecoration(
                   color: Colors.black,
                   border: Border.all(
@@ -31,25 +31,28 @@ class RtmpTabView extends GetView<RtmpTabViewController> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(3),
-                  child: StreamViewTexture(
-                    currentStream,
-                    key: ValueKey(
-                      '${currentStream.hashCode}_${controller.currentPosition.value}_${controller.isStreamingVideoRtmp.value}',
+                  child: AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: StreamViewTexture(
+                      currentStream,
+                      key: ValueKey(
+                        '${currentStream.hashCode}_${controller.currentPosition.value}_${controller.isStreamingVideoRtmp.value}',
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            _controlRowWidget(context),
-            Padding(
-              padding: const EdgeInsets.all(5),
-              child: Column(
-                children: [
-                  _rtmpSelectorDropdown(),
-                ],
+              _controlRowWidget(context),
+              Padding(
+                padding: const EdgeInsets.all(5),
+                child: Column(
+                  children: [
+                    _rtmpSelectorDropdown(),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       }),
     );
