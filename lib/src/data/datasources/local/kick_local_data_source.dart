@@ -1,4 +1,5 @@
 import 'package:irllink/data/database/database_helper.dart';
+import 'package:irllink/src/core/params/kick_auth_params.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/entities/kick/kick_credentials_dto.dart';
 import 'package:talker_flutter/talker_flutter.dart';
@@ -69,6 +70,18 @@ class KickLocalDataSourceImpl implements KickLocalDataSource {
     }
 
     final credentials = credentialsMaps.first;
+
+    // Check if stored scopes match the current required scopes
+    final storedScopes = credentials['scopes'] as String;
+    final requiredScopes = const KickAuthParams().scopes;
+
+    if (storedScopes != requiredScopes) {
+      talker.logCustom(
+        KickLog('Stored scopes do not match required scopes. Logging out.'),
+      );
+      await removeCredentials();
+      return null;
+    }
 
     // Get user data
     final List<Map<String, dynamic>> userMaps = await db.query(

@@ -15,7 +15,7 @@ class KickAuthParams {
     this.clientId = kKickAuthClientId,
     this.responseType = "code",
     this.scopes =
-        "user:read channel:read channel:write chat:write streamkey:read events:subscribe",
+        "user:read channel:read channel:write chat:write streamkey:read events:subscribe moderation:ban",
     this.codeChallenge = "",
     this.codeChallengeMethod = "S256",
     this.state = "",
