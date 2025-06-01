@@ -146,10 +146,6 @@ class StoreService extends GetxService {
       (r) => twitchCredentials = r,
     );
 
-    if (twitchCredentials == null) {
-      return Future<bool>.value(false);
-    }
-
     String? purchaseToken =
         purchaseDetails.verificationData.serverVerificationData;
     final remoteConfig = FirebaseRemoteConfig.instance;
@@ -177,7 +173,7 @@ class StoreService extends GetxService {
         url,
         data: {
           'purchaseToken': purchaseToken,
-          'twitchId': twitchCredentials!.twitchUser.id,
+          'twitchId': twitchCredentials?.twitchUser.id,
           'environment': environment,
         },
       );

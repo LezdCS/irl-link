@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
@@ -142,12 +143,20 @@ class TwitchRemoteDataSourceImpl implements TwitchRemoteDataSource {
           remoteConfig.getString('irllink_refresh_token_url_dev');
     }
 
+    String? fcmToken;
+    try {
+      fcmToken = await FirebaseMessaging.instance.getToken();
+    } catch (e, stack) {
+      talker.handle(e, stack);
+    }
+
     final response = await dioClient.get(
       apiRefreshTokenUrl,
       queryParameters: {
         'refresh_token': refreshToken,
         'app_version': Get.find<AppInfoService>().version,
         'platform': Platform.isAndroid ? 'android' : 'ios',
+        if (fcmToken != null) 'fcm_token': fcmToken,
       },
     );
 
