@@ -477,7 +477,7 @@ class SettingsView extends GetView<SettingsViewController> {
           ),
           settingsGoToRow(
             context,
-            "rtmp".tr,
+            "RTMP",
             Icons.camera,
             () {
               Get.to(
