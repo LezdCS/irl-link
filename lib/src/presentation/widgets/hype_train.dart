@@ -35,11 +35,9 @@ Widget hypeTrain(
         ],
       ),
       Text('${hypetrain.progress}%'),
-      Obx(
-        () => Text(
-          printDuration(
-            remainingTime ?? Duration.zero,
-          ),
+      Text(
+        printDuration(
+          remainingTime ?? Duration.zero,
         ),
       ),
     ],
