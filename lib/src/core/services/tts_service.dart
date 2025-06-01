@@ -107,19 +107,30 @@ class TtsService extends GetxService {
         return;
       }
     }
+
+    String finalMessage = message.message;
+
     // If the list of prefixs to use TTS only is not empty, we only read the message if it starts with one of the prefixs
     if (settings.ttsSettings.prefixsToUseTtsOnly.isNotEmpty) {
+      bool foundPrefix = false;
+
       for (String prefix in settings.ttsSettings.prefixsToUseTtsOnly) {
-        if (!message.message.startsWith(prefix)) {
-          return;
+        if (message.message.startsWith(prefix)) {
+          finalMessage = message.message.substring(prefix.length).trim();
+          foundPrefix = true;
+          break;
         }
+      }
+
+      if (!foundPrefix) {
+        return;
       }
     }
     String text = "user_said_message".trParams(
-      {'authorName': message.displayName, 'message': message.message},
+      {'authorName': message.displayName, 'message': finalMessage},
     );
     if (settings.ttsSettings.ttsMuteViewerName) {
-      text = message.message;
+      text = finalMessage;
     }
     flutterTts.speak(text);
   }
