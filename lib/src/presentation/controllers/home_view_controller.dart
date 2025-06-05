@@ -630,6 +630,7 @@ class HomeViewController extends GetxController
         kickChats,
         message,
       );
+      return;
     }
 
     if (kickChats.isNotEmpty && twitchChats.isEmpty) {
