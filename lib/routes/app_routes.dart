@@ -4,4 +4,5 @@ abstract class Routes {
   static const settings = '/settings';
   static const rtmpSettings = '/rtmp-settings';
   static const streamelementsSettings = '/streamelements-settings';
+  static const browserSettings = '/browser-settings';
 }
