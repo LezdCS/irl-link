@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/params/kick_auth_params.dart';
-import 'package:irllink/src/core/params/streamelements_auth_params.dart';
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
@@ -11,8 +10,6 @@ import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
 import 'package:irllink/src/domain/usecases/kick/login_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/logout_usecase.dart';
-import 'package:irllink/src/domain/usecases/streamelements/disconnect_usecase.dart';
-import 'package:irllink/src/domain/usecases/streamelements/login_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_users_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/login_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/logout_usecase.dart';
@@ -23,8 +20,6 @@ class SettingsViewController extends GetxController {
   SettingsViewController({
     required this.logoutUseCase,
     required this.loginUseCase,
-    required this.streamElementsLoginUseCase,
-    required this.streamElementsDisconnectUseCase,
     required this.getTwitchUsersUseCase,
     required this.settingsService,
     required this.homeViewController,
@@ -36,8 +31,6 @@ class SettingsViewController extends GetxController {
 
   final LogoutUseCase logoutUseCase;
   final LoginUseCase loginUseCase;
-  final StreamElementsLoginUseCase streamElementsLoginUseCase;
-  final StreamElementsDisconnectUseCase streamElementsDisconnectUseCase;
   final GetTwitchUsersUseCase getTwitchUsersUseCase;
   final LogoutKickUseCase logoutKickUseCase;
   final LoginKickUseCase loginKickUseCase;
@@ -60,8 +53,6 @@ class SettingsViewController extends GetxController {
 
   RxBool obsWebsocketPasswordShow = false.obs;
   RxBool obsWebsocketUrlShow = false.obs;
-  RxBool seJwtShow = false.obs;
-  RxBool seOverlayTokenShow = false.obs;
   RxBool rtIrlKeyShow = false.obs;
   late TextEditingController obsWebsocketUrlFieldController;
   late TextEditingController obsWebsocketPasswordFieldController;
@@ -87,11 +78,6 @@ class SettingsViewController extends GetxController {
     addTtsIgnoredUsersController = TextEditingController();
     addTtsIgnoredPrefixsController = TextEditingController();
     addTtsAllowedPrefixsController = TextEditingController();
-    seJwtInputController =
-        TextEditingController(text: settings.streamElementsSettings.jwt);
-    seOverlayTokenInputController = TextEditingController(
-      text: settings.streamElementsSettings.overlayToken,
-    );
     rtIrlInputController = TextEditingController(text: settings.rtIrlPushKey);
 
     usernamesHiddenUsers = <String>[].obs;
@@ -203,73 +189,6 @@ class SettingsViewController extends GetxController {
 
   List<dynamic> getVoiceForLanguage(String language) {
     return ttsService.ttsVoices.where((v) => v['locale'] == language).toList();
-  }
-
-  Future<void> loginStreamElements() async {
-    if (!storeService.isSubscribed()) {
-      Get.snackbar(
-        "Error",
-        "You are not subscribed",
-        snackPosition: SnackPosition.BOTTOM,
-        icon: const Icon(Icons.error_outline, color: Colors.red),
-        borderWidth: 1,
-        borderColor: Colors.red,
-      );
-      return;
-    }
-    StreamelementsAuthParams params = const StreamelementsAuthParams();
-    final loginResult = await streamElementsLoginUseCase(params: params);
-    loginResult.fold(
-      (l) {
-        Get.snackbar(
-          "Error",
-          "Login failed: $l",
-          snackPosition: SnackPosition.BOTTOM,
-          icon: const Icon(Icons.error_outline, color: Colors.red),
-          borderWidth: 1,
-          borderColor: Colors.red,
-        );
-      },
-      (r) {
-        homeViewController.generateTabs();
-
-        Get.snackbar(
-          "StreamElements",
-          "Login successfull",
-          snackPosition: SnackPosition.BOTTOM,
-          icon: const Icon(Icons.check, color: Colors.green),
-          borderWidth: 1,
-          borderColor: Colors.green,
-        );
-      },
-    );
-  }
-
-  Future<void> disconnectStreamElements() async {
-    if (homeViewController
-            .streamelementsViewController.value?.seCredentials.value ==
-        null) {
-      return;
-    }
-    final result = await streamElementsDisconnectUseCase(
-      params: homeViewController
-          .streamelementsViewController.value!.seCredentials.value!.accessToken,
-    );
-
-    result.fold(
-      (l) => debugPrint(l.message),
-      (r) {
-        Get.snackbar(
-          "StreamElements",
-          "Successfully disconnected.",
-          snackPosition: SnackPosition.BOTTOM,
-          icon: const Icon(Icons.check, color: Colors.green),
-          borderWidth: 1,
-          borderColor: Colors.green,
-        );
-        homeViewController.generateTabs();
-      },
-    );
   }
 
   void removeHiddenUser(userId) {

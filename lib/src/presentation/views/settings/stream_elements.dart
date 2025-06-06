@@ -4,54 +4,59 @@ import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
-import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/settings/streamelements_settings_controller.dart';
 import 'package:irllink/src/presentation/widgets/premium_feature_badge.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-class StreamElements extends GetView<SettingsViewController> {
-  const StreamElements({
+class StreamelementsSettings extends GetView<StreamelementsSettingsController> {
+  const StreamelementsSettings({
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              'StreamElements',
-              style: TextStyle(
-                fontSize: 18,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('StreamElements Settings'),
+      ),
+      body: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'StreamElements',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+              premiumFeatureBadge(context),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(
+                Radius.circular(8),
+              ),
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+            child: Obx(
+              () => Column(
+                children: [
+                  if (controller.homeViewController.streamelementsViewController
+                          .value !=
+                      null)
+                    loggedIn(context)
+                  else
+                    loginButton(),
+                ],
               ),
             ),
-            premiumFeatureBadge(context),
-          ],
-        ),
-        const SizedBox(height: 6),
-        Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(
-              Radius.circular(8),
-            ),
-            color: Theme.of(context).colorScheme.secondary,
           ),
-          child: Obx(
-            () => Column(
-              children: [
-                if (controller.homeViewController.streamelementsViewController
-                        .value !=
-                    null)
-                  loggedIn(context)
-                else
-                  loginButton(),
-              ],
-            ),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
