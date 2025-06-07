@@ -6,6 +6,7 @@ import 'package:irllink/src/bindings/settings/browser_settings_bindings.dart';
 import 'package:irllink/src/bindings/settings/rtmp_settings_bindings.dart';
 import 'package:irllink/src/bindings/settings/streamelements_settings_bindings.dart';
 import 'package:irllink/src/bindings/settings_bindings.dart';
+import 'package:irllink/src/bindings/tabs_bindings.dart';
 import 'package:irllink/src/presentation/views/home_view.dart';
 import 'package:irllink/src/presentation/views/login_view.dart';
 import 'package:irllink/src/presentation/views/settings/manage_list_browser_tabs.dart';
@@ -26,6 +27,9 @@ class AppPages {
       name: Routes.home,
       page: () => const HomeView(),
       binding: HomeBindings(),
+      bindings: [
+        TabsBindings(),
+      ],
     ),
     GetPage(
       name: Routes.settings,

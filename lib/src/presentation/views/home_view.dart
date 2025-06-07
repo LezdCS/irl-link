@@ -15,21 +15,16 @@ import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/tabs/kick_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/tabs/twitch_tab_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/tabs_controller.dart';
 import 'package:irllink/src/presentation/views/chat_view.dart';
 import 'package:irllink/src/presentation/views/dashboard.dart';
-import 'package:irllink/src/presentation/views/tabs/kick_tab_view.dart';
-import 'package:irllink/src/presentation/views/tabs/obs_tab_view.dart';
-import 'package:irllink/src/presentation/views/tabs/realtime_irl_tab_view.dart';
-import 'package:irllink/src/presentation/views/tabs/rtmp_tab_view.dart';
-import 'package:irllink/src/presentation/views/tabs/streamelements_tab_view.dart';
-import 'package:irllink/src/presentation/views/tabs/twitch_tab_view.dart';
+import 'package:irllink/src/presentation/views/tabs_view.dart';
 import 'package:irllink/src/presentation/widgets/chats/select_channel_dialog.dart';
 import 'package:irllink/src/presentation/widgets/emote_picker_view.dart';
 import 'package:irllink/src/presentation/widgets/hype_train.dart';
 import 'package:irllink/src/presentation/widgets/pinned_messages_sheet.dart';
 import 'package:irllink/src/presentation/widgets/poll.dart';
 import 'package:irllink/src/presentation/widgets/prediction.dart';
-import 'package:irllink/src/presentation/widgets/web_page_view.dart';
 import 'package:kick_chat/kick_chat.dart';
 import 'package:split_view/split_view.dart';
 import 'package:twitch_chat/twitch_chat.dart';
@@ -66,12 +61,12 @@ class HomeView extends GetView<HomeViewController> {
                 child: SafeArea(
                   child: Stack(
                     children: [
-                      Stack(
-                        children: List<Widget>.generate(
-                          controller.iOSAudioSources.length,
-                          (int index) => controller.iOSAudioSources[index],
-                        ),
-                      ),
+                      // Stack(
+                      //   children: List<Widget>.generate(
+                      //     controller.iOSAudioSources.length,
+                      //     (int index) => controller.iOSAudioSources[index],
+                      //   ),
+                      // ),
                       Listener(
                         onPointerUp: (_) => {
                           controller.displayDashboard.value = false,
@@ -99,13 +94,7 @@ class HomeView extends GetView<HomeViewController> {
                           ),
                           onWeightChanged: controller.onSplitResized,
                           children: [
-                            if (controller.tabElements.isNotEmpty)
-                              _top(context, height, width)
-                            else
-                              const Text(
-                                "No tabs",
-                                textAlign: TextAlign.center,
-                              ),
+                            const TabsView(),
                             _bottom(context, height, width),
                           ],
                         ),
@@ -127,18 +116,6 @@ class HomeView extends GetView<HomeViewController> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _top(BuildContext context, double height, double width) {
-    return ColoredBox(
-      color: Theme.of(context).colorScheme.surface,
-      child: Column(
-        children: [
-          _tabBar(context, height, width),
-          _tabs(context),
-        ],
       ),
     );
   }
@@ -222,45 +199,6 @@ class HomeView extends GetView<HomeViewController> {
     );
   }
 
-  Widget _tabBar(BuildContext context, double height, double width) {
-    return Obx(
-      () => TabBar(
-        controller: controller.tabController,
-        isScrollable: true,
-        indicatorWeight: 0.01,
-        onTap: (index) {
-          controller.tabIndex.value = index;
-        },
-        tabs: List<Tab>.generate(
-          controller.tabElements.length,
-          (int index) => Tab(
-            child: Text(
-              controller.tabElements[index] is ObsTabView
-                  ? "OBS"
-                  : controller.tabElements[index] is StreamelementsTabView
-                      ? "StreamElements"
-                      : controller.tabElements[index] is RealtimeIrlTabView
-                          ? "RealtimeIRL"
-                          : controller.tabElements[index] is TwitchTabView
-                              ? "Twitch"
-                              : controller.tabElements[index] is KickTabView
-                                  ? "Kick"
-                                  : controller.tabElements[index] is RtmpTabView
-                                      ? "RTMP"
-                                      : controller.tabElements[index]
-                                              is WebPageView
-                                          ? (controller.tabElements[index]
-                                                  as WebPageView)
-                                              .tab
-                                              .title
-                                          : "",
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _bottomNavBar(double height, double width, BuildContext context) {
     Settings settings = Get.find<SettingsService>().settings.value;
 
@@ -307,19 +245,24 @@ class HomeView extends GetView<HomeViewController> {
                           border: InputBorder.none,
                           hintText: settings.generalSettings.displayViewerCount
                               ? "viewers_number".trParams({
-                                  "number":
-                                      ((Get.find<TwitchTabViewController>()
+                                  "number": ((Get.isRegistered<
+                                                  TwitchTabViewController>()
+                                              ? Get.find<TwitchTabViewController>()
                                                       .twitchStreamInfos
                                                       .value
                                                       .viewerCount ??
-                                                  0) +
-                                              (Get.find<KickTabViewController>()
+                                                  0
+                                              : 0) +
+                                          (Get.isRegistered<
+                                                  KickTabViewController>()
+                                              ? Get.find<KickTabViewController>()
                                                       .kickChannel
                                                       .value
                                                       ?.stream
                                                       .viewerCount ??
-                                                  0))
-                                          .toString(),
+                                                  0
+                                              : 0))
+                                      .toString(),
                                 })
                               : 'send_message'.tr,
                           hintStyle: TextStyle(
@@ -480,10 +423,12 @@ class HomeView extends GetView<HomeViewController> {
                   Routes.settings,
                 );
                 controller.applySettings();
-                controller.obsTabViewController?.applySettings();
-                controller.streamelementsViewController.value?.applySettings();
-                controller.realtimeIrlViewController?.applySettings();
-                controller.rtmpTabViewController?.getRtmpList();
+                Get.find<TabsController>().generateTabs();
+                // TODO(LezdCS): Apply settings to tabs, but maybe change the way to apply settings
+                // controller.obsTabViewController?.applySettings();
+                // controller.streamelementsViewController.value?.applySettings();
+                // controller.realtimeIrlViewController?.applySettings();
+                // controller.rtmpTabViewController?.getRtmpList();
               },
               child: Icon(
                 Icons.settings,
@@ -493,20 +438,6 @@ class HomeView extends GetView<HomeViewController> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _tabs(BuildContext context) {
-    return Expanded(
-      child: ColoredBox(
-        color: Theme.of(context).colorScheme.surface,
-        child: Obx(
-          () => IndexedStack(
-            index: controller.tabIndex.value,
-            children: controller.tabElements,
-          ),
-        ),
       ),
     );
   }
