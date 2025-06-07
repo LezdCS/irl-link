@@ -424,11 +424,6 @@ class HomeView extends GetView<HomeViewController> {
                 );
                 controller.applySettings();
                 Get.find<TabsController>().generateTabs();
-                // TODO(LezdCS): Apply settings to tabs, but maybe change the way to apply settings
-                // controller.obsTabViewController?.applySettings();
-                // controller.streamelementsViewController.value?.applySettings();
-                // controller.realtimeIrlViewController?.applySettings();
-                // controller.rtmpTabViewController?.getRtmpList();
               },
               child: Icon(
                 Icons.settings,

@@ -231,6 +231,19 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
     addTabs();
     reorderTabs();
 
+    if (obsTabViewController != null) {
+      obsTabViewController?.applySettings();
+    }
+    if (streamelementsViewController != null) {
+      streamelementsViewController?.applySettings();
+    }
+    if (realtimeIrlViewController != null) {
+      realtimeIrlViewController?.applySettings();
+    }
+    if (rtmpTabViewController != null) {
+      rtmpTabViewController?.getRtmpList();
+    }
+
     tabController = TabController(length: tabElements.length, vsync: this);
     if (tabIndex.value > tabElements.length - 1) {
       tabIndex.value = 0;

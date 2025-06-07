@@ -66,7 +66,6 @@ class ChatViewController extends GetxController
   void onInit() async {
     scrollController = ScrollController();
     banDurationInputController = TextEditingController();
-    await applySettings();
     homeViewController.selectedChatGroup.value = chatGroup;
 
     chatMessages.listen((value) {
@@ -261,10 +260,6 @@ class ChatViewController extends GetxController
         scrollController.position.maxScrollExtent,
       );
     }
-  }
-
-  Future applySettings() async {
-    isAutoScrolldown.value = true;
   }
 
   void updateChannels(
