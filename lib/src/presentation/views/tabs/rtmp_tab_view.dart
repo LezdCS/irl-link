@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:haishin_kit/stream_view_texture.dart';
 import 'package:irllink/src/domain/entities/rtmp.dart';
-import 'package:irllink/src/presentation/controllers/rtmp_tab_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/tabs/rtmp_tab_view_controller.dart';
 
 class RtmpTabView extends GetView<RtmpTabViewController> {
   const RtmpTabView({super.key});

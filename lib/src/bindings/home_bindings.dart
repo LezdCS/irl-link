@@ -50,12 +50,12 @@ import 'package:irllink/src/domain/usecases/twitch/set_chat_settings_usecase.dar
 import 'package:irllink/src/domain/usecases/twitch/set_stream_title_usecase.dart';
 import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
-import 'package:irllink/src/presentation/controllers/kick_tab_view_controller.dart';
-import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/realtime_irl_view_controller.dart';
-import 'package:irllink/src/presentation/controllers/rtmp_tab_view_controller.dart';
-import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
-import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/tabs/kick_tab_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/tabs/obs_tab_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/tabs/rtmp_tab_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/tabs/streamelements_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/tabs/twitch_tab_view_controller.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class HomeBindings extends Bindings {

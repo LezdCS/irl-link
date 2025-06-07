@@ -5,8 +5,8 @@ import 'package:irllink/src/core/utils/dashboard_events.dart';
 import 'package:irllink/src/domain/entities/dashboard_event.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
-import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
-import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/tabs/obs_tab_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/tabs/streamelements_view_controller.dart';
 
 class Dashboard extends GetView<DashboardController> {
   @override
