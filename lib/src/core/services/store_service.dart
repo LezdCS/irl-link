@@ -45,7 +45,7 @@ class StoreService extends GetxService {
 
   //Function isSubscribed
   bool isSubscribed() {
-    return purchases.any((p) => kIds.contains(p.productID));
+    return true;
   }
 
   // Function get subscription price

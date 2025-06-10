@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
@@ -10,6 +9,7 @@ import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/usecases/kick/get_kick_local_usecase.dart';
 import 'package:irllink/src/domain/usecases/rtmp/get_rtmp_list_usecase.dart';
+import 'package:irllink/src/domain/usecases/streamelements/get_local_credentials_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/realtime_irl_view_controller.dart';
@@ -34,6 +34,7 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
     required this.getKickLocalUseCase,
     required this.getTwitchLocalUseCase,
     required this.homeViewController,
+    required this.getLocalCredentialsUseCase,
   });
 
   final SettingsService settingsService;
@@ -42,6 +43,7 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
   final GetKickLocalUseCase getKickLocalUseCase;
   final GetTwitchLocalUseCase getTwitchLocalUseCase;
   final HomeViewController homeViewController;
+  final StreamElementsGetLocalCredentialsUseCase getLocalCredentialsUseCase;
 
   late TabController tabController;
   Rx<int> tabIndex = 0.obs;
@@ -179,12 +181,19 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
 
     // Check if StreamElements have to be added
     if (isSubscribed && streamelementsViewController == null) {
-      final box = GetStorage();
-      var seCredentialsString = box.read('seCredentials');
-      if (seCredentialsString != null) {
-        streamelementsViewController = Get.find<StreamelementsViewController>();
-        tabElements.insert(0, const StreamelementsTabView());
-      }
+      final seCredentials = await getLocalCredentialsUseCase();
+      seCredentials.fold(
+        (l) {
+          talkerService.talker
+              .error('Failed to get StreamElements credentials');
+        },
+        (r) {
+          talkerService.talker.info('StreamElements credentials found');
+          streamelementsViewController =
+              Get.find<StreamelementsViewController>();
+          tabElements.insert(0, const StreamelementsTabView());
+        },
+      );
     }
 
     // Check if Realtime IRL have to be added

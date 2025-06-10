@@ -15,9 +15,13 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$SeCredentialsDTO {
+  @JsonKey(name: 'access_token')
   String get accessToken;
+  @JsonKey(name: 'refresh_token')
   String get refreshToken;
+  @JsonKey(name: 'expires_in')
   int get expiresIn;
+  @JsonKey(name: 'scopes')
   String get scopes;
 
   /// Create a copy of SeCredentialsDTO
@@ -63,7 +67,10 @@ abstract mixin class $SeCredentialsDTOCopyWith<$Res> {
       _$SeCredentialsDTOCopyWithImpl;
   @useResult
   $Res call(
-      {String accessToken, String refreshToken, int expiresIn, String scopes});
+      {@JsonKey(name: 'access_token') String accessToken,
+      @JsonKey(name: 'refresh_token') String refreshToken,
+      @JsonKey(name: 'expires_in') int expiresIn,
+      @JsonKey(name: 'scopes') String scopes});
 }
 
 /// @nodoc
@@ -109,20 +116,24 @@ class _$SeCredentialsDTOCopyWithImpl<$Res>
 @JsonSerializable()
 class _SeCredentialsDTO implements SeCredentialsDTO {
   const _SeCredentialsDTO(
-      {required this.accessToken,
-      required this.refreshToken,
-      required this.expiresIn,
-      required this.scopes});
+      {@JsonKey(name: 'access_token') required this.accessToken,
+      @JsonKey(name: 'refresh_token') required this.refreshToken,
+      @JsonKey(name: 'expires_in') required this.expiresIn,
+      @JsonKey(name: 'scopes') required this.scopes});
   factory _SeCredentialsDTO.fromJson(Map<String, dynamic> json) =>
       _$SeCredentialsDTOFromJson(json);
 
   @override
+  @JsonKey(name: 'access_token')
   final String accessToken;
   @override
+  @JsonKey(name: 'refresh_token')
   final String refreshToken;
   @override
+  @JsonKey(name: 'expires_in')
   final int expiresIn;
   @override
+  @JsonKey(name: 'scopes')
   final String scopes;
 
   /// Create a copy of SeCredentialsDTO
@@ -174,7 +185,10 @@ abstract mixin class _$SeCredentialsDTOCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String accessToken, String refreshToken, int expiresIn, String scopes});
+      {@JsonKey(name: 'access_token') String accessToken,
+      @JsonKey(name: 'refresh_token') String refreshToken,
+      @JsonKey(name: 'expires_in') int expiresIn,
+      @JsonKey(name: 'scopes') String scopes});
 }
 
 /// @nodoc

@@ -7,11 +7,14 @@ import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/data/datasources/local/kick_local_data_source.dart';
 import 'package:irllink/src/data/datasources/local/rtmp_local_data_source.dart';
+import 'package:irllink/src/data/datasources/local/streamelements_local_data_source.dart';
 import 'package:irllink/src/data/datasources/local/twitch_local_data_source.dart';
 import 'package:irllink/src/data/datasources/remote/kick_remote_data_source.dart';
+import 'package:irllink/src/data/datasources/remote/streamelements_remote_data_source.dart';
 import 'package:irllink/src/data/datasources/remote/twitch_remote_data_source.dart';
 import 'package:irllink/src/data/repositories/kick_repository_impl.dart';
 import 'package:irllink/src/data/repositories/rtmp_repository_impl.dart';
+import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/usecases/kick/get_kick_categories_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/get_kick_channels_usecase.dart';
@@ -19,6 +22,7 @@ import 'package:irllink/src/domain/usecases/kick/get_kick_local_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/patch_kick_channel_usecase.dart'
     show PatchKickChannelUseCase;
 import 'package:irllink/src/domain/usecases/rtmp/get_rtmp_list_usecase.dart';
+import 'package:irllink/src/domain/usecases/streamelements/get_local_credentials_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_stream_info_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/set_chat_settings_usecase.dart';
@@ -74,6 +78,21 @@ class TabsBindings extends Bindings {
 
     GetTwitchLocalUseCase getTwitchLocalUseCase =
         GetTwitchLocalUseCase(twitchRepository);
+
+    Dio streamElementsDioClient = initDio(kStreamelementsUrlBase);
+    final streamelementsRepository = StreamelementsRepositoryImpl(
+      talker: talker,
+      localDataSource: StreamelementsLocalDataSourceImpl(
+        talker: talker,
+      ),
+      remoteDataSource: StreamelementsRemoteDataSourceImpl(
+        dioClient: streamElementsDioClient,
+        talker: talker,
+      ),
+    );
+    final getLocalCredentialsUseCase = StreamElementsGetLocalCredentialsUseCase(
+      streamelementsRepository: streamelementsRepository,
+    );
     Get.lazyPut<TabsController>(
       () => TabsController(
         settingsService: Get.find<SettingsService>(),
@@ -82,6 +101,7 @@ class TabsBindings extends Bindings {
         getRtmpListUseCase: getRtmpListUseCase,
         getKickLocalUseCase: getKickLocalUseCase,
         getTwitchLocalUseCase: getTwitchLocalUseCase,
+        getLocalCredentialsUseCase: getLocalCredentialsUseCase,
       ),
     );
 

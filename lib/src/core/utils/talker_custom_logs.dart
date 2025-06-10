@@ -85,8 +85,8 @@ class RtmpLog extends TalkerLog {
   RtmpLog(String super.message);
 
   @override
-  AnsiPen get pen => AnsiPen()..rgb(g: 0.5, b: 0.5);
+  AnsiPen get pen => AnsiPen()..rgb(r: 0, g: 0.6, b: 0);
 
   @override
-  String get title => 'RTMP';
+  String get title => 'RTMP 📡';
 }

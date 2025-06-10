@@ -25,12 +25,6 @@ class StreamelementsSettings extends GetView<StreamelementsSettingsController> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'StreamElements',
-                style: TextStyle(
-                  fontSize: 18,
-                ),
-              ),
               premiumFeatureBadge(context),
             ],
           ),
