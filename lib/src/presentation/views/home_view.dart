@@ -61,12 +61,13 @@ class HomeView extends GetView<HomeViewController> {
                 child: SafeArea(
                   child: Stack(
                     children: [
-                      // Stack(
-                      //   children: List<Widget>.generate(
-                      //     controller.iOSAudioSources.length,
-                      //     (int index) => controller.iOSAudioSources[index],
-                      //   ),
-                      // ),
+                      Stack(
+                        children: List<Widget>.generate(
+                          Get.find<TabsController>().iOSAudioSources.length,
+                          (int index) =>
+                              Get.find<TabsController>().iOSAudioSources[index],
+                        ),
+                      ),
                       Listener(
                         onPointerUp: (_) => {
                           controller.displayDashboard.value = false,
