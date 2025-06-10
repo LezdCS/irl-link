@@ -162,13 +162,9 @@ class KickTabViewController extends GetxController
     if (kickChannel.value == null) {
       return;
     }
-    // Check if rmptTabViewController is not null in homeViewController
-    // If null, we need to init it (might just create a function for that in homeViewController)
-    // If not null, we need to call the addTemporaryRtmp function in rtmpTabViewController
     if (Get.find<TabsController>().rtmpTabViewController == null) {
       Get.find<TabsController>().initRtmpTabViewController();
     }
-    // await for 1 second
     await Future.delayed(const Duration(seconds: 1));
     Get.find<TabsController>().rtmpTabViewController?.addTemporaryRtmp(
           Rtmp(

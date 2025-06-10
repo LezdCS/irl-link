@@ -60,7 +60,24 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
   void onInit() {
     super.onInit();
     tabController = TabController(length: 0, vsync: this);
+
+    // Listen to tabElements changes and update tabController accordingly
+    tabElements.listen((list) {
+      _updateTabController();
+    });
+
     generateTabs();
+  }
+
+  void _updateTabController() {
+    // Dispose old TabController to prevent memory leak
+    tabController.dispose();
+
+    tabController = TabController(length: tabElements.length, vsync: this);
+    if (tabIndex.value > tabElements.length - 1) {
+      tabIndex.value = 0;
+    }
+    tabController.animateTo(tabIndex.value);
   }
 
   void reorderTabs() {
@@ -84,7 +101,7 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
     tabElements.refresh();
   }
 
-  void removeTabs() async {
+  Future<void> removeTabs() async {
     Settings settings = settingsService.settings.value;
 
     // Check if WebTabs have to be removed
@@ -236,8 +253,8 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
   }
 
   Future generateTabs() async {
-    removeTabs();
-    addTabs();
+    await removeTabs();
+    await addTabs();
     reorderTabs();
 
     if (obsTabViewController != null) {
@@ -252,17 +269,18 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
     if (rtmpTabViewController != null) {
       rtmpTabViewController?.getRtmpList();
     }
-
-    tabController = TabController(length: tabElements.length, vsync: this);
-    if (tabIndex.value > tabElements.length - 1) {
-      tabIndex.value = 0;
-    }
-    tabController.animateTo(tabIndex.value);
   }
 
   void initRtmpTabViewController() {
-    rtmpTabViewController = Get.find<RtmpTabViewController>();
-    tabElements.add(const RtmpTabView());
-    tabController = TabController(length: tabElements.length, vsync: this);
+    if (rtmpTabViewController == null) {
+      rtmpTabViewController = Get.find<RtmpTabViewController>();
+      tabElements.add(const RtmpTabView());
+    }
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
   }
 }

@@ -73,7 +73,6 @@ class StreamelementsRemoteDataSourceImpl
 
       talker.logCustom(StreamElementsLog('StreamElements token refreshed.'));
 
-      debugPrint('response.data: ${response.data}');
       return SeCredentialsDTO(
         accessToken: response.data['access_token'],
         refreshToken: response.data['refresh_token'],

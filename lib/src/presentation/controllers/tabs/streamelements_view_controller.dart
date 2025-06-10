@@ -112,7 +112,9 @@ class StreamelementsViewController extends GetxController
 
     activities.listen((value) {
       // Send to watchOS
-      watchService.sendSeActivityToNative(value.last);
+      if (value.isNotEmpty) {
+        watchService.sendSeActivityToNative(value.last);
+      }
     });
 
     super.onInit();
@@ -338,7 +340,9 @@ class StreamelementsViewController extends GetxController
       (event, data) => {
         if (data != null)
           {
-            talkerService.talker.debug(data),
+            talkerService.talker.logCustom(
+              StreamElementsLog('StreamElements WebSocket event: $event'),
+            ),
           },
       },
     );
