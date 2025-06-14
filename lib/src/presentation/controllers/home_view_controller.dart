@@ -82,7 +82,6 @@ class HomeViewController extends GetxController
   // Chats
   RxList<ChatView> chatsViews = <ChatView>[].obs;
   Rxn<ChatGroup> selectedChatGroup = Rxn<ChatGroup>();
-  int? selectedChatIndex;
 
   late TabController chatTabsController;
   Rxn<entity.ChatMessage> selectedMessage = Rxn<entity.ChatMessage>();
@@ -376,13 +375,9 @@ class HomeViewController extends GetxController
 
     chatTabsController = TabController(length: chatsViews.length, vsync: this);
     if (chatsViews.isEmpty) {
-      selectedChatIndex = null;
       selectedChatGroup.value = null;
-    } else if (selectedChatIndex != null) {
-      if (selectedChatIndex! >= chatsViews.length) {
-        selectedChatIndex = 0;
-      }
-      chatTabsController.animateTo(selectedChatIndex!);
+    } else if (chatTabsController.index >= chatsViews.length) {
+      chatTabsController.animateTo(0);
     }
   }
 

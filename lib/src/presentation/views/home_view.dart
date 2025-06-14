@@ -467,7 +467,7 @@ class HomeView extends GetView<HomeViewController> {
             controller.selectedChatGroup.value = c.chatGroup;
           }
           controller.selectedMessage.value = null;
-          controller.selectedChatIndex = i;
+          controller.chatTabsController.animateTo(i);
         },
         tabs: List<Tab>.generate(
           tabsLength,
