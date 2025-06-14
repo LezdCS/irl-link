@@ -118,39 +118,55 @@ class ModerationBottomSheet extends GetView {
             ),
           ),
           const SizedBox(height: 15),
-          Visibility(
-            visible: message.platform == Platform.twitch ||
-                message.platform == Platform.kick,
-            child: Row(
-              children: [
-                InkWell(
+          Row(
+            spacing: 10,
+            children: [
+              Visibility(
+                visible: message.platform == Platform.twitch ||
+                    message.platform == Platform.kick,
+                child: InkWell(
                   onTap: () => controller.banMessageInstruction(
                     message,
                   ),
                   child: moderationViewButton(Icons.stop, "ban".tr),
                 ),
-                const SizedBox(width: 10),
-                InkWell(
+              ),
+              Visibility(
+                visible: message.platform == Platform.twitch ||
+                    message.platform == Platform.kick,
+                child: InkWell(
                   onTap: () => timeoutDialog(),
                   child: moderationViewButton(Icons.timer, "timeout".tr),
                 ),
-                const SizedBox(width: 10),
-                // InkWell(
-                //   onTap: () => controller.hideUser(
-                //     message,
-                //   ),
-                //   child: (settings.hiddenUsersIds.firstWhereOrNull(
-                //             (userId) => message.authorId == userId,
-                //           ) !=
-                //           null)
-                //       ? moderationViewButton(Icons.visibility, "unhide_user".tr)
-                //       : moderationViewButton(
-                //           Icons.visibility_off,
-                //           "hide_user".tr,
-                //         ),
-                // ),
-              ],
-            ),
+              ),
+              InkWell(
+                onTap: () async {
+                  final isHidden = await controller.isUserHidden(message);
+                  if (!isHidden) {
+                    controller.hideUser(message);
+                  } else {
+                    controller.unhideUser(message);
+                  }
+                },
+                child: FutureBuilder<bool>(
+                  future: controller.isUserHidden(message),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return snapshot.data!
+                          ? moderationViewButton(
+                              Icons.visibility,
+                              "unhide_user".tr,
+                            )
+                          : moderationViewButton(
+                              Icons.visibility_off,
+                              "hide_user".tr,
+                            );
+                    }
+                    return const SizedBox(); // Loading state
+                  },
+                ),
+              ),
+            ],
           ),
         ],
       ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/domain/entities/chat/chat_message.dart'
+    show Platform;
 import 'package:irllink/src/presentation/controllers/settings/hidden_users_settings_controller.dart';
 
 class ManageListHiddenUsers extends GetView<HiddenUsersSettingsController> {
@@ -76,10 +78,27 @@ class ManageListHiddenUsers extends GetView<HiddenUsersSettingsController> {
                               child: InkWell(
                                 onTap: () {},
                                 child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
+                                    Image.asset(
+                                      elem.platform == Platform.twitch
+                                          ? "lib/assets/twitch/twitch_logo.png"
+                                          : elem.platform == Platform.kick
+                                              ? "lib/assets/kick/kickLogo.png"
+                                              : "lib/assets/youtube/youtubeLogo.png",
+                                      width: 30,
+                                    ),
+                                    Text(
+                                      controller.hiddenUsers[index].id,
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge!
+                                            .color,
+                                        fontSize: 12,
+                                      ),
+                                    ),
                                     Text(
                                       controller.hiddenUsers[index].username,
                                       style: TextStyle(
@@ -92,7 +111,9 @@ class ManageListHiddenUsers extends GetView<HiddenUsersSettingsController> {
                                     ),
                                     InkWell(
                                       onTap: () {
-                                        controller.hiddenUsers.removeAt(index);
+                                        controller.removeHiddenUser(
+                                          controller.hiddenUsers[index],
+                                        );
                                       },
                                       child: const Icon(
                                         Icons.close,

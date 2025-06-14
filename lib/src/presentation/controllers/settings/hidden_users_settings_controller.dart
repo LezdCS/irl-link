@@ -14,6 +14,12 @@ class HiddenUsersSettingsController extends GetxController {
 
   RxList<HiddenUser> hiddenUsers = <HiddenUser>[].obs;
 
+  @override
+  void onInit() {
+    super.onInit();
+    getHiddenUsers();
+  }
+
   Future<void> getHiddenUsers() async {
     final result = await getHiddenUsersUseCase();
     result.fold(
@@ -24,5 +30,6 @@ class HiddenUsersSettingsController extends GetxController {
 
   void removeHiddenUser(HiddenUser user) {
     removeHiddenUserUseCase(user);
+    getHiddenUsers();
   }
 }

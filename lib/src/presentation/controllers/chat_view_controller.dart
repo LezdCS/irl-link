@@ -131,6 +131,15 @@ class ChatViewController extends GetxController
     }
   }
 
+  Future<bool> isUserHidden(ChatMessage message) async {
+    final hiddenUsers = await getHiddenUsersUseCase();
+    return hiddenUsers.fold(
+          (l) => false,
+          (r) => r.any((user) => user.id == message.authorId),
+        ) ??
+        false;
+  }
+
   void addMessage(ChatMessage message) {
     chatMessages.add(message);
     if (chatMessages.length > 500 && isAutoScrolldown.value) {
@@ -242,8 +251,16 @@ class ChatViewController extends GetxController
         platform: message.platform,
       ),
     );
-    homeViewController.selectedMessage.value = null;
-    homeViewController.selectedMessage.refresh();
+  }
+
+  void unhideUser(ChatMessage message) {
+    removeHiddenUserUseCase(
+      HiddenUser(
+        id: message.authorId,
+        username: message.username,
+        platform: message.platform,
+      ),
+    );
   }
 
   /// Scroll to bottom of the chat
