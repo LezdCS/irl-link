@@ -22,13 +22,15 @@ class StreamelementsSettings extends GetView<StreamelementsSettingsController> {
       ),
       body: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              premiumFeatureBadge(context),
-            ],
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                premiumFeatureBadge(context),
+              ],
+            ),
           ),
-          const SizedBox(height: 6),
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(

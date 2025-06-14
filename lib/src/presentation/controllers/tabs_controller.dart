@@ -278,6 +278,31 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
     }
   }
 
+  String getTabTitle(Widget tabElement) {
+    if (tabElement is ObsTabView) {
+      return "OBS";
+    }
+    if (tabElement is StreamelementsTabView) {
+      return "StreamElements";
+    }
+    if (tabElement is RealtimeIrlTabView) {
+      return "RealtimeIRL";
+    }
+    if (tabElement is TwitchTabView) {
+      return "Twitch";
+    }
+    if (tabElement is KickTabView) {
+      return "Kick";
+    }
+    if (tabElement is RtmpTabView) {
+      return "RTMP";
+    }
+    if (tabElement is WebPageView) {
+      return tabElement.tab.title;
+    }
+    return "";
+  }
+
   @override
   void dispose() {
     tabController.dispose();
