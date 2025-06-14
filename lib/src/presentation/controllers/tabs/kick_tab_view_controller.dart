@@ -182,7 +182,6 @@ class KickTabViewController extends GetxController
     // animate to the rtmp tab view
     final indexToGo =
         Get.find<TabsController>().tabElements.indexOf(rtmpTabView);
-    Get.find<TabsController>().tabIndex.value = indexToGo;
-    Get.find<TabsController>().tabController.animateTo(indexToGo);
+    Get.find<TabsController>().setTabIndex(indexToGo);
   }
 }

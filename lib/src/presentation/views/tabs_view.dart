@@ -22,12 +22,10 @@ class TabsView extends GetView<TabsController> {
   Widget _tabBar(BuildContext context) {
     return Obx(
       () => TabBar(
-        controller: controller.tabController,
+        controller: controller.tabController.value,
         isScrollable: true,
         indicatorWeight: 0.01,
-        onTap: (index) {
-          controller.tabIndex.value = index;
-        },
+        onTap: (index) => controller.setTabIndex(index),
         tabs: List<Tab>.generate(
           controller.tabElements.length,
           (int index) => Tab(
@@ -46,7 +44,7 @@ class TabsView extends GetView<TabsController> {
         color: Theme.of(context).colorScheme.surface,
         child: Obx(
           () => IndexedStack(
-            index: controller.tabIndex.value,
+            index: controller.tabController.value.index,
             children: controller.tabElements,
           ),
         ),

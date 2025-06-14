@@ -45,8 +45,7 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
   final HomeViewController homeViewController;
   final StreamElementsGetLocalCredentialsUseCase getLocalCredentialsUseCase;
 
-  late TabController tabController;
-  Rx<int> tabIndex = 0.obs;
+  late Rx<TabController> tabController;
   RxList<Widget> tabElements = <Widget>[].obs;
   RxList<WebPageView> iOSAudioSources = <WebPageView>[].obs;
   RtmpTabViewController? rtmpTabViewController;
@@ -59,7 +58,7 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
   @override
   void onInit() {
     super.onInit();
-    tabController = TabController(length: 0, vsync: this);
+    tabController = TabController(length: 0, vsync: this).obs;
 
     // Listen to tabElements changes and update tabController accordingly
     tabElements.listen((list) {
@@ -71,13 +70,23 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
 
   void _updateTabController() {
     // Dispose old TabController to prevent memory leak
-    tabController.dispose();
+    tabController.value.dispose();
 
-    tabController = TabController(length: tabElements.length, vsync: this);
-    if (tabIndex.value > tabElements.length - 1) {
-      tabIndex.value = 0;
+    tabController.value =
+        TabController(length: tabElements.length, vsync: this);
+    if (tabController.value.index > tabElements.length - 1) {
+      tabController.value.animateTo(0);
     }
-    tabController.animateTo(tabIndex.value);
+  }
+
+  void setTabIndex(int index) {
+    if (index >= 0 && index < tabElements.length) {
+      final newController =
+          TabController(length: tabElements.length, vsync: this);
+      newController.animateTo(index);
+      tabController.value.dispose();
+      tabController.value = newController;
+    }
   }
 
   void reorderTabs() {
@@ -305,7 +314,7 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
 
   @override
   void dispose() {
-    tabController.dispose();
+    tabController.value.dispose();
     super.dispose();
   }
 }
