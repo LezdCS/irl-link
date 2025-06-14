@@ -18,6 +18,8 @@ abstract class Migration {
     switch (version) {
       case 1:
         return Migration1();
+      case 2:
+        return Migration2();
       default:
         return null;
     }
@@ -157,5 +159,21 @@ class Migration1 extends Migration {
     await db.execute('DROP TABLE IF EXISTS kick_credentials');
     await db.execute('DROP TABLE IF EXISTS kick_users');
     await db.execute('DROP TABLE IF EXISTS streamelements_credentials');
+  }
+}
+
+class Migration2 extends Migration {
+  Migration2() : super(2);
+
+  @override
+  Future<void> up(Database db) async {
+    await db.execute(
+      'CREATE TABLE hidden_users (id TEXT PRIMARY KEY, username TEXT NOT NULL, platform TEXT NOT NULL)',
+    );
+  }
+
+  @override
+  Future<void> down(Database db) async {
+    await db.execute('DROP TABLE IF EXISTS hidden_users');
   }
 }

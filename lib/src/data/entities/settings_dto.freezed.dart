@@ -19,7 +19,6 @@ mixin _$SettingsDTO {
   bool get isEmotes;
   double get textSize;
   bool get displayTimestamp;
-  List get hiddenUsersIds;
   ChatEventsSettingsDTO get chatEventsSettings;
   ChatSettingsDTO get chatSettings; //GENERAL SETTINGS
   GeneralSettingsDTO get generalSettings;
@@ -54,8 +53,6 @@ mixin _$SettingsDTO {
                 other.textSize == textSize) &&
             (identical(other.displayTimestamp, displayTimestamp) ||
                 other.displayTimestamp == displayTimestamp) &&
-            const DeepCollectionEquality()
-                .equals(other.hiddenUsersIds, hiddenUsersIds) &&
             (identical(other.chatEventsSettings, chatEventsSettings) ||
                 other.chatEventsSettings == chatEventsSettings) &&
             (identical(other.chatSettings, chatSettings) ||
@@ -89,7 +86,6 @@ mixin _$SettingsDTO {
       isEmotes,
       textSize,
       displayTimestamp,
-      const DeepCollectionEquality().hash(hiddenUsersIds),
       chatEventsSettings,
       chatSettings,
       generalSettings,
@@ -105,7 +101,7 @@ mixin _$SettingsDTO {
 
   @override
   String toString() {
-    return 'SettingsDTO(isEmotes: $isEmotes, textSize: $textSize, displayTimestamp: $displayTimestamp, hiddenUsersIds: $hiddenUsersIds, chatEventsSettings: $chatEventsSettings, chatSettings: $chatSettings, generalSettings: $generalSettings, dashboardSettings: $dashboardSettings, isObsConnected: $isObsConnected, obsWebsocketUrl: $obsWebsocketUrl, obsWebsocketPassword: $obsWebsocketPassword, browserTabs: $browserTabs, obsConnectionsHistory: $obsConnectionsHistory, streamElementsSettings: $streamElementsSettings, rtIrlPushKey: $rtIrlPushKey, ttsSettings: $ttsSettings)';
+    return 'SettingsDTO(isEmotes: $isEmotes, textSize: $textSize, displayTimestamp: $displayTimestamp, chatEventsSettings: $chatEventsSettings, chatSettings: $chatSettings, generalSettings: $generalSettings, dashboardSettings: $dashboardSettings, isObsConnected: $isObsConnected, obsWebsocketUrl: $obsWebsocketUrl, obsWebsocketPassword: $obsWebsocketPassword, browserTabs: $browserTabs, obsConnectionsHistory: $obsConnectionsHistory, streamElementsSettings: $streamElementsSettings, rtIrlPushKey: $rtIrlPushKey, ttsSettings: $ttsSettings)';
   }
 }
 
@@ -119,7 +115,6 @@ abstract mixin class $SettingsDTOCopyWith<$Res> {
       {bool isEmotes,
       double textSize,
       bool displayTimestamp,
-      List hiddenUsersIds,
       ChatEventsSettingsDTO chatEventsSettings,
       ChatSettingsDTO chatSettings,
       GeneralSettingsDTO generalSettings,
@@ -157,7 +152,6 @@ class _$SettingsDTOCopyWithImpl<$Res> implements $SettingsDTOCopyWith<$Res> {
     Object? isEmotes = null,
     Object? textSize = null,
     Object? displayTimestamp = null,
-    Object? hiddenUsersIds = null,
     Object? chatEventsSettings = null,
     Object? chatSettings = null,
     Object? generalSettings = null,
@@ -184,10 +178,6 @@ class _$SettingsDTOCopyWithImpl<$Res> implements $SettingsDTOCopyWith<$Res> {
           ? _self.displayTimestamp
           : displayTimestamp // ignore: cast_nullable_to_non_nullable
               as bool,
-      hiddenUsersIds: null == hiddenUsersIds
-          ? _self.hiddenUsersIds
-          : hiddenUsersIds // ignore: cast_nullable_to_non_nullable
-              as List,
       chatEventsSettings: null == chatEventsSettings
           ? _self.chatEventsSettings
           : chatEventsSettings // ignore: cast_nullable_to_non_nullable
@@ -320,7 +310,6 @@ class _SettingsDTO implements SettingsDTO {
       {this.isEmotes = true,
       this.textSize = 19,
       this.displayTimestamp = false,
-      final List hiddenUsersIds = const [],
       required this.chatEventsSettings,
       required this.chatSettings,
       required this.generalSettings,
@@ -333,8 +322,7 @@ class _SettingsDTO implements SettingsDTO {
       required this.streamElementsSettings,
       this.rtIrlPushKey = "",
       required this.ttsSettings})
-      : _hiddenUsersIds = hiddenUsersIds,
-        _obsConnectionsHistory = obsConnectionsHistory;
+      : _obsConnectionsHistory = obsConnectionsHistory;
   factory _SettingsDTO.fromJson(Map<String, dynamic> json) =>
       _$SettingsDTOFromJson(json);
 
@@ -348,15 +336,6 @@ class _SettingsDTO implements SettingsDTO {
   @override
   @JsonKey()
   final bool displayTimestamp;
-  final List _hiddenUsersIds;
-  @override
-  @JsonKey()
-  List get hiddenUsersIds {
-    if (_hiddenUsersIds is EqualUnmodifiableListView) return _hiddenUsersIds;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_hiddenUsersIds);
-  }
-
   @override
   final ChatEventsSettingsDTO chatEventsSettings;
   @override
@@ -423,8 +402,6 @@ class _SettingsDTO implements SettingsDTO {
                 other.textSize == textSize) &&
             (identical(other.displayTimestamp, displayTimestamp) ||
                 other.displayTimestamp == displayTimestamp) &&
-            const DeepCollectionEquality()
-                .equals(other._hiddenUsersIds, _hiddenUsersIds) &&
             (identical(other.chatEventsSettings, chatEventsSettings) ||
                 other.chatEventsSettings == chatEventsSettings) &&
             (identical(other.chatSettings, chatSettings) ||
@@ -458,7 +435,6 @@ class _SettingsDTO implements SettingsDTO {
       isEmotes,
       textSize,
       displayTimestamp,
-      const DeepCollectionEquality().hash(_hiddenUsersIds),
       chatEventsSettings,
       chatSettings,
       generalSettings,
@@ -474,7 +450,7 @@ class _SettingsDTO implements SettingsDTO {
 
   @override
   String toString() {
-    return 'SettingsDTO(isEmotes: $isEmotes, textSize: $textSize, displayTimestamp: $displayTimestamp, hiddenUsersIds: $hiddenUsersIds, chatEventsSettings: $chatEventsSettings, chatSettings: $chatSettings, generalSettings: $generalSettings, dashboardSettings: $dashboardSettings, isObsConnected: $isObsConnected, obsWebsocketUrl: $obsWebsocketUrl, obsWebsocketPassword: $obsWebsocketPassword, browserTabs: $browserTabs, obsConnectionsHistory: $obsConnectionsHistory, streamElementsSettings: $streamElementsSettings, rtIrlPushKey: $rtIrlPushKey, ttsSettings: $ttsSettings)';
+    return 'SettingsDTO(isEmotes: $isEmotes, textSize: $textSize, displayTimestamp: $displayTimestamp, chatEventsSettings: $chatEventsSettings, chatSettings: $chatSettings, generalSettings: $generalSettings, dashboardSettings: $dashboardSettings, isObsConnected: $isObsConnected, obsWebsocketUrl: $obsWebsocketUrl, obsWebsocketPassword: $obsWebsocketPassword, browserTabs: $browserTabs, obsConnectionsHistory: $obsConnectionsHistory, streamElementsSettings: $streamElementsSettings, rtIrlPushKey: $rtIrlPushKey, ttsSettings: $ttsSettings)';
   }
 }
 
@@ -490,7 +466,6 @@ abstract mixin class _$SettingsDTOCopyWith<$Res>
       {bool isEmotes,
       double textSize,
       bool displayTimestamp,
-      List hiddenUsersIds,
       ChatEventsSettingsDTO chatEventsSettings,
       ChatSettingsDTO chatSettings,
       GeneralSettingsDTO generalSettings,
@@ -535,7 +510,6 @@ class __$SettingsDTOCopyWithImpl<$Res> implements _$SettingsDTOCopyWith<$Res> {
     Object? isEmotes = null,
     Object? textSize = null,
     Object? displayTimestamp = null,
-    Object? hiddenUsersIds = null,
     Object? chatEventsSettings = null,
     Object? chatSettings = null,
     Object? generalSettings = null,
@@ -562,10 +536,6 @@ class __$SettingsDTOCopyWithImpl<$Res> implements _$SettingsDTOCopyWith<$Res> {
           ? _self.displayTimestamp
           : displayTimestamp // ignore: cast_nullable_to_non_nullable
               as bool,
-      hiddenUsersIds: null == hiddenUsersIds
-          ? _self._hiddenUsersIds
-          : hiddenUsersIds // ignore: cast_nullable_to_non_nullable
-              as List,
       chatEventsSettings: null == chatEventsSettings
           ? _self.chatEventsSettings
           : chatEventsSettings // ignore: cast_nullable_to_non_nullable

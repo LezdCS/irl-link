@@ -10,7 +10,6 @@ _SettingsDTO _$SettingsDTOFromJson(Map<String, dynamic> json) => _SettingsDTO(
       isEmotes: json['isEmotes'] as bool? ?? true,
       textSize: (json['textSize'] as num?)?.toDouble() ?? 19,
       displayTimestamp: json['displayTimestamp'] as bool? ?? false,
-      hiddenUsersIds: json['hiddenUsersIds'] as List<dynamic>? ?? const [],
       chatEventsSettings: ChatEventsSettingsDTO.fromJson(
           json['chatEventsSettings'] as Map<String, dynamic>),
       chatSettings: ChatSettingsDTO.fromJson(
@@ -38,7 +37,6 @@ Map<String, dynamic> _$SettingsDTOToJson(_SettingsDTO instance) =>
       'isEmotes': instance.isEmotes,
       'textSize': instance.textSize,
       'displayTimestamp': instance.displayTimestamp,
-      'hiddenUsersIds': instance.hiddenUsersIds,
       'chatEventsSettings': instance.chatEventsSettings,
       'chatSettings': instance.chatSettings,
       'generalSettings': instance.generalSettings,

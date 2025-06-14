@@ -13,7 +13,6 @@ import 'package:irllink/src/presentation/views/settings/chat_events.dart';
 import 'package:irllink/src/presentation/views/settings/chats_joined.dart';
 import 'package:irllink/src/presentation/views/settings/dashboard_settings_view.dart';
 import 'package:irllink/src/presentation/views/settings/manage_list_browser_tabs.dart';
-import 'package:irllink/src/presentation/views/settings/manage_list_hidden_users.dart';
 import 'package:irllink/src/presentation/views/settings/obs_settings.dart';
 import 'package:irllink/src/presentation/views/settings/realtime_irl.dart';
 import 'package:irllink/src/presentation/views/settings/subscription.dart';
@@ -226,9 +225,7 @@ class SettingsView extends GetView<SettingsViewController> {
                   "manage_hidden_users".tr,
                   Icons.list,
                   () {
-                    Get.to(
-                      () => const ManageListHiddenUsers(),
-                    );
+                    Get.toNamed(Routes.hiddenUsersSettings);
                   },
                 ),
                 settingsGoToRow(

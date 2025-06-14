@@ -25,6 +25,9 @@ import 'package:irllink/src/domain/usecases/kick/ban_kick_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/kick_refresh_token_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/post_kick_chat_nessage_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/unban_kick_user_usecase.dart';
+import 'package:irllink/src/domain/usecases/settings/add_hidden_user_usecase.dart';
+import 'package:irllink/src/domain/usecases/settings/get_hidden_users_usecase.dart';
+import 'package:irllink/src/domain/usecases/settings/remove_hidden_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_recent_messages.dart';
 import 'package:irllink/src/domain/usecases/twitch/refresh_token_usecase.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
@@ -46,6 +49,9 @@ class HomeViewController extends GetxController
     required this.getRecentMessagesUseCase,
     required this.banKickUserUseCase,
     required this.unbanKickUserUseCase,
+    required this.addHiddenUserUseCase,
+    required this.removeHiddenUserUseCase,
+    required this.getHiddenUsersUseCase,
   });
 
   final RefreshTwitchTokenUseCase refreshAccessTokenUseCase;
@@ -56,6 +62,9 @@ class HomeViewController extends GetxController
   final GetRecentMessagesUseCase getRecentMessagesUseCase;
   final BanKickUserUseCase banKickUserUseCase;
   final UnbanKickUserUseCase unbanKickUserUseCase;
+  final AddHiddenUserUseCase addHiddenUserUseCase;
+  final RemoveHiddenUserUseCase removeHiddenUserUseCase;
+  final GetHiddenUsersUseCase getHiddenUsersUseCase;
   SplitViewController? splitViewController = SplitViewController(
     limits: [null, WeightLimit(min: 0.12, max: 0.92)],
   );
@@ -232,6 +241,9 @@ class HomeViewController extends GetxController
           getRecentMessagesUseCase: getRecentMessagesUseCase,
           banKickUserUseCase: banKickUserUseCase,
           unbanKickUserUseCase: unbanKickUserUseCase,
+          addHiddenUserUseCase: addHiddenUserUseCase,
+          removeHiddenUserUseCase: removeHiddenUserUseCase,
+          getHiddenUsersUseCase: getHiddenUsersUseCase,
         );
         return controller;
       },

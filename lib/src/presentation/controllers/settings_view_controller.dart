@@ -7,7 +7,6 @@ import 'package:irllink/src/core/services/speaker_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
-import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
 import 'package:irllink/src/domain/usecases/kick/login_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/logout_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_users_usecase.dart';
@@ -39,8 +38,6 @@ class SettingsViewController extends GetxController {
   final TtsService ttsService;
   final StoreService storeService;
 
-  late RxList<String> usernamesHiddenUsers;
-
   RxBool obsWebsocketPasswordShow = false.obs;
   RxBool obsWebsocketUrlShow = false.obs;
   RxBool rtIrlKeyShow = false.obs;
@@ -67,17 +64,7 @@ class SettingsViewController extends GetxController {
     addTtsAllowedPrefixsController = TextEditingController();
     rtIrlInputController = TextEditingController(text: settings.rtIrlPushKey);
 
-    usernamesHiddenUsers = <String>[].obs;
     super.onInit();
-  }
-
-  @override
-  void onReady() {
-    if (homeViewController.twitchData.value != null) {
-      getUsernames();
-    }
-
-    super.onReady();
   }
 
   void updateKeepSpeakerOn({required bool value}) {
@@ -190,37 +177,6 @@ class SettingsViewController extends GetxController {
 
   List<dynamic> getVoiceForLanguage(String language) {
     return ttsService.ttsVoices.where((v) => v['locale'] == language).toList();
-  }
-
-  void removeHiddenUser(userId) {
-    Settings settings = settingsService.settings.value;
-
-    List hiddenUsersIds = List.from(settings.hiddenUsersIds);
-    hiddenUsersIds.remove(userId);
-    settingsService.settings.value =
-        settings.copyWith(hiddenUsersIds: hiddenUsersIds);
-    settingsService.saveSettings();
-  }
-
-  Future<void> getUsernames() async {
-    List<TwitchUser> users = [];
-    Settings settings = settingsService.settings.value;
-
-    final twitchUsersResult = await getTwitchUsersUseCase(
-      params: GetTwitchUsersUseCaseParams(
-        ids: settings.hiddenUsersIds,
-        accessToken: homeViewController.twitchData.value!.accessToken,
-      ),
-    );
-
-    twitchUsersResult.fold(
-      (l) => {},
-      (r) => users = r,
-    );
-
-    for (var user in users) {
-      usernamesHiddenUsers.add(user.displayName);
-    }
   }
 
   Future<void> logoutKick() async {

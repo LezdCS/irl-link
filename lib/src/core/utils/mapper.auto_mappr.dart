@@ -21,6 +21,7 @@ import '../../data/entities/settings/chat_events_settings_dto.dart' as _i17;
 import '../../data/entities/settings/chat_settings_dto.dart' as _i5;
 import '../../data/entities/settings/dashboard_settings_dto.dart' as _i25;
 import '../../data/entities/settings/general_settings_dto.dart' as _i9;
+import '../../data/entities/settings/hidden_user_dto.dart' as _i53;
 import '../../data/entities/settings/stream_elements_settings_dto.dart' as _i13;
 import '../../data/entities/settings/tts_settings_dto.dart' as _i15;
 import '../../data/entities/settings_dto.dart' as _i3;
@@ -47,6 +48,7 @@ import '../../domain/entities/settings/chat_events_settings.dart' as _i16;
 import '../../domain/entities/settings/chat_settings.dart' as _i4;
 import '../../domain/entities/settings/dashboard_settings.dart' as _i24;
 import '../../domain/entities/settings/general_settings.dart' as _i8;
+import '../../domain/entities/settings/hidden_user.dart' as _i52;
 import '../../domain/entities/settings/stream_elements_settings.dart' as _i12;
 import '../../domain/entities/settings/tts_settings.dart' as _i14;
 import '../../domain/entities/stream_elements/se_activity.dart' as _i31;
@@ -120,6 +122,8 @@ import '../../domain/entities/twitch/twitch_user.dart' as _i22;
 /// - `KickChannelDto` → `KickChannel`.
 /// - `Rtmp` → `RtmpDTO`.
 /// - `RtmpDTO` → `Rtmp`.
+/// - `HiddenUser` → `HiddenUserDTO`.
+/// - `HiddenUserDTO` → `HiddenUser`.
 /// {@endtemplate}
 class $Mappr implements _i1.AutoMapprInterface {
   const $Mappr();
@@ -474,6 +478,18 @@ class $Mappr implements _i1.AutoMapprInterface {
             sourceTypeOf == _typeOf<_i51.RtmpDTO?>()) &&
         (targetTypeOf == _typeOf<_i50.Rtmp>() ||
             targetTypeOf == _typeOf<_i50.Rtmp?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i52.HiddenUser>() ||
+            sourceTypeOf == _typeOf<_i52.HiddenUser?>()) &&
+        (targetTypeOf == _typeOf<_i53.HiddenUserDTO>() ||
+            targetTypeOf == _typeOf<_i53.HiddenUserDTO?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i53.HiddenUserDTO>() ||
+            sourceTypeOf == _typeOf<_i53.HiddenUserDTO?>()) &&
+        (targetTypeOf == _typeOf<_i52.HiddenUser>() ||
+            targetTypeOf == _typeOf<_i52.HiddenUser?>())) {
       return true;
     }
     if (recursive) {
@@ -1236,6 +1252,26 @@ class $Mappr implements _i1.AutoMapprInterface {
       return (_map__i51$RtmpDTO_To__i50$Rtmp((model as _i51.RtmpDTO?))
           as TARGET);
     }
+    if ((sourceTypeOf == _typeOf<_i52.HiddenUser>() ||
+            sourceTypeOf == _typeOf<_i52.HiddenUser?>()) &&
+        (targetTypeOf == _typeOf<_i53.HiddenUserDTO>() ||
+            targetTypeOf == _typeOf<_i53.HiddenUserDTO?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i52$HiddenUser_To__i53$HiddenUserDTO(
+          (model as _i52.HiddenUser?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i53.HiddenUserDTO>() ||
+            sourceTypeOf == _typeOf<_i53.HiddenUserDTO?>()) &&
+        (targetTypeOf == _typeOf<_i52.HiddenUser>() ||
+            targetTypeOf == _typeOf<_i52.HiddenUser?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i53$HiddenUserDTO_To__i52$HiddenUser(
+          (model as _i53.HiddenUserDTO?)) as TARGET);
+    }
     throw Exception('No ${model.runtimeType} -> $targetTypeOf mapping.');
   }
 
@@ -1279,7 +1315,6 @@ class $Mappr implements _i1.AutoMapprInterface {
       isEmotes: model.isEmotes,
       textSize: model.textSize,
       displayTimestamp: model.displayTimestamp,
-      hiddenUsersIds: model.hiddenUsersIds,
       chatEventsSettings:
           _map__i16$ChatEventsSettings_To__i17$ChatEventsSettingsDTO(
               model.chatEventsSettings),
@@ -1316,7 +1351,6 @@ class $Mappr implements _i1.AutoMapprInterface {
       isEmotes: model.isEmotes,
       textSize: model.textSize,
       displayTimestamp: model.displayTimestamp,
-      hiddenUsersIds: model.hiddenUsersIds,
       chatEventsSettings:
           _map__i17$ChatEventsSettingsDTO_To__i16$ChatEventsSettings(
               model.chatEventsSettings),
@@ -2338,6 +2372,36 @@ class $Mappr implements _i1.AutoMapprInterface {
       url: model.url,
       key: model.key,
       createdAt: model.createdAt,
+    );
+  }
+
+  _i53.HiddenUserDTO _map__i52$HiddenUser_To__i53$HiddenUserDTO(
+      _i52.HiddenUser? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping HiddenUser → HiddenUserDTO failed because HiddenUser was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<HiddenUser, HiddenUserDTO> to handle null values during mapping.');
+    }
+    return _i53.HiddenUserDTO(
+      id: model.id,
+      username: model.username,
+      platform: model.platform,
+    );
+  }
+
+  _i52.HiddenUser _map__i53$HiddenUserDTO_To__i52$HiddenUser(
+      _i53.HiddenUserDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping HiddenUserDTO → HiddenUser failed because HiddenUserDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<HiddenUserDTO, HiddenUser> to handle null values during mapping.');
+    }
+    return _i52.HiddenUser(
+      id: model.id,
+      username: model.username,
+      platform: model.platform,
     );
   }
 

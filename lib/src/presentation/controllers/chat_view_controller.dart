@@ -15,8 +15,12 @@ import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/pinned_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
+import 'package:irllink/src/domain/entities/settings/hidden_user.dart';
 import 'package:irllink/src/domain/usecases/kick/ban_kick_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/unban_kick_user_usecase.dart';
+import 'package:irllink/src/domain/usecases/settings/add_hidden_user_usecase.dart';
+import 'package:irllink/src/domain/usecases/settings/get_hidden_users_usecase.dart';
+import 'package:irllink/src/domain/usecases/settings/remove_hidden_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_recent_messages.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:kick_chat/kick_chat.dart';
@@ -35,6 +39,9 @@ class ChatViewController extends GetxController
     required this.getRecentMessagesUseCase,
     required this.banKickUserUseCase,
     required this.unbanKickUserUseCase,
+    required this.addHiddenUserUseCase,
+    required this.removeHiddenUserUseCase,
+    required this.getHiddenUsersUseCase,
   });
 
   final ChatGroup chatGroup;
@@ -47,7 +54,9 @@ class ChatViewController extends GetxController
   final GetRecentMessagesUseCase getRecentMessagesUseCase;
   final BanKickUserUseCase banKickUserUseCase;
   final UnbanKickUserUseCase unbanKickUserUseCase;
-
+  final AddHiddenUserUseCase addHiddenUserUseCase;
+  final RemoveHiddenUserUseCase removeHiddenUserUseCase;
+  final GetHiddenUsersUseCase getHiddenUsersUseCase;
   //CHAT
   late ScrollController scrollController;
   RxBool isAutoScrolldown = true.obs;
@@ -224,31 +233,16 @@ class ChatViewController extends GetxController
     homeViewController.selectedMessage.value = null;
   }
 
-  /// Hide every future messages from an user (only on this application, not on Twitch)
+  /// Hide every future messages from an user in IRL Link
   void hideUser(ChatMessage message) {
-    if (homeViewController.twitchData.value == null) {
-      return;
-    }
-    if (message.platform != Platform.twitch) {
-      return;
-    }
-    Settings settings = settingsService.settings.value;
-
-    List hiddenUsersIds = List.from(settings.hiddenUsersIds);
-    if (hiddenUsersIds
-            .firstWhereOrNull((userId) => userId == message.authorId) ==
-        null) {
-      //add user
-      hiddenUsersIds.add(message.authorId);
-      settingsService.settings.value =
-          settings.copyWith(hiddenUsersIds: hiddenUsersIds);
-    } else {
-      //remove user
-      hiddenUsersIds.remove(message.authorId);
-      settingsService.settings.value =
-          settings.copyWith(hiddenUsersIds: hiddenUsersIds);
-    }
-    settingsService.saveSettings();
+    addHiddenUserUseCase(
+      HiddenUser(
+        id: message.authorId,
+        username: message.username,
+        platform: message.platform,
+      ),
+    );
+    homeViewController.selectedMessage.value = null;
     homeViewController.selectedMessage.refresh();
   }
 
@@ -449,9 +443,9 @@ class ChatViewController extends GetxController
       }
       ChatMessage message =
           ChatMessage.fromTwitch(twitchMessage, twitchChat.channelId ?? '');
-      if (settings.hiddenUsersIds.contains(message.authorId)) {
-        return;
-      }
+      // if (settings.hiddenUsersIds.contains(message.authorId)) {
+      //   return;
+      // }
       if (settings.ttsSettings.ttsEnabled) {
         ttsService.readTts(message);
       }

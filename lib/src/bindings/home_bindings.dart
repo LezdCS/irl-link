@@ -10,18 +10,23 @@ import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/data/datasources/local/kick_local_data_source.dart';
+import 'package:irllink/src/data/datasources/local/settings_local_data_source.dart';
 import 'package:irllink/src/data/datasources/local/streamelements_local_data_source.dart';
 import 'package:irllink/src/data/datasources/local/twitch_local_data_source.dart';
 import 'package:irllink/src/data/datasources/remote/kick_remote_data_source.dart';
 import 'package:irllink/src/data/datasources/remote/streamelements_remote_data_source.dart';
 import 'package:irllink/src/data/datasources/remote/twitch_remote_data_source.dart';
 import 'package:irllink/src/data/repositories/kick_repository_impl.dart';
+import 'package:irllink/src/data/repositories/settings_repository_impl.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/usecases/kick/ban_kick_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/kick_refresh_token_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/post_kick_chat_nessage_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/unban_kick_user_usecase.dart';
+import 'package:irllink/src/domain/usecases/settings/add_hidden_user_usecase.dart';
+import 'package:irllink/src/domain/usecases/settings/get_hidden_users_usecase.dart';
+import 'package:irllink/src/domain/usecases/settings/remove_hidden_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_last_activities_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_local_credentials_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_me_usecase.dart';
@@ -136,6 +141,19 @@ class HomeBindings extends Bindings {
       streamelementsRepository: streamelementsRepository,
     );
 
+    final settingsRepository = SettingsRepositoryImpl(
+      localDataSource: SettingsLocalDataSourceImpl(
+        talker: talker,
+      ),
+      talker: talker,
+    );
+    final addHiddenUserUseCase =
+        AddHiddenUserUseCase(settingsRepository: settingsRepository);
+    final removeHiddenUserUseCase =
+        RemoveHiddenUserUseCase(settingsRepository: settingsRepository);
+    final getHiddenUsersUseCase =
+        GetHiddenUsersUseCase(settingsRepository: settingsRepository);
+
     Get.lazyPut<HomeViewController>(
       () => HomeViewController(
         refreshAccessTokenUseCase: refreshTwitchAccessTokenUseCase,
@@ -146,6 +164,9 @@ class HomeBindings extends Bindings {
         getRecentMessagesUseCase: getRecentMessagesUseCase,
         banKickUserUseCase: banKickUserUseCase,
         unbanKickUserUseCase: unbanKickUserUseCase,
+        addHiddenUserUseCase: addHiddenUserUseCase,
+        removeHiddenUserUseCase: removeHiddenUserUseCase,
+        getHiddenUsersUseCase: getHiddenUsersUseCase,
       ),
     );
 

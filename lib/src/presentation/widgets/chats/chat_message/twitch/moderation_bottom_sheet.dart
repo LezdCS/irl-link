@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
-import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/badges.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -20,7 +18,6 @@ class ModerationBottomSheet extends GetView {
   @override
   Widget build(BuildContext context) {
     ChatMessage? message = controller.homeViewController.selectedMessage.value;
-    Settings settings = Get.find<SettingsService>().settings.value;
 
     if (message == null) {
       return Container();
@@ -138,20 +135,20 @@ class ModerationBottomSheet extends GetView {
                   child: moderationViewButton(Icons.timer, "timeout".tr),
                 ),
                 const SizedBox(width: 10),
-                InkWell(
-                  onTap: () => controller.hideUser(
-                    message,
-                  ),
-                  child: (settings.hiddenUsersIds.firstWhereOrNull(
-                            (userId) => message.authorId == userId,
-                          ) !=
-                          null)
-                      ? moderationViewButton(Icons.visibility, "unhide_user".tr)
-                      : moderationViewButton(
-                          Icons.visibility_off,
-                          "hide_user".tr,
-                        ),
-                ),
+                // InkWell(
+                //   onTap: () => controller.hideUser(
+                //     message,
+                //   ),
+                //   child: (settings.hiddenUsersIds.firstWhereOrNull(
+                //             (userId) => message.authorId == userId,
+                //           ) !=
+                //           null)
+                //       ? moderationViewButton(Icons.visibility, "unhide_user".tr)
+                //       : moderationViewButton(
+                //           Icons.visibility_off,
+                //           "hide_user".tr,
+                //         ),
+                // ),
               ],
             ),
           ),
