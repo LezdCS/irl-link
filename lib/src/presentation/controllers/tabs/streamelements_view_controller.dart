@@ -101,7 +101,9 @@ class StreamelementsViewController extends GetxController
       );
     }
 
-    settingsService.getSettings().then((value) => applySettings());
+    connectWebsocket();
+
+    handleGetMe();
 
     isSocketConnected.listen((value) {
       // Send to watchOS
@@ -178,15 +180,6 @@ class StreamelementsViewController extends GetxController
         activity: activity,
       ),
     );
-  }
-
-  Future<void> applySettings() async {
-    if (userSeProfile.value != null) {
-      handleGetMe();
-    }
-    if (!isSocketConnected.value && socket == null) {
-      connectWebsocket();
-    }
   }
 
   Future<void> handleGetMe() async {

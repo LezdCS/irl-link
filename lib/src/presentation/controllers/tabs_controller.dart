@@ -269,9 +269,6 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
     if (obsTabViewController != null) {
       obsTabViewController?.applySettings();
     }
-    if (streamelementsViewController != null) {
-      streamelementsViewController?.applySettings();
-    }
     if (realtimeIrlViewController != null) {
       realtimeIrlViewController?.applySettings();
     }
