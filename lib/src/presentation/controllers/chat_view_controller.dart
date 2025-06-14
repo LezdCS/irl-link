@@ -251,6 +251,8 @@ class ChatViewController extends GetxController
         platform: message.platform,
       ),
     );
+
+    homeViewController.selectedMessage.refresh();
   }
 
   void unhideUser(ChatMessage message) {
@@ -261,6 +263,8 @@ class ChatViewController extends GetxController
         platform: message.platform,
       ),
     );
+
+    homeViewController.selectedMessage.refresh();
   }
 
   /// Scroll to bottom of the chat
