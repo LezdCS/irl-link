@@ -5,6 +5,7 @@ import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/utils/list_move.dart';
+import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/usecases/kick/get_kick_local_usecase.dart';
@@ -141,9 +142,21 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
 
     // Check if StreamElements have to be removed
     if (streamelementsViewController != null) {
-      tabElements.removeWhere((t) => t is StreamelementsTabView);
-      streamelementsViewController = null;
-      await Get.delete<StreamelementsViewController>();
+      final seCredentials = await getLocalCredentialsUseCase();
+      seCredentials.fold(
+        (l) {
+          tabElements.removeWhere((t) => t is StreamelementsTabView);
+          streamelementsViewController = null;
+          Get.delete<StreamelementsViewController>();
+        },
+        (r) {
+          talkerService.talker.logCustom(
+            StreamElementsLog(
+              'StreamElements credentials found, no need to remove tab.',
+            ),
+          );
+        },
+      );
     }
 
     // Check if Twitch have to be removed
