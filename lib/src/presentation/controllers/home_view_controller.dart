@@ -73,7 +73,6 @@ class HomeViewController extends GetxController
   RxInt emotesTabIndex = 0.obs;
 
   Timer? timerRefreshToken;
-  Timer? timerKeepSpeakerOn;
   AudioPlayer audioPlayer = AudioPlayer();
 
   RxBool displayDashboard = false.obs;
@@ -201,7 +200,6 @@ class HomeViewController extends GetxController
   void onClose() {
     debounceSplitResize?.cancel();
     timerRefreshToken?.cancel();
-    timerKeepSpeakerOn?.cancel();
     super.onClose();
   }
 
@@ -470,17 +468,6 @@ class HomeViewController extends GetxController
       Settings settings = settingsService.settings.value;
 
       generateChats();
-
-      // SPEAKER SETTING
-      if (settings.generalSettings.keepSpeakerOn) {
-        const path = "../lib/assets/blank.mp3";
-        timerKeepSpeakerOn = Timer.periodic(
-          const Duration(minutes: 5),
-          (Timer t) async => audioPlayer.play(AssetSource(path)),
-        );
-      } else {
-        timerKeepSpeakerOn?.cancel();
-      }
 
       // SPLIT VIEW
       splitViewController?.weights = settings.generalSettings.splitViewWeights;

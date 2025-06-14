@@ -7,6 +7,7 @@ import 'package:irllink/src/core/services/app_info_service.dart';
 import 'package:irllink/src/core/services/deeplinks_service.dart';
 import 'package:irllink/src/core/services/notification_service.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/core/services/speaker_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/services/tts_service.dart';
@@ -95,4 +96,12 @@ Future<void> initializeDependencies() async {
   await Get.putAsync(() => WatchService().init(), permanent: true);
 
   await Get.putAsync(() => AppInfoService().init(), permanent: true);
+
+  // Initialize SpeakerService
+  await Get.putAsync(
+    () => SpeakerService(
+      settingsService: settingsService,
+    ).init(),
+    permanent: true,
+  );
 }

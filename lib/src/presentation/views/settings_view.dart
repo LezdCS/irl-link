@@ -321,12 +321,8 @@ class SettingsView extends GetView<SettingsViewController> {
                     ),
                     Switch(
                       onChanged: (value) {
-                        settingsService.settings.value =
-                            settings.value.copyWith(
-                          generalSettings: settings.value.generalSettings
-                              .copyWith(keepSpeakerOn: value),
-                        );
-                        settingsService.saveSettings();
+                        Get.find<SettingsViewController>()
+                            .updateKeepSpeakerOn(value: value);
                       },
                       value: settings.value.generalSettings.keepSpeakerOn,
                     ),

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:irllink/src/core/params/kick_auth_params.dart';
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
+import 'package:irllink/src/core/services/speaker_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
@@ -77,6 +78,20 @@ class SettingsViewController extends GetxController {
     }
 
     super.onReady();
+  }
+
+  void updateKeepSpeakerOn({required bool value}) {
+    settingsService.settings.value = settingsService.settings.value.copyWith(
+      generalSettings: settingsService.settings.value.generalSettings.copyWith(
+        keepSpeakerOn: value,
+      ),
+    );
+    settingsService.saveSettings();
+
+    // Update the speaker service directly
+    if (Get.isRegistered<SpeakerService>()) {
+      Get.find<SpeakerService>().updateSettings(settingsService.settings.value);
+    }
   }
 
   Future<void> logout() async {
