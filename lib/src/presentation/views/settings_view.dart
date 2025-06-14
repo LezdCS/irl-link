@@ -467,7 +467,7 @@ class SettingsView extends GetView<SettingsViewController> {
                 settingsGoToRow(
                   context,
                   "StreamElements",
-                  Icons.stream,
+                  Icons.rocket,
                   () {
                     Get.toNamed(Routes.streamelementsSettings);
                   },
