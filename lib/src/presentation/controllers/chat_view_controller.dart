@@ -446,7 +446,7 @@ class ChatViewController extends GetxController
     twitchChat.connect();
     twitchChats.add(twitchChat);
 
-    twitchChat.chatStream.listen((twitchMessage) {
+    twitchChat.chatStream.listen((twitchMessage) async {
       final settings = settingsService.settings.value;
 
       if (cheerEmotes.isEmpty) {
@@ -460,9 +460,9 @@ class ChatViewController extends GetxController
       }
       ChatMessage message =
           ChatMessage.fromTwitch(twitchMessage, twitchChat.channelId ?? '');
-      // if (settings.hiddenUsersIds.contains(message.authorId)) {
-      //   return;
-      // }
+      if (await isUserHidden(message)) {
+        return;
+      }
       if (settings.ttsSettings.ttsEnabled) {
         ttsService.readTts(message);
       }
