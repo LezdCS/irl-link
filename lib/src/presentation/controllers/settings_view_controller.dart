@@ -47,10 +47,6 @@ class SettingsViewController extends GetxController {
   late TextEditingController seOverlayTokenInputController;
   late TextEditingController rtIrlInputController;
 
-  late TextEditingController addTtsIgnoredUsersController;
-  late TextEditingController addTtsIgnoredPrefixsController;
-  late TextEditingController addTtsAllowedPrefixsController;
-
   @override
   void onInit() {
     Settings settings = settingsService.settings.value;
@@ -59,9 +55,6 @@ class SettingsViewController extends GetxController {
         TextEditingController(text: settings.obsWebsocketUrl);
     obsWebsocketPasswordFieldController =
         TextEditingController(text: settings.obsWebsocketPassword);
-    addTtsIgnoredUsersController = TextEditingController();
-    addTtsIgnoredPrefixsController = TextEditingController();
-    addTtsAllowedPrefixsController = TextEditingController();
     rtIrlInputController = TextEditingController(text: settings.rtIrlPushKey);
 
     super.onInit();
@@ -75,7 +68,6 @@ class SettingsViewController extends GetxController {
     );
     settingsService.saveSettings();
 
-    // Update the speaker service directly
     if (Get.isRegistered<SpeakerService>()) {
       Get.find<SpeakerService>().updateSettings(settingsService.settings.value);
     }

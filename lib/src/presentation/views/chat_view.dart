@@ -5,6 +5,8 @@ import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/chats_controller.dart';
+import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/alert_message.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/event_container.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/message_container.dart';
@@ -42,12 +44,11 @@ class ChatView extends GetView<ChatViewController> {
           children: [
             GestureDetector(
               onTap: () {
-                if (controller.homeViewController.selectedMessage.value !=
-                    null) {
-                  controller.homeViewController.selectedMessage.value = null;
+                if (Get.find<ChatsController>().selectedMessage.value != null) {
+                  Get.find<ChatsController>().selectedMessage.value = null;
                 }
-                if (controller.homeViewController.showPinnedMessages.value) {
-                  controller.homeViewController.showPinnedMessages.value =
+                if (Get.find<HomeViewController>().showPinnedMessages.value) {
+                  Get.find<HomeViewController>().showPinnedMessages.value =
                       false;
                 }
                 FocusScope.of(context).unfocus();
@@ -95,18 +96,19 @@ class ChatView extends GetView<ChatViewController> {
                               if (FocusScope.of(context).isFirstFocus) {
                                 FocusScope.of(context).unfocus();
                               }
-                              controller.homeViewController.selectedMessage
+                              Get.find<ChatsController>()
+                                  .selectedMessage
                                   .value = null;
                             },
                             onLongPress: () {
-                              controller.homeViewController.selectedMessage
+                              Get.find<ChatsController>()
+                                  .selectedMessage
                                   .value = message;
                             },
                             child: message.eventType != null
                                 ? EventContainer(
                                     message: message,
-                                    selectedMessage: controller
-                                        .homeViewController
+                                    selectedMessage: Get.find<ChatsController>()
                                         .selectedMessage
                                         .value,
                                     displayTimestamp: settings.displayTimestamp,
@@ -118,8 +120,7 @@ class ChatView extends GetView<ChatViewController> {
                                     showPlatformBadge: multiplePlatform,
                                   )
                                 : MessageContainer(
-                                    selectedMessage: controller
-                                        .homeViewController
+                                    selectedMessage: Get.find<ChatsController>()
                                         .selectedMessage
                                         .value,
                                     message: message,
@@ -186,14 +187,13 @@ class ChatView extends GetView<ChatViewController> {
               right: 0,
               child: AnimatedSlide(
                 offset:
-                    controller.homeViewController.selectedMessage.value != null
+                    Get.find<ChatsController>().selectedMessage.value != null
                         ? Offset.zero
                         : const Offset(0, 1),
                 duration: const Duration(milliseconds: 200),
                 child: Visibility(
                   visible:
-                      controller.homeViewController.selectedMessage.value !=
-                          null,
+                      Get.find<ChatsController>().selectedMessage.value != null,
                   child: ModerationBottomSheet(controller: controller),
                 ),
               ),

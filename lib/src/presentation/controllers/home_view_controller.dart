@@ -9,30 +9,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
-import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/core/services/twitch_event_sub_service.dart';
 import 'package:irllink/src/core/services/twitch_pub_sub_service.dart';
-import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
-import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
-import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/kick/kick_credentials.dart';
 import 'package:irllink/src/domain/entities/pinned_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
-import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
-import 'package:irllink/src/domain/usecases/kick/ban_kick_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/kick_refresh_token_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/post_kick_chat_nessage_usecase.dart';
-import 'package:irllink/src/domain/usecases/kick/unban_kick_user_usecase.dart';
-import 'package:irllink/src/domain/usecases/settings/add_hidden_user_usecase.dart';
-import 'package:irllink/src/domain/usecases/settings/get_hidden_users_usecase.dart';
-import 'package:irllink/src/domain/usecases/settings/remove_hidden_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_recent_messages.dart';
 import 'package:irllink/src/domain/usecases/twitch/refresh_token_usecase.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/chats_controller.dart';
 import 'package:irllink/src/presentation/controllers/tabs/twitch_tab_view_controller.dart';
-import 'package:irllink/src/presentation/views/chat_view.dart';
 import 'package:irllink/src/presentation/views/home_view.dart';
 import 'package:kick_chat/kick_chat.dart';
 import 'package:split_view/split_view.dart';
@@ -47,11 +37,6 @@ class HomeViewController extends GetxController
     required this.talkerService,
     required this.postKickChatMessageUseCase,
     required this.getRecentMessagesUseCase,
-    required this.banKickUserUseCase,
-    required this.unbanKickUserUseCase,
-    required this.addHiddenUserUseCase,
-    required this.removeHiddenUserUseCase,
-    required this.getHiddenUsersUseCase,
   });
 
   final RefreshTwitchTokenUseCase refreshAccessTokenUseCase;
@@ -60,11 +45,6 @@ class HomeViewController extends GetxController
   final TalkerService talkerService;
   final PostKickChatMessageUseCase postKickChatMessageUseCase;
   final GetRecentMessagesUseCase getRecentMessagesUseCase;
-  final BanKickUserUseCase banKickUserUseCase;
-  final UnbanKickUserUseCase unbanKickUserUseCase;
-  final AddHiddenUserUseCase addHiddenUserUseCase;
-  final RemoveHiddenUserUseCase removeHiddenUserUseCase;
-  final GetHiddenUsersUseCase getHiddenUsersUseCase;
   SplitViewController? splitViewController = SplitViewController(
     limits: [null, WeightLimit(min: 0.12, max: 0.92)],
   );
@@ -88,12 +68,6 @@ class HomeViewController extends GetxController
 
   TwitchPubSubService? twitchPubSubService;
   TwitchEventSubService? twitchEventSubService;
-  // Chats
-  RxList<ChatView> chatsViews = <ChatView>[].obs;
-  Rxn<ChatGroup> selectedChatGroup = Rxn<ChatGroup>();
-
-  late TabController chatTabsController;
-  Rxn<entity.ChatMessage> selectedMessage = Rxn<entity.ChatMessage>();
 
   RxList<PinnedMessage> pinnedMessages = <PinnedMessage>[].obs;
   RxBool showPinnedMessages = false.obs;
@@ -103,7 +77,6 @@ class HomeViewController extends GetxController
   @override
   void onInit() async {
     chatInputController = TextEditingController();
-    chatTabsController = TabController(length: 0, vsync: this);
     emotesTabController = TabController(length: 0, vsync: this);
 
     if (Get.arguments != null) {
@@ -228,178 +201,13 @@ class HomeViewController extends GetxController
     });
   }
 
-  Future<void> putChat(ChatGroup chatGroup) async {
-    await Get.putAsync<ChatViewController>(
-      () async {
-        final controller = ChatViewController(
-          chatGroup: chatGroup,
-          homeViewController: this,
-          settingsService: Get.find<SettingsService>(),
-          talker: talkerService.talker,
-          ttsService: Get.find<TtsService>(),
-          watchService: Get.find<WatchService>(),
-          getRecentMessagesUseCase: getRecentMessagesUseCase,
-          banKickUserUseCase: banKickUserUseCase,
-          unbanKickUserUseCase: unbanKickUserUseCase,
-          addHiddenUserUseCase: addHiddenUserUseCase,
-          removeHiddenUserUseCase: removeHiddenUserUseCase,
-          getHiddenUsersUseCase: getHiddenUsersUseCase,
-        );
-        return controller;
-      },
-      tag: chatGroup.id,
-    );
-  }
-
-  Future<void> generateChats() async {
-    Settings settings = settingsService.settings.value;
-
-    List<ChatView> groupsViews = List<ChatView>.from(chatsViews);
-
-    // 1. Find the groups that are in the groupsViews but not in the settings to remove them
-    List<ChatGroup> settingsGroups =
-        settings.chatSettings.copyWith().chatGroups;
-    List<ChatGroup> groupsToRemove = groupsViews
-        .where(
-          (groupView) =>
-              !settingsGroups
-                  .any((sGroup) => sGroup.id == groupView.chatGroup.id) ||
-              groupView.chatGroup.channels.isEmpty,
-        )
-        .map((groupView) => groupView.chatGroup)
-        .toList();
-
-    // Remove groups that are no longer in settings
-    chatsViews.removeWhere((groupView) {
-      if (groupView.chatGroup.id == 'permanentFirstGroup') {
-        return false;
-      }
-      if (groupsToRemove.any((g) => g.id == groupView.chatGroup.id)) {
-        Get.delete<ChatViewController>(tag: groupView.chatGroup.id);
-        return true;
-      }
-      return false;
-    });
-
-    // 2. Find the groups that are in the settings but not in the groupsViews to add them
-    List<ChatGroup> groupsToAdd = settingsGroups
-        .where(
-          (sGroup) =>
-              !groupsViews
-                  .any((groupView) => groupView.chatGroup.id == sGroup.id) &&
-              sGroup.channels.isNotEmpty, // Only add groups with channels
-        )
-        .toList();
-    for (var group in groupsToAdd) {
-      ChatView groupView = ChatView(
-        chatGroup: group,
-      );
-      await putChat(group);
-      chatsViews.add(groupView);
-    }
-
-    // 3. We add the 'Permanent First Group' from the settings to the first position if it does not exist yet in the channels
-    ChatGroup? permanentFirstGroupFromSettings =
-        settings.chatSettings.permanentFirstGroup.copyWith();
-    List<Channel> targetPermanentChannels =
-        List.from(permanentFirstGroupFromSettings.channels);
-
-    // Prepare user's channels if logged in
-    Channel? userTwitchChannel;
-    if (twitchData.value != null) {
-      userTwitchChannel = Channel(
-        platform: Platform.twitch,
-        channel: twitchData.value!.twitchUser.login,
-        enabled: true,
-      );
-    }
-    Channel? userKickChannel;
-    if (kickData.value != null) {
-      userKickChannel = Channel(
-        platform: Platform.kick,
-        channel: kickData.value!.kickUser.name,
-        enabled: true,
-      );
-    }
-
-    // Add user's channels to the target list if they don't exist
-    if (userKickChannel != null &&
-        !targetPermanentChannels.any(
-          (c) =>
-              c.platform == Platform.kick &&
-              c.channel == userKickChannel!.channel,
-        )) {
-      targetPermanentChannels.insert(0, userKickChannel);
-    }
-    if (userTwitchChannel != null &&
-        !targetPermanentChannels.any(
-          (c) =>
-              c.platform == Platform.twitch &&
-              c.channel == userTwitchChannel!.channel,
-        )) {
-      targetPermanentChannels.insert(0, userTwitchChannel);
-    }
-
-    // Find the existing permanent group view
-    int permanentGroupIndex = chatsViews.indexWhere(
-      (groupView) =>
-          groupView.chatGroup.id == permanentFirstGroupFromSettings.id,
-    );
-
-    // If the permanent group view doesn't exist, create and add it
-    if (permanentGroupIndex == -1) {
-      ChatGroup permanentGroup = permanentFirstGroupFromSettings.copyWith(
-        channels: targetPermanentChannels,
-      );
-      ChatView groupView = ChatView(
-        chatGroup: permanentGroup,
-      );
-      await putChat(permanentGroup);
-      chatsViews.insert(0, groupView);
-      // Update the index as we just inserted it
-      permanentGroupIndex = 0;
-    }
-    // No else needed here, the update happens in the loop below
-
-    // 4. Call the updateChannels and createChats function for each group controller
-    for (ChatView c in chatsViews) {
-      List<Channel> channelsToUpdate;
-      if (c.chatGroup.id == permanentFirstGroupFromSettings.id) {
-        // Use the definitive target list for the permanent group
-        channelsToUpdate = targetPermanentChannels;
-      } else {
-        // Use the channels from settings for other groups
-        channelsToUpdate = settingsGroups
-            .firstWhere(
-              (g) => g.id == c.chatGroup.id,
-              orElse: () => const ChatGroup(id: 'fallback', channels: []),
-            )
-            .channels;
-      }
-
-      c.controller.updateChannels(
-        channelsToUpdate,
-        twitchData.value?.twitchUser.login,
-        kickData.value?.kickUser.name,
-      );
-      c.controller.createChats();
-    }
-
-    chatTabsController = TabController(length: chatsViews.length, vsync: this);
-    if (chatsViews.isEmpty) {
-      selectedChatGroup.value = null;
-    } else if (chatTabsController.index >= chatsViews.length) {
-      chatTabsController.animateTo(0);
-    }
-  }
-
   void sendChatMessage(String message, [String? channel]) {
-    if (selectedChatGroup.value == null) {
+    if (Get.find<ChatsController>().selectedChatGroup.value == null) {
       return;
     }
 
     ChatViewController chatViewController = Get.find<ChatViewController>(
-      tag: selectedChatGroup.value?.id,
+      tag: Get.find<ChatsController>().selectedChatGroup.value?.id,
     );
     List<TwitchChat> twitchChats = chatViewController.twitchChats.toList();
     List<KickChat> kickChats = chatViewController.kickChats.toList();
@@ -430,7 +238,7 @@ class HomeViewController extends GetxController
 
   void clearChatInput() {
     chatInputController.text = '';
-    selectedMessage.value = null;
+    Get.find<ChatsController>().selectedMessage.value = null;
     isPickingEmote.value = false;
   }
 
@@ -473,8 +281,6 @@ class HomeViewController extends GetxController
   Future applySettings() async {
     {
       Settings settings = settingsService.settings.value;
-
-      generateChats();
 
       // SPLIT VIEW
       splitViewController?.weights = settings.generalSettings.splitViewWeights;

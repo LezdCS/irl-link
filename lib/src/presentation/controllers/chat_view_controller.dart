@@ -21,7 +21,7 @@ import 'package:irllink/src/domain/usecases/kick/unban_kick_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/add_hidden_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/get_hidden_users_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/remove_hidden_user_usecase.dart';
-import 'package:irllink/src/domain/usecases/twitch/get_recent_messages.dart';
+import 'package:irllink/src/presentation/controllers/chats_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:kick_chat/kick_chat.dart';
 import 'package:talker_flutter/talker_flutter.dart';
@@ -36,7 +36,6 @@ class ChatViewController extends GetxController
     required this.watchService,
     required this.settingsService,
     required this.talker,
-    required this.getRecentMessagesUseCase,
     required this.banKickUserUseCase,
     required this.unbanKickUserUseCase,
     required this.addHiddenUserUseCase,
@@ -51,7 +50,6 @@ class ChatViewController extends GetxController
   final SettingsService settingsService;
   final Talker talker;
 
-  final GetRecentMessagesUseCase getRecentMessagesUseCase;
   final BanKickUserUseCase banKickUserUseCase;
   final UnbanKickUserUseCase unbanKickUserUseCase;
   final AddHiddenUserUseCase addHiddenUserUseCase;
@@ -75,7 +73,7 @@ class ChatViewController extends GetxController
   void onInit() async {
     scrollController = ScrollController();
     banDurationInputController = TextEditingController();
-    homeViewController.selectedChatGroup.value = chatGroup;
+    Get.find<ChatsController>().selectedChatGroup.value = chatGroup;
 
     chatMessages.listen((value) {
       // Send to watchOS
@@ -172,7 +170,7 @@ class ChatViewController extends GetxController
     if (homeViewController.twitchData.value == null ||
         message.platform != Platform.twitch) {
       message.isDeleted = true;
-      homeViewController.selectedMessage.value = null;
+      Get.find<ChatsController>().selectedMessage.value = null;
       return;
     }
 
@@ -183,7 +181,7 @@ class ChatViewController extends GetxController
       kTwitchAuthClientId,
     );
 
-    homeViewController.selectedMessage.value = null;
+    Get.find<ChatsController>().selectedMessage.value = null;
   }
 
   /// Ban user for specific [duration] based on the author name in the [message]
@@ -212,7 +210,7 @@ class ChatViewController extends GetxController
     }
 
     Get.back();
-    homeViewController.selectedMessage.value = null;
+    Get.find<ChatsController>().selectedMessage.value = null;
   }
 
   /// Ban user based on the author name in the [message]
@@ -239,7 +237,7 @@ class ChatViewController extends GetxController
       );
     }
 
-    homeViewController.selectedMessage.value = null;
+    Get.find<ChatsController>().selectedMessage.value = null;
   }
 
   /// Hide every future messages from an user in IRL Link
@@ -252,7 +250,7 @@ class ChatViewController extends GetxController
       ),
     );
 
-    homeViewController.selectedMessage.refresh();
+    Get.find<ChatsController>().selectedMessage.refresh();
   }
 
   void unhideUser(ChatMessage message) {
@@ -264,7 +262,7 @@ class ChatViewController extends GetxController
       ),
     );
 
-    homeViewController.selectedMessage.refresh();
+    Get.find<ChatsController>().selectedMessage.refresh();
   }
 
   /// Scroll to bottom of the chat

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/chats_controller.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/badges.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -17,7 +18,7 @@ class ModerationBottomSheet extends GetView {
 
   @override
   Widget build(BuildContext context) {
-    ChatMessage? message = controller.homeViewController.selectedMessage.value;
+    ChatMessage? message = Get.find<ChatsController>().selectedMessage.value;
 
     if (message == null) {
       return Container();
@@ -65,8 +66,10 @@ class ModerationBottomSheet extends GetView {
                         host: message.platform == Platform.twitch
                             ? "twitch.tv"
                             : 'kick.com',
-                        path: controller
-                            .homeViewController.selectedMessage.value?.username,
+                        path: Get.find<ChatsController>()
+                            .selectedMessage
+                            .value
+                            ?.username,
                       ),
                       mode: LaunchMode.externalApplication,
                     ),
@@ -77,8 +80,9 @@ class ModerationBottomSheet extends GetView {
                   ),
                   const SizedBox(width: 5),
                   InkWell(
-                    onTap: () => controller
-                        .homeViewController.selectedMessage.value = null,
+                    onTap: () => Get.find<ChatsController>()
+                        .selectedMessage
+                        .value = null,
                     child: const Icon(
                       Icons.close,
                       color: Colors.white,
@@ -225,7 +229,7 @@ class ModerationBottomSheet extends GetView {
             children: List.generate(timeoutValues.length, (index) {
               return InkWell(
                 onTap: () => controller.timeoutMessageInstruction(
-                  controller.homeViewController.selectedMessage.value!,
+                  Get.find<ChatsController>().selectedMessage.value!,
                   timeoutValues[index].values.first,
                 ),
                 child: Container(
@@ -269,7 +273,7 @@ class ModerationBottomSheet extends GetView {
                     onSubmitted: (String value) {
                       if (int.tryParse(value) != null) {
                         controller.timeoutMessageInstruction(
-                          controller.homeViewController.selectedMessage.value!,
+                          Get.find<ChatsController>().selectedMessage.value!,
                           int.parse(value),
                         );
                       }
@@ -290,7 +294,7 @@ class ModerationBottomSheet extends GetView {
                         ) !=
                         null) {
                       controller.timeoutMessageInstruction(
-                        controller.homeViewController.selectedMessage.value!,
+                        Get.find<ChatsController>().selectedMessage.value!,
                         int.parse(controller.banDurationInputController.text),
                       );
                     }

@@ -1,5 +1,6 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:irllink/routes/app_routes.dart';
+import 'package:irllink/src/bindings/chats_bindings.dart';
 import 'package:irllink/src/bindings/home_bindings.dart';
 import 'package:irllink/src/bindings/login_bindings.dart';
 import 'package:irllink/src/bindings/settings/browser_settings_bindings.dart';
@@ -31,6 +32,7 @@ class AppPages {
       binding: HomeBindings(),
       bindings: [
         TabsBindings(),
+        ChatsBindings(),
       ],
     ),
     GetPage(
