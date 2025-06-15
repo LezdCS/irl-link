@@ -10,7 +10,7 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart';
-import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/tabs_controller.dart';
 import 'package:store_checker/store_checker.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
@@ -193,9 +193,9 @@ class StoreService extends GetxService {
     }
     purchases.add(purchaseDetails);
     purchasePending.value = false;
-    if (Get.isRegistered<HomeViewController>()) {
-      Get.find<HomeViewController>().applySettings();
-    }
+
+    // Generate the tabs
+    Get.find<TabsController>().generateTabs();
 
     if (purchaseDetails.status == PurchaseStatus.purchased) {
       Get.back();

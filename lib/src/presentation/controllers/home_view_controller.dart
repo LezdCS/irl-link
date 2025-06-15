@@ -93,7 +93,8 @@ class HomeViewController extends GetxController
       }
     }
 
-    await applySettings();
+    splitViewController?.weights =
+        settingsService.settings.value.generalSettings.splitViewWeights;
 
     final remoteConfig = FirebaseRemoteConfig.instance;
     await remoteConfig.fetchAndActivate();
@@ -276,14 +277,5 @@ class HomeViewController extends GetxController
   void getEmotes() {
     emotesTabIndex.value = 0;
     isPickingEmote.toggle();
-  }
-
-  Future applySettings() async {
-    {
-      Settings settings = settingsService.settings.value;
-
-      // SPLIT VIEW
-      splitViewController?.weights = settings.generalSettings.splitViewWeights;
-    }
   }
 }

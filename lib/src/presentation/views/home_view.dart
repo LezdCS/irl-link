@@ -391,7 +391,6 @@ class HomeView extends GetView<HomeViewController> {
                 await Get.toNamed(
                   Routes.settings,
                 );
-                controller.applySettings();
                 Get.find<ChatsController>().generateChats();
                 Get.find<TabsController>().generateTabs();
               },
