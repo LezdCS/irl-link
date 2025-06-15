@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
-import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/tabs/obs_tab_view_controller.dart';
 
 class WatchService extends GetxService {
   static const String _channelName = 'com.irllink';

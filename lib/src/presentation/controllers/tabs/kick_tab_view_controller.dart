@@ -9,6 +9,7 @@ import 'package:irllink/src/domain/usecases/kick/get_kick_categories_usecase.dar
 import 'package:irllink/src/domain/usecases/kick/get_kick_channels_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/patch_kick_channel_usecase.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/tabs_controller.dart';
 import 'package:irllink/src/presentation/views/tabs/rtmp_tab_view.dart';
 
 class KickTabViewController extends GetxController
@@ -161,15 +162,11 @@ class KickTabViewController extends GetxController
     if (kickChannel.value == null) {
       return;
     }
-    // Check if rmptTabViewController is not null in homeViewController
-    // If null, we need to init it (might just create a function for that in homeViewController)
-    // If not null, we need to call the addTemporaryRtmp function in rtmpTabViewController
-    if (Get.find<HomeViewController>().rtmpTabViewController == null) {
-      Get.find<HomeViewController>().initRtmpTabViewController();
+    if (Get.find<TabsController>().rtmpTabViewController == null) {
+      Get.find<TabsController>().initRtmpTabViewController();
     }
-    // await for 1 second
     await Future.delayed(const Duration(seconds: 1));
-    Get.find<HomeViewController>().rtmpTabViewController?.addTemporaryRtmp(
+    Get.find<TabsController>().rtmpTabViewController?.addTemporaryRtmp(
           Rtmp(
             id: 0,
             name: "Kick",
@@ -179,13 +176,12 @@ class KickTabViewController extends GetxController
           ),
         );
     // find the rtmp tab view in the homeViewController.tabElements
-    final rtmpTabView = Get.find<HomeViewController>()
+    final rtmpTabView = Get.find<TabsController>()
         .tabElements
         .firstWhere((element) => element is RtmpTabView);
     // animate to the rtmp tab view
     final indexToGo =
-        Get.find<HomeViewController>().tabElements.indexOf(rtmpTabView);
-    Get.find<HomeViewController>().tabIndex.value = indexToGo;
-    Get.find<HomeViewController>().tabController.animateTo(indexToGo);
+        Get.find<TabsController>().tabElements.indexOf(rtmpTabView);
+    Get.find<TabsController>().setTabIndex(indexToGo);
   }
 }

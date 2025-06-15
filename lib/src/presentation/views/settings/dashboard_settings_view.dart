@@ -151,9 +151,7 @@ Widget _addGroupButton(
         cancelTextColor: const Color(0xFF9147ff),
         confirmTextColor: Colors.white,
         radius: 10,
-        onConfirm: () {
-          settingsViewController.addBrowserTab();
-        },
+        onConfirm: () {},
       );
     },
     child: Container(

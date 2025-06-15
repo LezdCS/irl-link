@@ -8,16 +8,16 @@ part of 'se_credentials_dto.dart';
 
 _SeCredentialsDTO _$SeCredentialsDTOFromJson(Map<String, dynamic> json) =>
     _SeCredentialsDTO(
-      accessToken: json['accessToken'] as String,
-      refreshToken: json['refreshToken'] as String,
-      expiresIn: (json['expiresIn'] as num).toInt(),
+      accessToken: json['access_token'] as String,
+      refreshToken: json['refresh_token'] as String,
+      expiresIn: (json['expires_in'] as num).toInt(),
       scopes: json['scopes'] as String,
     );
 
 Map<String, dynamic> _$SeCredentialsDTOToJson(_SeCredentialsDTO instance) =>
     <String, dynamic>{
-      'accessToken': instance.accessToken,
-      'refreshToken': instance.refreshToken,
-      'expiresIn': instance.expiresIn,
+      'access_token': instance.accessToken,
+      'refresh_token': instance.refreshToken,
+      'expires_in': instance.expiresIn,
       'scopes': instance.scopes,
     };

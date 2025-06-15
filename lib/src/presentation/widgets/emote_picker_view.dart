@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/chats_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:twitch_chat/twitch_chat.dart';
 
@@ -13,7 +14,7 @@ class EmotePickerView extends GetView<HomeViewController> {
   @override
   Widget build(BuildContext context) {
     ChatViewController? chatController = Get.find<ChatViewController>(
-      tag: controller.selectedChatGroup.value?.id,
+      tag: Get.find<ChatsController>().selectedChatGroup.value?.id,
     );
 
     List<Emote> globalEmotes = chatController.twitchChats[0].globalEmotes;

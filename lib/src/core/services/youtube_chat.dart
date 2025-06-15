@@ -89,11 +89,21 @@ class YoutubeChat {
     talker.warning("Youtube Chat: Connection closed");
     isConnected.value = false;
     close();
+
+    // Retry connection after delay
+    Future.delayed(const Duration(seconds: 20), () {
+      connect();
+    });
   }
 
   void _onError(Object o, StackTrace s) {
     isConnected.value = false;
     talker.error("Youtube Chat: error", o, s);
+
+    // Retry connection after delay
+    Future.delayed(const Duration(seconds: 20), () {
+      connect();
+    });
   }
 
   void _eventListener(String data) {

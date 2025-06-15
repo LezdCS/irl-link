@@ -4,72 +4,83 @@ import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
-import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/settings/streamelements_settings_controller.dart';
+import 'package:irllink/src/presentation/controllers/tabs/streamelements_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/premium_feature_badge.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-class StreamElements extends GetView<SettingsViewController> {
-  const StreamElements({
+class StreamelementsSettings extends GetView<StreamelementsSettingsController> {
+  const StreamelementsSettings({
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              'StreamElements',
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-            premiumFeatureBadge(context),
-          ],
-        ),
-        const SizedBox(height: 6),
-        Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(
-              Radius.circular(8),
-            ),
-            color: Theme.of(context).colorScheme.secondary,
-          ),
-          child: Obx(
-            () => Column(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('StreamElements Settings'),
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (controller.homeViewController.streamelementsViewController
-                        .value !=
-                    null)
-                  loggedIn(context)
-                else
-                  loginButton(),
+                premiumFeatureBadge(context),
               ],
             ),
           ),
-        ),
-      ],
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(
+                Radius.circular(8),
+              ),
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+            child: FutureBuilder<bool>(
+              future: controller.isLoggedIn(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                final isLoggedIn = snapshot.data ?? false;
+                return Column(
+                  children: [
+                    if (isLoggedIn)
+                      FutureBuilder<SeMe?>(
+                        future: _getSeMe(),
+                        builder: (context, seMeSnapshot) {
+                          if (seMeSnapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          return loggedIn(context, seMeSnapshot.data);
+                        },
+                      )
+                    else
+                      loginButton(),
+                  ],
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  Widget loggedIn(BuildContext context) {
+  Widget loggedIn(BuildContext context, SeMe? seMe) {
     Settings settings = Get.find<SettingsService>().settings.value;
-    SeMe? seMe = controller.homeViewController.streamelementsViewController
-        .value?.userSeProfile.value;
-
     final settingsService = Get.find<SettingsService>();
 
     return Column(
       children: [
-        if (seMe != null)
-          _profile(
-            seMe,
-          )
-        else
-          Container(),
+        if (seMe != null) _profile(seMe) else Container(),
         const SizedBox(
           height: 12,
         ),
@@ -278,5 +289,17 @@ class StreamElements extends GetView<SettingsViewController> {
         ],
       ),
     );
+  }
+
+  Future<SeMe?> _getSeMe() async {
+    try {
+      if (Get.isRegistered<StreamelementsViewController>()) {
+        final seController = Get.find<StreamelementsViewController>();
+        return seController.userSeProfile.value;
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
   }
 }

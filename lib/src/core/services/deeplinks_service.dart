@@ -5,7 +5,7 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
-import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/tabs_controller.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:uuid/uuid.dart';
 
@@ -90,8 +90,8 @@ class DeeplinksService {
     );
     settingsService.saveSettings();
 
-    // Apply the settings to update the UI
-    Get.find<HomeViewController>().applySettings();
+    // Generate the tabs
+    Get.find<TabsController>().generateTabs();
   }
 
   void dispose() {

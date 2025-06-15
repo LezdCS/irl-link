@@ -9,18 +9,13 @@ import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/data/datasources/local/kick_local_data_source.dart';
-import 'package:irllink/src/data/datasources/local/streamelements_local_data_source.dart';
 import 'package:irllink/src/data/datasources/local/twitch_local_data_source.dart';
 import 'package:irllink/src/data/datasources/remote/kick_remote_data_source.dart';
-import 'package:irllink/src/data/datasources/remote/streamelements_remote_data_source.dart';
 import 'package:irllink/src/data/datasources/remote/twitch_remote_data_source.dart';
 import 'package:irllink/src/data/repositories/kick_repository_impl.dart';
-import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/usecases/kick/login_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/logout_usecase.dart';
-import 'package:irllink/src/domain/usecases/streamelements/disconnect_usecase.dart';
-import 'package:irllink/src/domain/usecases/streamelements/login_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_users_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/login_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/logout_usecase.dart';
@@ -32,7 +27,6 @@ class SettingsBindings extends Bindings {
   @override
   void dependencies() {
     Dio dioTwitchClient = initDio(kTwitchApiUrlBase);
-    Dio streamElementsDioClient = initDio(kStreamelementsUrlBase);
     Dio kickDioClient = initDio(kKickApiUrlBase);
     Talker talker = Get.find<TalkerService>().talker;
     // Repositories
@@ -46,16 +40,7 @@ class SettingsBindings extends Bindings {
       ),
       talker: talker,
     );
-    final streamelementsRepository = StreamelementsRepositoryImpl(
-      talker: talker,
-      remoteDataSource: StreamelementsRemoteDataSourceImpl(
-        dioClient: streamElementsDioClient,
-        talker: talker,
-      ),
-      localDataSource: StreamelementsLocalDataSourceImpl(
-        talker: talker,
-      ),
-    );
+
     final kickRepository = KickRepositoryImpl(
       remoteDataSource: KickRemoteDataSourceImpl(
         dioClient: kickDioClient,
@@ -71,14 +56,7 @@ class SettingsBindings extends Bindings {
     GetTwitchUsersUseCase getTwitchUsersUseCase =
         GetTwitchUsersUseCase(twitchRepository);
     LogoutUseCase logoutUseCase = LogoutUseCase(twitchRepository);
-    StreamElementsLoginUseCase streamElementsLoginUseCase =
-        StreamElementsLoginUseCase(
-      streamelementsRepository: streamelementsRepository,
-    );
-    StreamElementsDisconnectUseCase streamElementsDisconnectUseCase =
-        StreamElementsDisconnectUseCase(
-      streamelementsRepository: streamelementsRepository,
-    );
+
     LogoutKickUseCase logoutKickUseCase = LogoutKickUseCase(kickRepository);
 
     final loginUseCase = LoginUseCase(twitchRepository);
@@ -89,8 +67,6 @@ class SettingsBindings extends Bindings {
         getTwitchUsersUseCase: getTwitchUsersUseCase,
         logoutUseCase: logoutUseCase,
         loginUseCase: loginUseCase,
-        streamElementsLoginUseCase: streamElementsLoginUseCase,
-        streamElementsDisconnectUseCase: streamElementsDisconnectUseCase,
         homeViewController: Get.find<HomeViewController>(),
         settingsService: Get.find<SettingsService>(),
         storeService: Get.find<StoreService>(),

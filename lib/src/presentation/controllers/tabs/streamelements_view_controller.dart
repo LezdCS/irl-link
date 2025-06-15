@@ -101,7 +101,9 @@ class StreamelementsViewController extends GetxController
       );
     }
 
-    settingsService.getSettings().then((value) => applySettings());
+    connectWebsocket();
+
+    handleGetMe();
 
     isSocketConnected.listen((value) {
       // Send to watchOS
@@ -112,7 +114,9 @@ class StreamelementsViewController extends GetxController
 
     activities.listen((value) {
       // Send to watchOS
-      watchService.sendSeActivityToNative(value.last);
+      if (value.isNotEmpty) {
+        watchService.sendSeActivityToNative(value.last);
+      }
     });
 
     super.onInit();
@@ -176,15 +180,6 @@ class StreamelementsViewController extends GetxController
         activity: activity,
       ),
     );
-  }
-
-  Future<void> applySettings() async {
-    if (userSeProfile.value != null) {
-      handleGetMe();
-    }
-    if (!isSocketConnected.value && socket == null) {
-      connectWebsocket();
-    }
   }
 
   Future<void> handleGetMe() async {
@@ -338,7 +333,9 @@ class StreamelementsViewController extends GetxController
       (event, data) => {
         if (data != null)
           {
-            talkerService.talker.debug(data),
+            talkerService.talker.logCustom(
+              StreamElementsLog('StreamElements WebSocket event: $event'),
+            ),
           },
       },
     );

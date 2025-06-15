@@ -5,7 +5,7 @@ import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/stream_elements_settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
-import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/tabs/streamelements_view_controller.dart';
 
 class SeActivitiesList extends GetView<StreamelementsViewController> {
   const SeActivitiesList({

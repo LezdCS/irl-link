@@ -14,6 +14,14 @@ class Tts extends GetView<SettingsViewController> {
   Widget build(BuildContext context) {
     final SettingsService settingsService = Get.find<SettingsService>();
     final TtsService ttsService = Get.find<TtsService>();
+
+    TextEditingController addTtsIgnoredUsersController =
+        TextEditingController();
+    TextEditingController addTtsIgnoredPrefixsController =
+        TextEditingController();
+    TextEditingController addTtsAllowedPrefixsController =
+        TextEditingController();
+
     return Obx(
       () {
         Settings settings = settingsService.settings.value;
@@ -343,21 +351,19 @@ class Tts extends GetView<SettingsViewController> {
                           settingsService.saveSettings();
                         },
                         controller: controller,
-                        textFieldController:
-                            controller.addTtsIgnoredPrefixsController,
+                        textFieldController: addTtsIgnoredPrefixsController,
                         onAdd: () {
                           final updatedList = List<String>.from(
                             settings.ttsSettings.prefixsToIgnore,
                           )..add(
-                              controller.addTtsIgnoredPrefixsController.text
-                                  .trim(),
+                              addTtsIgnoredPrefixsController.text.trim(),
                             );
                           settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings.copyWith(
                               prefixsToIgnore: updatedList,
                             ),
                           );
-                          controller.addTtsIgnoredPrefixsController.clear();
+                          addTtsIgnoredPrefixsController.clear();
                           settingsService.saveSettings();
                         },
                       );
@@ -414,21 +420,19 @@ class Tts extends GetView<SettingsViewController> {
                           settingsService.saveSettings();
                         },
                         controller: controller,
-                        textFieldController:
-                            controller.addTtsAllowedPrefixsController,
+                        textFieldController: addTtsAllowedPrefixsController,
                         onAdd: () {
                           final updatedList = List<String>.from(
                             settings.ttsSettings.prefixsToUseTtsOnly,
                           )..add(
-                              controller.addTtsAllowedPrefixsController.text
-                                  .trim(),
+                              addTtsAllowedPrefixsController.text.trim(),
                             );
                           settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings.copyWith(
                               prefixsToUseTtsOnly: updatedList,
                             ),
                           );
-                          controller.addTtsAllowedPrefixsController.clear();
+                          addTtsAllowedPrefixsController.clear();
                           settingsService.saveSettings();
                         },
                       );
@@ -484,21 +488,19 @@ class Tts extends GetView<SettingsViewController> {
                           settingsService.saveSettings();
                         },
                         controller: controller,
-                        textFieldController:
-                            controller.addTtsIgnoredUsersController,
+                        textFieldController: addTtsIgnoredUsersController,
                         onAdd: () {
                           final updatedList = List<String>.from(
                             settings.ttsSettings.ttsUsersToIgnore,
                           )..add(
-                              controller.addTtsIgnoredUsersController.text
-                                  .trim(),
+                              addTtsIgnoredUsersController.text.trim(),
                             );
                           settingsService.settings.value = settings.copyWith(
                             ttsSettings: settings.ttsSettings.copyWith(
                               ttsUsersToIgnore: updatedList,
                             ),
                           );
-                          controller.addTtsIgnoredUsersController.clear();
+                          addTtsIgnoredUsersController.clear();
                           settingsService.saveSettings();
                         },
                       );

@@ -5,9 +5,9 @@ import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
-import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/settings/browser_settings_controller.dart';
 
-class ManageListBrowserTabs extends GetView<SettingsViewController> {
+class ManageListBrowserTabs extends GetView<BrowserSettingsController> {
   const ManageListBrowserTabs({
     super.key,
   });
@@ -170,7 +170,7 @@ class ManageListBrowserTabs extends GetView<SettingsViewController> {
 
 Widget _addGroupButton(
   BuildContext context,
-  SettingsViewController controller,
+  BrowserSettingsController controller,
 ) {
   return InkWell(
     onTap: () {
@@ -210,7 +210,7 @@ Widget _addGroupButton(
   );
 }
 
-Widget _addDialog(context, SettingsViewController controller) {
+Widget _addDialog(context, BrowserSettingsController controller) {
   controller.addBrowserUrlController.text = '';
   controller.addBrowserTitleController.text = '';
   controller.addBrowserToggled.value = true;
@@ -316,7 +316,7 @@ Widget _addDialog(context, SettingsViewController controller) {
 
 Widget _editDialog(
   context,
-  SettingsViewController controller,
+  BrowserSettingsController controller,
   BrowserTab elem,
 ) {
   controller.addBrowserUrlController.text = elem.url;

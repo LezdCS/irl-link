@@ -17,7 +17,6 @@ abstract class SettingsDTO with _$SettingsDTO {
     @Default(true) bool isEmotes,
     @Default(19) double textSize,
     @Default(false) bool displayTimestamp,
-    @Default([]) List hiddenUsersIds,
     required ChatEventsSettingsDTO chatEventsSettings,
     required ChatSettingsDTO chatSettings,
     //GENERAL SETTINGS

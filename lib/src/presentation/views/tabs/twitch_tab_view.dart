@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
-import 'package:irllink/src/presentation/controllers/twitch_tab_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/tabs/twitch_tab_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/poll.dart';
 import 'package:irllink/src/presentation/widgets/prediction.dart';
 import 'package:irllink/src/presentation/widgets/slow_mode_dialog.dart';

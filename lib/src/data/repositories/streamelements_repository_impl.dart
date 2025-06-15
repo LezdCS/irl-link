@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
@@ -87,8 +88,10 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
     SeCredentials seCredentials,
   ) async {
     try {
-      final newSeCredentialDTO =
-          await _remoteDataSource.refreshToken(seCredentials.refreshToken);
+      final newSeCredentialDTO = await _remoteDataSource.refreshToken(
+        seCredentials.refreshToken,
+        seCredentials.scopes,
+      );
       await _localDataSource.storeCredentials(newSeCredentialDTO);
 
       await _remoteDataSource.validateToken(newSeCredentialDTO.accessToken);
@@ -256,6 +259,7 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
   @override
   Future<Either<Failure, SeCredentials>> getSeCredentialsFromLocal() async {
     final seCredentialsDTO = await _localDataSource.getCredentials();
+    debugPrint('seCredentialsDTO: $seCredentialsDTO');
 
     if (seCredentialsDTO != null) {
       StreamelementsAuthParams params = const StreamelementsAuthParams();
