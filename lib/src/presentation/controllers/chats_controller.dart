@@ -7,7 +7,6 @@ import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart'
     show Platform;
 import 'package:irllink/src/domain/entities/chat/chat_message.dart' as entity;
-import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/usecases/kick/ban_kick_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/unban_kick_user_usecase.dart';
@@ -55,13 +54,15 @@ class ChatsController extends GetxController with GetTickerProviderStateMixin {
   }
 
   Future<void> generateChats() async {
-    Settings settings = settingsService.settings.value;
-
     List<ChatView> groupsViews = List<ChatView>.from(chatsViews);
 
     // 1. Find the groups that are in the groupsViews but not in the settings to remove them
-    List<ChatGroup> settingsGroups =
-        settings.chatSettings.copyWith().chatGroups;
+    final result = await getChatGroupsUseCase(params: null);
+    List<ChatGroup> settingsGroups = result.fold(
+      (l) => [],
+      (r) => r,
+    );
+
     List<ChatGroup> groupsToRemove = groupsViews
         .where(
           (groupView) =>
@@ -74,9 +75,10 @@ class ChatsController extends GetxController with GetTickerProviderStateMixin {
 
     // Remove groups that are no longer in settings
     chatsViews.removeWhere((groupView) {
-      if (groupView.chatGroup.id == 'permanentFirstGroup') {
+      if (groupView.chatGroup.id == '-1') {
         return false;
       }
+
       if (groupsToRemove.any((g) => g.id == groupView.chatGroup.id)) {
         Get.delete<ChatViewController>(tag: groupView.chatGroup.id);
         return true;
@@ -90,7 +92,7 @@ class ChatsController extends GetxController with GetTickerProviderStateMixin {
           (sGroup) =>
               !groupsViews
                   .any((groupView) => groupView.chatGroup.id == sGroup.id) &&
-              sGroup.channels.isNotEmpty, // Only add groups with channels
+              (sGroup.channels.isNotEmpty || sGroup.id == '-1'),
         )
         .toList();
     for (var group in groupsToAdd) {
@@ -101,88 +103,45 @@ class ChatsController extends GetxController with GetTickerProviderStateMixin {
       chatsViews.add(groupView);
     }
 
-    // 3. We add the 'Permanent First Group' from the settings to the first position if it does not exist yet in the channels
-    ChatGroup? permanentFirstGroupFromSettings =
-        settings.chatSettings.permanentFirstGroup.copyWith();
-    List<Channel> targetPermanentChannels =
-        List.from(permanentFirstGroupFromSettings.channels);
-
     // Prepare user's channels if logged in
-    Channel? userTwitchChannel;
     if (Get.find<HomeViewController>().twitchData.value != null) {
-      userTwitchChannel = Channel(
+      final userTwitchChannel = Channel(
         platform: Platform.twitch,
         channel:
             Get.find<HomeViewController>().twitchData.value!.twitchUser.login,
       );
+      settingsGroups
+          .firstWhere((c) => c.id == '-1')
+          .channels
+          .add(userTwitchChannel);
     }
-    Channel? userKickChannel;
     if (Get.find<HomeViewController>().kickData.value != null) {
-      userKickChannel = Channel(
+      final userKickChannel = Channel(
         platform: Platform.kick,
         channel: Get.find<HomeViewController>().kickData.value!.kickUser.name,
       );
+      settingsGroups
+          .firstWhere((c) => c.id == '-1')
+          .channels
+          .add(userKickChannel);
     }
-
-    // Add user's channels to the target list if they don't exist
-    if (userKickChannel != null &&
-        !targetPermanentChannels.any(
-          (c) =>
-              c.platform == Platform.kick &&
-              c.channel == userKickChannel!.channel,
-        )) {
-      targetPermanentChannels.insert(0, userKickChannel);
-    }
-    if (userTwitchChannel != null &&
-        !targetPermanentChannels.any(
-          (c) =>
-              c.platform == Platform.twitch &&
-              c.channel == userTwitchChannel!.channel,
-        )) {
-      targetPermanentChannels.insert(0, userTwitchChannel);
-    }
-
-    // Find the existing permanent group view
-    int permanentGroupIndex = chatsViews.indexWhere(
-      (groupView) =>
-          groupView.chatGroup.id == permanentFirstGroupFromSettings.id,
-    );
-
-    // If the permanent group view doesn't exist, create and add it
-    if (permanentGroupIndex == -1) {
-      ChatGroup permanentGroup = permanentFirstGroupFromSettings.copyWith(
-        channels: targetPermanentChannels,
-      );
-      ChatView groupView = ChatView(
-        chatGroup: permanentGroup,
-      );
-      await putChat(permanentGroup);
-      chatsViews.insert(0, groupView);
-      // Update the index as we just inserted it
-      permanentGroupIndex = 0;
-    }
-    // No else needed here, the update happens in the loop below
 
     // 4. Call the updateChannels and createChats function for each group controller
     for (ChatView c in chatsViews) {
       List<Channel> channelsToUpdate;
-      if (c.chatGroup.id == permanentFirstGroupFromSettings.id) {
-        // Use the definitive target list for the permanent group
-        channelsToUpdate = targetPermanentChannels;
-      } else {
-        // Use the channels from settings for other groups
-        channelsToUpdate = settingsGroups
-            .firstWhere(
-              (g) => g.id == c.chatGroup.id,
-              orElse: () => const ChatGroup(id: 'fallback', channels: []),
-            )
-            .channels;
+
+      ChatGroup? chatGroup = settingsGroups.firstWhereOrNull(
+        (g) => g.id == c.chatGroup.id,
+      );
+
+      if (chatGroup == null) {
+        continue;
       }
+
+      channelsToUpdate = chatGroup.channels;
 
       c.controller.updateChannels(
         channelsToUpdate,
-        Get.find<HomeViewController>().twitchData.value?.twitchUser.login,
-        Get.find<HomeViewController>().kickData.value?.kickUser.name,
       );
       c.controller.createChats();
     }

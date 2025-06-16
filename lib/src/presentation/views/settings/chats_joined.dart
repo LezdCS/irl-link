@@ -83,6 +83,20 @@ class ChatsJoined extends GetView<ChatsSettingsController> {
       onDismissed: (direction) {
         // If the user swipes to the left
         if (direction == DismissDirection.endToStart) {
+          if (group.id == '-1') {
+            Get.defaultDialog(
+              title: "delete".tr,
+              content: const Text("You can't delete the default group"),
+              textConfirm: "ok".tr,
+              buttonColor: const Color(0xFF9147ff),
+              confirmTextColor: Colors.white,
+              onConfirm: () {
+                controller.getChatGroups();
+                Get.back();
+              },
+            );
+            return;
+          }
           controller.removeChatGroup(group);
         }
       },
