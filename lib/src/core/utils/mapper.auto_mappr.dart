@@ -1479,8 +1479,6 @@ class $Mappr implements _i1.AutoMapprInterface {
           r'Consider setting the whenSourceIsNull parameter on the MapType<ChatSettings, ChatSettingsDTO> to handle null values during mapping.');
     }
     return _i5.ChatSettingsDTO(
-      permanentFirstGroup:
-          _map__i4$ChatGroup_To__i5$ChatGroupDTO(model.permanentFirstGroup),
       chatGroups: model.chatGroups
           .map<_i5.ChatGroupDTO>(
               (value) => _map__i4$ChatGroup_To__i5$ChatGroupDTO(value))
@@ -1498,8 +1496,6 @@ class $Mappr implements _i1.AutoMapprInterface {
           r'Consider setting the whenSourceIsNull parameter on the MapType<ChatSettingsDTO, ChatSettings> to handle null values during mapping.');
     }
     return _i4.ChatSettings(
-      permanentFirstGroup:
-          _map__i5$ChatGroupDTO_To__i4$ChatGroup(model.permanentFirstGroup),
       chatGroups: model.chatGroups
           .map<_i4.ChatGroup>(
               (value) => _map__i5$ChatGroupDTO_To__i4$ChatGroup(value))

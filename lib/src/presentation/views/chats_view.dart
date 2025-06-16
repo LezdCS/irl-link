@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart'
     show Platform;
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
-import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/chats_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/views/chat_view.dart';
@@ -65,21 +64,9 @@ class ChatsView extends GetView<ChatsController> {
       int tabsLength = controller.chatsViews.length;
 
       return TabBar(
-        controller: controller.chatTabsController,
+        controller: controller.chatTabsController.value,
         isScrollable: true,
-        onTap: (int i) {
-          if (Get.isRegistered<ChatViewController>(
-            tag: controller.chatsViews[i].chatGroup.id,
-          )) {
-            ChatViewController c = Get.find<ChatViewController>(
-              tag: controller.chatsViews[i].chatGroup.id,
-            );
-            c.scrollToBottom();
-            controller.selectedChatGroup.value = c.chatGroup;
-          }
-          controller.selectedMessage.value = null;
-          controller.chatTabsController.animateTo(i);
-        },
+        onTap: (int i) => controller.setTabIndex(i),
         tabs: List<Tab>.generate(
           tabsLength,
           (int index) {
@@ -122,14 +109,16 @@ class ChatsView extends GetView<ChatsController> {
     return Expanded(
       child: ColoredBox(
         color: Theme.of(context).colorScheme.surface,
-        child: TabBarView(
-          physics: const NeverScrollableScrollPhysics(),
-          controller: controller.chatTabsController,
-          children: List<Widget>.generate(
-            controller.chatsViews.length,
-            (int index) => KeepAlive(
-              chat: controller.chatsViews[index],
-              key: ValueKey(controller.chatsViews[index]),
+        child: Obx(
+          () => TabBarView(
+            physics: const NeverScrollableScrollPhysics(),
+            controller: controller.chatTabsController.value,
+            children: List<Widget>.generate(
+              controller.chatsViews.length,
+              (int index) => KeepAlive(
+                chat: controller.chatsViews[index],
+                key: ValueKey(controller.chatsViews[index]),
+              ),
             ),
           ),
         ),

@@ -8,9 +8,6 @@ part of 'chat_settings_dto.dart';
 
 _ChatSettingsDTO _$ChatSettingsDTOFromJson(Map<String, dynamic> json) =>
     _ChatSettingsDTO(
-      permanentFirstGroup: json['permanentFirstGroup'] == null
-          ? const ChatGroupDTO(id: "permanentFirstGroup", channels: [])
-          : _permanentGroupFromJson(json['permanentFirstGroup']),
       chatGroups: (json['chatGroups'] as List<dynamic>?)
               ?.map((e) => ChatGroupDTO.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -20,7 +17,6 @@ _ChatSettingsDTO _$ChatSettingsDTOFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$ChatSettingsDTOToJson(_ChatSettingsDTO instance) =>
     <String, dynamic>{
-      'permanentFirstGroup': instance.permanentFirstGroup,
       'chatGroups': instance.chatGroups,
       'hideDeletedMessages': instance.hideDeletedMessages,
     };

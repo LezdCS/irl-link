@@ -39,18 +39,55 @@ class ChatsController extends GetxController with GetTickerProviderStateMixin {
   final SettingsService settingsService;
   final GetChatGroupsUsecase getChatGroupsUseCase;
 
+  late Rx<TabController> chatTabsController;
   RxList<ChatView> chatsViews = <ChatView>[].obs;
-  late TabController chatTabsController;
   Rxn<ChatGroup> selectedChatGroup = Rxn<ChatGroup>();
-
   Rxn<entity.ChatMessage> selectedMessage = Rxn<entity.ChatMessage>();
   RxBool showPinnedMessages = false.obs;
 
   @override
   void onInit() {
     super.onInit();
-    chatTabsController = TabController(length: chatsViews.length, vsync: this);
+    chatTabsController = TabController(length: 0, vsync: this).obs;
+
+    // Listen to chatsViews changes and update chatTabsController accordingly
+    chatsViews.listen((list) {
+      _updateTabController();
+    });
+
     generateChats();
+  }
+
+  void _updateTabController() {
+    // Dispose old TabController to prevent memory leak
+    chatTabsController.value.dispose();
+
+    chatTabsController.value =
+        TabController(length: chatsViews.length, vsync: this);
+    if (chatTabsController.value.index > chatsViews.length - 1) {
+      chatTabsController.value.animateTo(0);
+    }
+  }
+
+  void setTabIndex(int index) {
+    if (index >= 0 && index < chatsViews.length) {
+      final newController =
+          TabController(length: chatsViews.length, vsync: this);
+      newController.animateTo(index);
+      chatTabsController.value.dispose();
+      chatTabsController.value = newController;
+
+      if (Get.isRegistered<ChatViewController>(
+        tag: chatsViews[index].chatGroup.id,
+      )) {
+        ChatViewController c = Get.find<ChatViewController>(
+          tag: chatsViews[index].chatGroup.id,
+        );
+        c.scrollToBottom();
+        selectedChatGroup.value = c.chatGroup;
+      }
+      selectedMessage.value = null;
+    }
   }
 
   Future<void> generateChats() async {
@@ -146,11 +183,8 @@ class ChatsController extends GetxController with GetTickerProviderStateMixin {
       c.controller.createChats();
     }
 
-    chatTabsController = TabController(length: chatsViews.length, vsync: this);
     if (chatsViews.isEmpty) {
       selectedChatGroup.value = null;
-    } else if (chatTabsController.index >= chatsViews.length) {
-      chatTabsController.animateTo(0);
     }
   }
 
@@ -174,5 +208,11 @@ class ChatsController extends GetxController with GetTickerProviderStateMixin {
       },
       tag: chatGroup.id,
     );
+  }
+
+  @override
+  void dispose() {
+    chatTabsController.value.dispose();
+    super.dispose();
   }
 }

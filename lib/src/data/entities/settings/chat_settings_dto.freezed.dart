@@ -15,8 +15,6 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$ChatSettingsDTO {
-  @JsonKey(fromJson: _permanentGroupFromJson)
-  ChatGroupDTO get permanentFirstGroup;
   List<ChatGroupDTO> get chatGroups;
   bool get hideDeletedMessages;
 
@@ -36,8 +34,6 @@ mixin _$ChatSettingsDTO {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is ChatSettingsDTO &&
-            (identical(other.permanentFirstGroup, permanentFirstGroup) ||
-                other.permanentFirstGroup == permanentFirstGroup) &&
             const DeepCollectionEquality()
                 .equals(other.chatGroups, chatGroups) &&
             (identical(other.hideDeletedMessages, hideDeletedMessages) ||
@@ -46,12 +42,12 @@ mixin _$ChatSettingsDTO {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, permanentFirstGroup,
+  int get hashCode => Object.hash(runtimeType,
       const DeepCollectionEquality().hash(chatGroups), hideDeletedMessages);
 
   @override
   String toString() {
-    return 'ChatSettingsDTO(permanentFirstGroup: $permanentFirstGroup, chatGroups: $chatGroups, hideDeletedMessages: $hideDeletedMessages)';
+    return 'ChatSettingsDTO(chatGroups: $chatGroups, hideDeletedMessages: $hideDeletedMessages)';
   }
 }
 
@@ -61,13 +57,7 @@ abstract mixin class $ChatSettingsDTOCopyWith<$Res> {
           ChatSettingsDTO value, $Res Function(ChatSettingsDTO) _then) =
       _$ChatSettingsDTOCopyWithImpl;
   @useResult
-  $Res call(
-      {@JsonKey(fromJson: _permanentGroupFromJson)
-      ChatGroupDTO permanentFirstGroup,
-      List<ChatGroupDTO> chatGroups,
-      bool hideDeletedMessages});
-
-  $ChatGroupDTOCopyWith<$Res> get permanentFirstGroup;
+  $Res call({List<ChatGroupDTO> chatGroups, bool hideDeletedMessages});
 }
 
 /// @nodoc
@@ -83,15 +73,10 @@ class _$ChatSettingsDTOCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? permanentFirstGroup = null,
     Object? chatGroups = null,
     Object? hideDeletedMessages = null,
   }) {
     return _then(_self.copyWith(
-      permanentFirstGroup: null == permanentFirstGroup
-          ? _self.permanentFirstGroup
-          : permanentFirstGroup // ignore: cast_nullable_to_non_nullable
-              as ChatGroupDTO,
       chatGroups: null == chatGroups
           ? _self.chatGroups
           : chatGroups // ignore: cast_nullable_to_non_nullable
@@ -102,34 +87,19 @@ class _$ChatSettingsDTOCopyWithImpl<$Res>
               as bool,
     ));
   }
-
-  /// Create a copy of ChatSettingsDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $ChatGroupDTOCopyWith<$Res> get permanentFirstGroup {
-    return $ChatGroupDTOCopyWith<$Res>(_self.permanentFirstGroup, (value) {
-      return _then(_self.copyWith(permanentFirstGroup: value));
-    });
-  }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _ChatSettingsDTO extends ChatSettingsDTO {
   _ChatSettingsDTO(
-      {@JsonKey(fromJson: _permanentGroupFromJson) this.permanentFirstGroup =
-          const ChatGroupDTO(id: "permanentFirstGroup", channels: []),
-      final List<ChatGroupDTO> chatGroups = const [],
+      {final List<ChatGroupDTO> chatGroups = const [],
       this.hideDeletedMessages = true})
       : _chatGroups = chatGroups,
         super._();
   factory _ChatSettingsDTO.fromJson(Map<String, dynamic> json) =>
       _$ChatSettingsDTOFromJson(json);
 
-  @override
-  @JsonKey(fromJson: _permanentGroupFromJson)
-  final ChatGroupDTO permanentFirstGroup;
   final List<ChatGroupDTO> _chatGroups;
   @override
   @JsonKey()
@@ -163,8 +133,6 @@ class _ChatSettingsDTO extends ChatSettingsDTO {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _ChatSettingsDTO &&
-            (identical(other.permanentFirstGroup, permanentFirstGroup) ||
-                other.permanentFirstGroup == permanentFirstGroup) &&
             const DeepCollectionEquality()
                 .equals(other._chatGroups, _chatGroups) &&
             (identical(other.hideDeletedMessages, hideDeletedMessages) ||
@@ -173,12 +141,12 @@ class _ChatSettingsDTO extends ChatSettingsDTO {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, permanentFirstGroup,
+  int get hashCode => Object.hash(runtimeType,
       const DeepCollectionEquality().hash(_chatGroups), hideDeletedMessages);
 
   @override
   String toString() {
-    return 'ChatSettingsDTO(permanentFirstGroup: $permanentFirstGroup, chatGroups: $chatGroups, hideDeletedMessages: $hideDeletedMessages)';
+    return 'ChatSettingsDTO(chatGroups: $chatGroups, hideDeletedMessages: $hideDeletedMessages)';
   }
 }
 
@@ -190,14 +158,7 @@ abstract mixin class _$ChatSettingsDTOCopyWith<$Res>
       __$ChatSettingsDTOCopyWithImpl;
   @override
   @useResult
-  $Res call(
-      {@JsonKey(fromJson: _permanentGroupFromJson)
-      ChatGroupDTO permanentFirstGroup,
-      List<ChatGroupDTO> chatGroups,
-      bool hideDeletedMessages});
-
-  @override
-  $ChatGroupDTOCopyWith<$Res> get permanentFirstGroup;
+  $Res call({List<ChatGroupDTO> chatGroups, bool hideDeletedMessages});
 }
 
 /// @nodoc
@@ -213,15 +174,10 @@ class __$ChatSettingsDTOCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? permanentFirstGroup = null,
     Object? chatGroups = null,
     Object? hideDeletedMessages = null,
   }) {
     return _then(_ChatSettingsDTO(
-      permanentFirstGroup: null == permanentFirstGroup
-          ? _self.permanentFirstGroup
-          : permanentFirstGroup // ignore: cast_nullable_to_non_nullable
-              as ChatGroupDTO,
       chatGroups: null == chatGroups
           ? _self._chatGroups
           : chatGroups // ignore: cast_nullable_to_non_nullable
@@ -231,16 +187,6 @@ class __$ChatSettingsDTOCopyWithImpl<$Res>
           : hideDeletedMessages // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
-  }
-
-  /// Create a copy of ChatSettingsDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $ChatGroupDTOCopyWith<$Res> get permanentFirstGroup {
-    return $ChatGroupDTOCopyWith<$Res>(_self.permanentFirstGroup, (value) {
-      return _then(_self.copyWith(permanentFirstGroup: value));
-    });
   }
 }
 
