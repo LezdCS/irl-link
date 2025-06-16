@@ -136,8 +136,10 @@ class SettingsRepositoryImpl extends SettingsRepository {
     final chatGroupsDTO = await _localDataSource.getChatGroups();
     if (chatGroupsDTO != null) {
       List<ChatGroup> chatGroups = chatGroupsDTO
-          .map((chatGroupDTO) =>
-              _mappr.convert<ChatGroupDTO, ChatGroup>(chatGroupDTO),)
+          .map(
+            (chatGroupDTO) =>
+                _mappr.convert<ChatGroupDTO, ChatGroup>(chatGroupDTO),
+          )
           .toList();
       return Right(chatGroups);
     }

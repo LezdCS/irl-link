@@ -83,7 +83,7 @@ class ChatsJoined extends GetView<ChatsSettingsController> {
       onDismissed: (direction) {
         // If the user swipes to the left
         if (direction == DismissDirection.endToStart) {
-          controller.removeChatGroupUseCase(params: group);
+          controller.removeChatGroup(group);
         }
       },
       child: Container(
@@ -147,7 +147,7 @@ class ChatsJoined extends GetView<ChatsSettingsController> {
         // If the user swipes to the left
         if (direction == DismissDirection.endToStart) {
           // Remove the channel from the group
-          controller.removeChannelUseCase(params: (group, channel));
+          controller.removeChannel(group, channel);
         }
       },
       key: ValueKey(channel),
@@ -203,7 +203,7 @@ class ChatsJoined extends GetView<ChatsSettingsController> {
               channel: channelTextController.text.trim(),
             );
 
-            controller.addChannelUseCase(params: (chatGroup, newChan));
+            controller.addChannel(chatGroup, newChan);
 
             channelTextController.text = '';
             Get.back();
@@ -240,7 +240,7 @@ class ChatsJoined extends GetView<ChatsSettingsController> {
           id: uuid.v4(),
           channels: const [],
         );
-        controller.addChatGroupUseCase(params: newGroup);
+        controller.addChatGroup(newGroup);
       },
       child: Container(
         padding:
