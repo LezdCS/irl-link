@@ -137,17 +137,6 @@ class ChatsJoined extends GetView<SettingsViewController> {
                   bottom: 12,
                   top: 12,
                 ),
-                //   onReorder: (int oldIndex, int newIndex) {
-                //     if (newIndex > oldIndex) {
-                //       newIndex -= 1;
-                //     }
-                //     final element = controller.homeViewController.settings.value
-                //         .chatSettings!.chatsJoined
-                //         .removeAt(oldIndex);
-                //     controller.homeViewController.settings.value.chatSettings!
-                //         .chatsJoined
-                //         .insert(newIndex, element);
-                //   },
                 itemBuilder: (BuildContext context, int index) {
                   ChatGroup group = chatGroups[index];
                   return Container(

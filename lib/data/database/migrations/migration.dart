@@ -170,10 +170,20 @@ class Migration2 extends Migration {
     await db.execute(
       'CREATE TABLE hidden_users (id TEXT PRIMARY KEY, username TEXT NOT NULL, platform TEXT NOT NULL)',
     );
+
+    await db.execute(
+      'CREATE TABLE chat_groups (id TEXT PRIMARY KEY)',
+    );
+
+    await db.execute(
+      'CREATE TABLE channels (id TEXT PRIMARY KEY, channel TEXT NOT NULL, platform TEXT NOT NULL, enabled BOOLEAN NOT NULL, chat_group_id TEXT NOT NULL, FOREIGN KEY (chat_group_id) REFERENCES chat_groups(id))',
+    );
   }
 
   @override
   Future<void> down(Database db) async {
     await db.execute('DROP TABLE IF EXISTS hidden_users');
+    await db.execute('DROP TABLE IF EXISTS chat_groups');
+    await db.execute('DROP TABLE IF EXISTS channels');
   }
 }

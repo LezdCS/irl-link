@@ -29,7 +29,7 @@ class HiddenUsersSettingsController extends GetxController {
   }
 
   void removeHiddenUser(HiddenUser user) {
-    removeHiddenUserUseCase(user);
+    removeHiddenUserUseCase(params: user);
     getHiddenUsers();
   }
 }

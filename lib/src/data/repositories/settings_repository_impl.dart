@@ -3,9 +3,11 @@ import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/utils/mapper.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/datasources/local/settings_local_data_source.dart';
+import 'package:irllink/src/data/entities/settings/chat_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/hidden_user_dto.dart';
 import 'package:irllink/src/data/entities/settings_dto.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
+import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/settings/hidden_user.dart';
 import 'package:irllink/src/domain/repositories/settings_repository.dart';
 import 'package:talker_flutter/talker_flutter.dart';
@@ -71,5 +73,61 @@ class SettingsRepositoryImpl extends SettingsRepository {
       return Right(hiddenUsers);
     }
     return const Right([]);
+  }
+
+  @override
+  Future<Either<Failure, void>> addChatGroup(ChatGroup chatGroup) async {
+    try {
+      ChatGroupDTO chatGroupDTO =
+          _mappr.convert<ChatGroup, ChatGroupDTO>(chatGroup);
+      await _localDataSource.addChatGroup(chatGroupDTO);
+      return const Right(null);
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> removeChatGroup(ChatGroup chatGroup) async {
+    try {
+      ChatGroupDTO chatGroupDTO =
+          _mappr.convert<ChatGroup, ChatGroupDTO>(chatGroup);
+      await _localDataSource.removeChatGroup(chatGroupDTO);
+      return const Right(null);
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> addChannel(
+    ChatGroup chatGroup,
+    Channel channel,
+  ) async {
+    try {
+      ChatGroupDTO chatGroupDTO =
+          _mappr.convert<ChatGroup, ChatGroupDTO>(chatGroup);
+      ChannelDTO channelDTO = _mappr.convert<Channel, ChannelDTO>(channel);
+      await _localDataSource.addChannel(chatGroupDTO, channelDTO);
+      return const Right(null);
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> removeChannel(
+    ChatGroup chatGroup,
+    Channel channel,
+  ) async {
+    try {
+      ChatGroupDTO chatGroupDTO =
+          _mappr.convert<ChatGroup, ChatGroupDTO>(chatGroup);
+      ChannelDTO channelDTO = _mappr.convert<Channel, ChannelDTO>(channel);
+      await _localDataSource.removeChannel(chatGroupDTO, channelDTO);
+      return const Right(null);
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
   }
 }

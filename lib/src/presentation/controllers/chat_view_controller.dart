@@ -243,7 +243,7 @@ class ChatViewController extends GetxController
   /// Hide every future messages from an user in IRL Link
   void hideUser(ChatMessage message) {
     addHiddenUserUseCase(
-      HiddenUser(
+      params: HiddenUser(
         id: message.authorId,
         username: message.username,
         platform: message.platform,
@@ -255,7 +255,7 @@ class ChatViewController extends GetxController
 
   void unhideUser(ChatMessage message) {
     removeHiddenUserUseCase(
-      HiddenUser(
+      params: HiddenUser(
         id: message.authorId,
         username: message.username,
         platform: message.platform,
