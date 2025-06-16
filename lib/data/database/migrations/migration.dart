@@ -181,6 +181,36 @@ class Migration2 extends Migration {
 
     // Create default chat group
     await db.insert('chat_groups', {'id': '-1'});
+
+    final storage = GetStorage();
+    final settings = storage.read('settings');
+    if (settings != null) {
+      final settingsJson = jsonDecode(settings);
+      final firstGroupChannels =
+          settingsJson["permanentFirstGroup"]["channels"];
+      if (firstGroupChannels != null) {
+        firstGroupChannels.forEach((channel) async {
+          await db.insert('channels', {
+            'id': channel['id'],
+            'channel': channel['channel'],
+            'platform': channel['platform'],
+            'chat_group_id': '-1',
+          });
+        });
+      }
+
+      settingsJson['chatSettings']['chatGroups'].forEach((group) async {
+        await db.insert('chat_groups', {'id': group['id']});
+        group['channels'].forEach((channel) async {
+          await db.insert('channels', {
+            'id': channel['id'],
+            'channel': channel['channel'],
+            'platform': channel['platform'],
+            'chat_group_id': group['id'],
+          });
+        });
+      });
+    }
   }
 
   @override
