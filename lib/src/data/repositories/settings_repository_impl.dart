@@ -130,4 +130,17 @@ class SettingsRepositoryImpl extends SettingsRepository {
       return Left(Failure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, List<ChatGroup>>> getChatGroups() async {
+    final chatGroupsDTO = await _localDataSource.getChatGroups();
+    if (chatGroupsDTO != null) {
+      List<ChatGroup> chatGroups = chatGroupsDTO
+          .map((chatGroupDTO) =>
+              _mappr.convert<ChatGroupDTO, ChatGroup>(chatGroupDTO),)
+          .toList();
+      return Right(chatGroups);
+    }
+    return const Right([]);
+  }
 }

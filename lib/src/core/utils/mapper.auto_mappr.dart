@@ -1386,7 +1386,6 @@ class $Mappr implements _i1.AutoMapprInterface {
     return _i5.ChannelDTO(
       platform: model.platform,
       channel: model.channel,
-      enabled: model.enabled,
     );
   }
 
@@ -1400,7 +1399,6 @@ class $Mappr implements _i1.AutoMapprInterface {
     return _i4.Channel(
       platform: model.platform,
       channel: model.channel,
-      enabled: model.enabled,
     );
   }
 

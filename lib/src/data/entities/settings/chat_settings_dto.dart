@@ -45,7 +45,6 @@ abstract class ChannelDTO with _$ChannelDTO {
   const factory ChannelDTO({
     required Platform platform,
     required String channel,
-    required bool enabled,
   }) = _ChannelDTO;
 
   factory ChannelDTO.fromJson(Map<String, dynamic> json) =>

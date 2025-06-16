@@ -1,25 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/utils/string_casing_extension.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
-import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
-import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/settings/chats_settings_controller.dart';
 import 'package:uuid/uuid.dart';
 
-class ChatsJoined extends GetView<SettingsViewController> {
+class ChatsJoined extends GetView<ChatsSettingsController> {
   const ChatsJoined({super.key});
 
   @override
   Widget build(BuildContext context) {
     TextEditingController channelTextController = TextEditingController();
-    final SettingsService settingsService = Get.find<SettingsService>();
     return Obx(() {
-      Settings settings = settingsService.settings.value;
-      List<ChatGroup> chatGroups = settings.chatSettings.chatGroups;
-      ChatGroup firstGroup = settings.chatSettings.permanentFirstGroup;
       return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -40,96 +34,9 @@ class ChatsJoined extends GetView<SettingsViewController> {
           ),
           child: Column(
             children: [
-              Container(
-                color: Theme.of(context).colorScheme.secondary,
-                padding: const EdgeInsets.only(
-                  left: 20,
-                  right: 20,
-                  bottom: 10,
-                  top: 10,
-                ),
-                margin: const EdgeInsets.only(
-                  top: 12,
-                ),
-                child: Column(
-                  children: [
-                    Visibility(
-                      visible: controller.homeViewController.twitchData.value !=
-                          null,
-                      child: Row(
-                        children: [
-                          const Image(
-                            width: 18,
-                            height: 18,
-                            image: AssetImage(
-                              "lib/assets/twitch/twitch_logo.png",
-                            ),
-                            filterQuality: FilterQuality.high,
-                          ),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                          Text(
-                            controller.homeViewController.twitchData.value
-                                    ?.twitchUser.displayName ??
-                                '',
-                            style: const TextStyle(
-                              fontSize: 18,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Visibility(
-                      visible:
-                          controller.homeViewController.kickData.value != null,
-                      child: Row(
-                        children: [
-                          const Image(
-                            width: 18,
-                            height: 18,
-                            image: AssetImage(
-                              "lib/assets/kick/kickLogo.png",
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                          Text(
-                            controller.homeViewController.kickData.value
-                                    ?.kickUser.name ??
-                                '',
-                            style: const TextStyle(
-                              fontSize: 18,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Divider(
-                      color: Colors.grey[800],
-                      height: 12,
-                    ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: firstGroup.channels.length,
-                      padding: EdgeInsets.zero,
-                      itemBuilder: (BuildContext context, int index) {
-                        Channel channel = firstGroup.channels[index];
-                        return _channel(channel, firstGroup);
-                      },
-                    ),
-                    _addChannelToGroupButton(
-                      context,
-                      channelTextController,
-                      settings.chatSettings.permanentFirstGroup,
-                    ),
-                  ],
-                ),
-              ),
               ListView.separated(
                 shrinkWrap: true,
-                itemCount: chatGroups.length,
+                itemCount: controller.chatGroups.length,
                 separatorBuilder: (context, index) => const SizedBox(
                   height: 12,
                 ),
@@ -138,7 +45,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
                   top: 12,
                 ),
                 itemBuilder: (BuildContext context, int index) {
-                  ChatGroup group = chatGroups[index];
+                  ChatGroup group = controller.chatGroups[index];
                   return Container(
                     key: ValueKey(
                       group,
@@ -156,7 +63,6 @@ class ChatsJoined extends GetView<SettingsViewController> {
   }
 
   Widget _group(context, channelTextController, ChatGroup group) {
-    final SettingsService settingsService = Get.find<SettingsService>();
     return Dismissible(
       key: ValueKey(group),
       direction: DismissDirection.endToStart,
@@ -177,12 +83,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
       onDismissed: (direction) {
         // If the user swipes to the left
         if (direction == DismissDirection.endToStart) {
-          Settings settings = settingsService.settings.value;
-
-          // Remove the group from the list of groups in the settings
-          settings.chatSettings.chatGroups.remove(group);
-          // Save the settings and refresh the UI
-          settingsService.saveSettings();
+          controller.removeChatGroupUseCase(params: group);
         }
       },
       child: Container(
@@ -216,7 +117,6 @@ class ChatsJoined extends GetView<SettingsViewController> {
   }
 
   Widget _channel(Channel channel, ChatGroup group) {
-    final SettingsService settingsService = Get.find<SettingsService>();
     String badge = '';
     switch (channel.platform) {
       case Platform.twitch:
@@ -247,9 +147,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
         // If the user swipes to the left
         if (direction == DismissDirection.endToStart) {
           // Remove the channel from the group
-          group.channels.remove(channel);
-          // Save the settings and refresh the UI
-          settingsService.saveSettings();
+          controller.removeChannelUseCase(params: (group, channel));
         }
       },
       key: ValueKey(channel),
@@ -282,8 +180,6 @@ class ChatsJoined extends GetView<SettingsViewController> {
     ChatGroup chatGroup,
   ) {
     Rx<Platform?> selectedPlatform = Platform.values.first.obs;
-    final SettingsService settingsService = Get.find<SettingsService>();
-    Settings settings = settingsService.settings.value;
 
     return InkWell(
       onTap: () {
@@ -305,36 +201,9 @@ class ChatsJoined extends GetView<SettingsViewController> {
             Channel newChan = Channel(
               platform: selectedPlatform.value!,
               channel: channelTextController.text.trim(),
-              enabled: true,
             );
 
-            // Add the new channel to the selected group
-            List<Channel> channels = [...chatGroup.channels, newChan];
-            ChatGroup updatedGroup = chatGroup.copyWith(channels: channels);
-
-            if (updatedGroup.id == 'permanentFirstGroup') {
-              settingsService.settings.value = settings.copyWith(
-                chatSettings: settings.chatSettings
-                    .copyWith(permanentFirstGroup: updatedGroup),
-              );
-            } else {
-              // Replace the group in the list
-              List<ChatGroup>? groups = [];
-              groups.addAll(settings.chatSettings.chatGroups);
-              int indexToReplace =
-                  groups.indexWhere((g) => g.id == updatedGroup.id);
-              groups.removeAt(indexToReplace);
-              groups.insert(indexToReplace, updatedGroup);
-
-              // Update the settings
-              settingsService.settings.value = settings.copyWith(
-                chatSettings:
-                    settings.chatSettings.copyWith(chatGroups: groups),
-              );
-            }
-
-            // Save and close dialog
-            settingsService.saveSettings();
+            controller.addChannelUseCase(params: (chatGroup, newChan));
 
             channelTextController.text = '';
             Get.back();
@@ -364,7 +233,6 @@ class ChatsJoined extends GetView<SettingsViewController> {
   }
 
   Widget _addGroupButton(context) {
-    final SettingsService settingsService = Get.find<SettingsService>();
     return InkWell(
       onTap: () {
         var uuid = const Uuid();
@@ -372,14 +240,7 @@ class ChatsJoined extends GetView<SettingsViewController> {
           id: uuid.v4(),
           channels: const [],
         );
-        Settings settings = settingsService.settings.value;
-        List<ChatGroup> chatGroups =
-            List.from(settings.chatSettings.chatGroups);
-        chatGroups.add(newGroup);
-        settingsService.settings.value = settings.copyWith(
-          chatSettings: settings.chatSettings.copyWith(chatGroups: chatGroups),
-        );
-        settingsService.saveSettings();
+        controller.addChatGroupUseCase(params: newGroup);
       },
       child: Container(
         padding:

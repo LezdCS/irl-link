@@ -49,11 +49,9 @@ class ChatGroup {
 class Channel {
   final Platform platform;
   final String channel;
-  final bool enabled;
 
   const Channel({
     required this.platform,
     required this.channel,
-    required this.enabled,
   });
 }

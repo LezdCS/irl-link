@@ -4,16 +4,14 @@ import 'package:irllink/src/core/usecases/usecase.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/repositories/settings_repository.dart';
 
-class RemoveChannelUsecase
-    implements UseCase<Either<Failure, void>, (ChatGroup, Channel)> {
+class GetChatGroupsUsecase
+    implements UseCase<Either<Failure, List<ChatGroup>>, void> {
   final SettingsRepository settingsRepository;
 
-  RemoveChannelUsecase({required this.settingsRepository});
+  GetChatGroupsUsecase({required this.settingsRepository});
 
   @override
-  Future<Either<Failure, void>> call({
-    required (ChatGroup, Channel) params,
-  }) async {
-    return settingsRepository.removeChannel(params.$1, params.$2);
+  Future<Either<Failure, List<ChatGroup>>> call({required void params}) async {
+    return settingsRepository.getChatGroups();
   }
 }

@@ -12,6 +12,7 @@ import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/usecases/kick/ban_kick_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/unban_kick_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/add_hidden_user_usecase.dart';
+import 'package:irllink/src/domain/usecases/settings/get_chats_groups_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/get_hidden_users_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/remove_hidden_user_usecase.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
@@ -27,6 +28,7 @@ class ChatsController extends GetxController with GetTickerProviderStateMixin {
     required this.removeHiddenUserUseCase,
     required this.getHiddenUsersUseCase,
     required this.settingsService,
+    required this.getChatGroupsUseCase,
   });
 
   final TalkerService talkerService;
@@ -36,6 +38,7 @@ class ChatsController extends GetxController with GetTickerProviderStateMixin {
   final RemoveHiddenUserUseCase removeHiddenUserUseCase;
   final GetHiddenUsersUseCase getHiddenUsersUseCase;
   final SettingsService settingsService;
+  final GetChatGroupsUsecase getChatGroupsUseCase;
 
   RxList<ChatView> chatsViews = <ChatView>[].obs;
   late TabController chatTabsController;
@@ -111,7 +114,6 @@ class ChatsController extends GetxController with GetTickerProviderStateMixin {
         platform: Platform.twitch,
         channel:
             Get.find<HomeViewController>().twitchData.value!.twitchUser.login,
-        enabled: true,
       );
     }
     Channel? userKickChannel;
@@ -119,7 +121,6 @@ class ChatsController extends GetxController with GetTickerProviderStateMixin {
       userKickChannel = Channel(
         platform: Platform.kick,
         channel: Get.find<HomeViewController>().kickData.value!.kickUser.name,
-        enabled: true,
       );
     }
 

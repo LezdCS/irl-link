@@ -18,6 +18,7 @@ abstract class SettingsLocalDataSource {
   Future<void> removeChatGroup(ChatGroupDTO chatGroup);
   Future<void> addChannel(ChatGroupDTO chatGroup, ChannelDTO channel);
   Future<void> removeChannel(ChatGroupDTO chatGroup, ChannelDTO channel);
+  Future<List<ChatGroupDTO>?> getChatGroups();
 }
 
 class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
@@ -79,7 +80,7 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
   @override
   Future<void> addChatGroup(ChatGroupDTO chatGroup) async {
     final db = await _databaseHelper.database;
-    await db.insert('chat_groups', chatGroup.toJson());
+    await db.insert('chat_groups', {'id': chatGroup.id});
   }
 
   @override
@@ -91,13 +92,41 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
   @override
   Future<void> addChannel(ChatGroupDTO chatGroup, ChannelDTO channel) async {
     final db = await _databaseHelper.database;
-    await db.insert('channels', channel.toJson());
+    final chatGroupId = chatGroup.id;
+    await db.insert(
+      'channels',
+      channel.toJson()..['chat_group_id'] = chatGroupId,
+    );
   }
 
   @override
   Future<void> removeChannel(ChatGroupDTO chatGroup, ChannelDTO channel) async {
     final db = await _databaseHelper.database;
-    await db
-        .delete('channels', where: 'channel = ?', whereArgs: [channel.channel]);
+    await db.delete(
+      'channels',
+      where: 'channel = ? AND chat_group_id = ?',
+      whereArgs: [channel.channel, chatGroup.id],
+    );
+  }
+
+  @override
+  Future<List<ChatGroupDTO>?> getChatGroups() async {
+    final db = await _databaseHelper.database;
+    final List<Map<String, dynamic>> maps = await db.query('chat_groups');
+
+    List<Map<String, dynamic>> mutableMaps = [];
+    for (var map in maps) {
+      // Create a new mutable map with the existing data
+      Map<String, dynamic> mutableMap = Map<String, dynamic>.from(map);
+
+      List<Map<String, dynamic>> channelsMaps = await db.query(
+        'channels',
+        where: 'chat_group_id = ?',
+        whereArgs: [map['id']],
+      );
+      mutableMap['channels'] = channelsMaps;
+      mutableMaps.add(mutableMap);
+    }
+    return mutableMaps.map((map) => ChatGroupDTO.fromJson(map)).toList();
   }
 }

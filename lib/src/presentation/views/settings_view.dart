@@ -10,7 +10,6 @@ import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:irllink/src/presentation/views/settings/chat_events.dart';
-import 'package:irllink/src/presentation/views/settings/chats_joined.dart';
 import 'package:irllink/src/presentation/views/settings/dashboard_settings_view.dart';
 import 'package:irllink/src/presentation/views/settings/obs_settings.dart';
 import 'package:irllink/src/presentation/views/settings/realtime_irl.dart';
@@ -204,9 +203,7 @@ class SettingsView extends GetView<SettingsViewController> {
                   "chats_joined".tr,
                   Icons.wechat_sharp,
                   () {
-                    Get.to(
-                      () => const ChatsJoined(),
-                    );
+                    Get.toNamed(Routes.chatsSettings);
                   },
                 ),
                 settingsGoToRow(

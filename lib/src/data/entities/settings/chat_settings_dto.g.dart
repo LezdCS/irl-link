@@ -42,14 +42,12 @@ Map<String, dynamic> _$ChatGroupDTOToJson(_ChatGroupDTO instance) =>
 _ChannelDTO _$ChannelDTOFromJson(Map<String, dynamic> json) => _ChannelDTO(
       platform: $enumDecode(_$PlatformEnumMap, json['platform']),
       channel: json['channel'] as String,
-      enabled: json['enabled'] as bool,
     );
 
 Map<String, dynamic> _$ChannelDTOToJson(_ChannelDTO instance) =>
     <String, dynamic>{
       'platform': _$PlatformEnumMap[instance.platform]!,
       'channel': instance.channel,
-      'enabled': instance.enabled,
     };
 
 const _$PlatformEnumMap = {

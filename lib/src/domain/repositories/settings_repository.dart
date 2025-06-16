@@ -24,4 +24,6 @@ abstract class SettingsRepository {
     ChatGroup chatGroup,
     Channel channel,
   );
+
+  Future<Either<Failure, List<ChatGroup>>> getChatGroups();
 }

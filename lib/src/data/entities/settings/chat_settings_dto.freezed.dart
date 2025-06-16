@@ -415,7 +415,6 @@ class __$ChatGroupDTOCopyWithImpl<$Res>
 mixin _$ChannelDTO {
   Platform get platform;
   String get channel;
-  bool get enabled;
 
   /// Create a copy of ChannelDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -434,17 +433,16 @@ mixin _$ChannelDTO {
             other is ChannelDTO &&
             (identical(other.platform, platform) ||
                 other.platform == platform) &&
-            (identical(other.channel, channel) || other.channel == channel) &&
-            (identical(other.enabled, enabled) || other.enabled == enabled));
+            (identical(other.channel, channel) || other.channel == channel));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, platform, channel, enabled);
+  int get hashCode => Object.hash(runtimeType, platform, channel);
 
   @override
   String toString() {
-    return 'ChannelDTO(platform: $platform, channel: $channel, enabled: $enabled)';
+    return 'ChannelDTO(platform: $platform, channel: $channel)';
   }
 }
 
@@ -454,7 +452,7 @@ abstract mixin class $ChannelDTOCopyWith<$Res> {
           ChannelDTO value, $Res Function(ChannelDTO) _then) =
       _$ChannelDTOCopyWithImpl;
   @useResult
-  $Res call({Platform platform, String channel, bool enabled});
+  $Res call({Platform platform, String channel});
 }
 
 /// @nodoc
@@ -471,7 +469,6 @@ class _$ChannelDTOCopyWithImpl<$Res> implements $ChannelDTOCopyWith<$Res> {
   $Res call({
     Object? platform = null,
     Object? channel = null,
-    Object? enabled = null,
   }) {
     return _then(_self.copyWith(
       platform: null == platform
@@ -482,10 +479,6 @@ class _$ChannelDTOCopyWithImpl<$Res> implements $ChannelDTOCopyWith<$Res> {
           ? _self.channel
           : channel // ignore: cast_nullable_to_non_nullable
               as String,
-      enabled: null == enabled
-          ? _self.enabled
-          : enabled // ignore: cast_nullable_to_non_nullable
-              as bool,
     ));
   }
 }
@@ -493,8 +486,7 @@ class _$ChannelDTOCopyWithImpl<$Res> implements $ChannelDTOCopyWith<$Res> {
 /// @nodoc
 @JsonSerializable()
 class _ChannelDTO implements ChannelDTO {
-  const _ChannelDTO(
-      {required this.platform, required this.channel, required this.enabled});
+  const _ChannelDTO({required this.platform, required this.channel});
   factory _ChannelDTO.fromJson(Map<String, dynamic> json) =>
       _$ChannelDTOFromJson(json);
 
@@ -502,8 +494,6 @@ class _ChannelDTO implements ChannelDTO {
   final Platform platform;
   @override
   final String channel;
-  @override
-  final bool enabled;
 
   /// Create a copy of ChannelDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -527,17 +517,16 @@ class _ChannelDTO implements ChannelDTO {
             other is _ChannelDTO &&
             (identical(other.platform, platform) ||
                 other.platform == platform) &&
-            (identical(other.channel, channel) || other.channel == channel) &&
-            (identical(other.enabled, enabled) || other.enabled == enabled));
+            (identical(other.channel, channel) || other.channel == channel));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, platform, channel, enabled);
+  int get hashCode => Object.hash(runtimeType, platform, channel);
 
   @override
   String toString() {
-    return 'ChannelDTO(platform: $platform, channel: $channel, enabled: $enabled)';
+    return 'ChannelDTO(platform: $platform, channel: $channel)';
   }
 }
 
@@ -549,7 +538,7 @@ abstract mixin class _$ChannelDTOCopyWith<$Res>
       __$ChannelDTOCopyWithImpl;
   @override
   @useResult
-  $Res call({Platform platform, String channel, bool enabled});
+  $Res call({Platform platform, String channel});
 }
 
 /// @nodoc
@@ -566,7 +555,6 @@ class __$ChannelDTOCopyWithImpl<$Res> implements _$ChannelDTOCopyWith<$Res> {
   $Res call({
     Object? platform = null,
     Object? channel = null,
-    Object? enabled = null,
   }) {
     return _then(_ChannelDTO(
       platform: null == platform
@@ -577,10 +565,6 @@ class __$ChannelDTOCopyWithImpl<$Res> implements _$ChannelDTOCopyWith<$Res> {
           ? _self.channel
           : channel // ignore: cast_nullable_to_non_nullable
               as String,
-      enabled: null == enabled
-          ? _self.enabled
-          : enabled // ignore: cast_nullable_to_non_nullable
-              as bool,
     ));
   }
 }

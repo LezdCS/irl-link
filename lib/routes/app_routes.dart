@@ -7,4 +7,5 @@ abstract class Routes {
   static const browserSettings = '/browser-settings';
   static const tabs = '/tabs';
   static const hiddenUsersSettings = '/hidden-users-settings';
+  static const chatsSettings = '/chats-settings';
 }

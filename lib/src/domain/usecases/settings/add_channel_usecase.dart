@@ -11,8 +11,9 @@ class AddChannelUsecase
   AddChannelUsecase({required this.settingsRepository});
 
   @override
-  Future<Either<Failure, void>> call(
-      {required (ChatGroup, Channel) params,}) async {
+  Future<Either<Failure, void>> call({
+    required (ChatGroup, Channel) params,
+  }) async {
     return settingsRepository.addChannel(params.$1, params.$2);
   }
 }
