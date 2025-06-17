@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
+import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_activity_dto.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_credentials_dto.dart';
@@ -90,7 +91,7 @@ class StreamelementsRemoteDataSourceImpl
       await dioClient.post(
         '/oauth2/revoke',
         queryParameters: {
-          'client_id': 'irllink',
+          'client_id': kStreamelementsAuthClientId,
           'token': accessToken,
         },
       );
