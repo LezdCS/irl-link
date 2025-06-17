@@ -5,7 +5,6 @@ import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:irllink/src/presentation/controllers/settings/streamelements_settings_controller.dart';
-import 'package:irllink/src/presentation/controllers/tabs/streamelements_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/premium_feature_badge.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -39,48 +38,39 @@ class StreamelementsSettings extends GetView<StreamelementsSettingsController> {
               ),
               color: Theme.of(context).colorScheme.secondary,
             ),
-            child: FutureBuilder<bool>(
-              future: controller.isLoggedIn(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+            child: Obx(() {
+              if (controller.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-                final isLoggedIn = snapshot.data ?? false;
-                return Column(
-                  children: [
-                    if (isLoggedIn)
-                      FutureBuilder<SeMe?>(
-                        future: _getSeMe(),
-                        builder: (context, seMeSnapshot) {
-                          if (seMeSnapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                          return loggedIn(context, seMeSnapshot.data);
-                        },
-                      )
-                    else
-                      loginButton(),
-                  ],
-                );
-              },
-            ),
+              return Column(
+                children: [
+                  if (controller.isLoggedIn.value)
+                    loggedIn(context)
+                  else
+                    loginButton(),
+                ],
+              );
+            }),
           ),
         ],
       ),
     );
   }
 
-  Widget loggedIn(BuildContext context, SeMe? seMe) {
+  Widget loggedIn(BuildContext context) {
     Settings settings = Get.find<SettingsService>().settings.value;
     final settingsService = Get.find<SettingsService>();
 
     return Column(
       children: [
-        if (seMe != null) _profile(seMe) else Container(),
+        Obx(() {
+          final profile = controller.userProfile.value;
+          if (profile != null) {
+            return _profile(profile);
+          }
+          return Container();
+        }),
         const SizedBox(
           height: 12,
         ),
@@ -108,16 +98,19 @@ class StreamelementsSettings extends GetView<StreamelementsSettingsController> {
                   labelStyle: TextStyle(
                     color: Theme.of(context).colorScheme.tertiary,
                   ),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      controller.seJwtShow.value
-                          ? Icons.visibility
-                          : Icons.visibility_off,
+                  suffixIcon: Obx(
+                    () => IconButton(
+                      icon: Icon(
+                        controller.seJwtShow.value
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                      ),
+                      color: Theme.of(context).primaryIconTheme.color,
+                      onPressed: () {
+                        controller.seJwtShow.value =
+                            !controller.seJwtShow.value;
+                      },
                     ),
-                    color: Theme.of(context).primaryIconTheme.color,
-                    onPressed: () {
-                      controller.seJwtShow.value = !controller.seJwtShow.value;
-                    },
                   ),
                 ),
               ),
@@ -152,17 +145,19 @@ class StreamelementsSettings extends GetView<StreamelementsSettingsController> {
                   labelStyle: TextStyle(
                     color: Theme.of(context).colorScheme.tertiary,
                   ),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      controller.seOverlayTokenShow.value
-                          ? Icons.visibility
-                          : Icons.visibility_off,
+                  suffixIcon: Obx(
+                    () => IconButton(
+                      icon: Icon(
+                        controller.seOverlayTokenShow.value
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                      ),
+                      color: Theme.of(context).primaryIconTheme.color,
+                      onPressed: () {
+                        controller.seOverlayTokenShow.value =
+                            !controller.seOverlayTokenShow.value;
+                      },
                     ),
-                    color: Theme.of(context).primaryIconTheme.color,
-                    onPressed: () {
-                      controller.seOverlayTokenShow.value =
-                          !controller.seOverlayTokenShow.value;
-                    },
                   ),
                 ),
               ),
@@ -190,7 +185,7 @@ class StreamelementsSettings extends GetView<StreamelementsSettingsController> {
       ),
       padding: const EdgeInsets.only(top: 8, bottom: 8),
       child: InkWell(
-        onTap: () => {controller.disconnectStreamElements()},
+        onTap: () => controller.disconnectStreamElements(),
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -217,7 +212,7 @@ class StreamelementsSettings extends GetView<StreamelementsSettingsController> {
 
   Widget loginButton() {
     return InkWell(
-      onTap: () => {controller.loginStreamElements()},
+      onTap: () => controller.loginStreamElements(),
       child: const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -289,17 +284,5 @@ class StreamelementsSettings extends GetView<StreamelementsSettingsController> {
         ],
       ),
     );
-  }
-
-  Future<SeMe?> _getSeMe() async {
-    try {
-      if (Get.isRegistered<StreamelementsViewController>()) {
-        final seController = Get.find<StreamelementsViewController>();
-        return seController.userSeProfile.value;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
   }
 }

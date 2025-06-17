@@ -33,8 +33,12 @@ class StreamelementsSettingsController extends GetxController {
   final StoreService storeService;
   final SettingsService settingsService;
 
-  RxBool seJwtShow = false.obs;
-  RxBool seOverlayTokenShow = false.obs;
+  final RxBool seJwtShow = false.obs;
+  final RxBool seOverlayTokenShow = false.obs;
+  final RxBool isLoading = false.obs;
+  final Rx<SeMe?> userProfile = Rx<SeMe?>(null);
+  final RxBool isLoggedIn = false.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -44,17 +48,24 @@ class StreamelementsSettingsController extends GetxController {
     seOverlayTokenInputController = TextEditingController(
       text: settings.streamElementsSettings.overlayToken,
     );
+    checkLoginStatus();
   }
 
-  Future<bool> isLoggedIn() async {
+  Future<void> checkLoginStatus() async {
+    isLoading.value = true;
     final seCredentials = await streamElementsGetLocalCredentialsUseCase();
-    return seCredentials.fold((l) => false, (r) => true);
+    isLoggedIn.value = seCredentials.fold((l) => false, (r) => true);
+    if (isLoggedIn.value) {
+      await fetchUserProfile();
+    }
+    isLoading.value = false;
   }
 
-  Future<SeMe?> getMe() async {
+  Future<void> fetchUserProfile() async {
     final seCredentials = await streamElementsGetLocalCredentialsUseCase();
     if (seCredentials.isLeft()) {
-      return null;
+      userProfile.value = null;
+      return;
     }
 
     final seMeResult = await getMeUseCase(
@@ -62,7 +73,7 @@ class StreamelementsSettingsController extends GetxController {
         token: seCredentials.fold((l) => "", (r) => r.accessToken),
       ),
     );
-    return seMeResult.fold(
+    userProfile.value = seMeResult.fold(
       (l) => null,
       (r) => r,
     );
@@ -80,6 +91,7 @@ class StreamelementsSettingsController extends GetxController {
       );
       return;
     }
+    isLoading.value = true;
     StreamelementsAuthParams params = const StreamelementsAuthParams();
     final loginResult = await streamElementsLoginUseCase(params: params);
     loginResult.fold(
@@ -102,11 +114,14 @@ class StreamelementsSettingsController extends GetxController {
           borderWidth: 1,
           borderColor: Colors.green,
         );
+        checkLoginStatus();
       },
     );
+    isLoading.value = false;
   }
 
   Future<void> disconnectStreamElements() async {
+    isLoading.value = true;
     final seCredentials = await streamElementsGetLocalCredentialsUseCase();
     seCredentials.fold(
       (l) => debugPrint(l.message),
@@ -126,9 +141,12 @@ class StreamelementsSettingsController extends GetxController {
               borderWidth: 1,
               borderColor: Colors.green,
             );
+            isLoggedIn.value = false;
+            userProfile.value = null;
           },
         );
       },
     );
+    isLoading.value = false;
   }
 }
