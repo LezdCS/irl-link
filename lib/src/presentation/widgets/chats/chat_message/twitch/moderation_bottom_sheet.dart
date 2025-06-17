@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
-import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/chats_controller.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/badges.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -19,8 +18,7 @@ class ModerationBottomSheet extends GetView {
 
   @override
   Widget build(BuildContext context) {
-    ChatMessage? message = controller.homeViewController.selectedMessage.value;
-    Settings settings = Get.find<SettingsService>().settings.value;
+    ChatMessage? message = Get.find<ChatsController>().selectedMessage.value;
 
     if (message == null) {
       return Container();
@@ -68,8 +66,10 @@ class ModerationBottomSheet extends GetView {
                         host: message.platform == Platform.twitch
                             ? "twitch.tv"
                             : 'kick.com',
-                        path: controller
-                            .homeViewController.selectedMessage.value?.username,
+                        path: Get.find<ChatsController>()
+                            .selectedMessage
+                            .value
+                            ?.username,
                       ),
                       mode: LaunchMode.externalApplication,
                     ),
@@ -80,8 +80,9 @@ class ModerationBottomSheet extends GetView {
                   ),
                   const SizedBox(width: 5),
                   InkWell(
-                    onTap: () => controller
-                        .homeViewController.selectedMessage.value = null,
+                    onTap: () => Get.find<ChatsController>()
+                        .selectedMessage
+                        .value = null,
                     child: const Icon(
                       Icons.close,
                       color: Colors.white,
@@ -121,39 +122,55 @@ class ModerationBottomSheet extends GetView {
             ),
           ),
           const SizedBox(height: 15),
-          Visibility(
-            visible: message.platform == Platform.twitch ||
-                message.platform == Platform.kick,
-            child: Row(
-              children: [
-                InkWell(
+          Row(
+            spacing: 10,
+            children: [
+              Visibility(
+                visible: message.platform == Platform.twitch ||
+                    message.platform == Platform.kick,
+                child: InkWell(
                   onTap: () => controller.banMessageInstruction(
                     message,
                   ),
                   child: moderationViewButton(Icons.stop, "ban".tr),
                 ),
-                const SizedBox(width: 10),
-                InkWell(
+              ),
+              Visibility(
+                visible: message.platform == Platform.twitch ||
+                    message.platform == Platform.kick,
+                child: InkWell(
                   onTap: () => timeoutDialog(),
                   child: moderationViewButton(Icons.timer, "timeout".tr),
                 ),
-                const SizedBox(width: 10),
-                InkWell(
-                  onTap: () => controller.hideUser(
-                    message,
-                  ),
-                  child: (settings.hiddenUsersIds.firstWhereOrNull(
-                            (userId) => message.authorId == userId,
-                          ) !=
-                          null)
-                      ? moderationViewButton(Icons.visibility, "unhide_user".tr)
-                      : moderationViewButton(
-                          Icons.visibility_off,
-                          "hide_user".tr,
-                        ),
+              ),
+              InkWell(
+                onTap: () async {
+                  final isHidden = await controller.isUserHidden(message);
+                  if (!isHidden) {
+                    controller.hideUser(message);
+                  } else {
+                    controller.unhideUser(message);
+                  }
+                },
+                child: FutureBuilder<bool>(
+                  future: controller.isUserHidden(message),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return snapshot.data!
+                          ? moderationViewButton(
+                              Icons.visibility,
+                              "unhide_user".tr,
+                            )
+                          : moderationViewButton(
+                              Icons.visibility_off,
+                              "hide_user".tr,
+                            );
+                    }
+                    return const SizedBox(); // Loading state
+                  },
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),
@@ -212,7 +229,7 @@ class ModerationBottomSheet extends GetView {
             children: List.generate(timeoutValues.length, (index) {
               return InkWell(
                 onTap: () => controller.timeoutMessageInstruction(
-                  controller.homeViewController.selectedMessage.value!,
+                  Get.find<ChatsController>().selectedMessage.value!,
                   timeoutValues[index].values.first,
                 ),
                 child: Container(
@@ -256,7 +273,7 @@ class ModerationBottomSheet extends GetView {
                     onSubmitted: (String value) {
                       if (int.tryParse(value) != null) {
                         controller.timeoutMessageInstruction(
-                          controller.homeViewController.selectedMessage.value!,
+                          Get.find<ChatsController>().selectedMessage.value!,
                           int.parse(value),
                         );
                       }
@@ -277,7 +294,7 @@ class ModerationBottomSheet extends GetView {
                         ) !=
                         null) {
                       controller.timeoutMessageInstruction(
-                        controller.homeViewController.selectedMessage.value!,
+                        Get.find<ChatsController>().selectedMessage.value!,
                         int.parse(controller.banDurationInputController.text),
                       );
                     }

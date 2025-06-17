@@ -15,9 +15,13 @@ import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/pinned_message.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
+import 'package:irllink/src/domain/entities/settings/hidden_user.dart';
 import 'package:irllink/src/domain/usecases/kick/ban_kick_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/unban_kick_user_usecase.dart';
-import 'package:irllink/src/domain/usecases/twitch/get_recent_messages.dart';
+import 'package:irllink/src/domain/usecases/settings/add_hidden_user_usecase.dart';
+import 'package:irllink/src/domain/usecases/settings/get_hidden_users_usecase.dart';
+import 'package:irllink/src/domain/usecases/settings/remove_hidden_user_usecase.dart';
+import 'package:irllink/src/presentation/controllers/chats_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:kick_chat/kick_chat.dart';
 import 'package:talker_flutter/talker_flutter.dart';
@@ -32,9 +36,11 @@ class ChatViewController extends GetxController
     required this.watchService,
     required this.settingsService,
     required this.talker,
-    required this.getRecentMessagesUseCase,
     required this.banKickUserUseCase,
     required this.unbanKickUserUseCase,
+    required this.addHiddenUserUseCase,
+    required this.removeHiddenUserUseCase,
+    required this.getHiddenUsersUseCase,
   });
 
   final ChatGroup chatGroup;
@@ -44,10 +50,11 @@ class ChatViewController extends GetxController
   final SettingsService settingsService;
   final Talker talker;
 
-  final GetRecentMessagesUseCase getRecentMessagesUseCase;
   final BanKickUserUseCase banKickUserUseCase;
   final UnbanKickUserUseCase unbanKickUserUseCase;
-
+  final AddHiddenUserUseCase addHiddenUserUseCase;
+  final RemoveHiddenUserUseCase removeHiddenUserUseCase;
+  final GetHiddenUsersUseCase getHiddenUsersUseCase;
   //CHAT
   late ScrollController scrollController;
   RxBool isAutoScrolldown = true.obs;
@@ -66,8 +73,7 @@ class ChatViewController extends GetxController
   void onInit() async {
     scrollController = ScrollController();
     banDurationInputController = TextEditingController();
-    await applySettings();
-    homeViewController.selectedChatGroup.value = chatGroup;
+    Get.find<ChatsController>().selectedChatGroup.value = chatGroup;
 
     chatMessages.listen((value) {
       // Send to watchOS
@@ -123,6 +129,15 @@ class ChatViewController extends GetxController
     }
   }
 
+  Future<bool> isUserHidden(ChatMessage message) async {
+    final hiddenUsers = await getHiddenUsersUseCase();
+    return hiddenUsers.fold(
+          (l) => false,
+          (r) => r.any((user) => user.id == message.authorId),
+        ) ??
+        false;
+  }
+
   void addMessage(ChatMessage message) {
     chatMessages.add(message);
     if (chatMessages.length > 500 && isAutoScrolldown.value) {
@@ -155,7 +170,7 @@ class ChatViewController extends GetxController
     if (homeViewController.twitchData.value == null ||
         message.platform != Platform.twitch) {
       message.isDeleted = true;
-      homeViewController.selectedMessage.value = null;
+      Get.find<ChatsController>().selectedMessage.value = null;
       return;
     }
 
@@ -166,7 +181,7 @@ class ChatViewController extends GetxController
       kTwitchAuthClientId,
     );
 
-    homeViewController.selectedMessage.value = null;
+    Get.find<ChatsController>().selectedMessage.value = null;
   }
 
   /// Ban user for specific [duration] based on the author name in the [message]
@@ -195,7 +210,7 @@ class ChatViewController extends GetxController
     }
 
     Get.back();
-    homeViewController.selectedMessage.value = null;
+    Get.find<ChatsController>().selectedMessage.value = null;
   }
 
   /// Ban user based on the author name in the [message]
@@ -222,35 +237,32 @@ class ChatViewController extends GetxController
       );
     }
 
-    homeViewController.selectedMessage.value = null;
+    Get.find<ChatsController>().selectedMessage.value = null;
   }
 
-  /// Hide every future messages from an user (only on this application, not on Twitch)
+  /// Hide every future messages from an user in IRL Link
   void hideUser(ChatMessage message) {
-    if (homeViewController.twitchData.value == null) {
-      return;
-    }
-    if (message.platform != Platform.twitch) {
-      return;
-    }
-    Settings settings = settingsService.settings.value;
+    addHiddenUserUseCase(
+      params: HiddenUser(
+        id: message.authorId,
+        username: message.username,
+        platform: message.platform,
+      ),
+    );
 
-    List hiddenUsersIds = List.from(settings.hiddenUsersIds);
-    if (hiddenUsersIds
-            .firstWhereOrNull((userId) => userId == message.authorId) ==
-        null) {
-      //add user
-      hiddenUsersIds.add(message.authorId);
-      settingsService.settings.value =
-          settings.copyWith(hiddenUsersIds: hiddenUsersIds);
-    } else {
-      //remove user
-      hiddenUsersIds.remove(message.authorId);
-      settingsService.settings.value =
-          settings.copyWith(hiddenUsersIds: hiddenUsersIds);
-    }
-    settingsService.saveSettings();
-    homeViewController.selectedMessage.refresh();
+    Get.find<ChatsController>().selectedMessage.refresh();
+  }
+
+  void unhideUser(ChatMessage message) {
+    removeHiddenUserUseCase(
+      params: HiddenUser(
+        id: message.authorId,
+        username: message.username,
+        platform: message.platform,
+      ),
+    );
+
+    Get.find<ChatsController>().selectedMessage.refresh();
   }
 
   /// Scroll to bottom of the chat
@@ -263,26 +275,12 @@ class ChatViewController extends GetxController
     }
   }
 
-  Future applySettings() async {
-    isAutoScrolldown.value = true;
-  }
-
   void updateChannels(
     List<Channel> channels,
-    String? twitchUsername,
-    String? kickUsername,
   ) {
     // check chatGroup channels not existings in channels and remove them
     List<Channel> channelsToRemove = [];
     for (var channel in chatGroup.channels) {
-      if (channel.channel == twitchUsername &&
-          homeViewController.twitchData.value != null) {
-        continue;
-      }
-      if (channel.channel == kickUsername &&
-          homeViewController.kickData.value != null) {
-        continue;
-      }
       if (channels.firstWhereOrNull((e) => e.channel == channel.channel) ==
           null) {
         channelsToRemove.add(channel);
@@ -440,7 +438,7 @@ class ChatViewController extends GetxController
     twitchChat.connect();
     twitchChats.add(twitchChat);
 
-    twitchChat.chatStream.listen((twitchMessage) {
+    twitchChat.chatStream.listen((twitchMessage) async {
       final settings = settingsService.settings.value;
 
       if (cheerEmotes.isEmpty) {
@@ -454,7 +452,7 @@ class ChatViewController extends GetxController
       }
       ChatMessage message =
           ChatMessage.fromTwitch(twitchMessage, twitchChat.channelId ?? '');
-      if (settings.hiddenUsersIds.contains(message.authorId)) {
+      if (await isUserHidden(message)) {
         return;
       }
       if (settings.ttsSettings.ttsEnabled) {

@@ -13,7 +13,6 @@ class Settings {
   final bool isEmotes;
   final double textSize;
   final bool displayTimestamp;
-  final List hiddenUsersIds;
   final ChatEventsSettings chatEventsSettings;
   final ChatSettings chatSettings;
 
@@ -38,7 +37,6 @@ class Settings {
     required this.isEmotes,
     required this.textSize,
     required this.displayTimestamp,
-    required this.hiddenUsersIds,
     required this.chatEventsSettings,
     required this.chatSettings,
 
@@ -66,7 +64,6 @@ class Settings {
     bool? displayTimestamp,
     bool? alternateChannel,
     String? alternateChannelName,
-    List? hiddenUsersIds,
     ChatEventsSettings? chatEventsSettings,
     ChatSettings? chatSettings,
     //GENERAL
@@ -88,7 +85,6 @@ class Settings {
         isEmotes: isEmotes ?? this.isEmotes,
         textSize: textSize ?? this.textSize,
         displayTimestamp: displayTimestamp ?? this.displayTimestamp,
-        hiddenUsersIds: hiddenUsersIds ?? this.hiddenUsersIds,
         chatEventsSettings: chatEventsSettings ?? this.chatEventsSettings,
         chatSettings: chatSettings ?? this.chatSettings,
         //GENERAL

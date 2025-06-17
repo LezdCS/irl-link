@@ -16,38 +16,7 @@ Also available in the [Releases](https://github.com/LezdCS/irl_link/releases).
 
 ## Features
 
-- Twitch
-  - [x] Chat
-    - [x] Events (sub, follow, first message...)
-    - [x] Modereation (TO, ban, delete message)
-    - [x] Third-Party emojis (BTTV, 7TV, FFZ)
-  - [x] Viewer count
-  - [x] Change stream title
-  - [x] Polls & predictions
-  - [x] Hype train
-- Kick
-  - [x] Chat
-    - [x] Messages
-    - [x] Events (subs, follow...)
-    - [x] Emojis
-- YouTube
-  - [x] Chat
-    - [x] Messages
-- OBS controls
-  - [x] Start & stop streaming/recording
-  - [x] Switch scenes
-  - [x] On/Off sources
-  - [x] Manage sources volume
-  - [ ] Display OBS statistics
-- StreamElements
-  - [x] Display activities (subs, follows, tips...)
-  - [x] Replay activities
-  - [x] Song request managment (just controls)
-  - [x] Overlays list (to be improved)
-- Text To Speech
-- Light mode / Dark mode
-- Translations in English, French and Cantonese
-- Prevent your speaker to go in sleep mode
+Find them [here](https://www.irllink.com/#features).
 
 ## For contributors
 To run the project, you need to have Flutter and Dart SDK installed.

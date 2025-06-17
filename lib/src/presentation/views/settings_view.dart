@@ -10,13 +10,9 @@ import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:irllink/src/presentation/views/settings/chat_events.dart';
-import 'package:irllink/src/presentation/views/settings/chats_joined.dart';
 import 'package:irllink/src/presentation/views/settings/dashboard_settings_view.dart';
-import 'package:irllink/src/presentation/views/settings/manage_list_browser_tabs.dart';
-import 'package:irllink/src/presentation/views/settings/manage_list_hidden_users.dart';
 import 'package:irllink/src/presentation/views/settings/obs_settings.dart';
 import 'package:irllink/src/presentation/views/settings/realtime_irl.dart';
-import 'package:irllink/src/presentation/views/settings/stream_elements.dart';
 import 'package:irllink/src/presentation/views/settings/subscription.dart';
 import 'package:irllink/src/presentation/views/settings/talker_screen.dart';
 import 'package:irllink/src/presentation/views/settings/tts.dart';
@@ -207,9 +203,7 @@ class SettingsView extends GetView<SettingsViewController> {
                   "chats_joined".tr,
                   Icons.wechat_sharp,
                   () {
-                    Get.to(
-                      () => const ChatsJoined(),
-                    );
+                    Get.toNamed(Routes.chatsSettings);
                   },
                 ),
                 settingsGoToRow(
@@ -227,9 +221,7 @@ class SettingsView extends GetView<SettingsViewController> {
                   "manage_hidden_users".tr,
                   Icons.list,
                   () {
-                    Get.to(
-                      () => const ManageListHiddenUsers(),
-                    );
+                    Get.toNamed(Routes.hiddenUsersSettings);
                   },
                 ),
                 settingsGoToRow(
@@ -322,12 +314,8 @@ class SettingsView extends GetView<SettingsViewController> {
                     ),
                     Switch(
                       onChanged: (value) {
-                        settingsService.settings.value =
-                            settings.value.copyWith(
-                          generalSettings: settings.value.generalSettings
-                              .copyWith(keepSpeakerOn: value),
-                        );
-                        settingsService.saveSettings();
+                        Get.find<SettingsViewController>()
+                            .updateKeepSpeakerOn(value: value);
                       },
                       value: settings.value.generalSettings.keepSpeakerOn,
                     ),
@@ -440,8 +428,8 @@ class SettingsView extends GetView<SettingsViewController> {
                   "manage_browser_tabs".tr,
                   Icons.list,
                   () {
-                    Get.to(
-                      () => const ManageListBrowserTabs(),
+                    Get.toNamed(
+                      Routes.browserSettings,
                     );
                   },
                 ),
@@ -469,7 +457,14 @@ class SettingsView extends GetView<SettingsViewController> {
                   child: const ObsSettings(),
                 ),
                 const SizedBox(height: 10),
-                const StreamElements(),
+                settingsGoToRow(
+                  context,
+                  "StreamElements",
+                  Icons.rocket,
+                  () {
+                    Get.toNamed(Routes.streamelementsSettings);
+                  },
+                ),
                 const SizedBox(height: 10),
                 const RealtimeIrl(),
               ],

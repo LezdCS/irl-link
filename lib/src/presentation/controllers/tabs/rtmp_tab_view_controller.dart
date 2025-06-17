@@ -11,6 +11,7 @@ import 'package:haishin_kit/video_settings.dart';
 import 'package:haishin_kit/video_source.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
+import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/domain/entities/rtmp.dart';
 import 'package:irllink/src/domain/usecases/rtmp/get_rtmp_list_usecase.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -69,8 +70,14 @@ class RtmpTabViewController extends GetxController {
   }
 
   Future<void> addTemporaryRtmp(Rtmp rtmp) async {
+    if (rtmpList.any((element) => element.id == rtmp.id)) {
+      rtmpList.removeWhere((element) => element.id == rtmp.id);
+    }
     rtmpList.add(rtmp);
     selectedRtmp.value = rtmp;
+    talkerService.talker.logCustom(
+      RtmpLog('Added temporary RTMP: ${rtmp.name}'),
+    );
   }
 
   Future<void> _initializeStreaming() async {
@@ -81,7 +88,9 @@ class RtmpTabViewController extends GetxController {
       _connection = await RtmpConnection.create();
       _connectionSubscription =
           _connection?.eventChannel.receiveBroadcastStream().listen((event) {
-        talkerService.talker.debug("RtmpConnection event: $event");
+        talkerService.talker.logCustom(
+          RtmpLog('RtmpConnection event: $event'),
+        );
         switch (event["data"]["code"]) {
           case 'NetConnection.Connect.Success':
             _publishStream();
@@ -125,7 +134,9 @@ class RtmpTabViewController extends GetxController {
     try {
       await stream.value?.attachVideo(VideoSource(position: newPosition));
       currentPosition.value = newPosition;
-      talkerService.talker.debug("Switched camera to $newPosition");
+      talkerService.talker.logCustom(
+        RtmpLog('Switched camera to $newPosition'),
+      );
     } catch (e) {
       talkerService.talker.error("Error switching camera: $e");
       Get.snackbar('Error', 'Failed to switch camera.');
@@ -161,7 +172,9 @@ class RtmpTabViewController extends GetxController {
       return;
     }
 
-    talkerService.talker.debug("RTMP Base URL: $baseUrl");
+    talkerService.talker.logCustom(
+      RtmpLog('RTMP Base URL: $baseUrl'),
+    );
 
     try {
       _connection?.connect(baseUrl);
@@ -191,7 +204,9 @@ class RtmpTabViewController extends GetxController {
         'Success',
         'Streaming started to ${rtmpConfig?.url}',
       );
-      talkerService.talker.debug("Streaming published with key: $streamKey");
+      talkerService.talker.logCustom(
+        RtmpLog('Streaming published with key: $streamKey'),
+      );
     } catch (e) {
       talkerService.talker.error("Error publishing stream: $e");
       Get.snackbar('Error', 'Failed to publish stream.');
@@ -204,7 +219,9 @@ class RtmpTabViewController extends GetxController {
     try {
       _connection?.close();
       Get.snackbar('Success', 'Streaming stopped.');
-      talkerService.talker.debug("Streaming stopped via connection close.");
+      talkerService.talker.logCustom(
+        RtmpLog('Streaming stopped via connection close.'),
+      );
       isStreamingVideoRtmp.value = false;
     } catch (e) {
       talkerService.talker

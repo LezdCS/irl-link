@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
+import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_activity_dto.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_credentials_dto.dart';
@@ -11,7 +12,10 @@ import 'package:talker_flutter/talker_flutter.dart';
 
 abstract class StreamelementsRemoteDataSource {
   Future<Map<String, dynamic>> validateToken(String accessToken);
-  Future<SeCredentialsDTO> refreshToken(String refreshToken);
+  Future<SeCredentialsDTO> refreshToken(
+    String refreshToken,
+    String previousScopes,
+  );
   Future<void> revokeToken(String accessToken);
   Future<void> replayActivity(String token, String channel, String activityId);
   Future<List<SeActivityDTO>> getLastActivities(String token, String channel);
@@ -49,7 +53,10 @@ class StreamelementsRemoteDataSourceImpl
   }
 
   @override
-  Future<SeCredentialsDTO> refreshToken(String refreshToken) async {
+  Future<SeCredentialsDTO> refreshToken(
+    String refreshToken,
+    String previousScopes,
+  ) async {
     final remoteConfig = FirebaseRemoteConfig.instance;
     await remoteConfig.fetchAndActivate();
     String apiRefreshTokenUrl =
@@ -71,7 +78,7 @@ class StreamelementsRemoteDataSourceImpl
         accessToken: response.data['access_token'],
         refreshToken: response.data['refresh_token'],
         expiresIn: response.data['expires_in'],
-        scopes: response.data['scopes'].join(' '),
+        scopes: previousScopes,
       );
     } on DioException catch (e) {
       throw Exception("Refresh SE token failed: ${e.message}");
@@ -84,7 +91,7 @@ class StreamelementsRemoteDataSourceImpl
       await dioClient.post(
         '/oauth2/revoke',
         queryParameters: {
-          'client_id': 'irllink',
+          'client_id': kStreamelementsAuthClientId,
           'token': accessToken,
         },
       );

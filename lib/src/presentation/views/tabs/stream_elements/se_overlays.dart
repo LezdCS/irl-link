@@ -4,7 +4,7 @@ import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_overlay.dart';
-import 'package:irllink/src/presentation/controllers/streamelements_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/tabs/streamelements_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/web_page_view.dart';
 import 'package:uuid/uuid.dart';
 

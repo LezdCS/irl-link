@@ -18,6 +18,8 @@ abstract class Migration {
     switch (version) {
       case 1:
         return Migration1();
+      case 2:
+        return Migration2();
       default:
         return null;
     }
@@ -157,5 +159,68 @@ class Migration1 extends Migration {
     await db.execute('DROP TABLE IF EXISTS kick_credentials');
     await db.execute('DROP TABLE IF EXISTS kick_users');
     await db.execute('DROP TABLE IF EXISTS streamelements_credentials');
+  }
+}
+
+class Migration2 extends Migration {
+  Migration2() : super(2);
+
+  @override
+  Future<void> up(Database db) async {
+    await db.execute(
+      'CREATE TABLE hidden_users (id TEXT PRIMARY KEY, username TEXT NOT NULL, platform TEXT NOT NULL)',
+    );
+
+    await db.execute(
+      'CREATE TABLE chat_groups (id TEXT PRIMARY KEY)',
+    );
+
+    await db.execute(
+      'CREATE TABLE channels (id TEXT PRIMARY KEY, channel TEXT NOT NULL, platform TEXT NOT NULL, chat_group_id TEXT NOT NULL, FOREIGN KEY (chat_group_id) REFERENCES chat_groups(id))',
+    );
+
+    // Create default chat group
+    await db.insert('chat_groups', {'id': '-1'});
+
+    try {
+      final storage = GetStorage();
+      final settings = storage.read('settings');
+      if (settings != null) {
+        final settingsJson = jsonDecode(settings);
+        final firstGroupChannels =
+            settingsJson['chatSettings']['permanentFirstGroup']['channels'];
+        if (firstGroupChannels != null) {
+          firstGroupChannels.forEach((channel) async {
+            await db.insert('channels', {
+              'id': channel['id'],
+              'channel': channel['channel'],
+              'platform': channel['platform'],
+              'chat_group_id': '-1',
+            });
+          });
+        }
+
+        settingsJson['chatSettings']['chatGroups'].forEach((group) async {
+          await db.insert('chat_groups', {'id': group['id']});
+          group['channels'].forEach((channel) async {
+            await db.insert('channels', {
+              'id': channel['id'],
+              'channel': channel['channel'],
+              'platform': channel['platform'],
+              'chat_group_id': group['id'],
+            });
+          });
+        });
+      }
+    } catch (e) {
+      debugPrint('Failed to migrate chat settings: $e');
+    }
+  }
+
+  @override
+  Future<void> down(Database db) async {
+    await db.execute('DROP TABLE IF EXISTS hidden_users');
+    await db.execute('DROP TABLE IF EXISTS chat_groups');
+    await db.execute('DROP TABLE IF EXISTS channels');
   }
 }

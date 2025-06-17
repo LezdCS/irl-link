@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
-import 'package:irllink/src/presentation/controllers/obs_tab_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/tabs/obs_tab_view_controller.dart';
 import 'package:irllink/src/presentation/widgets/alert_message.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 
