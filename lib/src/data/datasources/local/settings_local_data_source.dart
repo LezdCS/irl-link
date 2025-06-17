@@ -104,8 +104,12 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
     final db = await _databaseHelper.database;
     await db.delete(
       'channels',
-      where: 'channel = ? AND chat_group_id = ?',
-      whereArgs: [channel.channel, chatGroup.id],
+      where: 'channel = ? AND chat_group_id = ? AND platform = ?',
+      whereArgs: [
+        channel.channel,
+        chatGroup.id,
+        channel.platform.name,
+      ],
     );
   }
 
