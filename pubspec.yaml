@@ -92,7 +92,7 @@ dev_dependencies:
   json_serializable: ^6.9.4
   integration_test:
     sdk: flutter
-  patrol: ^3.15.2
+  patrol: ^3.16.0
 
   test_api: any
 dependency_overrides:
