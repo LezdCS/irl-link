@@ -35,7 +35,7 @@ struct SeView: View {
                             .font(.system(size: 14, design: .default))
                     }
                 }
-                .listRowPlatterColor(Color(argb: activity.colors[1]))
+                .listRowBackground(Color(argb: activity.colors[1]))
             }
         }
         .toolbar {

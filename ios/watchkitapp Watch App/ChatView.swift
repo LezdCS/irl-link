@@ -42,31 +42,47 @@ struct ChatView: View {
                     .listRowBackground(Color.clear)
                     //                    .listRowPlatterColor(Color.green)
                 }
-                .onChange(of: viewModel.messages) {
+                .onChange(of: viewModel.messages) { _ in
                     proxy.scrollTo(viewModel.messages.last, anchor: .bottom)
                 }
             }
         }
-        .toolbar {
-            ToolbarItemGroup(placement: .bottomBar) {
+        .overlay(
+            VStack {
+                Spacer()
                 HStack {
-                    Text("\(viewModel.viewers)")
-                    Image(systemName: "person")
-                        .font(.system(size: 15))
-                        .foregroundColor(.red)
-                }
-                HStack {
-                    Button("OBS") {
-                        selectedTab = 1
+                    HStack {
+                        Text("\(viewModel.viewers)")
+                        Image(systemName: "person")
+                            .font(.system(size: 12))
+                            .foregroundColor(.red)
                     }
-                    .frame(width: 50)
-                    Button("SE") {
-                        selectedTab = 2
+                    Spacer()
+                    HStack(spacing: 10) {
+                        Button("OBS") {
+                            selectedTab = 1
+                        }
+                        .font(.system(size: 12))
+                        .frame(width: 40, height: 25)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                        
+                        Button("SE") {
+                            selectedTab = 2
+                        }
+                        .font(.system(size: 12))
+                        .frame(width: 40, height: 25)
+                        .background(Color.green)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
                     }
-                    .frame(width: 50)
                 }
+                .padding(.horizontal, 8)
+                .padding(.bottom, 4)
+                .background(Color.black.opacity(0.8))
             }
-        }
+        )
         .environment(\.defaultMinListRowHeight, 10)
         .ignoresSafeArea(edges: .top)
     }

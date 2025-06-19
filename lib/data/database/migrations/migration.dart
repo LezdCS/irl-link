@@ -215,7 +215,8 @@ class Migration2 extends Migration {
 
         // Remove chatSettings and hiddenUsers from settings after migration
         settingsJson.remove('hiddenUsersIds');
-        settingsJson.remove('chatSettings');
+        settingsJson['chatSettings'].remove('chatGroups');
+        settingsJson['chatSettings'].remove('permanentFirstGroup');
         await storage.write('settings', jsonEncode(settingsJson));
       }
     } catch (e) {

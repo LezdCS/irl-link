@@ -13,12 +13,12 @@ class Subscription extends GetView<SettingsViewController> {
     String price = storeService.getSubscriptionPrice();
     RxBool storeFound = storeService.storeFound;
 
-    if (!storeFound.value || price == "") {
-      return const Text('Error loading the subscription module.');
-    }
-
     return Obx(
       () {
+        if (!storeFound.value || price == "") {
+          return const Text('Error loading the subscription module.');
+        }
+
         bool isSubscribed = storeService.isSubscribed();
 
         return Column(

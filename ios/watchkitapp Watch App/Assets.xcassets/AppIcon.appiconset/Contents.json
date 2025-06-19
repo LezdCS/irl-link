@@ -1,12 +1,6 @@
 {
   "images" : [
     {
-      "idiom" : "universal",
-      "platform" : "watchos",
-      "scale" : "2x",
-      "size" : "22x22"
-    },
-    {
       "filename" : "48.png",
       "idiom" : "universal",
       "platform" : "watchos",
@@ -26,18 +20,6 @@
       "platform" : "watchos",
       "scale" : "2x",
       "size" : "29x29"
-    },
-    {
-      "idiom" : "universal",
-      "platform" : "watchos",
-      "scale" : "2x",
-      "size" : "30x30"
-    },
-    {
-      "idiom" : "universal",
-      "platform" : "watchos",
-      "scale" : "2x",
-      "size" : "32x32"
     },
     {
       "filename" : "66.png",
