@@ -20,7 +20,7 @@ struct ContentView: View {
             SeView(viewModel: viewModel, selectedTab: $selectedTab)
                 .tag(2)
         }
-        .tabViewStyle(.verticalPage)
+        .tabViewStyle(.page(indexDisplayMode: .never))
     }
 }
 

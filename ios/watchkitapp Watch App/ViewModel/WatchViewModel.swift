@@ -60,14 +60,28 @@ class WatchViewModel: NSObject, ObservableObject {
     func sendDataMessage(for method: WatchSendMethod, data: [String: Any] = [:]) {
         sendMessage(for: method.rawValue, data: data)
     }
-    
 }
 
 extension WatchViewModel: WCSessionDelegate {
-    
-    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
-        
+    public func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+        // Handle session activation completion
+        if let error = error {
+            print("WC Session activation failed with error: \(error.localizedDescription)")
+            return
+        }
+        print("WC Session activated with state: \(activationState.rawValue)")
     }
+    
+    #if os(iOS)
+    func sessionDidBecomeInactive(_ session: WCSession) {
+        // Required for iOS only
+    }
+    
+    func sessionDidDeactivate(_ session: WCSession) {
+        // Required for iOS only
+        session.activate()
+    }
+    #endif
     
     // Receive message From AppDelegate.swift that send from iOS devices
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
@@ -149,5 +163,4 @@ extension WatchViewModel: WCSessionDelegate {
         print("sending data to ios")
         session.sendMessage(messageData, replyHandler: nil, errorHandler: nil)
     }
-    
 }
