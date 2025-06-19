@@ -187,6 +187,7 @@ class Migration2 extends Migration {
       final settings = storage.read('settings');
       if (settings != null) {
         final Map<String, dynamic> settingsJson = jsonDecode(settings);
+
         final firstGroupChannels =
             settingsJson['chatSettings']['permanentFirstGroup']['channels'];
         if (firstGroupChannels != null) {
@@ -212,7 +213,8 @@ class Migration2 extends Migration {
           });
         });
 
-        // Remove chatSettings from settings after migration
+        // Remove chatSettings and hiddenUsers from settings after migration
+        settingsJson.remove('hiddenUsersIds');
         settingsJson.remove('chatSettings');
         await storage.write('settings', jsonEncode(settingsJson));
       }
