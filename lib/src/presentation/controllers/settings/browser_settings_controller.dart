@@ -77,6 +77,7 @@ class BrowserSettingsController extends GetxController {
     );
 
     await addBrowserTabUsecase(params: tab);
+    await getBrowserTabs();
     Get.back();
   }
 
@@ -102,12 +103,14 @@ class BrowserSettingsController extends GetxController {
     await editBrowserTabUsecase(params: newTab);
 
     // Close the dialog
+    await getBrowserTabs();
     Get.back();
   }
 
   Future<void> removeBrowserTab(BrowserTab tab) async {
     await removeBrowserTabUsecase(params: tab);
 
+    await getBrowserTabs();
     Get.back();
   }
 }
