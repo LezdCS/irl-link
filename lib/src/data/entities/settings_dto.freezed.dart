@@ -26,7 +26,6 @@ mixin _$SettingsDTO {
   bool get isObsConnected;
   String get obsWebsocketUrl;
   String get obsWebsocketPassword;
-  BrowserTabSettingsDTO get browserTabs;
   List get obsConnectionsHistory;
   StreamElementsSettingsDTO get streamElementsSettings;
   String get rtIrlPushKey; //TTS SETTINGS
@@ -67,8 +66,6 @@ mixin _$SettingsDTO {
                 other.obsWebsocketUrl == obsWebsocketUrl) &&
             (identical(other.obsWebsocketPassword, obsWebsocketPassword) ||
                 other.obsWebsocketPassword == obsWebsocketPassword) &&
-            (identical(other.browserTabs, browserTabs) ||
-                other.browserTabs == browserTabs) &&
             const DeepCollectionEquality()
                 .equals(other.obsConnectionsHistory, obsConnectionsHistory) &&
             (identical(other.streamElementsSettings, streamElementsSettings) ||
@@ -93,7 +90,6 @@ mixin _$SettingsDTO {
       isObsConnected,
       obsWebsocketUrl,
       obsWebsocketPassword,
-      browserTabs,
       const DeepCollectionEquality().hash(obsConnectionsHistory),
       streamElementsSettings,
       rtIrlPushKey,
@@ -101,7 +97,7 @@ mixin _$SettingsDTO {
 
   @override
   String toString() {
-    return 'SettingsDTO(isEmotes: $isEmotes, textSize: $textSize, displayTimestamp: $displayTimestamp, chatEventsSettings: $chatEventsSettings, chatSettings: $chatSettings, generalSettings: $generalSettings, dashboardSettings: $dashboardSettings, isObsConnected: $isObsConnected, obsWebsocketUrl: $obsWebsocketUrl, obsWebsocketPassword: $obsWebsocketPassword, browserTabs: $browserTabs, obsConnectionsHistory: $obsConnectionsHistory, streamElementsSettings: $streamElementsSettings, rtIrlPushKey: $rtIrlPushKey, ttsSettings: $ttsSettings)';
+    return 'SettingsDTO(isEmotes: $isEmotes, textSize: $textSize, displayTimestamp: $displayTimestamp, chatEventsSettings: $chatEventsSettings, chatSettings: $chatSettings, generalSettings: $generalSettings, dashboardSettings: $dashboardSettings, isObsConnected: $isObsConnected, obsWebsocketUrl: $obsWebsocketUrl, obsWebsocketPassword: $obsWebsocketPassword, obsConnectionsHistory: $obsConnectionsHistory, streamElementsSettings: $streamElementsSettings, rtIrlPushKey: $rtIrlPushKey, ttsSettings: $ttsSettings)';
   }
 }
 
@@ -122,7 +118,6 @@ abstract mixin class $SettingsDTOCopyWith<$Res> {
       bool isObsConnected,
       String obsWebsocketUrl,
       String obsWebsocketPassword,
-      BrowserTabSettingsDTO browserTabs,
       List obsConnectionsHistory,
       StreamElementsSettingsDTO streamElementsSettings,
       String rtIrlPushKey,
@@ -132,7 +127,6 @@ abstract mixin class $SettingsDTOCopyWith<$Res> {
   $ChatSettingsDTOCopyWith<$Res> get chatSettings;
   $GeneralSettingsDTOCopyWith<$Res> get generalSettings;
   $DashboardSettingsDTOCopyWith<$Res> get dashboardSettings;
-  $BrowserTabSettingsDTOCopyWith<$Res> get browserTabs;
   $StreamElementsSettingsDTOCopyWith<$Res> get streamElementsSettings;
   $TtsSettingsDTOCopyWith<$Res> get ttsSettings;
 }
@@ -159,7 +153,6 @@ class _$SettingsDTOCopyWithImpl<$Res> implements $SettingsDTOCopyWith<$Res> {
     Object? isObsConnected = null,
     Object? obsWebsocketUrl = null,
     Object? obsWebsocketPassword = null,
-    Object? browserTabs = null,
     Object? obsConnectionsHistory = null,
     Object? streamElementsSettings = null,
     Object? rtIrlPushKey = null,
@@ -206,10 +199,6 @@ class _$SettingsDTOCopyWithImpl<$Res> implements $SettingsDTOCopyWith<$Res> {
           ? _self.obsWebsocketPassword
           : obsWebsocketPassword // ignore: cast_nullable_to_non_nullable
               as String,
-      browserTabs: null == browserTabs
-          ? _self.browserTabs
-          : browserTabs // ignore: cast_nullable_to_non_nullable
-              as BrowserTabSettingsDTO,
       obsConnectionsHistory: null == obsConnectionsHistory
           ? _self.obsConnectionsHistory
           : obsConnectionsHistory // ignore: cast_nullable_to_non_nullable
@@ -275,16 +264,6 @@ class _$SettingsDTOCopyWithImpl<$Res> implements $SettingsDTOCopyWith<$Res> {
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $BrowserTabSettingsDTOCopyWith<$Res> get browserTabs {
-    return $BrowserTabSettingsDTOCopyWith<$Res>(_self.browserTabs, (value) {
-      return _then(_self.copyWith(browserTabs: value));
-    });
-  }
-
-  /// Create a copy of SettingsDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
   $StreamElementsSettingsDTOCopyWith<$Res> get streamElementsSettings {
     return $StreamElementsSettingsDTOCopyWith<$Res>(
         _self.streamElementsSettings, (value) {
@@ -317,7 +296,6 @@ class _SettingsDTO implements SettingsDTO {
       this.isObsConnected = false,
       this.obsWebsocketUrl = "",
       this.obsWebsocketPassword = "",
-      required this.browserTabs,
       final List obsConnectionsHistory = const [],
       required this.streamElementsSettings,
       this.rtIrlPushKey = "",
@@ -355,8 +333,6 @@ class _SettingsDTO implements SettingsDTO {
   @override
   @JsonKey()
   final String obsWebsocketPassword;
-  @override
-  final BrowserTabSettingsDTO browserTabs;
   final List _obsConnectionsHistory;
   @override
   @JsonKey()
@@ -416,8 +392,6 @@ class _SettingsDTO implements SettingsDTO {
                 other.obsWebsocketUrl == obsWebsocketUrl) &&
             (identical(other.obsWebsocketPassword, obsWebsocketPassword) ||
                 other.obsWebsocketPassword == obsWebsocketPassword) &&
-            (identical(other.browserTabs, browserTabs) ||
-                other.browserTabs == browserTabs) &&
             const DeepCollectionEquality()
                 .equals(other._obsConnectionsHistory, _obsConnectionsHistory) &&
             (identical(other.streamElementsSettings, streamElementsSettings) ||
@@ -442,7 +416,6 @@ class _SettingsDTO implements SettingsDTO {
       isObsConnected,
       obsWebsocketUrl,
       obsWebsocketPassword,
-      browserTabs,
       const DeepCollectionEquality().hash(_obsConnectionsHistory),
       streamElementsSettings,
       rtIrlPushKey,
@@ -450,7 +423,7 @@ class _SettingsDTO implements SettingsDTO {
 
   @override
   String toString() {
-    return 'SettingsDTO(isEmotes: $isEmotes, textSize: $textSize, displayTimestamp: $displayTimestamp, chatEventsSettings: $chatEventsSettings, chatSettings: $chatSettings, generalSettings: $generalSettings, dashboardSettings: $dashboardSettings, isObsConnected: $isObsConnected, obsWebsocketUrl: $obsWebsocketUrl, obsWebsocketPassword: $obsWebsocketPassword, browserTabs: $browserTabs, obsConnectionsHistory: $obsConnectionsHistory, streamElementsSettings: $streamElementsSettings, rtIrlPushKey: $rtIrlPushKey, ttsSettings: $ttsSettings)';
+    return 'SettingsDTO(isEmotes: $isEmotes, textSize: $textSize, displayTimestamp: $displayTimestamp, chatEventsSettings: $chatEventsSettings, chatSettings: $chatSettings, generalSettings: $generalSettings, dashboardSettings: $dashboardSettings, isObsConnected: $isObsConnected, obsWebsocketUrl: $obsWebsocketUrl, obsWebsocketPassword: $obsWebsocketPassword, obsConnectionsHistory: $obsConnectionsHistory, streamElementsSettings: $streamElementsSettings, rtIrlPushKey: $rtIrlPushKey, ttsSettings: $ttsSettings)';
   }
 }
 
@@ -473,7 +446,6 @@ abstract mixin class _$SettingsDTOCopyWith<$Res>
       bool isObsConnected,
       String obsWebsocketUrl,
       String obsWebsocketPassword,
-      BrowserTabSettingsDTO browserTabs,
       List obsConnectionsHistory,
       StreamElementsSettingsDTO streamElementsSettings,
       String rtIrlPushKey,
@@ -487,8 +459,6 @@ abstract mixin class _$SettingsDTOCopyWith<$Res>
   $GeneralSettingsDTOCopyWith<$Res> get generalSettings;
   @override
   $DashboardSettingsDTOCopyWith<$Res> get dashboardSettings;
-  @override
-  $BrowserTabSettingsDTOCopyWith<$Res> get browserTabs;
   @override
   $StreamElementsSettingsDTOCopyWith<$Res> get streamElementsSettings;
   @override
@@ -517,7 +487,6 @@ class __$SettingsDTOCopyWithImpl<$Res> implements _$SettingsDTOCopyWith<$Res> {
     Object? isObsConnected = null,
     Object? obsWebsocketUrl = null,
     Object? obsWebsocketPassword = null,
-    Object? browserTabs = null,
     Object? obsConnectionsHistory = null,
     Object? streamElementsSettings = null,
     Object? rtIrlPushKey = null,
@@ -564,10 +533,6 @@ class __$SettingsDTOCopyWithImpl<$Res> implements _$SettingsDTOCopyWith<$Res> {
           ? _self.obsWebsocketPassword
           : obsWebsocketPassword // ignore: cast_nullable_to_non_nullable
               as String,
-      browserTabs: null == browserTabs
-          ? _self.browserTabs
-          : browserTabs // ignore: cast_nullable_to_non_nullable
-              as BrowserTabSettingsDTO,
       obsConnectionsHistory: null == obsConnectionsHistory
           ? _self._obsConnectionsHistory
           : obsConnectionsHistory // ignore: cast_nullable_to_non_nullable
@@ -626,16 +591,6 @@ class __$SettingsDTOCopyWithImpl<$Res> implements _$SettingsDTOCopyWith<$Res> {
     return $DashboardSettingsDTOCopyWith<$Res>(_self.dashboardSettings,
         (value) {
       return _then(_self.copyWith(dashboardSettings: value));
-    });
-  }
-
-  /// Create a copy of SettingsDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $BrowserTabSettingsDTOCopyWith<$Res> get browserTabs {
-    return $BrowserTabSettingsDTOCopyWith<$Res>(_self.browserTabs, (value) {
-      return _then(_self.copyWith(browserTabs: value));
     });
   }
 

@@ -3,10 +3,12 @@ import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/utils/mapper.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/datasources/local/settings_local_data_source.dart';
+import 'package:irllink/src/data/entities/settings/browser_tab_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/chat_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/hidden_user_dto.dart';
 import 'package:irllink/src/data/entities/settings_dto.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
+import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/settings/hidden_user.dart';
 import 'package:irllink/src/domain/repositories/settings_repository.dart';
@@ -142,6 +144,57 @@ class SettingsRepositoryImpl extends SettingsRepository {
           )
           .toList();
       return Right(chatGroups);
+    }
+    return const Right([]);
+  }
+
+  @override
+  Future<Either<Failure, void>> addBrowserTab(BrowserTab browserTab) async {
+    try {
+      BrowserTabDTO browserTabDTO =
+          _mappr.convert<BrowserTab, BrowserTabDTO>(browserTab);
+      await _localDataSource.addBrowserTab(browserTabDTO);
+      return const Right(null);
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> editBrowserTab(BrowserTab browserTab) async {
+    try {
+      BrowserTabDTO browserTabDTO =
+          _mappr.convert<BrowserTab, BrowserTabDTO>(browserTab);
+      await _localDataSource.editBrowserTab(browserTabDTO);
+      return const Right(null);
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> removeBrowserTab(BrowserTab browserTab) async {
+    try {
+      BrowserTabDTO browserTabDTO =
+          _mappr.convert<BrowserTab, BrowserTabDTO>(browserTab);
+      await _localDataSource.removeBrowserTab(browserTabDTO);
+      return const Right(null);
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<BrowserTab>>> getBrowserTabs() async {
+    final browserTabsDTO = await _localDataSource.getBrowserTabs();
+    if (browserTabsDTO != null) {
+      List<BrowserTab> browserTabs = browserTabsDTO
+          .map(
+            (browserTabDTO) =>
+                _mappr.convert<BrowserTabDTO, BrowserTab>(browserTabDTO),
+          )
+          .toList();
+      return Right(browserTabs);
     }
     return const Right([]);
   }

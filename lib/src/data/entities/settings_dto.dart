@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:irllink/src/data/entities/settings/browser_tab_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/chat_events_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/chat_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/dashboard_settings_dto.dart';
@@ -26,7 +25,6 @@ abstract class SettingsDTO with _$SettingsDTO {
     @Default(false) bool isObsConnected,
     @Default("") String obsWebsocketUrl,
     @Default("") String obsWebsocketPassword,
-    required BrowserTabSettingsDTO browserTabs,
     @Default([]) List obsConnectionsHistory,
     required StreamElementsSettingsDTO streamElementsSettings,
     @Default("") String rtIrlPushKey,
@@ -35,7 +33,6 @@ abstract class SettingsDTO with _$SettingsDTO {
   }) = _SettingsDTO;
 
   factory SettingsDTO.blank() => SettingsDTO(
-        browserTabs: BrowserTabSettingsDTO.blank(),
         chatEventsSettings: ChatEventsSettingsDTO.blank(),
         chatSettings: ChatSettingsDTO.blank(),
         dashboardSettings: DashboardSettingsDTO.blank(),

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
-import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/presentation/controllers/settings/browser_settings_controller.dart';
 
@@ -16,8 +15,6 @@ class ManageListBrowserTabs extends GetView<BrowserSettingsController> {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        Settings settings = Get.find<SettingsService>().settings.value;
-
         return Scaffold(
           appBar: AppBar(
             leading: IconButton(
@@ -46,18 +43,17 @@ class ManageListBrowserTabs extends GetView<BrowserSettingsController> {
                     right: 18,
                     bottom: 8,
                   ),
-                  itemCount: settings.browserTabs.tabs.length,
+                  itemCount: controller.browserTabs.length,
                   onReorder: (int oldIndex, int newIndex) {
                     if (newIndex > oldIndex) {
                       newIndex -= 1;
                     }
-                    final element =
-                        settings.browserTabs.tabs.removeAt(oldIndex);
-                    settings.browserTabs.tabs.insert(newIndex, element);
+                    final element = controller.browserTabs.removeAt(oldIndex);
+                    controller.browserTabs.insert(newIndex, element);
                     Get.find<SettingsService>().saveSettings();
                   },
                   itemBuilder: (BuildContext context, int index) {
-                    BrowserTab elem = settings.browserTabs.tabs[index];
+                    BrowserTab elem = controller.browserTabs[index];
                     return Dismissible(
                       key: ValueKey(elem),
                       background: Container(

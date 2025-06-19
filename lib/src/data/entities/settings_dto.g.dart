@@ -21,8 +21,6 @@ _SettingsDTO _$SettingsDTOFromJson(Map<String, dynamic> json) => _SettingsDTO(
       isObsConnected: json['isObsConnected'] as bool? ?? false,
       obsWebsocketUrl: json['obsWebsocketUrl'] as String? ?? "",
       obsWebsocketPassword: json['obsWebsocketPassword'] as String? ?? "",
-      browserTabs: BrowserTabSettingsDTO.fromJson(
-          json['browserTabs'] as Map<String, dynamic>),
       obsConnectionsHistory:
           json['obsConnectionsHistory'] as List<dynamic>? ?? const [],
       streamElementsSettings: StreamElementsSettingsDTO.fromJson(
@@ -44,7 +42,6 @@ Map<String, dynamic> _$SettingsDTOToJson(_SettingsDTO instance) =>
       'isObsConnected': instance.isObsConnected,
       'obsWebsocketUrl': instance.obsWebsocketUrl,
       'obsWebsocketPassword': instance.obsWebsocketPassword,
-      'browserTabs': instance.browserTabs,
       'obsConnectionsHistory': instance.obsConnectionsHistory,
       'streamElementsSettings': instance.streamElementsSettings,
       'rtIrlPushKey': instance.rtIrlPushKey,

@@ -20,6 +20,8 @@ abstract class Migration {
         return Migration1();
       case 2:
         return Migration2();
+      case 3:
+        return Migration3();
       default:
         return null;
     }
@@ -229,5 +231,44 @@ class Migration2 extends Migration {
     await db.execute('DROP TABLE IF EXISTS hidden_users');
     await db.execute('DROP TABLE IF EXISTS chat_groups');
     await db.execute('DROP TABLE IF EXISTS channels');
+  }
+}
+
+class Migration3 extends Migration {
+  Migration3() : super(3);
+
+  @override
+  Future<void> up(Database db) async {
+    await db.execute(
+      'CREATE TABLE browser_tabs (id TEXT PRIMARY KEY AUTOINCREMENT, url TEXT NOT NULL, name TEXT NOT NULL, toggled INTEGER NOT NULL, is_ios_audio_source INTEGER NOT NULL)',
+    );
+
+    try {
+      final storage = GetStorage();
+      final settings = storage.read('settings');
+      if (settings != null) {
+        final Map<String, dynamic> settingsJson = jsonDecode(settings);
+        final browserTabs = settingsJson['browserTabs']['tabs'];
+        if (browserTabs != null) {
+          browserTabs.forEach((tab) async {
+            await db.insert('browser_tabs', {
+              'url': tab['url'],
+              'name': tab['title'],
+              'toggled': tab['toggled'],
+              'is_ios_audio_source': tab['iOSAudioSource'],
+            });
+          });
+          settingsJson.remove('browserTabs');
+          await storage.write('settings', jsonEncode(settingsJson));
+        }
+      }
+    } catch (e) {
+      debugPrint('Failed to migrate browser tabs: $e');
+    }
+  }
+
+  @override
+  Future<void> down(Database db) async {
+    await db.execute('DROP TABLE IF EXISTS browser_tabs');
   }
 }

@@ -79,8 +79,6 @@ import '../../domain/entities/twitch/twitch_user.dart' as _i22;
 /// - `GeneralSettingsDTO` → `GeneralSettings`.
 /// - `DashboardEvent` → `DashboardEventDTO`.
 /// - `DashboardEventDTO` → `DashboardEvent`.
-/// - `BrowserTabSettings` → `BrowserTabSettingsDTO`.
-/// - `BrowserTabSettingsDTO` → `BrowserTabSettings`.
 /// - `StreamElementsSettings` → `StreamElementsSettingsDTO`.
 /// - `StreamElementsSettingsDTO` → `StreamElementsSettings`.
 /// - `TtsSettings` → `TtsSettingsDTO`.
@@ -220,18 +218,6 @@ class $Mappr implements _i1.AutoMapprInterface {
             sourceTypeOf == _typeOf<_i11.DashboardEventDTO?>()) &&
         (targetTypeOf == _typeOf<_i10.DashboardEvent>() ||
             targetTypeOf == _typeOf<_i10.DashboardEvent?>())) {
-      return true;
-    }
-    if ((sourceTypeOf == _typeOf<_i6.BrowserTabSettings>() ||
-            sourceTypeOf == _typeOf<_i6.BrowserTabSettings?>()) &&
-        (targetTypeOf == _typeOf<_i7.BrowserTabSettingsDTO>() ||
-            targetTypeOf == _typeOf<_i7.BrowserTabSettingsDTO?>())) {
-      return true;
-    }
-    if ((sourceTypeOf == _typeOf<_i7.BrowserTabSettingsDTO>() ||
-            sourceTypeOf == _typeOf<_i7.BrowserTabSettingsDTO?>()) &&
-        (targetTypeOf == _typeOf<_i6.BrowserTabSettings>() ||
-            targetTypeOf == _typeOf<_i6.BrowserTabSettings?>())) {
       return true;
     }
     if ((sourceTypeOf == _typeOf<_i12.StreamElementsSettings>() ||
@@ -823,26 +809,6 @@ class $Mappr implements _i1.AutoMapprInterface {
       return (_map__i11$DashboardEventDTO_To__i10$DashboardEvent(
           (model as _i11.DashboardEventDTO?)) as TARGET);
     }
-    if ((sourceTypeOf == _typeOf<_i6.BrowserTabSettings>() ||
-            sourceTypeOf == _typeOf<_i6.BrowserTabSettings?>()) &&
-        (targetTypeOf == _typeOf<_i7.BrowserTabSettingsDTO>() ||
-            targetTypeOf == _typeOf<_i7.BrowserTabSettingsDTO?>())) {
-      if (canReturnNull && model == null) {
-        return null;
-      }
-      return (_map__i6$BrowserTabSettings_To__i7$BrowserTabSettingsDTO(
-          (model as _i6.BrowserTabSettings?)) as TARGET);
-    }
-    if ((sourceTypeOf == _typeOf<_i7.BrowserTabSettingsDTO>() ||
-            sourceTypeOf == _typeOf<_i7.BrowserTabSettingsDTO?>()) &&
-        (targetTypeOf == _typeOf<_i6.BrowserTabSettings>() ||
-            targetTypeOf == _typeOf<_i6.BrowserTabSettings?>())) {
-      if (canReturnNull && model == null) {
-        return null;
-      }
-      return (_map__i7$BrowserTabSettingsDTO_To__i6$BrowserTabSettings(
-          (model as _i7.BrowserTabSettingsDTO?)) as TARGET);
-    }
     if ((sourceTypeOf == _typeOf<_i12.StreamElementsSettings>() ||
             sourceTypeOf == _typeOf<_i12.StreamElementsSettings?>()) &&
         (targetTypeOf == _typeOf<_i13.StreamElementsSettingsDTO>() ||
@@ -1328,8 +1294,6 @@ class $Mappr implements _i1.AutoMapprInterface {
       isObsConnected: model.isObsConnected,
       obsWebsocketUrl: model.obsWebsocketUrl,
       obsWebsocketPassword: model.obsWebsocketPassword,
-      browserTabs: _map__i6$BrowserTabSettings_To__i7$BrowserTabSettingsDTO(
-          model.browserTabs),
       obsConnectionsHistory: model.obsConnectionsHistory,
       streamElementsSettings:
           _map__i12$StreamElementsSettings_To__i13$StreamElementsSettingsDTO(
@@ -1364,8 +1328,6 @@ class $Mappr implements _i1.AutoMapprInterface {
       isObsConnected: model.isObsConnected,
       obsWebsocketUrl: model.obsWebsocketUrl,
       obsWebsocketPassword: model.obsWebsocketPassword,
-      browserTabs: _map__i7$BrowserTabSettingsDTO_To__i6$BrowserTabSettings(
-          model.browserTabs),
       obsConnectionsHistory: model.obsConnectionsHistory,
       streamElementsSettings:
           _map__i13$StreamElementsSettingsDTO_To__i12$StreamElementsSettings(
@@ -1570,38 +1532,6 @@ class $Mappr implements _i1.AutoMapprInterface {
       event: model.event,
       customValue: model.customValue,
     );
-  }
-
-  _i7.BrowserTabSettingsDTO
-      _map__i6$BrowserTabSettings_To__i7$BrowserTabSettingsDTO(
-          _i6.BrowserTabSettings? input) {
-    final model = input;
-    if (model == null) {
-      throw Exception(
-          r'Mapping BrowserTabSettings → BrowserTabSettingsDTO failed because BrowserTabSettings was null, and no default value was provided. '
-          r'Consider setting the whenSourceIsNull parameter on the MapType<BrowserTabSettings, BrowserTabSettingsDTO> to handle null values during mapping.');
-    }
-    return _i7.BrowserTabSettingsDTO(
-        tabs: model.tabs
-            .map<_i7.BrowserTabDTO>(
-                (value) => _map__i6$BrowserTab_To__i7$BrowserTabDTO(value))
-            .toList());
-  }
-
-  _i6.BrowserTabSettings
-      _map__i7$BrowserTabSettingsDTO_To__i6$BrowserTabSettings(
-          _i7.BrowserTabSettingsDTO? input) {
-    final model = input;
-    if (model == null) {
-      throw Exception(
-          r'Mapping BrowserTabSettingsDTO → BrowserTabSettings failed because BrowserTabSettingsDTO was null, and no default value was provided. '
-          r'Consider setting the whenSourceIsNull parameter on the MapType<BrowserTabSettingsDTO, BrowserTabSettings> to handle null values during mapping.');
-    }
-    return _i6.BrowserTabSettings(
-        tabs: model.tabs
-            .map<_i6.BrowserTab>(
-                (value) => _map__i7$BrowserTabDTO_To__i6$BrowserTab(value))
-            .toList());
   }
 
   _i13.StreamElementsSettingsDTO

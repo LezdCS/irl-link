@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_events_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/settings/dashboard_settings.dart';
@@ -24,7 +23,6 @@ class Settings {
   final bool isObsConnected;
   final String obsWebsocketUrl;
   final String obsWebsocketPassword;
-  final BrowserTabSettings browserTabs;
   final List obsConnectionsHistory;
   final StreamElementsSettings streamElementsSettings;
   final String rtIrlPushKey;
@@ -48,7 +46,6 @@ class Settings {
     required this.isObsConnected,
     required this.obsWebsocketUrl,
     required this.obsWebsocketPassword,
-    required this.browserTabs,
     required this.obsConnectionsHistory,
     required this.streamElementsSettings,
     required this.rtIrlPushKey,
@@ -73,7 +70,6 @@ class Settings {
     bool? isObsConnected,
     String? obsWebsocketUrl,
     String? obsWebsocketPassword,
-    BrowserTabSettings? browserTabs,
     List? obsConnectionsHistory,
     StreamElementsSettings? streamElementsSettings,
     String? rtIrlPushKey,
@@ -94,7 +90,6 @@ class Settings {
         isObsConnected: isObsConnected ?? this.isObsConnected,
         obsWebsocketUrl: obsWebsocketUrl ?? this.obsWebsocketUrl,
         obsWebsocketPassword: obsWebsocketPassword ?? this.obsWebsocketPassword,
-        browserTabs: browserTabs ?? this.browserTabs,
         obsConnectionsHistory:
             obsConnectionsHistory ?? this.obsConnectionsHistory,
         streamElementsSettings:

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:get_storage/get_storage.dart';
 import 'package:irllink/data/database/database_helper.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
+import 'package:irllink/src/data/entities/settings/browser_tab_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/chat_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/hidden_user_dto.dart';
 import 'package:irllink/src/data/entities/settings_dto.dart';
@@ -19,6 +20,10 @@ abstract class SettingsLocalDataSource {
   Future<void> addChannel(ChatGroupDTO chatGroup, ChannelDTO channel);
   Future<void> removeChannel(ChatGroupDTO chatGroup, ChannelDTO channel);
   Future<List<ChatGroupDTO>?> getChatGroups();
+  Future<void> addBrowserTab(BrowserTabDTO browserTab);
+  Future<void> editBrowserTab(BrowserTabDTO browserTab);
+  Future<void> removeBrowserTab(BrowserTabDTO browserTab);
+  Future<List<BrowserTabDTO>?> getBrowserTabs();
 }
 
 class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
@@ -132,5 +137,36 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
       mutableMaps.add(mutableMap);
     }
     return mutableMaps.map((map) => ChatGroupDTO.fromJson(map)).toList();
+  }
+
+  @override
+  Future<void> addBrowserTab(BrowserTabDTO browserTab) async {
+    final db = await _databaseHelper.database;
+    await db.insert('browser_tabs', browserTab.toJson());
+  }
+
+  @override
+  Future<void> editBrowserTab(BrowserTabDTO browserTab) async {
+    final db = await _databaseHelper.database;
+    await db.update(
+      'browser_tabs',
+      browserTab.toJson(),
+      where: 'id = ?',
+      whereArgs: [browserTab.id],
+    );
+  }
+
+  @override
+  Future<void> removeBrowserTab(BrowserTabDTO browserTab) async {
+    final db = await _databaseHelper.database;
+    await db
+        .delete('browser_tabs', where: 'id = ?', whereArgs: [browserTab.id]);
+  }
+
+  @override
+  Future<List<BrowserTabDTO>?> getBrowserTabs() async {
+    final db = await _databaseHelper.database;
+    final List<Map<String, dynamic>> maps = await db.query('browser_tabs');
+    return maps.map((map) => BrowserTabDTO.fromJson(map)).toList();
   }
 }

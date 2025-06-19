@@ -19,6 +19,7 @@ import 'package:irllink/src/data/datasources/local/twitch_local_data_source.dart
 import 'package:irllink/src/data/datasources/remote/twitch_remote_data_source.dart';
 import 'package:irllink/src/data/repositories/settings_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
+import 'package:irllink/src/domain/usecases/settings/add_browser_tab_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/get_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/set_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart';
@@ -29,10 +30,22 @@ Future<void> initializeDependencies() async {
     permanent: true,
   );
 
+  // Repositories
+  final settingsRepository = SettingsRepositoryImpl(
+    talker: talkerService.talker,
+    localDataSource: SettingsLocalDataSourceImpl(
+      talker: talkerService.talker,
+      storage: GetStorage(),
+    ),
+  );
+
+  final addBrowserTabUsecase = AddBrowserTabUsecase(settingsRepository);
+
   await Get.putAsync(
     () => DeeplinksService(
       appLinks: AppLinks(),
       talker: talkerService.talker,
+      addBrowserTabUsecase: addBrowserTabUsecase,
     ).init(),
     permanent: true,
   );
@@ -44,14 +57,6 @@ Future<void> initializeDependencies() async {
 
   Dio dioTwitchClient = initDio(kTwitchApiUrlBase);
 
-  // Repositories
-  final settingsRepository = SettingsRepositoryImpl(
-    talker: talkerService.talker,
-    localDataSource: SettingsLocalDataSourceImpl(
-      talker: talkerService.talker,
-      storage: GetStorage(),
-    ),
-  );
   final twitchRepository = TwitchRepositoryImpl(
     remoteDataSource: TwitchRemoteDataSourceImpl(
       dioClient: dioTwitchClient,

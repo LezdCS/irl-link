@@ -68,8 +68,6 @@ import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
   MapType<GeneralSettingsDTO, GeneralSettings>(),
   MapType<DashboardEvent, DashboardEventDTO>(),
   MapType<DashboardEventDTO, DashboardEvent>(),
-  MapType<BrowserTabSettings, BrowserTabSettingsDTO>(),
-  MapType<BrowserTabSettingsDTO, BrowserTabSettings>(),
   MapType<StreamElementsSettings, StreamElementsSettingsDTO>(),
   MapType<StreamElementsSettingsDTO, StreamElementsSettings>(),
   MapType<TtsSettings, TtsSettingsDTO>(),
