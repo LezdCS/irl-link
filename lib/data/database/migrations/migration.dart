@@ -186,7 +186,7 @@ class Migration2 extends Migration {
       final storage = GetStorage();
       final settings = storage.read('settings');
       if (settings != null) {
-        final settingsJson = jsonDecode(settings);
+        final Map<String, dynamic> settingsJson = jsonDecode(settings);
         final firstGroupChannels =
             settingsJson['chatSettings']['permanentFirstGroup']['channels'];
         if (firstGroupChannels != null) {
@@ -211,6 +211,10 @@ class Migration2 extends Migration {
             });
           });
         });
+
+        // Remove chatSettings from settings after migration
+        settingsJson.remove('chatSettings');
+        await storage.write('settings', jsonEncode(settingsJson));
       }
     } catch (e) {
       debugPrint('Failed to migrate chat settings: $e');
