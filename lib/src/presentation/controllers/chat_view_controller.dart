@@ -73,7 +73,6 @@ class ChatViewController extends GetxController
   void onInit() async {
     scrollController = ScrollController();
     banDurationInputController = TextEditingController();
-    Get.find<ChatsController>().selectedChatGroup.value = chatGroup;
 
     chatMessages.listen((value) {
       // Send to watchOS
