@@ -15,11 +15,13 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$BrowserTabDTO {
-  @JsonKey(fromJson: _idFromJson)
   String get id;
   String get title;
   String get url;
+  @BoolToIntConverter()
   bool get toggled;
+  @JsonKey(name: 'is_ios_audio_source')
+  @BoolToIntConverter()
   bool get iOSAudioSource;
 
   /// Create a copy of BrowserTabDTO
@@ -64,10 +66,12 @@ abstract mixin class $BrowserTabDTOCopyWith<$Res> {
       _$BrowserTabDTOCopyWithImpl;
   @useResult
   $Res call(
-      {@JsonKey(fromJson: _idFromJson) String id,
+      {String id,
       String title,
       String url,
-      bool toggled,
+      @BoolToIntConverter() bool toggled,
+      @JsonKey(name: 'is_ios_audio_source')
+      @BoolToIntConverter()
       bool iOSAudioSource});
 }
 
@@ -119,24 +123,28 @@ class _$BrowserTabDTOCopyWithImpl<$Res>
 @JsonSerializable()
 class _BrowserTabDTO implements BrowserTabDTO {
   const _BrowserTabDTO(
-      {@JsonKey(fromJson: _idFromJson) required this.id,
+      {required this.id,
       required this.title,
       required this.url,
-      required this.toggled,
+      @BoolToIntConverter() required this.toggled,
+      @JsonKey(name: 'is_ios_audio_source')
+      @BoolToIntConverter()
       required this.iOSAudioSource});
   factory _BrowserTabDTO.fromJson(Map<String, dynamic> json) =>
       _$BrowserTabDTOFromJson(json);
 
   @override
-  @JsonKey(fromJson: _idFromJson)
   final String id;
   @override
   final String title;
   @override
   final String url;
   @override
+  @BoolToIntConverter()
   final bool toggled;
   @override
+  @JsonKey(name: 'is_ios_audio_source')
+  @BoolToIntConverter()
   final bool iOSAudioSource;
 
   /// Create a copy of BrowserTabDTO
@@ -187,10 +195,12 @@ abstract mixin class _$BrowserTabDTOCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(fromJson: _idFromJson) String id,
+      {String id,
       String title,
       String url,
-      bool toggled,
+      @BoolToIntConverter() bool toggled,
+      @JsonKey(name: 'is_ios_audio_source')
+      @BoolToIntConverter()
       bool iOSAudioSource});
 }
 

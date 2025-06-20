@@ -8,11 +8,12 @@ part of 'browser_tab_settings_dto.dart';
 
 _BrowserTabDTO _$BrowserTabDTOFromJson(Map<String, dynamic> json) =>
     _BrowserTabDTO(
-      id: _idFromJson(json['id']),
+      id: json['id'] as String,
       title: json['title'] as String,
       url: json['url'] as String,
-      toggled: json['toggled'] as bool,
-      iOSAudioSource: json['iOSAudioSource'] as bool,
+      toggled: const BoolToIntConverter().fromJson(json['toggled'] as Object),
+      iOSAudioSource: const BoolToIntConverter()
+          .fromJson(json['is_ios_audio_source'] as Object),
     );
 
 Map<String, dynamic> _$BrowserTabDTOToJson(_BrowserTabDTO instance) =>
@@ -20,6 +21,7 @@ Map<String, dynamic> _$BrowserTabDTOToJson(_BrowserTabDTO instance) =>
       'id': instance.id,
       'title': instance.title,
       'url': instance.url,
-      'toggled': instance.toggled,
-      'iOSAudioSource': instance.iOSAudioSource,
+      'toggled': const BoolToIntConverter().toJson(instance.toggled),
+      'is_ios_audio_source':
+          const BoolToIntConverter().toJson(instance.iOSAudioSource),
     };
