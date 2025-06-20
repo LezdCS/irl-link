@@ -240,7 +240,7 @@ class Migration3 extends Migration {
   @override
   Future<void> up(Database db) async {
     await db.execute(
-      'CREATE TABLE browser_tabs (id TEXT PRIMARY KEY AUTOINCREMENT, url TEXT NOT NULL, name TEXT NOT NULL, toggled INTEGER NOT NULL, is_ios_audio_source INTEGER NOT NULL)',
+      'CREATE TABLE browser_tabs (id TEXT PRIMARY KEY, url TEXT NOT NULL, name TEXT NOT NULL, toggled INTEGER NOT NULL, is_ios_audio_source INTEGER NOT NULL)',
     );
 
     try {
@@ -252,6 +252,7 @@ class Migration3 extends Migration {
         if (browserTabs != null) {
           browserTabs.forEach((tab) async {
             await db.insert('browser_tabs', {
+              'id': tab['id'],
               'url': tab['url'],
               'name': tab['title'],
               'toggled': tab['toggled'],

@@ -4,7 +4,7 @@ import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
   static const _databaseName = "irllink.db";
-  static const _databaseVersion = 2;
+  static const _databaseVersion = 3;
 
   // Singleton pattern
   DatabaseHelper._privateConstructor();
