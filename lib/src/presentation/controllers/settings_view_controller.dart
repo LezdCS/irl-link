@@ -59,6 +59,9 @@ class SettingsViewController extends GetxController {
       <String, DownloadTaskStatus>{}.obs;
   final RxMap<String, int> downloadProgress = <String, int>{}.obs;
 
+  // Available backups reactive list
+  final RxList<File> availableBackups = <File>[].obs;
+
   final ReceivePort _port = ReceivePort();
 
   @override
@@ -73,6 +76,9 @@ class SettingsViewController extends GetxController {
 
     // Setup download progress listening
     _setupDownloadListener();
+
+    // Load available backups
+    loadAvailableBackups();
 
     super.onInit();
   }
@@ -327,6 +333,9 @@ class SettingsViewController extends GetxController {
             borderColor: Colors.green,
             duration: const Duration(seconds: 5),
           );
+
+          // Add the new backup to the reactive list
+          availableBackups.insert(0, File(filePath));
         } catch (e) {
           // Fallback: just show success for the internal file
           Get.snackbar(
@@ -338,6 +347,9 @@ class SettingsViewController extends GetxController {
             borderColor: Colors.orange,
             duration: const Duration(seconds: 5),
           );
+
+          // Add the new backup to the reactive list
+          availableBackups.insert(0, File(filePath));
         }
       } else {
         // Fallback: just show success for the internal file
@@ -350,6 +362,9 @@ class SettingsViewController extends GetxController {
           borderColor: Colors.green,
           duration: const Duration(seconds: 5),
         );
+
+        // Add the new backup to the reactive list
+        availableBackups.insert(0, File(filePath));
       }
     } catch (e) {
       Get.snackbar(
@@ -490,6 +505,9 @@ class SettingsViewController extends GetxController {
           borderWidth: 1,
           borderColor: Colors.orange,
         );
+
+        // Remove the backup from the reactive list
+        availableBackups.removeWhere((backup) => backup.path == filePath);
       } else {
         throw Exception('Backup file not found');
       }
@@ -589,5 +607,27 @@ class SettingsViewController extends GetxController {
         borderColor: Colors.red,
       );
     }
+  }
+
+  /// Load available backups into the reactive list
+  Future<void> loadAvailableBackups() async {
+    try {
+      final backups = await getAvailableBackups();
+      availableBackups.value = backups;
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        "Failed to load available backups: $e",
+        snackPosition: SnackPosition.BOTTOM,
+        icon: const Icon(Icons.error_outline, color: Colors.red),
+        borderWidth: 1,
+        borderColor: Colors.red,
+      );
+    }
+  }
+
+  /// Refresh the backups list manually
+  Future<void> refreshBackups() async {
+    await loadAvailableBackups();
   }
 }

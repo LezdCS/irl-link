@@ -475,104 +475,93 @@ class SettingsView extends GetView<SettingsViewController> {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    FutureBuilder<List<dynamic>>(
-                      future: controller.getAvailableBackups(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Center(child: CircularProgressIndicator()),
-                          );
-                        }
-
-                        if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                          return const Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Text(
-                              "No backups available",
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontStyle: FontStyle.italic,
-                              ),
+                    Obx(() {
+                      if (controller.availableBackups.isEmpty) {
+                        return const Padding(
+                          padding: EdgeInsets.all(8),
+                          child: Text(
+                            "No backups available",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontStyle: FontStyle.italic,
                             ),
-                          );
-                        }
-
-                        return Container(
-                          constraints: const BoxConstraints(maxHeight: 200),
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (context, index) {
-                              final file = snapshot.data![index];
-                              final fileName = file.path.split('/').last;
-                              final dateTime = file.lastModifiedSync();
-
-                              return Container(
-                                margin: const EdgeInsets.symmetric(vertical: 2),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Theme.of(context).dividerColor,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: ListTile(
-                                  dense: true,
-                                  title: Text(
-                                    fileName
-                                        .replaceAll('irllink_backup_', '')
-                                        .replaceAll('.json', ''),
-                                    style: const TextStyle(fontSize: 14),
-                                  ),
-                                  subtitle: Text(
-                                    "${dateTime.day}/${dateTime.month}/${dateTime.year} ${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}",
-                                    style: const TextStyle(fontSize: 12),
-                                  ),
-                                  trailing: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      IconButton(
-                                        icon: const Icon(
-                                          Icons.download_outlined,
-                                          size: 20,
-                                          color: Colors.blue,
-                                        ),
-                                        onPressed: () {
-                                          controller.downloadBackup(file.path);
-                                        },
-                                        tooltip: 'Download backup',
-                                      ),
-                                      IconButton(
-                                        icon: const Icon(
-                                          Icons.restore_outlined,
-                                          size: 20,
-                                        ),
-                                        onPressed: () {
-                                          controller.importDatabase(file.path);
-                                        },
-                                        tooltip: 'Restore backup',
-                                      ),
-                                      IconButton(
-                                        icon: const Icon(
-                                          Icons.delete_outline,
-                                          size: 20,
-                                          color: Colors.red,
-                                        ),
-                                        onPressed: () {
-                                          controller.deleteBackup(file.path);
-                                        },
-                                        tooltip: 'Delete backup',
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
                           ),
                         );
-                      },
-                    ),
+                      }
+
+                      return Container(
+                        constraints: const BoxConstraints(maxHeight: 200),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: controller.availableBackups.length,
+                          itemBuilder: (context, index) {
+                            final file = controller.availableBackups[index];
+                            final fileName = file.path.split('/').last;
+                            final dateTime = file.lastModifiedSync();
+
+                            return Container(
+                              margin: const EdgeInsets.symmetric(vertical: 2),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Theme.of(context).dividerColor,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: ListTile(
+                                dense: true,
+                                title: Text(
+                                  fileName
+                                      .replaceAll('irllink_backup_', '')
+                                      .replaceAll('.json', ''),
+                                  style: const TextStyle(fontSize: 14),
+                                ),
+                                subtitle: Text(
+                                  "${dateTime.day}/${dateTime.month}/${dateTime.year} ${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}",
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.download_outlined,
+                                        size: 20,
+                                        color: Colors.blue,
+                                      ),
+                                      onPressed: () {
+                                        controller.downloadBackup(file.path);
+                                      },
+                                      tooltip: 'Download backup',
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.restore_outlined,
+                                        size: 20,
+                                      ),
+                                      onPressed: () {
+                                        controller.importDatabase(file.path);
+                                      },
+                                      tooltip: 'Restore backup',
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.delete_outline,
+                                        size: 20,
+                                        color: Colors.red,
+                                      ),
+                                      onPressed: () {
+                                        controller.deleteBackup(file.path);
+                                      },
+                                      tooltip: 'Delete backup',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    }),
                   ],
                 ),
               ],
