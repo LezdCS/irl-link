@@ -70,6 +70,10 @@ class SettingsView extends GetView<SettingsViewController> {
               const Divider(
                 height: 20,
               ),
+              dataManagementSettings(context, width),
+              const Divider(
+                height: 20,
+              ),
               contactSettings(context, width),
               Container(
                 padding: const EdgeInsets.only(left: 4, right: 4, top: 6),
@@ -388,6 +392,185 @@ class SettingsView extends GetView<SettingsViewController> {
                           ),
                         );
                         settingsService.saveSettings();
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget dataManagementSettings(BuildContext context, double width) {
+    return ColoredBox(
+      color: Theme.of(context).colorScheme.surface,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Data Management",
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.tertiary,
+              fontSize: 20,
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.only(left: 4, right: 4),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Backup buttons
+                Row(
+                  children: [
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          controller.exportDatabase();
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.download,
+                                color: Theme.of(context).primaryIconTheme.color,
+                                size: 22,
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: const Text(
+                                  "Backup & Download",
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                // Restore section
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.restore,
+                          color: Theme.of(context).primaryIconTheme.color,
+                          size: 22,
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: const Text(
+                            "Restore Database",
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    FutureBuilder<List<dynamic>>(
+                      future: controller.getAvailableBackups(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Center(child: CircularProgressIndicator()),
+                          );
+                        }
+
+                        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                          return const Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text(
+                              "No backups available",
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                          );
+                        }
+
+                        return Container(
+                          constraints: const BoxConstraints(maxHeight: 200),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              final file = snapshot.data![index];
+                              final fileName = file.path.split('/').last;
+                              final dateTime = file.lastModifiedSync();
+
+                              return Container(
+                                margin: const EdgeInsets.symmetric(vertical: 2),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Theme.of(context).dividerColor,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: ListTile(
+                                  dense: true,
+                                  title: Text(
+                                    fileName
+                                        .replaceAll('irllink_backup_', '')
+                                        .replaceAll('.json', ''),
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                  subtitle: Text(
+                                    "${dateTime.day}/${dateTime.month}/${dateTime.year} ${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}",
+                                    style: const TextStyle(fontSize: 12),
+                                  ),
+                                  trailing: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      IconButton(
+                                        icon: const Icon(
+                                          Icons.download_outlined,
+                                          size: 20,
+                                          color: Colors.blue,
+                                        ),
+                                        onPressed: () {
+                                          controller.downloadBackup(file.path);
+                                        },
+                                        tooltip: 'Download backup',
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(
+                                          Icons.restore_outlined,
+                                          size: 20,
+                                        ),
+                                        onPressed: () {
+                                          controller.importDatabase(file.path);
+                                        },
+                                        tooltip: 'Restore backup',
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(
+                                          Icons.delete_outline,
+                                          size: 20,
+                                          color: Colors.red,
+                                        ),
+                                        onPressed: () {
+                                          controller.deleteBackup(file.path);
+                                        },
+                                        tooltip: 'Delete backup',
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        );
                       },
                     ),
                   ],
