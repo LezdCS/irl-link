@@ -537,6 +537,7 @@ class SettingsView extends GetView<SettingsViewController> {
                                       icon: const Icon(
                                         Icons.restore_outlined,
                                         size: 20,
+                                        color: Colors.green,
                                       ),
                                       onPressed: () {
                                         controller.importDatabase(file.path);
