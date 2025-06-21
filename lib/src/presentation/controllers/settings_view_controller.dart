@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
@@ -629,5 +630,49 @@ class SettingsViewController extends GetxController {
   /// Refresh the backups list manually
   Future<void> refreshBackups() async {
     await loadAvailableBackups();
+  }
+
+  /// Import database from a file selected by the user
+  Future<void> importDatabaseFromFile() async {
+    try {
+      // Show file picker to select a JSON file
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['json'],
+        dialogTitle: 'Select Backup File to Import',
+      );
+
+      if (result != null && result.files.single.path != null) {
+        final filePath = result.files.single.path!;
+
+        // Validate that it's a backup file by checking the name pattern
+        final fileName = result.files.single.name;
+        if (!fileName.contains('irllink_backup_') ||
+            !fileName.endsWith('.json')) {
+          Get.snackbar(
+            "Invalid File",
+            "Please select a valid IRL Link backup file (should contain 'irllink_backup_' and end with '.json')",
+            snackPosition: SnackPosition.BOTTOM,
+            icon: const Icon(Icons.warning, color: Colors.orange),
+            borderWidth: 1,
+            borderColor: Colors.orange,
+            duration: const Duration(seconds: 5),
+          );
+          return;
+        }
+
+        // Import the selected file
+        await importDatabase(filePath);
+      }
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        "Failed to select or import file: $e",
+        snackPosition: SnackPosition.BOTTOM,
+        icon: const Icon(Icons.error_outline, color: Colors.red),
+        borderWidth: 1,
+        borderColor: Colors.red,
+      );
+    }
   }
 }

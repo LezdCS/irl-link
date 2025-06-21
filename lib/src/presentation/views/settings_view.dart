@@ -475,6 +475,40 @@ class SettingsView extends GetView<SettingsViewController> {
                       ],
                     ),
                     const SizedBox(height: 8),
+                    // Import from file button
+                    Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              controller.importDatabaseFromFile();
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.file_upload,
+                                    color: Theme.of(context)
+                                        .primaryIconTheme
+                                        .color,
+                                    size: 22,
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: const Text(
+                                      "Import from File",
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
                     Obx(() {
                       if (controller.availableBackups.isEmpty) {
                         return const Padding(
