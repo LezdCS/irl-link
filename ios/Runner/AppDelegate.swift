@@ -1,6 +1,7 @@
 import UIKit
 import Flutter
 import WatchConnectivity
+import flutter_downloader
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
@@ -17,6 +18,8 @@ import WatchConnectivity
         session?.activate();
       }
     GeneratedPluginRegistrant.register(with: self)
+
+    FlutterDownloaderPlugin.setPluginRegistrantCallback(registerPlugins)
 
     // For flutter_foreground_task
     SwiftFlutterForegroundTaskPlugin.setPluginRegistrantCallback(registerPlugins)
@@ -86,6 +89,9 @@ extension AppDelegate: WCSessionDelegate {
 
 // For flutter_foreground_task
 func registerPlugins(registry: FlutterPluginRegistry) {
+    if (!registry.hasPlugin("FlutterDownloaderPlugin")) {
+       FlutterDownloaderPlugin.register(with: registry.registrar(forPlugin: "FlutterDownloaderPlugin")!)
+    }
   GeneratedPluginRegistrant.register(with: registry)
 }
 
