@@ -14,7 +14,6 @@ import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/settings/hidden_user.dart';
 import 'package:irllink/src/domain/entities/settings/obs_settings.dart';
 import 'package:irllink/src/domain/repositories/settings_repository.dart';
-import 'package:irllink/src/domain/usecases/obs/toggle_obs_usecase.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class SettingsRepositoryImpl extends SettingsRepository {
@@ -212,28 +211,12 @@ class SettingsRepositoryImpl extends SettingsRepository {
   }
 
   @override
-  Future<Either<Failure, void>> toggleObsConnection(
-    ToggleObsUsecaseParams isConnected,
-  ) async {
-    await _localDataSource.toggleObsConnection(isConnected);
-    return const Right(null);
-  }
-
-  @override
-  Future<Either<Failure, void>> updateObsPassword(
+  Future<Either<Failure, void>> updateObsSettings(
     ObsSettings obsSettings,
   ) async {
     final obsSettingsDTO =
         _mappr.convert<ObsSettings, ObsSettingsDTO>(obsSettings);
-    await _localDataSource.updateObsPassword(obsSettingsDTO);
-    return const Right(null);
-  }
-
-  @override
-  Future<Either<Failure, void>> updateObsUrl(ObsSettings obsSettings) async {
-    final obsSettingsDTO =
-        _mappr.convert<ObsSettings, ObsSettingsDTO>(obsSettings);
-    await _localDataSource.updateObsUrl(obsSettingsDTO);
+    await _localDataSource.updateObsSettings(obsSettingsDTO);
     return const Right(null);
   }
 }

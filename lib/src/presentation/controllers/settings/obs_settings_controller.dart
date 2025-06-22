@@ -3,8 +3,6 @@ import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings/obs_settings.dart';
 import 'package:irllink/src/domain/usecases/obs/get_obs_credentials_usecase.dart';
-import 'package:irllink/src/domain/usecases/obs/toggle_obs_usecase.dart';
-import 'package:irllink/src/domain/usecases/obs/update_obs_password_usecase.dart';
 import 'package:irllink/src/domain/usecases/obs/update_obs_url_usecase.dart';
 
 class ObsSettingsController extends GetxController {
@@ -12,15 +10,11 @@ class ObsSettingsController extends GetxController {
 
   ObsSettingsController({
     required this.getObsCredentialsUsecase,
-    required this.toggleObsUsecase,
-    required this.updateObsPasswordUsecase,
-    required this.updateObsUrlUsecase,
+    required this.updateObsSettingsUsecase,
   });
 
   final GetObsCredentialsUsecase getObsCredentialsUsecase;
-  final ToggleObsUsecase toggleObsUsecase;
-  final UpdateObsPasswordUsecase updateObsPasswordUsecase;
-  final UpdateObsUrlUsecase updateObsUrlUsecase;
+  final UpdateObsSettingsUsecase updateObsSettingsUsecase;
 
   RxBool obsWebsocketPasswordShow = false.obs;
   RxBool obsWebsocketUrlShow = false.obs;
@@ -59,8 +53,10 @@ class ObsSettingsController extends GetxController {
   }
 
   void toggleObsConnection() async {
-    final result = await toggleObsUsecase(
-      params: ToggleObsUsecaseParams(
+    final result = await updateObsSettingsUsecase(
+      params: ObsSettings(
+        url: obsSettings.value?.url ?? '',
+        password: obsSettings.value?.password ?? '',
         isConnected: !(obsSettings.value?.isConnected ?? false),
       ),
     );
@@ -72,7 +68,7 @@ class ObsSettingsController extends GetxController {
   }
 
   void updateObsUrl(String url) async {
-    final result = await updateObsUrlUsecase(
+    final result = await updateObsSettingsUsecase(
       params: ObsSettings(
         url: url,
         password: obsSettings.value?.password ?? '',
@@ -87,7 +83,7 @@ class ObsSettingsController extends GetxController {
   }
 
   void updateObsPassword(String password) async {
-    final result = await updateObsPasswordUsecase(
+    final result = await updateObsSettingsUsecase(
       params: ObsSettings(
         url: obsSettings.value?.url ?? '',
         password: password,

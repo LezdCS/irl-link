@@ -8,7 +8,6 @@ import 'package:irllink/src/data/entities/settings/browser_tab_settings_dto.dart
 import 'package:irllink/src/data/entities/settings/chat_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/hidden_user_dto.dart';
 import 'package:irllink/src/data/entities/settings_dto.dart';
-import 'package:irllink/src/domain/usecases/obs/toggle_obs_usecase.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 abstract class SettingsLocalDataSource {
@@ -26,9 +25,7 @@ abstract class SettingsLocalDataSource {
   Future<void> editBrowserTab(BrowserTabDTO browserTab);
   Future<void> removeBrowserTab(BrowserTabDTO browserTab);
   Future<List<BrowserTabDTO>?> getBrowserTabs();
-  Future<void> toggleObsConnection(ToggleObsUsecaseParams isConnected);
-  Future<void> updateObsPassword(ObsSettingsDTO obsSettings);
-  Future<void> updateObsUrl(ObsSettingsDTO obsSettings);
+  Future<void> updateObsSettings(ObsSettingsDTO obsSettings);
   Future<ObsSettingsDTO?> getObsCredentials();
 }
 
@@ -177,28 +174,7 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
   }
 
   @override
-  Future<void> toggleObsConnection(ToggleObsUsecaseParams isConnected) async {
-    final obsSettings = GetStorage().read('obsSettings');
-    if (obsSettings != null) {
-      final obsSettingsDTO = ObsSettingsDTO.fromJson(obsSettings);
-      GetStorage().write(
-        'obsSettings',
-        obsSettingsDTO
-            .copyWith(
-              isConnected: isConnected.isConnected,
-            )
-            .toJson(),
-      );
-    }
-  }
-
-  @override
-  Future<void> updateObsPassword(ObsSettingsDTO obsSettings) async {
-    GetStorage().write('obsSettings', obsSettings.toJson());
-  }
-
-  @override
-  Future<void> updateObsUrl(ObsSettingsDTO obsSettings) async {
+  Future<void> updateObsSettings(ObsSettingsDTO obsSettings) async {
     GetStorage().write('obsSettings', obsSettings.toJson());
   }
 
@@ -208,6 +184,10 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
     if (obsSettings != null) {
       return ObsSettingsDTO.fromJson(obsSettings);
     }
-    return null;
+    return const ObsSettingsDTO(
+      url: '',
+      password: '',
+      isConnected: false,
+    );
   }
 }
