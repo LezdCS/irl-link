@@ -3,20 +3,16 @@ import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 
 @immutable
 class ChatSettings {
-  final List<ChatGroup> chatGroups;
   final bool hideDeletedMessages;
 
   const ChatSettings({
-    required this.chatGroups,
     required this.hideDeletedMessages,
   });
 
   ChatSettings copyWith({
-    List<ChatGroup>? chatGroups,
     bool? hideDeletedMessages,
   }) {
     return ChatSettings(
-      chatGroups: chatGroups ?? this.chatGroups,
       hideDeletedMessages: hideDeletedMessages ?? this.hideDeletedMessages,
     );
   }

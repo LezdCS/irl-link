@@ -16,8 +16,9 @@ class ToggleObsUsecase
   ToggleObsUsecase({required this.settingsRepository});
 
   @override
-  Future<Either<Failure, void>> call(
-      {required ToggleObsUsecaseParams params,}) async {
+  Future<Either<Failure, void>> call({
+    required ToggleObsUsecaseParams params,
+  }) async {
     return settingsRepository.toggleObsConnection(params);
   }
 }

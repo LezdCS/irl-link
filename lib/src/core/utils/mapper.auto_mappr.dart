@@ -1468,13 +1468,7 @@ class $Mappr implements _i1.AutoMapprInterface {
           r'Mapping ChatSettings → ChatSettingsDTO failed because ChatSettings was null, and no default value was provided. '
           r'Consider setting the whenSourceIsNull parameter on the MapType<ChatSettings, ChatSettingsDTO> to handle null values during mapping.');
     }
-    return _i5.ChatSettingsDTO(
-      chatGroups: model.chatGroups
-          .map<_i5.ChatGroupDTO>(
-              (value) => _map__i4$ChatGroup_To__i5$ChatGroupDTO(value))
-          .toList(),
-      hideDeletedMessages: model.hideDeletedMessages,
-    );
+    return _i5.ChatSettingsDTO(hideDeletedMessages: model.hideDeletedMessages);
   }
 
   _i4.ChatSettings _map__i5$ChatSettingsDTO_To__i4$ChatSettings(
@@ -1485,13 +1479,7 @@ class $Mappr implements _i1.AutoMapprInterface {
           r'Mapping ChatSettingsDTO → ChatSettings failed because ChatSettingsDTO was null, and no default value was provided. '
           r'Consider setting the whenSourceIsNull parameter on the MapType<ChatSettingsDTO, ChatSettings> to handle null values during mapping.');
     }
-    return _i4.ChatSettings(
-      chatGroups: model.chatGroups
-          .map<_i4.ChatGroup>(
-              (value) => _map__i5$ChatGroupDTO_To__i4$ChatGroup(value))
-          .toList(),
-      hideDeletedMessages: model.hideDeletedMessages,
-    );
+    return _i4.ChatSettings(hideDeletedMessages: model.hideDeletedMessages);
   }
 
   _i9.GeneralSettingsDTO _map__i8$GeneralSettings_To__i9$GeneralSettingsDTO(

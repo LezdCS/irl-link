@@ -7,7 +7,6 @@ part 'chat_settings_dto.g.dart';
 @freezed
 abstract class ChatSettingsDTO with _$ChatSettingsDTO {
   factory ChatSettingsDTO({
-    @Default([]) List<ChatGroupDTO> chatGroups,
     @Default(true) bool hideDeletedMessages,
   }) = _ChatSettingsDTO;
   ChatSettingsDTO._();

@@ -39,5 +39,6 @@ abstract class SettingsRepository {
   Future<Either<Failure, void>> updateObsPassword(ObsSettings obsSettings);
   Future<Either<Failure, void>> updateObsUrl(ObsSettings obsSettings);
   Future<Either<Failure, void>> toggleObsConnection(
-      ToggleObsUsecaseParams isConnected,);
+    ToggleObsUsecaseParams isConnected,
+  );
 }
