@@ -23,10 +23,6 @@ mixin _$SettingsDTO {
   ChatSettingsDTO get chatSettings; //GENERAL SETTINGS
   GeneralSettingsDTO get generalSettings;
   DashboardSettingsDTO get dashboardSettings; //CONNECTIONS SETTINGS
-  bool get isObsConnected;
-  String get obsWebsocketUrl;
-  String get obsWebsocketPassword;
-  List get obsConnectionsHistory;
   StreamElementsSettingsDTO get streamElementsSettings;
   String get rtIrlPushKey; //TTS SETTINGS
   TtsSettingsDTO get ttsSettings;
@@ -60,14 +56,6 @@ mixin _$SettingsDTO {
                 other.generalSettings == generalSettings) &&
             (identical(other.dashboardSettings, dashboardSettings) ||
                 other.dashboardSettings == dashboardSettings) &&
-            (identical(other.isObsConnected, isObsConnected) ||
-                other.isObsConnected == isObsConnected) &&
-            (identical(other.obsWebsocketUrl, obsWebsocketUrl) ||
-                other.obsWebsocketUrl == obsWebsocketUrl) &&
-            (identical(other.obsWebsocketPassword, obsWebsocketPassword) ||
-                other.obsWebsocketPassword == obsWebsocketPassword) &&
-            const DeepCollectionEquality()
-                .equals(other.obsConnectionsHistory, obsConnectionsHistory) &&
             (identical(other.streamElementsSettings, streamElementsSettings) ||
                 other.streamElementsSettings == streamElementsSettings) &&
             (identical(other.rtIrlPushKey, rtIrlPushKey) ||
@@ -87,17 +75,13 @@ mixin _$SettingsDTO {
       chatSettings,
       generalSettings,
       dashboardSettings,
-      isObsConnected,
-      obsWebsocketUrl,
-      obsWebsocketPassword,
-      const DeepCollectionEquality().hash(obsConnectionsHistory),
       streamElementsSettings,
       rtIrlPushKey,
       ttsSettings);
 
   @override
   String toString() {
-    return 'SettingsDTO(isEmotes: $isEmotes, textSize: $textSize, displayTimestamp: $displayTimestamp, chatEventsSettings: $chatEventsSettings, chatSettings: $chatSettings, generalSettings: $generalSettings, dashboardSettings: $dashboardSettings, isObsConnected: $isObsConnected, obsWebsocketUrl: $obsWebsocketUrl, obsWebsocketPassword: $obsWebsocketPassword, obsConnectionsHistory: $obsConnectionsHistory, streamElementsSettings: $streamElementsSettings, rtIrlPushKey: $rtIrlPushKey, ttsSettings: $ttsSettings)';
+    return 'SettingsDTO(isEmotes: $isEmotes, textSize: $textSize, displayTimestamp: $displayTimestamp, chatEventsSettings: $chatEventsSettings, chatSettings: $chatSettings, generalSettings: $generalSettings, dashboardSettings: $dashboardSettings, streamElementsSettings: $streamElementsSettings, rtIrlPushKey: $rtIrlPushKey, ttsSettings: $ttsSettings)';
   }
 }
 
@@ -115,10 +99,6 @@ abstract mixin class $SettingsDTOCopyWith<$Res> {
       ChatSettingsDTO chatSettings,
       GeneralSettingsDTO generalSettings,
       DashboardSettingsDTO dashboardSettings,
-      bool isObsConnected,
-      String obsWebsocketUrl,
-      String obsWebsocketPassword,
-      List obsConnectionsHistory,
       StreamElementsSettingsDTO streamElementsSettings,
       String rtIrlPushKey,
       TtsSettingsDTO ttsSettings});
@@ -150,10 +130,6 @@ class _$SettingsDTOCopyWithImpl<$Res> implements $SettingsDTOCopyWith<$Res> {
     Object? chatSettings = null,
     Object? generalSettings = null,
     Object? dashboardSettings = null,
-    Object? isObsConnected = null,
-    Object? obsWebsocketUrl = null,
-    Object? obsWebsocketPassword = null,
-    Object? obsConnectionsHistory = null,
     Object? streamElementsSettings = null,
     Object? rtIrlPushKey = null,
     Object? ttsSettings = null,
@@ -187,22 +163,6 @@ class _$SettingsDTOCopyWithImpl<$Res> implements $SettingsDTOCopyWith<$Res> {
           ? _self.dashboardSettings
           : dashboardSettings // ignore: cast_nullable_to_non_nullable
               as DashboardSettingsDTO,
-      isObsConnected: null == isObsConnected
-          ? _self.isObsConnected
-          : isObsConnected // ignore: cast_nullable_to_non_nullable
-              as bool,
-      obsWebsocketUrl: null == obsWebsocketUrl
-          ? _self.obsWebsocketUrl
-          : obsWebsocketUrl // ignore: cast_nullable_to_non_nullable
-              as String,
-      obsWebsocketPassword: null == obsWebsocketPassword
-          ? _self.obsWebsocketPassword
-          : obsWebsocketPassword // ignore: cast_nullable_to_non_nullable
-              as String,
-      obsConnectionsHistory: null == obsConnectionsHistory
-          ? _self.obsConnectionsHistory
-          : obsConnectionsHistory // ignore: cast_nullable_to_non_nullable
-              as List,
       streamElementsSettings: null == streamElementsSettings
           ? _self.streamElementsSettings
           : streamElementsSettings // ignore: cast_nullable_to_non_nullable
@@ -293,14 +253,9 @@ class _SettingsDTO implements SettingsDTO {
       required this.chatSettings,
       required this.generalSettings,
       required this.dashboardSettings,
-      this.isObsConnected = false,
-      this.obsWebsocketUrl = "",
-      this.obsWebsocketPassword = "",
-      final List obsConnectionsHistory = const [],
       required this.streamElementsSettings,
       this.rtIrlPushKey = "",
-      required this.ttsSettings})
-      : _obsConnectionsHistory = obsConnectionsHistory;
+      required this.ttsSettings});
   factory _SettingsDTO.fromJson(Map<String, dynamic> json) =>
       _$SettingsDTOFromJson(json);
 
@@ -324,25 +279,6 @@ class _SettingsDTO implements SettingsDTO {
   @override
   final DashboardSettingsDTO dashboardSettings;
 //CONNECTIONS SETTINGS
-  @override
-  @JsonKey()
-  final bool isObsConnected;
-  @override
-  @JsonKey()
-  final String obsWebsocketUrl;
-  @override
-  @JsonKey()
-  final String obsWebsocketPassword;
-  final List _obsConnectionsHistory;
-  @override
-  @JsonKey()
-  List get obsConnectionsHistory {
-    if (_obsConnectionsHistory is EqualUnmodifiableListView)
-      return _obsConnectionsHistory;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_obsConnectionsHistory);
-  }
-
   @override
   final StreamElementsSettingsDTO streamElementsSettings;
   @override
@@ -386,14 +322,6 @@ class _SettingsDTO implements SettingsDTO {
                 other.generalSettings == generalSettings) &&
             (identical(other.dashboardSettings, dashboardSettings) ||
                 other.dashboardSettings == dashboardSettings) &&
-            (identical(other.isObsConnected, isObsConnected) ||
-                other.isObsConnected == isObsConnected) &&
-            (identical(other.obsWebsocketUrl, obsWebsocketUrl) ||
-                other.obsWebsocketUrl == obsWebsocketUrl) &&
-            (identical(other.obsWebsocketPassword, obsWebsocketPassword) ||
-                other.obsWebsocketPassword == obsWebsocketPassword) &&
-            const DeepCollectionEquality()
-                .equals(other._obsConnectionsHistory, _obsConnectionsHistory) &&
             (identical(other.streamElementsSettings, streamElementsSettings) ||
                 other.streamElementsSettings == streamElementsSettings) &&
             (identical(other.rtIrlPushKey, rtIrlPushKey) ||
@@ -413,17 +341,13 @@ class _SettingsDTO implements SettingsDTO {
       chatSettings,
       generalSettings,
       dashboardSettings,
-      isObsConnected,
-      obsWebsocketUrl,
-      obsWebsocketPassword,
-      const DeepCollectionEquality().hash(_obsConnectionsHistory),
       streamElementsSettings,
       rtIrlPushKey,
       ttsSettings);
 
   @override
   String toString() {
-    return 'SettingsDTO(isEmotes: $isEmotes, textSize: $textSize, displayTimestamp: $displayTimestamp, chatEventsSettings: $chatEventsSettings, chatSettings: $chatSettings, generalSettings: $generalSettings, dashboardSettings: $dashboardSettings, isObsConnected: $isObsConnected, obsWebsocketUrl: $obsWebsocketUrl, obsWebsocketPassword: $obsWebsocketPassword, obsConnectionsHistory: $obsConnectionsHistory, streamElementsSettings: $streamElementsSettings, rtIrlPushKey: $rtIrlPushKey, ttsSettings: $ttsSettings)';
+    return 'SettingsDTO(isEmotes: $isEmotes, textSize: $textSize, displayTimestamp: $displayTimestamp, chatEventsSettings: $chatEventsSettings, chatSettings: $chatSettings, generalSettings: $generalSettings, dashboardSettings: $dashboardSettings, streamElementsSettings: $streamElementsSettings, rtIrlPushKey: $rtIrlPushKey, ttsSettings: $ttsSettings)';
   }
 }
 
@@ -443,10 +367,6 @@ abstract mixin class _$SettingsDTOCopyWith<$Res>
       ChatSettingsDTO chatSettings,
       GeneralSettingsDTO generalSettings,
       DashboardSettingsDTO dashboardSettings,
-      bool isObsConnected,
-      String obsWebsocketUrl,
-      String obsWebsocketPassword,
-      List obsConnectionsHistory,
       StreamElementsSettingsDTO streamElementsSettings,
       String rtIrlPushKey,
       TtsSettingsDTO ttsSettings});
@@ -484,10 +404,6 @@ class __$SettingsDTOCopyWithImpl<$Res> implements _$SettingsDTOCopyWith<$Res> {
     Object? chatSettings = null,
     Object? generalSettings = null,
     Object? dashboardSettings = null,
-    Object? isObsConnected = null,
-    Object? obsWebsocketUrl = null,
-    Object? obsWebsocketPassword = null,
-    Object? obsConnectionsHistory = null,
     Object? streamElementsSettings = null,
     Object? rtIrlPushKey = null,
     Object? ttsSettings = null,
@@ -521,22 +437,6 @@ class __$SettingsDTOCopyWithImpl<$Res> implements _$SettingsDTOCopyWith<$Res> {
           ? _self.dashboardSettings
           : dashboardSettings // ignore: cast_nullable_to_non_nullable
               as DashboardSettingsDTO,
-      isObsConnected: null == isObsConnected
-          ? _self.isObsConnected
-          : isObsConnected // ignore: cast_nullable_to_non_nullable
-              as bool,
-      obsWebsocketUrl: null == obsWebsocketUrl
-          ? _self.obsWebsocketUrl
-          : obsWebsocketUrl // ignore: cast_nullable_to_non_nullable
-              as String,
-      obsWebsocketPassword: null == obsWebsocketPassword
-          ? _self.obsWebsocketPassword
-          : obsWebsocketPassword // ignore: cast_nullable_to_non_nullable
-              as String,
-      obsConnectionsHistory: null == obsConnectionsHistory
-          ? _self._obsConnectionsHistory
-          : obsConnectionsHistory // ignore: cast_nullable_to_non_nullable
-              as List,
       streamElementsSettings: null == streamElementsSettings
           ? _self.streamElementsSettings
           : streamElementsSettings // ignore: cast_nullable_to_non_nullable

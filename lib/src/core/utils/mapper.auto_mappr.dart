@@ -15,6 +15,7 @@ import '../../data/entities/kick/kick_category_dto.dart' as _i43;
 import '../../data/entities/kick/kick_channel_dto.dart' as _i48;
 import '../../data/entities/kick/kick_credentials_dto.dart' as _i47;
 import '../../data/entities/kick/kick_user_dto.dart' as _i45;
+import '../../data/entities/obs_settings_dto.dart' as _i55;
 import '../../data/entities/rtmp_dto.dart' as _i51;
 import '../../data/entities/settings/browser_tab_settings_dto.dart' as _i7;
 import '../../data/entities/settings/chat_events_settings_dto.dart' as _i17;
@@ -49,6 +50,7 @@ import '../../domain/entities/settings/chat_settings.dart' as _i4;
 import '../../domain/entities/settings/dashboard_settings.dart' as _i24;
 import '../../domain/entities/settings/general_settings.dart' as _i8;
 import '../../domain/entities/settings/hidden_user.dart' as _i52;
+import '../../domain/entities/settings/obs_settings.dart' as _i54;
 import '../../domain/entities/settings/stream_elements_settings.dart' as _i12;
 import '../../domain/entities/settings/tts_settings.dart' as _i14;
 import '../../domain/entities/stream_elements/se_activity.dart' as _i31;
@@ -122,6 +124,8 @@ import '../../domain/entities/twitch/twitch_user.dart' as _i22;
 /// - `RtmpDTO` → `Rtmp`.
 /// - `HiddenUser` → `HiddenUserDTO`.
 /// - `HiddenUserDTO` → `HiddenUser`.
+/// - `ObsSettings` → `ObsSettingsDTO`.
+/// - `ObsSettingsDTO` → `ObsSettings`.
 /// {@endtemplate}
 class $Mappr implements _i1.AutoMapprInterface {
   const $Mappr();
@@ -476,6 +480,18 @@ class $Mappr implements _i1.AutoMapprInterface {
             sourceTypeOf == _typeOf<_i53.HiddenUserDTO?>()) &&
         (targetTypeOf == _typeOf<_i52.HiddenUser>() ||
             targetTypeOf == _typeOf<_i52.HiddenUser?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i54.ObsSettings>() ||
+            sourceTypeOf == _typeOf<_i54.ObsSettings?>()) &&
+        (targetTypeOf == _typeOf<_i55.ObsSettingsDTO>() ||
+            targetTypeOf == _typeOf<_i55.ObsSettingsDTO?>())) {
+      return true;
+    }
+    if ((sourceTypeOf == _typeOf<_i55.ObsSettingsDTO>() ||
+            sourceTypeOf == _typeOf<_i55.ObsSettingsDTO?>()) &&
+        (targetTypeOf == _typeOf<_i54.ObsSettings>() ||
+            targetTypeOf == _typeOf<_i54.ObsSettings?>())) {
       return true;
     }
     if (recursive) {
@@ -1238,6 +1254,26 @@ class $Mappr implements _i1.AutoMapprInterface {
       return (_map__i53$HiddenUserDTO_To__i52$HiddenUser(
           (model as _i53.HiddenUserDTO?)) as TARGET);
     }
+    if ((sourceTypeOf == _typeOf<_i54.ObsSettings>() ||
+            sourceTypeOf == _typeOf<_i54.ObsSettings?>()) &&
+        (targetTypeOf == _typeOf<_i55.ObsSettingsDTO>() ||
+            targetTypeOf == _typeOf<_i55.ObsSettingsDTO?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i54$ObsSettings_To__i55$ObsSettingsDTO(
+          (model as _i54.ObsSettings?)) as TARGET);
+    }
+    if ((sourceTypeOf == _typeOf<_i55.ObsSettingsDTO>() ||
+            sourceTypeOf == _typeOf<_i55.ObsSettingsDTO?>()) &&
+        (targetTypeOf == _typeOf<_i54.ObsSettings>() ||
+            targetTypeOf == _typeOf<_i54.ObsSettings?>())) {
+      if (canReturnNull && model == null) {
+        return null;
+      }
+      return (_map__i55$ObsSettingsDTO_To__i54$ObsSettings(
+          (model as _i55.ObsSettingsDTO?)) as TARGET);
+    }
     throw Exception('No ${model.runtimeType} -> $targetTypeOf mapping.');
   }
 
@@ -1291,10 +1327,6 @@ class $Mappr implements _i1.AutoMapprInterface {
       dashboardSettings:
           _map__i24$DashboardSettings_To__i25$DashboardSettingsDTO(
               model.dashboardSettings),
-      isObsConnected: model.isObsConnected,
-      obsWebsocketUrl: model.obsWebsocketUrl,
-      obsWebsocketPassword: model.obsWebsocketPassword,
-      obsConnectionsHistory: model.obsConnectionsHistory,
       streamElementsSettings:
           _map__i12$StreamElementsSettings_To__i13$StreamElementsSettingsDTO(
               model.streamElementsSettings),
@@ -1325,10 +1357,6 @@ class $Mappr implements _i1.AutoMapprInterface {
       dashboardSettings:
           _map__i25$DashboardSettingsDTO_To__i24$DashboardSettings(
               model.dashboardSettings),
-      isObsConnected: model.isObsConnected,
-      obsWebsocketUrl: model.obsWebsocketUrl,
-      obsWebsocketPassword: model.obsWebsocketPassword,
-      obsConnectionsHistory: model.obsConnectionsHistory,
       streamElementsSettings:
           _map__i13$StreamElementsSettingsDTO_To__i12$StreamElementsSettings(
               model.streamElementsSettings),
@@ -2326,6 +2354,36 @@ class $Mappr implements _i1.AutoMapprInterface {
       id: model.id,
       username: model.username,
       platform: model.platform,
+    );
+  }
+
+  _i55.ObsSettingsDTO _map__i54$ObsSettings_To__i55$ObsSettingsDTO(
+      _i54.ObsSettings? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping ObsSettings → ObsSettingsDTO failed because ObsSettings was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<ObsSettings, ObsSettingsDTO> to handle null values during mapping.');
+    }
+    return _i55.ObsSettingsDTO(
+      url: model.url,
+      password: model.password,
+      isConnected: model.isConnected,
+    );
+  }
+
+  _i54.ObsSettings _map__i55$ObsSettingsDTO_To__i54$ObsSettings(
+      _i55.ObsSettingsDTO? input) {
+    final model = input;
+    if (model == null) {
+      throw Exception(
+          r'Mapping ObsSettingsDTO → ObsSettings failed because ObsSettingsDTO was null, and no default value was provided. '
+          r'Consider setting the whenSourceIsNull parameter on the MapType<ObsSettingsDTO, ObsSettings> to handle null values during mapping.');
+    }
+    return _i54.ObsSettings(
+      url: model.url,
+      password: model.password,
+      isConnected: model.isConnected,
     );
   }
 

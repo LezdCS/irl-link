@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/rendering.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:irllink/src/data/entities/obs_settings_dto.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_credentials_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_credentials_dto.dart';
 import 'package:sqflite/sqflite.dart';
@@ -261,6 +262,22 @@ class Migration3 extends Migration {
           });
           settingsJson.remove('browserTabs');
           await storage.write('settings', jsonEncode(settingsJson));
+        }
+
+        final obsUrl = storage.read('obsWebsocketUrl');
+        final obsPassword = storage.read('obsWebsocketPassword');
+        final obsIsConnected = storage.read('isObsConnected');
+
+        if (obsUrl != null && obsPassword != null && obsIsConnected != null) {
+          ObsSettingsDTO obsSettings = ObsSettingsDTO(
+            url: obsUrl,
+            password: obsPassword,
+            isConnected: obsIsConnected,
+          );
+          await storage.write('obsSettings', jsonEncode(obsSettings.toJson()));
+          await storage.remove('obsWebsocketUrl');
+          await storage.remove('obsWebsocketPassword');
+          await storage.remove('isObsConnected');
         }
       }
     } catch (e) {

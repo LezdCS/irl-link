@@ -3,6 +3,7 @@ import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/utils/mapper.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/datasources/local/settings_local_data_source.dart';
+import 'package:irllink/src/data/entities/obs_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/browser_tab_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/chat_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/hidden_user_dto.dart';
@@ -11,7 +12,9 @@ import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/settings/hidden_user.dart';
+import 'package:irllink/src/domain/entities/settings/obs_settings.dart';
 import 'package:irllink/src/domain/repositories/settings_repository.dart';
+import 'package:irllink/src/domain/usecases/obs/toggle_obs_usecase.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class SettingsRepositoryImpl extends SettingsRepository {
@@ -197,5 +200,40 @@ class SettingsRepositoryImpl extends SettingsRepository {
       return Right(browserTabs);
     }
     return const Right([]);
+  }
+
+  @override
+  Future<Either<Failure, ObsSettings>> getObsCredentials() async {
+    final obsSettingsDTO = await _localDataSource.getObsCredentials();
+    if (obsSettingsDTO != null) {
+      return Right(_mappr.convert<ObsSettingsDTO, ObsSettings>(obsSettingsDTO));
+    }
+    return Left(Failure('No obs credentials found'));
+  }
+
+  @override
+  Future<Either<Failure, void>> toggleObsConnection(
+    ToggleObsUsecaseParams isConnected,
+  ) async {
+    await _localDataSource.toggleObsConnection(isConnected);
+    return const Right(null);
+  }
+
+  @override
+  Future<Either<Failure, void>> updateObsPassword(
+    ObsSettings obsSettings,
+  ) async {
+    final obsSettingsDTO =
+        _mappr.convert<ObsSettings, ObsSettingsDTO>(obsSettings);
+    await _localDataSource.updateObsPassword(obsSettingsDTO);
+    return const Right(null);
+  }
+
+  @override
+  Future<Either<Failure, void>> updateObsUrl(ObsSettings obsSettings) async {
+    final obsSettingsDTO =
+        _mappr.convert<ObsSettings, ObsSettingsDTO>(obsSettings);
+    await _localDataSource.updateObsUrl(obsSettingsDTO);
+    return const Right(null);
   }
 }

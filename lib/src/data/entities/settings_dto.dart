@@ -22,10 +22,6 @@ abstract class SettingsDTO with _$SettingsDTO {
     required GeneralSettingsDTO generalSettings,
     required DashboardSettingsDTO dashboardSettings,
     //CONNECTIONS SETTINGS
-    @Default(false) bool isObsConnected,
-    @Default("") String obsWebsocketUrl,
-    @Default("") String obsWebsocketPassword,
-    @Default([]) List obsConnectionsHistory,
     required StreamElementsSettingsDTO streamElementsSettings,
     @Default("") String rtIrlPushKey,
     //TTS SETTINGS

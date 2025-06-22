@@ -20,10 +20,6 @@ class Settings {
   final DashboardSettings dashboardSettings;
 
   //CONNECTIONS SETTINGS
-  final bool isObsConnected;
-  final String obsWebsocketUrl;
-  final String obsWebsocketPassword;
-  final List obsConnectionsHistory;
   final StreamElementsSettings streamElementsSettings;
   final String rtIrlPushKey;
 
@@ -43,10 +39,6 @@ class Settings {
     required this.dashboardSettings,
 
     //CONNECTIONS SETTINGS
-    required this.isObsConnected,
-    required this.obsWebsocketUrl,
-    required this.obsWebsocketPassword,
-    required this.obsConnectionsHistory,
     required this.streamElementsSettings,
     required this.rtIrlPushKey,
 
@@ -67,10 +59,6 @@ class Settings {
     GeneralSettings? generalSettings,
     DashboardSettings? dashboardSettings,
     //CONNECTIONS
-    bool? isObsConnected,
-    String? obsWebsocketUrl,
-    String? obsWebsocketPassword,
-    List? obsConnectionsHistory,
     StreamElementsSettings? streamElementsSettings,
     String? rtIrlPushKey,
     //TTS
@@ -87,11 +75,6 @@ class Settings {
         generalSettings: generalSettings ?? this.generalSettings,
         dashboardSettings: dashboardSettings ?? this.dashboardSettings,
         //CONNECTIONS
-        isObsConnected: isObsConnected ?? this.isObsConnected,
-        obsWebsocketUrl: obsWebsocketUrl ?? this.obsWebsocketUrl,
-        obsWebsocketPassword: obsWebsocketPassword ?? this.obsWebsocketPassword,
-        obsConnectionsHistory:
-            obsConnectionsHistory ?? this.obsConnectionsHistory,
         streamElementsSettings:
             streamElementsSettings ?? this.streamElementsSettings,
         rtIrlPushKey: rtIrlPushKey ?? this.rtIrlPushKey,

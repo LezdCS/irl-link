@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/services/settings_service.dart';
-import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/settings/obs_settings_controller.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -11,9 +9,6 @@ class ObsSettings extends GetView<ObsSettingsController> {
 
   @override
   Widget build(BuildContext context) {
-    final SettingsService settingsService = Get.find<SettingsService>();
-    Settings settings = settingsService.settings.value;
-
     return Obx(
       () => Scaffold(
         appBar: AppBar(
@@ -24,12 +19,9 @@ class ObsSettings extends GetView<ObsSettingsController> {
               activeColor: Colors.white,
               inactiveTrackColor:
                   Theme.of(context).colorScheme.tertiaryContainer,
-              value: settings.isObsConnected,
+              value: controller.obsSettings.value?.isConnected ?? false,
               onChanged: (value) {
-                Get.find<SettingsService>().settings.value = settings.copyWith(
-                  isObsConnected: value,
-                );
-                Get.find<SettingsService>().saveSettings();
+                controller.toggleObsConnection();
               },
             ),
           ],
@@ -53,9 +45,7 @@ class ObsSettings extends GetView<ObsSettingsController> {
                       controller: controller.obsWebsocketUrlFieldController,
                       obscureText: !controller.obsWebsocketUrlShow.value,
                       onChanged: (value) {
-                        settingsService.settings.value =
-                            settings.copyWith(obsWebsocketUrl: value);
-                        settingsService.saveSettings();
+                        controller.updateObsUrl(value);
                       },
                       decoration: InputDecoration(
                         isDense: true,
@@ -95,9 +85,7 @@ class ObsSettings extends GetView<ObsSettingsController> {
                           controller.obsWebsocketPasswordFieldController,
                       obscureText: !controller.obsWebsocketPasswordShow.value,
                       onChanged: (value) {
-                        settingsService.settings.value =
-                            settings.copyWith(obsWebsocketPassword: value);
-                        settingsService.saveSettings();
+                        controller.updateObsPassword(value);
                       },
                       decoration: InputDecoration(
                         isDense: true,
@@ -156,38 +144,6 @@ class ObsSettings extends GetView<ObsSettingsController> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor:
-                            Theme.of(context).colorScheme.tertiaryContainer,
-                        fixedSize: const Size(50, 20),
-                      ),
-                      onPressed: () {
-                        Get.defaultDialog(
-                          title: "history".tr,
-                          cancelTextColor:
-                              Theme.of(context).textTheme.bodyLarge!.color,
-                          textCancel: "cancel".tr,
-                          backgroundColor:
-                              Theme.of(context).colorScheme.tertiaryContainer,
-                          content: _obsHistory(),
-                        );
-                        FocusManager.instance.primaryFocus?.unfocus();
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'history'.tr,
-                          ),
-                          const SizedBox(width: 10),
-                          const Icon(Icons.history, color: Colors.white),
-                        ],
-                      ),
-                    ),
-                  ),
                 ],
               ),
               const SizedBox(height: 4),
@@ -231,8 +187,6 @@ class ObsSettings extends GetView<ObsSettingsController> {
       width: 250,
       height: 250,
     );
-    final SettingsService settingsService = Get.find<SettingsService>();
-    Settings settings = settingsService.settings.value;
 
     return Stack(
       fit: StackFit.expand,
@@ -249,13 +203,9 @@ class ObsSettings extends GetView<ObsSettingsController> {
               controller.obsWebsocketPasswordFieldController.text = password;
               controller.obsWebsocketUrlFieldController.text = url;
 
-              settingsService.settings.value =
-                  settings.copyWith(obsWebsocketUrl: url);
+              controller.updateObsUrl(url);
+              controller.updateObsPassword(password);
 
-              settingsService.settings.value =
-                  settings.copyWith(obsWebsocketPassword: password);
-
-              settingsService.saveSettings();
               Get.back();
             }
           },
@@ -305,37 +255,6 @@ class ObsSettings extends GetView<ObsSettingsController> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _obsHistory() {
-    final SettingsService settingsService = Get.find<SettingsService>();
-    Settings settings = settingsService.settings.value;
-
-    return SizedBox(
-      height: 200,
-      width: 300,
-      child: ListView.builder(
-        itemCount: settings.obsConnectionsHistory.length,
-        itemBuilder: (context, index) {
-          String url = settings.obsConnectionsHistory[index]['url']!;
-          String password = settings.obsConnectionsHistory[index]['password']!;
-
-          return ListTile(
-            title: Text(url),
-            onTap: () {
-              controller.obsWebsocketUrlFieldController.text = url;
-              controller.obsWebsocketPasswordFieldController.text = password;
-              settingsService.settings.value = settings.copyWith(
-                obsWebsocketUrl: url,
-                obsWebsocketPassword: password,
-              );
-              settingsService.saveSettings();
-              Get.back();
-            },
-          );
-        },
-      ),
     );
   }
 }

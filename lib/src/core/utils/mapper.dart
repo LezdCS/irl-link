@@ -5,6 +5,7 @@ import 'package:irllink/src/data/entities/kick/kick_category_dto.dart';
 import 'package:irllink/src/data/entities/kick/kick_channel_dto.dart';
 import 'package:irllink/src/data/entities/kick/kick_credentials_dto.dart';
 import 'package:irllink/src/data/entities/kick/kick_user_dto.dart';
+import 'package:irllink/src/data/entities/obs_settings_dto.dart';
 import 'package:irllink/src/data/entities/rtmp_dto.dart';
 import 'package:irllink/src/data/entities/settings/browser_tab_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/chat_events_settings_dto.dart';
@@ -39,6 +40,7 @@ import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/settings/dashboard_settings.dart';
 import 'package:irllink/src/domain/entities/settings/general_settings.dart';
 import 'package:irllink/src/domain/entities/settings/hidden_user.dart';
+import 'package:irllink/src/domain/entities/settings/obs_settings.dart';
 import 'package:irllink/src/domain/entities/settings/stream_elements_settings.dart';
 import 'package:irllink/src/domain/entities/settings/tts_settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
@@ -111,5 +113,7 @@ import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
   MapType<RtmpDTO, Rtmp>(),
   MapType<HiddenUser, HiddenUserDTO>(),
   MapType<HiddenUserDTO, HiddenUser>(),
+  MapType<ObsSettings, ObsSettingsDTO>(),
+  MapType<ObsSettingsDTO, ObsSettings>(),
 ])
 class Mappr extends $Mappr {}

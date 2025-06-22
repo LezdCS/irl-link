@@ -48,8 +48,6 @@ class SettingsViewController extends GetxController {
 
   RxBool rtIrlKeyShow = false.obs;
 
-  late TextEditingController seJwtInputController;
-  late TextEditingController seOverlayTokenInputController;
   late TextEditingController rtIrlInputController;
 
   // Download progress tracking
@@ -66,7 +64,6 @@ class SettingsViewController extends GetxController {
   void onInit() {
     Settings settings = settingsService.settings.value;
 
-    TextEditingController(text: settings.obsWebsocketPassword);
     rtIrlInputController = TextEditingController(text: settings.rtIrlPushKey);
 
     // Setup download progress listening

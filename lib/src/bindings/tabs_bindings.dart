@@ -23,6 +23,7 @@ import 'package:irllink/src/domain/usecases/kick/get_kick_channels_usecase.dart'
 import 'package:irllink/src/domain/usecases/kick/get_kick_local_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/patch_kick_channel_usecase.dart'
     show PatchKickChannelUseCase;
+import 'package:irllink/src/domain/usecases/obs/get_obs_credentials_usecase.dart';
 import 'package:irllink/src/domain/usecases/rtmp/get_rtmp_list_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/get_browser_tabs_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_local_credentials_usecase.dart';
@@ -103,6 +104,9 @@ class TabsBindings extends Bindings {
       ),
     );
     final getBrowserTabsUseCase = GetBrowserTabsUsecase(settingsRepository);
+    final getObsCredentialsUsecase = GetObsCredentialsUsecase(
+      settingsRepository: settingsRepository,
+    );
     Get.lazyPut<TabsController>(
       () => TabsController(
         settingsService: Get.find<SettingsService>(),
@@ -113,6 +117,7 @@ class TabsBindings extends Bindings {
         getTwitchLocalUseCase: getTwitchLocalUseCase,
         getLocalCredentialsUseCase: getLocalCredentialsUseCase,
         getBrowserTabsUseCase: getBrowserTabsUseCase,
+        getObsCredentialsUsecase: getObsCredentialsUsecase,
       ),
     );
 
@@ -151,6 +156,7 @@ class TabsBindings extends Bindings {
       () => ObsTabViewController(
         watchService: watchService,
         talkerService: talkerService,
+        getObsCredentialsUsecase: getObsCredentialsUsecase,
       ),
       fenix: true,
     );

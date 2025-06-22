@@ -8,6 +8,7 @@ import 'package:irllink/src/core/utils/list_move.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/usecases/kick/get_kick_local_usecase.dart';
+import 'package:irllink/src/domain/usecases/obs/get_obs_credentials_usecase.dart';
 import 'package:irllink/src/domain/usecases/rtmp/get_rtmp_list_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/get_browser_tabs_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_local_credentials_usecase.dart';
@@ -37,6 +38,7 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
     required this.homeViewController,
     required this.getLocalCredentialsUseCase,
     required this.getBrowserTabsUseCase,
+    required this.getObsCredentialsUsecase,
   });
 
   final SettingsService settingsService;
@@ -47,6 +49,7 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
   final HomeViewController homeViewController;
   final StreamElementsGetLocalCredentialsUseCase getLocalCredentialsUseCase;
   final GetBrowserTabsUsecase getBrowserTabsUseCase;
+  final GetObsCredentialsUsecase getObsCredentialsUsecase;
 
   late Rx<TabController> tabController;
   RxList<Widget> tabElements = <Widget>[].obs;
@@ -128,11 +131,16 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
     });
 
     // Check if OBS have to be removed
-    if (obsTabViewController != null &&
-        !settingsService.settings.value.isObsConnected) {
-      tabElements.removeWhere((t) => t is ObsTabView);
-      obsTabViewController = null;
-      await Get.delete<ObsTabViewController>();
+    if (obsTabViewController != null) {
+      final obsCredentials = await getObsCredentialsUsecase(params: null);
+      if (obsCredentials.fold(
+        (l) => false,
+        (r) => !r.isConnected,
+      )) {
+        obsTabViewController = null;
+        await Get.delete<ObsTabViewController>();
+        tabElements.removeWhere((t) => t is ObsTabView);
+      }
     }
 
     // Check if StreamElements have to be removed
@@ -190,10 +198,15 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
     bool isSubscribed = Get.find<StoreService>().isSubscribed();
 
     // Check if OBS have to be added
-    if (obsTabViewController == null &&
-        settingsService.settings.value.isObsConnected) {
-      obsTabViewController = Get.find<ObsTabViewController>();
-      tabElements.insert(0, const ObsTabView());
+    if (obsTabViewController == null) {
+      final obsCredentials = await getObsCredentialsUsecase(params: null);
+      if (obsCredentials.fold(
+        (l) => false,
+        (r) => r.isConnected,
+      )) {
+        tabElements.insert(0, const ObsTabView());
+        obsTabViewController = Get.find<ObsTabViewController>();
+      }
     }
 
     // Check if Twitch have to be added

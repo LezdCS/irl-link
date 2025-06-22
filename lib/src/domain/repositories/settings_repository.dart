@@ -4,6 +4,8 @@ import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/settings/hidden_user.dart';
+import 'package:irllink/src/domain/entities/settings/obs_settings.dart';
+import 'package:irllink/src/domain/usecases/obs/toggle_obs_usecase.dart';
 
 abstract class SettingsRepository {
   Future<Either<Failure, Settings>> getSettings();
@@ -32,4 +34,10 @@ abstract class SettingsRepository {
   Future<Either<Failure, void>> editBrowserTab(BrowserTab browserTab);
   Future<Either<Failure, void>> removeBrowserTab(BrowserTab browserTab);
   Future<Either<Failure, List<BrowserTab>>> getBrowserTabs();
+
+  Future<Either<Failure, ObsSettings>> getObsCredentials();
+  Future<Either<Failure, void>> updateObsPassword(ObsSettings obsSettings);
+  Future<Either<Failure, void>> updateObsUrl(ObsSettings obsSettings);
+  Future<Either<Failure, void>> toggleObsConnection(
+      ToggleObsUsecaseParams isConnected,);
 }
