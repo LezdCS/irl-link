@@ -7,12 +7,14 @@ import 'package:irllink/src/data/entities/obs_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/browser_tab_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/chat_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/hidden_user_dto.dart';
+import 'package:irllink/src/data/entities/settings/tts_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings_dto.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/settings/hidden_user.dart';
 import 'package:irllink/src/domain/entities/settings/obs_settings.dart';
+import 'package:irllink/src/domain/entities/settings/tts_settings.dart';
 import 'package:irllink/src/domain/repositories/settings_repository.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
@@ -217,6 +219,25 @@ class SettingsRepositoryImpl extends SettingsRepository {
     final obsSettingsDTO =
         _mappr.convert<ObsSettings, ObsSettingsDTO>(obsSettings);
     await _localDataSource.updateObsSettings(obsSettingsDTO);
+    return const Right(null);
+  }
+
+  @override
+  Future<Either<Failure, TtsSettings>> getTtsSettings() async {
+    final ttsSettingsDTO = await _localDataSource.getTtsSettings();
+    if (ttsSettingsDTO != null) {
+      return Right(_mappr.convert<TtsSettingsDTO, TtsSettings>(ttsSettingsDTO));
+    }
+    return Left(Failure('No tts settings found'));
+  }
+
+  @override
+  Future<Either<Failure, void>> updateTtsSettings(
+    TtsSettings ttsSettings,
+  ) async {
+    final ttsSettingsDTO =
+        _mappr.convert<TtsSettings, TtsSettingsDTO>(ttsSettings);
+    await _localDataSource.setTtsSettings(ttsSettingsDTO);
     return const Right(null);
   }
 }

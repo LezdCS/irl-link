@@ -264,9 +264,9 @@ class Migration3 extends Migration {
           await storage.write('settings', jsonEncode(settingsJson));
         }
 
-        final obsUrl = storage.read('obsWebsocketUrl');
-        final obsPassword = storage.read('obsWebsocketPassword');
-        final obsIsConnected = storage.read('isObsConnected');
+        final obsUrl = settingsJson['obsWebsocketUrl'];
+        final obsPassword = settingsJson['obsWebsocketPassword'];
+        final obsIsConnected = settingsJson['isObsConnected'];
 
         if (obsUrl != null && obsPassword != null && obsIsConnected != null) {
           ObsSettingsDTO obsSettings = ObsSettingsDTO(
@@ -275,9 +275,15 @@ class Migration3 extends Migration {
             isConnected: obsIsConnected,
           );
           await storage.write('obsSettings', jsonEncode(obsSettings.toJson()));
-          await storage.remove('obsWebsocketUrl');
-          await storage.remove('obsWebsocketPassword');
-          await storage.remove('isObsConnected');
+          settingsJson.remove('obsWebsocketUrl');
+          settingsJson.remove('obsWebsocketPassword');
+          settingsJson.remove('isObsConnected');
+          await storage.write('settings', jsonEncode(settingsJson));
+        }
+
+        final ttsSettings = settingsJson['ttsSettings'];
+        if (ttsSettings != null) {
+          await storage.write('ttsSettings', jsonEncode(ttsSettings));
         }
       }
     } catch (e) {

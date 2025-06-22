@@ -7,6 +7,7 @@ import 'package:irllink/src/data/entities/obs_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/browser_tab_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/chat_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/hidden_user_dto.dart';
+import 'package:irllink/src/data/entities/settings/tts_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings_dto.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
@@ -27,6 +28,8 @@ abstract class SettingsLocalDataSource {
   Future<List<BrowserTabDTO>?> getBrowserTabs();
   Future<void> updateObsSettings(ObsSettingsDTO obsSettings);
   Future<ObsSettingsDTO?> getObsCredentials();
+  Future<TtsSettingsDTO?> getTtsSettings();
+  Future<void> setTtsSettings(TtsSettingsDTO ttsSettings);
 }
 
 class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
@@ -189,5 +192,19 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
       password: '',
       isConnected: false,
     );
+  }
+
+  @override
+  Future<TtsSettingsDTO?> getTtsSettings() async {
+    final ttsSettings = GetStorage().read('ttsSettings');
+    if (ttsSettings != null) {
+      return TtsSettingsDTO.fromJson(ttsSettings);
+    }
+    return TtsSettingsDTO();
+  }
+
+  @override
+  Future<void> setTtsSettings(TtsSettingsDTO ttsSettings) async {
+    GetStorage().write('ttsSettings', ttsSettings.toJson());
   }
 }

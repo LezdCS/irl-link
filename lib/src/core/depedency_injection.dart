@@ -22,6 +22,7 @@ import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/usecases/settings/add_browser_tab_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/get_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/set_settings_usecase.dart';
+import 'package:irllink/src/domain/usecases/tts/get_tts_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart';
 
 Future<void> initializeDependencies() async {
@@ -72,6 +73,9 @@ Future<void> initializeDependencies() async {
   final getSettingsUseCase = GetSettingsUseCase(settingsRepository);
   final setSettingsUseCase = SetSettingsUseCase(settingsRepository);
   final getTwitchLocalUseCase = GetTwitchLocalUseCase(twitchRepository);
+  final getTtsSettingsUsecase = GetTtsSettingsUsecase(
+    settingsRepository: settingsRepository,
+  );
 
   final settingsService = await Get.putAsync(
     () => SettingsService(
@@ -93,7 +97,9 @@ Future<void> initializeDependencies() async {
   );
 
   final ttsService = await Get.putAsync(
-    () => TtsService().init(),
+    () => TtsService(
+      getTtsSettingsUsecase: getTtsSettingsUsecase,
+    ).init(),
     permanent: true,
   );
   await ttsService.initTts(settingsService.settings.value);

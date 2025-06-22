@@ -13,7 +13,6 @@ import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/pinned_message.dart';
-import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/settings/hidden_user.dart';
 import 'package:irllink/src/domain/usecases/kick/ban_kick_user_usecase.dart';
@@ -438,8 +437,6 @@ class ChatViewController extends GetxController
     twitchChats.add(twitchChat);
 
     twitchChat.chatStream.listen((twitchMessage) async {
-      final settings = settingsService.settings.value;
-
       if (cheerEmotes.isEmpty) {
         cheerEmotes.value =
             twitchChat.cheerEmotes.map((e) => ChatEmote.fromTwitch(e)).toList();
@@ -454,7 +451,7 @@ class ChatViewController extends GetxController
       if (await isUserHidden(message)) {
         return;
       }
-      if (settings.ttsSettings.ttsEnabled) {
+      if (ttsService.ttsSettings.ttsEnabled) {
         ttsService.readTts(message);
       }
 
@@ -480,8 +477,7 @@ class ChatViewController extends GetxController
     ).init(channel: channelId);
     await youtubeChat.connect();
     youtubeChat.chatStream.listen((ChatMessage message) {
-      Settings settings = settingsService.settings.value;
-      if (settings.ttsSettings.ttsEnabled) {
+      if (ttsService.ttsSettings.ttsEnabled) {
         ttsService.readTts(message);
       }
       addMessage(message);
@@ -542,8 +538,7 @@ class ChatViewController extends GetxController
       if (chatMessages.firstWhereOrNull((e) => e.id == message.id) != null) {
         return;
       }
-      Settings settings = settingsService.settings.value;
-      if (settings.ttsSettings.ttsEnabled) {
+      if (ttsService.ttsSettings.ttsEnabled) {
         ttsService.readTts(message);
       }
       // For some reason, the same message is sent multiple times, need to investigate further but for now, this is a workaround

@@ -14,8 +14,11 @@ import 'package:irllink/src/core/services/speaker_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
+import 'package:irllink/src/domain/entities/settings/tts_settings.dart';
 import 'package:irllink/src/domain/usecases/kick/login_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/logout_usecase.dart';
+import 'package:irllink/src/domain/usecases/tts/get_tts_settings_usecase.dart';
+import 'package:irllink/src/domain/usecases/tts/set_tts_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_users_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/login_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/logout_usecase.dart';
@@ -33,6 +36,8 @@ class SettingsViewController extends GetxController {
     required this.storeService,
     required this.logoutKickUseCase,
     required this.loginKickUseCase,
+    required this.getTtsSettingsUsecase,
+    required this.setTtsSettingsUsecase,
   });
 
   final LogoutUseCase logoutUseCase;
@@ -40,6 +45,8 @@ class SettingsViewController extends GetxController {
   final GetTwitchUsersUseCase getTwitchUsersUseCase;
   final LogoutKickUseCase logoutKickUseCase;
   final LoginKickUseCase loginKickUseCase;
+  final GetTtsSettingsUsecase getTtsSettingsUsecase;
+  final SetTtsSettingsUsecase setTtsSettingsUsecase;
 
   final SettingsService settingsService;
   final HomeViewController homeViewController;
@@ -60,6 +67,8 @@ class SettingsViewController extends GetxController {
 
   final ReceivePort _port = ReceivePort();
 
+  late TtsSettings ttsSettings;
+
   @override
   void onInit() {
     Settings settings = settingsService.settings.value;
@@ -72,6 +81,8 @@ class SettingsViewController extends GetxController {
     // Load available backups
     loadAvailableBackups();
 
+    getTtsSettings();
+
     super.onInit();
   }
 
@@ -80,6 +91,30 @@ class SettingsViewController extends GetxController {
     _port.close();
     IsolateNameServer.removePortNameMapping('downloader_send_port');
     super.onClose();
+  }
+
+  Future<void> getTtsSettings() async {
+    final result = await getTtsSettingsUsecase(params: null);
+    result.fold(
+      (l) {
+        Get.snackbar(
+          "Error",
+          "Failed to get TTS settings: $l",
+        );
+      },
+      (r) {
+        ttsSettings = r;
+      },
+    );
+  }
+
+  Future<void> setTtsSettings(TtsSettings ttsSettings) async {
+    final result = await setTtsSettingsUsecase(params: ttsSettings);
+    result.fold(
+      (l) {},
+      (r) {},
+    );
+    ttsService.getTtsSettings();
   }
 
   void _setupDownloadListener() {

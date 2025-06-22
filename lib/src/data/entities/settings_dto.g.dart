@@ -21,8 +21,6 @@ _SettingsDTO _$SettingsDTOFromJson(Map<String, dynamic> json) => _SettingsDTO(
       streamElementsSettings: StreamElementsSettingsDTO.fromJson(
           json['streamElementsSettings'] as Map<String, dynamic>),
       rtIrlPushKey: json['rtIrlPushKey'] as String? ?? "",
-      ttsSettings:
-          TtsSettingsDTO.fromJson(json['ttsSettings'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$SettingsDTOToJson(_SettingsDTO instance) =>
@@ -36,5 +34,4 @@ Map<String, dynamic> _$SettingsDTOToJson(_SettingsDTO instance) =>
       'dashboardSettings': instance.dashboardSettings,
       'streamElementsSettings': instance.streamElementsSettings,
       'rtIrlPushKey': instance.rtIrlPushKey,
-      'ttsSettings': instance.ttsSettings,
     };

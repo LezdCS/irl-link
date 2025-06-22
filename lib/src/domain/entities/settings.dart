@@ -23,9 +23,6 @@ class Settings {
   final StreamElementsSettings streamElementsSettings;
   final String rtIrlPushKey;
 
-  //TTS SETTIGS
-  final TtsSettings ttsSettings;
-
   const Settings({
     //CHAT SETTINGS
     required this.isEmotes,
@@ -41,9 +38,6 @@ class Settings {
     //CONNECTIONS SETTINGS
     required this.streamElementsSettings,
     required this.rtIrlPushKey,
-
-    //TTS SETTIGS
-    required this.ttsSettings,
   });
 
   Settings copyWith({
@@ -78,7 +72,5 @@ class Settings {
         streamElementsSettings:
             streamElementsSettings ?? this.streamElementsSettings,
         rtIrlPushKey: rtIrlPushKey ?? this.rtIrlPushKey,
-        //TTS
-        ttsSettings: ttsSettings ?? this.ttsSettings,
       );
 }

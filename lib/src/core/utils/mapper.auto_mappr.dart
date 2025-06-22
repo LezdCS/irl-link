@@ -1331,8 +1331,6 @@ class $Mappr implements _i1.AutoMapprInterface {
           _map__i12$StreamElementsSettings_To__i13$StreamElementsSettingsDTO(
               model.streamElementsSettings),
       rtIrlPushKey: model.rtIrlPushKey,
-      ttsSettings:
-          _map__i14$TtsSettings_To__i15$TtsSettingsDTO(model.ttsSettings),
     );
   }
 
@@ -1361,8 +1359,6 @@ class $Mappr implements _i1.AutoMapprInterface {
           _map__i13$StreamElementsSettingsDTO_To__i12$StreamElementsSettings(
               model.streamElementsSettings),
       rtIrlPushKey: model.rtIrlPushKey,
-      ttsSettings:
-          _map__i15$TtsSettingsDTO_To__i14$TtsSettings(model.ttsSettings),
     );
   }
 
