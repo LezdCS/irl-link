@@ -84,11 +84,8 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
 
   void setTabIndex(int index) {
     if (index >= 0 && index < tabElements.length) {
-      final newController =
-          TabController(length: tabElements.length, vsync: this);
-      newController.animateTo(index);
-      tabController.value.dispose();
-      tabController.value = newController;
+      tabController.value.animateTo(index);
+      tabController.refresh();
     }
   }
 
