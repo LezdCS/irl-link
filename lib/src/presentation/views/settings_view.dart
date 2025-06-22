@@ -11,7 +11,6 @@ import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:irllink/src/presentation/views/settings/chat_events.dart';
 import 'package:irllink/src/presentation/views/settings/dashboard_settings_view.dart';
-import 'package:irllink/src/presentation/views/settings/obs_settings.dart';
 import 'package:irllink/src/presentation/views/settings/realtime_irl.dart';
 import 'package:irllink/src/presentation/views/settings/subscription.dart';
 import 'package:irllink/src/presentation/views/settings/talker_screen.dart';
@@ -460,24 +459,6 @@ class SettingsView extends GetView<SettingsViewController> {
                   children: [
                     Row(
                       children: [
-                        Icon(
-                          Icons.restore,
-                          color: Theme.of(context).primaryIconTheme.color,
-                          size: 22,
-                        ),
-                        Container(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: const Text(
-                            "Restore Database",
-                            style: TextStyle(fontSize: 18),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    // Import from file button
-                    Row(
-                      children: [
                         Expanded(
                           child: InkWell(
                             onTap: () {
@@ -640,30 +621,14 @@ class SettingsView extends GetView<SettingsViewController> {
                     );
                   },
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "OBS",
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                    Switch(
-                      onChanged: (value) {
-                        settingsService.settings.value =
-                            settings.value.copyWith(isObsConnected: value);
-                        settingsService.saveSettings();
-                      },
-                      value: settings.value.isObsConnected,
-                    ),
-                  ],
+                settingsGoToRow(
+                  context,
+                  "OBS",
+                  Icons.laptop,
+                  () {
+                    Get.toNamed(Routes.obsSettings);
+                  },
                 ),
-                Visibility(
-                  visible: settings.value.isObsConnected,
-                  child: const ObsSettings(),
-                ),
-                const SizedBox(height: 10),
                 settingsGoToRow(
                   context,
                   "StreamElements",

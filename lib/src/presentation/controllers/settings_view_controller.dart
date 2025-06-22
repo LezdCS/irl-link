@@ -46,11 +46,8 @@ class SettingsViewController extends GetxController {
   final TtsService ttsService;
   final StoreService storeService;
 
-  RxBool obsWebsocketPasswordShow = false.obs;
-  RxBool obsWebsocketUrlShow = false.obs;
   RxBool rtIrlKeyShow = false.obs;
-  late TextEditingController obsWebsocketUrlFieldController;
-  late TextEditingController obsWebsocketPasswordFieldController;
+
   late TextEditingController seJwtInputController;
   late TextEditingController seOverlayTokenInputController;
   late TextEditingController rtIrlInputController;
@@ -69,10 +66,7 @@ class SettingsViewController extends GetxController {
   void onInit() {
     Settings settings = settingsService.settings.value;
 
-    obsWebsocketUrlFieldController =
-        TextEditingController(text: settings.obsWebsocketUrl);
-    obsWebsocketPasswordFieldController =
-        TextEditingController(text: settings.obsWebsocketPassword);
+    TextEditingController(text: settings.obsWebsocketPassword);
     rtIrlInputController = TextEditingController(text: settings.rtIrlPushKey);
 
     // Setup download progress listening

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
-import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
+import 'package:irllink/src/presentation/controllers/settings/obs_settings_controller.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-class ObsSettings extends GetView<SettingsViewController> {
+class ObsSettings extends GetView<ObsSettingsController> {
   const ObsSettings({super.key});
 
   @override
@@ -15,188 +15,208 @@ class ObsSettings extends GetView<SettingsViewController> {
     Settings settings = settingsService.settings.value;
 
     return Obx(
-      () => Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(
-            Radius.circular(8),
-          ),
-          color: Theme.of(context).colorScheme.secondary,
-        ),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  flex: 7,
-                  child: TextFormField(
-                    controller: controller.obsWebsocketUrlFieldController,
-                    obscureText: !controller.obsWebsocketUrlShow.value,
-                    onChanged: (value) {
-                      settingsService.settings.value =
-                          settings.copyWith(obsWebsocketUrl: value);
-                      settingsService.saveSettings();
-                    },
-                    decoration: InputDecoration(
-                      isDense: true,
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 7,
-                      ),
-                      hintText: 'url',
-                      labelText: 'Websocket Url',
-                      labelStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.tertiary,
-                      ),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          controller.obsWebsocketUrlShow.value
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                        ),
-                        color: Theme.of(context).primaryIconTheme.color,
-                        onPressed: () {
-                          controller.obsWebsocketUrlShow.value =
-                              !controller.obsWebsocketUrlShow.value;
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: controller.obsWebsocketPasswordFieldController,
-                    obscureText: !controller.obsWebsocketPasswordShow.value,
-                    onChanged: (value) {
-                      settingsService.settings.value =
-                          settings.copyWith(obsWebsocketPassword: value);
-                      settingsService.saveSettings();
-                    },
-                    decoration: InputDecoration(
-                      isDense: true,
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 7,
-                      ),
-                      hintText: 'password',
-                      labelText: 'Websocket Password',
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          controller.obsWebsocketPasswordShow.value
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                        ),
-                        color: Theme.of(context).primaryIconTheme.color,
-                        onPressed: () {
-                          controller.obsWebsocketPasswordShow.value =
-                              !controller.obsWebsocketPasswordShow.value;
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 6),
-            Row(
-              children: [
-                Expanded(
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.tertiary,
-                      fixedSize: const Size(50, 20),
-                    ),
-                    onPressed: () {
-                      MobileScannerController cameraController =
-                          MobileScannerController();
-                      Get.dialog(
-                        _qrPasswordScanner(
-                          cameraController,
-                          controller,
-                          context,
-                        ),
-                      );
-                      FocusManager.instance.primaryFocus?.unfocus();
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'scan_qr'.tr,
-                        ),
-                        const SizedBox(width: 5),
-                        const Icon(Icons.qr_code, color: Colors.white),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      backgroundColor:
-                          Theme.of(context).colorScheme.tertiaryContainer,
-                      fixedSize: const Size(50, 20),
-                    ),
-                    onPressed: () {
-                      Get.defaultDialog(
-                        title: "history".tr,
-                        cancelTextColor:
-                            Theme.of(context).textTheme.bodyLarge!.color,
-                        textCancel: "cancel".tr,
-                        backgroundColor:
-                            Theme.of(context).colorScheme.tertiaryContainer,
-                        content: _obsHistory(controller),
-                      );
-                      FocusManager.instance.primaryFocus?.unfocus();
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'history'.tr,
-                        ),
-                        const SizedBox(width: 10),
-                        const Icon(Icons.history, color: Colors.white),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            InkWell(
-              onTap: () {
-                launchUrlString(
-                  "https://www.irllink.com/blog/setup-obs-websocket",
-                  mode: LaunchMode.externalApplication,
+      () => Scaffold(
+        appBar: AppBar(
+          title: const Text('OBS Settings'),
+          actions: [
+            Switch(
+              activeTrackColor: Theme.of(context).colorScheme.tertiary,
+              activeColor: Colors.white,
+              inactiveTrackColor:
+                  Theme.of(context).colorScheme.tertiaryContainer,
+              value: settings.isObsConnected,
+              onChanged: (value) {
+                Get.find<SettingsService>().settings.value = settings.copyWith(
+                  isObsConnected: value,
                 );
+                Get.find<SettingsService>().saveSettings();
               },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+            ),
+          ],
+        ),
+        body: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(
+              Radius.circular(8),
+            ),
+            color: Theme.of(context).colorScheme.secondary,
+          ),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Icon(
-                    Icons.open_in_browser,
-                    size: 18,
-                  ),
-                  const SizedBox(width: 5),
-                  Text(
-                    "how_can_i".tr,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.tertiary,
+                  Expanded(
+                    flex: 7,
+                    child: TextFormField(
+                      controller: controller.obsWebsocketUrlFieldController,
+                      obscureText: !controller.obsWebsocketUrlShow.value,
+                      onChanged: (value) {
+                        settingsService.settings.value =
+                            settings.copyWith(obsWebsocketUrl: value);
+                        settingsService.saveSettings();
+                      },
+                      decoration: InputDecoration(
+                        isDense: true,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 7,
+                        ),
+                        hintText: 'url',
+                        labelText: 'Websocket Url',
+                        labelStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.tertiary,
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            controller.obsWebsocketUrlShow.value
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          color: Theme.of(context).primaryIconTheme.color,
+                          onPressed: () {
+                            controller.obsWebsocketUrlShow.value =
+                                !controller.obsWebsocketUrlShow.value;
+                          },
+                        ),
+                      ),
                     ),
                   ),
                 ],
               ),
-            ),
-          ],
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller:
+                          controller.obsWebsocketPasswordFieldController,
+                      obscureText: !controller.obsWebsocketPasswordShow.value,
+                      onChanged: (value) {
+                        settingsService.settings.value =
+                            settings.copyWith(obsWebsocketPassword: value);
+                        settingsService.saveSettings();
+                      },
+                      decoration: InputDecoration(
+                        isDense: true,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 7,
+                        ),
+                        hintText: 'password',
+                        labelText: 'Websocket Password',
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            controller.obsWebsocketPasswordShow.value
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          color: Theme.of(context).primaryIconTheme.color,
+                          onPressed: () {
+                            controller.obsWebsocketPasswordShow.value =
+                                !controller.obsWebsocketPasswordShow.value;
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 6),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Theme.of(context).colorScheme.tertiary,
+                        fixedSize: const Size(50, 20),
+                      ),
+                      onPressed: () {
+                        MobileScannerController cameraController =
+                            MobileScannerController();
+                        Get.dialog(
+                          _qrPasswordScanner(
+                            cameraController,
+                            context,
+                          ),
+                        );
+                        FocusManager.instance.primaryFocus?.unfocus();
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'scan_qr'.tr,
+                          ),
+                          const SizedBox(width: 5),
+                          const Icon(Icons.qr_code, color: Colors.white),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor:
+                            Theme.of(context).colorScheme.tertiaryContainer,
+                        fixedSize: const Size(50, 20),
+                      ),
+                      onPressed: () {
+                        Get.defaultDialog(
+                          title: "history".tr,
+                          cancelTextColor:
+                              Theme.of(context).textTheme.bodyLarge!.color,
+                          textCancel: "cancel".tr,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
+                          content: _obsHistory(),
+                        );
+                        FocusManager.instance.primaryFocus?.unfocus();
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'history'.tr,
+                          ),
+                          const SizedBox(width: 10),
+                          const Icon(Icons.history, color: Colors.white),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              InkWell(
+                onTap: () {
+                  launchUrlString(
+                    "https://www.irllink.com/blog/setup-obs-websocket",
+                    mode: LaunchMode.externalApplication,
+                  );
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.open_in_browser,
+                      size: 18,
+                    ),
+                    const SizedBox(width: 5),
+                    Text(
+                      "how_can_i".tr,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.tertiary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -204,7 +224,6 @@ class ObsSettings extends GetView<SettingsViewController> {
 
   Widget _qrPasswordScanner(
     MobileScannerController controllerCamera,
-    SettingsViewController controller,
     BuildContext context,
   ) {
     final scanWindow = Rect.fromCenter(
@@ -289,7 +308,7 @@ class ObsSettings extends GetView<SettingsViewController> {
     );
   }
 
-  Widget _obsHistory(SettingsViewController controller) {
+  Widget _obsHistory() {
     final SettingsService settingsService = Get.find<SettingsService>();
     Settings settings = settingsService.settings.value;
 
