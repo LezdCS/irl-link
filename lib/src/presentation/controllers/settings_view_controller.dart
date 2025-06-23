@@ -67,10 +67,10 @@ class SettingsViewController extends GetxController {
 
   final ReceivePort _port = ReceivePort();
 
-  late TtsSettings ttsSettings;
+  Rxn<TtsSettings> ttsSettings = Rxn<TtsSettings>();
 
   @override
-  void onInit() {
+  void onInit() async {
     Settings settings = settingsService.settings.value;
 
     rtIrlInputController = TextEditingController(text: settings.rtIrlPushKey);
@@ -81,7 +81,7 @@ class SettingsViewController extends GetxController {
     // Load available backups
     loadAvailableBackups();
 
-    getTtsSettings();
+    await getTtsSettings();
 
     super.onInit();
   }
@@ -103,7 +103,7 @@ class SettingsViewController extends GetxController {
         );
       },
       (r) {
-        ttsSettings = r;
+        ttsSettings.value = r;
       },
     );
   }
@@ -114,6 +114,7 @@ class SettingsViewController extends GetxController {
       (l) {},
       (r) {},
     );
+    getTtsSettings();
     ttsService.getTtsSettings();
   }
 

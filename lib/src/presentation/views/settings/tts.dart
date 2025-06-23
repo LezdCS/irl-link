@@ -20,10 +20,16 @@ class Tts extends GetView<SettingsViewController> {
     TextEditingController addTtsAllowedPrefixsController =
         TextEditingController();
 
+    if (controller.ttsSettings.value == null) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
     return Obx(
       () {
-        List<dynamic> ttsVoicesFiltered =
-            controller.getVoiceForLanguage(controller.ttsSettings.language);
+        List<dynamic> ttsVoicesFiltered = controller
+            .getVoiceForLanguage(controller.ttsSettings.value!.language);
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.surface,
           appBar: AppBar(
@@ -76,10 +82,10 @@ class Tts extends GetView<SettingsViewController> {
                         ),
                       ),
                       Switch(
-                        value: controller.ttsSettings.ttsEnabled,
+                        value: controller.ttsSettings.value!.ttsEnabled,
                         onChanged: (value) {
                           TtsSettings ttsSettings =
-                              controller.ttsSettings.copyWith(
+                              controller.ttsSettings.value!.copyWith(
                             ttsEnabled: value,
                           );
                           controller.setTtsSettings(ttsSettings);
@@ -99,7 +105,7 @@ class Tts extends GetView<SettingsViewController> {
                       DropdownButton(
                         value: ttsService.ttsLanguages.firstWhereOrNull(
                           (element) =>
-                              element == controller.ttsSettings.language,
+                              element == controller.ttsSettings.value!.language,
                         ),
                         hint: const Text("Select a language"),
                         onChanged: (value) async {
@@ -111,7 +117,7 @@ class Tts extends GetView<SettingsViewController> {
                             "locale": firstVoiceForLanguage["locale"],
                           };
                           TtsSettings ttsSettings =
-                              controller.ttsSettings.copyWith(
+                              controller.ttsSettings.value!.copyWith(
                             language: value.toString(),
                             voice: voice,
                           );
@@ -143,7 +149,7 @@ class Tts extends GetView<SettingsViewController> {
                           value: ttsService.ttsVoices.firstWhereOrNull(
                             (element) =>
                                 element["name"] ==
-                                controller.ttsSettings.voice["name"],
+                                controller.ttsSettings.value!.voice["name"],
                           ),
                           hint: const Text("Select a voice"),
                           onChanged: (Object? value) async {
@@ -151,8 +157,9 @@ class Tts extends GetView<SettingsViewController> {
                               "name": (value as Map)["name"],
                               "locale": value["locale"],
                             };
-                            TtsSettings ttsSettings =
-                                controller.ttsSettings.copyWith(voice: voice);
+                            TtsSettings ttsSettings = controller
+                                .ttsSettings.value!
+                                .copyWith(voice: voice);
                             controller.setTtsSettings(ttsSettings);
                           },
                           items: List.generate(
@@ -179,10 +186,11 @@ class Tts extends GetView<SettingsViewController> {
                         ),
                       ),
                       Slider(
-                        value: controller.ttsSettings.volume,
+                        value: controller.ttsSettings.value!.volume,
                         onChanged: (value) async {
-                          TtsSettings ttsSettings =
-                              controller.ttsSettings.copyWith(volume: value);
+                          TtsSettings ttsSettings = controller
+                              .ttsSettings.value!
+                              .copyWith(volume: value);
                           controller.setTtsSettings(ttsSettings);
                         },
                       ),
@@ -198,10 +206,11 @@ class Tts extends GetView<SettingsViewController> {
                         ),
                       ),
                       Slider(
-                        value: controller.ttsSettings.rate,
+                        value: controller.ttsSettings.value!.rate,
                         onChanged: (value) async {
-                          TtsSettings ttsSettings =
-                              controller.ttsSettings.copyWith(rate: value);
+                          TtsSettings ttsSettings = controller
+                              .ttsSettings.value!
+                              .copyWith(rate: value);
                           controller.setTtsSettings(ttsSettings);
                         },
                       ),
@@ -217,10 +226,11 @@ class Tts extends GetView<SettingsViewController> {
                         ),
                       ),
                       Slider(
-                        value: controller.ttsSettings.pitch,
+                        value: controller.ttsSettings.value!.pitch,
                         onChanged: (value) async {
-                          TtsSettings ttsSettings =
-                              controller.ttsSettings.copyWith(pitch: value);
+                          TtsSettings ttsSettings = controller
+                              .ttsSettings.value!
+                              .copyWith(pitch: value);
                           controller.setTtsSettings(ttsSettings);
                         },
                       ),
@@ -237,10 +247,10 @@ class Tts extends GetView<SettingsViewController> {
                         ),
                       ),
                       Switch(
-                        value: controller.ttsSettings.ttsMuteViewerName,
+                        value: controller.ttsSettings.value!.ttsMuteViewerName,
                         onChanged: (value) {
                           TtsSettings ttsSettings =
-                              controller.ttsSettings.copyWith(
+                              controller.ttsSettings.value!.copyWith(
                             ttsMuteViewerName: value,
                           );
                           controller.setTtsSettings(ttsSettings);
@@ -259,10 +269,10 @@ class Tts extends GetView<SettingsViewController> {
                         ),
                       ),
                       Switch(
-                        value: controller.ttsSettings.ttsOnlyVip,
+                        value: controller.ttsSettings.value!.ttsOnlyVip,
                         onChanged: (value) {
                           TtsSettings ttsSettings =
-                              controller.ttsSettings.copyWith(
+                              controller.ttsSettings.value!.copyWith(
                             ttsOnlyVip: value,
                           );
                           controller.setTtsSettings(ttsSettings);
@@ -281,10 +291,10 @@ class Tts extends GetView<SettingsViewController> {
                         ),
                       ),
                       Switch(
-                        value: controller.ttsSettings.ttsOnlyMod,
+                        value: controller.ttsSettings.value!.ttsOnlyMod,
                         onChanged: (value) {
                           TtsSettings ttsSettings =
-                              controller.ttsSettings.copyWith(
+                              controller.ttsSettings.value!.copyWith(
                             ttsOnlyMod: value,
                           );
                           controller.setTtsSettings(ttsSettings);
@@ -303,10 +313,10 @@ class Tts extends GetView<SettingsViewController> {
                         ),
                       ),
                       Switch(
-                        value: controller.ttsSettings.ttsOnlySubscriber,
+                        value: controller.ttsSettings.value!.ttsOnlySubscriber,
                         onChanged: (value) {
                           TtsSettings ttsSettings =
-                              controller.ttsSettings.copyWith(
+                              controller.ttsSettings.value!.copyWith(
                             ttsOnlySubscriber: value,
                           );
                           controller.setTtsSettings(ttsSettings);
@@ -322,13 +332,13 @@ class Tts extends GetView<SettingsViewController> {
                         description:
                             'Message starting with these prefixs will not be read aloud.',
                         textFieldHint: 'Prefix',
-                        list: controller.ttsSettings.prefixsToIgnore,
+                        list: controller.ttsSettings.value!.prefixsToIgnore,
                         onDeleted: (index) {
                           final updatedList = List<String>.from(
-                            controller.ttsSettings.prefixsToIgnore,
+                            controller.ttsSettings.value!.prefixsToIgnore,
                           )..removeAt(index);
                           TtsSettings ttsSettings =
-                              controller.ttsSettings.copyWith(
+                              controller.ttsSettings.value!.copyWith(
                             prefixsToIgnore: updatedList,
                           );
                           controller.setTtsSettings(ttsSettings);
@@ -337,12 +347,12 @@ class Tts extends GetView<SettingsViewController> {
                         textFieldController: addTtsIgnoredPrefixsController,
                         onAdd: () {
                           final updatedList = List<String>.from(
-                            controller.ttsSettings.prefixsToIgnore,
+                            controller.ttsSettings.value!.prefixsToIgnore,
                           )..add(
                               addTtsIgnoredPrefixsController.text.trim(),
                             );
                           TtsSettings ttsSettings =
-                              controller.ttsSettings.copyWith(
+                              controller.ttsSettings.value!.copyWith(
                             prefixsToIgnore: updatedList,
                           );
                           controller.setTtsSettings(ttsSettings);
@@ -389,13 +399,13 @@ class Tts extends GetView<SettingsViewController> {
                         description:
                             'Only messages starting with these prefixs will be read aloud.',
                         textFieldHint: 'Prefix',
-                        list: controller.ttsSettings.prefixsToUseTtsOnly,
+                        list: controller.ttsSettings.value!.prefixsToUseTtsOnly,
                         onDeleted: (index) {
                           final updatedList = List<String>.from(
-                            controller.ttsSettings.prefixsToUseTtsOnly,
+                            controller.ttsSettings.value!.prefixsToUseTtsOnly,
                           )..removeAt(index);
                           TtsSettings ttsSettings =
-                              controller.ttsSettings.copyWith(
+                              controller.ttsSettings.value!.copyWith(
                             prefixsToUseTtsOnly: updatedList,
                           );
                           controller.setTtsSettings(ttsSettings);
@@ -404,12 +414,12 @@ class Tts extends GetView<SettingsViewController> {
                         textFieldController: addTtsAllowedPrefixsController,
                         onAdd: () {
                           final updatedList = List<String>.from(
-                            controller.ttsSettings.prefixsToUseTtsOnly,
+                            controller.ttsSettings.value!.prefixsToUseTtsOnly,
                           )..add(
                               addTtsAllowedPrefixsController.text.trim(),
                             );
                           TtsSettings ttsSettings =
-                              controller.ttsSettings.copyWith(
+                              controller.ttsSettings.value!.copyWith(
                             prefixsToUseTtsOnly: updatedList,
                           );
                           controller.setTtsSettings(ttsSettings);
@@ -455,13 +465,13 @@ class Tts extends GetView<SettingsViewController> {
                         title: 'Ignored users',
                         description: 'Users that will not be read aloud.',
                         textFieldHint: 'Username',
-                        list: controller.ttsSettings.ttsUsersToIgnore,
+                        list: controller.ttsSettings.value!.ttsUsersToIgnore,
                         onDeleted: (index) {
                           final updatedList = List<String>.from(
-                            controller.ttsSettings.ttsUsersToIgnore,
+                            controller.ttsSettings.value!.ttsUsersToIgnore,
                           )..removeAt(index);
                           TtsSettings ttsSettings =
-                              controller.ttsSettings.copyWith(
+                              controller.ttsSettings.value!.copyWith(
                             ttsUsersToIgnore: updatedList,
                           );
                           controller.setTtsSettings(ttsSettings);
@@ -470,12 +480,12 @@ class Tts extends GetView<SettingsViewController> {
                         textFieldController: addTtsIgnoredUsersController,
                         onAdd: () {
                           final updatedList = List<String>.from(
-                            controller.ttsSettings.ttsUsersToIgnore,
+                            controller.ttsSettings.value!.ttsUsersToIgnore,
                           )..add(
                               addTtsIgnoredUsersController.text.trim(),
                             );
                           TtsSettings ttsSettings =
-                              controller.ttsSettings.copyWith(
+                              controller.ttsSettings.value!.copyWith(
                             ttsUsersToIgnore: updatedList,
                           );
                           controller.setTtsSettings(ttsSettings);
