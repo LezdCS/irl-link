@@ -245,7 +245,7 @@ class Migration3 extends Migration {
     );
 
     await db.execute(
-      'CREATE TABLE dashboard_events (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, color TEXT NOT NULL, dashboard_actions_type TEXT NOT NULL, event TEXT NOT NULL, custom_value TEXT NOT NULL)',
+      'CREATE TABLE dashboard_events (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, color INTEGER NOT NULL, dashboard_actions_type TEXT NOT NULL, event TEXT NOT NULL, custom_value TEXT NOT NULL)',
     );
 
     try {
