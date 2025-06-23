@@ -309,7 +309,6 @@ class Migration3 extends Migration {
         if (dashboardEvents != null) {
           dashboardEvents.forEach((event) async {
             await db.insert('dashboard_events', {
-              'id': event['id'],
               'title': event['title'],
               'color': event['color'],
               'dashboard_actions_type': event['dashboardActionsType'],

@@ -215,17 +215,28 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
   @override
   Future<void> addDashboardEvent(DashboardEventDTO dashboardEvent) async {
     final db = await _databaseHelper.database;
-    await db.insert('dashboard_events', dashboardEvent.toJson());
+
+    // Convert to JSON and remove id if it's null to let auto-increment work
+    Map<String, dynamic> eventData = dashboardEvent.toJson();
+    if (dashboardEvent.id == null) {
+      eventData.remove('id');
+    }
+
+    await db.insert('dashboard_events', eventData);
   }
 
   @override
   Future<void> removeDashboardEvent(DashboardEventDTO dashboardEvent) async {
     final db = await _databaseHelper.database;
-    await db.delete(
-      'dashboard_events',
-      where: 'id = ?',
-      whereArgs: [dashboardEvent.id],
-    );
+
+    // Only delete if we have a valid ID
+    if (dashboardEvent.id != null) {
+      await db.delete(
+        'dashboard_events',
+        where: 'id = ?',
+        whereArgs: [dashboardEvent.id],
+      );
+    }
   }
 
   @override

@@ -28,18 +28,38 @@ class DashboardController extends GetxController {
   }
 
   // Add a dashboard event
-  void addDashboardEvent(DashboardEvent event) {
-    addDashboardEventUseCase(params: event);
-
+  void addDashboardEvent(DashboardEvent event) async {
+    final result = await addDashboardEventUseCase(params: event);
+    result.fold(
+      (failure) {},
+      (success) {
+        // Refresh the events list after successful addition
+        getDashboardEvents();
+      },
+    );
     Get.back();
   }
 
   // Remove a dashboard event
-  void removeDashboardEvent(DashboardEvent event) {
-    removeDashboardEventUseCase(params: event);
+  void removeDashboardEvent(DashboardEvent event) async {
+    final result = await removeDashboardEventUseCase(params: event);
+    result.fold(
+      (failure) {},
+      (success) {
+        // Refresh the events list after successful removal
+        getDashboardEvents();
+      },
+    );
   }
 
-  void getDashboardEvents() {
-    getDashboardEventsUseCase(params: null);
+  void getDashboardEvents() async {
+    final result = await getDashboardEventsUseCase(params: null);
+    result.fold(
+      (failure) {},
+      (events) {
+        // Update the reactive list with the fetched events
+        dashboardEvents.assignAll(events);
+      },
+    );
   }
 }

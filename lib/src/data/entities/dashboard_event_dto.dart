@@ -9,7 +9,7 @@ part 'dashboard_event_dto.g.dart';
 @freezed
 abstract class DashboardEventDTO with _$DashboardEventDTO {
   const factory DashboardEventDTO({
-    @Default(0) int id,
+    int? id,
     @Default('None') String title,
     @ColorConverter() required Color color,
     @JsonKey(name: 'dashboard_actions_type')

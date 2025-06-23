@@ -8,7 +8,7 @@ part of 'dashboard_event_dto.dart';
 
 _DashboardEventDTO _$DashboardEventDTOFromJson(Map<String, dynamic> json) =>
     _DashboardEventDTO(
-      id: (json['id'] as num?)?.toInt() ?? 0,
+      id: (json['id'] as num?)?.toInt(),
       title: json['title'] as String? ?? 'None',
       color: const ColorConverter().fromJson((json['color'] as num).toInt()),
       dashboardActionsType: $enumDecode(

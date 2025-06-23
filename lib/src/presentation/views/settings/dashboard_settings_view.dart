@@ -299,7 +299,6 @@ Widget _addDialog(context, DashboardController dashboardController) {
             onPressed: () {
               if (formKey.currentState!.validate()) {
                 DashboardEvent newEvent = DashboardEvent(
-                  id: 0,
                   title: title,
                   event: selectedEvent.value,
                   dashboardActionsType: selectedType!,

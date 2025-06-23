@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$DashboardEventDTO {
-  int get id;
+  int? get id;
   String get title;
   @ColorConverter()
   Color get color;
@@ -78,7 +78,7 @@ abstract mixin class $DashboardEventDTOCopyWith<$Res> {
       _$DashboardEventDTOCopyWithImpl;
   @useResult
   $Res call(
-      {int id,
+      {int? id,
       String title,
       @ColorConverter() Color color,
       @JsonKey(name: 'dashboard_actions_type')
@@ -100,7 +100,7 @@ class _$DashboardEventDTOCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? id = freezed,
     Object? title = null,
     Object? color = null,
     Object? dashboardActionsType = null,
@@ -108,10 +108,10 @@ class _$DashboardEventDTOCopyWithImpl<$Res>
     Object? customValue = freezed,
   }) {
     return _then(_self.copyWith(
-      id: null == id
+      id: freezed == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       title: null == title
           ? _self.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -140,7 +140,7 @@ class _$DashboardEventDTOCopyWithImpl<$Res>
 @JsonSerializable()
 class _DashboardEventDTO implements DashboardEventDTO {
   const _DashboardEventDTO(
-      {this.id = 0,
+      {this.id,
       this.title = 'None',
       @ColorConverter() required this.color,
       @JsonKey(name: 'dashboard_actions_type')
@@ -151,8 +151,7 @@ class _DashboardEventDTO implements DashboardEventDTO {
       _$DashboardEventDTOFromJson(json);
 
   @override
-  @JsonKey()
-  final int id;
+  final int? id;
   @override
   @JsonKey()
   final String title;
@@ -227,7 +226,7 @@ abstract mixin class _$DashboardEventDTOCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int id,
+      {int? id,
       String title,
       @ColorConverter() Color color,
       @JsonKey(name: 'dashboard_actions_type')
@@ -249,7 +248,7 @@ class __$DashboardEventDTOCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? id = null,
+    Object? id = freezed,
     Object? title = null,
     Object? color = null,
     Object? dashboardActionsType = null,
@@ -257,10 +256,10 @@ class __$DashboardEventDTOCopyWithImpl<$Res>
     Object? customValue = freezed,
   }) {
     return _then(_DashboardEventDTO(
-      id: null == id
+      id: freezed == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       title: null == title
           ? _self.title
           : title // ignore: cast_nullable_to_non_nullable
