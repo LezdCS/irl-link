@@ -222,7 +222,7 @@ class SettingsView extends GetView<SettingsViewController> {
                 settingsGoToRow(
                   context,
                   "manage_hidden_users".tr,
-                  Icons.list,
+                  Icons.person_off,
                   () {
                     Get.toNamed(Routes.hiddenUsersSettings);
                   },
@@ -614,7 +614,7 @@ class SettingsView extends GetView<SettingsViewController> {
                 settingsGoToRow(
                   context,
                   "manage_browser_tabs".tr,
-                  Icons.list,
+                  Icons.tab,
                   () {
                     Get.toNamed(
                       Routes.browserSettings,
