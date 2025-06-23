@@ -98,6 +98,7 @@ class ManageListBrowserTabs extends GetView<BrowserSettingsController> {
                             confirmTextColor: Colors.white,
                             radius: 10,
                             onConfirm: () {
+                              controller.removeBrowserTab(elem);
                               delete = true;
                             },
                           );
@@ -120,6 +121,7 @@ class ManageListBrowserTabs extends GetView<BrowserSettingsController> {
                             confirmTextColor: Colors.white,
                             radius: 10,
                             onConfirm: () {
+                              controller.editBrowserTab(elem);
                               edit = true;
                             },
                           );
@@ -128,11 +130,8 @@ class ManageListBrowserTabs extends GetView<BrowserSettingsController> {
                         return false;
                       },
                       onDismissed: (direction) {
-                        if (direction == DismissDirection.endToStart) {
-                          controller.removeBrowserTab(elem);
-                        } else if (direction == DismissDirection.startToEnd) {
-                          controller.editBrowserTab(elem);
-                        }
+                        // Actions are handled in the dialog confirmations
+                        // This callback is kept empty to prevent duplicate actions
                       },
                       child: Container(
                         margin: const EdgeInsets.all(4),

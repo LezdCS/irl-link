@@ -75,12 +75,19 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
   }
 
   void _updateTabController() {
+    // Store the current index before disposing
+    int currentIndex = tabController.value.index;
+
     // Dispose old TabController to prevent memory leak
     tabController.value.dispose();
 
     tabController.value =
         TabController(length: tabElements.length, vsync: this);
-    if (tabController.value.index > tabElements.length - 1) {
+
+    // Keep the current index if it's still within bounds, otherwise go to index 0
+    if (currentIndex < tabElements.length) {
+      tabController.value.animateTo(currentIndex);
+    } else if (tabElements.isNotEmpty) {
       tabController.value.animateTo(0);
     }
   }
@@ -117,7 +124,13 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
         BrowserTab? tabExist = browserTabs.firstWhereOrNull(
           (settingsTab) => settingsTab.id == tabElement.tab.id,
         );
-        return tabExist == null || !tabExist.toggled || tabExist.iOSAudioSource;
+        // Remove if tab doesn't exist, is not toggled, is an audio source,
+        // or if the title or URL has changed
+        return tabExist == null ||
+            !tabExist.toggled ||
+            tabExist.iOSAudioSource ||
+            tabExist.title != tabElement.tab.title ||
+            tabExist.url != tabElement.tab.url;
       }
       return false; // Keep other types of tabs
     });
@@ -127,7 +140,13 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
       BrowserTab? tabExist = browserTabs.firstWhereOrNull(
         (settingsTab) => settingsTab.id == tabElement.tab.id,
       );
-      return tabExist == null || !tabExist.toggled || !tabExist.iOSAudioSource;
+      // Remove if tab doesn't exist, is not toggled, is not an audio source,
+      // or if the title or URL has changed
+      return tabExist == null ||
+          !tabExist.toggled ||
+          !tabExist.iOSAudioSource ||
+          tabExist.title != tabElement.tab.title ||
+          tabExist.url != tabElement.tab.url;
     });
 
     // Check if OBS have to be removed
