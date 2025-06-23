@@ -5,7 +5,6 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/services/youtube_chat.dart';
@@ -33,7 +32,6 @@ class ChatViewController extends GetxController
     required this.homeViewController,
     required this.ttsService,
     required this.watchService,
-    required this.settingsService,
     required this.talker,
     required this.banKickUserUseCase,
     required this.unbanKickUserUseCase,
@@ -46,7 +44,6 @@ class ChatViewController extends GetxController
   final HomeViewController homeViewController;
   final TtsService ttsService;
   final WatchService watchService;
-  final SettingsService settingsService;
   final Talker talker;
 
   final BanKickUserUseCase banKickUserUseCase;

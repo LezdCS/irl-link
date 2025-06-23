@@ -1,7 +1,6 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings/stream_elements_settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
 import 'package:irllink/src/presentation/controllers/tabs/streamelements_view_controller.dart';
@@ -50,7 +49,6 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
   }
 
   Widget _activitiesSettings() {
-    final SettingsService settingsService = Get.find<SettingsService>();
     return PopupMenuButton(
       offset: const Offset(30, 10),
       color: Theme.of(Get.context!).colorScheme.secondary,
@@ -169,7 +167,6 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                   controller.setStreamElementsSettingsUseCase(
                     params: streamElementsSettings,
                   );
-                  settingsService.saveSettings();
                 },
               );
             },

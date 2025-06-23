@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings/stream_elements_settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:irllink/src/presentation/controllers/settings/streamelements_settings_controller.dart';
@@ -59,8 +58,6 @@ class StreamelementsSettings extends GetView<StreamelementsSettingsController> {
   }
 
   Widget loggedIn(BuildContext context) {
-    final settingsService = Get.find<SettingsService>();
-
     return Column(
       children: [
         Obx(() {
@@ -90,7 +87,6 @@ class StreamelementsSettings extends GetView<StreamelementsSettingsController> {
                   controller.setStreamElementsSettingsUseCase(
                     params: streamElementsSettings,
                   );
-                  settingsService.saveSettings();
                 },
                 decoration: InputDecoration(
                   isDense: true,
@@ -141,7 +137,6 @@ class StreamelementsSettings extends GetView<StreamelementsSettingsController> {
                   controller.setStreamElementsSettingsUseCase(
                     params: streamElementsSettings,
                   );
-                  settingsService.saveSettings();
                 },
                 decoration: InputDecoration(
                   isDense: true,

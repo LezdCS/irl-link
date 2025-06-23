@@ -204,7 +204,6 @@ class ChatsController extends GetxController with GetTickerProviderStateMixin {
         final controller = ChatViewController(
           chatGroup: chatGroup,
           homeViewController: Get.find<HomeViewController>(),
-          settingsService: Get.find<SettingsService>(),
           talker: talkerService.talker,
           ttsService: Get.find<TtsService>(),
           watchService: Get.find<WatchService>(),

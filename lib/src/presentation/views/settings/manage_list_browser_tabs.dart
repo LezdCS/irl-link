@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/presentation/controllers/settings/browser_settings_controller.dart';
 
@@ -45,12 +44,10 @@ class ManageListBrowserTabs extends GetView<BrowserSettingsController> {
                   ),
                   itemCount: controller.browserTabs.length,
                   onReorder: (int oldIndex, int newIndex) {
-                    if (newIndex > oldIndex) {
-                      newIndex -= 1;
-                    }
-                    final element = controller.browserTabs.removeAt(oldIndex);
-                    controller.browserTabs.insert(newIndex, element);
-                    Get.find<SettingsService>().saveSettings();
+                    // TODO(LezdCS): Implement reordering
+                    // if (newIndex > oldIndex) {
+                    //   newIndex -= 1;
+                    // }
                   },
                   itemBuilder: (BuildContext context, int index) {
                     BrowserTab elem = controller.browserTabs[index];

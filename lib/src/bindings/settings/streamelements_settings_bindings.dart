@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
@@ -64,7 +63,6 @@ class StreamelementsSettingsBinding extends Bindings {
       () => StreamelementsSettingsController(
         streamElementsLoginUseCase: streamElementsLoginUseCase,
         streamElementsDisconnectUseCase: streamElementsDisconnectUseCase,
-        settingsService: Get.find<SettingsService>(),
         streamElementsGetLocalCredentialsUseCase:
             streamElementsGetLocalCredentialsUseCase,
         getMeUseCase: streamElementsGetMeUseCase,

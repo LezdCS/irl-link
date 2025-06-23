@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
-import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/domain/entities/settings/stream_elements_settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
@@ -19,7 +18,6 @@ class StreamelementsSettingsController extends GetxController {
     required this.streamElementsLoginUseCase,
     required this.streamElementsDisconnectUseCase,
     required this.streamElementsGetLocalCredentialsUseCase,
-    required this.settingsService,
     required this.storeService,
     required this.getMeUseCase,
     required this.getStreamElementsSettingsUseCase,
@@ -37,7 +35,6 @@ class StreamelementsSettingsController extends GetxController {
   final SetStreamElementsSettingsUseCase setStreamElementsSettingsUseCase;
 
   final StoreService storeService;
-  final SettingsService settingsService;
 
   final RxBool seJwtShow = false.obs;
   final RxBool seOverlayTokenShow = false.obs;

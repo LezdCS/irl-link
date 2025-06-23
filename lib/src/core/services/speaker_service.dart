@@ -3,16 +3,14 @@ import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 
 class SpeakerService extends GetxService {
-  final SettingsService settingsService;
   Timer? _keepAliveTimer;
   final AudioPlayer _audioPlayer = AudioPlayer();
   bool _isInitialized = false;
 
-  SpeakerService({required this.settingsService});
+  SpeakerService();
 
   Future<SpeakerService> init() async {
     await _audioPlayer.setReleaseMode(ReleaseMode.stop);

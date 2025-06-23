@@ -11,8 +11,9 @@ class GetDashboardEventsUseCase
   GetDashboardEventsUseCase({required this.repository});
 
   @override
-  Future<Either<Failure, List<DashboardEvent>>> call(
-      {required void params,}) async {
+  Future<Either<Failure, List<DashboardEvent>>> call({
+    required void params,
+  }) async {
     return repository.getDashboardEvents();
   }
 }

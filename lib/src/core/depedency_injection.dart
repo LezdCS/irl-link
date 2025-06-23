@@ -110,9 +110,7 @@ Future<void> initializeDependencies() async {
 
   // Initialize SpeakerService
   await Get.putAsync(
-    () => SpeakerService(
-      settingsService: settingsService,
-    ).init(),
+    () => SpeakerService().init(),
     permanent: true,
   );
 }

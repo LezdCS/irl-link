@@ -43,8 +43,10 @@ abstract class SettingsRepository {
   Future<Either<Failure, void>> updateTtsSettings(TtsSettings ttsSettings);
 
   Future<Either<Failure, void>> addDashboardEvent(
-      DashboardEvent dashboardEvent,);
+    DashboardEvent dashboardEvent,
+  );
   Future<Either<Failure, void>> removeDashboardEvent(
-      DashboardEvent dashboardEvent,);
+    DashboardEvent dashboardEvent,
+  );
   Future<Either<Failure, List<DashboardEvent>>> getDashboardEvents();
 }
