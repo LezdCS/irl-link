@@ -244,6 +244,10 @@ class Migration3 extends Migration {
       'CREATE TABLE browser_tabs (id TEXT PRIMARY KEY, url TEXT NOT NULL, title TEXT NOT NULL, toggled INTEGER NOT NULL, is_ios_audio_source INTEGER NOT NULL)',
     );
 
+    await db.execute(
+      'CREATE TABLE dashboard_events (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, color TEXT NOT NULL, dashboard_actions_type TEXT NOT NULL, event TEXT NOT NULL, custom_value TEXT NOT NULL)',
+    );
+
     try {
       final storage = GetStorage();
       final settings = storage.read('settings');
@@ -297,6 +301,23 @@ class Migration3 extends Migration {
         if (seSettings != null) {
           await storage.write('streamElementsSettings', jsonEncode(seSettings));
           settingsJson.remove('streamElementsSettings');
+          await storage.write('settings', jsonEncode(settingsJson));
+        }
+
+        // Migrate dashboard events
+        final dashboardEvents = settingsJson['dashboardSettings']['userEvents'];
+        if (dashboardEvents != null) {
+          dashboardEvents.forEach((event) async {
+            await db.insert('dashboard_events', {
+              'id': event['id'],
+              'title': event['title'],
+              'color': event['color'],
+              'dashboard_actions_type': event['dashboardActionsType'],
+              'event': event['event'],
+              'custom_value': event['customValue'],
+            });
+          });
+          settingsJson.remove('dashboardSettings');
           await storage.write('settings', jsonEncode(settingsJson));
         }
       }

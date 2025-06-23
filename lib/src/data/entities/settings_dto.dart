@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:irllink/src/data/entities/settings/chat_events_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/chat_settings_dto.dart';
-import 'package:irllink/src/data/entities/settings/dashboard_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/general_settings_dto.dart';
 
 part 'settings_dto.freezed.dart';
@@ -18,7 +17,6 @@ abstract class SettingsDTO with _$SettingsDTO {
     required ChatSettingsDTO chatSettings,
     //GENERAL SETTINGS
     required GeneralSettingsDTO generalSettings,
-    required DashboardSettingsDTO dashboardSettings,
     //CONNECTIONS SETTINGS
     @Default("") String rtIrlPushKey,
   }) = _SettingsDTO;
@@ -26,7 +24,6 @@ abstract class SettingsDTO with _$SettingsDTO {
   factory SettingsDTO.blank() => SettingsDTO(
         chatEventsSettings: ChatEventsSettingsDTO.blank(),
         chatSettings: ChatSettingsDTO.blank(),
-        dashboardSettings: DashboardSettingsDTO.blank(),
         generalSettings: GeneralSettingsDTO.blank(),
       );
   factory SettingsDTO.fromJson(Map<String, dynamic> json) =>

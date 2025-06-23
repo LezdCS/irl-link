@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:irllink/src/core/failure.dart';
+import 'package:irllink/src/domain/entities/dashboard_event.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
@@ -40,4 +41,10 @@ abstract class SettingsRepository {
 
   Future<Either<Failure, TtsSettings>> getTtsSettings();
   Future<Either<Failure, void>> updateTtsSettings(TtsSettings ttsSettings);
+
+  Future<Either<Failure, void>> addDashboardEvent(
+      DashboardEvent dashboardEvent,);
+  Future<Either<Failure, void>> removeDashboardEvent(
+      DashboardEvent dashboardEvent,);
+  Future<Either<Failure, List<DashboardEvent>>> getDashboardEvents();
 }

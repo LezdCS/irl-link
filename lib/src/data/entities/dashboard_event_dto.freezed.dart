@@ -15,14 +15,17 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$DashboardEventDTO {
+  int get id;
   String get title;
   @ColorConverter()
   Color get color;
+  @JsonKey(name: 'dashboard_actions_type')
   DashboardActionsTypes get dashboardActionsType;
   SupportedEvents
       get event; // The customValue needs to be dynamic since it can be of different types
 // depending on the event type
 // ignore: avoid_annotating_with_dynamic
+  @JsonKey(name: 'custom_value')
   dynamic get customValue;
 
   /// Create a copy of DashboardEventDTO
@@ -41,6 +44,7 @@ mixin _$DashboardEventDTO {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is DashboardEventDTO &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.color, color) || other.color == color) &&
             (identical(other.dashboardActionsType, dashboardActionsType) ||
@@ -54,6 +58,7 @@ mixin _$DashboardEventDTO {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      id,
       title,
       color,
       dashboardActionsType,
@@ -62,7 +67,7 @@ mixin _$DashboardEventDTO {
 
   @override
   String toString() {
-    return 'DashboardEventDTO(title: $title, color: $color, dashboardActionsType: $dashboardActionsType, event: $event, customValue: $customValue)';
+    return 'DashboardEventDTO(id: $id, title: $title, color: $color, dashboardActionsType: $dashboardActionsType, event: $event, customValue: $customValue)';
   }
 }
 
@@ -73,11 +78,13 @@ abstract mixin class $DashboardEventDTOCopyWith<$Res> {
       _$DashboardEventDTOCopyWithImpl;
   @useResult
   $Res call(
-      {String title,
+      {int id,
+      String title,
       @ColorConverter() Color color,
+      @JsonKey(name: 'dashboard_actions_type')
       DashboardActionsTypes dashboardActionsType,
       SupportedEvents event,
-      dynamic customValue});
+      @JsonKey(name: 'custom_value') dynamic customValue});
 }
 
 /// @nodoc
@@ -93,6 +100,7 @@ class _$DashboardEventDTOCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? title = null,
     Object? color = null,
     Object? dashboardActionsType = null,
@@ -100,6 +108,10 @@ class _$DashboardEventDTOCopyWithImpl<$Res>
     Object? customValue = freezed,
   }) {
     return _then(_self.copyWith(
+      id: null == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       title: null == title
           ? _self.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -128,14 +140,19 @@ class _$DashboardEventDTOCopyWithImpl<$Res>
 @JsonSerializable()
 class _DashboardEventDTO implements DashboardEventDTO {
   const _DashboardEventDTO(
-      {this.title = 'None',
+      {this.id = 0,
+      this.title = 'None',
       @ColorConverter() required this.color,
+      @JsonKey(name: 'dashboard_actions_type')
       required this.dashboardActionsType,
       required this.event,
-      required this.customValue});
+      @JsonKey(name: 'custom_value') required this.customValue});
   factory _DashboardEventDTO.fromJson(Map<String, dynamic> json) =>
       _$DashboardEventDTOFromJson(json);
 
+  @override
+  @JsonKey()
+  final int id;
   @override
   @JsonKey()
   final String title;
@@ -143,6 +160,7 @@ class _DashboardEventDTO implements DashboardEventDTO {
   @ColorConverter()
   final Color color;
   @override
+  @JsonKey(name: 'dashboard_actions_type')
   final DashboardActionsTypes dashboardActionsType;
   @override
   final SupportedEvents event;
@@ -150,6 +168,7 @@ class _DashboardEventDTO implements DashboardEventDTO {
 // depending on the event type
 // ignore: avoid_annotating_with_dynamic
   @override
+  @JsonKey(name: 'custom_value')
   final dynamic customValue;
 
   /// Create a copy of DashboardEventDTO
@@ -172,6 +191,7 @@ class _DashboardEventDTO implements DashboardEventDTO {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _DashboardEventDTO &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.color, color) || other.color == color) &&
             (identical(other.dashboardActionsType, dashboardActionsType) ||
@@ -185,6 +205,7 @@ class _DashboardEventDTO implements DashboardEventDTO {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      id,
       title,
       color,
       dashboardActionsType,
@@ -193,7 +214,7 @@ class _DashboardEventDTO implements DashboardEventDTO {
 
   @override
   String toString() {
-    return 'DashboardEventDTO(title: $title, color: $color, dashboardActionsType: $dashboardActionsType, event: $event, customValue: $customValue)';
+    return 'DashboardEventDTO(id: $id, title: $title, color: $color, dashboardActionsType: $dashboardActionsType, event: $event, customValue: $customValue)';
   }
 }
 
@@ -206,11 +227,13 @@ abstract mixin class _$DashboardEventDTOCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String title,
+      {int id,
+      String title,
       @ColorConverter() Color color,
+      @JsonKey(name: 'dashboard_actions_type')
       DashboardActionsTypes dashboardActionsType,
       SupportedEvents event,
-      dynamic customValue});
+      @JsonKey(name: 'custom_value') dynamic customValue});
 }
 
 /// @nodoc
@@ -226,6 +249,7 @@ class __$DashboardEventDTOCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
+    Object? id = null,
     Object? title = null,
     Object? color = null,
     Object? dashboardActionsType = null,
@@ -233,6 +257,10 @@ class __$DashboardEventDTOCopyWithImpl<$Res>
     Object? customValue = freezed,
   }) {
     return _then(_DashboardEventDTO(
+      id: null == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       title: null == title
           ? _self.title
           : title // ignore: cast_nullable_to_non_nullable

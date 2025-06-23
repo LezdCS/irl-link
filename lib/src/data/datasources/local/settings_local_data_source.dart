@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:get_storage/get_storage.dart';
 import 'package:irllink/data/database/database_helper.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
+import 'package:irllink/src/data/entities/dashboard_event_dto.dart';
 import 'package:irllink/src/data/entities/obs_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/browser_tab_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/chat_settings_dto.dart';
@@ -30,6 +31,9 @@ abstract class SettingsLocalDataSource {
   Future<ObsSettingsDTO?> getObsCredentials();
   Future<TtsSettingsDTO?> getTtsSettings();
   Future<void> setTtsSettings(TtsSettingsDTO ttsSettings);
+  Future<void> addDashboardEvent(DashboardEventDTO dashboardEvent);
+  Future<void> removeDashboardEvent(DashboardEventDTO dashboardEvent);
+  Future<List<DashboardEventDTO>?> getDashboardEvents();
 }
 
 class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
@@ -206,5 +210,28 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
   @override
   Future<void> setTtsSettings(TtsSettingsDTO ttsSettings) async {
     GetStorage().write('ttsSettings', ttsSettings.toJson());
+  }
+
+  @override
+  Future<void> addDashboardEvent(DashboardEventDTO dashboardEvent) async {
+    final db = await _databaseHelper.database;
+    await db.insert('dashboard_events', dashboardEvent.toJson());
+  }
+
+  @override
+  Future<void> removeDashboardEvent(DashboardEventDTO dashboardEvent) async {
+    final db = await _databaseHelper.database;
+    await db.delete(
+      'dashboard_events',
+      where: 'id = ?',
+      whereArgs: [dashboardEvent.id],
+    );
+  }
+
+  @override
+  Future<List<DashboardEventDTO>?> getDashboardEvents() async {
+    final db = await _databaseHelper.database;
+    final List<Map<String, dynamic>> maps = await db.query('dashboard_events');
+    return maps.map((map) => DashboardEventDTO.fromJson(map)).toList();
   }
 }

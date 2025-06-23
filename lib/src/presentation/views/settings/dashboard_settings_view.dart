@@ -2,10 +2,8 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/utils/dashboard_events.dart';
 import 'package:irllink/src/domain/entities/dashboard_event.dart';
-import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 
@@ -19,7 +17,6 @@ class DashboardSettingsView extends GetView<DashboardController> {
 
     return Obx(
       () {
-        Settings settings = Get.find<SettingsService>().settings.value;
         return Scaffold(
           appBar: AppBar(
             leading: IconButton(
@@ -29,24 +26,6 @@ class DashboardSettingsView extends GetView<DashboardController> {
               ),
               onPressed: () => Get.back(),
             ),
-            actions: [
-              Switch(
-                activeTrackColor: Theme.of(context).colorScheme.tertiary,
-                activeColor: Colors.white,
-                inactiveTrackColor:
-                    Theme.of(context).colorScheme.tertiaryContainer,
-                value: settings.dashboardSettings.activated,
-                onChanged: (value) {
-                  Get.find<SettingsService>().settings.value =
-                      settings.copyWith(
-                    dashboardSettings: settings.dashboardSettings.copyWith(
-                      activated: value,
-                    ),
-                  );
-                  Get.find<SettingsService>().saveSettings();
-                },
-              ),
-            ],
             title: Text(
               "dashboard_events".tr,
             ),
@@ -63,10 +42,9 @@ class DashboardSettingsView extends GetView<DashboardController> {
                   reverse: true,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: settings.dashboardSettings.userEvents.length,
+                  itemCount: controller.dashboardEvents.length,
                   itemBuilder: (context, index) {
-                    DashboardEvent event =
-                        settings.dashboardSettings.userEvents[index];
+                    DashboardEvent event = controller.dashboardEvents[index];
                     ExistingDashboardEvent? eventDetails =
                         dashboardEvents[event.event];
                     return Dismissible(
@@ -321,6 +299,7 @@ Widget _addDialog(context, DashboardController dashboardController) {
             onPressed: () {
               if (formKey.currentState!.validate()) {
                 DashboardEvent newEvent = DashboardEvent(
+                  id: 0,
                   title: title,
                   event: selectedEvent.value,
                   dashboardActionsType: selectedType!,

@@ -83,7 +83,9 @@ class StreamelementsLocalDataSourceImpl
     StreamElementsSettingsDTO settings,
   ) async {
     await _storage.write(
-        'streamelements_settings', jsonEncode(settings.toJson()),);
+      'streamelements_settings',
+      jsonEncode(settings.toJson()),
+    );
   }
 
   @override

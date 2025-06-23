@@ -10,14 +10,19 @@ import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/data/datasources/local/kick_local_data_source.dart';
+import 'package:irllink/src/data/datasources/local/settings_local_data_source.dart';
 import 'package:irllink/src/data/datasources/local/streamelements_local_data_source.dart';
 import 'package:irllink/src/data/datasources/local/twitch_local_data_source.dart';
 import 'package:irllink/src/data/datasources/remote/kick_remote_data_source.dart';
 import 'package:irllink/src/data/datasources/remote/streamelements_remote_data_source.dart';
 import 'package:irllink/src/data/datasources/remote/twitch_remote_data_source.dart';
 import 'package:irllink/src/data/repositories/kick_repository_impl.dart';
+import 'package:irllink/src/data/repositories/settings_repository_impl.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
+import 'package:irllink/src/domain/usecases/dashboard/add_dashboard_event_usecase.dart';
+import 'package:irllink/src/domain/usecases/dashboard/delete_dashboard_event_usecase.dart';
+import 'package:irllink/src/domain/usecases/dashboard/get_dashboard_events_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/kick_refresh_token_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/post_kick_chat_nessage_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_last_activities_usecase.dart';
@@ -175,9 +180,29 @@ class HomeBindings extends Bindings {
       fenix: true,
     );
 
+    final settingsRepository = SettingsRepositoryImpl(
+      localDataSource: SettingsLocalDataSourceImpl(
+        talker: talker,
+      ),
+      talker: talker,
+    );
+
+    final getDashboardEventsUseCase = GetDashboardEventsUseCase(
+      repository: settingsRepository,
+    );
+    final addDashboardEventUseCase = AddDashboardEventUseCase(
+      repository: settingsRepository,
+    );
+    final removeDashboardEventUseCase = DeleteDashboardEventUseCase(
+      repository: settingsRepository,
+    );
+
     Get.lazyPut<DashboardController>(
       () => DashboardController(
         settingsService: settingsService,
+        getDashboardEventsUseCase: getDashboardEventsUseCase,
+        addDashboardEventUseCase: addDashboardEventUseCase,
+        removeDashboardEventUseCase: removeDashboardEventUseCase,
       ),
       fenix: true,
     );

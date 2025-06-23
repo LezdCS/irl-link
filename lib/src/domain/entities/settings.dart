@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:irllink/src/domain/entities/settings/chat_events_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
-import 'package:irllink/src/domain/entities/settings/dashboard_settings.dart';
 import 'package:irllink/src/domain/entities/settings/general_settings.dart';
 
 @immutable
@@ -15,7 +14,6 @@ class Settings {
 
   //GENERAL SETTINGS
   final GeneralSettings generalSettings;
-  final DashboardSettings dashboardSettings;
 
   //CONNECTIONS SETTINGS
   final String rtIrlPushKey;
@@ -30,7 +28,6 @@ class Settings {
 
     //GENERAL SETTINGS
     required this.generalSettings,
-    required this.dashboardSettings,
 
     //CONNECTIONS SETTINGS
     required this.rtIrlPushKey,
@@ -45,7 +42,6 @@ class Settings {
     ChatSettings? chatSettings,
     //GENERAL
     GeneralSettings? generalSettings,
-    DashboardSettings? dashboardSettings,
     //CONNECTIONS
     String? rtIrlPushKey,
   }) =>
@@ -58,7 +54,6 @@ class Settings {
         chatSettings: chatSettings ?? this.chatSettings,
         //GENERAL
         generalSettings: generalSettings ?? this.generalSettings,
-        dashboardSettings: dashboardSettings ?? this.dashboardSettings,
         //CONNECTIONS
         rtIrlPushKey: rtIrlPushKey ?? this.rtIrlPushKey,
       );

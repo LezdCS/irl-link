@@ -16,8 +16,6 @@ _SettingsDTO _$SettingsDTOFromJson(Map<String, dynamic> json) => _SettingsDTO(
           json['chatSettings'] as Map<String, dynamic>),
       generalSettings: GeneralSettingsDTO.fromJson(
           json['generalSettings'] as Map<String, dynamic>),
-      dashboardSettings: DashboardSettingsDTO.fromJson(
-          json['dashboardSettings'] as Map<String, dynamic>),
       rtIrlPushKey: json['rtIrlPushKey'] as String? ?? "",
     );
 
@@ -29,6 +27,5 @@ Map<String, dynamic> _$SettingsDTOToJson(_SettingsDTO instance) =>
       'chatEventsSettings': instance.chatEventsSettings,
       'chatSettings': instance.chatSettings,
       'generalSettings': instance.generalSettings,
-      'dashboardSettings': instance.dashboardSettings,
       'rtIrlPushKey': instance.rtIrlPushKey,
     };

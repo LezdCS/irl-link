@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/utils/dashboard_events.dart';
 import 'package:irllink/src/domain/entities/dashboard_event.dart';
-import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
 import 'package:irllink/src/presentation/controllers/tabs/obs_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/tabs/streamelements_view_controller.dart';
@@ -16,8 +14,6 @@ class Dashboard extends GetView<DashboardController> {
 
   @override
   Widget build(BuildContext context) {
-    Settings settings = Get.find<SettingsService>().settings.value;
-
     return Positioned(
       top: MediaQuery.of(context).size.height / 2 - 250,
       left: MediaQuery.of(context).size.width / 2 - 150,
@@ -31,16 +27,15 @@ class Dashboard extends GetView<DashboardController> {
             Radius.circular(8),
           ),
         ),
-        child: settings.dashboardSettings.userEvents.isNotEmpty
+        child: controller.dashboardEvents.isNotEmpty
             ? GridView.builder(
-                itemCount: settings.dashboardSettings.userEvents.length,
+                itemCount: controller.dashboardEvents.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 3 / 1.8,
                 ),
                 itemBuilder: (BuildContext context, int index) {
-                  DashboardEvent event =
-                      settings.dashboardSettings.userEvents[index];
+                  DashboardEvent event = controller.dashboardEvents[index];
                   // Check if the event is still supported
                   if (event.event == SupportedEvents.none) {
                     return _disabledServiceEvent(

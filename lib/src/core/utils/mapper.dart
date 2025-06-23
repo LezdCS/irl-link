@@ -10,7 +10,6 @@ import 'package:irllink/src/data/entities/rtmp_dto.dart';
 import 'package:irllink/src/data/entities/settings/browser_tab_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/chat_events_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/chat_settings_dto.dart';
-import 'package:irllink/src/data/entities/settings/dashboard_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/general_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/hidden_user_dto.dart';
 import 'package:irllink/src/data/entities/settings/stream_elements_settings_dto.dart';
@@ -37,7 +36,6 @@ import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_events_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
-import 'package:irllink/src/domain/entities/settings/dashboard_settings.dart';
 import 'package:irllink/src/domain/entities/settings/general_settings.dart';
 import 'package:irllink/src/domain/entities/settings/hidden_user.dart';
 import 'package:irllink/src/domain/entities/settings/obs_settings.dart';
@@ -82,8 +80,6 @@ import 'package:irllink/src/domain/entities/twitch/twitch_user.dart';
   MapType<TwitchDecodedIdTokenDTO, TwitchDecodedIdToken>(),
   MapType<TwitchUser, TwitchUserDTO>(),
   MapType<TwitchUserDTO, TwitchUser>(),
-  MapType<DashboardSettings, DashboardSettingsDTO>(),
-  MapType<DashboardSettingsDTO, DashboardSettings>(),
   MapType<TwitchPoll, TwitchPollDTO>(),
   MapType<TwitchPollDTO, TwitchPoll>(),
   MapType<Choice, ChoiceDTO>(),

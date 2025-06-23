@@ -3,12 +3,14 @@ import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/utils/mapper.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/datasources/local/settings_local_data_source.dart';
+import 'package:irllink/src/data/entities/dashboard_event_dto.dart';
 import 'package:irllink/src/data/entities/obs_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/browser_tab_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/chat_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/hidden_user_dto.dart';
 import 'package:irllink/src/data/entities/settings/tts_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings_dto.dart';
+import 'package:irllink/src/domain/entities/dashboard_event.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
@@ -239,5 +241,48 @@ class SettingsRepositoryImpl extends SettingsRepository {
         _mappr.convert<TtsSettings, TtsSettingsDTO>(ttsSettings);
     await _localDataSource.setTtsSettings(ttsSettingsDTO);
     return const Right(null);
+  }
+
+  @override
+  Future<Either<Failure, void>> addDashboardEvent(
+    DashboardEvent dashboardEvent,
+  ) async {
+    try {
+      final dashboardEventDTO =
+          _mappr.convert<DashboardEvent, DashboardEventDTO>(dashboardEvent);
+      await _localDataSource.addDashboardEvent(dashboardEventDTO);
+      return const Right(null);
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> removeDashboardEvent(
+    DashboardEvent dashboardEvent,
+  ) async {
+    try {
+      final dashboardEventDTO =
+          _mappr.convert<DashboardEvent, DashboardEventDTO>(dashboardEvent);
+      await _localDataSource.removeDashboardEvent(dashboardEventDTO);
+      return const Right(null);
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<DashboardEvent>>> getDashboardEvents() async {
+    final dashboardEventsDTO = await _localDataSource.getDashboardEvents();
+    if (dashboardEventsDTO != null) {
+      List<DashboardEvent> dashboardEvents = dashboardEventsDTO
+          .map(
+            (dashboardEventDTO) => _mappr
+                .convert<DashboardEventDTO, DashboardEvent>(dashboardEventDTO),
+          )
+          .toList();
+      return Right(dashboardEvents);
+    }
+    return const Right([]);
   }
 }

@@ -21,8 +21,7 @@ mixin _$SettingsDTO {
   bool get displayTimestamp;
   ChatEventsSettingsDTO get chatEventsSettings;
   ChatSettingsDTO get chatSettings; //GENERAL SETTINGS
-  GeneralSettingsDTO get generalSettings;
-  DashboardSettingsDTO get dashboardSettings; //CONNECTIONS SETTINGS
+  GeneralSettingsDTO get generalSettings; //CONNECTIONS SETTINGS
   String get rtIrlPushKey;
 
   /// Create a copy of SettingsDTO
@@ -52,8 +51,6 @@ mixin _$SettingsDTO {
                 other.chatSettings == chatSettings) &&
             (identical(other.generalSettings, generalSettings) ||
                 other.generalSettings == generalSettings) &&
-            (identical(other.dashboardSettings, dashboardSettings) ||
-                other.dashboardSettings == dashboardSettings) &&
             (identical(other.rtIrlPushKey, rtIrlPushKey) ||
                 other.rtIrlPushKey == rtIrlPushKey));
   }
@@ -68,12 +65,11 @@ mixin _$SettingsDTO {
       chatEventsSettings,
       chatSettings,
       generalSettings,
-      dashboardSettings,
       rtIrlPushKey);
 
   @override
   String toString() {
-    return 'SettingsDTO(isEmotes: $isEmotes, textSize: $textSize, displayTimestamp: $displayTimestamp, chatEventsSettings: $chatEventsSettings, chatSettings: $chatSettings, generalSettings: $generalSettings, dashboardSettings: $dashboardSettings, rtIrlPushKey: $rtIrlPushKey)';
+    return 'SettingsDTO(isEmotes: $isEmotes, textSize: $textSize, displayTimestamp: $displayTimestamp, chatEventsSettings: $chatEventsSettings, chatSettings: $chatSettings, generalSettings: $generalSettings, rtIrlPushKey: $rtIrlPushKey)';
   }
 }
 
@@ -90,13 +86,11 @@ abstract mixin class $SettingsDTOCopyWith<$Res> {
       ChatEventsSettingsDTO chatEventsSettings,
       ChatSettingsDTO chatSettings,
       GeneralSettingsDTO generalSettings,
-      DashboardSettingsDTO dashboardSettings,
       String rtIrlPushKey});
 
   $ChatEventsSettingsDTOCopyWith<$Res> get chatEventsSettings;
   $ChatSettingsDTOCopyWith<$Res> get chatSettings;
   $GeneralSettingsDTOCopyWith<$Res> get generalSettings;
-  $DashboardSettingsDTOCopyWith<$Res> get dashboardSettings;
 }
 
 /// @nodoc
@@ -117,7 +111,6 @@ class _$SettingsDTOCopyWithImpl<$Res> implements $SettingsDTOCopyWith<$Res> {
     Object? chatEventsSettings = null,
     Object? chatSettings = null,
     Object? generalSettings = null,
-    Object? dashboardSettings = null,
     Object? rtIrlPushKey = null,
   }) {
     return _then(_self.copyWith(
@@ -145,10 +138,6 @@ class _$SettingsDTOCopyWithImpl<$Res> implements $SettingsDTOCopyWith<$Res> {
           ? _self.generalSettings
           : generalSettings // ignore: cast_nullable_to_non_nullable
               as GeneralSettingsDTO,
-      dashboardSettings: null == dashboardSettings
-          ? _self.dashboardSettings
-          : dashboardSettings // ignore: cast_nullable_to_non_nullable
-              as DashboardSettingsDTO,
       rtIrlPushKey: null == rtIrlPushKey
           ? _self.rtIrlPushKey
           : rtIrlPushKey // ignore: cast_nullable_to_non_nullable
@@ -186,17 +175,6 @@ class _$SettingsDTOCopyWithImpl<$Res> implements $SettingsDTOCopyWith<$Res> {
       return _then(_self.copyWith(generalSettings: value));
     });
   }
-
-  /// Create a copy of SettingsDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $DashboardSettingsDTOCopyWith<$Res> get dashboardSettings {
-    return $DashboardSettingsDTOCopyWith<$Res>(_self.dashboardSettings,
-        (value) {
-      return _then(_self.copyWith(dashboardSettings: value));
-    });
-  }
 }
 
 /// @nodoc
@@ -209,7 +187,6 @@ class _SettingsDTO implements SettingsDTO {
       required this.chatEventsSettings,
       required this.chatSettings,
       required this.generalSettings,
-      required this.dashboardSettings,
       this.rtIrlPushKey = ""});
   factory _SettingsDTO.fromJson(Map<String, dynamic> json) =>
       _$SettingsDTOFromJson(json);
@@ -231,8 +208,6 @@ class _SettingsDTO implements SettingsDTO {
 //GENERAL SETTINGS
   @override
   final GeneralSettingsDTO generalSettings;
-  @override
-  final DashboardSettingsDTO dashboardSettings;
 //CONNECTIONS SETTINGS
   @override
   @JsonKey()
@@ -270,8 +245,6 @@ class _SettingsDTO implements SettingsDTO {
                 other.chatSettings == chatSettings) &&
             (identical(other.generalSettings, generalSettings) ||
                 other.generalSettings == generalSettings) &&
-            (identical(other.dashboardSettings, dashboardSettings) ||
-                other.dashboardSettings == dashboardSettings) &&
             (identical(other.rtIrlPushKey, rtIrlPushKey) ||
                 other.rtIrlPushKey == rtIrlPushKey));
   }
@@ -286,12 +259,11 @@ class _SettingsDTO implements SettingsDTO {
       chatEventsSettings,
       chatSettings,
       generalSettings,
-      dashboardSettings,
       rtIrlPushKey);
 
   @override
   String toString() {
-    return 'SettingsDTO(isEmotes: $isEmotes, textSize: $textSize, displayTimestamp: $displayTimestamp, chatEventsSettings: $chatEventsSettings, chatSettings: $chatSettings, generalSettings: $generalSettings, dashboardSettings: $dashboardSettings, rtIrlPushKey: $rtIrlPushKey)';
+    return 'SettingsDTO(isEmotes: $isEmotes, textSize: $textSize, displayTimestamp: $displayTimestamp, chatEventsSettings: $chatEventsSettings, chatSettings: $chatSettings, generalSettings: $generalSettings, rtIrlPushKey: $rtIrlPushKey)';
   }
 }
 
@@ -310,7 +282,6 @@ abstract mixin class _$SettingsDTOCopyWith<$Res>
       ChatEventsSettingsDTO chatEventsSettings,
       ChatSettingsDTO chatSettings,
       GeneralSettingsDTO generalSettings,
-      DashboardSettingsDTO dashboardSettings,
       String rtIrlPushKey});
 
   @override
@@ -319,8 +290,6 @@ abstract mixin class _$SettingsDTOCopyWith<$Res>
   $ChatSettingsDTOCopyWith<$Res> get chatSettings;
   @override
   $GeneralSettingsDTOCopyWith<$Res> get generalSettings;
-  @override
-  $DashboardSettingsDTOCopyWith<$Res> get dashboardSettings;
 }
 
 /// @nodoc
@@ -341,7 +310,6 @@ class __$SettingsDTOCopyWithImpl<$Res> implements _$SettingsDTOCopyWith<$Res> {
     Object? chatEventsSettings = null,
     Object? chatSettings = null,
     Object? generalSettings = null,
-    Object? dashboardSettings = null,
     Object? rtIrlPushKey = null,
   }) {
     return _then(_SettingsDTO(
@@ -369,10 +337,6 @@ class __$SettingsDTOCopyWithImpl<$Res> implements _$SettingsDTOCopyWith<$Res> {
           ? _self.generalSettings
           : generalSettings // ignore: cast_nullable_to_non_nullable
               as GeneralSettingsDTO,
-      dashboardSettings: null == dashboardSettings
-          ? _self.dashboardSettings
-          : dashboardSettings // ignore: cast_nullable_to_non_nullable
-              as DashboardSettingsDTO,
       rtIrlPushKey: null == rtIrlPushKey
           ? _self.rtIrlPushKey
           : rtIrlPushKey // ignore: cast_nullable_to_non_nullable
@@ -408,17 +372,6 @@ class __$SettingsDTOCopyWithImpl<$Res> implements _$SettingsDTOCopyWith<$Res> {
   $GeneralSettingsDTOCopyWith<$Res> get generalSettings {
     return $GeneralSettingsDTOCopyWith<$Res>(_self.generalSettings, (value) {
       return _then(_self.copyWith(generalSettings: value));
-    });
-  }
-
-  /// Create a copy of SettingsDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $DashboardSettingsDTOCopyWith<$Res> get dashboardSettings {
-    return $DashboardSettingsDTOCopyWith<$Res>(_self.dashboardSettings,
-        (value) {
-      return _then(_self.copyWith(dashboardSettings: value));
     });
   }
 }
