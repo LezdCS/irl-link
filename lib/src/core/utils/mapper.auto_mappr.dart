@@ -1327,9 +1327,6 @@ class $Mappr implements _i1.AutoMapprInterface {
       dashboardSettings:
           _map__i24$DashboardSettings_To__i25$DashboardSettingsDTO(
               model.dashboardSettings),
-      streamElementsSettings:
-          _map__i12$StreamElementsSettings_To__i13$StreamElementsSettingsDTO(
-              model.streamElementsSettings),
       rtIrlPushKey: model.rtIrlPushKey,
     );
   }
@@ -1355,9 +1352,6 @@ class $Mappr implements _i1.AutoMapprInterface {
       dashboardSettings:
           _map__i25$DashboardSettingsDTO_To__i24$DashboardSettings(
               model.dashboardSettings),
-      streamElementsSettings:
-          _map__i13$StreamElementsSettingsDTO_To__i12$StreamElementsSettings(
-              model.streamElementsSettings),
       rtIrlPushKey: model.rtIrlPushKey,
     );
   }

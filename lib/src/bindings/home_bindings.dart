@@ -24,6 +24,7 @@ import 'package:irllink/src/domain/usecases/streamelements/get_last_activities_u
 import 'package:irllink/src/domain/usecases/streamelements/get_local_credentials_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_me_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_overlays_usecase.dart';
+import 'package:irllink/src/domain/usecases/streamelements/get_se_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_song_playing_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_song_queue_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/next_song_usecase.dart';
@@ -31,6 +32,7 @@ import 'package:irllink/src/domain/usecases/streamelements/refresh_token_usecase
 import 'package:irllink/src/domain/usecases/streamelements/remove_song_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/replay_activity_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/reset_queue_usecase.dart';
+import 'package:irllink/src/domain/usecases/streamelements/set_se_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/update_player_state_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/create_poll_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/end_poll_usecase.dart';
@@ -144,6 +146,13 @@ class HomeBindings extends Bindings {
       ),
     );
 
+    final getStreamElementsSettingsUseCase = GetStreamElementsSettingsUseCase(
+      repository: streamelementsRepository,
+    );
+    final setStreamElementsSettingsUseCase = SetStreamElementsSettingsUseCase(
+      repository: streamelementsRepository,
+    );
+
     Get.lazyPut<StreamelementsViewController>(
       () => StreamelementsViewController(
         getOverlaysUseCase: getOverlaysUseCase,
@@ -159,8 +168,9 @@ class HomeBindings extends Bindings {
         getSongPlayingUseCase: getSongPlayingUseCase,
         getSongQueueUseCase: getSongQueueUseCase,
         watchService: watchService,
-        settingsService: settingsService,
         talkerService: talkerService,
+        getStreamElementsSettingsUseCase: getStreamElementsSettingsUseCase,
+        setStreamElementsSettingsUseCase: setStreamElementsSettingsUseCase,
       ),
       fenix: true,
     );

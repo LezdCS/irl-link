@@ -3,7 +3,6 @@ import 'package:irllink/src/data/entities/settings/chat_events_settings_dto.dart
 import 'package:irllink/src/data/entities/settings/chat_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/dashboard_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/general_settings_dto.dart';
-import 'package:irllink/src/data/entities/settings/stream_elements_settings_dto.dart';
 
 part 'settings_dto.freezed.dart';
 part 'settings_dto.g.dart';
@@ -21,7 +20,6 @@ abstract class SettingsDTO with _$SettingsDTO {
     required GeneralSettingsDTO generalSettings,
     required DashboardSettingsDTO dashboardSettings,
     //CONNECTIONS SETTINGS
-    required StreamElementsSettingsDTO streamElementsSettings,
     @Default("") String rtIrlPushKey,
   }) = _SettingsDTO;
 
@@ -30,7 +28,6 @@ abstract class SettingsDTO with _$SettingsDTO {
         chatSettings: ChatSettingsDTO.blank(),
         dashboardSettings: DashboardSettingsDTO.blank(),
         generalSettings: GeneralSettingsDTO.blank(),
-        streamElementsSettings: StreamElementsSettingsDTO.blank(),
       );
   factory SettingsDTO.fromJson(Map<String, dynamic> json) =>
       _$SettingsDTOFromJson(json);

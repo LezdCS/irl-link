@@ -249,6 +249,8 @@ class Migration3 extends Migration {
       final settings = storage.read('settings');
       if (settings != null) {
         final Map<String, dynamic> settingsJson = jsonDecode(settings);
+
+        // Migrate browser tabs
         final browserTabs = settingsJson['browserTabs']['tabs'];
         if (browserTabs != null) {
           browserTabs.forEach((tab) async {
@@ -264,6 +266,7 @@ class Migration3 extends Migration {
           await storage.write('settings', jsonEncode(settingsJson));
         }
 
+        // Migrate OBS settings
         final obsUrl = settingsJson['obsWebsocketUrl'];
         final obsPassword = settingsJson['obsWebsocketPassword'];
         final obsIsConnected = settingsJson['isObsConnected'];
@@ -281,9 +284,20 @@ class Migration3 extends Migration {
           await storage.write('settings', jsonEncode(settingsJson));
         }
 
+        // Migrate TTS settings
         final ttsSettings = settingsJson['ttsSettings'];
         if (ttsSettings != null) {
           await storage.write('ttsSettings', jsonEncode(ttsSettings));
+          settingsJson.remove('ttsSettings');
+          await storage.write('settings', jsonEncode(settingsJson));
+        }
+
+        // Migrate StreamElements settings
+        final seSettings = settingsJson['streamElementsSettings'];
+        if (seSettings != null) {
+          await storage.write('streamElementsSettings', jsonEncode(seSettings));
+          settingsJson.remove('streamElementsSettings');
+          await storage.write('settings', jsonEncode(settingsJson));
         }
       }
     } catch (e) {

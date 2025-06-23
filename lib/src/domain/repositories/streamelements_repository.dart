@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
+import 'package:irllink/src/domain/entities/settings/stream_elements_settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_credentials.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
@@ -57,4 +58,10 @@ abstract class StreamelementsRepository {
   );
 
   Future<Either<Failure, void>> resetQueue(String token, String userId);
+
+  Future<Either<Failure, void>> updateStreamElementsSettings(
+    StreamElementsSettings settings,
+  );
+
+  Future<Either<Failure, StreamElementsSettings>> getStreamElementsSettings();
 }

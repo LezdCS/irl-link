@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
-import 'package:irllink/src/domain/entities/settings.dart';
+import 'package:irllink/src/domain/entities/settings/stream_elements_settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:irllink/src/presentation/controllers/settings/streamelements_settings_controller.dart';
 import 'package:irllink/src/presentation/widgets/premium_feature_badge.dart';
@@ -59,7 +59,6 @@ class StreamelementsSettings extends GetView<StreamelementsSettingsController> {
   }
 
   Widget loggedIn(BuildContext context) {
-    Settings settings = Get.find<SettingsService>().settings.value;
     final settingsService = Get.find<SettingsService>();
 
     return Column(
@@ -83,9 +82,13 @@ class StreamelementsSettings extends GetView<StreamelementsSettingsController> {
                 controller: controller.seJwtInputController,
                 obscureText: !controller.seJwtShow.value,
                 onChanged: (value) {
-                  settingsService.settings.value = settings.copyWith(
-                    streamElementsSettings:
-                        settings.streamElementsSettings.copyWith(jwt: value),
+                  StreamElementsSettings streamElementsSettings =
+                      controller.streamElementsSettings.value!;
+                  streamElementsSettings = streamElementsSettings.copyWith(
+                    jwt: value,
+                  );
+                  controller.setStreamElementsSettingsUseCase(
+                    params: streamElementsSettings,
                   );
                   settingsService.saveSettings();
                 },
@@ -130,9 +133,13 @@ class StreamelementsSettings extends GetView<StreamelementsSettingsController> {
                 controller: controller.seOverlayTokenInputController,
                 obscureText: !controller.seOverlayTokenShow.value,
                 onChanged: (value) {
-                  settingsService.settings.value = settings.copyWith(
-                    streamElementsSettings: settings.streamElementsSettings
-                        .copyWith(overlayToken: value),
+                  StreamElementsSettings streamElementsSettings =
+                      controller.streamElementsSettings.value!;
+                  streamElementsSettings = streamElementsSettings.copyWith(
+                    overlayToken: value,
+                  );
+                  controller.setStreamElementsSettingsUseCase(
+                    params: streamElementsSettings,
                   );
                   settingsService.saveSettings();
                 },

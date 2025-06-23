@@ -3,8 +3,6 @@ import 'package:irllink/src/domain/entities/settings/chat_events_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/settings/dashboard_settings.dart';
 import 'package:irllink/src/domain/entities/settings/general_settings.dart';
-import 'package:irllink/src/domain/entities/settings/stream_elements_settings.dart';
-import 'package:irllink/src/domain/entities/settings/tts_settings.dart';
 
 @immutable
 class Settings {
@@ -20,7 +18,6 @@ class Settings {
   final DashboardSettings dashboardSettings;
 
   //CONNECTIONS SETTINGS
-  final StreamElementsSettings streamElementsSettings;
   final String rtIrlPushKey;
 
   const Settings({
@@ -36,7 +33,6 @@ class Settings {
     required this.dashboardSettings,
 
     //CONNECTIONS SETTINGS
-    required this.streamElementsSettings,
     required this.rtIrlPushKey,
   });
 
@@ -45,18 +41,13 @@ class Settings {
     bool? isEmotes,
     double? textSize,
     bool? displayTimestamp,
-    bool? alternateChannel,
-    String? alternateChannelName,
     ChatEventsSettings? chatEventsSettings,
     ChatSettings? chatSettings,
     //GENERAL
     GeneralSettings? generalSettings,
     DashboardSettings? dashboardSettings,
     //CONNECTIONS
-    StreamElementsSettings? streamElementsSettings,
     String? rtIrlPushKey,
-    //TTS
-    TtsSettings? ttsSettings,
   }) =>
       Settings(
         //CHAT
@@ -69,8 +60,6 @@ class Settings {
         generalSettings: generalSettings ?? this.generalSettings,
         dashboardSettings: dashboardSettings ?? this.dashboardSettings,
         //CONNECTIONS
-        streamElementsSettings:
-            streamElementsSettings ?? this.streamElementsSettings,
         rtIrlPushKey: rtIrlPushKey ?? this.rtIrlPushKey,
       );
 }

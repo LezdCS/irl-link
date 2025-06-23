@@ -1,5 +1,9 @@
+import 'dart:convert';
+
+import 'package:get_storage/get_storage.dart';
 import 'package:irllink/data/database/database_helper.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
+import 'package:irllink/src/data/entities/settings/stream_elements_settings_dto.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_credentials_dto.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
@@ -7,17 +11,22 @@ abstract class StreamelementsLocalDataSource {
   Future<void> storeCredentials(SeCredentialsDTO credentials);
   Future<SeCredentialsDTO?> getCredentials();
   Future<void> removeCredentials();
+  Future<void> storeStreamElementsSettings(StreamElementsSettingsDTO settings);
+  Future<StreamElementsSettingsDTO?> getStreamElementsSettings();
 }
 
 class StreamelementsLocalDataSourceImpl
     implements StreamelementsLocalDataSource {
   final Talker talker;
   final DatabaseHelper _databaseHelper;
+  final GetStorage _storage;
 
   StreamelementsLocalDataSourceImpl({
     required this.talker,
+    GetStorage? storage,
     DatabaseHelper? databaseHelper,
-  }) : _databaseHelper = databaseHelper ?? DatabaseHelper.instance;
+  })  : _storage = storage ?? GetStorage(),
+        _databaseHelper = databaseHelper ?? DatabaseHelper.instance;
 
   @override
   Future<void> storeCredentials(SeCredentialsDTO credentials) async {
@@ -67,5 +76,23 @@ class StreamelementsLocalDataSourceImpl
     talker.logCustom(
       StreamElementsLog('StreamElements credentials removed from database.'),
     );
+  }
+
+  @override
+  Future<void> storeStreamElementsSettings(
+    StreamElementsSettingsDTO settings,
+  ) async {
+    await _storage.write(
+        'streamelements_settings', jsonEncode(settings.toJson()),);
+  }
+
+  @override
+  Future<StreamElementsSettingsDTO?> getStreamElementsSettings() async {
+    final settingsString = _storage.read('streamelements_settings');
+    if (settingsString != null) {
+      Map<String, dynamic> settingsJson = jsonDecode(settingsString);
+      return StreamElementsSettingsDTO.fromJson(settingsJson);
+    }
+    return StreamElementsSettingsDTO.blank();
   }
 }

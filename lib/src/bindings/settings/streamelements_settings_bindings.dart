@@ -11,7 +11,9 @@ import 'package:irllink/src/data/repositories/streamelements_repository_impl.dar
 import 'package:irllink/src/domain/usecases/streamelements/disconnect_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_local_credentials_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_me_usecase.dart';
+import 'package:irllink/src/domain/usecases/streamelements/get_se_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/login_usecase.dart';
+import 'package:irllink/src/domain/usecases/streamelements/set_se_settings_usecase.dart';
 import 'package:irllink/src/presentation/controllers/settings/streamelements_settings_controller.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
@@ -49,6 +51,15 @@ class StreamelementsSettingsBinding extends Bindings {
       streamelementsRepository: streamelementsRepository,
     );
 
+    GetStreamElementsSettingsUseCase getStreamElementsSettingsUseCase =
+        GetStreamElementsSettingsUseCase(
+      repository: streamelementsRepository,
+    );
+    SetStreamElementsSettingsUseCase setStreamElementsSettingsUseCase =
+        SetStreamElementsSettingsUseCase(
+      repository: streamelementsRepository,
+    );
+
     Get.lazyPut(
       () => StreamelementsSettingsController(
         streamElementsLoginUseCase: streamElementsLoginUseCase,
@@ -58,6 +69,8 @@ class StreamelementsSettingsBinding extends Bindings {
             streamElementsGetLocalCredentialsUseCase,
         getMeUseCase: streamElementsGetMeUseCase,
         storeService: Get.find<StoreService>(),
+        getStreamElementsSettingsUseCase: getStreamElementsSettingsUseCase,
+        setStreamElementsSettingsUseCase: setStreamElementsSettingsUseCase,
       ),
     );
   }
