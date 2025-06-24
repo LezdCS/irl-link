@@ -56,7 +56,7 @@ dependencies:
   quiver: ^3.2.2
   socket_io_client: ^3.1.1
   split_view: ^3.2.1
-  talker_dio_logger: ^4.8.0
+  talker_dio_logger: ^4.9.1
   talker_flutter: ^4.8.0
   twitch_chat: ^2.0.0
   upgrader: ^11.4.0
