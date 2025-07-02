@@ -30,7 +30,7 @@ dependencies:
   dio: ^5.8.0+1
   expandable: ^5.0.1
 
-  firebase_analytics: ^11.4.6
+  firebase_analytics: ^11.5.0
   firebase_core: ^3.13.1
   firebase_remote_config: ^5.4.4
   firebase_crashlytics: ^4.3.6
