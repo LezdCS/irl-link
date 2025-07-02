@@ -37,7 +37,7 @@ dependencies:
   firebase_messaging: ^15.2.6
   flutter_colorpicker: ^1.1.0
   flutter_foreground_task: ^9.1.0
-  flutter_svg: ^2.0.17
+  flutter_svg: ^2.2.0
   flutter_tts: ^4.2.3
   flutter_web_auth_2: ^4.1.0
   geolocator: ^14.0.1
