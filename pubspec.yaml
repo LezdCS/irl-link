@@ -77,7 +77,7 @@ dependencies:
   store_checker: ^1.8.0
   sqflite: ^2.4.2
   path: ^1.9.1
-  permission_handler: ^12.0.0+1
+  permission_handler: ^12.0.1
   haishin_kit: ^0.14.3
   dropdown_search: ^6.0.2
   path_provider: ^2.1.5
