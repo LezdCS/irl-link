@@ -192,7 +192,7 @@ class Dashboard extends GetView<DashboardController> {
                 dashboardEvents[event.event]?.action(value);
                 dashboardEvents[event.event]?.value.refresh();
               },
-              activeColor: event.color,
+              activeThumbColor: event.color,
             ),
           ),
         ],

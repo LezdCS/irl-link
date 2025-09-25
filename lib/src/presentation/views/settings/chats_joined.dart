@@ -62,7 +62,11 @@ class ChatsJoined extends GetView<ChatsSettingsController> {
     });
   }
 
-  Widget _group(context, channelTextController, ChatGroup group) {
+  Widget _group(
+    BuildContext context,
+    TextEditingController channelTextController,
+    ChatGroup group,
+  ) {
     return Dismissible(
       key: ValueKey(group),
       direction: DismissDirection.endToStart,
@@ -189,7 +193,7 @@ class ChatsJoined extends GetView<ChatsSettingsController> {
   }
 
   Widget _addChannelToGroupButton(
-    context,
+    BuildContext context,
     TextEditingController channelTextController,
     ChatGroup chatGroup,
   ) {
@@ -246,7 +250,7 @@ class ChatsJoined extends GetView<ChatsSettingsController> {
     );
   }
 
-  Widget _addGroupButton(context) {
+  Widget _addGroupButton(BuildContext context) {
     return InkWell(
       onTap: () {
         var uuid = const Uuid();
@@ -278,7 +282,11 @@ class ChatsJoined extends GetView<ChatsSettingsController> {
     );
   }
 
-  Widget _addDialog(context, channelTextController, selectedPlatform) {
+  Widget _addDialog(
+    BuildContext context,
+    TextEditingController channelTextController,
+    selectedPlatform,
+  ) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [

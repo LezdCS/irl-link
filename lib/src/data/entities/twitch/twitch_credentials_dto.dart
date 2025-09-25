@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_decoded_idtoken_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_user_dto.dart';
@@ -25,7 +26,8 @@ abstract class TwitchCredentialsDTO with _$TwitchCredentialsDTO {
 }
 
 // Because in previous versions of the app, the twitchUser and decodedIdToken were stored as a string
-TwitchDecodedIdTokenDTO _stringToTwitchDecodedIdTokenDTO(json) {
+// ignore: avoid_annotating_with_dynamic
+TwitchDecodedIdTokenDTO _stringToTwitchDecodedIdTokenDTO(dynamic json) {
   if (json is String) {
     return TwitchDecodedIdTokenDTO.fromJson(jsonDecode(json));
   } else if (json is Map<String, dynamic>) {
@@ -34,7 +36,8 @@ TwitchDecodedIdTokenDTO _stringToTwitchDecodedIdTokenDTO(json) {
   throw Exception("Unexpected type");
 }
 
-TwitchUserDTO _stringToTwitchUserDTO(json) {
+// ignore: avoid_annotating_with_dynamic because we need to specify the type
+TwitchUserDTO _stringToTwitchUserDTO(dynamic json) {
   if (json is String) {
     return TwitchUserDTO.fromJson(jsonDecode(json));
   } else if (json is Map<String, dynamic>) {

@@ -202,7 +202,7 @@ Widget _addGroupButton(
   );
 }
 
-Widget _addDialog(context, BrowserSettingsController controller) {
+Widget _addDialog(BuildContext context, BrowserSettingsController controller) {
   controller.addBrowserUrlController.text = '';
   controller.addBrowserTitleController.text = '';
   controller.addBrowserToggled.value = true;
@@ -307,7 +307,7 @@ Widget _addDialog(context, BrowserSettingsController controller) {
 }
 
 Widget _editDialog(
-  context,
+  BuildContext context,
   BrowserSettingsController controller,
   BrowserTab elem,
 ) {

@@ -16,7 +16,7 @@ class ObsSettings extends GetView<ObsSettingsController> {
           actions: [
             Switch(
               activeTrackColor: Theme.of(context).colorScheme.tertiary,
-              activeColor: Colors.white,
+              activeThumbColor: Colors.white,
               inactiveTrackColor:
                   Theme.of(context).colorScheme.tertiaryContainer,
               value: controller.obsSettings.value?.isConnected ?? false,

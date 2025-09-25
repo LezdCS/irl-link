@@ -153,7 +153,10 @@ Widget _addGroupButton(
   );
 }
 
-Widget _addDialog(context, DashboardController dashboardController) {
+Widget _addDialog(
+  BuildContext context,
+  DashboardController dashboardController,
+) {
   String title = '';
   Rx<SupportedEvents> selectedEvent = SupportedEvents.none.obs;
   DashboardActionsTypes? selectedType;
@@ -191,7 +194,7 @@ Widget _addDialog(context, DashboardController dashboardController) {
           ),
           DropdownButtonFormField(
             isExpanded: true,
-            value: SupportedEvents.values[0],
+            initialValue: SupportedEvents.values[0],
             items: SupportedEvents.values.map((event) {
               Widget? icon = getSupportedEventIcon(event);
               return DropdownMenuItem(
@@ -235,10 +238,11 @@ Widget _addDialog(context, DashboardController dashboardController) {
             child: DropdownButtonFormField(
               isExpanded: true,
               hint: Text("type_input".tr),
-              value: dashboardEvents[dashboardEvents.keys.firstWhereOrNull(
+              initialValue:
+                  dashboardEvents[dashboardEvents.keys.firstWhereOrNull(
                 (element) => element == selectedEvent.value,
               )]
-                  ?.actionsAllowed[0],
+                      ?.actionsAllowed[0],
               items: dashboardEvents[dashboardEvents.keys.firstWhereOrNull(
                 (element) => element == selectedEvent.value,
               )]

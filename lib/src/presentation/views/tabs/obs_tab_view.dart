@@ -284,7 +284,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
     );
   }
 
-  getScenes() {
+  ListView getScenes() {
     return ListView.separated(
       shrinkWrap: true,
       itemCount: controller.scenesList.length,
@@ -326,7 +326,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
     );
   }
 
-  getSources(BuildContext context) {
+  GridView getSources(BuildContext context) {
     return GridView.builder(
       shrinkWrap: true,
       physics: const ScrollPhysics(),

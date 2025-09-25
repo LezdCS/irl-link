@@ -409,25 +409,29 @@ class StreamelementsViewController extends GetxController
     talkerService.talker.warning('StreamElements WebSocket disconnected.');
   }
 
-  Future<void> onAuthenticated(data) async {
+  // ignore: avoid_annotating_with_dynamic because we need to specify the type
+  Future<void> onAuthenticated(dynamic data) async {
     isSocketConnected.value = true;
     talkerService.talker.logCustom(
       StreamElementsLog('StreamElements WebSocket authenticated.'),
     );
   }
 
-  void onAddSongQueue(data) {
+  // ignore: avoid_annotating_with_dynamic because we need to specify the type
+  void onAddSongQueue(dynamic data) {
     dynamic songData = data[0]["song"];
     SeSong song = SeSong.fromJson(songData);
     songRequestQueue.add(song);
   }
 
-  void onRemoveSongQueue(data) {
+  // ignore: avoid_annotating_with_dynamic because we need to specify the type
+  void onRemoveSongQueue(dynamic data) {
     dynamic songId = data[0]["songId"];
     songRequestQueue.removeWhere((element) => element.id == songId);
   }
 
-  void onNextSong(data) {
+  // ignore: avoid_annotating_with_dynamic because we need to specify the type
+  void onNextSong(dynamic data) {
     dynamic songData = data[0]["nextSong"];
     if (songData == null || songData == {}) {
       return;
@@ -439,13 +443,15 @@ class StreamelementsViewController extends GetxController
     }
   }
 
-  void onPreviousSong(data) {
+  // ignore: avoid_annotating_with_dynamic because we need to specify the type
+  void onPreviousSong(dynamic data) {
     dynamic songData = data[0]["song"];
     SeSong song = SeSong.fromJson(songData);
     currentSong.value = song;
   }
 
-  void parseTestEvent(data) {
+  // ignore: avoid_annotating_with_dynamic because we need to specify the type
+  void parseTestEvent(dynamic data) {
     dynamic widget = data[0];
     String listener = widget["listener"];
     dynamic event = widget["event"];
@@ -543,7 +549,8 @@ class StreamelementsViewController extends GetxController
     }
   }
 
-  void parseEvent(data) {
+  // ignore: avoid_annotating_with_dynamic because we need to specify the type
+  void parseEvent(dynamic data) {
     dynamic event = data[0];
     String type = event["type"];
     switch (type) {
