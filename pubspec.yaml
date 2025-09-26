@@ -95,8 +95,6 @@ dev_dependencies:
   integration_test:
     sdk: flutter
   patrol: ^3.16.0
-
-  test_api: 0.7.6
 dependency_overrides:
 
 # The following section is specific to Flutter.
