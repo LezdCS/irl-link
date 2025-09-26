@@ -48,7 +48,7 @@ jobs:
         run: flutter pub get
 
       - name: Install Patrol CLI
-        run: dart pub global activate patrol_cli
+        run: dart pub global activate patrol_cli 3.8.0
 
       - name: Run unit and widget tests
         run: flutter test
