@@ -26,15 +26,15 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          flutter-version: '3.29.2'
+          flutter-version: '3.35.4'
 
       - name: Install Android SDK
         uses: android-actions/setup-android@v3
         with:
           cmdline-tools-version: "latest"
-          build-tools-version: "34.0.0"
-          platform-version: "33"
-          ndk-version: "25.1.8937393"
+          build-tools-version: "36.0.0"
+          platform-version: "36"
+          ndk-version: "27.0.12077973"
 
       - name: Add google-services.json
         env:
