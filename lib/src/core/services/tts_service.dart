@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/utils/emote_utils.dart';
+import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart'
     show ChatMessage;
 import 'package:irllink/src/domain/entities/settings.dart';
@@ -96,7 +98,7 @@ class TtsService extends GetxService {
     );
   }
 
-  void readTts(ChatMessage message) {
+  void readTts(ChatMessage message, [List<ChatEmote>? thirdPartEmotes]) {
     // If the user is in the ignore list, we don't read the message
     if (ttsSettings.ttsUsersToIgnore.contains(message.displayName)) {
       return;
@@ -142,6 +144,15 @@ class TtsService extends GetxService {
         return;
       }
     }
+
+    // Remove emotes from the final message (skip emotes setting is considered always true for now)
+    finalMessage = EmoteUtils.removeEmotes(message, thirdPartEmotes ?? []);
+
+    // Skip speaking if the message becomes empty after emote removal
+    if (finalMessage.trim().isEmpty) {
+      return;
+    }
+
     String text = "user_said_message".trParams(
       {'authorName': message.displayName, 'message': finalMessage},
     );
