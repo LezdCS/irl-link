@@ -6,10 +6,11 @@ import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/utils/list_move.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
-import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/usecases/kick/get_kick_local_usecase.dart';
+import 'package:irllink/src/domain/usecases/obs/get_obs_credentials_usecase.dart';
 import 'package:irllink/src/domain/usecases/rtmp/get_rtmp_list_usecase.dart';
+import 'package:irllink/src/domain/usecases/settings/get_browser_tabs_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_local_credentials_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
@@ -36,6 +37,8 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
     required this.getTwitchLocalUseCase,
     required this.homeViewController,
     required this.getLocalCredentialsUseCase,
+    required this.getBrowserTabsUseCase,
+    required this.getObsCredentialsUsecase,
   });
 
   final SettingsService settingsService;
@@ -45,6 +48,8 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
   final GetTwitchLocalUseCase getTwitchLocalUseCase;
   final HomeViewController homeViewController;
   final StreamElementsGetLocalCredentialsUseCase getLocalCredentialsUseCase;
+  final GetBrowserTabsUsecase getBrowserTabsUseCase;
+  final GetObsCredentialsUsecase getObsCredentialsUsecase;
 
   late Rx<TabController> tabController;
   RxList<Widget> tabElements = <Widget>[].obs;
@@ -70,32 +75,33 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
   }
 
   void _updateTabController() {
+    // Store the current index before disposing
+    int currentIndex = tabController.value.index;
+
     // Dispose old TabController to prevent memory leak
     tabController.value.dispose();
 
     tabController.value =
         TabController(length: tabElements.length, vsync: this);
-    if (tabController.value.index > tabElements.length - 1) {
+
+    // Keep the current index if it's still within bounds, otherwise go to index 0
+    if (currentIndex < tabElements.length) {
+      tabController.value.animateTo(currentIndex);
+    } else if (tabElements.isNotEmpty) {
       tabController.value.animateTo(0);
     }
   }
 
   void setTabIndex(int index) {
     if (index >= 0 && index < tabElements.length) {
-      final newController =
-          TabController(length: tabElements.length, vsync: this);
-      newController.animateTo(index);
-      tabController.value.dispose();
-      tabController.value = newController;
+      tabController.value.animateTo(index);
+      tabController.refresh();
     }
   }
 
-  void reorderTabs() {
-    Settings settings = Get.find<SettingsService>().settings.value;
-
-    List<BrowserTab> tabs = settings.browserTabs.tabs
-        .where((t) => t.toggled && !t.iOSAudioSource)
-        .toList();
+  void reorderTabs(List<BrowserTab> browserTabs) {
+    List<BrowserTab> tabs =
+        browserTabs.where((t) => t.toggled && !t.iOSAudioSource).toList();
     int diff = tabElements.length - tabs.length;
     tabs.forEachIndexed((index, tab) {
       // Find the index of the tab in the tabElements list
@@ -111,33 +117,49 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
     tabElements.refresh();
   }
 
-  Future<void> removeTabs() async {
-    Settings settings = settingsService.settings.value;
-
+  Future<void> removeTabs(List<BrowserTab> browserTabs) async {
     // Check if WebTabs have to be removed
     tabElements.removeWhere((tabElement) {
       if (tabElement is WebPageView) {
-        BrowserTab? tabExist = settings.browserTabs.tabs.firstWhereOrNull(
+        BrowserTab? tabExist = browserTabs.firstWhereOrNull(
           (settingsTab) => settingsTab.id == tabElement.tab.id,
         );
-        return tabExist == null || !tabExist.toggled || tabExist.iOSAudioSource;
+        // Remove if tab doesn't exist, is not toggled, is an audio source,
+        // or if the title or URL has changed
+        return tabExist == null ||
+            !tabExist.toggled ||
+            tabExist.iOSAudioSource ||
+            tabExist.title != tabElement.tab.title ||
+            tabExist.url != tabElement.tab.url;
       }
       return false; // Keep other types of tabs
     });
 
     // Now we remove the audio sources that do no longer exist in the settings
     iOSAudioSources.removeWhere((tabElement) {
-      BrowserTab? tabExist = settings.browserTabs.tabs.firstWhereOrNull(
+      BrowserTab? tabExist = browserTabs.firstWhereOrNull(
         (settingsTab) => settingsTab.id == tabElement.tab.id,
       );
-      return tabExist == null || !tabExist.toggled || !tabExist.iOSAudioSource;
+      // Remove if tab doesn't exist, is not toggled, is not an audio source,
+      // or if the title or URL has changed
+      return tabExist == null ||
+          !tabExist.toggled ||
+          !tabExist.iOSAudioSource ||
+          tabExist.title != tabElement.tab.title ||
+          tabExist.url != tabElement.tab.url;
     });
 
     // Check if OBS have to be removed
-    if (obsTabViewController != null && !settings.isObsConnected) {
-      tabElements.removeWhere((t) => t is ObsTabView);
-      obsTabViewController = null;
-      await Get.delete<ObsTabViewController>();
+    if (obsTabViewController != null) {
+      final obsCredentials = await getObsCredentialsUsecase(params: null);
+      if (obsCredentials.fold(
+        (l) => false,
+        (r) => !r.isConnected,
+      )) {
+        obsTabViewController = null;
+        await Get.delete<ObsTabViewController>();
+        tabElements.removeWhere((t) => t is ObsTabView);
+      }
     }
 
     // Check if StreamElements have to be removed
@@ -176,7 +198,8 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
     }
 
     // Check if Realtime IRL have to be removed
-    if (realtimeIrlViewController != null && settings.rtIrlPushKey.isEmpty) {
+    if (realtimeIrlViewController != null &&
+        settingsService.settings.value.rtIrlPushKey.isEmpty) {
       tabElements.removeWhere((t) => t is RealtimeIrlTabView);
       realtimeIrlViewController = null;
       await Get.delete<RealtimeIrlViewController>();
@@ -190,14 +213,19 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
     // }
   }
 
-  Future<void> addTabs() async {
+  Future<void> addTabs(List<BrowserTab> browserTabs) async {
     bool isSubscribed = Get.find<StoreService>().isSubscribed();
-    Settings settings = settingsService.settings.value;
 
     // Check if OBS have to be added
-    if (obsTabViewController == null && settings.isObsConnected) {
-      obsTabViewController = Get.find<ObsTabViewController>();
-      tabElements.insert(0, const ObsTabView());
+    if (obsTabViewController == null) {
+      final obsCredentials = await getObsCredentialsUsecase(params: null);
+      if (obsCredentials.fold(
+        (l) => false,
+        (r) => r.isConnected,
+      )) {
+        tabElements.insert(0, const ObsTabView());
+        obsTabViewController = Get.find<ObsTabViewController>();
+      }
     }
 
     // Check if Twitch have to be added
@@ -236,7 +264,8 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
     }
 
     // Check if Realtime IRL have to be added
-    if (settings.rtIrlPushKey.isNotEmpty && realtimeIrlViewController == null) {
+    if (settingsService.settings.value.rtIrlPushKey.isNotEmpty &&
+        realtimeIrlViewController == null) {
       realtimeIrlViewController = Get.find<RealtimeIrlViewController>();
       tabElements.add(const RealtimeIrlTabView());
     }
@@ -255,7 +284,7 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
     );
 
     // Only add the tabs that are toggled
-    for (BrowserTab tab in settings.browserTabs.tabs.where((t) => t.toggled)) {
+    for (BrowserTab tab in browserTabs.where((t) => t.toggled)) {
       // Check if the tab already exists
       bool tabExists = tabElements
               .whereType<WebPageView>()
@@ -275,9 +304,20 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
   }
 
   Future generateTabs() async {
-    await removeTabs();
-    await addTabs();
-    reorderTabs();
+    final browserTabsResult = await getBrowserTabsUseCase(params: null);
+    List<BrowserTab> browserTabs = [];
+    browserTabsResult.fold(
+      (l) {
+        talkerService.talker.error('Failed to get browser tabs');
+      },
+      (r) {
+        browserTabs = r;
+      },
+    );
+
+    await removeTabs(browserTabs);
+    await addTabs(browserTabs);
+    reorderTabs(browserTabs);
 
     if (obsTabViewController != null) {
       obsTabViewController?.applySettings();

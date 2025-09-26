@@ -19,8 +19,10 @@ import 'package:irllink/src/data/datasources/local/twitch_local_data_source.dart
 import 'package:irllink/src/data/datasources/remote/twitch_remote_data_source.dart';
 import 'package:irllink/src/data/repositories/settings_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
+import 'package:irllink/src/domain/usecases/settings/add_browser_tab_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/get_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/set_settings_usecase.dart';
+import 'package:irllink/src/domain/usecases/tts/get_tts_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart';
 
 Future<void> initializeDependencies() async {
@@ -29,10 +31,22 @@ Future<void> initializeDependencies() async {
     permanent: true,
   );
 
+  // Repositories
+  final settingsRepository = SettingsRepositoryImpl(
+    talker: talkerService.talker,
+    localDataSource: SettingsLocalDataSourceImpl(
+      talker: talkerService.talker,
+      storage: GetStorage(),
+    ),
+  );
+
+  final addBrowserTabUsecase = AddBrowserTabUsecase(settingsRepository);
+
   await Get.putAsync(
     () => DeeplinksService(
       appLinks: AppLinks(),
       talker: talkerService.talker,
+      addBrowserTabUsecase: addBrowserTabUsecase,
     ).init(),
     permanent: true,
   );
@@ -44,14 +58,6 @@ Future<void> initializeDependencies() async {
 
   Dio dioTwitchClient = initDio(kTwitchApiUrlBase);
 
-  // Repositories
-  final settingsRepository = SettingsRepositoryImpl(
-    talker: talkerService.talker,
-    localDataSource: SettingsLocalDataSourceImpl(
-      talker: talkerService.talker,
-      storage: GetStorage(),
-    ),
-  );
   final twitchRepository = TwitchRepositoryImpl(
     remoteDataSource: TwitchRemoteDataSourceImpl(
       dioClient: dioTwitchClient,
@@ -67,6 +73,9 @@ Future<void> initializeDependencies() async {
   final getSettingsUseCase = GetSettingsUseCase(settingsRepository);
   final setSettingsUseCase = SetSettingsUseCase(settingsRepository);
   final getTwitchLocalUseCase = GetTwitchLocalUseCase(twitchRepository);
+  final getTtsSettingsUsecase = GetTtsSettingsUsecase(
+    settingsRepository: settingsRepository,
+  );
 
   final settingsService = await Get.putAsync(
     () => SettingsService(
@@ -88,7 +97,9 @@ Future<void> initializeDependencies() async {
   );
 
   final ttsService = await Get.putAsync(
-    () => TtsService().init(),
+    () => TtsService(
+      getTtsSettingsUsecase: getTtsSettingsUsecase,
+    ).init(),
     permanent: true,
   );
   await ttsService.initTts(settingsService.settings.value);
@@ -99,9 +110,7 @@ Future<void> initializeDependencies() async {
 
   // Initialize SpeakerService
   await Get.putAsync(
-    () => SpeakerService(
-      settingsService: settingsService,
-    ).init(),
+    () => SpeakerService().init(),
     permanent: true,
   );
 }

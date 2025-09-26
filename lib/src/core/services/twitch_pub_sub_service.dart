@@ -73,7 +73,8 @@ class TwitchPubSubService extends GetxController {
     pingTimer.cancel();
   }
 
-  void _eventListener(data) {
+  // ignore: avoid_annotating_with_dynamic because we need to specify the type
+  void _eventListener(dynamic data) {
     // Handle incoming events
     Map<String, dynamic> msgMapped = jsonDecode(data);
     String type = msgMapped['type'];
@@ -104,7 +105,8 @@ class TwitchPubSubService extends GetxController {
     close();
   }
 
-  void _onError(error) {
+  // ignore: avoid_annotating_with_dynamic because we need to specify the type
+  void _onError(dynamic error) {
     talker.warning('Twitch PubSub Websocket error: $error');
     isConnected.value = false;
     close();

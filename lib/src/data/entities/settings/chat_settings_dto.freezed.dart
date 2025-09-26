@@ -15,7 +15,6 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$ChatSettingsDTO {
-  List<ChatGroupDTO> get chatGroups;
   bool get hideDeletedMessages;
 
   /// Create a copy of ChatSettingsDTO
@@ -34,20 +33,17 @@ mixin _$ChatSettingsDTO {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is ChatSettingsDTO &&
-            const DeepCollectionEquality()
-                .equals(other.chatGroups, chatGroups) &&
             (identical(other.hideDeletedMessages, hideDeletedMessages) ||
                 other.hideDeletedMessages == hideDeletedMessages));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(chatGroups), hideDeletedMessages);
+  int get hashCode => Object.hash(runtimeType, hideDeletedMessages);
 
   @override
   String toString() {
-    return 'ChatSettingsDTO(chatGroups: $chatGroups, hideDeletedMessages: $hideDeletedMessages)';
+    return 'ChatSettingsDTO(hideDeletedMessages: $hideDeletedMessages)';
   }
 }
 
@@ -57,7 +53,7 @@ abstract mixin class $ChatSettingsDTOCopyWith<$Res> {
           ChatSettingsDTO value, $Res Function(ChatSettingsDTO) _then) =
       _$ChatSettingsDTOCopyWithImpl;
   @useResult
-  $Res call({List<ChatGroupDTO> chatGroups, bool hideDeletedMessages});
+  $Res call({bool hideDeletedMessages});
 }
 
 /// @nodoc
@@ -73,14 +69,9 @@ class _$ChatSettingsDTOCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? chatGroups = null,
     Object? hideDeletedMessages = null,
   }) {
     return _then(_self.copyWith(
-      chatGroups: null == chatGroups
-          ? _self.chatGroups
-          : chatGroups // ignore: cast_nullable_to_non_nullable
-              as List<ChatGroupDTO>,
       hideDeletedMessages: null == hideDeletedMessages
           ? _self.hideDeletedMessages
           : hideDeletedMessages // ignore: cast_nullable_to_non_nullable
@@ -92,22 +83,9 @@ class _$ChatSettingsDTOCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _ChatSettingsDTO extends ChatSettingsDTO {
-  _ChatSettingsDTO(
-      {final List<ChatGroupDTO> chatGroups = const [],
-      this.hideDeletedMessages = true})
-      : _chatGroups = chatGroups,
-        super._();
+  _ChatSettingsDTO({this.hideDeletedMessages = true}) : super._();
   factory _ChatSettingsDTO.fromJson(Map<String, dynamic> json) =>
       _$ChatSettingsDTOFromJson(json);
-
-  final List<ChatGroupDTO> _chatGroups;
-  @override
-  @JsonKey()
-  List<ChatGroupDTO> get chatGroups {
-    if (_chatGroups is EqualUnmodifiableListView) return _chatGroups;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_chatGroups);
-  }
 
   @override
   @JsonKey()
@@ -133,20 +111,17 @@ class _ChatSettingsDTO extends ChatSettingsDTO {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _ChatSettingsDTO &&
-            const DeepCollectionEquality()
-                .equals(other._chatGroups, _chatGroups) &&
             (identical(other.hideDeletedMessages, hideDeletedMessages) ||
                 other.hideDeletedMessages == hideDeletedMessages));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_chatGroups), hideDeletedMessages);
+  int get hashCode => Object.hash(runtimeType, hideDeletedMessages);
 
   @override
   String toString() {
-    return 'ChatSettingsDTO(chatGroups: $chatGroups, hideDeletedMessages: $hideDeletedMessages)';
+    return 'ChatSettingsDTO(hideDeletedMessages: $hideDeletedMessages)';
   }
 }
 
@@ -158,7 +133,7 @@ abstract mixin class _$ChatSettingsDTOCopyWith<$Res>
       __$ChatSettingsDTOCopyWithImpl;
   @override
   @useResult
-  $Res call({List<ChatGroupDTO> chatGroups, bool hideDeletedMessages});
+  $Res call({bool hideDeletedMessages});
 }
 
 /// @nodoc
@@ -174,14 +149,9 @@ class __$ChatSettingsDTOCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? chatGroups = null,
     Object? hideDeletedMessages = null,
   }) {
     return _then(_ChatSettingsDTO(
-      chatGroups: null == chatGroups
-          ? _self._chatGroups
-          : chatGroups // ignore: cast_nullable_to_non_nullable
-              as List<ChatGroupDTO>,
       hideDeletedMessages: null == hideDeletedMessages
           ? _self.hideDeletedMessages
           : hideDeletedMessages // ignore: cast_nullable_to_non_nullable

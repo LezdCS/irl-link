@@ -10,7 +10,6 @@ import 'package:get/route_manager.dart';
 import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/utils/determine_position.dart';
-
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
@@ -30,7 +29,8 @@ class RealtimeIrl {
     this.key,
   );
 
-  Future<void> onReceiveTaskData(data) async {
+  // ignore: avoid_annotating_with_dynamic because we need to specify the type
+  Future<void> onReceiveTaskData(dynamic data) async {
     if (data is Map<String, dynamic>) {
       final dynamic action = data["action"];
       switch (action) {

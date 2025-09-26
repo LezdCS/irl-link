@@ -7,6 +7,7 @@ import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/data/datasources/local/kick_local_data_source.dart';
 import 'package:irllink/src/data/datasources/local/rtmp_local_data_source.dart';
+import 'package:irllink/src/data/datasources/local/settings_local_data_source.dart';
 import 'package:irllink/src/data/datasources/local/streamelements_local_data_source.dart';
 import 'package:irllink/src/data/datasources/local/twitch_local_data_source.dart';
 import 'package:irllink/src/data/datasources/remote/kick_remote_data_source.dart';
@@ -14,6 +15,7 @@ import 'package:irllink/src/data/datasources/remote/streamelements_remote_data_s
 import 'package:irllink/src/data/datasources/remote/twitch_remote_data_source.dart';
 import 'package:irllink/src/data/repositories/kick_repository_impl.dart';
 import 'package:irllink/src/data/repositories/rtmp_repository_impl.dart';
+import 'package:irllink/src/data/repositories/settings_repository_impl.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/usecases/kick/get_kick_categories_usecase.dart';
@@ -21,7 +23,9 @@ import 'package:irllink/src/domain/usecases/kick/get_kick_channels_usecase.dart'
 import 'package:irllink/src/domain/usecases/kick/get_kick_local_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/patch_kick_channel_usecase.dart'
     show PatchKickChannelUseCase;
+import 'package:irllink/src/domain/usecases/obs/get_obs_credentials_usecase.dart';
 import 'package:irllink/src/domain/usecases/rtmp/get_rtmp_list_usecase.dart';
+import 'package:irllink/src/domain/usecases/settings/get_browser_tabs_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_local_credentials_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_stream_info_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart';
@@ -93,6 +97,16 @@ class TabsBindings extends Bindings {
     final getLocalCredentialsUseCase = StreamElementsGetLocalCredentialsUseCase(
       streamelementsRepository: streamelementsRepository,
     );
+    final settingsRepository = SettingsRepositoryImpl(
+      talker: talker,
+      localDataSource: SettingsLocalDataSourceImpl(
+        talker: talker,
+      ),
+    );
+    final getBrowserTabsUseCase = GetBrowserTabsUsecase(settingsRepository);
+    final getObsCredentialsUsecase = GetObsCredentialsUsecase(
+      settingsRepository: settingsRepository,
+    );
     Get.lazyPut<TabsController>(
       () => TabsController(
         settingsService: Get.find<SettingsService>(),
@@ -102,6 +116,8 @@ class TabsBindings extends Bindings {
         getKickLocalUseCase: getKickLocalUseCase,
         getTwitchLocalUseCase: getTwitchLocalUseCase,
         getLocalCredentialsUseCase: getLocalCredentialsUseCase,
+        getBrowserTabsUseCase: getBrowserTabsUseCase,
+        getObsCredentialsUsecase: getObsCredentialsUsecase,
       ),
     );
 
@@ -140,6 +156,7 @@ class TabsBindings extends Bindings {
       () => ObsTabViewController(
         watchService: watchService,
         talkerService: talkerService,
+        getObsCredentialsUsecase: getObsCredentialsUsecase,
       ),
       fenix: true,
     );

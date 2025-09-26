@@ -8,10 +8,12 @@ import 'package:irllink/src/core/utils/mapper.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/datasources/local/streamelements_local_data_source.dart';
 import 'package:irllink/src/data/datasources/remote/streamelements_remote_data_source.dart';
+import 'package:irllink/src/data/entities/settings/stream_elements_settings_dto.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_activity_dto.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_credentials_dto.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_me_dto.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_overlay_dto.dart';
+import 'package:irllink/src/domain/entities/settings/stream_elements_settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_credentials.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
@@ -295,5 +297,29 @@ class StreamelementsRepositoryImpl implements StreamelementsRepository {
     } else {
       return Left(Failure("No SE Data in local storage"));
     }
+  }
+
+  @override
+  Future<Either<Failure, void>> updateStreamElementsSettings(
+    StreamElementsSettings settings,
+  ) async {
+    final settingsDTO = _mappr
+        .convert<StreamElementsSettings, StreamElementsSettingsDTO>(settings);
+    await _localDataSource.storeStreamElementsSettings(settingsDTO);
+    return const Right(null);
+  }
+
+  @override
+  Future<Either<Failure, StreamElementsSettings>>
+      getStreamElementsSettings() async {
+    final settingsDTO = await _localDataSource.getStreamElementsSettings();
+    if (settingsDTO != null) {
+      return Right(
+        _mappr.convert<StreamElementsSettingsDTO, StreamElementsSettings>(
+          settingsDTO,
+        ),
+      );
+    }
+    return Left(Failure("No SE Settings in local storage"));
   }
 }

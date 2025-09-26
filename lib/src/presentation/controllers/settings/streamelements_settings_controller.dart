@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/params/streamelements_auth_params.dart';
-import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
-import 'package:irllink/src/domain/entities/settings.dart';
+import 'package:irllink/src/domain/entities/settings/stream_elements_settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
 import 'package:irllink/src/domain/usecases/streamelements/disconnect_usecase.dart'
     show StreamElementsDisconnectUseCase;
 import 'package:irllink/src/domain/usecases/streamelements/get_local_credentials_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_me_usecase.dart';
+import 'package:irllink/src/domain/usecases/streamelements/get_se_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/login_usecase.dart'
     show StreamElementsLoginUseCase;
+import 'package:irllink/src/domain/usecases/streamelements/set_se_settings_usecase.dart';
 
 class StreamelementsSettingsController extends GetxController {
   StreamelementsSettingsController({
     required this.streamElementsLoginUseCase,
     required this.streamElementsDisconnectUseCase,
     required this.streamElementsGetLocalCredentialsUseCase,
-    required this.settingsService,
     required this.storeService,
     required this.getMeUseCase,
+    required this.getStreamElementsSettingsUseCase,
+    required this.setStreamElementsSettingsUseCase,
   });
 
   late TextEditingController seJwtInputController;
@@ -29,26 +31,37 @@ class StreamelementsSettingsController extends GetxController {
   final StreamElementsGetLocalCredentialsUseCase
       streamElementsGetLocalCredentialsUseCase;
   final StreamElementsGetMeUseCase getMeUseCase;
+  final GetStreamElementsSettingsUseCase getStreamElementsSettingsUseCase;
+  final SetStreamElementsSettingsUseCase setStreamElementsSettingsUseCase;
 
   final StoreService storeService;
-  final SettingsService settingsService;
 
   final RxBool seJwtShow = false.obs;
   final RxBool seOverlayTokenShow = false.obs;
   final RxBool isLoading = false.obs;
   final Rx<SeMe?> userProfile = Rx<SeMe?>(null);
   final RxBool isLoggedIn = false.obs;
-
+  final Rxn<StreamElementsSettings> streamElementsSettings =
+      Rxn<StreamElementsSettings>();
   @override
   void onInit() {
     super.onInit();
-    Settings settings = settingsService.settings.value;
-    seJwtInputController =
-        TextEditingController(text: settings.streamElementsSettings.jwt);
-    seOverlayTokenInputController = TextEditingController(
-      text: settings.streamElementsSettings.overlayToken,
-    );
+    getStreamElementsSettings();
+    seJwtInputController = TextEditingController();
+    seOverlayTokenInputController = TextEditingController();
     checkLoginStatus();
+  }
+
+  Future<void> getStreamElementsSettings() async {
+    final seSettings = await getStreamElementsSettingsUseCase();
+    seSettings.fold(
+      (l) => debugPrint(l.message),
+      (r) {
+        streamElementsSettings.value = r;
+        seJwtInputController.text = r.jwt ?? "";
+        seOverlayTokenInputController.text = r.overlayToken ?? "";
+      },
+    );
   }
 
   Future<void> checkLoginStatus() async {

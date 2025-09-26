@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_song.dart';
 import 'package:irllink/src/presentation/controllers/tabs/streamelements_view_controller.dart';
 
@@ -13,11 +12,7 @@ class SeSongRequests extends GetView<StreamelementsViewController> {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        String? jwt = Get.find<SettingsService>()
-            .settings
-            .value
-            .streamElementsSettings
-            .jwt;
+        String? jwt = controller.streamElementsSettings.value?.jwt;
         return Container(
           margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
           child: Column(

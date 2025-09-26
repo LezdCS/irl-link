@@ -14,167 +14,14 @@ part of 'browser_tab_settings_dto.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$BrowserTabSettingsDTO {
-  List<BrowserTabDTO> get tabs;
-
-  /// Create a copy of BrowserTabSettingsDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  $BrowserTabSettingsDTOCopyWith<BrowserTabSettingsDTO> get copyWith =>
-      _$BrowserTabSettingsDTOCopyWithImpl<BrowserTabSettingsDTO>(
-          this as BrowserTabSettingsDTO, _$identity);
-
-  /// Serializes this BrowserTabSettingsDTO to a JSON map.
-  Map<String, dynamic> toJson();
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is BrowserTabSettingsDTO &&
-            const DeepCollectionEquality().equals(other.tabs, tabs));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(tabs));
-
-  @override
-  String toString() {
-    return 'BrowserTabSettingsDTO(tabs: $tabs)';
-  }
-}
-
-/// @nodoc
-abstract mixin class $BrowserTabSettingsDTOCopyWith<$Res> {
-  factory $BrowserTabSettingsDTOCopyWith(BrowserTabSettingsDTO value,
-          $Res Function(BrowserTabSettingsDTO) _then) =
-      _$BrowserTabSettingsDTOCopyWithImpl;
-  @useResult
-  $Res call({List<BrowserTabDTO> tabs});
-}
-
-/// @nodoc
-class _$BrowserTabSettingsDTOCopyWithImpl<$Res>
-    implements $BrowserTabSettingsDTOCopyWith<$Res> {
-  _$BrowserTabSettingsDTOCopyWithImpl(this._self, this._then);
-
-  final BrowserTabSettingsDTO _self;
-  final $Res Function(BrowserTabSettingsDTO) _then;
-
-  /// Create a copy of BrowserTabSettingsDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? tabs = null,
-  }) {
-    return _then(_self.copyWith(
-      tabs: null == tabs
-          ? _self.tabs
-          : tabs // ignore: cast_nullable_to_non_nullable
-              as List<BrowserTabDTO>,
-    ));
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _BrowserTabSettingsDTO extends BrowserTabSettingsDTO {
-  _BrowserTabSettingsDTO({final List<BrowserTabDTO> tabs = const []})
-      : _tabs = tabs,
-        super._();
-  factory _BrowserTabSettingsDTO.fromJson(Map<String, dynamic> json) =>
-      _$BrowserTabSettingsDTOFromJson(json);
-
-  final List<BrowserTabDTO> _tabs;
-  @override
-  @JsonKey()
-  List<BrowserTabDTO> get tabs {
-    if (_tabs is EqualUnmodifiableListView) return _tabs;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_tabs);
-  }
-
-  /// Create a copy of BrowserTabSettingsDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  _$BrowserTabSettingsDTOCopyWith<_BrowserTabSettingsDTO> get copyWith =>
-      __$BrowserTabSettingsDTOCopyWithImpl<_BrowserTabSettingsDTO>(
-          this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$BrowserTabSettingsDTOToJson(
-      this,
-    );
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _BrowserTabSettingsDTO &&
-            const DeepCollectionEquality().equals(other._tabs, _tabs));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_tabs));
-
-  @override
-  String toString() {
-    return 'BrowserTabSettingsDTO(tabs: $tabs)';
-  }
-}
-
-/// @nodoc
-abstract mixin class _$BrowserTabSettingsDTOCopyWith<$Res>
-    implements $BrowserTabSettingsDTOCopyWith<$Res> {
-  factory _$BrowserTabSettingsDTOCopyWith(_BrowserTabSettingsDTO value,
-          $Res Function(_BrowserTabSettingsDTO) _then) =
-      __$BrowserTabSettingsDTOCopyWithImpl;
-  @override
-  @useResult
-  $Res call({List<BrowserTabDTO> tabs});
-}
-
-/// @nodoc
-class __$BrowserTabSettingsDTOCopyWithImpl<$Res>
-    implements _$BrowserTabSettingsDTOCopyWith<$Res> {
-  __$BrowserTabSettingsDTOCopyWithImpl(this._self, this._then);
-
-  final _BrowserTabSettingsDTO _self;
-  final $Res Function(_BrowserTabSettingsDTO) _then;
-
-  /// Create a copy of BrowserTabSettingsDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $Res call({
-    Object? tabs = null,
-  }) {
-    return _then(_BrowserTabSettingsDTO(
-      tabs: null == tabs
-          ? _self._tabs
-          : tabs // ignore: cast_nullable_to_non_nullable
-              as List<BrowserTabDTO>,
-    ));
-  }
-}
-
-/// @nodoc
 mixin _$BrowserTabDTO {
-  @JsonKey(fromJson: _idFromJson)
   String get id;
   String get title;
   String get url;
+  @BoolToIntConverter()
   bool get toggled;
+  @JsonKey(name: 'is_ios_audio_source')
+  @BoolToIntConverter()
   bool get iOSAudioSource;
 
   /// Create a copy of BrowserTabDTO
@@ -219,10 +66,12 @@ abstract mixin class $BrowserTabDTOCopyWith<$Res> {
       _$BrowserTabDTOCopyWithImpl;
   @useResult
   $Res call(
-      {@JsonKey(fromJson: _idFromJson) String id,
+      {String id,
       String title,
       String url,
-      bool toggled,
+      @BoolToIntConverter() bool toggled,
+      @JsonKey(name: 'is_ios_audio_source')
+      @BoolToIntConverter()
       bool iOSAudioSource});
 }
 
@@ -274,24 +123,28 @@ class _$BrowserTabDTOCopyWithImpl<$Res>
 @JsonSerializable()
 class _BrowserTabDTO implements BrowserTabDTO {
   const _BrowserTabDTO(
-      {@JsonKey(fromJson: _idFromJson) required this.id,
+      {required this.id,
       required this.title,
       required this.url,
-      required this.toggled,
+      @BoolToIntConverter() required this.toggled,
+      @JsonKey(name: 'is_ios_audio_source')
+      @BoolToIntConverter()
       required this.iOSAudioSource});
   factory _BrowserTabDTO.fromJson(Map<String, dynamic> json) =>
       _$BrowserTabDTOFromJson(json);
 
   @override
-  @JsonKey(fromJson: _idFromJson)
   final String id;
   @override
   final String title;
   @override
   final String url;
   @override
+  @BoolToIntConverter()
   final bool toggled;
   @override
+  @JsonKey(name: 'is_ios_audio_source')
+  @BoolToIntConverter()
   final bool iOSAudioSource;
 
   /// Create a copy of BrowserTabDTO
@@ -342,10 +195,12 @@ abstract mixin class _$BrowserTabDTOCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(fromJson: _idFromJson) String id,
+      {String id,
       String title,
       String url,
-      bool toggled,
+      @BoolToIntConverter() bool toggled,
+      @JsonKey(name: 'is_ios_audio_source')
+      @BoolToIntConverter()
       bool iOSAudioSource});
 }
 

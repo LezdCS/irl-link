@@ -26,7 +26,7 @@ class LoginView extends GetView<LoginViewController> {
     );
   }
 
-  Widget _loginButton(context) {
+  Widget _loginButton(BuildContext context) {
     return Column(
       children: [
         SizedBox(
@@ -138,7 +138,7 @@ class LoginView extends GetView<LoginViewController> {
     );
   }
 
-  Widget _loadingCircle(context) {
+  Widget _loadingCircle(BuildContext context) {
     return Obx(
       () => Column(
         spacing: 20,

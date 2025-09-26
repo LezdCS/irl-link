@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/services/settings_service.dart';
-import 'package:irllink/src/domain/entities/settings.dart';
+import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
+import 'package:irllink/src/domain/usecases/settings/add_browser_tab_usecase.dart';
+import 'package:irllink/src/domain/usecases/settings/edit_browser_tab_usecase.dart';
+import 'package:irllink/src/domain/usecases/settings/get_browser_tabs_usecase.dart';
+import 'package:irllink/src/domain/usecases/settings/remove_browser_tab_usecase.dart';
 import 'package:uuid/uuid.dart';
 
 class BrowserSettingsController extends GetxController {
   BrowserSettingsController({
-    required this.settingsService,
+    required this.talkerService,
+    required this.addBrowserTabUsecase,
+    required this.editBrowserTabUsecase,
+    required this.removeBrowserTabUsecase,
+    required this.getBrowserTabsUsecase,
   });
 
-  final SettingsService settingsService;
+  final TalkerService talkerService;
+  final AddBrowserTabUsecase addBrowserTabUsecase;
+  final EditBrowserTabUsecase editBrowserTabUsecase;
+  final RemoveBrowserTabUsecase removeBrowserTabUsecase;
+  final GetBrowserTabsUsecase getBrowserTabsUsecase;
 
   late TextEditingController addBrowserTitleController;
   late TextEditingController addBrowserUrlController;
@@ -21,15 +32,28 @@ class BrowserSettingsController extends GetxController {
   final addBrowserUrlKey = GlobalKey<FormState>();
   final addBrowserTitleKey = GlobalKey<FormState>();
 
+  final RxList<BrowserTab> browserTabs = <BrowserTab>[].obs;
+
   @override
   void onInit() {
     super.onInit();
     addBrowserTitleController = TextEditingController();
     addBrowserUrlController = TextEditingController();
     addHiddenUsernameController = TextEditingController();
+
+    getBrowserTabs();
   }
 
-  void addBrowserTab() {
+  Future<void> getBrowserTabs() async {
+    final browserTabsResult = await getBrowserTabsUsecase(params: null);
+    browserTabsResult.fold((l) {
+      talkerService.talker.error('Failed to get browser tabs: $l');
+    }, (r) {
+      browserTabs.value = r;
+    });
+  }
+
+  Future<void> addBrowserTab() async {
     bool isValid = false;
     isValid = addBrowserTitleKey.currentState!.validate();
     isValid = addBrowserUrlKey.currentState!.validate();
@@ -51,19 +75,13 @@ class BrowserSettingsController extends GetxController {
       toggled: toggled,
       iOSAudioSource: audioSourceToggled,
     );
-    Settings settings = settingsService.settings.value;
 
-    List<BrowserTab> tabs = List.from(settings.browserTabs.tabs);
-    tabs.add(tab);
-    settingsService.settings.value = settings.copyWith(
-      browserTabs: settings.browserTabs.copyWith(tabs: tabs),
-    );
-    settingsService.saveSettings();
-
+    await addBrowserTabUsecase(params: tab);
+    await getBrowserTabs();
     Get.back();
   }
 
-  void editBrowserTab(BrowserTab tab) {
+  Future<void> editBrowserTab(BrowserTab tab) async {
     bool isValid = false;
     isValid = addBrowserTitleKey.currentState!.validate();
     isValid = addBrowserUrlKey.currentState!.validate();
@@ -82,32 +100,17 @@ class BrowserSettingsController extends GetxController {
       iOSAudioSource: audioSourceToggled,
     );
 
-    Settings settings = settingsService.settings.value;
-
-    List<BrowserTab> tabs = settings.browserTabs.tabs;
-    int index = tabs.indexWhere((element) => element.id == tab.id);
-    tabs[index] = newTab;
-    settingsService.settings.value = settings.copyWith(
-      browserTabs: settings.browserTabs.copyWith(tabs: tabs),
-    );
-
-    settingsService.saveSettings();
+    await editBrowserTabUsecase(params: newTab);
 
     // Close the dialog
+    await getBrowserTabs();
     Get.back();
   }
 
-  void removeBrowserTab(tab) {
-    Settings settings = settingsService.settings.value;
+  Future<void> removeBrowserTab(BrowserTab tab) async {
+    await removeBrowserTabUsecase(params: tab);
 
-    List<BrowserTab> tabs = settings.browserTabs.tabs;
-    tabs.remove(tab);
-
-    settingsService.settings.value = settings.copyWith(
-      browserTabs: settings.browserTabs.copyWith(tabs: tabs),
-    );
-    settingsService.saveSettings();
-
+    await getBrowserTabs();
     Get.back();
   }
 }

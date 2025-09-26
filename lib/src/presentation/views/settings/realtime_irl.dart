@@ -10,7 +10,9 @@ class RealtimeIrl extends GetView<SettingsViewController> {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     Settings settings = Get.find<SettingsService>().settings.value;
 
     return Column(

@@ -10,6 +10,7 @@ import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 import 'package:irllink/src/presentation/controllers/chats_controller.dart';
+import 'package:irllink/src/presentation/controllers/dashboard_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/tabs/kick_tab_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/tabs/twitch_tab_view_controller.dart';
@@ -370,7 +371,7 @@ class HomeView extends GetView<HomeViewController> {
             ),
           ),
           Visibility(
-            visible: settings.dashboardSettings.activated,
+            visible: Get.find<DashboardController>().dashboardEvents.isNotEmpty,
             child: Expanded(
               child: InkWell(
                 onTap: () async {

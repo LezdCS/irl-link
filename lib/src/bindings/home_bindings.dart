@@ -10,20 +10,26 @@ import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/data/datasources/local/kick_local_data_source.dart';
+import 'package:irllink/src/data/datasources/local/settings_local_data_source.dart';
 import 'package:irllink/src/data/datasources/local/streamelements_local_data_source.dart';
 import 'package:irllink/src/data/datasources/local/twitch_local_data_source.dart';
 import 'package:irllink/src/data/datasources/remote/kick_remote_data_source.dart';
 import 'package:irllink/src/data/datasources/remote/streamelements_remote_data_source.dart';
 import 'package:irllink/src/data/datasources/remote/twitch_remote_data_source.dart';
 import 'package:irllink/src/data/repositories/kick_repository_impl.dart';
+import 'package:irllink/src/data/repositories/settings_repository_impl.dart';
 import 'package:irllink/src/data/repositories/streamelements_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
+import 'package:irllink/src/domain/usecases/dashboard/add_dashboard_event_usecase.dart';
+import 'package:irllink/src/domain/usecases/dashboard/delete_dashboard_event_usecase.dart';
+import 'package:irllink/src/domain/usecases/dashboard/get_dashboard_events_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/kick_refresh_token_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/post_kick_chat_nessage_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_last_activities_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_local_credentials_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_me_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_overlays_usecase.dart';
+import 'package:irllink/src/domain/usecases/streamelements/get_se_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_song_playing_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_song_queue_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/next_song_usecase.dart';
@@ -31,6 +37,7 @@ import 'package:irllink/src/domain/usecases/streamelements/refresh_token_usecase
 import 'package:irllink/src/domain/usecases/streamelements/remove_song_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/replay_activity_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/reset_queue_usecase.dart';
+import 'package:irllink/src/domain/usecases/streamelements/set_se_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/update_player_state_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/create_poll_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/end_poll_usecase.dart';
@@ -144,6 +151,13 @@ class HomeBindings extends Bindings {
       ),
     );
 
+    final getStreamElementsSettingsUseCase = GetStreamElementsSettingsUseCase(
+      repository: streamelementsRepository,
+    );
+    final setStreamElementsSettingsUseCase = SetStreamElementsSettingsUseCase(
+      repository: streamelementsRepository,
+    );
+
     Get.lazyPut<StreamelementsViewController>(
       () => StreamelementsViewController(
         getOverlaysUseCase: getOverlaysUseCase,
@@ -159,15 +173,36 @@ class HomeBindings extends Bindings {
         getSongPlayingUseCase: getSongPlayingUseCase,
         getSongQueueUseCase: getSongQueueUseCase,
         watchService: watchService,
-        settingsService: settingsService,
         talkerService: talkerService,
+        getStreamElementsSettingsUseCase: getStreamElementsSettingsUseCase,
+        setStreamElementsSettingsUseCase: setStreamElementsSettingsUseCase,
       ),
       fenix: true,
+    );
+
+    final settingsRepository = SettingsRepositoryImpl(
+      localDataSource: SettingsLocalDataSourceImpl(
+        talker: talker,
+      ),
+      talker: talker,
+    );
+
+    final getDashboardEventsUseCase = GetDashboardEventsUseCase(
+      repository: settingsRepository,
+    );
+    final addDashboardEventUseCase = AddDashboardEventUseCase(
+      repository: settingsRepository,
+    );
+    final removeDashboardEventUseCase = DeleteDashboardEventUseCase(
+      repository: settingsRepository,
     );
 
     Get.lazyPut<DashboardController>(
       () => DashboardController(
         settingsService: settingsService,
+        getDashboardEventsUseCase: getDashboardEventsUseCase,
+        addDashboardEventUseCase: addDashboardEventUseCase,
+        removeDashboardEventUseCase: removeDashboardEventUseCase,
       ),
       fenix: true,
     );

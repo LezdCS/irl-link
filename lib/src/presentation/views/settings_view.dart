@@ -11,7 +11,6 @@ import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 import 'package:irllink/src/presentation/views/settings/chat_events.dart';
 import 'package:irllink/src/presentation/views/settings/dashboard_settings_view.dart';
-import 'package:irllink/src/presentation/views/settings/obs_settings.dart';
 import 'package:irllink/src/presentation/views/settings/realtime_irl.dart';
 import 'package:irllink/src/presentation/views/settings/subscription.dart';
 import 'package:irllink/src/presentation/views/settings/talker_screen.dart';
@@ -67,6 +66,10 @@ class SettingsView extends GetView<SettingsViewController> {
                 height: 20,
               ),
               generalSettings(context, width, settingsService, settings),
+              const Divider(
+                height: 20,
+              ),
+              dataManagementSettings(context, width),
               const Divider(
                 height: 20,
               ),
@@ -219,7 +222,7 @@ class SettingsView extends GetView<SettingsViewController> {
                 settingsGoToRow(
                   context,
                   "manage_hidden_users".tr,
-                  Icons.list,
+                  Icons.person_off,
                   () {
                     Get.toNamed(Routes.hiddenUsersSettings);
                   },
@@ -400,6 +403,191 @@ class SettingsView extends GetView<SettingsViewController> {
     );
   }
 
+  Widget dataManagementSettings(BuildContext context, double width) {
+    return ColoredBox(
+      color: Theme.of(context).colorScheme.surface,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Data Management",
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.tertiary,
+              fontSize: 20,
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.only(left: 4, right: 4),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Backup buttons
+                Row(
+                  children: [
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          controller.exportDatabase();
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.download,
+                                color: Theme.of(context).primaryIconTheme.color,
+                                size: 22,
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: const Text(
+                                  "Backup & Download",
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                // Restore section
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              controller.importDatabaseFromFile();
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.file_upload,
+                                    color: Theme.of(context)
+                                        .primaryIconTheme
+                                        .color,
+                                    size: 22,
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: const Text(
+                                      "Import from File",
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Obx(() {
+                      if (controller.availableBackups.isEmpty) {
+                        return const Padding(
+                          padding: EdgeInsets.all(8),
+                          child: Text(
+                            "No backups available",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        );
+                      }
+
+                      return Container(
+                        constraints: const BoxConstraints(maxHeight: 200),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: controller.availableBackups.length,
+                          itemBuilder: (context, index) {
+                            final file = controller.availableBackups[index];
+                            final fileName = file.path.split('/').last;
+                            final dateTime = file.lastModifiedSync();
+
+                            return Container(
+                              margin: const EdgeInsets.symmetric(vertical: 2),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Theme.of(context).dividerColor,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: ListTile(
+                                dense: true,
+                                title: Text(
+                                  fileName
+                                      .replaceAll('irllink_backup_', '')
+                                      .replaceAll('.json', ''),
+                                  style: const TextStyle(fontSize: 14),
+                                ),
+                                subtitle: Text(
+                                  "${dateTime.day}/${dateTime.month}/${dateTime.year} ${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}",
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.download_outlined,
+                                        size: 20,
+                                        color: Colors.blue,
+                                      ),
+                                      onPressed: () {
+                                        controller.downloadBackup(file.path);
+                                      },
+                                      tooltip: 'Download backup',
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.restore_outlined,
+                                        size: 20,
+                                        color: Colors.green,
+                                      ),
+                                      onPressed: () {
+                                        controller.importDatabase(file.path);
+                                      },
+                                      tooltip: 'Restore backup',
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.delete_outline,
+                                        size: 20,
+                                        color: Colors.red,
+                                      ),
+                                      onPressed: () {
+                                        controller.deleteBackup(file.path);
+                                      },
+                                      tooltip: 'Delete backup',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    }),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget connectionsSettings(
     BuildContext context,
     double width,
@@ -426,37 +614,21 @@ class SettingsView extends GetView<SettingsViewController> {
                 settingsGoToRow(
                   context,
                   "manage_browser_tabs".tr,
-                  Icons.list,
+                  Icons.tab,
                   () {
                     Get.toNamed(
                       Routes.browserSettings,
                     );
                   },
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "OBS",
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                    Switch(
-                      onChanged: (value) {
-                        settingsService.settings.value =
-                            settings.value.copyWith(isObsConnected: value);
-                        settingsService.saveSettings();
-                      },
-                      value: settings.value.isObsConnected,
-                    ),
-                  ],
+                settingsGoToRow(
+                  context,
+                  "OBS",
+                  Icons.laptop,
+                  () {
+                    Get.toNamed(Routes.obsSettings);
+                  },
                 ),
-                Visibility(
-                  visible: settings.value.isObsConnected,
-                  child: const ObsSettings(),
-                ),
-                const SizedBox(height: 10),
                 settingsGoToRow(
                   context,
                   "StreamElements",

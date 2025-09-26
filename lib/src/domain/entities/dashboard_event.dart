@@ -21,6 +21,7 @@ String getDashboardActionTypeString(DashboardActionsTypes actionType) {
 
 @immutable
 class DashboardEvent {
+  final int? id;
   final String title;
   final Color color;
   final DashboardActionsTypes dashboardActionsType;
@@ -28,6 +29,7 @@ class DashboardEvent {
   final dynamic customValue;
 
   const DashboardEvent({
+    this.id,
     required this.title,
     required this.color,
     required this.dashboardActionsType,
@@ -36,6 +38,7 @@ class DashboardEvent {
   });
 
   DashboardEvent copyWith({
+    int? id,
     String? title,
     Color? color,
     DashboardActionsTypes? dashboardActionsType,
@@ -43,6 +46,7 @@ class DashboardEvent {
     customValue,
   }) {
     return DashboardEvent(
+      id: id ?? this.id,
       title: title ?? this.title,
       color: color ?? this.color,
       dashboardActionsType: dashboardActionsType ?? this.dashboardActionsType,

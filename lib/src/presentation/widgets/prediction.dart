@@ -196,18 +196,20 @@ void pickWinnerDialog(
       Get.back();
     },
     content: Obx(
-      () => Column(
-        children: List<Widget>.generate(
-          prediction.outcomes.length,
-          (int index) => ListTile(
-            title: Text(prediction.outcomes[index].title),
-            leading: Radio(
-              value: prediction.outcomes[index].id,
-              groupValue: twitchEventSubService.selectedOutcomeId.value,
-              onChanged: (String? value) {
-                twitchEventSubService.selectedOutcomeId.value = value!;
-              },
-              activeColor: Colors.green,
+      () => RadioGroup<String>(
+        groupValue: twitchEventSubService.selectedOutcomeId.value,
+        onChanged: (String? value) {
+          twitchEventSubService.selectedOutcomeId.value = value!;
+        },
+        child: Column(
+          children: List<Widget>.generate(
+            prediction.outcomes.length,
+            (int index) => ListTile(
+              title: Text(prediction.outcomes[index].title),
+              leading: Radio<String>(
+                value: prediction.outcomes[index].id,
+                activeColor: Colors.green,
+              ),
             ),
           ),
         ),

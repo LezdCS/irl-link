@@ -4,11 +4,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
-import 'package:irllink/src/domain/entities/settings.dart';
+import 'package:irllink/src/domain/entities/settings/obs_settings.dart';
+import 'package:irllink/src/domain/usecases/obs/get_obs_credentials_usecase.dart';
 import 'package:obs_websocket/event.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 
@@ -16,6 +16,7 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
   ObsTabViewController({
     required this.watchService,
     required this.talkerService,
+    required this.getObsCredentialsUsecase,
   });
 
   ObsWebSocket? obsWebSocket;
@@ -40,6 +41,9 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
 
   final WatchService watchService;
   final TalkerService talkerService;
+
+  Rxn<ObsSettings> obsSettings = Rxn<ObsSettings>();
+  final GetObsCredentialsUsecase getObsCredentialsUsecase;
 
   @override
   Future<void> onReady() async {
@@ -155,23 +159,6 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
 
       alertMessage.value = "Connected.";
       isConnected.value = true;
-      Settings settings = Get.find<SettingsService>().settings.value;
-
-      List obsConnectionsHistory = List.from(settings.obsConnectionsHistory);
-      if (obsConnectionsHistory.firstWhereOrNull(
-            (element) =>
-                element['url'] == url && element['password'] == password,
-          ) ==
-          null) {
-        obsConnectionsHistory.add({
-          "url": url,
-          "password": password,
-        });
-
-        settings =
-            settings.copyWith(obsConnectionsHistory: obsConnectionsHistory);
-        Get.find<SettingsService>().saveSettings();
-      }
 
       getSceneList();
       getCurrentScene();
@@ -196,6 +183,16 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
       alertMessage.value = "Failed to connect to OBS";
       isConnected.value = false;
     }
+  }
+
+  void getObsSettings() async {
+    final result = await getObsCredentialsUsecase(params: null);
+    result.fold(
+      (failure) {},
+      (success) {
+        obsSettings.value = success;
+      },
+    );
   }
 
   void connectionLost() {
@@ -313,13 +310,11 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
   }
 
   Future applySettings() async {
-    Settings settings = Get.find<SettingsService>().settings.value;
-
     if (obsWebSocket != null) {
       obsWebSocket!.close();
     }
-    if (settings.isObsConnected) {
-      connectWs(settings.obsWebsocketUrl, settings.obsWebsocketPassword);
+    if (obsSettings.value?.isConnected ?? false) {
+      connectWs(obsSettings.value!.url, obsSettings.value!.password);
     }
   }
 }

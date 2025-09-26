@@ -16,20 +16,7 @@ _SettingsDTO _$SettingsDTOFromJson(Map<String, dynamic> json) => _SettingsDTO(
           json['chatSettings'] as Map<String, dynamic>),
       generalSettings: GeneralSettingsDTO.fromJson(
           json['generalSettings'] as Map<String, dynamic>),
-      dashboardSettings: DashboardSettingsDTO.fromJson(
-          json['dashboardSettings'] as Map<String, dynamic>),
-      isObsConnected: json['isObsConnected'] as bool? ?? false,
-      obsWebsocketUrl: json['obsWebsocketUrl'] as String? ?? "",
-      obsWebsocketPassword: json['obsWebsocketPassword'] as String? ?? "",
-      browserTabs: BrowserTabSettingsDTO.fromJson(
-          json['browserTabs'] as Map<String, dynamic>),
-      obsConnectionsHistory:
-          json['obsConnectionsHistory'] as List<dynamic>? ?? const [],
-      streamElementsSettings: StreamElementsSettingsDTO.fromJson(
-          json['streamElementsSettings'] as Map<String, dynamic>),
       rtIrlPushKey: json['rtIrlPushKey'] as String? ?? "",
-      ttsSettings:
-          TtsSettingsDTO.fromJson(json['ttsSettings'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$SettingsDTOToJson(_SettingsDTO instance) =>
@@ -40,13 +27,5 @@ Map<String, dynamic> _$SettingsDTOToJson(_SettingsDTO instance) =>
       'chatEventsSettings': instance.chatEventsSettings,
       'chatSettings': instance.chatSettings,
       'generalSettings': instance.generalSettings,
-      'dashboardSettings': instance.dashboardSettings,
-      'isObsConnected': instance.isObsConnected,
-      'obsWebsocketUrl': instance.obsWebsocketUrl,
-      'obsWebsocketPassword': instance.obsWebsocketPassword,
-      'browserTabs': instance.browserTabs,
-      'obsConnectionsHistory': instance.obsConnectionsHistory,
-      'streamElementsSettings': instance.streamElementsSettings,
       'rtIrlPushKey': instance.rtIrlPushKey,
-      'ttsSettings': instance.ttsSettings,
     };

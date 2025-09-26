@@ -8,16 +8,11 @@ part of 'chat_settings_dto.dart';
 
 _ChatSettingsDTO _$ChatSettingsDTOFromJson(Map<String, dynamic> json) =>
     _ChatSettingsDTO(
-      chatGroups: (json['chatGroups'] as List<dynamic>?)
-              ?.map((e) => ChatGroupDTO.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          const [],
       hideDeletedMessages: json['hideDeletedMessages'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$ChatSettingsDTOToJson(_ChatSettingsDTO instance) =>
     <String, dynamic>{
-      'chatGroups': instance.chatGroups,
       'hideDeletedMessages': instance.hideDeletedMessages,
     };
 

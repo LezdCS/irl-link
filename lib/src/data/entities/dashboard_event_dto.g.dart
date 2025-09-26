@@ -8,22 +8,24 @@ part of 'dashboard_event_dto.dart';
 
 _DashboardEventDTO _$DashboardEventDTOFromJson(Map<String, dynamic> json) =>
     _DashboardEventDTO(
+      id: (json['id'] as num?)?.toInt(),
       title: json['title'] as String? ?? 'None',
       color: const ColorConverter().fromJson((json['color'] as num).toInt()),
       dashboardActionsType: $enumDecode(
-          _$DashboardActionsTypesEnumMap, json['dashboardActionsType']),
+          _$DashboardActionsTypesEnumMap, json['dashboard_actions_type']),
       event: $enumDecode(_$SupportedEventsEnumMap, json['event']),
-      customValue: json['customValue'],
+      customValue: json['custom_value'],
     );
 
 Map<String, dynamic> _$DashboardEventDTOToJson(_DashboardEventDTO instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'title': instance.title,
       'color': const ColorConverter().toJson(instance.color),
-      'dashboardActionsType':
+      'dashboard_actions_type':
           _$DashboardActionsTypesEnumMap[instance.dashboardActionsType]!,
       'event': _$SupportedEventsEnumMap[instance.event]!,
-      'customValue': instance.customValue,
+      'custom_value': instance.customValue,
     };
 
 const _$DashboardActionsTypesEnumMap = {

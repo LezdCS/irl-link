@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:app_links/app_links.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
+import 'package:irllink/src/domain/usecases/settings/add_browser_tab_usecase.dart';
 import 'package:irllink/src/presentation/controllers/tabs_controller.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:uuid/uuid.dart';
@@ -12,11 +12,13 @@ import 'package:uuid/uuid.dart';
 class DeeplinksService {
   final AppLinks appLinks;
   final Talker talker;
+  final AddBrowserTabUsecase addBrowserTabUsecase;
   StreamSubscription? _subscription;
 
   DeeplinksService({
     required this.appLinks,
     required this.talker,
+    required this.addBrowserTabUsecase,
   });
 
   Future<DeeplinksService> init() async {
@@ -66,10 +68,6 @@ class DeeplinksService {
       return;
     }
 
-    // Get the settings service
-    final settingsService = Get.find<SettingsService>();
-    final settings = settingsService.settings.value;
-
     final remoteConfig = FirebaseRemoteConfig.instance;
     await remoteConfig.fetchAndActivate();
     final baseUrl = remoteConfig.getString('irltools_obs_remote_base_url');
@@ -84,11 +82,7 @@ class DeeplinksService {
     );
 
     // Add the tab to settings
-    final tabs = List<BrowserTab>.from(settings.browserTabs.tabs)..add(tab);
-    settingsService.settings.value = settings.copyWith(
-      browserTabs: settings.browserTabs.copyWith(tabs: tabs),
-    );
-    settingsService.saveSettings();
+    await addBrowserTabUsecase(params: tab);
 
     // Generate the tabs
     Get.find<TabsController>().generateTabs();

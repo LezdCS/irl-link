@@ -185,6 +185,16 @@ class ChatsController extends GetxController with GetTickerProviderStateMixin {
 
     if (chatsViews.isEmpty) {
       selectedChatGroup.value = null;
+    } else if (selectedChatGroup.value == null) {
+      // Set selectedChatGroup to the first chat group if none is selected
+      if (Get.isRegistered<ChatViewController>(
+        tag: chatsViews.first.chatGroup.id,
+      )) {
+        ChatViewController c = Get.find<ChatViewController>(
+          tag: chatsViews.first.chatGroup.id,
+        );
+        selectedChatGroup.value = c.chatGroup;
+      }
     }
   }
 
@@ -194,7 +204,6 @@ class ChatsController extends GetxController with GetTickerProviderStateMixin {
         final controller = ChatViewController(
           chatGroup: chatGroup,
           homeViewController: Get.find<HomeViewController>(),
-          settingsService: Get.find<SettingsService>(),
           talker: talkerService.talker,
           ttsService: Get.find<TtsService>(),
           watchService: Get.find<WatchService>(),

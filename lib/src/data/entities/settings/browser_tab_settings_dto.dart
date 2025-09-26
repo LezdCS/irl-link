@@ -1,36 +1,42 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:uuid/uuid.dart';
 
 part 'browser_tab_settings_dto.freezed.dart';
 part 'browser_tab_settings_dto.g.dart';
 
-@freezed
-abstract class BrowserTabSettingsDTO with _$BrowserTabSettingsDTO {
-  factory BrowserTabSettingsDTO({
-    @Default([]) List<BrowserTabDTO> tabs,
-  }) = _BrowserTabSettingsDTO;
-  BrowserTabSettingsDTO._();
+// Custom converter for boolean values stored as integers in SQLite
+class BoolToIntConverter implements JsonConverter<bool, Object> {
+  const BoolToIntConverter();
 
-  factory BrowserTabSettingsDTO.blank() => BrowserTabSettingsDTO();
-  factory BrowserTabSettingsDTO.fromJson(Map<String, dynamic> json) =>
-      _$BrowserTabSettingsDTOFromJson(json);
+  @override
+  bool fromJson(Object json) {
+    if (json is bool) {
+      return json;
+    }
+    if (json is int) {
+      return json == 1;
+    }
+    if (json is String) {
+      return json.toLowerCase() == 'true';
+    }
+    return false;
+  }
+
+  @override
+  Object toJson(bool object) => object;
 }
 
 @freezed
 abstract class BrowserTabDTO with _$BrowserTabDTO {
   const factory BrowserTabDTO({
-    @JsonKey(fromJson: _idFromJson) required String id,
+    required String id,
     required String title,
     required String url,
-    required bool toggled,
+    @BoolToIntConverter() required bool toggled,
+    @JsonKey(name: 'is_ios_audio_source')
+    @BoolToIntConverter()
     required bool iOSAudioSource,
   }) = _BrowserTabDTO;
 
   factory BrowserTabDTO.fromJson(Map<String, dynamic> json) =>
       _$BrowserTabDTOFromJson(json);
-}
-
-// we used not to have id in the BrowserTab entity, this is to prevent braking from the previous versions
-String _idFromJson(id) {
-  return id ?? const Uuid().v4();
 }

@@ -2,11 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
-import 'package:irllink/src/domain/entities/settings.dart';
+import 'package:irllink/src/domain/entities/settings/stream_elements_settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_credentials.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_me.dart';
@@ -16,6 +15,7 @@ import 'package:irllink/src/domain/usecases/streamelements/get_last_activities_u
 import 'package:irllink/src/domain/usecases/streamelements/get_local_credentials_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_me_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_overlays_usecase.dart';
+import 'package:irllink/src/domain/usecases/streamelements/get_se_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_song_playing_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_song_queue_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/next_song_usecase.dart';
@@ -23,6 +23,7 @@ import 'package:irllink/src/domain/usecases/streamelements/refresh_token_usecase
 import 'package:irllink/src/domain/usecases/streamelements/remove_song_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/replay_activity_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/reset_queue_usecase.dart';
+import 'package:irllink/src/domain/usecases/streamelements/set_se_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/update_player_state_usecase.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -41,9 +42,10 @@ class StreamelementsViewController extends GetxController
     required this.getLastActivitiesUseCase,
     required this.getSongPlayingUseCase,
     required this.getSongQueueUseCase,
-    required this.settingsService,
     required this.watchService,
     required this.talkerService,
+    required this.getStreamElementsSettingsUseCase,
+    required this.setStreamElementsSettingsUseCase,
   });
 
   final StreamElementsGetOverlaysUseCase getOverlaysUseCase;
@@ -58,8 +60,9 @@ class StreamelementsViewController extends GetxController
   final StreamElementsGetLastActivitiesUseCase getLastActivitiesUseCase;
   final StreamElementsGetSongPlayingUseCase getSongPlayingUseCase;
   final StreamElementsGetSongQueueUseCase getSongQueueUseCase;
+  final GetStreamElementsSettingsUseCase getStreamElementsSettingsUseCase;
+  final SetStreamElementsSettingsUseCase setStreamElementsSettingsUseCase;
 
-  final SettingsService settingsService;
   final WatchService watchService;
   final TalkerService talkerService;
 
@@ -82,6 +85,9 @@ class StreamelementsViewController extends GetxController
   Socket? socket;
 
   RxBool isSocketConnected = false.obs;
+
+  Rxn<StreamElementsSettings> streamElementsSettings =
+      Rxn<StreamElementsSettings>();
 
   @override
   Future<void> onInit() async {
@@ -128,6 +134,14 @@ class StreamelementsViewController extends GetxController
     isSocketConnected.value = false;
     socket = null;
     super.onClose();
+  }
+
+  Future<void> getStreamElementsSettings() async {
+    final settingsResult = await getStreamElementsSettingsUseCase();
+    settingsResult.fold(
+      (l) => {},
+      (r) => streamElementsSettings.value = r,
+    );
   }
 
   void reconnectSocket() {
@@ -183,7 +197,6 @@ class StreamelementsViewController extends GetxController
   }
 
   Future<void> handleGetMe() async {
-    String? jwt = settingsService.settings.value.streamElementsSettings.jwt;
     SeMe? me = userSeProfile.value;
     if (me == null) {
       talkerService.talker.error('User profile was not found.');
@@ -229,20 +242,18 @@ class StreamelementsViewController extends GetxController
       (r) => currentSong.value = r,
     );
 
-    if (jwt != null) {
-      final songQueueResult = await getSongQueueUseCase(
-        params: StreamElementsGetSongQueueParams(
-          token: accessToken,
-          channel: me.id,
-        ),
-      );
-      songQueueResult.fold(
-        (l) => {},
-        (r) => {
-          songRequestQueue.value = r,
-        },
-      );
-    }
+    final songQueueResult = await getSongQueueUseCase(
+      params: StreamElementsGetSongQueueParams(
+        token: accessToken,
+        channel: me.id,
+      ),
+    );
+    songQueueResult.fold(
+      (l) => {},
+      (r) => {
+        songRequestQueue.value = r,
+      },
+    );
   }
 
   void updatePlayerState(String state, String jwt) {
@@ -398,25 +409,29 @@ class StreamelementsViewController extends GetxController
     talkerService.talker.warning('StreamElements WebSocket disconnected.');
   }
 
-  Future<void> onAuthenticated(data) async {
+  // ignore: avoid_annotating_with_dynamic because we need to specify the type
+  Future<void> onAuthenticated(dynamic data) async {
     isSocketConnected.value = true;
     talkerService.talker.logCustom(
       StreamElementsLog('StreamElements WebSocket authenticated.'),
     );
   }
 
-  void onAddSongQueue(data) {
+  // ignore: avoid_annotating_with_dynamic because we need to specify the type
+  void onAddSongQueue(dynamic data) {
     dynamic songData = data[0]["song"];
     SeSong song = SeSong.fromJson(songData);
     songRequestQueue.add(song);
   }
 
-  void onRemoveSongQueue(data) {
+  // ignore: avoid_annotating_with_dynamic because we need to specify the type
+  void onRemoveSongQueue(dynamic data) {
     dynamic songId = data[0]["songId"];
     songRequestQueue.removeWhere((element) => element.id == songId);
   }
 
-  void onNextSong(data) {
+  // ignore: avoid_annotating_with_dynamic because we need to specify the type
+  void onNextSong(dynamic data) {
     dynamic songData = data[0]["nextSong"];
     if (songData == null || songData == {}) {
       return;
@@ -428,21 +443,21 @@ class StreamelementsViewController extends GetxController
     }
   }
 
-  void onPreviousSong(data) {
+  // ignore: avoid_annotating_with_dynamic because we need to specify the type
+  void onPreviousSong(dynamic data) {
     dynamic songData = data[0]["song"];
     SeSong song = SeSong.fromJson(songData);
     currentSong.value = song;
   }
 
-  void parseTestEvent(data) {
-    Settings settings = settingsService.settings.value;
-
+  // ignore: avoid_annotating_with_dynamic because we need to specify the type
+  void parseTestEvent(dynamic data) {
     dynamic widget = data[0];
     String listener = widget["listener"];
     dynamic event = widget["event"];
     switch (listener) {
       case "follower-latest":
-        if (!settings.streamElementsSettings.showFollowerActivity) {
+        if (!(streamElementsSettings.value?.showFollowerActivity ?? true)) {
           return;
         }
         SeActivity activity = SeActivity(
@@ -455,7 +470,7 @@ class StreamelementsViewController extends GetxController
         );
         activities.add(activity);
       case "subscriber-latest":
-        if (!settings.streamElementsSettings.showSubscriberActivity) {
+        if (!(streamElementsSettings.value?.showSubscriberActivity ?? true)) {
           return;
         }
         SeActivity activity = SeActivity(
@@ -472,7 +487,7 @@ class StreamelementsViewController extends GetxController
         );
         activities.add(activity);
       case "tip-latest":
-        if (!settings.streamElementsSettings.showDonationActivity) {
+        if (!(streamElementsSettings.value?.showDonationActivity ?? true)) {
           return;
         }
         SeActivity activity = SeActivity(
@@ -487,7 +502,7 @@ class StreamelementsViewController extends GetxController
         );
         activities.add(activity);
       case "cheer-latest":
-        if (!settings.streamElementsSettings.showCheerActivity) {
+        if (!(streamElementsSettings.value?.showCheerActivity ?? true)) {
           return;
         }
         SeActivity activity = SeActivity(
@@ -502,7 +517,7 @@ class StreamelementsViewController extends GetxController
         );
         activities.add(activity);
       case "host-latest":
-        if (!settings.streamElementsSettings.showHostActivity) {
+        if (!(streamElementsSettings.value?.showHostActivity ?? true)) {
           return;
         }
         SeActivity activity = SeActivity(
@@ -516,7 +531,7 @@ class StreamelementsViewController extends GetxController
         );
         activities.add(activity);
       case "raid-latest":
-        if (!settings.streamElementsSettings.showRaidActivity) {
+        if (!(streamElementsSettings.value?.showRaidActivity ?? true)) {
           return;
         }
         SeActivity activity = SeActivity(
@@ -534,14 +549,13 @@ class StreamelementsViewController extends GetxController
     }
   }
 
-  void parseEvent(data) {
-    Settings settings = settingsService.settings.value;
-
+  // ignore: avoid_annotating_with_dynamic because we need to specify the type
+  void parseEvent(dynamic data) {
     dynamic event = data[0];
     String type = event["type"];
     switch (type) {
       case "follower":
-        if (!settings.streamElementsSettings.showFollowerActivity) {
+        if (!(streamElementsSettings.value?.showFollowerActivity ?? true)) {
           return;
         }
         SeActivity activity = SeActivity(
@@ -553,7 +567,7 @@ class StreamelementsViewController extends GetxController
         );
         activities.add(activity);
       case "subscriber":
-        if (!settings.streamElementsSettings.showSubscriberActivity) {
+        if (!(streamElementsSettings.value?.showSubscriberActivity ?? true)) {
           return;
         }
         SeActivity activity = SeActivity(
@@ -570,7 +584,7 @@ class StreamelementsViewController extends GetxController
         );
         activities.add(activity);
       case "tip":
-        if (!settings.streamElementsSettings.showDonationActivity) {
+        if (!(streamElementsSettings.value?.showDonationActivity ?? true)) {
           return;
         }
         SeActivity activity = SeActivity(
@@ -584,7 +598,7 @@ class StreamelementsViewController extends GetxController
         );
         activities.add(activity);
       case "cheer":
-        if (!settings.streamElementsSettings.showCheerActivity) {
+        if (!(streamElementsSettings.value?.showCheerActivity ?? true)) {
           return;
         }
         SeActivity activity = SeActivity(
@@ -598,7 +612,7 @@ class StreamelementsViewController extends GetxController
         );
         activities.add(activity);
       case "host":
-        if (!settings.streamElementsSettings.showHostActivity) {
+        if (!(streamElementsSettings.value?.showHostActivity ?? true)) {
           return;
         }
         SeActivity activity = SeActivity(
@@ -611,7 +625,7 @@ class StreamelementsViewController extends GetxController
         );
         activities.add(activity);
       case "raid":
-        if (!settings.streamElementsSettings.showRaidActivity) {
+        if (!(streamElementsSettings.value?.showRaidActivity ?? true)) {
           return;
         }
         SeActivity activity = SeActivity(

@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/services/settings_service.dart';
-import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/presentation/controllers/settings/browser_settings_controller.dart';
 
@@ -16,8 +14,6 @@ class ManageListBrowserTabs extends GetView<BrowserSettingsController> {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        Settings settings = Get.find<SettingsService>().settings.value;
-
         return Scaffold(
           appBar: AppBar(
             leading: IconButton(
@@ -46,18 +42,15 @@ class ManageListBrowserTabs extends GetView<BrowserSettingsController> {
                     right: 18,
                     bottom: 8,
                   ),
-                  itemCount: settings.browserTabs.tabs.length,
+                  itemCount: controller.browserTabs.length,
                   onReorder: (int oldIndex, int newIndex) {
-                    if (newIndex > oldIndex) {
-                      newIndex -= 1;
-                    }
-                    final element =
-                        settings.browserTabs.tabs.removeAt(oldIndex);
-                    settings.browserTabs.tabs.insert(newIndex, element);
-                    Get.find<SettingsService>().saveSettings();
+                    // TODO(LezdCS): Implement reordering
+                    // if (newIndex > oldIndex) {
+                    //   newIndex -= 1;
+                    // }
                   },
                   itemBuilder: (BuildContext context, int index) {
-                    BrowserTab elem = settings.browserTabs.tabs[index];
+                    BrowserTab elem = controller.browserTabs[index];
                     return Dismissible(
                       key: ValueKey(elem),
                       background: Container(
@@ -105,6 +98,7 @@ class ManageListBrowserTabs extends GetView<BrowserSettingsController> {
                             confirmTextColor: Colors.white,
                             radius: 10,
                             onConfirm: () {
+                              controller.removeBrowserTab(elem);
                               delete = true;
                             },
                           );
@@ -127,6 +121,7 @@ class ManageListBrowserTabs extends GetView<BrowserSettingsController> {
                             confirmTextColor: Colors.white,
                             radius: 10,
                             onConfirm: () {
+                              controller.editBrowserTab(elem);
                               edit = true;
                             },
                           );
@@ -135,11 +130,8 @@ class ManageListBrowserTabs extends GetView<BrowserSettingsController> {
                         return false;
                       },
                       onDismissed: (direction) {
-                        if (direction == DismissDirection.endToStart) {
-                          controller.removeBrowserTab(elem);
-                        } else if (direction == DismissDirection.startToEnd) {
-                          controller.editBrowserTab(elem);
-                        }
+                        // Actions are handled in the dialog confirmations
+                        // This callback is kept empty to prevent duplicate actions
                       },
                       child: Container(
                         margin: const EdgeInsets.all(4),
@@ -210,7 +202,7 @@ Widget _addGroupButton(
   );
 }
 
-Widget _addDialog(context, BrowserSettingsController controller) {
+Widget _addDialog(BuildContext context, BrowserSettingsController controller) {
   controller.addBrowserUrlController.text = '';
   controller.addBrowserTitleController.text = '';
   controller.addBrowserToggled.value = true;
@@ -315,7 +307,7 @@ Widget _addDialog(context, BrowserSettingsController controller) {
 }
 
 Widget _editDialog(
-  context,
+  BuildContext context,
   BrowserSettingsController controller,
   BrowserTab elem,
 ) {

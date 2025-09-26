@@ -10,7 +10,7 @@ class TalkerService extends GetxService {
     talker = TalkerFlutter.init(
       settings: TalkerSettings(
         colors: {
-          TalkerLogType.debug.key: AnsiPen()..yellow(),
+          TalkerKey.debug: AnsiPen()..yellow(),
         },
       ),
       observer: crashlyticsTalkerObserver,

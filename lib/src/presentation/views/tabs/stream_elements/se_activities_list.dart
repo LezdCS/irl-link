@@ -1,8 +1,6 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/services/settings_service.dart';
-import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/stream_elements_settings.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
 import 'package:irllink/src/presentation/controllers/tabs/streamelements_view_controller.dart';
@@ -51,7 +49,6 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
   }
 
   Widget _activitiesSettings() {
-    final SettingsService settingsService = Get.find<SettingsService>();
     return PopupMenuButton(
       offset: const Offset(30, 10),
       color: Theme.of(Get.context!).colorScheme.secondary,
@@ -59,21 +56,22 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
       itemBuilder: (context) => [
         PopupMenuItem(
           child: Obx(() {
-            StreamElementsSettings? seSettings =
-                settingsService.settings.value.streamElementsSettings;
             return CheckboxListTile(
               controlAffinity: ListTileControlAffinity.leading,
               title: Text(
                 "followers".tr,
               ),
-              value: seSettings.showFollowerActivity,
+              value:
+                  controller.streamElementsSettings.value?.showFollowerActivity,
               onChanged: (bool? value) {
-                settingsService.settings.value =
-                    settingsService.settings.value.copyWith(
-                  streamElementsSettings:
-                      seSettings.copyWith(showFollowerActivity: value),
+                StreamElementsSettings streamElementsSettings =
+                    controller.streamElementsSettings.value!;
+                streamElementsSettings = streamElementsSettings.copyWith(
+                  showFollowerActivity: value,
                 );
-                settingsService.saveSettings();
+                controller.setStreamElementsSettingsUseCase(
+                  params: streamElementsSettings,
+                );
               },
             );
           }),
@@ -81,19 +79,22 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
         PopupMenuItem(
           child: Obx(
             () {
-              Settings settings = settingsService.settings.value;
               return CheckboxListTile(
                 controlAffinity: ListTileControlAffinity.leading,
                 title: Text(
                   "subscriptions".tr,
                 ),
-                value: settings.streamElementsSettings.showSubscriberActivity,
+                value: controller
+                    .streamElementsSettings.value?.showSubscriberActivity,
                 onChanged: (bool? value) {
-                  settingsService.settings.value = settings.copyWith(
-                    streamElementsSettings: settings.streamElementsSettings
-                        .copyWith(showSubscriberActivity: value),
+                  StreamElementsSettings streamElementsSettings =
+                      controller.streamElementsSettings.value!;
+                  streamElementsSettings = streamElementsSettings.copyWith(
+                    showSubscriberActivity: value,
                   );
-                  settingsService.saveSettings();
+                  controller.setStreamElementsSettingsUseCase(
+                    params: streamElementsSettings,
+                  );
                 },
               );
             },
@@ -102,19 +103,22 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
         PopupMenuItem(
           child: Obx(
             () {
-              Settings settings = settingsService.settings.value;
               return CheckboxListTile(
                 controlAffinity: ListTileControlAffinity.leading,
                 title: Text(
                   "bits".tr,
                 ),
-                value: settings.streamElementsSettings.showCheerActivity,
+                value:
+                    controller.streamElementsSettings.value?.showCheerActivity,
                 onChanged: (bool? value) {
-                  settingsService.settings.value = settings.copyWith(
-                    streamElementsSettings: settings.streamElementsSettings
-                        .copyWith(showCheerActivity: value),
+                  StreamElementsSettings streamElementsSettings =
+                      controller.streamElementsSettings.value!;
+                  streamElementsSettings = streamElementsSettings.copyWith(
+                    showCheerActivity: value,
                   );
-                  settingsService.saveSettings();
+                  controller.setStreamElementsSettingsUseCase(
+                    params: streamElementsSettings,
+                  );
                 },
               );
             },
@@ -123,19 +127,22 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
         PopupMenuItem(
           child: Obx(
             () {
-              Settings settings = settingsService.settings.value;
               return CheckboxListTile(
                 controlAffinity: ListTileControlAffinity.leading,
                 title: Text(
                   "donations".tr,
                 ),
-                value: settings.streamElementsSettings.showDonationActivity,
+                value: controller
+                    .streamElementsSettings.value?.showDonationActivity,
                 onChanged: (bool? value) {
-                  settingsService.settings.value = settings.copyWith(
-                    streamElementsSettings: settings.streamElementsSettings
-                        .copyWith(showDonationActivity: value),
+                  StreamElementsSettings streamElementsSettings =
+                      controller.streamElementsSettings.value!;
+                  streamElementsSettings = streamElementsSettings.copyWith(
+                    showDonationActivity: value,
                   );
-                  settingsService.saveSettings();
+                  controller.setStreamElementsSettingsUseCase(
+                    params: streamElementsSettings,
+                  );
                 },
               );
             },
@@ -144,19 +151,22 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
         PopupMenuItem(
           child: Obx(
             () {
-              Settings settings = settingsService.settings.value;
               return CheckboxListTile(
                 controlAffinity: ListTileControlAffinity.leading,
                 title: Text(
                   "raids".tr,
                 ),
-                value: settings.streamElementsSettings.showRaidActivity,
+                value:
+                    controller.streamElementsSettings.value?.showRaidActivity,
                 onChanged: (bool? value) {
-                  settingsService.settings.value = settings.copyWith(
-                    streamElementsSettings: settings.streamElementsSettings
-                        .copyWith(showRaidActivity: value),
+                  StreamElementsSettings streamElementsSettings =
+                      controller.streamElementsSettings.value!;
+                  streamElementsSettings = streamElementsSettings.copyWith(
+                    showRaidActivity: value,
                   );
-                  settingsService.saveSettings();
+                  controller.setStreamElementsSettingsUseCase(
+                    params: streamElementsSettings,
+                  );
                 },
               );
             },
@@ -165,19 +175,22 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
         PopupMenuItem(
           child: Obx(
             () {
-              Settings settings = settingsService.settings.value;
               return CheckboxListTile(
                 controlAffinity: ListTileControlAffinity.leading,
                 title: Text(
                   "hosts".tr,
                 ),
-                value: settings.streamElementsSettings.showHostActivity,
+                value:
+                    controller.streamElementsSettings.value?.showHostActivity,
                 onChanged: (bool? value) {
-                  settingsService.settings.value = settings.copyWith(
-                    streamElementsSettings: settings.streamElementsSettings
-                        .copyWith(showHostActivity: value),
+                  StreamElementsSettings streamElementsSettings =
+                      controller.streamElementsSettings.value!;
+                  streamElementsSettings = streamElementsSettings.copyWith(
+                    showHostActivity: value,
                   );
-                  settingsService.saveSettings();
+                  controller.setStreamElementsSettingsUseCase(
+                    params: streamElementsSettings,
+                  );
                 },
               );
             },

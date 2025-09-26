@@ -9,14 +9,16 @@ part 'dashboard_event_dto.g.dart';
 @freezed
 abstract class DashboardEventDTO with _$DashboardEventDTO {
   const factory DashboardEventDTO({
+    int? id,
     @Default('None') String title,
     @ColorConverter() required Color color,
+    @JsonKey(name: 'dashboard_actions_type')
     required DashboardActionsTypes dashboardActionsType,
     required SupportedEvents event,
     // The customValue needs to be dynamic since it can be of different types
     // depending on the event type
     // ignore: avoid_annotating_with_dynamic
-    required dynamic customValue,
+    @JsonKey(name: 'custom_value') required dynamic customValue,
   }) = _DashboardEventDTO;
 
   factory DashboardEventDTO.fromJson(Map<String, dynamic> json) =>

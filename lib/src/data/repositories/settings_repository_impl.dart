@@ -3,12 +3,20 @@ import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/utils/mapper.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/datasources/local/settings_local_data_source.dart';
+import 'package:irllink/src/data/entities/dashboard_event_dto.dart';
+import 'package:irllink/src/data/entities/obs_settings_dto.dart';
+import 'package:irllink/src/data/entities/settings/browser_tab_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/chat_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/hidden_user_dto.dart';
+import 'package:irllink/src/data/entities/settings/tts_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings_dto.dart';
+import 'package:irllink/src/domain/entities/dashboard_event.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
+import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/domain/entities/settings/hidden_user.dart';
+import 'package:irllink/src/domain/entities/settings/obs_settings.dart';
+import 'package:irllink/src/domain/entities/settings/tts_settings.dart';
 import 'package:irllink/src/domain/repositories/settings_repository.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
@@ -142,6 +150,138 @@ class SettingsRepositoryImpl extends SettingsRepository {
           )
           .toList();
       return Right(chatGroups);
+    }
+    return const Right([]);
+  }
+
+  @override
+  Future<Either<Failure, void>> addBrowserTab(BrowserTab browserTab) async {
+    try {
+      BrowserTabDTO browserTabDTO =
+          _mappr.convert<BrowserTab, BrowserTabDTO>(browserTab);
+      await _localDataSource.addBrowserTab(browserTabDTO);
+      return const Right(null);
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> editBrowserTab(BrowserTab browserTab) async {
+    try {
+      BrowserTabDTO browserTabDTO =
+          _mappr.convert<BrowserTab, BrowserTabDTO>(browserTab);
+      await _localDataSource.editBrowserTab(browserTabDTO);
+      return const Right(null);
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> removeBrowserTab(BrowserTab browserTab) async {
+    try {
+      BrowserTabDTO browserTabDTO =
+          _mappr.convert<BrowserTab, BrowserTabDTO>(browserTab);
+      await _localDataSource.removeBrowserTab(browserTabDTO);
+      return const Right(null);
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<BrowserTab>>> getBrowserTabs() async {
+    final browserTabsDTO = await _localDataSource.getBrowserTabs();
+    if (browserTabsDTO != null) {
+      List<BrowserTab> browserTabs = browserTabsDTO
+          .map(
+            (browserTabDTO) =>
+                _mappr.convert<BrowserTabDTO, BrowserTab>(browserTabDTO),
+          )
+          .toList();
+      return Right(browserTabs);
+    }
+    return const Right([]);
+  }
+
+  @override
+  Future<Either<Failure, ObsSettings>> getObsCredentials() async {
+    final obsSettingsDTO = await _localDataSource.getObsCredentials();
+    if (obsSettingsDTO != null) {
+      return Right(_mappr.convert<ObsSettingsDTO, ObsSettings>(obsSettingsDTO));
+    }
+    return Left(Failure('No obs credentials found'));
+  }
+
+  @override
+  Future<Either<Failure, void>> updateObsSettings(
+    ObsSettings obsSettings,
+  ) async {
+    final obsSettingsDTO =
+        _mappr.convert<ObsSettings, ObsSettingsDTO>(obsSettings);
+    await _localDataSource.updateObsSettings(obsSettingsDTO);
+    return const Right(null);
+  }
+
+  @override
+  Future<Either<Failure, TtsSettings>> getTtsSettings() async {
+    final ttsSettingsDTO = await _localDataSource.getTtsSettings();
+    if (ttsSettingsDTO != null) {
+      return Right(_mappr.convert<TtsSettingsDTO, TtsSettings>(ttsSettingsDTO));
+    }
+    return Left(Failure('No tts settings found'));
+  }
+
+  @override
+  Future<Either<Failure, void>> updateTtsSettings(
+    TtsSettings ttsSettings,
+  ) async {
+    final ttsSettingsDTO =
+        _mappr.convert<TtsSettings, TtsSettingsDTO>(ttsSettings);
+    await _localDataSource.setTtsSettings(ttsSettingsDTO);
+    return const Right(null);
+  }
+
+  @override
+  Future<Either<Failure, void>> addDashboardEvent(
+    DashboardEvent dashboardEvent,
+  ) async {
+    try {
+      final dashboardEventDTO =
+          _mappr.convert<DashboardEvent, DashboardEventDTO>(dashboardEvent);
+      await _localDataSource.addDashboardEvent(dashboardEventDTO);
+      return const Right(null);
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> removeDashboardEvent(
+    DashboardEvent dashboardEvent,
+  ) async {
+    try {
+      final dashboardEventDTO =
+          _mappr.convert<DashboardEvent, DashboardEventDTO>(dashboardEvent);
+      await _localDataSource.removeDashboardEvent(dashboardEventDTO);
+      return const Right(null);
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<DashboardEvent>>> getDashboardEvents() async {
+    final dashboardEventsDTO = await _localDataSource.getDashboardEvents();
+    if (dashboardEventsDTO != null) {
+      List<DashboardEvent> dashboardEvents = dashboardEventsDTO
+          .map(
+            (dashboardEventDTO) => _mappr
+                .convert<DashboardEventDTO, DashboardEvent>(dashboardEventDTO),
+          )
+          .toList();
+      return Right(dashboardEvents);
     }
     return const Right([]);
   }
