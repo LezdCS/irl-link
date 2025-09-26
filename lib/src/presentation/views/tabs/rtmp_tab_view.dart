@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:haishin_kit/stream_view_texture.dart';
+// import 'package:haishin_kit/stream_view_texture.dart';
 import 'package:irllink/src/domain/entities/rtmp.dart';
 import 'package:irllink/src/presentation/controllers/tabs/rtmp_tab_view_controller.dart';
 
@@ -12,36 +12,37 @@ class RtmpTabView extends GetView<RtmpTabViewController> {
     return Scaffold(
       body: Obx(() {
         final isReady = controller.isStreamReady.value;
-        final isStreaming = controller.isStreamingVideoRtmp.value;
-        final currentStream = controller.stream.value;
+        // final isStreaming = controller.isStreamingVideoRtmp.value;
+        // final currentStream = controller.stream.value;
 
-        if (!isReady || currentStream == null) {
+        // if (!isReady || currentStream == null) {
+        if (!isReady) {
           return const Center(child: CircularProgressIndicator());
         }
         return SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  border: Border.all(
-                    color: isStreaming ? Colors.redAccent : Colors.grey,
-                    width: 3,
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(3),
-                  child: AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: StreamViewTexture(
-                      currentStream,
-                      key: ValueKey(
-                        '${currentStream.hashCode}_${controller.currentPosition.value}_${controller.isStreamingVideoRtmp.value}',
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              // DecoratedBox(
+              //   decoration: BoxDecoration(
+              //     color: Colors.black,
+              //     border: Border.all(
+              //       color: isStreaming ? Colors.redAccent : Colors.grey,
+              //       width: 3,
+              //     ),
+              //   ),
+              //   child: Padding(
+              //     padding: const EdgeInsets.all(3),
+              //     child: AspectRatio(
+              //       aspectRatio: 16 / 9,
+              //       child: StreamViewTexture(
+              //         currentStream,
+              //         key: ValueKey(
+              //           '${currentStream.hashCode}_${controller.currentPosition.value}_${controller.isStreamingVideoRtmp.value}',
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
               _controlRowWidget(context),
               Padding(
                 padding: const EdgeInsets.all(5),

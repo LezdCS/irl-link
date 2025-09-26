@@ -2,13 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:haishin_kit/audio_settings.dart';
-import 'package:haishin_kit/audio_source.dart';
-import 'package:haishin_kit/av_capture_session_preset.dart';
-import 'package:haishin_kit/rtmp_connection.dart';
-import 'package:haishin_kit/rtmp_stream.dart';
-import 'package:haishin_kit/video_settings.dart';
-import 'package:haishin_kit/video_source.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
@@ -27,10 +20,10 @@ class RtmpTabViewController extends GetxController {
   final TalkerService talkerService;
   final GetRtmpListUseCase getRtmpListUseCase;
 
-  RtmpConnection? _connection;
-  final Rxn<RtmpStream> stream = Rxn<RtmpStream>();
-  StreamSubscription? _connectionSubscription;
-  final Rx<CameraPosition> currentPosition = Rx(CameraPosition.back);
+  // RtmpConnection? _connection;
+  // final Rxn<RtmpStream> stream = Rxn<RtmpStream>();
+  // StreamSubscription? _connectionSubscription;
+  // final Rx<CameraPosition> currentPosition = Rx(CameraPosition.back);
 
   RxBool isStreamingVideoRtmp = false.obs;
   RxBool isStreamReady = false.obs;
@@ -47,9 +40,9 @@ class RtmpTabViewController extends GetxController {
 
   @override
   void onClose() {
-    _connectionSubscription?.cancel();
-    _connection?.close();
-    stream.value?.dispose();
+    // _connectionSubscription?.cancel();
+    // _connection?.close();
+    // stream.value?.dispose();
     urlController.dispose();
     super.onClose();
   }
@@ -85,34 +78,34 @@ class RtmpTabViewController extends GetxController {
       await Permission.camera.request();
       await Permission.microphone.request();
 
-      _connection = await RtmpConnection.create();
-      _connectionSubscription =
-          _connection?.eventChannel.receiveBroadcastStream().listen((event) {
-        talkerService.talker.logCustom(
-          RtmpLog('RtmpConnection event: $event'),
-        );
-        switch (event["data"]["code"]) {
-          case 'NetConnection.Connect.Success':
-            _publishStream();
-          case 'NetConnection.Connect.Closed':
-          case 'NetConnection.Connect.Failed':
-            isStreamingVideoRtmp.value = false;
-            Get.snackbar('Info', 'Connection closed or failed.');
-        }
-      });
+      // _connection = await RtmpConnection.create();
+      // _connectionSubscription =
+      //     _connection?.eventChannel.receiveBroadcastStream().listen((event) {
+      //   talkerService.talker.logCustom(
+      //     RtmpLog('RtmpConnection event: $event'),
+      //   );
+      //   switch (event["data"]["code"]) {
+      //     case 'NetConnection.Connect.Success':
+      //       _publishStream();
+      //     case 'NetConnection.Connect.Closed':
+      //     case 'NetConnection.Connect.Failed':
+      //       isStreamingVideoRtmp.value = false;
+      //       Get.snackbar('Info', 'Connection closed or failed.');
+      //   }
+      // });
 
-      stream.value = await RtmpStream.create(_connection!);
-      stream.value?.audioSettings = AudioSettings(bitrate: 64 * 1000);
-      stream.value?.videoSettings = VideoSettings(
-        height: 1080,
-        width: 1920,
-        bitrate: 2700 * 1000,
-        profileLevel: ProfileLevel.h264HighAutoLevel,
-      );
-      stream.value?.sessionPreset = AVCaptureSessionPreset.high;
-      await stream.value
-          ?.attachVideo(VideoSource(position: currentPosition.value));
-      await stream.value?.attachAudio(AudioSource());
+      // stream.value = await RtmpStream.create(_connection!);
+      // stream.value?.audioSettings = AudioSettings(bitrate: 64 * 1000);
+      // stream.value?.videoSettings = VideoSettings(
+      //   height: 1080,
+      //   width: 1920,
+      //   bitrate: 2700 * 1000,
+      //   profileLevel: ProfileLevel.h264HighAutoLevel,
+      // );
+      // stream.value?.sessionPreset = AVCaptureSessionPreset.high;
+      // await stream.value
+      //     ?.attachVideo(VideoSource(position: currentPosition.value));
+      // await stream.value?.attachAudio(AudioSource());
 
       isStreamReady.value = true;
     } catch (e) {
@@ -127,29 +120,29 @@ class RtmpTabViewController extends GetxController {
   }
 
   Future<void> switchCamera() async {
-    final newPosition = currentPosition.value == CameraPosition.back
-        ? CameraPosition.front
-        : CameraPosition.back;
+    // final newPosition = currentPosition.value == CameraPosition.back
+    //     ? CameraPosition.front
+    //     : CameraPosition.back;
 
-    try {
-      await stream.value?.attachVideo(VideoSource(position: newPosition));
-      currentPosition.value = newPosition;
-      talkerService.talker.logCustom(
-        RtmpLog('Switched camera to $newPosition'),
-      );
-    } catch (e) {
-      talkerService.talker.error("Error switching camera: $e");
-      Get.snackbar('Error', 'Failed to switch camera.');
-    }
+    // try {
+    //   await stream.value?.attachVideo(VideoSource(position: newPosition));
+    //   currentPosition.value = newPosition;
+    //   talkerService.talker.logCustom(
+    //     RtmpLog('Switched camera to $newPosition'),
+    //   );
+    // } catch (e) {
+    //   talkerService.talker.error("Error switching camera: $e");
+    //   Get.snackbar('Error', 'Failed to switch camera.');
+    // }
   }
 
   String timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
 
   Future<void> startVideoStreaming() async {
-    if (_connection == null || stream.value == null) {
-      Get.snackbar('Error', 'Streaming components not initialized.');
-      return;
-    }
+    // if (_connection == null || stream.value == null) {
+    //   Get.snackbar('Error', 'Streaming components not initialized.');
+    //   return;
+    // }
 
     if (isStreamingVideoRtmp.value) {
       Get.snackbar('Info', 'Already streaming.');
@@ -177,7 +170,7 @@ class RtmpTabViewController extends GetxController {
     );
 
     try {
-      _connection?.connect(baseUrl);
+      // _connection?.connect(baseUrl);
     } catch (e) {
       talkerService.talker.error("Error connecting to RTMP server: $e");
       Get.snackbar('Error', 'Failed to connect to RTMP server.');
@@ -185,39 +178,39 @@ class RtmpTabViewController extends GetxController {
     }
   }
 
-  Future<void> _publishStream() async {
-    final rtmpConfig = selectedRtmp.value;
-    final streamKey = rtmpConfig?.key;
+  // Future<void> _publishStream() async {
+  //   final rtmpConfig = selectedRtmp.value;
+  //   final streamKey = rtmpConfig?.key;
 
-    if (streamKey == null || streamKey.isEmpty) {
-      talkerService.talker
-          .error("Cannot publish stream: RTMP stream key is null or empty.");
-      Get.snackbar('Error', 'RTMP configuration is missing a stream key.');
-      await stopVideoStreaming();
-      return;
-    }
+  //   if (streamKey == null || streamKey.isEmpty) {
+  //     talkerService.talker
+  //         .error("Cannot publish stream: RTMP stream key is null or empty.");
+  //     Get.snackbar('Error', 'RTMP configuration is missing a stream key.');
+  //     await stopVideoStreaming();
+  //     return;
+  //   }
 
-    try {
-      await stream.value?.publish(streamKey);
-      isStreamingVideoRtmp.value = true;
-      Get.snackbar(
-        'Success',
-        'Streaming started to ${rtmpConfig?.url}',
-      );
-      talkerService.talker.logCustom(
-        RtmpLog('Streaming published with key: $streamKey'),
-      );
-    } catch (e) {
-      talkerService.talker.error("Error publishing stream: $e");
-      Get.snackbar('Error', 'Failed to publish stream.');
-      isStreamingVideoRtmp.value = false;
-      _connection?.close();
-    }
-  }
+  //   try {
+  //     // await stream.value?.publish(streamKey);
+  //     isStreamingVideoRtmp.value = true;
+  //     Get.snackbar(
+  //       'Success',
+  //       'Streaming started to ${rtmpConfig?.url}',
+  //     );
+  //     talkerService.talker.logCustom(
+  //       RtmpLog('Streaming published with key: $streamKey'),
+  //     );
+  //   } catch (e) {
+  //     talkerService.talker.error("Error publishing stream: $e");
+  //     Get.snackbar('Error', 'Failed to publish stream.');
+  //     isStreamingVideoRtmp.value = false;
+  //     // _connection?.close();
+  //   }
+  // }
 
   Future<void> stopVideoStreaming() async {
     try {
-      _connection?.close();
+      // _connection?.close();
       Get.snackbar('Success', 'Streaming stopped.');
       talkerService.talker.logCustom(
         RtmpLog('Streaming stopped via connection close.'),
