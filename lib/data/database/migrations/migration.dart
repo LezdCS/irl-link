@@ -182,6 +182,66 @@ class Migration2 extends Migration {
       'CREATE TABLE channels (id TEXT PRIMARY KEY, channel TEXT NOT NULL, platform TEXT NOT NULL, chat_group_id TEXT NOT NULL, FOREIGN KEY (chat_group_id) REFERENCES chat_groups(id))',
     );
 
+    // Create TTS settings table
+    await db.execute('''
+      CREATE TABLE tts_settings (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        tts_enabled INTEGER NOT NULL DEFAULT 0,
+        language TEXT NOT NULL DEFAULT 'en-US',
+        volume REAL NOT NULL DEFAULT 1.0,
+        pitch REAL NOT NULL DEFAULT 1.0,
+        rate REAL NOT NULL DEFAULT 0.5,
+        voice_name TEXT NOT NULL DEFAULT 'en-us-x-sfg-local',
+        voice_locale TEXT NOT NULL DEFAULT 'en-US',
+        tts_mute_viewer_name INTEGER NOT NULL DEFAULT 0,
+        tts_only_vip INTEGER NOT NULL DEFAULT 0,
+        tts_only_mod INTEGER NOT NULL DEFAULT 0,
+        tts_only_subscriber INTEGER NOT NULL DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    ''');
+
+    // Create TTS prefixes to ignore table
+    await db.execute('''
+      CREATE TABLE tts_prefixes_to_ignore (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        tts_settings_id INTEGER NOT NULL,
+        prefix TEXT NOT NULL,
+        FOREIGN KEY (tts_settings_id) REFERENCES tts_settings(id) ON DELETE CASCADE
+      )
+    ''');
+
+    // Create TTS prefixes to use TTS only table
+    await db.execute('''
+      CREATE TABLE tts_prefixes_to_use_tts_only (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        tts_settings_id INTEGER NOT NULL,
+        prefix TEXT NOT NULL,
+        FOREIGN KEY (tts_settings_id) REFERENCES tts_settings(id) ON DELETE CASCADE
+      )
+    ''');
+
+    // Create TTS users to ignore table
+    await db.execute('''
+      CREATE TABLE tts_users_to_ignore (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        tts_settings_id INTEGER NOT NULL,
+        username TEXT NOT NULL,
+        FOREIGN KEY (tts_settings_id) REFERENCES tts_settings(id) ON DELETE CASCADE
+      )
+    ''');
+
+    // Create OBS settings table
+    await db.execute('''
+      CREATE TABLE obs_settings (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        url TEXT NOT NULL DEFAULT '',
+        password TEXT NOT NULL DEFAULT '',
+        is_connected INTEGER NOT NULL DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    ''');
+
     // Create default chat group
     await db.insert('chat_groups', {'id': '-1'});
 
@@ -220,6 +280,80 @@ class Migration2 extends Migration {
         settingsJson.remove('hiddenUsersIds');
         settingsJson['chatSettings'].remove('chatGroups');
         settingsJson['chatSettings'].remove('permanentFirstGroup');
+
+        // Migrate TTS settings
+        final ttsSettings = settingsJson['ttsSettings'];
+        if (ttsSettings != null) {
+          // Insert main TTS settings
+          int ttsSettingsId = await db.insert('tts_settings', {
+            'tts_enabled': ttsSettings['ttsEnabled'] == true ? 1 : 0,
+            'language': ttsSettings['language'] ?? 'en-US',
+            'volume': ttsSettings['volume'] ?? 1.0,
+            'pitch': ttsSettings['pitch'] ?? 1.0,
+            'rate': ttsSettings['rate'] ?? 0.5,
+            'voice_name': ttsSettings['voice']?['name'] ?? 'en-us-x-sfg-local',
+            'voice_locale': ttsSettings['voice']?['locale'] ?? 'en-US',
+            'tts_mute_viewer_name':
+                ttsSettings['ttsMuteViewerName'] == true ? 1 : 0,
+            'tts_only_vip': ttsSettings['ttsOnlyVip'] == true ? 1 : 0,
+            'tts_only_mod': ttsSettings['ttsOnlyMod'] == true ? 1 : 0,
+            'tts_only_subscriber':
+                ttsSettings['ttsOnlySubscriber'] == true ? 1 : 0,
+          });
+
+          // Migrate prefixes to ignore
+          final prefixsToIgnore = ttsSettings['prefixsToIgnore'] as List?;
+          if (prefixsToIgnore != null) {
+            for (String prefix in prefixsToIgnore) {
+              await db.insert('tts_prefixes_to_ignore', {
+                'tts_settings_id': ttsSettingsId,
+                'prefix': prefix,
+              });
+            }
+          }
+
+          // Migrate prefixes to use TTS only
+          final prefixsToUseTtsOnly =
+              ttsSettings['prefixsToUseTtsOnly'] as List?;
+          if (prefixsToUseTtsOnly != null) {
+            for (String prefix in prefixsToUseTtsOnly) {
+              await db.insert('tts_prefixes_to_use_tts_only', {
+                'tts_settings_id': ttsSettingsId,
+                'prefix': prefix,
+              });
+            }
+          }
+
+          // Migrate users to ignore
+          final ttsUsersToIgnore = ttsSettings['ttsUsersToIgnore'] as List?;
+          if (ttsUsersToIgnore != null) {
+            for (String username in ttsUsersToIgnore) {
+              await db.insert('tts_users_to_ignore', {
+                'tts_settings_id': ttsSettingsId,
+                'username': username,
+              });
+            }
+          }
+
+          // Remove TTS settings from main settings JSON
+          settingsJson.remove('ttsSettings');
+        }
+
+        // Migrate OBS settings
+        final obsSettings = storage.read('obsSettings');
+        if (obsSettings != null) {
+          final obsSettingsJson = jsonDecode(obsSettings);
+
+          await db.insert('obs_settings', {
+            'url': obsSettingsJson['url'] ?? '',
+            'password': obsSettingsJson['password'] ?? '',
+            'is_connected': obsSettingsJson['isConnected'] == true ? 1 : 0,
+          });
+
+          // Remove OBS settings from GetStorage
+          await storage.remove('obsSettings');
+        }
+
         await storage.write('settings', jsonEncode(settingsJson));
       }
     } catch (e) {
@@ -232,6 +366,11 @@ class Migration2 extends Migration {
     await db.execute('DROP TABLE IF EXISTS hidden_users');
     await db.execute('DROP TABLE IF EXISTS chat_groups');
     await db.execute('DROP TABLE IF EXISTS channels');
+    await db.execute('DROP TABLE IF EXISTS tts_prefixes_to_ignore');
+    await db.execute('DROP TABLE IF EXISTS tts_prefixes_to_use_tts_only');
+    await db.execute('DROP TABLE IF EXISTS tts_users_to_ignore');
+    await db.execute('DROP TABLE IF EXISTS tts_settings');
+    await db.execute('DROP TABLE IF EXISTS obs_settings');
   }
 }
 
