@@ -242,6 +242,33 @@ class Migration2 extends Migration {
       )
     ''');
 
+    // Create StreamElements settings table
+    await db.execute('''
+      CREATE TABLE streamelements_settings (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        show_follower_activity INTEGER NOT NULL DEFAULT 1,
+        show_subscriber_activity INTEGER NOT NULL DEFAULT 1,
+        show_donation_activity INTEGER NOT NULL DEFAULT 1,
+        show_cheer_activity INTEGER NOT NULL DEFAULT 1,
+        show_raid_activity INTEGER NOT NULL DEFAULT 1,
+        show_host_activity INTEGER NOT NULL DEFAULT 1,
+        show_merch_activity INTEGER NOT NULL DEFAULT 1,
+        jwt TEXT,
+        overlay_token TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    ''');
+
+    // Create StreamElements muted overlays table
+    await db.execute('''
+      CREATE TABLE streamelements_muted_overlays (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        streamelements_settings_id INTEGER NOT NULL,
+        overlay_name TEXT NOT NULL,
+        FOREIGN KEY (streamelements_settings_id) REFERENCES streamelements_settings(id) ON DELETE CASCADE
+      )
+    ''');
+
     // Create default chat group
     await db.insert('chat_groups', {'id': '-1'});
 
@@ -354,6 +381,46 @@ class Migration2 extends Migration {
           await storage.remove('obsSettings');
         }
 
+        // Migrate StreamElements settings
+        final seSettings = storage.read('streamelements_settings');
+        if (seSettings != null) {
+          final seSettingsJson = jsonDecode(seSettings);
+
+          // Insert main StreamElements settings
+          int seSettingsId = await db.insert('streamelements_settings', {
+            'show_follower_activity':
+                seSettingsJson['showFollowerActivity'] == true ? 1 : 0,
+            'show_subscriber_activity':
+                seSettingsJson['showSubscriberActivity'] == true ? 1 : 0,
+            'show_donation_activity':
+                seSettingsJson['showDonationActivity'] == true ? 1 : 0,
+            'show_cheer_activity':
+                seSettingsJson['showCheerActivity'] == true ? 1 : 0,
+            'show_raid_activity':
+                seSettingsJson['showRaidActivity'] == true ? 1 : 0,
+            'show_host_activity':
+                seSettingsJson['showHostActivity'] == true ? 1 : 0,
+            'show_merch_activity':
+                seSettingsJson['showMerchActivity'] == true ? 1 : 0,
+            'jwt': seSettingsJson['jwt'],
+            'overlay_token': seSettingsJson['overlayToken'],
+          });
+
+          // Migrate muted overlays
+          final mutedOverlays = seSettingsJson['mutedOverlays'] as List?;
+          if (mutedOverlays != null) {
+            for (String overlayName in mutedOverlays) {
+              await db.insert('streamelements_muted_overlays', {
+                'streamelements_settings_id': seSettingsId,
+                'overlay_name': overlayName,
+              });
+            }
+          }
+
+          // Remove StreamElements settings from GetStorage
+          await storage.remove('streamelements_settings');
+        }
+
         await storage.write('settings', jsonEncode(settingsJson));
       }
     } catch (e) {
@@ -371,6 +438,8 @@ class Migration2 extends Migration {
     await db.execute('DROP TABLE IF EXISTS tts_users_to_ignore');
     await db.execute('DROP TABLE IF EXISTS tts_settings');
     await db.execute('DROP TABLE IF EXISTS obs_settings');
+    await db.execute('DROP TABLE IF EXISTS streamelements_muted_overlays');
+    await db.execute('DROP TABLE IF EXISTS streamelements_settings');
   }
 }
 

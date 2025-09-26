@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:get_storage/get_storage.dart';
 import 'package:irllink/data/database/database_helper.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/entities/settings/stream_elements_settings_dto.dart';
@@ -19,14 +16,11 @@ class StreamelementsLocalDataSourceImpl
     implements StreamelementsLocalDataSource {
   final Talker talker;
   final DatabaseHelper _databaseHelper;
-  final GetStorage _storage;
 
   StreamelementsLocalDataSourceImpl({
     required this.talker,
-    GetStorage? storage,
     DatabaseHelper? databaseHelper,
-  })  : _storage = storage ?? GetStorage(),
-        _databaseHelper = databaseHelper ?? DatabaseHelper.instance;
+  }) : _databaseHelper = databaseHelper ?? DatabaseHelper.instance;
 
   @override
   Future<void> storeCredentials(SeCredentialsDTO credentials) async {
@@ -82,19 +76,99 @@ class StreamelementsLocalDataSourceImpl
   Future<void> storeStreamElementsSettings(
     StreamElementsSettingsDTO settings,
   ) async {
-    await _storage.write(
-      'streamelements_settings',
-      jsonEncode(settings.toJson()),
-    );
+    final db = await _databaseHelper.database;
+
+    // Check if StreamElements settings already exist
+    final existingSettings = await db.query('streamelements_settings');
+
+    int seSettingsId;
+
+    if (existingSettings.isNotEmpty) {
+      // Update existing settings
+      seSettingsId = existingSettings.first['id'] as int;
+
+      await db.update(
+        'streamelements_settings',
+        {
+          'show_follower_activity': settings.showFollowerActivity ? 1 : 0,
+          'show_subscriber_activity': settings.showSubscriberActivity ? 1 : 0,
+          'show_donation_activity': settings.showDonationActivity ? 1 : 0,
+          'show_cheer_activity': settings.showCheerActivity ? 1 : 0,
+          'show_raid_activity': settings.showRaidActivity ? 1 : 0,
+          'show_host_activity': settings.showHostActivity ? 1 : 0,
+          'show_merch_activity': settings.showMerchActivity ? 1 : 0,
+          'jwt': settings.jwt,
+          'overlay_token': settings.overlayToken,
+        },
+        where: 'id = ?',
+        whereArgs: [seSettingsId],
+      );
+
+      // Delete existing muted overlays
+      await db.delete(
+        'streamelements_muted_overlays',
+        where: 'streamelements_settings_id = ?',
+        whereArgs: [seSettingsId],
+      );
+    } else {
+      // Insert new settings
+      seSettingsId = await db.insert('streamelements_settings', {
+        'show_follower_activity': settings.showFollowerActivity ? 1 : 0,
+        'show_subscriber_activity': settings.showSubscriberActivity ? 1 : 0,
+        'show_donation_activity': settings.showDonationActivity ? 1 : 0,
+        'show_cheer_activity': settings.showCheerActivity ? 1 : 0,
+        'show_raid_activity': settings.showRaidActivity ? 1 : 0,
+        'show_host_activity': settings.showHostActivity ? 1 : 0,
+        'show_merch_activity': settings.showMerchActivity ? 1 : 0,
+        'jwt': settings.jwt,
+        'overlay_token': settings.overlayToken,
+      });
+    }
+
+    // Insert muted overlays
+    for (String overlayName in settings.mutedOverlays) {
+      await db.insert('streamelements_muted_overlays', {
+        'streamelements_settings_id': seSettingsId,
+        'overlay_name': overlayName,
+      });
+    }
   }
 
   @override
   Future<StreamElementsSettingsDTO?> getStreamElementsSettings() async {
-    final settingsString = _storage.read('streamelements_settings');
-    if (settingsString != null) {
-      Map<String, dynamic> settingsJson = jsonDecode(settingsString);
-      return StreamElementsSettingsDTO.fromJson(settingsJson);
+    final db = await _databaseHelper.database;
+
+    // Get the main StreamElements settings
+    final List<Map<String, dynamic>> seSettingsMaps =
+        await db.query('streamelements_settings');
+
+    if (seSettingsMaps.isEmpty) {
+      return StreamElementsSettingsDTO.blank();
     }
-    return StreamElementsSettingsDTO.blank();
+
+    final seSettingsMap = seSettingsMaps.first;
+    final seSettingsId = seSettingsMap['id'];
+
+    // Get the muted overlays
+    final mutedOverlaysMaps = await db.query(
+      'streamelements_muted_overlays',
+      where: 'streamelements_settings_id = ?',
+      whereArgs: [seSettingsId],
+    );
+
+    // Build the StreamElementsSettingsDTO
+    return StreamElementsSettingsDTO(
+      showFollowerActivity: seSettingsMap['show_follower_activity'] == 1,
+      showSubscriberActivity: seSettingsMap['show_subscriber_activity'] == 1,
+      showDonationActivity: seSettingsMap['show_donation_activity'] == 1,
+      showCheerActivity: seSettingsMap['show_cheer_activity'] == 1,
+      showRaidActivity: seSettingsMap['show_raid_activity'] == 1,
+      showHostActivity: seSettingsMap['show_host_activity'] == 1,
+      showMerchActivity: seSettingsMap['show_merch_activity'] == 1,
+      jwt: seSettingsMap['jwt'],
+      overlayToken: seSettingsMap['overlay_token'],
+      mutedOverlays:
+          mutedOverlaysMaps.map((e) => e['overlay_name'] as String).toList(),
+    );
   }
 }
