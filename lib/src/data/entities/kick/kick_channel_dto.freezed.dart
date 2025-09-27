@@ -1,6 +1,5 @@
-// dart format width=80
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -158,6 +157,208 @@ class _$KickChannelDtoCopyWithImpl<$Res>
     return $KickChannelStreamDtoCopyWith<$Res>(_self.stream, (value) {
       return _then(_self.copyWith(stream: value));
     });
+  }
+}
+
+/// Adds pattern-matching-related methods to [KickChannelDto].
+extension KickChannelDtoPatterns on KickChannelDto {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_KickChannelDto value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _KickChannelDto() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_KickChannelDto value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _KickChannelDto():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_KickChannelDto value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _KickChannelDto() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(
+            @JsonKey(name: 'banner_picture') String bannerPicture,
+            @JsonKey(name: 'broadcaster_user_id') int broadcasterUserId,
+            KickCategoryDTO category,
+            @JsonKey(name: 'channel_description') String channelDescription,
+            String slug,
+            KickChannelStreamDto stream,
+            @JsonKey(name: 'stream_title') String streamTitle)?
+        $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _KickChannelDto() when $default != null:
+        return $default(
+            _that.bannerPicture,
+            _that.broadcasterUserId,
+            _that.category,
+            _that.channelDescription,
+            _that.slug,
+            _that.stream,
+            _that.streamTitle);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(
+            @JsonKey(name: 'banner_picture') String bannerPicture,
+            @JsonKey(name: 'broadcaster_user_id') int broadcasterUserId,
+            KickCategoryDTO category,
+            @JsonKey(name: 'channel_description') String channelDescription,
+            String slug,
+            KickChannelStreamDto stream,
+            @JsonKey(name: 'stream_title') String streamTitle)
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _KickChannelDto():
+        return $default(
+            _that.bannerPicture,
+            _that.broadcasterUserId,
+            _that.category,
+            _that.channelDescription,
+            _that.slug,
+            _that.stream,
+            _that.streamTitle);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(
+            @JsonKey(name: 'banner_picture') String bannerPicture,
+            @JsonKey(name: 'broadcaster_user_id') int broadcasterUserId,
+            KickCategoryDTO category,
+            @JsonKey(name: 'channel_description') String channelDescription,
+            String slug,
+            KickChannelStreamDto stream,
+            @JsonKey(name: 'stream_title') String streamTitle)?
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _KickChannelDto() when $default != null:
+        return $default(
+            _that.bannerPicture,
+            _that.broadcasterUserId,
+            _that.category,
+            _that.channelDescription,
+            _that.slug,
+            _that.stream,
+            _that.streamTitle);
+      case _:
+        return null;
+    }
   }
 }
 
@@ -466,6 +667,193 @@ class _$KickChannelStreamDtoCopyWithImpl<$Res>
           : viewerCount // ignore: cast_nullable_to_non_nullable
               as int,
     ));
+  }
+}
+
+/// Adds pattern-matching-related methods to [KickChannelStreamDto].
+extension KickChannelStreamDtoPatterns on KickChannelStreamDto {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_KickChannelStreamDto value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _KickChannelStreamDto() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_KickChannelStreamDto value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _KickChannelStreamDto():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_KickChannelStreamDto value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _KickChannelStreamDto() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(
+            @JsonKey(name: 'is_live') bool isLive,
+            @JsonKey(name: 'is_mature') bool isMature,
+            String key,
+            String language,
+            @JsonKey(name: 'start_time') String startTime,
+            String thumbnail,
+            String url,
+            @JsonKey(name: 'viewer_count') int viewerCount)?
+        $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _KickChannelStreamDto() when $default != null:
+        return $default(_that.isLive, _that.isMature, _that.key, _that.language,
+            _that.startTime, _that.thumbnail, _that.url, _that.viewerCount);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(
+            @JsonKey(name: 'is_live') bool isLive,
+            @JsonKey(name: 'is_mature') bool isMature,
+            String key,
+            String language,
+            @JsonKey(name: 'start_time') String startTime,
+            String thumbnail,
+            String url,
+            @JsonKey(name: 'viewer_count') int viewerCount)
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _KickChannelStreamDto():
+        return $default(_that.isLive, _that.isMature, _that.key, _that.language,
+            _that.startTime, _that.thumbnail, _that.url, _that.viewerCount);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(
+            @JsonKey(name: 'is_live') bool isLive,
+            @JsonKey(name: 'is_mature') bool isMature,
+            String key,
+            String language,
+            @JsonKey(name: 'start_time') String startTime,
+            String thumbnail,
+            String url,
+            @JsonKey(name: 'viewer_count') int viewerCount)?
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _KickChannelStreamDto() when $default != null:
+        return $default(_that.isLive, _that.isMature, _that.key, _that.language,
+            _that.startTime, _that.thumbnail, _that.url, _that.viewerCount);
+      case _:
+        return null;
+    }
   }
 }
 

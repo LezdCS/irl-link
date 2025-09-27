@@ -68,7 +68,7 @@ class SelectChannelDialog extends StatelessWidget {
               child: InkWell(
                 borderRadius: BorderRadius.circular(10),
                 onTap: () {
-                  controller.sendKickMessageToChat(chat.username, message);
+                  controller.sendKickMessageToChat(message);
                   controller.chatInputController.text = '';
                   FocusScope.of(context).unfocus();
                   Get.back();

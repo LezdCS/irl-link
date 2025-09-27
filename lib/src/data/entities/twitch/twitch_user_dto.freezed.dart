@@ -1,6 +1,5 @@
-// dart format width=80
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -135,6 +134,208 @@ class _$TwitchUserDTOCopyWithImpl<$Res>
           : viewCount // ignore: cast_nullable_to_non_nullable
               as int,
     ));
+  }
+}
+
+/// Adds pattern-matching-related methods to [TwitchUserDTO].
+extension TwitchUserDTOPatterns on TwitchUserDTO {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_TwitchUserDTO value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _TwitchUserDTO() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_TwitchUserDTO value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _TwitchUserDTO():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_TwitchUserDTO value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _TwitchUserDTO() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(
+            String id,
+            String login,
+            @JsonKey(name: 'display_name') String displayName,
+            @JsonKey(name: 'broadcaster_type') String broadcasterType,
+            String description,
+            @JsonKey(name: 'profile_image_url') String profileImageUrl,
+            @JsonKey(name: 'view_count', fromJson: _stringToInt) int viewCount)?
+        $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _TwitchUserDTO() when $default != null:
+        return $default(
+            _that.id,
+            _that.login,
+            _that.displayName,
+            _that.broadcasterType,
+            _that.description,
+            _that.profileImageUrl,
+            _that.viewCount);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(
+            String id,
+            String login,
+            @JsonKey(name: 'display_name') String displayName,
+            @JsonKey(name: 'broadcaster_type') String broadcasterType,
+            String description,
+            @JsonKey(name: 'profile_image_url') String profileImageUrl,
+            @JsonKey(name: 'view_count', fromJson: _stringToInt) int viewCount)
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _TwitchUserDTO():
+        return $default(
+            _that.id,
+            _that.login,
+            _that.displayName,
+            _that.broadcasterType,
+            _that.description,
+            _that.profileImageUrl,
+            _that.viewCount);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(
+            String id,
+            String login,
+            @JsonKey(name: 'display_name') String displayName,
+            @JsonKey(name: 'broadcaster_type') String broadcasterType,
+            String description,
+            @JsonKey(name: 'profile_image_url') String profileImageUrl,
+            @JsonKey(name: 'view_count', fromJson: _stringToInt) int viewCount)?
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _TwitchUserDTO() when $default != null:
+        return $default(
+            _that.id,
+            _that.login,
+            _that.displayName,
+            _that.broadcasterType,
+            _that.description,
+            _that.profileImageUrl,
+            _that.viewCount);
+      case _:
+        return null;
+    }
   }
 }
 

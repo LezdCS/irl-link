@@ -227,7 +227,7 @@ class HomeViewController extends GetxController
     }
 
     if (kickChats.isNotEmpty && twitchChats.isEmpty) {
-      sendKickMessageToChat(kickChats.first.username, message);
+      sendKickMessageToChat(message);
     }
 
     if (kickChats.isEmpty && twitchChats.isNotEmpty) {
@@ -243,7 +243,7 @@ class HomeViewController extends GetxController
     isPickingEmote.value = false;
   }
 
-  void sendKickMessageToChat(String username, String message) {
+  void sendKickMessageToChat(String message) {
     if (kickData.value == null) {
       return;
     }

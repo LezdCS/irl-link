@@ -1,6 +1,5 @@
-// dart format width=80
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -196,6 +195,244 @@ class _$TtsSettingsDTOCopyWithImpl<$Res>
           : ttsOnlySubscriber // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
+  }
+}
+
+/// Adds pattern-matching-related methods to [TtsSettingsDTO].
+extension TtsSettingsDTOPatterns on TtsSettingsDTO {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_TtsSettingsDTO value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _TtsSettingsDTO() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_TtsSettingsDTO value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _TtsSettingsDTO():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_TtsSettingsDTO value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _TtsSettingsDTO() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(
+            bool ttsEnabled,
+            String language,
+            List prefixsToIgnore,
+            List prefixsToUseTtsOnly,
+            double volume,
+            double pitch,
+            double rate,
+            Map<String, String> voice,
+            List ttsUsersToIgnore,
+            bool ttsMuteViewerName,
+            bool ttsOnlyVip,
+            bool ttsOnlyMod,
+            bool ttsOnlySubscriber)?
+        $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _TtsSettingsDTO() when $default != null:
+        return $default(
+            _that.ttsEnabled,
+            _that.language,
+            _that.prefixsToIgnore,
+            _that.prefixsToUseTtsOnly,
+            _that.volume,
+            _that.pitch,
+            _that.rate,
+            _that.voice,
+            _that.ttsUsersToIgnore,
+            _that.ttsMuteViewerName,
+            _that.ttsOnlyVip,
+            _that.ttsOnlyMod,
+            _that.ttsOnlySubscriber);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(
+            bool ttsEnabled,
+            String language,
+            List prefixsToIgnore,
+            List prefixsToUseTtsOnly,
+            double volume,
+            double pitch,
+            double rate,
+            Map<String, String> voice,
+            List ttsUsersToIgnore,
+            bool ttsMuteViewerName,
+            bool ttsOnlyVip,
+            bool ttsOnlyMod,
+            bool ttsOnlySubscriber)
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _TtsSettingsDTO():
+        return $default(
+            _that.ttsEnabled,
+            _that.language,
+            _that.prefixsToIgnore,
+            _that.prefixsToUseTtsOnly,
+            _that.volume,
+            _that.pitch,
+            _that.rate,
+            _that.voice,
+            _that.ttsUsersToIgnore,
+            _that.ttsMuteViewerName,
+            _that.ttsOnlyVip,
+            _that.ttsOnlyMod,
+            _that.ttsOnlySubscriber);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(
+            bool ttsEnabled,
+            String language,
+            List prefixsToIgnore,
+            List prefixsToUseTtsOnly,
+            double volume,
+            double pitch,
+            double rate,
+            Map<String, String> voice,
+            List ttsUsersToIgnore,
+            bool ttsMuteViewerName,
+            bool ttsOnlyVip,
+            bool ttsOnlyMod,
+            bool ttsOnlySubscriber)?
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _TtsSettingsDTO() when $default != null:
+        return $default(
+            _that.ttsEnabled,
+            _that.language,
+            _that.prefixsToIgnore,
+            _that.prefixsToUseTtsOnly,
+            _that.volume,
+            _that.pitch,
+            _that.rate,
+            _that.voice,
+            _that.ttsUsersToIgnore,
+            _that.ttsMuteViewerName,
+            _that.ttsOnlyVip,
+            _that.ttsOnlyMod,
+            _that.ttsOnlySubscriber);
+      case _:
+        return null;
+    }
   }
 }
 

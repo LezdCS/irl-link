@@ -40,4 +40,5 @@ const _$SupportedEventsEnumMap = {
   SupportedEvents.obsStreamStop: 'obsStreamStop',
   SupportedEvents.obsRecordToggle: 'obsRecordToggle',
   SupportedEvents.twitchChatMessage: 'twitchChatMessage',
+  SupportedEvents.kickChatMessage: 'kickChatMessage',
 };
