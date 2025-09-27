@@ -44,16 +44,17 @@ class TtsService extends GetxService {
   }
 
   Future<void> initTts(Settings settings) async {
-    //  The following setup allows background music and in-app audio session to continue simultaneously:
-    await flutterTts.setIosAudioCategory(
-      IosTextToSpeechAudioCategory.ambient,
-      [
-        IosTextToSpeechAudioCategoryOptions.allowBluetooth,
-        IosTextToSpeechAudioCategoryOptions.allowBluetoothA2DP,
-        IosTextToSpeechAudioCategoryOptions.mixWithOthers,
-      ],
-      IosTextToSpeechAudioMode.voicePrompt,
-    );
+    // Configure iOS audio so TTS continues when app is in background
+    if (Platform.isIOS) {
+      await flutterTts.setIosAudioCategory(
+        IosTextToSpeechAudioCategory.playback,
+        [
+          IosTextToSpeechAudioCategoryOptions.allowBluetooth,
+          IosTextToSpeechAudioCategoryOptions.allowBluetoothA2DP,
+          IosTextToSpeechAudioCategoryOptions.mixWithOthers,
+        ],
+      );
+    }
 
     await flutterTts.awaitSpeakCompletion(true);
     await flutterTts.setLanguage(ttsSettings.language);
