@@ -7,6 +7,7 @@ import 'package:irllink/src/presentation/controllers/tabs/obs_tab_view_controlle
 enum DashboardActionsProvider {
   custom,
   twitch,
+  kick,
   obs,
   streamElements,
 }
@@ -18,6 +19,8 @@ String getDashboardActionProviderString(DashboardActionsProvider? provider) {
       return 'Custom';
     case DashboardActionsProvider.twitch:
       return 'Twitch';
+    case DashboardActionsProvider.kick:
+      return 'Kick';
     case DashboardActionsProvider.obs:
       return 'OBS';
     case DashboardActionsProvider.streamElements:
@@ -33,6 +36,7 @@ enum SupportedEvents {
   obsStreamStop,
   obsRecordToggle,
   twitchChatMessage,
+  kickChatMessage,
   // twitchFollowerOnly,
   // twitchSubOnly,
   // twitchEmoteOnly,
@@ -59,6 +63,8 @@ String getSupportedEventString(SupportedEvents event) {
       return 'OBS Record Toggle';
     case SupportedEvents.twitchChatMessage:
       return 'Twitch Chat Message';
+    case SupportedEvents.kickChatMessage:
+      return 'Kick Chat Message';
     // case SupportedEvents.twitchFollowerOnly:
     //   return 'Twitch Follower Only';
     // case SupportedEvents.twitchSubOnly:
@@ -97,6 +103,11 @@ Widget? getSupportedEventIcon(SupportedEvents event) {
     case SupportedEvents.twitchChatMessage:
       return const Image(
         image: AssetImage("lib/assets/twitch/twitch_logo.png"),
+        width: 16,
+      );
+    case SupportedEvents.kickChatMessage:
+      return const Image(
+        image: AssetImage("lib/assets/kick/kickLogo.png"),
         width: 16,
       );
     // case SupportedEvents.twitchFollowerOnly:
@@ -174,6 +185,16 @@ Map<SupportedEvents, ExistingDashboardEvent> dashboardEvents = {
       String channel =
           Get.find<HomeViewController>().twitchData.value!.twitchUser.login;
       Get.find<HomeViewController>().sendChatMessage(v, channel);
+    },
+  ),
+  SupportedEvents.kickChatMessage: ExistingDashboardEvent(
+    provider: DashboardActionsProvider.kick,
+    actionsAllowed: [DashboardActionsTypes.button],
+    action: (String v) {
+      Get.find<HomeViewController>().sendKickMessageToChat(
+        v,
+        Get.find<HomeViewController>().chatInputController.text,
+      );
     },
   ),
   // SupportedEvents.twitchFollowerOnly: ExistingDashboardEvent(

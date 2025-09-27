@@ -244,6 +244,10 @@ class HomeViewController extends GetxController
   }
 
   void sendKickMessageToChat(String username, String message) {
+    if (kickData.value == null) {
+      return;
+    }
+
     postKickChatMessageUseCase(
       params: PostKickChatMessageParams(
         accessToken: kickData.value!.accessToken,

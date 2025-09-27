@@ -261,7 +261,8 @@ Widget _addDialog(
             ),
           ),
           Visibility(
-            visible: selectedEvent.value == SupportedEvents.twitchChatMessage,
+            visible: selectedEvent.value == SupportedEvents.twitchChatMessage ||
+                selectedEvent.value == SupportedEvents.kickChatMessage,
             child: Padding(
               padding: const EdgeInsets.only(top: 10, bottom: 10),
               child: TextFormField(
