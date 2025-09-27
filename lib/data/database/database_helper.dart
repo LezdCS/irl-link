@@ -140,6 +140,14 @@ class DatabaseHelper {
         'streamelements_credentials',
         'rtmp',
         'twitch_credentials',
+        'dashboard_events',
+        'obs_settings',
+        'streamelements_muted_overlays',
+        'streamelements_settings',
+        'tts_prefixes_to_ignore',
+        'tts_prefixes_to_use_tts_only',
+        'tts_users_to_ignore',
+        'tts_settings',
       ];
 
       for (final tableName in clearOrder) {
@@ -161,6 +169,14 @@ class DatabaseHelper {
         'chat_groups',
         'channels',
         'browser_tabs',
+        'dashboard_events',
+        'obs_settings',
+        'streamelements_settings',
+        'streamelements_muted_overlays',
+        'tts_settings',
+        'tts_prefixes_to_ignore',
+        'tts_prefixes_to_use_tts_only',
+        'tts_users_to_ignore',
       ];
 
       final tablesData = dumpData['tables'] as Map<String, dynamic>;
