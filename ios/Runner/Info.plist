@@ -54,6 +54,10 @@
 	<string>This app needs camera access to scan QR codes</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs access to location when also in background.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app needs access to location to share it with services.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app needs access to photo library to save screenshots.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
