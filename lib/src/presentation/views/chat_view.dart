@@ -11,7 +11,6 @@ import 'package:irllink/src/presentation/widgets/alert_message.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/event_container.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/shared/message_container.dart';
 import 'package:irllink/src/presentation/widgets/chats/chat_message/twitch/moderation_bottom_sheet.dart';
-import 'package:twitch_chat/twitch_chat.dart' as twitch_chat;
 
 class ChatView extends GetView<ChatViewController> {
   const ChatView({
@@ -66,11 +65,7 @@ class ChatView extends GetView<ChatViewController> {
                   cancelTextColor: Theme.of(context).textTheme.bodyLarge!.color,
                   buttonColor: Theme.of(context).colorScheme.tertiary,
                   onConfirm: () {
-                    for (twitch_chat.TwitchChat twitchChat
-                        in controller.twitchChats) {
-                      twitchChat.close();
-                      twitchChat.connect();
-                    }
+                    controller.reconnectAllChats();
                     Get.back();
                   },
                   onCancel: () {

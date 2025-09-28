@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart'
     show Platform;
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
+import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/chats_controller.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/views/chat_view.dart';
@@ -74,28 +75,57 @@ class ChatsView extends GetView<ChatsController> {
                 controller.chatsViews[index].chatGroup.channels;
             return Tab(
               height: 30,
-              child: Text.rich(
-                TextSpan(
-                  children: List<TextSpan>.generate(
-                    channels.length,
-                    (int i) => TextSpan(
-                      children: [
+              child: IntrinsicHeight(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: Text.rich(
                         TextSpan(
-                          text: i == (channels.length - 1) ? '' : ', ',
-                          style: TextStyle(
-                            color: Theme.of(Get.context!)
-                                .textTheme
-                                .bodyLarge!
-                                .color,
+                          children: List<TextSpan>.generate(
+                            channels.length,
+                            (int i) => TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: i == (channels.length - 1) ? '' : ', ',
+                                  style: TextStyle(
+                                    color: Theme.of(Get.context!)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .color,
+                                  ),
+                                ),
+                              ],
+                              text: channels[i].channel,
+                              style: TextStyle(
+                                color: getPlatformColor(channels[i].platform),
+                              ),
+                            ),
                           ),
                         ),
-                      ],
-                      text: channels[i].channel,
-                      style: TextStyle(
-                        color: getPlatformColor(channels[i].platform),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                  ),
+                    const SizedBox(width: 4),
+                    GestureDetector(
+                      onTap: () => _showReconnectDialog(context, index),
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .tertiary
+                              .withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Icon(
+                          Icons.refresh,
+                          size: 16,
+                          color: Theme.of(context).colorScheme.tertiary,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             );
@@ -103,6 +133,43 @@ class ChatsView extends GetView<ChatsController> {
         ),
       );
     });
+  }
+
+  void _showReconnectDialog(BuildContext context, int tabIndex) {
+    List<Channel> channels = controller.chatsViews[tabIndex].chatGroup.channels;
+    String channelNames = channels.map((c) => c.channel).join(', ');
+
+    Get.defaultDialog(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      title: "confirm".tr,
+      middleText: "reconnect_question".trParams({
+        "channel": channelNames,
+      }),
+      textConfirm: "confirm".tr,
+      textCancel: "cancel".tr,
+      confirmTextColor: Theme.of(context).textTheme.bodyLarge!.color,
+      cancelTextColor: Theme.of(context).textTheme.bodyLarge!.color,
+      buttonColor: Theme.of(context).colorScheme.tertiary,
+      onConfirm: () {
+        _reconnectTabChats(tabIndex);
+        Get.back();
+      },
+      onCancel: () {
+        Get.back();
+      },
+    );
+  }
+
+  void _reconnectTabChats(int tabIndex) {
+    if (tabIndex >= 0 && tabIndex < controller.chatsViews.length) {
+      String chatGroupId = controller.chatsViews[tabIndex].chatGroup.id;
+
+      if (Get.isRegistered<ChatViewController>(tag: chatGroupId)) {
+        ChatViewController chatController =
+            Get.find<ChatViewController>(tag: chatGroupId);
+        chatController.reconnectAllChats();
+      }
+    }
   }
 
   Widget _chats(BuildContext context) {

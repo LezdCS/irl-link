@@ -109,16 +109,17 @@ class ChatViewController extends GetxController
 
   void reconnectAllChats() {
     for (twitch_chat.TwitchChat twitchChat in twitchChats) {
-      if (!twitchChat.isConnected.value) {
-        twitchChat.close();
-        twitchChat.connect();
-      }
+      talker.info('Reconnecting twitch chat: ${twitchChat.channel}');
+      twitchChat.close();
+      twitchChat.connect();
     }
     for (KickChat kickChat in kickChats) {
+      talker.info('Reconnecting kick chat: ${kickChat.username}');
       kickChat.close();
       kickChat.connect();
     }
     for (YoutubeChat youtubeChat in youtubeChats) {
+      talker.info('Reconnecting youtube chat: ${youtubeChat.channelHandle}');
       youtubeChat.close();
       youtubeChat.connect();
     }
@@ -385,6 +386,7 @@ class ChatViewController extends GetxController
         homeViewController.twitchData.value!.accessToken,
         clientId: kTwitchAuthClientId,
         onConnected: () async {
+          talker.info('Twitch Chat connected: ${tc.channel}');
           // final result = await getRecentMessagesUseCase(
           //   params: GetRecentMessagesUseCaseParams(
           //     channelName: tc.channel,
@@ -407,6 +409,7 @@ class ChatViewController extends GetxController
           // );
         },
         onClearChat: () {
+          talker.info('Twitch Chat cleared: ${tc.channel}');
           chatMessages.clear();
         },
         onDeletedMessageByUserId: (String? userId) {
@@ -415,18 +418,24 @@ class ChatViewController extends GetxController
                 message.authorId == userId &&
                 message.platform == Platform.twitch,
           )) {
+            talker.info('Twitch Chat deleted message by user id: $userId');
             message.isDeleted = true;
           }
           chatMessages.refresh();
         },
         onDeletedMessageByMessageId: (String? messageId) {
+          talker.info('Twitch Chat deleted message by message id: $messageId');
           chatMessages
               .firstWhereOrNull((message) => message.id == messageId)!
               .isDeleted = true;
           chatMessages.refresh();
         },
-        onDone: () {},
-        onError: () {},
+        onDone: () {
+          talker.info('Twitch Chat done: ${tc.channel}');
+        },
+        onError: () {
+          talker.error('Twitch Chat error: ${tc.channel}');
+        },
         params: const twitch_chat.TwitchChatParameters(addFirstMessages: true),
       );
     }
