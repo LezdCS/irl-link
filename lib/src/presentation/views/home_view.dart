@@ -23,6 +23,7 @@ import 'package:irllink/src/presentation/widgets/emote_picker_view.dart';
 import 'package:irllink/src/presentation/widgets/pinned_messages_sheet.dart';
 import 'package:irllink/src/presentation/widgets/poll.dart';
 import 'package:irllink/src/presentation/widgets/prediction.dart';
+import 'package:irllink/src/presentation/widgets/rain_mode_disable_dialog.dart';
 import 'package:kick_chat/kick_chat.dart';
 import 'package:split_view/split_view.dart';
 import 'package:twitch_chat/twitch_chat.dart';
@@ -70,32 +71,37 @@ class HomeView extends GetView<HomeViewController> {
                         onPointerUp: (_) => {
                           controller.displayDashboard.value = false,
                         },
-                        child: SplitView(
-                          controller: controller.splitViewController,
-                          gripColor: context.theme.colorScheme.secondary,
-                          gripColorActive: context.theme.colorScheme.secondary,
-                          gripSize: 8,
-                          viewMode: context.isPortrait
-                              ? SplitViewMode.Vertical
-                              : SplitViewMode.Horizontal,
-                          indicator: SplitIndicator(
+                        child: Obx(
+                          () => SplitView(
+                            controller: controller.splitViewController,
+                            gripColor: context.theme.colorScheme.secondary,
+                            gripColorActive:
+                                context.theme.colorScheme.secondary,
+                            gripSize: 8,
                             viewMode: context.isPortrait
                                 ? SplitViewMode.Vertical
                                 : SplitViewMode.Horizontal,
-                            color: const Color(0xFF464444),
+                            indicator: SplitIndicator(
+                              viewMode: context.isPortrait
+                                  ? SplitViewMode.Vertical
+                                  : SplitViewMode.Horizontal,
+                              color: const Color(0xFF464444),
+                            ),
+                            activeIndicator: SplitIndicator(
+                              color: const Color(0xFF464444),
+                              viewMode: context.isPortrait
+                                  ? SplitViewMode.Vertical
+                                  : SplitViewMode.Horizontal,
+                              isActive: true,
+                            ),
+                            onWeightChanged: controller.rainMode.value
+                                ? null
+                                : controller.onSplitResized,
+                            children: [
+                              const TabsView(),
+                              _bottom(context, height, width),
+                            ],
                           ),
-                          activeIndicator: SplitIndicator(
-                            color: const Color(0xFF464444),
-                            viewMode: context.isPortrait
-                                ? SplitViewMode.Vertical
-                                : SplitViewMode.Horizontal,
-                            isActive: true,
-                          ),
-                          onWeightChanged: controller.onSplitResized,
-                          children: [
-                            const TabsView(),
-                            _bottom(context, height, width),
-                          ],
                         ),
                       ),
                       Visibility(
@@ -195,66 +201,90 @@ class HomeView extends GetView<HomeViewController> {
                     const EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
                 child: Row(
                   children: [
-                    InkWell(
-                      onTap: () => controller.getEmotes(),
-                      child: const Image(
-                        image: AssetImage("lib/assets/twitchSmileEmoji.png"),
-                        width: 30,
-                      ),
-                    ),
-                    Expanded(
-                      child: TextField(
-                        controller: controller.chatInputController,
-                        onTap: () {
-                          Get.find<ChatsController>().selectedMessage.value =
-                              null;
-                          controller.isPickingEmote.value = false;
-                        },
-                        textInputAction: TextInputAction.done,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: settings.generalSettings.displayViewerCount
-                              ? "viewers_number".trParams({
-                                  "number": ((Get.isRegistered<
-                                                  TwitchTabViewController>()
-                                              ? Get.find<TwitchTabViewController>()
-                                                      .twitchStreamInfos
-                                                      .value
-                                                      .viewerCount ??
-                                                  0
-                                              : 0) +
-                                          (Get.isRegistered<
-                                                  KickTabViewController>()
-                                              ? Get.find<KickTabViewController>()
-                                                      .kickChannel
-                                                      .value
-                                                      ?.stream
-                                                      .viewerCount ??
-                                                  0
-                                              : 0))
-                                      .toString(),
-                                })
-                              : 'send_message'.tr,
-                          hintStyle: TextStyle(
-                            color: Theme.of(context).textTheme.bodyLarge!.color,
+                    Obx(
+                      () => AbsorbPointer(
+                        absorbing: controller.rainMode.value,
+                        child: InkWell(
+                          onTap: () => controller.getEmotes(),
+                          child: const Image(
+                            image:
+                                AssetImage("lib/assets/twitchSmileEmoji.png"),
+                            width: 30,
                           ),
-                          isDense: true,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          contentPadding: const EdgeInsets.only(left: 5),
                         ),
                       ),
                     ),
-                    InkWell(
-                      onTap: () {
-                        controller.sendChatMessage(
-                          controller.chatInputController.text,
-                        );
-                      },
-                      child: Icon(
-                        Icons.send,
-                        color: Theme.of(context).primaryIconTheme.color,
-                        size: 21,
+                    Expanded(
+                      child: Obx(
+                        () => AbsorbPointer(
+                          absorbing: controller.rainMode.value,
+                          child: TextField(
+                            controller: controller.chatInputController,
+                            onTap: () {
+                              if (controller.rainMode.value) {
+                                return;
+                              }
+                              Get.find<ChatsController>()
+                                  .selectedMessage
+                                  .value = null;
+                              controller.isPickingEmote.value = false;
+                            },
+                            textInputAction: TextInputAction.done,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText:
+                                  settings.generalSettings.displayViewerCount
+                                      ? "viewers_number".trParams({
+                                          "number": ((Get.isRegistered<
+                                                          TwitchTabViewController>()
+                                                      ? Get.find<TwitchTabViewController>()
+                                                              .twitchStreamInfos
+                                                              .value
+                                                              .viewerCount ??
+                                                          0
+                                                      : 0) +
+                                                  (Get.isRegistered<
+                                                          KickTabViewController>()
+                                                      ? Get.find<KickTabViewController>()
+                                                              .kickChannel
+                                                              .value
+                                                              ?.stream
+                                                              .viewerCount ??
+                                                          0
+                                                      : 0))
+                                              .toString(),
+                                        })
+                                      : 'send_message'.tr,
+                              hintStyle: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .color,
+                              ),
+                              isDense: true,
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              contentPadding: const EdgeInsets.only(left: 5),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Obx(
+                      () => AbsorbPointer(
+                        absorbing: controller.rainMode.value,
+                        child: InkWell(
+                          onTap: () {
+                            controller.sendChatMessage(
+                              controller.chatInputController.text,
+                            );
+                          },
+                          child: Icon(
+                            Icons.send,
+                            color: Theme.of(context).primaryIconTheme.color,
+                            size: 21,
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -269,38 +299,46 @@ class HomeView extends GetView<HomeViewController> {
                         .twitchEventSubService!.currentPoll.value.status !=
                     PollStatus.empty,
                 child: Expanded(
-                  child: InkWell(
-                    onTap: () async {
-                      Get.dialog(
-                        AlertDialog(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.surface,
-                          surfaceTintColor:
-                              Theme.of(context).colorScheme.surface,
-                          content: Container(
-                            width: width,
-                            color: Theme.of(context).colorScheme.surface,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Obx(
-                                  () => poll(
-                                    context,
-                                    controller.twitchEventSubService!
-                                        .currentPoll.value,
-                                    controller.twitchEventSubService,
-                                  ),
+                  child: Obx(
+                    () => AbsorbPointer(
+                      absorbing: controller.rainMode.value,
+                      child: InkWell(
+                        onTap: () async {
+                          if (controller.rainMode.value) {
+                            return;
+                          }
+                          Get.dialog(
+                            AlertDialog(
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.surface,
+                              surfaceTintColor:
+                                  Theme.of(context).colorScheme.surface,
+                              content: Container(
+                                width: width,
+                                color: Theme.of(context).colorScheme.surface,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Obx(
+                                      () => poll(
+                                        context,
+                                        controller.twitchEventSubService!
+                                            .currentPoll.value,
+                                        controller.twitchEventSubService,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
+                          );
+                        },
+                        child: Icon(
+                          Icons.poll_outlined,
+                          color: Theme.of(context).primaryIconTheme.color,
+                          size: 22,
                         ),
-                      );
-                    },
-                    child: Icon(
-                      Icons.poll_outlined,
-                      color: Theme.of(context).primaryIconTheme.color,
-                      size: 22,
+                      ),
                     ),
                   ),
                 ),
@@ -315,39 +353,47 @@ class HomeView extends GetView<HomeViewController> {
                         .value.status !=
                     PredictionStatus.empty,
                 child: Expanded(
-                  child: InkWell(
-                    onTap: () async {
-                      Get.dialog(
-                        AlertDialog(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.surface,
-                          surfaceTintColor:
-                              Theme.of(context).colorScheme.surface,
-                          content: Container(
-                            width: width,
-                            color: Theme.of(context).colorScheme.surface,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Obx(
-                                  () => prediction(
-                                    context,
-                                    controller.twitchEventSubService!
-                                        .currentPrediction.value,
-                                    controller.twitchEventSubService!,
-                                  ),
+                  child: Obx(
+                    () => AbsorbPointer(
+                      absorbing: controller.rainMode.value,
+                      child: InkWell(
+                        onTap: () async {
+                          if (controller.rainMode.value) {
+                            return;
+                          }
+                          Get.dialog(
+                            AlertDialog(
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.surface,
+                              surfaceTintColor:
+                                  Theme.of(context).colorScheme.surface,
+                              content: Container(
+                                width: width,
+                                color: Theme.of(context).colorScheme.surface,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Obx(
+                                      () => prediction(
+                                        context,
+                                        controller.twitchEventSubService!
+                                            .currentPrediction.value,
+                                        controller.twitchEventSubService!,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
+                          );
+                        },
+                        child: SvgPicture.asset(
+                          './lib/assets/twitch/prediction.svg',
+                          semanticsLabel: 'prediction icon',
+                          width: 22,
+                          height: 22,
                         ),
-                      );
-                    },
-                    child: SvgPicture.asset(
-                      './lib/assets/twitch/prediction.svg',
-                      semanticsLabel: 'prediction icon',
-                      width: 22,
-                      height: 22,
+                      ),
                     ),
                   ),
                 ),
@@ -358,14 +404,22 @@ class HomeView extends GetView<HomeViewController> {
           Visibility(
             visible: controller.pinnedMessages.isNotEmpty,
             child: Expanded(
-              child: InkWell(
-                onTap: () {
-                  controller.showPinnedMessages.toggle();
-                },
-                child: Icon(
-                  Icons.push_pin,
-                  color: Theme.of(context).primaryIconTheme.color,
-                  size: 22,
+              child: Obx(
+                () => AbsorbPointer(
+                  absorbing: controller.rainMode.value,
+                  child: InkWell(
+                    onTap: () {
+                      if (controller.rainMode.value) {
+                        return;
+                      }
+                      controller.showPinnedMessages.toggle();
+                    },
+                    child: Icon(
+                      Icons.push_pin,
+                      color: Theme.of(context).primaryIconTheme.color,
+                      size: 22,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -373,32 +427,77 @@ class HomeView extends GetView<HomeViewController> {
           Visibility(
             visible: Get.find<DashboardController>().dashboardEvents.isNotEmpty,
             child: Expanded(
-              child: InkWell(
+              child: Obx(
+                () => AbsorbPointer(
+                  absorbing: controller.rainMode.value,
+                  child: InkWell(
+                    onTap: () async {
+                      if (controller.rainMode.value) {
+                        return;
+                      }
+                      controller.displayDashboard.value =
+                          !controller.displayDashboard.value;
+                    },
+                    child: Icon(
+                      Icons.dashboard_rounded,
+                      color: Theme.of(context).primaryIconTheme.color,
+                      size: 22,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          // Rain mode toggle button
+          Expanded(
+            child: Obx(
+              () => InkWell(
                 onTap: () async {
-                  controller.displayDashboard.value =
-                      !controller.displayDashboard.value;
+                  debugPrint('Rain mode: ${controller.rainMode.value}');
+                  if (controller.rainMode.value) {
+                    // Currently in rain mode, show disable dialog
+                    final result = await Get.dialog<bool>(
+                      const RainModeDisableDialog(),
+                    );
+                    if (result ?? false) {
+                      controller.rainMode.value = false;
+                    }
+                  } else {
+                    // Currently not in rain mode, enable it directly
+                    controller.rainMode.value = true;
+                  }
                 },
                 child: Icon(
-                  Icons.dashboard_rounded,
-                  color: Theme.of(context).primaryIconTheme.color,
+                  Icons.water_drop,
+                  color: controller.rainMode.value
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).primaryIconTheme.color,
                   size: 22,
                 ),
               ),
             ),
           ),
           Expanded(
-            child: InkWell(
-              onTap: () async {
-                await Get.toNamed(
-                  Routes.settings,
-                );
-                Get.find<ChatsController>().generateChats();
-                Get.find<TabsController>().generateTabs();
-              },
-              child: Icon(
-                Icons.settings,
-                color: Theme.of(context).primaryIconTheme.color,
-                size: 22,
+            child: Obx(
+              () => AbsorbPointer(
+                absorbing: controller.rainMode.value,
+                child: InkWell(
+                  onTap: () async {
+                    if (controller.rainMode.value) {
+                      return;
+                    }
+                    await Get.toNamed(
+                      Routes.settings,
+                    );
+                    Get.find<ChatsController>().generateChats();
+                    Get.find<TabsController>().generateTabs();
+                  },
+                  child: Icon(
+                    Icons.settings,
+                    color: Theme.of(context).primaryIconTheme.color,
+                    size: 22,
+                  ),
+                ),
               ),
             ),
           ),
