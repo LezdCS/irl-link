@@ -27,6 +27,7 @@ mixin _$TtsSettingsDTO {
   bool get ttsOnlyVip;
   bool get ttsOnlyMod;
   bool get ttsOnlySubscriber;
+  bool get ttsReadEmotes;
 
   /// Create a copy of TtsSettingsDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -65,7 +66,9 @@ mixin _$TtsSettingsDTO {
             (identical(other.ttsOnlyMod, ttsOnlyMod) ||
                 other.ttsOnlyMod == ttsOnlyMod) &&
             (identical(other.ttsOnlySubscriber, ttsOnlySubscriber) ||
-                other.ttsOnlySubscriber == ttsOnlySubscriber));
+                other.ttsOnlySubscriber == ttsOnlySubscriber) &&
+            (identical(other.ttsReadEmotes, ttsReadEmotes) ||
+                other.ttsReadEmotes == ttsReadEmotes));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -84,11 +87,12 @@ mixin _$TtsSettingsDTO {
       ttsMuteViewerName,
       ttsOnlyVip,
       ttsOnlyMod,
-      ttsOnlySubscriber);
+      ttsOnlySubscriber,
+      ttsReadEmotes);
 
   @override
   String toString() {
-    return 'TtsSettingsDTO(ttsEnabled: $ttsEnabled, language: $language, prefixsToIgnore: $prefixsToIgnore, prefixsToUseTtsOnly: $prefixsToUseTtsOnly, volume: $volume, pitch: $pitch, rate: $rate, voice: $voice, ttsUsersToIgnore: $ttsUsersToIgnore, ttsMuteViewerName: $ttsMuteViewerName, ttsOnlyVip: $ttsOnlyVip, ttsOnlyMod: $ttsOnlyMod, ttsOnlySubscriber: $ttsOnlySubscriber)';
+    return 'TtsSettingsDTO(ttsEnabled: $ttsEnabled, language: $language, prefixsToIgnore: $prefixsToIgnore, prefixsToUseTtsOnly: $prefixsToUseTtsOnly, volume: $volume, pitch: $pitch, rate: $rate, voice: $voice, ttsUsersToIgnore: $ttsUsersToIgnore, ttsMuteViewerName: $ttsMuteViewerName, ttsOnlyVip: $ttsOnlyVip, ttsOnlyMod: $ttsOnlyMod, ttsOnlySubscriber: $ttsOnlySubscriber, ttsReadEmotes: $ttsReadEmotes)';
   }
 }
 
@@ -111,7 +115,8 @@ abstract mixin class $TtsSettingsDTOCopyWith<$Res> {
       bool ttsMuteViewerName,
       bool ttsOnlyVip,
       bool ttsOnlyMod,
-      bool ttsOnlySubscriber});
+      bool ttsOnlySubscriber,
+      bool ttsReadEmotes});
 }
 
 /// @nodoc
@@ -140,6 +145,7 @@ class _$TtsSettingsDTOCopyWithImpl<$Res>
     Object? ttsOnlyVip = null,
     Object? ttsOnlyMod = null,
     Object? ttsOnlySubscriber = null,
+    Object? ttsReadEmotes = null,
   }) {
     return _then(_self.copyWith(
       ttsEnabled: null == ttsEnabled
@@ -193,6 +199,10 @@ class _$TtsSettingsDTOCopyWithImpl<$Res>
       ttsOnlySubscriber: null == ttsOnlySubscriber
           ? _self.ttsOnlySubscriber
           : ttsOnlySubscriber // ignore: cast_nullable_to_non_nullable
+              as bool,
+      ttsReadEmotes: null == ttsReadEmotes
+          ? _self.ttsReadEmotes
+          : ttsReadEmotes // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }
@@ -304,7 +314,8 @@ extension TtsSettingsDTOPatterns on TtsSettingsDTO {
             bool ttsMuteViewerName,
             bool ttsOnlyVip,
             bool ttsOnlyMod,
-            bool ttsOnlySubscriber)?
+            bool ttsOnlySubscriber,
+            bool ttsReadEmotes)?
         $default, {
     required TResult orElse(),
   }) {
@@ -324,7 +335,8 @@ extension TtsSettingsDTOPatterns on TtsSettingsDTO {
             _that.ttsMuteViewerName,
             _that.ttsOnlyVip,
             _that.ttsOnlyMod,
-            _that.ttsOnlySubscriber);
+            _that.ttsOnlySubscriber,
+            _that.ttsReadEmotes);
       case _:
         return orElse();
     }
@@ -358,7 +370,8 @@ extension TtsSettingsDTOPatterns on TtsSettingsDTO {
             bool ttsMuteViewerName,
             bool ttsOnlyVip,
             bool ttsOnlyMod,
-            bool ttsOnlySubscriber)
+            bool ttsOnlySubscriber,
+            bool ttsReadEmotes)
         $default,
   ) {
     final _that = this;
@@ -377,7 +390,8 @@ extension TtsSettingsDTOPatterns on TtsSettingsDTO {
             _that.ttsMuteViewerName,
             _that.ttsOnlyVip,
             _that.ttsOnlyMod,
-            _that.ttsOnlySubscriber);
+            _that.ttsOnlySubscriber,
+            _that.ttsReadEmotes);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -410,7 +424,8 @@ extension TtsSettingsDTOPatterns on TtsSettingsDTO {
             bool ttsMuteViewerName,
             bool ttsOnlyVip,
             bool ttsOnlyMod,
-            bool ttsOnlySubscriber)?
+            bool ttsOnlySubscriber,
+            bool ttsReadEmotes)?
         $default,
   ) {
     final _that = this;
@@ -429,7 +444,8 @@ extension TtsSettingsDTOPatterns on TtsSettingsDTO {
             _that.ttsMuteViewerName,
             _that.ttsOnlyVip,
             _that.ttsOnlyMod,
-            _that.ttsOnlySubscriber);
+            _that.ttsOnlySubscriber,
+            _that.ttsReadEmotes);
       case _:
         return null;
     }
@@ -455,7 +471,8 @@ class _TtsSettingsDTO extends TtsSettingsDTO {
       this.ttsMuteViewerName = false,
       this.ttsOnlyVip = false,
       this.ttsOnlyMod = false,
-      this.ttsOnlySubscriber = false})
+      this.ttsOnlySubscriber = false,
+      this.ttsReadEmotes = true})
       : _prefixsToIgnore = prefixsToIgnore,
         _prefixsToUseTtsOnly = prefixsToUseTtsOnly,
         _voice = voice,
@@ -529,6 +546,9 @@ class _TtsSettingsDTO extends TtsSettingsDTO {
   @override
   @JsonKey()
   final bool ttsOnlySubscriber;
+  @override
+  @JsonKey()
+  final bool ttsReadEmotes;
 
   /// Create a copy of TtsSettingsDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -571,7 +591,9 @@ class _TtsSettingsDTO extends TtsSettingsDTO {
             (identical(other.ttsOnlyMod, ttsOnlyMod) ||
                 other.ttsOnlyMod == ttsOnlyMod) &&
             (identical(other.ttsOnlySubscriber, ttsOnlySubscriber) ||
-                other.ttsOnlySubscriber == ttsOnlySubscriber));
+                other.ttsOnlySubscriber == ttsOnlySubscriber) &&
+            (identical(other.ttsReadEmotes, ttsReadEmotes) ||
+                other.ttsReadEmotes == ttsReadEmotes));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -590,11 +612,12 @@ class _TtsSettingsDTO extends TtsSettingsDTO {
       ttsMuteViewerName,
       ttsOnlyVip,
       ttsOnlyMod,
-      ttsOnlySubscriber);
+      ttsOnlySubscriber,
+      ttsReadEmotes);
 
   @override
   String toString() {
-    return 'TtsSettingsDTO(ttsEnabled: $ttsEnabled, language: $language, prefixsToIgnore: $prefixsToIgnore, prefixsToUseTtsOnly: $prefixsToUseTtsOnly, volume: $volume, pitch: $pitch, rate: $rate, voice: $voice, ttsUsersToIgnore: $ttsUsersToIgnore, ttsMuteViewerName: $ttsMuteViewerName, ttsOnlyVip: $ttsOnlyVip, ttsOnlyMod: $ttsOnlyMod, ttsOnlySubscriber: $ttsOnlySubscriber)';
+    return 'TtsSettingsDTO(ttsEnabled: $ttsEnabled, language: $language, prefixsToIgnore: $prefixsToIgnore, prefixsToUseTtsOnly: $prefixsToUseTtsOnly, volume: $volume, pitch: $pitch, rate: $rate, voice: $voice, ttsUsersToIgnore: $ttsUsersToIgnore, ttsMuteViewerName: $ttsMuteViewerName, ttsOnlyVip: $ttsOnlyVip, ttsOnlyMod: $ttsOnlyMod, ttsOnlySubscriber: $ttsOnlySubscriber, ttsReadEmotes: $ttsReadEmotes)';
   }
 }
 
@@ -619,7 +642,8 @@ abstract mixin class _$TtsSettingsDTOCopyWith<$Res>
       bool ttsMuteViewerName,
       bool ttsOnlyVip,
       bool ttsOnlyMod,
-      bool ttsOnlySubscriber});
+      bool ttsOnlySubscriber,
+      bool ttsReadEmotes});
 }
 
 /// @nodoc
@@ -648,6 +672,7 @@ class __$TtsSettingsDTOCopyWithImpl<$Res>
     Object? ttsOnlyVip = null,
     Object? ttsOnlyMod = null,
     Object? ttsOnlySubscriber = null,
+    Object? ttsReadEmotes = null,
   }) {
     return _then(_TtsSettingsDTO(
       ttsEnabled: null == ttsEnabled
@@ -701,6 +726,10 @@ class __$TtsSettingsDTOCopyWithImpl<$Res>
       ttsOnlySubscriber: null == ttsOnlySubscriber
           ? _self.ttsOnlySubscriber
           : ttsOnlySubscriber // ignore: cast_nullable_to_non_nullable
+              as bool,
+      ttsReadEmotes: null == ttsReadEmotes
+          ? _self.ttsReadEmotes
+          : ttsReadEmotes // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }

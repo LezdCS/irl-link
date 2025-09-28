@@ -15,6 +15,7 @@ class TtsSettings {
   final bool ttsOnlyVip;
   final bool ttsOnlyMod;
   final bool ttsOnlySubscriber;
+  final bool ttsReadEmotes;
 
   const TtsSettings({
     required this.ttsEnabled,
@@ -30,6 +31,7 @@ class TtsSettings {
     required this.ttsOnlyVip,
     required this.ttsOnlyMod,
     required this.ttsOnlySubscriber,
+    required this.ttsReadEmotes,
   });
 
   TtsSettings copyWith({
@@ -46,6 +48,7 @@ class TtsSettings {
     bool? ttsOnlyVip,
     bool? ttsOnlyMod,
     bool? ttsOnlySubscriber,
+    bool? ttsReadEmotes,
   }) {
     return TtsSettings(
       ttsEnabled: ttsEnabled ?? this.ttsEnabled,
@@ -61,6 +64,7 @@ class TtsSettings {
       ttsOnlyVip: ttsOnlyVip ?? this.ttsOnlyVip,
       ttsOnlyMod: ttsOnlyMod ?? this.ttsOnlyMod,
       ttsOnlySubscriber: ttsOnlySubscriber ?? this.ttsOnlySubscriber,
+      ttsReadEmotes: ttsReadEmotes ?? this.ttsReadEmotes,
     );
   }
 }

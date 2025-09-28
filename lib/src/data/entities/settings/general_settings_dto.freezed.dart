@@ -14,11 +14,16 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$GeneralSettingsDTO {
+  String get rtIrlPushKey;
+  bool get allowChatEmotes;
+  double get textSize;
+  bool get displayTimestamp;
   bool get isDarkMode;
   bool get keepSpeakerOn;
   bool get displayViewerCount;
   Map<dynamic, dynamic> get appLanguage;
   List<double> get splitViewWeights;
+  bool get rainModeActivated;
 
   /// Create a copy of GeneralSettingsDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -36,6 +41,14 @@ mixin _$GeneralSettingsDTO {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is GeneralSettingsDTO &&
+            (identical(other.rtIrlPushKey, rtIrlPushKey) ||
+                other.rtIrlPushKey == rtIrlPushKey) &&
+            (identical(other.allowChatEmotes, allowChatEmotes) ||
+                other.allowChatEmotes == allowChatEmotes) &&
+            (identical(other.textSize, textSize) ||
+                other.textSize == textSize) &&
+            (identical(other.displayTimestamp, displayTimestamp) ||
+                other.displayTimestamp == displayTimestamp) &&
             (identical(other.isDarkMode, isDarkMode) ||
                 other.isDarkMode == isDarkMode) &&
             (identical(other.keepSpeakerOn, keepSpeakerOn) ||
@@ -45,22 +58,29 @@ mixin _$GeneralSettingsDTO {
             const DeepCollectionEquality()
                 .equals(other.appLanguage, appLanguage) &&
             const DeepCollectionEquality()
-                .equals(other.splitViewWeights, splitViewWeights));
+                .equals(other.splitViewWeights, splitViewWeights) &&
+            (identical(other.rainModeActivated, rainModeActivated) ||
+                other.rainModeActivated == rainModeActivated));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      rtIrlPushKey,
+      allowChatEmotes,
+      textSize,
+      displayTimestamp,
       isDarkMode,
       keepSpeakerOn,
       displayViewerCount,
       const DeepCollectionEquality().hash(appLanguage),
-      const DeepCollectionEquality().hash(splitViewWeights));
+      const DeepCollectionEquality().hash(splitViewWeights),
+      rainModeActivated);
 
   @override
   String toString() {
-    return 'GeneralSettingsDTO(isDarkMode: $isDarkMode, keepSpeakerOn: $keepSpeakerOn, displayViewerCount: $displayViewerCount, appLanguage: $appLanguage, splitViewWeights: $splitViewWeights)';
+    return 'GeneralSettingsDTO(rtIrlPushKey: $rtIrlPushKey, allowChatEmotes: $allowChatEmotes, textSize: $textSize, displayTimestamp: $displayTimestamp, isDarkMode: $isDarkMode, keepSpeakerOn: $keepSpeakerOn, displayViewerCount: $displayViewerCount, appLanguage: $appLanguage, splitViewWeights: $splitViewWeights, rainModeActivated: $rainModeActivated)';
   }
 }
 
@@ -71,11 +91,16 @@ abstract mixin class $GeneralSettingsDTOCopyWith<$Res> {
       _$GeneralSettingsDTOCopyWithImpl;
   @useResult
   $Res call(
-      {bool isDarkMode,
+      {String rtIrlPushKey,
+      bool allowChatEmotes,
+      double textSize,
+      bool displayTimestamp,
+      bool isDarkMode,
       bool keepSpeakerOn,
       bool displayViewerCount,
       Map<dynamic, dynamic> appLanguage,
-      List<double> splitViewWeights});
+      List<double> splitViewWeights,
+      bool rainModeActivated});
 }
 
 /// @nodoc
@@ -91,13 +116,34 @@ class _$GeneralSettingsDTOCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? rtIrlPushKey = null,
+    Object? allowChatEmotes = null,
+    Object? textSize = null,
+    Object? displayTimestamp = null,
     Object? isDarkMode = null,
     Object? keepSpeakerOn = null,
     Object? displayViewerCount = null,
     Object? appLanguage = null,
     Object? splitViewWeights = null,
+    Object? rainModeActivated = null,
   }) {
     return _then(_self.copyWith(
+      rtIrlPushKey: null == rtIrlPushKey
+          ? _self.rtIrlPushKey
+          : rtIrlPushKey // ignore: cast_nullable_to_non_nullable
+              as String,
+      allowChatEmotes: null == allowChatEmotes
+          ? _self.allowChatEmotes
+          : allowChatEmotes // ignore: cast_nullable_to_non_nullable
+              as bool,
+      textSize: null == textSize
+          ? _self.textSize
+          : textSize // ignore: cast_nullable_to_non_nullable
+              as double,
+      displayTimestamp: null == displayTimestamp
+          ? _self.displayTimestamp
+          : displayTimestamp // ignore: cast_nullable_to_non_nullable
+              as bool,
       isDarkMode: null == isDarkMode
           ? _self.isDarkMode
           : isDarkMode // ignore: cast_nullable_to_non_nullable
@@ -118,6 +164,10 @@ class _$GeneralSettingsDTOCopyWithImpl<$Res>
           ? _self.splitViewWeights
           : splitViewWeights // ignore: cast_nullable_to_non_nullable
               as List<double>,
+      rainModeActivated: null == rainModeActivated
+          ? _self.rainModeActivated
+          : rainModeActivated // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -216,11 +266,16 @@ extension GeneralSettingsDTOPatterns on GeneralSettingsDTO {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(
+            String rtIrlPushKey,
+            bool allowChatEmotes,
+            double textSize,
+            bool displayTimestamp,
             bool isDarkMode,
             bool keepSpeakerOn,
             bool displayViewerCount,
             Map<dynamic, dynamic> appLanguage,
-            List<double> splitViewWeights)?
+            List<double> splitViewWeights,
+            bool rainModeActivated)?
         $default, {
     required TResult orElse(),
   }) {
@@ -228,11 +283,16 @@ extension GeneralSettingsDTOPatterns on GeneralSettingsDTO {
     switch (_that) {
       case _GeneralSettingsDTO() when $default != null:
         return $default(
+            _that.rtIrlPushKey,
+            _that.allowChatEmotes,
+            _that.textSize,
+            _that.displayTimestamp,
             _that.isDarkMode,
             _that.keepSpeakerOn,
             _that.displayViewerCount,
             _that.appLanguage,
-            _that.splitViewWeights);
+            _that.splitViewWeights,
+            _that.rainModeActivated);
       case _:
         return orElse();
     }
@@ -254,22 +314,32 @@ extension GeneralSettingsDTOPatterns on GeneralSettingsDTO {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(
+            String rtIrlPushKey,
+            bool allowChatEmotes,
+            double textSize,
+            bool displayTimestamp,
             bool isDarkMode,
             bool keepSpeakerOn,
             bool displayViewerCount,
             Map<dynamic, dynamic> appLanguage,
-            List<double> splitViewWeights)
+            List<double> splitViewWeights,
+            bool rainModeActivated)
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _GeneralSettingsDTO():
         return $default(
+            _that.rtIrlPushKey,
+            _that.allowChatEmotes,
+            _that.textSize,
+            _that.displayTimestamp,
             _that.isDarkMode,
             _that.keepSpeakerOn,
             _that.displayViewerCount,
             _that.appLanguage,
-            _that.splitViewWeights);
+            _that.splitViewWeights,
+            _that.rainModeActivated);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -290,22 +360,32 @@ extension GeneralSettingsDTOPatterns on GeneralSettingsDTO {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult? Function(
+            String rtIrlPushKey,
+            bool allowChatEmotes,
+            double textSize,
+            bool displayTimestamp,
             bool isDarkMode,
             bool keepSpeakerOn,
             bool displayViewerCount,
             Map<dynamic, dynamic> appLanguage,
-            List<double> splitViewWeights)?
+            List<double> splitViewWeights,
+            bool rainModeActivated)?
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _GeneralSettingsDTO() when $default != null:
         return $default(
+            _that.rtIrlPushKey,
+            _that.allowChatEmotes,
+            _that.textSize,
+            _that.displayTimestamp,
             _that.isDarkMode,
             _that.keepSpeakerOn,
             _that.displayViewerCount,
             _that.appLanguage,
-            _that.splitViewWeights);
+            _that.splitViewWeights,
+            _that.rainModeActivated);
       case _:
         return null;
     }
@@ -316,20 +396,37 @@ extension GeneralSettingsDTOPatterns on GeneralSettingsDTO {
 @JsonSerializable()
 class _GeneralSettingsDTO extends GeneralSettingsDTO {
   const _GeneralSettingsDTO(
-      {this.isDarkMode = true,
+      {this.rtIrlPushKey = "",
+      this.allowChatEmotes = true,
+      this.textSize = 19,
+      this.displayTimestamp = false,
+      this.isDarkMode = true,
       this.keepSpeakerOn = true,
       this.displayViewerCount = true,
       final Map<dynamic, dynamic> appLanguage = const {
         "languageCode": "en",
         "countryCode": "US"
       },
-      final List<double> splitViewWeights = const [0.5, 0.5]})
+      final List<double> splitViewWeights = const [0.5, 0.5],
+      this.rainModeActivated = false})
       : _appLanguage = appLanguage,
         _splitViewWeights = splitViewWeights,
         super._();
   factory _GeneralSettingsDTO.fromJson(Map<String, dynamic> json) =>
       _$GeneralSettingsDTOFromJson(json);
 
+  @override
+  @JsonKey()
+  final String rtIrlPushKey;
+  @override
+  @JsonKey()
+  final bool allowChatEmotes;
+  @override
+  @JsonKey()
+  final double textSize;
+  @override
+  @JsonKey()
+  final bool displayTimestamp;
   @override
   @JsonKey()
   final bool isDarkMode;
@@ -358,6 +455,10 @@ class _GeneralSettingsDTO extends GeneralSettingsDTO {
     return EqualUnmodifiableListView(_splitViewWeights);
   }
 
+  @override
+  @JsonKey()
+  final bool rainModeActivated;
+
   /// Create a copy of GeneralSettingsDTO
   /// with the given fields replaced by the non-null parameter values.
   @override
@@ -378,6 +479,14 @@ class _GeneralSettingsDTO extends GeneralSettingsDTO {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _GeneralSettingsDTO &&
+            (identical(other.rtIrlPushKey, rtIrlPushKey) ||
+                other.rtIrlPushKey == rtIrlPushKey) &&
+            (identical(other.allowChatEmotes, allowChatEmotes) ||
+                other.allowChatEmotes == allowChatEmotes) &&
+            (identical(other.textSize, textSize) ||
+                other.textSize == textSize) &&
+            (identical(other.displayTimestamp, displayTimestamp) ||
+                other.displayTimestamp == displayTimestamp) &&
             (identical(other.isDarkMode, isDarkMode) ||
                 other.isDarkMode == isDarkMode) &&
             (identical(other.keepSpeakerOn, keepSpeakerOn) ||
@@ -387,22 +496,29 @@ class _GeneralSettingsDTO extends GeneralSettingsDTO {
             const DeepCollectionEquality()
                 .equals(other._appLanguage, _appLanguage) &&
             const DeepCollectionEquality()
-                .equals(other._splitViewWeights, _splitViewWeights));
+                .equals(other._splitViewWeights, _splitViewWeights) &&
+            (identical(other.rainModeActivated, rainModeActivated) ||
+                other.rainModeActivated == rainModeActivated));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      rtIrlPushKey,
+      allowChatEmotes,
+      textSize,
+      displayTimestamp,
       isDarkMode,
       keepSpeakerOn,
       displayViewerCount,
       const DeepCollectionEquality().hash(_appLanguage),
-      const DeepCollectionEquality().hash(_splitViewWeights));
+      const DeepCollectionEquality().hash(_splitViewWeights),
+      rainModeActivated);
 
   @override
   String toString() {
-    return 'GeneralSettingsDTO(isDarkMode: $isDarkMode, keepSpeakerOn: $keepSpeakerOn, displayViewerCount: $displayViewerCount, appLanguage: $appLanguage, splitViewWeights: $splitViewWeights)';
+    return 'GeneralSettingsDTO(rtIrlPushKey: $rtIrlPushKey, allowChatEmotes: $allowChatEmotes, textSize: $textSize, displayTimestamp: $displayTimestamp, isDarkMode: $isDarkMode, keepSpeakerOn: $keepSpeakerOn, displayViewerCount: $displayViewerCount, appLanguage: $appLanguage, splitViewWeights: $splitViewWeights, rainModeActivated: $rainModeActivated)';
   }
 }
 
@@ -415,11 +531,16 @@ abstract mixin class _$GeneralSettingsDTOCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {bool isDarkMode,
+      {String rtIrlPushKey,
+      bool allowChatEmotes,
+      double textSize,
+      bool displayTimestamp,
+      bool isDarkMode,
       bool keepSpeakerOn,
       bool displayViewerCount,
       Map<dynamic, dynamic> appLanguage,
-      List<double> splitViewWeights});
+      List<double> splitViewWeights,
+      bool rainModeActivated});
 }
 
 /// @nodoc
@@ -435,13 +556,34 @@ class __$GeneralSettingsDTOCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
+    Object? rtIrlPushKey = null,
+    Object? allowChatEmotes = null,
+    Object? textSize = null,
+    Object? displayTimestamp = null,
     Object? isDarkMode = null,
     Object? keepSpeakerOn = null,
     Object? displayViewerCount = null,
     Object? appLanguage = null,
     Object? splitViewWeights = null,
+    Object? rainModeActivated = null,
   }) {
     return _then(_GeneralSettingsDTO(
+      rtIrlPushKey: null == rtIrlPushKey
+          ? _self.rtIrlPushKey
+          : rtIrlPushKey // ignore: cast_nullable_to_non_nullable
+              as String,
+      allowChatEmotes: null == allowChatEmotes
+          ? _self.allowChatEmotes
+          : allowChatEmotes // ignore: cast_nullable_to_non_nullable
+              as bool,
+      textSize: null == textSize
+          ? _self.textSize
+          : textSize // ignore: cast_nullable_to_non_nullable
+              as double,
+      displayTimestamp: null == displayTimestamp
+          ? _self.displayTimestamp
+          : displayTimestamp // ignore: cast_nullable_to_non_nullable
+              as bool,
       isDarkMode: null == isDarkMode
           ? _self.isDarkMode
           : isDarkMode // ignore: cast_nullable_to_non_nullable
@@ -462,6 +604,10 @@ class __$GeneralSettingsDTOCopyWithImpl<$Res>
           ? _self._splitViewWeights
           : splitViewWeights // ignore: cast_nullable_to_non_nullable
               as List<double>,
+      rainModeActivated: null == rainModeActivated
+          ? _self.rainModeActivated
+          : rainModeActivated // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }

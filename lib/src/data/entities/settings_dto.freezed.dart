@@ -15,13 +15,9 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SettingsDTO {
 //CHAT SETTINGS
-  bool get isEmotes;
-  double get textSize;
-  bool get displayTimestamp;
   ChatEventsSettingsDTO get chatEventsSettings;
   ChatSettingsDTO get chatSettings; //GENERAL SETTINGS
-  GeneralSettingsDTO get generalSettings; //CONNECTIONS SETTINGS
-  String get rtIrlPushKey;
+  GeneralSettingsDTO get generalSettings;
 
   /// Create a copy of SettingsDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -38,37 +34,22 @@ mixin _$SettingsDTO {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is SettingsDTO &&
-            (identical(other.isEmotes, isEmotes) ||
-                other.isEmotes == isEmotes) &&
-            (identical(other.textSize, textSize) ||
-                other.textSize == textSize) &&
-            (identical(other.displayTimestamp, displayTimestamp) ||
-                other.displayTimestamp == displayTimestamp) &&
             (identical(other.chatEventsSettings, chatEventsSettings) ||
                 other.chatEventsSettings == chatEventsSettings) &&
             (identical(other.chatSettings, chatSettings) ||
                 other.chatSettings == chatSettings) &&
             (identical(other.generalSettings, generalSettings) ||
-                other.generalSettings == generalSettings) &&
-            (identical(other.rtIrlPushKey, rtIrlPushKey) ||
-                other.rtIrlPushKey == rtIrlPushKey));
+                other.generalSettings == generalSettings));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      isEmotes,
-      textSize,
-      displayTimestamp,
-      chatEventsSettings,
-      chatSettings,
-      generalSettings,
-      rtIrlPushKey);
+      runtimeType, chatEventsSettings, chatSettings, generalSettings);
 
   @override
   String toString() {
-    return 'SettingsDTO(isEmotes: $isEmotes, textSize: $textSize, displayTimestamp: $displayTimestamp, chatEventsSettings: $chatEventsSettings, chatSettings: $chatSettings, generalSettings: $generalSettings, rtIrlPushKey: $rtIrlPushKey)';
+    return 'SettingsDTO(chatEventsSettings: $chatEventsSettings, chatSettings: $chatSettings, generalSettings: $generalSettings)';
   }
 }
 
@@ -79,13 +60,9 @@ abstract mixin class $SettingsDTOCopyWith<$Res> {
       _$SettingsDTOCopyWithImpl;
   @useResult
   $Res call(
-      {bool isEmotes,
-      double textSize,
-      bool displayTimestamp,
-      ChatEventsSettingsDTO chatEventsSettings,
+      {ChatEventsSettingsDTO chatEventsSettings,
       ChatSettingsDTO chatSettings,
-      GeneralSettingsDTO generalSettings,
-      String rtIrlPushKey});
+      GeneralSettingsDTO generalSettings});
 
   $ChatEventsSettingsDTOCopyWith<$Res> get chatEventsSettings;
   $ChatSettingsDTOCopyWith<$Res> get chatSettings;
@@ -104,27 +81,11 @@ class _$SettingsDTOCopyWithImpl<$Res> implements $SettingsDTOCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? isEmotes = null,
-    Object? textSize = null,
-    Object? displayTimestamp = null,
     Object? chatEventsSettings = null,
     Object? chatSettings = null,
     Object? generalSettings = null,
-    Object? rtIrlPushKey = null,
   }) {
     return _then(_self.copyWith(
-      isEmotes: null == isEmotes
-          ? _self.isEmotes
-          : isEmotes // ignore: cast_nullable_to_non_nullable
-              as bool,
-      textSize: null == textSize
-          ? _self.textSize
-          : textSize // ignore: cast_nullable_to_non_nullable
-              as double,
-      displayTimestamp: null == displayTimestamp
-          ? _self.displayTimestamp
-          : displayTimestamp // ignore: cast_nullable_to_non_nullable
-              as bool,
       chatEventsSettings: null == chatEventsSettings
           ? _self.chatEventsSettings
           : chatEventsSettings // ignore: cast_nullable_to_non_nullable
@@ -137,10 +98,6 @@ class _$SettingsDTOCopyWithImpl<$Res> implements $SettingsDTOCopyWith<$Res> {
           ? _self.generalSettings
           : generalSettings // ignore: cast_nullable_to_non_nullable
               as GeneralSettingsDTO,
-      rtIrlPushKey: null == rtIrlPushKey
-          ? _self.rtIrlPushKey
-          : rtIrlPushKey // ignore: cast_nullable_to_non_nullable
-              as String,
     ));
   }
 
@@ -269,28 +226,16 @@ extension SettingsDTOPatterns on SettingsDTO {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(
-            bool isEmotes,
-            double textSize,
-            bool displayTimestamp,
-            ChatEventsSettingsDTO chatEventsSettings,
-            ChatSettingsDTO chatSettings,
-            GeneralSettingsDTO generalSettings,
-            String rtIrlPushKey)?
+    TResult Function(ChatEventsSettingsDTO chatEventsSettings,
+            ChatSettingsDTO chatSettings, GeneralSettingsDTO generalSettings)?
         $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _SettingsDTO() when $default != null:
-        return $default(
-            _that.isEmotes,
-            _that.textSize,
-            _that.displayTimestamp,
-            _that.chatEventsSettings,
-            _that.chatSettings,
-            _that.generalSettings,
-            _that.rtIrlPushKey);
+        return $default(_that.chatEventsSettings, _that.chatSettings,
+            _that.generalSettings);
       case _:
         return orElse();
     }
@@ -311,27 +256,15 @@ extension SettingsDTOPatterns on SettingsDTO {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(
-            bool isEmotes,
-            double textSize,
-            bool displayTimestamp,
-            ChatEventsSettingsDTO chatEventsSettings,
-            ChatSettingsDTO chatSettings,
-            GeneralSettingsDTO generalSettings,
-            String rtIrlPushKey)
+    TResult Function(ChatEventsSettingsDTO chatEventsSettings,
+            ChatSettingsDTO chatSettings, GeneralSettingsDTO generalSettings)
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _SettingsDTO():
-        return $default(
-            _that.isEmotes,
-            _that.textSize,
-            _that.displayTimestamp,
-            _that.chatEventsSettings,
-            _that.chatSettings,
-            _that.generalSettings,
-            _that.rtIrlPushKey);
+        return $default(_that.chatEventsSettings, _that.chatSettings,
+            _that.generalSettings);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -351,27 +284,15 @@ extension SettingsDTOPatterns on SettingsDTO {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(
-            bool isEmotes,
-            double textSize,
-            bool displayTimestamp,
-            ChatEventsSettingsDTO chatEventsSettings,
-            ChatSettingsDTO chatSettings,
-            GeneralSettingsDTO generalSettings,
-            String rtIrlPushKey)?
+    TResult? Function(ChatEventsSettingsDTO chatEventsSettings,
+            ChatSettingsDTO chatSettings, GeneralSettingsDTO generalSettings)?
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _SettingsDTO() when $default != null:
-        return $default(
-            _that.isEmotes,
-            _that.textSize,
-            _that.displayTimestamp,
-            _that.chatEventsSettings,
-            _that.chatSettings,
-            _that.generalSettings,
-            _that.rtIrlPushKey);
+        return $default(_that.chatEventsSettings, _that.chatSettings,
+            _that.generalSettings);
       case _:
         return null;
     }
@@ -382,26 +303,13 @@ extension SettingsDTOPatterns on SettingsDTO {
 @JsonSerializable()
 class _SettingsDTO implements SettingsDTO {
   const _SettingsDTO(
-      {this.isEmotes = true,
-      this.textSize = 19,
-      this.displayTimestamp = false,
-      required this.chatEventsSettings,
+      {required this.chatEventsSettings,
       required this.chatSettings,
-      required this.generalSettings,
-      this.rtIrlPushKey = ""});
+      required this.generalSettings});
   factory _SettingsDTO.fromJson(Map<String, dynamic> json) =>
       _$SettingsDTOFromJson(json);
 
 //CHAT SETTINGS
-  @override
-  @JsonKey()
-  final bool isEmotes;
-  @override
-  @JsonKey()
-  final double textSize;
-  @override
-  @JsonKey()
-  final bool displayTimestamp;
   @override
   final ChatEventsSettingsDTO chatEventsSettings;
   @override
@@ -409,10 +317,6 @@ class _SettingsDTO implements SettingsDTO {
 //GENERAL SETTINGS
   @override
   final GeneralSettingsDTO generalSettings;
-//CONNECTIONS SETTINGS
-  @override
-  @JsonKey()
-  final String rtIrlPushKey;
 
   /// Create a copy of SettingsDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -434,37 +338,22 @@ class _SettingsDTO implements SettingsDTO {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _SettingsDTO &&
-            (identical(other.isEmotes, isEmotes) ||
-                other.isEmotes == isEmotes) &&
-            (identical(other.textSize, textSize) ||
-                other.textSize == textSize) &&
-            (identical(other.displayTimestamp, displayTimestamp) ||
-                other.displayTimestamp == displayTimestamp) &&
             (identical(other.chatEventsSettings, chatEventsSettings) ||
                 other.chatEventsSettings == chatEventsSettings) &&
             (identical(other.chatSettings, chatSettings) ||
                 other.chatSettings == chatSettings) &&
             (identical(other.generalSettings, generalSettings) ||
-                other.generalSettings == generalSettings) &&
-            (identical(other.rtIrlPushKey, rtIrlPushKey) ||
-                other.rtIrlPushKey == rtIrlPushKey));
+                other.generalSettings == generalSettings));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      isEmotes,
-      textSize,
-      displayTimestamp,
-      chatEventsSettings,
-      chatSettings,
-      generalSettings,
-      rtIrlPushKey);
+      runtimeType, chatEventsSettings, chatSettings, generalSettings);
 
   @override
   String toString() {
-    return 'SettingsDTO(isEmotes: $isEmotes, textSize: $textSize, displayTimestamp: $displayTimestamp, chatEventsSettings: $chatEventsSettings, chatSettings: $chatSettings, generalSettings: $generalSettings, rtIrlPushKey: $rtIrlPushKey)';
+    return 'SettingsDTO(chatEventsSettings: $chatEventsSettings, chatSettings: $chatSettings, generalSettings: $generalSettings)';
   }
 }
 
@@ -477,13 +366,9 @@ abstract mixin class _$SettingsDTOCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {bool isEmotes,
-      double textSize,
-      bool displayTimestamp,
-      ChatEventsSettingsDTO chatEventsSettings,
+      {ChatEventsSettingsDTO chatEventsSettings,
       ChatSettingsDTO chatSettings,
-      GeneralSettingsDTO generalSettings,
-      String rtIrlPushKey});
+      GeneralSettingsDTO generalSettings});
 
   @override
   $ChatEventsSettingsDTOCopyWith<$Res> get chatEventsSettings;
@@ -505,27 +390,11 @@ class __$SettingsDTOCopyWithImpl<$Res> implements _$SettingsDTOCopyWith<$Res> {
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? isEmotes = null,
-    Object? textSize = null,
-    Object? displayTimestamp = null,
     Object? chatEventsSettings = null,
     Object? chatSettings = null,
     Object? generalSettings = null,
-    Object? rtIrlPushKey = null,
   }) {
     return _then(_SettingsDTO(
-      isEmotes: null == isEmotes
-          ? _self.isEmotes
-          : isEmotes // ignore: cast_nullable_to_non_nullable
-              as bool,
-      textSize: null == textSize
-          ? _self.textSize
-          : textSize // ignore: cast_nullable_to_non_nullable
-              as double,
-      displayTimestamp: null == displayTimestamp
-          ? _self.displayTimestamp
-          : displayTimestamp // ignore: cast_nullable_to_non_nullable
-              as bool,
       chatEventsSettings: null == chatEventsSettings
           ? _self.chatEventsSettings
           : chatEventsSettings // ignore: cast_nullable_to_non_nullable
@@ -538,10 +407,6 @@ class __$SettingsDTOCopyWithImpl<$Res> implements _$SettingsDTOCopyWith<$Res> {
           ? _self.generalSettings
           : generalSettings // ignore: cast_nullable_to_non_nullable
               as GeneralSettingsDTO,
-      rtIrlPushKey: null == rtIrlPushKey
-          ? _self.rtIrlPushKey
-          : rtIrlPushKey // ignore: cast_nullable_to_non_nullable
-              as String,
     ));
   }
 

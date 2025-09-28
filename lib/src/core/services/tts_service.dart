@@ -146,12 +146,14 @@ class TtsService extends GetxService {
       }
     }
 
-    // Remove emotes from the final message (skip emotes setting is considered always true for now)
-    finalMessage = EmoteUtils.removeEmotes(message, thirdPartEmotes ?? []);
+    // Remove emotes from the final message if the setting is disabled
+    if (!ttsSettings.ttsReadEmotes) {
+      finalMessage = EmoteUtils.removeEmotes(message, thirdPartEmotes ?? []);
 
-    // Skip speaking if the message becomes empty after emote removal
-    if (finalMessage.trim().isEmpty) {
-      return;
+      // Skip speaking if the message becomes empty after emote removal
+      if (finalMessage.trim().isEmpty) {
+        return;
+      }
     }
 
     String text = "user_said_message".trParams(

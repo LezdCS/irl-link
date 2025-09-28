@@ -132,10 +132,13 @@ class SettingsView extends GetView<SettingsViewController> {
                     Switch(
                       onChanged: (value) {
                         settingsService.settings.value =
-                            settings.value.copyWith(isEmotes: value);
+                            settings.value.copyWith(
+                          generalSettings: settings.value.generalSettings
+                              .copyWith(allowChatEmotes: value),
+                        );
                         settingsService.saveSettings();
                       },
-                      value: settings.value.isEmotes,
+                      value: settings.value.generalSettings.allowChatEmotes,
                     ),
                   ],
                 ),
@@ -147,19 +150,22 @@ class SettingsView extends GetView<SettingsViewController> {
                       style: const TextStyle(fontSize: 18),
                     ),
                     Text(
-                      settings.value.textSize.ceil().toString(),
+                      settings.value.generalSettings.textSize.ceil().toString(),
                       style: const TextStyle(fontSize: 18),
                     ),
                     Slider(
                       onChanged: (value) {
                         settingsService.settings.value =
-                            settings.value.copyWith(textSize: value);
+                            settings.value.copyWith(
+                          generalSettings: settings.value.generalSettings
+                              .copyWith(textSize: value),
+                        );
                         settingsService.saveSettings();
                       },
-                      value: settings.value.textSize,
+                      value: settings.value.generalSettings.textSize,
                       max: 50,
                       divisions: 100,
-                      label: "${settings.value.textSize}",
+                      label: "${settings.value.generalSettings.textSize}",
                     ),
                   ],
                 ),
@@ -173,10 +179,13 @@ class SettingsView extends GetView<SettingsViewController> {
                     Switch(
                       onChanged: (value) {
                         settingsService.settings.value =
-                            settings.value.copyWith(displayTimestamp: value);
+                            settings.value.copyWith(
+                          generalSettings: settings.value.generalSettings
+                              .copyWith(displayTimestamp: value),
+                        );
                         settingsService.saveSettings();
                       },
-                      value: settings.value.displayTimestamp,
+                      value: settings.value.generalSettings.displayTimestamp,
                     ),
                   ],
                 ),

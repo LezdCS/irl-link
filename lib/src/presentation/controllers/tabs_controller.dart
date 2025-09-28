@@ -199,7 +199,7 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
 
     // Check if Realtime IRL have to be removed
     if (realtimeIrlViewController != null &&
-        settingsService.settings.value.rtIrlPushKey.isEmpty) {
+        settingsService.settings.value.generalSettings.rtIrlPushKey.isEmpty) {
       tabElements.removeWhere((t) => t is RealtimeIrlTabView);
       realtimeIrlViewController = null;
       await Get.delete<RealtimeIrlViewController>();
@@ -264,7 +264,8 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
     }
 
     // Check if Realtime IRL have to be added
-    if (settingsService.settings.value.rtIrlPushKey.isNotEmpty &&
+    if (settingsService
+            .settings.value.generalSettings.rtIrlPushKey.isNotEmpty &&
         realtimeIrlViewController == null) {
       realtimeIrlViewController = Get.find<RealtimeIrlViewController>();
       tabElements.add(const RealtimeIrlTabView());

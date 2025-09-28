@@ -23,6 +23,8 @@ abstract class Migration {
         return Migration3();
       case 4:
         return Migration4();
+      case 5:
+        return Migration5();
       default:
         return null;
     }
@@ -557,5 +559,91 @@ class Migration4 extends Migration {
     await db.execute('DROP TABLE IF EXISTS obs_settings');
     await db.execute('DROP TABLE IF EXISTS streamelements_muted_overlays');
     await db.execute('DROP TABLE IF EXISTS streamelements_settings');
+  }
+}
+
+class Migration5 extends Migration {
+  Migration5() : super(5);
+
+  @override
+  Future<void> up(Database db) async {
+    // Create general_settings table
+    await db.execute('''
+      CREATE TABLE general_settings (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        is_dark_mode INTEGER NOT NULL DEFAULT 1,
+        keep_speaker_on INTEGER NOT NULL DEFAULT 1,
+        display_viewer_count INTEGER NOT NULL DEFAULT 1,
+        app_language TEXT NOT NULL DEFAULT '{"languageCode": "en", "countryCode": "US"}',
+        split_view_weights TEXT NOT NULL DEFAULT '[0.5, 0.5]',
+        rain_mode_activated INTEGER NOT NULL DEFAULT 0,
+        allow_chat_emotes INTEGER NOT NULL DEFAULT 1,
+        text_size INTEGER NOT NULL DEFAULT 19,
+        display_timestamp INTEGER NOT NULL DEFAULT 0,
+        rtirl_push_key TEXT NOT NULL DEFAULT '',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    ''');
+
+    // Add TTS emote reading setting to tts_settings table
+    await db.execute('''
+      ALTER TABLE tts_settings 
+      ADD COLUMN tts_read_emotes INTEGER NOT NULL DEFAULT 1
+    ''');
+
+    // Migrate general settings from GetStorage to SQLite
+    await _migrateGeneralSettings(db);
+  }
+
+  Future<void> _migrateGeneralSettings(Database db) async {
+    try {
+      final storage = GetStorage();
+      final settings = storage.read('settings');
+      if (settings != null) {
+        final Map<String, dynamic> settingsJson = jsonDecode(settings);
+
+        // Check if generalSettings exists in the settings JSON
+        final generalSettings = settingsJson['generalSettings'];
+        if (generalSettings != null) {
+          // Insert general settings into SQLite
+          await db.insert('general_settings', {
+            'is_dark_mode': generalSettings['isDarkMode'] == true ? 1 : 0,
+            'keep_speaker_on': generalSettings['keepSpeakerOn'] == true ? 1 : 0,
+            'display_viewer_count':
+                generalSettings['displayViewerCount'] == true ? 1 : 0,
+            'app_language': jsonEncode(
+              generalSettings['appLanguage'] ??
+                  {"languageCode": "en", "countryCode": "US"},
+            ),
+            'split_view_weights':
+                jsonEncode(generalSettings['splitViewWeights'] ?? [0.5, 0.5]),
+            'rain_mode_activated':
+                generalSettings['rainModeActivated'] == true ? 1 : 0,
+            'allow_chat_emotes': settings['isEmotes'] == true ? 1 : 0,
+            'text_size': settings['textSize'] ?? 19,
+            'display_timestamp': settings['displayTimestamp'] == true ? 1 : 0,
+            'rtirl_push_key': settings['rtIrlPushKey'] ?? '',
+          });
+
+          // Remove generalSettings from main settings JSON
+          settingsJson.remove('generalSettings');
+          settingsJson.remove('isEmotes');
+          settingsJson.remove('textSize');
+          settingsJson.remove('displayTimestamp');
+          settingsJson.remove('rtIrlPushKey');
+          await storage.write('settings', jsonEncode(settingsJson));
+        }
+      }
+    } catch (e) {
+      debugPrint('Failed to migrate general settings: $e');
+    }
+  }
+
+  @override
+  Future<void> down(Database db) async {
+    await db.execute('DROP TABLE IF EXISTS general_settings');
+    debugPrint(
+      'Migration5 down: tts_read_emotes column left in place (SQLite limitation)',
+    );
   }
 }

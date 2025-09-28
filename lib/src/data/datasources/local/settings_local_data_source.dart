@@ -7,6 +7,7 @@ import 'package:irllink/src/data/entities/dashboard_event_dto.dart';
 import 'package:irllink/src/data/entities/obs_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/browser_tab_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/chat_settings_dto.dart';
+import 'package:irllink/src/data/entities/settings/general_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/hidden_user_dto.dart';
 import 'package:irllink/src/data/entities/settings/tts_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings_dto.dart';
@@ -34,6 +35,8 @@ abstract class SettingsLocalDataSource {
   Future<void> addDashboardEvent(DashboardEventDTO dashboardEvent);
   Future<void> removeDashboardEvent(DashboardEventDTO dashboardEvent);
   Future<List<DashboardEventDTO>?> getDashboardEvents();
+  Future<GeneralSettingsDTO?> getGeneralSettings();
+  Future<void> setGeneralSettings(GeneralSettingsDTO generalSettings);
 }
 
 class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
@@ -284,6 +287,7 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
       ttsOnlyVip: ttsSettingsMap['tts_only_vip'] == 1,
       ttsOnlyMod: ttsSettingsMap['tts_only_mod'] == 1,
       ttsOnlySubscriber: ttsSettingsMap['tts_only_subscriber'] == 1,
+      ttsReadEmotes: ttsSettingsMap['tts_read_emotes'] == 1,
     );
   }
 
@@ -314,6 +318,7 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
           'tts_only_vip': ttsSettings.ttsOnlyVip ? 1 : 0,
           'tts_only_mod': ttsSettings.ttsOnlyMod ? 1 : 0,
           'tts_only_subscriber': ttsSettings.ttsOnlySubscriber ? 1 : 0,
+          'tts_read_emotes': ttsSettings.ttsReadEmotes ? 1 : 0,
         },
         where: 'id = ?',
         whereArgs: [ttsSettingsId],
@@ -349,6 +354,7 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
         'tts_only_vip': ttsSettings.ttsOnlyVip ? 1 : 0,
         'tts_only_mod': ttsSettings.ttsOnlyMod ? 1 : 0,
         'tts_only_subscriber': ttsSettings.ttsOnlySubscriber ? 1 : 0,
+        'tts_read_emotes': ttsSettings.ttsReadEmotes ? 1 : 0,
       });
     }
 
@@ -409,5 +415,77 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
     final db = await _databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.query('dashboard_events');
     return maps.map((map) => DashboardEventDTO.fromJson(map)).toList();
+  }
+
+  @override
+  Future<GeneralSettingsDTO?> getGeneralSettings() async {
+    final db = await _databaseHelper.database;
+    final List<Map<String, dynamic>> generalSettingsMaps =
+        await db.query('general_settings');
+
+    if (generalSettingsMaps.isEmpty) {
+      return GeneralSettingsDTO.blank();
+    }
+
+    final generalSettingsMap = generalSettingsMaps.first;
+
+    // Parse JSON fields
+    final appLanguage = jsonDecode(generalSettingsMap['app_language']);
+    final splitViewWeights =
+        (jsonDecode(generalSettingsMap['split_view_weights']) as List)
+            .map((e) => (e as num).toDouble())
+            .toList();
+
+    return GeneralSettingsDTO(
+      isDarkMode: generalSettingsMap['is_dark_mode'] == 1,
+      keepSpeakerOn: generalSettingsMap['keep_speaker_on'] == 1,
+      displayViewerCount: generalSettingsMap['display_viewer_count'] == 1,
+      appLanguage: appLanguage,
+      splitViewWeights: splitViewWeights,
+      rainModeActivated: generalSettingsMap['rain_mode_activated'] == 1,
+    );
+  }
+
+  @override
+  Future<void> setGeneralSettings(GeneralSettingsDTO generalSettings) async {
+    final db = await _databaseHelper.database;
+
+    // Check if general settings already exist
+    final existingSettings = await db.query('general_settings');
+
+    if (existingSettings.isNotEmpty) {
+      // Update existing settings
+      await db.update(
+        'general_settings',
+        {
+          'is_dark_mode': generalSettings.isDarkMode ? 1 : 0,
+          'keep_speaker_on': generalSettings.keepSpeakerOn ? 1 : 0,
+          'display_viewer_count': generalSettings.displayViewerCount ? 1 : 0,
+          'app_language': jsonEncode(generalSettings.appLanguage),
+          'split_view_weights': jsonEncode(generalSettings.splitViewWeights),
+          'rain_mode_activated': generalSettings.rainModeActivated ? 1 : 0,
+          'allow_chat_emotes': generalSettings.allowChatEmotes ? 1 : 0,
+          'text_size': generalSettings.textSize,
+          'display_timestamp': generalSettings.displayTimestamp ? 1 : 0,
+          'rtirl_push_key': generalSettings.rtIrlPushKey,
+        },
+        where: 'id = ?',
+        whereArgs: [existingSettings.first['id']],
+      );
+    } else {
+      // Insert new settings
+      await db.insert('general_settings', {
+        'is_dark_mode': generalSettings.isDarkMode ? 1 : 0,
+        'keep_speaker_on': generalSettings.keepSpeakerOn ? 1 : 0,
+        'display_viewer_count': generalSettings.displayViewerCount ? 1 : 0,
+        'app_language': jsonEncode(generalSettings.appLanguage),
+        'split_view_weights': jsonEncode(generalSettings.splitViewWeights),
+        'rain_mode_activated': generalSettings.rainModeActivated ? 1 : 0,
+        'allow_chat_emotes': generalSettings.allowChatEmotes ? 1 : 0,
+        'text_size': generalSettings.textSize,
+        'display_timestamp': generalSettings.displayTimestamp ? 1 : 0,
+        'rtirl_push_key': generalSettings.rtIrlPushKey,
+      });
+    }
   }
 }

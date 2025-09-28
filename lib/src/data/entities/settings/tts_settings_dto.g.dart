@@ -25,6 +25,7 @@ _TtsSettingsDTO _$TtsSettingsDTOFromJson(Map<String, dynamic> json) =>
       ttsOnlyVip: json['ttsOnlyVip'] as bool? ?? false,
       ttsOnlyMod: json['ttsOnlyMod'] as bool? ?? false,
       ttsOnlySubscriber: json['ttsOnlySubscriber'] as bool? ?? false,
+      ttsReadEmotes: json['ttsReadEmotes'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$TtsSettingsDTOToJson(_TtsSettingsDTO instance) =>
@@ -42,4 +43,5 @@ Map<String, dynamic> _$TtsSettingsDTOToJson(_TtsSettingsDTO instance) =>
       'ttsOnlyVip': instance.ttsOnlyVip,
       'ttsOnlyMod': instance.ttsOnlyMod,
       'ttsOnlySubscriber': instance.ttsOnlySubscriber,
+      'ttsReadEmotes': instance.ttsReadEmotes,
     };

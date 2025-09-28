@@ -263,6 +263,28 @@ class Tts extends GetView<SettingsViewController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
+                        "Read emotes".tr,
+                        style: const TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                      Switch(
+                        value: controller.ttsSettings.value!.ttsReadEmotes,
+                        onChanged: (value) {
+                          TtsSettings ttsSettings =
+                              controller.ttsSettings.value!.copyWith(
+                            ttsReadEmotes: value,
+                          );
+                          controller.setTtsSettings(ttsSettings);
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
                         "only_read_vip".tr,
                         style: const TextStyle(
                           fontSize: 18,

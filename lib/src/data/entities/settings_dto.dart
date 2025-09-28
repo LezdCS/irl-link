@@ -10,15 +10,10 @@ part 'settings_dto.g.dart';
 abstract class SettingsDTO with _$SettingsDTO {
   const factory SettingsDTO({
     //CHAT SETTINGS
-    @Default(true) bool isEmotes,
-    @Default(19) double textSize,
-    @Default(false) bool displayTimestamp,
     required ChatEventsSettingsDTO chatEventsSettings,
     required ChatSettingsDTO chatSettings,
     //GENERAL SETTINGS
     required GeneralSettingsDTO generalSettings,
-    //CONNECTIONS SETTINGS
-    @Default("") String rtIrlPushKey,
   }) = _SettingsDTO;
 
   factory SettingsDTO.blank() => SettingsDTO(

@@ -6,12 +6,17 @@ part 'general_settings_dto.g.dart';
 @freezed
 abstract class GeneralSettingsDTO with _$GeneralSettingsDTO {
   const factory GeneralSettingsDTO({
+    @Default("") String rtIrlPushKey,
+    @Default(true) bool allowChatEmotes,
+    @Default(19) double textSize,
+    @Default(false) bool displayTimestamp,
     @Default(true) bool isDarkMode,
     @Default(true) bool keepSpeakerOn,
     @Default(true) bool displayViewerCount,
     @Default({"languageCode": "en", "countryCode": "US"})
     Map<dynamic, dynamic> appLanguage,
     @Default([0.5, 0.5]) List<double> splitViewWeights,
+    @Default(false) bool rainModeActivated,
   }) = _GeneralSettingsDTO;
   const GeneralSettingsDTO._();
 

@@ -73,7 +73,8 @@ class SettingsViewController extends GetxController {
   void onInit() async {
     Settings settings = settingsService.settings.value;
 
-    rtIrlInputController = TextEditingController(text: settings.rtIrlPushKey);
+    rtIrlInputController =
+        TextEditingController(text: settings.generalSettings.rtIrlPushKey);
 
     // Setup download progress listening
     _setupDownloadListener();

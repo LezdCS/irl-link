@@ -94,7 +94,8 @@ class HomeView extends GetView<HomeViewController> {
                                   : SplitViewMode.Horizontal,
                               isActive: true,
                             ),
-                            onWeightChanged: controller.rainMode.value
+                            onWeightChanged: controller.settingsService.settings
+                                    .value.generalSettings.rainModeActivated
                                 ? null
                                 : controller.onSplitResized,
                             children: [
@@ -203,7 +204,8 @@ class HomeView extends GetView<HomeViewController> {
                   children: [
                     Obx(
                       () => AbsorbPointer(
-                        absorbing: controller.rainMode.value,
+                        absorbing: controller.settingsService.settings.value
+                            .generalSettings.rainModeActivated,
                         child: InkWell(
                           onTap: () => controller.getEmotes(),
                           child: const Image(
@@ -217,11 +219,13 @@ class HomeView extends GetView<HomeViewController> {
                     Expanded(
                       child: Obx(
                         () => AbsorbPointer(
-                          absorbing: controller.rainMode.value,
+                          absorbing: controller.settingsService.settings.value
+                              .generalSettings.rainModeActivated,
                           child: TextField(
                             controller: controller.chatInputController,
                             onTap: () {
-                              if (controller.rainMode.value) {
+                              if (controller.settingsService.settings.value
+                                  .generalSettings.rainModeActivated) {
                                 return;
                               }
                               Get.find<ChatsController>()
@@ -272,7 +276,8 @@ class HomeView extends GetView<HomeViewController> {
                     ),
                     Obx(
                       () => AbsorbPointer(
-                        absorbing: controller.rainMode.value,
+                        absorbing: controller.settingsService.settings.value
+                            .generalSettings.rainModeActivated,
                         child: InkWell(
                           onTap: () {
                             controller.sendChatMessage(
@@ -301,10 +306,12 @@ class HomeView extends GetView<HomeViewController> {
                 child: Expanded(
                   child: Obx(
                     () => AbsorbPointer(
-                      absorbing: controller.rainMode.value,
+                      absorbing: controller.settingsService.settings.value
+                          .generalSettings.rainModeActivated,
                       child: InkWell(
                         onTap: () async {
-                          if (controller.rainMode.value) {
+                          if (controller.settingsService.settings.value
+                              .generalSettings.rainModeActivated) {
                             return;
                           }
                           Get.dialog(
@@ -355,10 +362,12 @@ class HomeView extends GetView<HomeViewController> {
                 child: Expanded(
                   child: Obx(
                     () => AbsorbPointer(
-                      absorbing: controller.rainMode.value,
+                      absorbing: controller.settingsService.settings.value
+                          .generalSettings.rainModeActivated,
                       child: InkWell(
                         onTap: () async {
-                          if (controller.rainMode.value) {
+                          if (controller.settingsService.settings.value
+                              .generalSettings.rainModeActivated) {
                             return;
                           }
                           Get.dialog(
@@ -406,10 +415,12 @@ class HomeView extends GetView<HomeViewController> {
             child: Expanded(
               child: Obx(
                 () => AbsorbPointer(
-                  absorbing: controller.rainMode.value,
+                  absorbing: controller.settingsService.settings.value
+                      .generalSettings.rainModeActivated,
                   child: InkWell(
                     onTap: () {
-                      if (controller.rainMode.value) {
+                      if (controller.settingsService.settings.value
+                          .generalSettings.rainModeActivated) {
                         return;
                       }
                       controller.showPinnedMessages.toggle();
@@ -429,10 +440,12 @@ class HomeView extends GetView<HomeViewController> {
             child: Expanded(
               child: Obx(
                 () => AbsorbPointer(
-                  absorbing: controller.rainMode.value,
+                  absorbing: controller.settingsService.settings.value
+                      .generalSettings.rainModeActivated,
                   child: InkWell(
                     onTap: () async {
-                      if (controller.rainMode.value) {
+                      if (controller.settingsService.settings.value
+                          .generalSettings.rainModeActivated) {
                         return;
                       }
                       controller.displayDashboard.value =
@@ -453,23 +466,31 @@ class HomeView extends GetView<HomeViewController> {
             child: Obx(
               () => InkWell(
                 onTap: () async {
-                  debugPrint('Rain mode: ${controller.rainMode.value}');
-                  if (controller.rainMode.value) {
+                  debugPrint(
+                    'Rain mode: ${controller.settingsService.settings.value.generalSettings.rainModeActivated}',
+                  );
+                  if (controller.settingsService.settings.value.generalSettings
+                      .rainModeActivated) {
                     // Currently in rain mode, show disable dialog
                     final result = await Get.dialog<bool>(
                       const RainModeDisableDialog(),
                     );
                     if (result ?? false) {
-                      controller.rainMode.value = false;
+                      controller.settingsService.settings.value.generalSettings
+                          .copyWith(rainModeActivated: false);
+                      controller.settingsService.saveSettings();
                     }
                   } else {
                     // Currently not in rain mode, enable it directly
-                    controller.rainMode.value = true;
+                    controller.settingsService.settings.value.generalSettings
+                        .copyWith(rainModeActivated: true);
+                    controller.settingsService.saveSettings();
                   }
                 },
                 child: Icon(
                   Icons.water_drop,
-                  color: controller.rainMode.value
+                  color: controller.settingsService.settings.value
+                          .generalSettings.rainModeActivated
                       ? Theme.of(context).colorScheme.primary
                       : Theme.of(context).primaryIconTheme.color,
                   size: 22,
@@ -480,10 +501,12 @@ class HomeView extends GetView<HomeViewController> {
           Expanded(
             child: Obx(
               () => AbsorbPointer(
-                absorbing: controller.rainMode.value,
+                absorbing: controller.settingsService.settings.value
+                    .generalSettings.rainModeActivated,
                 child: InkWell(
                   onTap: () async {
-                    if (controller.rainMode.value) {
+                    if (controller.settingsService.settings.value
+                        .generalSettings.rainModeActivated) {
                       return;
                     }
                     await Get.toNamed(

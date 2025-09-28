@@ -45,7 +45,9 @@ class RealtimeIrl extends GetView<SettingsViewController> {
                   onChanged: (value) {
                     Get.find<SettingsService>().settings.value =
                         settings.copyWith(
-                      rtIrlPushKey: value,
+                      generalSettings: settings.generalSettings.copyWith(
+                        rtIrlPushKey: value,
+                      ),
                     );
                     Get.find<SettingsService>().saveSettings();
                   },

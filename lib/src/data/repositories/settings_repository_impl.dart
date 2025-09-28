@@ -7,6 +7,7 @@ import 'package:irllink/src/data/entities/dashboard_event_dto.dart';
 import 'package:irllink/src/data/entities/obs_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/browser_tab_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/chat_settings_dto.dart';
+import 'package:irllink/src/data/entities/settings/general_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings/hidden_user_dto.dart';
 import 'package:irllink/src/data/entities/settings/tts_settings_dto.dart';
 import 'package:irllink/src/data/entities/settings_dto.dart';
@@ -14,6 +15,7 @@ import 'package:irllink/src/domain/entities/dashboard_event.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
+import 'package:irllink/src/domain/entities/settings/general_settings.dart';
 import 'package:irllink/src/domain/entities/settings/hidden_user.dart';
 import 'package:irllink/src/domain/entities/settings/obs_settings.dart';
 import 'package:irllink/src/domain/entities/settings/tts_settings.dart';
@@ -284,5 +286,26 @@ class SettingsRepositoryImpl extends SettingsRepository {
       return Right(dashboardEvents);
     }
     return const Right([]);
+  }
+
+  @override
+  Future<Either<Failure, GeneralSettings>> getGeneralSettings() async {
+    final generalSettingsDTO = await _localDataSource.getGeneralSettings();
+    if (generalSettingsDTO != null) {
+      return Right(
+        _mappr.convert<GeneralSettingsDTO, GeneralSettings>(generalSettingsDTO),
+      );
+    }
+    return Left(Failure('No general settings found'));
+  }
+
+  @override
+  Future<Either<Failure, void>> setGeneralSettings(
+    GeneralSettings generalSettings,
+  ) async {
+    final generalSettingsDTO =
+        _mappr.convert<GeneralSettings, GeneralSettingsDTO>(generalSettings);
+    await _localDataSource.setGeneralSettings(generalSettingsDTO);
+    return const Right(null);
   }
 }

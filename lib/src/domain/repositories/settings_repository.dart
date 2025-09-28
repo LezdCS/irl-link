@@ -4,6 +4,7 @@ import 'package:irllink/src/domain/entities/dashboard_event.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
+import 'package:irllink/src/domain/entities/settings/general_settings.dart';
 import 'package:irllink/src/domain/entities/settings/hidden_user.dart';
 import 'package:irllink/src/domain/entities/settings/obs_settings.dart';
 import 'package:irllink/src/domain/entities/settings/tts_settings.dart';
@@ -49,4 +50,9 @@ abstract class SettingsRepository {
     DashboardEvent dashboardEvent,
   );
   Future<Either<Failure, List<DashboardEvent>>> getDashboardEvents();
+
+  Future<Either<Failure, GeneralSettings>> getGeneralSettings();
+  Future<Either<Failure, void>> setGeneralSettings(
+    GeneralSettings generalSettings,
+  );
 }

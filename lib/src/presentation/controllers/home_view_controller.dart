@@ -74,9 +74,6 @@ class HomeViewController extends GetxController
 
   RxnString minimumVersion = RxnString();
 
-  // Rain mode - disables all interactivity
-  RxBool rainMode = true.obs;
-
   @override
   void onInit() async {
     chatInputController = TextEditingController();

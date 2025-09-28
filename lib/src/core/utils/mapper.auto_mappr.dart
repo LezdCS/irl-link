@@ -1278,9 +1278,6 @@ class $Mappr implements _i1.AutoMapprInterface {
           r'Consider setting the whenSourceIsNull parameter on the MapType<Settings, SettingsDTO> to handle null values during mapping.');
     }
     return _i3.SettingsDTO(
-      isEmotes: model.isEmotes,
-      textSize: model.textSize,
-      displayTimestamp: model.displayTimestamp,
       chatEventsSettings:
           _map__i16$ChatEventsSettings_To__i17$ChatEventsSettingsDTO(
               model.chatEventsSettings),
@@ -1288,7 +1285,6 @@ class $Mappr implements _i1.AutoMapprInterface {
           _map__i4$ChatSettings_To__i5$ChatSettingsDTO(model.chatSettings),
       generalSettings: _map__i8$GeneralSettings_To__i9$GeneralSettingsDTO(
           model.generalSettings),
-      rtIrlPushKey: model.rtIrlPushKey,
     );
   }
 
@@ -1300,9 +1296,6 @@ class $Mappr implements _i1.AutoMapprInterface {
           r'Consider setting the whenSourceIsNull parameter on the MapType<SettingsDTO, Settings> to handle null values during mapping.');
     }
     return _i2.Settings(
-      isEmotes: model.isEmotes,
-      textSize: model.textSize,
-      displayTimestamp: model.displayTimestamp,
       chatEventsSettings:
           _map__i17$ChatEventsSettingsDTO_To__i16$ChatEventsSettings(
               model.chatEventsSettings),
@@ -1310,7 +1303,6 @@ class $Mappr implements _i1.AutoMapprInterface {
           _map__i5$ChatSettingsDTO_To__i4$ChatSettings(model.chatSettings),
       generalSettings: _map__i9$GeneralSettingsDTO_To__i8$GeneralSettings(
           model.generalSettings),
-      rtIrlPushKey: model.rtIrlPushKey,
     );
   }
 
@@ -1439,11 +1431,16 @@ class $Mappr implements _i1.AutoMapprInterface {
           r'Consider setting the whenSourceIsNull parameter on the MapType<GeneralSettings, GeneralSettingsDTO> to handle null values during mapping.');
     }
     return _i9.GeneralSettingsDTO(
+      rtIrlPushKey: model.rtIrlPushKey,
+      allowChatEmotes: model.allowChatEmotes,
+      textSize: model.textSize,
+      displayTimestamp: model.displayTimestamp,
       isDarkMode: model.isDarkMode,
       keepSpeakerOn: model.keepSpeakerOn,
       displayViewerCount: model.displayViewerCount,
       appLanguage: model.appLanguage,
       splitViewWeights: model.splitViewWeights,
+      rainModeActivated: model.rainModeActivated,
     );
   }
 
@@ -1456,11 +1453,16 @@ class $Mappr implements _i1.AutoMapprInterface {
           r'Consider setting the whenSourceIsNull parameter on the MapType<GeneralSettingsDTO, GeneralSettings> to handle null values during mapping.');
     }
     return _i8.GeneralSettings(
+      rtIrlPushKey: model.rtIrlPushKey,
+      allowChatEmotes: model.allowChatEmotes,
+      textSize: model.textSize,
+      displayTimestamp: model.displayTimestamp,
       isDarkMode: model.isDarkMode,
       keepSpeakerOn: model.keepSpeakerOn,
       displayViewerCount: model.displayViewerCount,
       appLanguage: model.appLanguage,
       splitViewWeights: model.splitViewWeights,
+      rainModeActivated: model.rainModeActivated,
     );
   }
 
@@ -1568,6 +1570,7 @@ class $Mappr implements _i1.AutoMapprInterface {
       ttsOnlyVip: model.ttsOnlyVip,
       ttsOnlyMod: model.ttsOnlyMod,
       ttsOnlySubscriber: model.ttsOnlySubscriber,
+      ttsReadEmotes: model.ttsReadEmotes,
     );
   }
 
@@ -1593,6 +1596,7 @@ class $Mappr implements _i1.AutoMapprInterface {
       ttsOnlyVip: model.ttsOnlyVip,
       ttsOnlyMod: model.ttsOnlyMod,
       ttsOnlySubscriber: model.ttsOnlySubscriber,
+      ttsReadEmotes: model.ttsReadEmotes,
     );
   }
 

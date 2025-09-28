@@ -106,8 +106,9 @@ class ChatView extends GetView<ChatViewController> {
                                     selectedMessage: Get.find<ChatsController>()
                                         .selectedMessage
                                         .value,
-                                    displayTimestamp: settings.displayTimestamp,
-                                    textSize: settings.textSize,
+                                    displayTimestamp: settings
+                                        .generalSettings.displayTimestamp,
+                                    textSize: settings.generalSettings.textSize,
                                     hideDeletedMessages: settings
                                         .chatSettings.hideDeletedMessages,
                                     cheerEmotes: controller.cheerEmotes,
@@ -119,8 +120,9 @@ class ChatView extends GetView<ChatViewController> {
                                         .selectedMessage
                                         .value,
                                     message: message,
-                                    displayTimestamp: settings.displayTimestamp,
-                                    textSize: settings.textSize,
+                                    displayTimestamp: settings
+                                        .generalSettings.displayTimestamp,
+                                    textSize: settings.generalSettings.textSize,
                                     hideDeletedMessages: settings
                                         .chatSettings.hideDeletedMessages,
                                     cheerEmotes: controller.cheerEmotes,

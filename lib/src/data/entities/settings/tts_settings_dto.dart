@@ -20,6 +20,7 @@ abstract class TtsSettingsDTO with _$TtsSettingsDTO {
     @Default(false) bool ttsOnlyVip,
     @Default(false) bool ttsOnlyMod,
     @Default(false) bool ttsOnlySubscriber,
+    @Default(true) bool ttsReadEmotes,
   }) = _TtsSettingsDTO;
   TtsSettingsDTO._();
 
