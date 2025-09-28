@@ -59,6 +59,11 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
       talker.logCustom(SettingsLog('Settings found in local storage.'));
       Map<String, dynamic> settingsJson = jsonDecode(settingsString);
       SettingsDTO settingsDTO = SettingsDTO.fromJson(settingsJson);
+
+      GeneralSettingsDTO? generalSettingsDTO = await getGeneralSettings();
+      if (generalSettingsDTO != null) {
+        settingsDTO = settingsDTO.copyWith(generalSettings: generalSettingsDTO);
+      }
       talker.logCustom(SettingsLog('Settings JSON: $settingsJson'));
       return settingsDTO;
     }
@@ -68,10 +73,10 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
 
   @override
   Future<void> setSettings(SettingsDTO settings) async {
-    String settingsJson = jsonEncode(settings.toJson());
-    talker.logCustom(
-      SettingsLog('Saving settings to local storage: $settingsJson'),
-    );
+    GeneralSettingsDTO generalSettingsDTO = settings.generalSettings;
+    await setGeneralSettings(generalSettingsDTO);
+    Map<String, dynamic> settingsJson = settings.toJson();
+    settingsJson.remove('generalSettings');
     await _storage.write('settings', settingsJson);
   }
 

@@ -466,9 +466,6 @@ class HomeView extends GetView<HomeViewController> {
             child: Obx(
               () => InkWell(
                 onTap: () async {
-                  debugPrint(
-                    'Rain mode: ${controller.settingsService.settings.value.generalSettings.rainModeActivated}',
-                  );
                   if (controller.settingsService.settings.value.generalSettings
                       .rainModeActivated) {
                     // Currently in rain mode, show disable dialog
@@ -476,14 +473,22 @@ class HomeView extends GetView<HomeViewController> {
                       const RainModeDisableDialog(),
                     );
                     if (result ?? false) {
-                      controller.settingsService.settings.value.generalSettings
-                          .copyWith(rainModeActivated: false);
+                      controller.settingsService.settings.value =
+                          controller.settingsService.settings.value.copyWith(
+                        generalSettings: controller
+                            .settingsService.settings.value.generalSettings
+                            .copyWith(rainModeActivated: false),
+                      );
                       controller.settingsService.saveSettings();
                     }
                   } else {
                     // Currently not in rain mode, enable it directly
-                    controller.settingsService.settings.value.generalSettings
-                        .copyWith(rainModeActivated: true);
+                    controller.settingsService.settings.value =
+                        controller.settingsService.settings.value.copyWith(
+                      generalSettings: controller
+                          .settingsService.settings.value.generalSettings
+                          .copyWith(rainModeActivated: true),
+                    );
                     controller.settingsService.saveSettings();
                   }
                 },
