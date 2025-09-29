@@ -4,9 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:irllink/routes/app_routes.dart';
-import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
-import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_poll.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_prediction.dart';
 import 'package:irllink/src/presentation/controllers/chats_controller.dart';
@@ -94,8 +92,9 @@ class HomeView extends GetView<HomeViewController> {
                                   : SplitViewMode.Horizontal,
                               isActive: true,
                             ),
-                            onWeightChanged: controller.settingsService.settings
-                                    .value.generalSettings.rainModeActivated
+                            onWeightChanged: controller.generalSettings.value
+                                        ?.rainModeActivated ??
+                                    false
                                 ? null
                                 : controller.onSplitResized,
                             children: [
@@ -176,8 +175,6 @@ class HomeView extends GetView<HomeViewController> {
   }
 
   Widget _bottomNavBar(double height, double width, BuildContext context) {
-    Settings settings = Get.find<SettingsService>().settings.value;
-
     return Container(
       padding: const EdgeInsets.only(left: 10),
       height: height * 0.06,
@@ -204,8 +201,9 @@ class HomeView extends GetView<HomeViewController> {
                   children: [
                     Obx(
                       () => AbsorbPointer(
-                        absorbing: controller.settingsService.settings.value
-                            .generalSettings.rainModeActivated,
+                        absorbing: controller
+                                .generalSettings.value?.rainModeActivated ??
+                            false,
                         child: InkWell(
                           onTap: () => controller.getEmotes(),
                           child: const Image(
@@ -219,13 +217,15 @@ class HomeView extends GetView<HomeViewController> {
                     Expanded(
                       child: Obx(
                         () => AbsorbPointer(
-                          absorbing: controller.settingsService.settings.value
-                              .generalSettings.rainModeActivated,
+                          absorbing: controller
+                                  .generalSettings.value?.rainModeActivated ??
+                              false,
                           child: TextField(
                             controller: controller.chatInputController,
                             onTap: () {
-                              if (controller.settingsService.settings.value
-                                  .generalSettings.rainModeActivated) {
+                              if (controller.generalSettings.value
+                                      ?.rainModeActivated ??
+                                  false) {
                                 return;
                               }
                               Get.find<ChatsController>()
@@ -236,29 +236,30 @@ class HomeView extends GetView<HomeViewController> {
                             textInputAction: TextInputAction.done,
                             decoration: InputDecoration(
                               border: InputBorder.none,
-                              hintText:
-                                  settings.generalSettings.displayViewerCount
-                                      ? "viewers_number".trParams({
-                                          "number": ((Get.isRegistered<
-                                                          TwitchTabViewController>()
-                                                      ? Get.find<TwitchTabViewController>()
-                                                              .twitchStreamInfos
-                                                              .value
-                                                              .viewerCount ??
-                                                          0
-                                                      : 0) +
-                                                  (Get.isRegistered<
-                                                          KickTabViewController>()
-                                                      ? Get.find<KickTabViewController>()
-                                                              .kickChannel
-                                                              .value
-                                                              ?.stream
-                                                              .viewerCount ??
-                                                          0
-                                                      : 0))
-                                              .toString(),
-                                        })
-                                      : 'send_message'.tr,
+                              hintText: controller.generalSettings.value
+                                          ?.displayViewerCount ??
+                                      false
+                                  ? "viewers_number".trParams({
+                                      "number": ((Get.isRegistered<
+                                                      TwitchTabViewController>()
+                                                  ? Get.find<TwitchTabViewController>()
+                                                          .twitchStreamInfos
+                                                          .value
+                                                          .viewerCount ??
+                                                      0
+                                                  : 0) +
+                                              (Get.isRegistered<
+                                                      KickTabViewController>()
+                                                  ? Get.find<KickTabViewController>()
+                                                          .kickChannel
+                                                          .value
+                                                          ?.stream
+                                                          .viewerCount ??
+                                                      0
+                                                  : 0))
+                                          .toString(),
+                                    })
+                                  : 'send_message'.tr,
                               hintStyle: TextStyle(
                                 color: Theme.of(context)
                                     .textTheme
@@ -276,8 +277,9 @@ class HomeView extends GetView<HomeViewController> {
                     ),
                     Obx(
                       () => AbsorbPointer(
-                        absorbing: controller.settingsService.settings.value
-                            .generalSettings.rainModeActivated,
+                        absorbing: controller
+                                .generalSettings.value?.rainModeActivated ??
+                            false,
                         child: InkWell(
                           onTap: () {
                             controller.sendChatMessage(
@@ -306,12 +308,14 @@ class HomeView extends GetView<HomeViewController> {
                 child: Expanded(
                   child: Obx(
                     () => AbsorbPointer(
-                      absorbing: controller.settingsService.settings.value
-                          .generalSettings.rainModeActivated,
+                      absorbing:
+                          controller.generalSettings.value?.rainModeActivated ??
+                              false,
                       child: InkWell(
                         onTap: () async {
-                          if (controller.settingsService.settings.value
-                              .generalSettings.rainModeActivated) {
+                          if (controller
+                                  .generalSettings.value?.rainModeActivated ??
+                              false) {
                             return;
                           }
                           Get.dialog(
@@ -362,12 +366,14 @@ class HomeView extends GetView<HomeViewController> {
                 child: Expanded(
                   child: Obx(
                     () => AbsorbPointer(
-                      absorbing: controller.settingsService.settings.value
-                          .generalSettings.rainModeActivated,
+                      absorbing:
+                          controller.generalSettings.value?.rainModeActivated ??
+                              false,
                       child: InkWell(
                         onTap: () async {
-                          if (controller.settingsService.settings.value
-                              .generalSettings.rainModeActivated) {
+                          if (controller
+                                  .generalSettings.value?.rainModeActivated ??
+                              false) {
                             return;
                           }
                           Get.dialog(
@@ -415,12 +421,13 @@ class HomeView extends GetView<HomeViewController> {
             child: Expanded(
               child: Obx(
                 () => AbsorbPointer(
-                  absorbing: controller.settingsService.settings.value
-                      .generalSettings.rainModeActivated,
+                  absorbing:
+                      controller.generalSettings.value?.rainModeActivated ??
+                          false,
                   child: InkWell(
                     onTap: () {
-                      if (controller.settingsService.settings.value
-                          .generalSettings.rainModeActivated) {
+                      if (controller.generalSettings.value?.rainModeActivated ??
+                          false) {
                         return;
                       }
                       controller.showPinnedMessages.toggle();
@@ -440,12 +447,13 @@ class HomeView extends GetView<HomeViewController> {
             child: Expanded(
               child: Obx(
                 () => AbsorbPointer(
-                  absorbing: controller.settingsService.settings.value
-                      .generalSettings.rainModeActivated,
+                  absorbing:
+                      controller.generalSettings.value?.rainModeActivated ??
+                          false,
                   child: InkWell(
                     onTap: () async {
-                      if (controller.settingsService.settings.value
-                          .generalSettings.rainModeActivated) {
+                      if (controller.generalSettings.value?.rainModeActivated ??
+                          false) {
                         return;
                       }
                       controller.displayDashboard.value =
@@ -466,36 +474,36 @@ class HomeView extends GetView<HomeViewController> {
             child: Obx(
               () => InkWell(
                 onTap: () async {
-                  if (controller.settingsService.settings.value.generalSettings
-                      .rainModeActivated) {
+                  if (controller.generalSettings.value?.rainModeActivated ??
+                      false) {
                     // Currently in rain mode, show disable dialog
                     final result = await Get.dialog<bool>(
                       const RainModeDisableDialog(),
                     );
                     if (result ?? false) {
-                      controller.settingsService.settings.value =
-                          controller.settingsService.settings.value.copyWith(
-                        generalSettings: controller
-                            .settingsService.settings.value.generalSettings
-                            .copyWith(rainModeActivated: false),
+                      controller.generalSettings.value = controller
+                          .generalSettings.value
+                          ?.copyWith(rainModeActivated: false);
+
+                      controller.setGeneralSettingsUseCase(
+                        params: controller.generalSettings.value!,
                       );
-                      controller.settingsService.saveSettings();
                     }
                   } else {
                     // Currently not in rain mode, enable it directly
-                    controller.settingsService.settings.value =
-                        controller.settingsService.settings.value.copyWith(
-                      generalSettings: controller
-                          .settingsService.settings.value.generalSettings
-                          .copyWith(rainModeActivated: true),
+                    controller.generalSettings.value =
+                        controller.generalSettings.value?.copyWith(
+                      rainModeActivated: true,
                     );
-                    controller.settingsService.saveSettings();
+                    controller.setGeneralSettingsUseCase(
+                      params: controller.generalSettings.value!,
+                    );
                   }
                 },
                 child: Icon(
                   Icons.water_drop,
-                  color: controller.settingsService.settings.value
-                          .generalSettings.rainModeActivated
+                  color: controller.generalSettings.value?.rainModeActivated ??
+                          false
                       ? Theme.of(context).colorScheme.primary
                       : Theme.of(context).primaryIconTheme.color,
                   size: 22,
@@ -506,12 +514,13 @@ class HomeView extends GetView<HomeViewController> {
           Expanded(
             child: Obx(
               () => AbsorbPointer(
-                absorbing: controller.settingsService.settings.value
-                    .generalSettings.rainModeActivated,
+                absorbing:
+                    controller.generalSettings.value?.rainModeActivated ??
+                        false,
                 child: InkWell(
                   onTap: () async {
-                    if (controller.settingsService.settings.value
-                        .generalSettings.rainModeActivated) {
+                    if (controller.generalSettings.value?.rainModeActivated ??
+                        false) {
                       return;
                     }
                     await Get.toNamed(

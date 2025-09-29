@@ -1278,14 +1278,9 @@ class $Mappr implements _i1.AutoMapprInterface {
           r'Consider setting the whenSourceIsNull parameter on the MapType<Settings, SettingsDTO> to handle null values during mapping.');
     }
     return _i3.SettingsDTO(
-      chatEventsSettings:
-          _map__i16$ChatEventsSettings_To__i17$ChatEventsSettingsDTO(
-              model.chatEventsSettings),
-      chatSettings:
-          _map__i4$ChatSettings_To__i5$ChatSettingsDTO(model.chatSettings),
-      generalSettings: _map__i8$GeneralSettings_To__i9$GeneralSettingsDTO(
-          model.generalSettings),
-    );
+        chatEventsSettings:
+            _map__i16$ChatEventsSettings_To__i17$ChatEventsSettingsDTO(
+                model.chatEventsSettings));
   }
 
   _i2.Settings _map__i3$SettingsDTO_To__i2$Settings(_i3.SettingsDTO? input) {
@@ -1296,14 +1291,9 @@ class $Mappr implements _i1.AutoMapprInterface {
           r'Consider setting the whenSourceIsNull parameter on the MapType<SettingsDTO, Settings> to handle null values during mapping.');
     }
     return _i2.Settings(
-      chatEventsSettings:
-          _map__i17$ChatEventsSettingsDTO_To__i16$ChatEventsSettings(
-              model.chatEventsSettings),
-      chatSettings:
-          _map__i5$ChatSettingsDTO_To__i4$ChatSettings(model.chatSettings),
-      generalSettings: _map__i9$GeneralSettingsDTO_To__i8$GeneralSettings(
-          model.generalSettings),
-    );
+        chatEventsSettings:
+            _map__i17$ChatEventsSettingsDTO_To__i16$ChatEventsSettings(
+                model.chatEventsSettings));
   }
 
   _i5.ChannelDTO _map__i4$Channel_To__i5$ChannelDTO(_i4.Channel? input) {
@@ -1441,6 +1431,7 @@ class $Mappr implements _i1.AutoMapprInterface {
       appLanguage: model.appLanguage,
       splitViewWeights: model.splitViewWeights,
       rainModeActivated: model.rainModeActivated,
+      hideDeletedMessages: model.hideDeletedMessages,
     );
   }
 
@@ -1463,6 +1454,7 @@ class $Mappr implements _i1.AutoMapprInterface {
       appLanguage: model.appLanguage,
       splitViewWeights: model.splitViewWeights,
       rainModeActivated: model.rainModeActivated,
+      hideDeletedMessages: model.hideDeletedMessages,
     );
   }
 

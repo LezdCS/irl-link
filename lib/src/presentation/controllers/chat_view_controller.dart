@@ -13,10 +13,12 @@ import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/pinned_message.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
+import 'package:irllink/src/domain/entities/settings/general_settings.dart';
 import 'package:irllink/src/domain/entities/settings/hidden_user.dart';
 import 'package:irllink/src/domain/usecases/kick/ban_kick_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/unban_kick_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/add_hidden_user_usecase.dart';
+import 'package:irllink/src/domain/usecases/settings/get_general_settings.dart';
 import 'package:irllink/src/domain/usecases/settings/get_hidden_users_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/remove_hidden_user_usecase.dart';
 import 'package:irllink/src/presentation/controllers/chats_controller.dart';
@@ -38,6 +40,7 @@ class ChatViewController extends GetxController
     required this.addHiddenUserUseCase,
     required this.removeHiddenUserUseCase,
     required this.getHiddenUsersUseCase,
+    required this.getGeneralSettingsUseCase,
   });
 
   final ChatGroup chatGroup;
@@ -51,6 +54,7 @@ class ChatViewController extends GetxController
   final AddHiddenUserUseCase addHiddenUserUseCase;
   final RemoveHiddenUserUseCase removeHiddenUserUseCase;
   final GetHiddenUsersUseCase getHiddenUsersUseCase;
+  final GetGeneralSettingsUseCase getGeneralSettingsUseCase;
   //CHAT
   late ScrollController scrollController;
   RxBool isAutoScrolldown = true.obs;
@@ -65,6 +69,8 @@ class ChatViewController extends GetxController
   List<KickChat> kickChats = [];
   List<YoutubeChat> youtubeChats = [];
 
+  Rxn<GeneralSettings> generalSettings = Rxn<GeneralSettings>();
+
   @override
   void onInit() async {
     scrollController = ScrollController();
@@ -74,6 +80,14 @@ class ChatViewController extends GetxController
       // Send to watchOS
       watchService.sendChatMessageToNative(value.last);
     });
+
+    final generalSettingsResult = await getGeneralSettingsUseCase();
+    generalSettingsResult.fold(
+      (l) {},
+      (r) {
+        generalSettings.value = r;
+      },
+    );
 
     super.onInit();
     WidgetsBinding.instance.addObserver(this);

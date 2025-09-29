@@ -25,6 +25,8 @@ import 'package:irllink/src/domain/usecases/dashboard/delete_dashboard_event_use
 import 'package:irllink/src/domain/usecases/dashboard/get_dashboard_events_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/kick_refresh_token_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/post_kick_chat_nessage_usecase.dart';
+import 'package:irllink/src/domain/usecases/settings/get_general_settings.dart';
+import 'package:irllink/src/domain/usecases/settings/set_general_settings.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_last_activities_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_local_credentials_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_me_usecase.dart';
@@ -140,6 +142,18 @@ class HomeBindings extends Bindings {
       streamelementsRepository: streamelementsRepository,
     );
 
+    final settingsRepository = SettingsRepositoryImpl(
+      localDataSource: SettingsLocalDataSourceImpl(
+        talker: talker,
+      ),
+      talker: talker,
+    );
+
+    final getGeneralSettingsUseCase =
+        GetGeneralSettingsUseCase(settingsRepository);
+    final setGeneralSettingsUseCase =
+        SetGeneralSettingsUseCase(settingsRepository);
+
     Get.lazyPut<HomeViewController>(
       () => HomeViewController(
         refreshAccessTokenUseCase: refreshTwitchAccessTokenUseCase,
@@ -148,6 +162,8 @@ class HomeBindings extends Bindings {
         talkerService: talkerService,
         postKickChatMessageUseCase: postKickChatMessageUseCase,
         getRecentMessagesUseCase: getRecentMessagesUseCase,
+        getGeneralSettingsUseCase: getGeneralSettingsUseCase,
+        setGeneralSettingsUseCase: setGeneralSettingsUseCase,
       ),
     );
 
@@ -178,13 +194,6 @@ class HomeBindings extends Bindings {
         setStreamElementsSettingsUseCase: setStreamElementsSettingsUseCase,
       ),
       fenix: true,
-    );
-
-    final settingsRepository = SettingsRepositoryImpl(
-      localDataSource: SettingsLocalDataSourceImpl(
-        talker: talker,
-      ),
-      talker: talker,
     );
 
     final getDashboardEventsUseCase = GetDashboardEventsUseCase(

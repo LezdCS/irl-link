@@ -131,14 +131,15 @@ class SettingsView extends GetView<SettingsViewController> {
                     ),
                     Switch(
                       onChanged: (value) {
-                        settingsService.settings.value =
-                            settings.value.copyWith(
-                          generalSettings: settings.value.generalSettings
-                              .copyWith(allowChatEmotes: value),
+                        controller.setGeneralSettings(
+                          controller.generalSettings.value?.copyWith(
+                            allowChatEmotes: value,
+                          ),
                         );
-                        settingsService.saveSettings();
                       },
-                      value: settings.value.generalSettings.allowChatEmotes,
+                      value:
+                          controller.generalSettings.value?.allowChatEmotes ??
+                              true,
                     ),
                   ],
                 ),
@@ -150,22 +151,25 @@ class SettingsView extends GetView<SettingsViewController> {
                       style: const TextStyle(fontSize: 18),
                     ),
                     Text(
-                      settings.value.generalSettings.textSize.ceil().toString(),
+                      controller.generalSettings.value?.textSize
+                              .ceil()
+                              .toString() ??
+                          "19",
                       style: const TextStyle(fontSize: 18),
                     ),
                     Slider(
                       onChanged: (value) {
-                        settingsService.settings.value =
-                            settings.value.copyWith(
-                          generalSettings: settings.value.generalSettings
-                              .copyWith(textSize: value),
+                        controller.setGeneralSettings(
+                          controller.generalSettings.value?.copyWith(
+                            textSize: value,
+                          ),
                         );
-                        settingsService.saveSettings();
                       },
-                      value: settings.value.generalSettings.textSize,
+                      value: controller.generalSettings.value?.textSize ?? 19,
                       max: 50,
                       divisions: 100,
-                      label: "${settings.value.generalSettings.textSize}",
+                      label:
+                          "${controller.generalSettings.value?.textSize ?? 19}",
                     ),
                   ],
                 ),
@@ -178,14 +182,15 @@ class SettingsView extends GetView<SettingsViewController> {
                     ),
                     Switch(
                       onChanged: (value) {
-                        settingsService.settings.value =
-                            settings.value.copyWith(
-                          generalSettings: settings.value.generalSettings
-                              .copyWith(displayTimestamp: value),
+                        controller.setGeneralSettings(
+                          controller.generalSettings.value?.copyWith(
+                            displayTimestamp: value,
+                          ),
                         );
-                        settingsService.saveSettings();
                       },
-                      value: settings.value.generalSettings.displayTimestamp,
+                      value:
+                          controller.generalSettings.value?.displayTimestamp ??
+                              false,
                     ),
                   ],
                 ),
@@ -198,15 +203,15 @@ class SettingsView extends GetView<SettingsViewController> {
                     ),
                     Switch(
                       onChanged: (value) {
-                        settingsService.settings.value =
-                            settings.value.copyWith(
-                          chatSettings: settings.value.chatSettings
-                              .copyWith(hideDeletedMessages: value),
+                        controller.setGeneralSettings(
+                          controller.generalSettings.value?.copyWith(
+                            hideDeletedMessages: value,
+                          ),
                         );
-
-                        settingsService.saveSettings();
                       },
-                      value: settings.value.chatSettings.hideDeletedMessages,
+                      value: controller
+                              .generalSettings.value?.hideDeletedMessages ??
+                          false,
                     ),
                   ],
                 ),
@@ -299,17 +304,17 @@ class SettingsView extends GetView<SettingsViewController> {
                     ),
                     Switch(
                       onChanged: (value) {
-                        settingsService.settings.value =
-                            settings.value.copyWith(
-                          generalSettings: settings.value.generalSettings
-                              .copyWith(isDarkMode: value),
+                        controller.setGeneralSettings(
+                          controller.generalSettings.value?.copyWith(
+                            isDarkMode: value,
+                          ),
                         );
-                        settingsService.saveSettings();
                         Get.changeThemeMode(
                           value ? ThemeMode.dark : ThemeMode.light,
                         );
                       },
-                      value: settings.value.generalSettings.isDarkMode,
+                      value:
+                          controller.generalSettings.value?.isDarkMode ?? true,
                     ),
                   ],
                 ),
@@ -326,10 +331,16 @@ class SettingsView extends GetView<SettingsViewController> {
                     ),
                     Switch(
                       onChanged: (value) {
+                        controller.setGeneralSettings(
+                          controller.generalSettings.value?.copyWith(
+                            keepSpeakerOn: value,
+                          ),
+                        );
                         Get.find<SettingsViewController>()
                             .updateKeepSpeakerOn(value: value);
                       },
-                      value: settings.value.generalSettings.keepSpeakerOn,
+                      value: controller.generalSettings.value?.keepSpeakerOn ??
+                          true,
                     ),
                   ],
                 ),
@@ -346,14 +357,15 @@ class SettingsView extends GetView<SettingsViewController> {
                     ),
                     Switch(
                       onChanged: (value) {
-                        settingsService.settings.value =
-                            settings.value.copyWith(
-                          generalSettings: settings.value.generalSettings
-                              .copyWith(displayViewerCount: value),
+                        controller.setGeneralSettings(
+                          controller.generalSettings.value?.copyWith(
+                            displayViewerCount: value,
+                          ),
                         );
-                        settingsService.saveSettings();
                       },
-                      value: settings.value.generalSettings.displayViewerCount,
+                      value: controller
+                              .generalSettings.value?.displayViewerCount ??
+                          true,
                     ),
                   ],
                 ),
@@ -389,17 +401,14 @@ class SettingsView extends GetView<SettingsViewController> {
                         );
                         Get.updateLocale(locale);
 
-                        settingsService.settings.value =
-                            settings.value.copyWith(
-                          generalSettings:
-                              settings.value.generalSettings.copyWith(
+                        controller.setGeneralSettings(
+                          controller.generalSettings.value?.copyWith(
                             appLanguage: {
                               "languageCode": value['languageCode'],
                               "countryCode": value['countryCode'],
                             },
                           ),
                         );
-                        settingsService.saveSettings();
                       },
                     ),
                   ],

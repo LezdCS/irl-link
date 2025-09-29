@@ -11,6 +11,7 @@ import 'package:irllink/src/domain/usecases/kick/get_kick_local_usecase.dart';
 import 'package:irllink/src/domain/usecases/obs/get_obs_credentials_usecase.dart';
 import 'package:irllink/src/domain/usecases/rtmp/get_rtmp_list_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/get_browser_tabs_usecase.dart';
+import 'package:irllink/src/domain/usecases/settings/get_general_settings.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_local_credentials_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
@@ -39,6 +40,7 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
     required this.getLocalCredentialsUseCase,
     required this.getBrowserTabsUseCase,
     required this.getObsCredentialsUsecase,
+    required this.getGeneralSettingsUseCase,
   });
 
   final SettingsService settingsService;
@@ -50,7 +52,7 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
   final StreamElementsGetLocalCredentialsUseCase getLocalCredentialsUseCase;
   final GetBrowserTabsUsecase getBrowserTabsUseCase;
   final GetObsCredentialsUsecase getObsCredentialsUsecase;
-
+  final GetGeneralSettingsUseCase getGeneralSettingsUseCase;
   late Rx<TabController> tabController;
   RxList<Widget> tabElements = <Widget>[].obs;
   RxList<WebPageView> iOSAudioSources = <WebPageView>[].obs;
@@ -198,12 +200,17 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
     }
 
     // Check if Realtime IRL have to be removed
-    if (realtimeIrlViewController != null &&
-        settingsService.settings.value.generalSettings.rtIrlPushKey.isEmpty) {
-      tabElements.removeWhere((t) => t is RealtimeIrlTabView);
-      realtimeIrlViewController = null;
-      await Get.delete<RealtimeIrlViewController>();
-    }
+    final generalSettingsResult = await getGeneralSettingsUseCase();
+    generalSettingsResult.fold(
+      (l) {},
+      (r) async {
+        if (realtimeIrlViewController != null && r.rtIrlPushKey.isEmpty) {
+          tabElements.removeWhere((t) => t is RealtimeIrlTabView);
+          realtimeIrlViewController = null;
+          await Get.delete<RealtimeIrlViewController>();
+        }
+      },
+    );
 
     // Check if RTMP have to be removed
     // if (rtmpTabViewController != null) {
@@ -264,12 +271,16 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
     }
 
     // Check if Realtime IRL have to be added
-    if (settingsService
-            .settings.value.generalSettings.rtIrlPushKey.isNotEmpty &&
-        realtimeIrlViewController == null) {
-      realtimeIrlViewController = Get.find<RealtimeIrlViewController>();
-      tabElements.add(const RealtimeIrlTabView());
-    }
+    final generalSettingsResult = await getGeneralSettingsUseCase();
+    generalSettingsResult.fold(
+      (l) {},
+      (r) {
+        if (r.rtIrlPushKey.isNotEmpty && realtimeIrlViewController == null) {
+          realtimeIrlViewController = Get.find<RealtimeIrlViewController>();
+          tabElements.add(const RealtimeIrlTabView());
+        }
+      },
+    );
 
     final rtmpListResult = await getRtmpListUseCase();
     rtmpListResult.fold(

@@ -26,6 +26,7 @@ import 'package:irllink/src/domain/usecases/kick/patch_kick_channel_usecase.dart
 import 'package:irllink/src/domain/usecases/obs/get_obs_credentials_usecase.dart';
 import 'package:irllink/src/domain/usecases/rtmp/get_rtmp_list_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/get_browser_tabs_usecase.dart';
+import 'package:irllink/src/domain/usecases/settings/get_general_settings.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_local_credentials_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_stream_info_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart';
@@ -107,6 +108,8 @@ class TabsBindings extends Bindings {
     final getObsCredentialsUsecase = GetObsCredentialsUsecase(
       settingsRepository: settingsRepository,
     );
+    final getGeneralSettingsUseCase =
+        GetGeneralSettingsUseCase(settingsRepository);
     Get.lazyPut<TabsController>(
       () => TabsController(
         settingsService: Get.find<SettingsService>(),
@@ -118,6 +121,7 @@ class TabsBindings extends Bindings {
         getLocalCredentialsUseCase: getLocalCredentialsUseCase,
         getBrowserTabsUseCase: getBrowserTabsUseCase,
         getObsCredentialsUsecase: getObsCredentialsUsecase,
+        getGeneralSettingsUseCase: getGeneralSettingsUseCase,
       ),
     );
 
@@ -129,12 +133,15 @@ class TabsBindings extends Bindings {
         getKickCategoriesUseCase: getKickCategoriesUseCase,
         patchKickChannelUseCase: patchKickChannelUseCase,
         getKickChannelsUseCase: getKickChannelsUseCase,
+        getGeneralSettingsUseCase: getGeneralSettingsUseCase,
       ),
       fenix: true,
     );
 
     Get.lazyPut<RealtimeIrlViewController>(
-      () => RealtimeIrlViewController(),
+      () => RealtimeIrlViewController(
+        getGeneralSettingsUseCase: getGeneralSettingsUseCase,
+      ),
       fenix: true,
     );
 
@@ -148,6 +155,7 @@ class TabsBindings extends Bindings {
         setChatSettingsUseCase: setChatSettingsUseCase,
         setStreamTitleUseCase: setStreamTitleUseCase,
         watchService: watchService,
+        getGeneralSettingsUseCase: getGeneralSettingsUseCase,
       ),
       fenix: true,
     );

@@ -17,6 +17,7 @@ abstract class GeneralSettingsDTO with _$GeneralSettingsDTO {
     Map<dynamic, dynamic> appLanguage,
     @Default([0.5, 0.5]) List<double> splitViewWeights,
     @Default(false) bool rainModeActivated,
+    @Default(false) bool hideDeletedMessages,
   }) = _GeneralSettingsDTO;
   const GeneralSettingsDTO._();
 

@@ -578,10 +578,11 @@ class Migration5 extends Migration {
         split_view_weights TEXT NOT NULL DEFAULT '[0.5, 0.5]',
         rain_mode_activated INTEGER NOT NULL DEFAULT 0,
         allow_chat_emotes INTEGER NOT NULL DEFAULT 1,
-        text_size INTEGER NOT NULL DEFAULT 19,
+        text_size REAL NOT NULL DEFAULT 19,
         display_timestamp INTEGER NOT NULL DEFAULT 0,
         rtirl_push_key TEXT NOT NULL DEFAULT '',
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        hide_deleted_messages INTEGER NOT NULL DEFAULT 0
       )
     ''');
 
@@ -604,6 +605,7 @@ class Migration5 extends Migration {
 
         // Check if generalSettings exists in the settings JSON
         final generalSettings = settingsJson['generalSettings'];
+        final chatSettings = settingsJson['chatSettings'];
         if (generalSettings != null) {
           // Insert general settings into SQLite
           await db.insert('general_settings', {
@@ -623,6 +625,8 @@ class Migration5 extends Migration {
             'text_size': settings['textSize'] ?? 19,
             'display_timestamp': settings['displayTimestamp'] == true ? 1 : 0,
             'rtirl_push_key': settings['rtIrlPushKey'] ?? '',
+            'hide_deleted_messages':
+                chatSettings['hideDeletedMessages'] == true ? 1 : 0,
           });
 
           // Remove generalSettings from main settings JSON
@@ -631,6 +635,7 @@ class Migration5 extends Migration {
           settingsJson.remove('textSize');
           settingsJson.remove('displayTimestamp');
           settingsJson.remove('rtIrlPushKey');
+          settingsJson.remove('chatSettings');
           await storage.write('settings', jsonEncode(settingsJson));
         }
       }

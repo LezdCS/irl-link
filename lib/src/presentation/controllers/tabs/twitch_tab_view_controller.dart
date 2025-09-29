@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/watch_service.dart';
+import 'package:irllink/src/domain/entities/settings/general_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
+import 'package:irllink/src/domain/usecases/settings/get_general_settings.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_stream_info_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/set_chat_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/set_stream_title_usecase.dart';
@@ -15,13 +17,14 @@ class TwitchTabViewController extends GetxController
     required this.setChatSettingsUseCase,
     required this.setStreamTitleUseCase,
     required this.watchService,
+    required this.getGeneralSettingsUseCase,
   });
 
   final GetStreamInfoUseCase getStreamInfoUseCase;
   final SetChatSettingsUseCase setChatSettingsUseCase;
   final SetStreamTitleUseCase setStreamTitleUseCase;
   final WatchService watchService;
-
+  final GetGeneralSettingsUseCase getGeneralSettingsUseCase;
   late TextEditingController titleFormController;
   RxString streamTitle = "".obs;
 
@@ -41,6 +44,8 @@ class TwitchTabViewController extends GetxController
   String? accessToken;
   String? broadcasterId;
 
+  Rxn<GeneralSettings> generalSettings = Rxn<GeneralSettings>();
+
   void setup({
     required String token,
     required String broadcasterId,
@@ -50,7 +55,7 @@ class TwitchTabViewController extends GetxController
   }
 
   @override
-  void onInit() {
+  void onInit() async {
     titleFormController = TextEditingController();
 
     twitchStreamInfos.listen((value) {
@@ -76,6 +81,13 @@ class TwitchTabViewController extends GetxController
       duration: const Duration(seconds: 15),
     );
 
+    final generalSettingsResult = await getGeneralSettingsUseCase();
+    generalSettingsResult.fold(
+      (l) {},
+      (r) {
+        generalSettings.value = r;
+      },
+    );
     super.onInit();
   }
 

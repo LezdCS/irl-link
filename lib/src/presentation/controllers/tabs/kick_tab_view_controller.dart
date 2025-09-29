@@ -5,9 +5,11 @@ import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/kick/kick_category.dart';
 import 'package:irllink/src/domain/entities/kick/kick_channel.dart';
 import 'package:irllink/src/domain/entities/rtmp.dart';
+import 'package:irllink/src/domain/entities/settings/general_settings.dart';
 import 'package:irllink/src/domain/usecases/kick/get_kick_categories_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/get_kick_channels_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/patch_kick_channel_usecase.dart';
+import 'package:irllink/src/domain/usecases/settings/get_general_settings.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/tabs_controller.dart';
 import 'package:irllink/src/presentation/views/tabs/rtmp_tab_view.dart';
@@ -18,12 +20,13 @@ class KickTabViewController extends GetxController
     required this.patchKickChannelUseCase,
     required this.getKickCategoriesUseCase,
     required this.getKickChannelsUseCase,
+    required this.getGeneralSettingsUseCase,
   });
 
   final PatchKickChannelUseCase patchKickChannelUseCase;
   final GetKickCategoriesUseCase getKickCategoriesUseCase;
   final GetKickChannelsUseCase getKickChannelsUseCase;
-
+  final GetGeneralSettingsUseCase getGeneralSettingsUseCase;
   late TextEditingController categoryFormController;
   late TextEditingController titleFormController;
   RxString streamTitle = "".obs;
@@ -41,13 +44,15 @@ class KickTabViewController extends GetxController
   late AnimationController controllerLiveCircleAnimation;
   late Animation<double> circleShadowAnimation;
 
+  Rxn<GeneralSettings> generalSettings = Rxn<GeneralSettings>();
+
   void onCategorySearchChanged(String value) {
     categorySearchQuery.value = value;
     getKickCategories();
   }
 
   @override
-  void onInit() {
+  void onInit() async {
     titleFormController = TextEditingController();
     categoryFormController = TextEditingController();
     if (!focus.hasFocus) {
@@ -69,6 +74,14 @@ class KickTabViewController extends GetxController
         parent: controllerLiveCircleAnimation,
         curve: Curves.easeInOut,
       ),
+    );
+
+    final generalSettingsResult = await getGeneralSettingsUseCase();
+    generalSettingsResult.fold(
+      (l) {},
+      (r) {
+        generalSettings.value = r;
+      },
     );
     super.onInit();
   }

@@ -20,6 +20,7 @@ import 'package:irllink/src/data/datasources/remote/twitch_remote_data_source.da
 import 'package:irllink/src/data/repositories/settings_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/usecases/settings/add_browser_tab_usecase.dart';
+import 'package:irllink/src/domain/usecases/settings/get_general_settings.dart';
 import 'package:irllink/src/domain/usecases/settings/get_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/set_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/tts/get_tts_settings_usecase.dart';
@@ -70,23 +71,31 @@ Future<void> initializeDependencies() async {
   );
 
   // Use cases
-  final getSettingsUseCase = GetSettingsUseCase(settingsRepository);
-  final setSettingsUseCase = SetSettingsUseCase(settingsRepository);
   final getTwitchLocalUseCase = GetTwitchLocalUseCase(twitchRepository);
   final getTtsSettingsUsecase = GetTtsSettingsUsecase(
     settingsRepository: settingsRepository,
   );
+  final getGeneralSettingsUseCase =
+      GetGeneralSettingsUseCase(settingsRepository);
+  final getSettingsUseCase = GetSettingsUseCase(settingsRepository);
+  final setSettingsUseCase = SetSettingsUseCase(settingsRepository);
+  final generalSettingsResult = await getGeneralSettingsUseCase();
+  generalSettingsResult.fold(
+    (l) {},
+    (r) {
+      if (!r.isDarkMode) {
+        Get.changeThemeMode(ThemeMode.light);
+      }
+    },
+  );
 
-  final settingsService = await Get.putAsync(
+  await Get.putAsync(
     () => SettingsService(
       getSettingsUseCase: getSettingsUseCase,
       setSettingsUseCase: setSettingsUseCase,
     ).init(),
     permanent: true,
   );
-  if (!settingsService.settings.value.generalSettings.isDarkMode) {
-    Get.changeThemeMode(ThemeMode.light);
-  }
 
   await Get.putAsync(
     () => StoreService(
@@ -102,7 +111,7 @@ Future<void> initializeDependencies() async {
     ).init(),
     permanent: true,
   );
-  await ttsService.initTts(settingsService.settings.value);
+  await ttsService.initTts();
 
   await Get.putAsync(() => WatchService().init(), permanent: true);
 
@@ -110,7 +119,9 @@ Future<void> initializeDependencies() async {
 
   // Initialize SpeakerService
   await Get.putAsync(
-    () => SpeakerService().init(),
+    () => SpeakerService(
+      getGeneralSettingsUseCase: getGeneralSettingsUseCase,
+    ).init(),
     permanent: true,
   );
 }

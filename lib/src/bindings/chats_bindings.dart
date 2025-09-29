@@ -13,6 +13,7 @@ import 'package:irllink/src/domain/usecases/kick/ban_kick_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/unban_kick_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/add_hidden_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/get_chats_groups_usecase.dart';
+import 'package:irllink/src/domain/usecases/settings/get_general_settings.dart';
 import 'package:irllink/src/domain/usecases/settings/get_hidden_users_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/remove_hidden_user_usecase.dart';
 import 'package:irllink/src/presentation/controllers/chats_controller.dart';
@@ -53,6 +54,8 @@ class ChatsBindings extends Bindings {
     final getChatGroupsUseCase = GetChatGroupsUsecase(
       settingsRepository: settingsRepository,
     );
+    final getGeneralSettingsUseCase =
+        GetGeneralSettingsUseCase(settingsRepository);
     Get.lazyPut(
       () => ChatsController(
         talkerService: talkerService,
@@ -63,6 +66,7 @@ class ChatsBindings extends Bindings {
         getHiddenUsersUseCase: getHiddenUsersUseCase,
         settingsService: settingsService,
         getChatGroupsUseCase: getChatGroupsUseCase,
+        getGeneralSettingsUseCase: getGeneralSettingsUseCase,
       ),
     );
   }

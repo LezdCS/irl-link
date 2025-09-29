@@ -24,6 +24,7 @@ mixin _$GeneralSettingsDTO {
   Map<dynamic, dynamic> get appLanguage;
   List<double> get splitViewWeights;
   bool get rainModeActivated;
+  bool get hideDeletedMessages;
 
   /// Create a copy of GeneralSettingsDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -60,7 +61,9 @@ mixin _$GeneralSettingsDTO {
             const DeepCollectionEquality()
                 .equals(other.splitViewWeights, splitViewWeights) &&
             (identical(other.rainModeActivated, rainModeActivated) ||
-                other.rainModeActivated == rainModeActivated));
+                other.rainModeActivated == rainModeActivated) &&
+            (identical(other.hideDeletedMessages, hideDeletedMessages) ||
+                other.hideDeletedMessages == hideDeletedMessages));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -76,11 +79,12 @@ mixin _$GeneralSettingsDTO {
       displayViewerCount,
       const DeepCollectionEquality().hash(appLanguage),
       const DeepCollectionEquality().hash(splitViewWeights),
-      rainModeActivated);
+      rainModeActivated,
+      hideDeletedMessages);
 
   @override
   String toString() {
-    return 'GeneralSettingsDTO(rtIrlPushKey: $rtIrlPushKey, allowChatEmotes: $allowChatEmotes, textSize: $textSize, displayTimestamp: $displayTimestamp, isDarkMode: $isDarkMode, keepSpeakerOn: $keepSpeakerOn, displayViewerCount: $displayViewerCount, appLanguage: $appLanguage, splitViewWeights: $splitViewWeights, rainModeActivated: $rainModeActivated)';
+    return 'GeneralSettingsDTO(rtIrlPushKey: $rtIrlPushKey, allowChatEmotes: $allowChatEmotes, textSize: $textSize, displayTimestamp: $displayTimestamp, isDarkMode: $isDarkMode, keepSpeakerOn: $keepSpeakerOn, displayViewerCount: $displayViewerCount, appLanguage: $appLanguage, splitViewWeights: $splitViewWeights, rainModeActivated: $rainModeActivated, hideDeletedMessages: $hideDeletedMessages)';
   }
 }
 
@@ -100,7 +104,8 @@ abstract mixin class $GeneralSettingsDTOCopyWith<$Res> {
       bool displayViewerCount,
       Map<dynamic, dynamic> appLanguage,
       List<double> splitViewWeights,
-      bool rainModeActivated});
+      bool rainModeActivated,
+      bool hideDeletedMessages});
 }
 
 /// @nodoc
@@ -126,6 +131,7 @@ class _$GeneralSettingsDTOCopyWithImpl<$Res>
     Object? appLanguage = null,
     Object? splitViewWeights = null,
     Object? rainModeActivated = null,
+    Object? hideDeletedMessages = null,
   }) {
     return _then(_self.copyWith(
       rtIrlPushKey: null == rtIrlPushKey
@@ -167,6 +173,10 @@ class _$GeneralSettingsDTOCopyWithImpl<$Res>
       rainModeActivated: null == rainModeActivated
           ? _self.rainModeActivated
           : rainModeActivated // ignore: cast_nullable_to_non_nullable
+              as bool,
+      hideDeletedMessages: null == hideDeletedMessages
+          ? _self.hideDeletedMessages
+          : hideDeletedMessages // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }
@@ -275,7 +285,8 @@ extension GeneralSettingsDTOPatterns on GeneralSettingsDTO {
             bool displayViewerCount,
             Map<dynamic, dynamic> appLanguage,
             List<double> splitViewWeights,
-            bool rainModeActivated)?
+            bool rainModeActivated,
+            bool hideDeletedMessages)?
         $default, {
     required TResult orElse(),
   }) {
@@ -292,7 +303,8 @@ extension GeneralSettingsDTOPatterns on GeneralSettingsDTO {
             _that.displayViewerCount,
             _that.appLanguage,
             _that.splitViewWeights,
-            _that.rainModeActivated);
+            _that.rainModeActivated,
+            _that.hideDeletedMessages);
       case _:
         return orElse();
     }
@@ -323,7 +335,8 @@ extension GeneralSettingsDTOPatterns on GeneralSettingsDTO {
             bool displayViewerCount,
             Map<dynamic, dynamic> appLanguage,
             List<double> splitViewWeights,
-            bool rainModeActivated)
+            bool rainModeActivated,
+            bool hideDeletedMessages)
         $default,
   ) {
     final _that = this;
@@ -339,7 +352,8 @@ extension GeneralSettingsDTOPatterns on GeneralSettingsDTO {
             _that.displayViewerCount,
             _that.appLanguage,
             _that.splitViewWeights,
-            _that.rainModeActivated);
+            _that.rainModeActivated,
+            _that.hideDeletedMessages);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -369,7 +383,8 @@ extension GeneralSettingsDTOPatterns on GeneralSettingsDTO {
             bool displayViewerCount,
             Map<dynamic, dynamic> appLanguage,
             List<double> splitViewWeights,
-            bool rainModeActivated)?
+            bool rainModeActivated,
+            bool hideDeletedMessages)?
         $default,
   ) {
     final _that = this;
@@ -385,7 +400,8 @@ extension GeneralSettingsDTOPatterns on GeneralSettingsDTO {
             _that.displayViewerCount,
             _that.appLanguage,
             _that.splitViewWeights,
-            _that.rainModeActivated);
+            _that.rainModeActivated,
+            _that.hideDeletedMessages);
       case _:
         return null;
     }
@@ -408,7 +424,8 @@ class _GeneralSettingsDTO extends GeneralSettingsDTO {
         "countryCode": "US"
       },
       final List<double> splitViewWeights = const [0.5, 0.5],
-      this.rainModeActivated = false})
+      this.rainModeActivated = false,
+      this.hideDeletedMessages = false})
       : _appLanguage = appLanguage,
         _splitViewWeights = splitViewWeights,
         super._();
@@ -458,6 +475,9 @@ class _GeneralSettingsDTO extends GeneralSettingsDTO {
   @override
   @JsonKey()
   final bool rainModeActivated;
+  @override
+  @JsonKey()
+  final bool hideDeletedMessages;
 
   /// Create a copy of GeneralSettingsDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -498,7 +518,9 @@ class _GeneralSettingsDTO extends GeneralSettingsDTO {
             const DeepCollectionEquality()
                 .equals(other._splitViewWeights, _splitViewWeights) &&
             (identical(other.rainModeActivated, rainModeActivated) ||
-                other.rainModeActivated == rainModeActivated));
+                other.rainModeActivated == rainModeActivated) &&
+            (identical(other.hideDeletedMessages, hideDeletedMessages) ||
+                other.hideDeletedMessages == hideDeletedMessages));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -514,11 +536,12 @@ class _GeneralSettingsDTO extends GeneralSettingsDTO {
       displayViewerCount,
       const DeepCollectionEquality().hash(_appLanguage),
       const DeepCollectionEquality().hash(_splitViewWeights),
-      rainModeActivated);
+      rainModeActivated,
+      hideDeletedMessages);
 
   @override
   String toString() {
-    return 'GeneralSettingsDTO(rtIrlPushKey: $rtIrlPushKey, allowChatEmotes: $allowChatEmotes, textSize: $textSize, displayTimestamp: $displayTimestamp, isDarkMode: $isDarkMode, keepSpeakerOn: $keepSpeakerOn, displayViewerCount: $displayViewerCount, appLanguage: $appLanguage, splitViewWeights: $splitViewWeights, rainModeActivated: $rainModeActivated)';
+    return 'GeneralSettingsDTO(rtIrlPushKey: $rtIrlPushKey, allowChatEmotes: $allowChatEmotes, textSize: $textSize, displayTimestamp: $displayTimestamp, isDarkMode: $isDarkMode, keepSpeakerOn: $keepSpeakerOn, displayViewerCount: $displayViewerCount, appLanguage: $appLanguage, splitViewWeights: $splitViewWeights, rainModeActivated: $rainModeActivated, hideDeletedMessages: $hideDeletedMessages)';
   }
 }
 
@@ -540,7 +563,8 @@ abstract mixin class _$GeneralSettingsDTOCopyWith<$Res>
       bool displayViewerCount,
       Map<dynamic, dynamic> appLanguage,
       List<double> splitViewWeights,
-      bool rainModeActivated});
+      bool rainModeActivated,
+      bool hideDeletedMessages});
 }
 
 /// @nodoc
@@ -566,6 +590,7 @@ class __$GeneralSettingsDTOCopyWithImpl<$Res>
     Object? appLanguage = null,
     Object? splitViewWeights = null,
     Object? rainModeActivated = null,
+    Object? hideDeletedMessages = null,
   }) {
     return _then(_GeneralSettingsDTO(
       rtIrlPushKey: null == rtIrlPushKey
@@ -607,6 +632,10 @@ class __$GeneralSettingsDTOCopyWithImpl<$Res>
       rainModeActivated: null == rainModeActivated
           ? _self.rainModeActivated
           : rainModeActivated // ignore: cast_nullable_to_non_nullable
+              as bool,
+      hideDeletedMessages: null == hideDeletedMessages
+          ? _self.hideDeletedMessages
+          : hideDeletedMessages // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }

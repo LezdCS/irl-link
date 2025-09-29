@@ -13,10 +13,12 @@ import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/speaker_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/core/services/tts_service.dart';
-import 'package:irllink/src/domain/entities/settings.dart';
+import 'package:irllink/src/domain/entities/settings/general_settings.dart';
 import 'package:irllink/src/domain/entities/settings/tts_settings.dart';
 import 'package:irllink/src/domain/usecases/kick/login_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/logout_usecase.dart';
+import 'package:irllink/src/domain/usecases/settings/get_general_settings.dart';
+import 'package:irllink/src/domain/usecases/settings/set_general_settings.dart';
 import 'package:irllink/src/domain/usecases/tts/get_tts_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/tts/set_tts_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_users_usecase.dart';
@@ -38,6 +40,8 @@ class SettingsViewController extends GetxController {
     required this.loginKickUseCase,
     required this.getTtsSettingsUsecase,
     required this.setTtsSettingsUsecase,
+    required this.getGeneralSettingsUseCase,
+    required this.setGeneralSettingsUseCase,
   });
 
   final LogoutUseCase logoutUseCase;
@@ -47,7 +51,8 @@ class SettingsViewController extends GetxController {
   final LoginKickUseCase loginKickUseCase;
   final GetTtsSettingsUsecase getTtsSettingsUsecase;
   final SetTtsSettingsUsecase setTtsSettingsUsecase;
-
+  final GetGeneralSettingsUseCase getGeneralSettingsUseCase;
+  final SetGeneralSettingsUseCase setGeneralSettingsUseCase;
   final SettingsService settingsService;
   final HomeViewController homeViewController;
   final TtsService ttsService;
@@ -55,7 +60,7 @@ class SettingsViewController extends GetxController {
 
   RxBool rtIrlKeyShow = false.obs;
 
-  late TextEditingController rtIrlInputController;
+  late TextEditingController rtIrlInputController = TextEditingController();
 
   // Download progress tracking
   final RxMap<String, DownloadTaskStatus> downloadStatus =
@@ -69,12 +74,18 @@ class SettingsViewController extends GetxController {
 
   Rxn<TtsSettings> ttsSettings = Rxn<TtsSettings>();
 
+  Rxn<GeneralSettings> generalSettings = Rxn<GeneralSettings>();
+
   @override
   void onInit() async {
-    Settings settings = settingsService.settings.value;
-
-    rtIrlInputController =
-        TextEditingController(text: settings.generalSettings.rtIrlPushKey);
+    final generalSettingsResult = await getGeneralSettingsUseCase();
+    generalSettingsResult.fold(
+      (l) {},
+      (r) {
+        rtIrlInputController.text = r.rtIrlPushKey;
+        generalSettings.value = r;
+      },
+    );
 
     // Setup download progress listening
     _setupDownloadListener();
@@ -92,6 +103,19 @@ class SettingsViewController extends GetxController {
     _port.close();
     IsolateNameServer.removePortNameMapping('downloader_send_port');
     super.onClose();
+  }
+
+  Future<void> setGeneralSettings(GeneralSettings? settings) async {
+    if (settings == null) {
+      return;
+    }
+    final result = await setGeneralSettingsUseCase(params: settings);
+    result.fold(
+      (l) {},
+      (r) {
+        generalSettings.value = settings;
+      },
+    );
   }
 
   Future<void> getTtsSettings() async {
@@ -164,13 +188,17 @@ class SettingsViewController extends GetxController {
     send?.send([id, status, progress]);
   }
 
-  void updateKeepSpeakerOn({required bool value}) {
-    settingsService.settings.value = settingsService.settings.value.copyWith(
-      generalSettings: settingsService.settings.value.generalSettings.copyWith(
-        keepSpeakerOn: value,
-      ),
+  Future<void> updateKeepSpeakerOn({required bool value}) async {
+    final generalSettingsResult = await getGeneralSettingsUseCase();
+    generalSettingsResult.fold(
+      (l) {},
+      (r) {
+        final generalSettings = r.copyWith(
+          keepSpeakerOn: value,
+        );
+        setGeneralSettings(generalSettings);
+      },
     );
-    settingsService.saveSettings();
 
     if (Get.isRegistered<SpeakerService>()) {
       Get.find<SpeakerService>().updateSettings(settingsService.settings.value);

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/services/settings_service.dart';
-import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/presentation/controllers/settings_view_controller.dart';
 
 class RealtimeIrl extends GetView<SettingsViewController> {
@@ -13,8 +11,6 @@ class RealtimeIrl extends GetView<SettingsViewController> {
   Widget build(
     BuildContext context,
   ) {
-    Settings settings = Get.find<SettingsService>().settings.value;
-
     return Column(
       children: [
         const Row(
@@ -43,13 +39,11 @@ class RealtimeIrl extends GetView<SettingsViewController> {
                   controller: controller.rtIrlInputController,
                   obscureText: !controller.rtIrlKeyShow.value,
                   onChanged: (value) {
-                    Get.find<SettingsService>().settings.value =
-                        settings.copyWith(
-                      generalSettings: settings.generalSettings.copyWith(
+                    controller.setGeneralSettings(
+                      controller.generalSettings.value!.copyWith(
                         rtIrlPushKey: value,
                       ),
                     );
-                    Get.find<SettingsService>().saveSettings();
                   },
                   decoration: InputDecoration(
                     isDense: true,

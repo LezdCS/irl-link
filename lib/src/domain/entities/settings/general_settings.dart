@@ -12,6 +12,7 @@ class GeneralSettings {
   final Map<dynamic, dynamic> appLanguage;
   final List<double> splitViewWeights;
   final bool rainModeActivated;
+  final bool hideDeletedMessages;
 
   const GeneralSettings({
     required this.rtIrlPushKey,
@@ -24,6 +25,7 @@ class GeneralSettings {
     required this.appLanguage,
     required this.splitViewWeights,
     required this.rainModeActivated,
+    required this.hideDeletedMessages,
   });
 
   GeneralSettings copyWith({
@@ -37,6 +39,7 @@ class GeneralSettings {
     Map<dynamic, dynamic>? appLanguage,
     List<double>? splitViewWeights,
     bool? rainModeActivated,
+    bool? hideDeletedMessages,
   }) {
     return GeneralSettings(
       rtIrlPushKey: rtIrlPushKey ?? this.rtIrlPushKey,
@@ -49,6 +52,7 @@ class GeneralSettings {
       appLanguage: appLanguage ?? this.appLanguage,
       splitViewWeights: splitViewWeights ?? this.splitViewWeights,
       rainModeActivated: rainModeActivated ?? this.rainModeActivated,
+      hideDeletedMessages: hideDeletedMessages ?? this.hideDeletedMessages,
     );
   }
 }

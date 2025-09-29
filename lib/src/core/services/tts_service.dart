@@ -43,7 +43,7 @@ class TtsService extends GetxService {
     );
   }
 
-  Future<void> initTts(Settings settings) async {
+  Future<void> initTts() async {
     // Configure iOS audio so TTS continues when app is in background
     if (Platform.isIOS) {
       await flutterTts.setIosAudioCategory(

@@ -16,8 +16,6 @@ T _$identity<T>(T value) => value;
 mixin _$SettingsDTO {
 //CHAT SETTINGS
   ChatEventsSettingsDTO get chatEventsSettings;
-  ChatSettingsDTO get chatSettings; //GENERAL SETTINGS
-  GeneralSettingsDTO get generalSettings;
 
   /// Create a copy of SettingsDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -35,21 +33,16 @@ mixin _$SettingsDTO {
         (other.runtimeType == runtimeType &&
             other is SettingsDTO &&
             (identical(other.chatEventsSettings, chatEventsSettings) ||
-                other.chatEventsSettings == chatEventsSettings) &&
-            (identical(other.chatSettings, chatSettings) ||
-                other.chatSettings == chatSettings) &&
-            (identical(other.generalSettings, generalSettings) ||
-                other.generalSettings == generalSettings));
+                other.chatEventsSettings == chatEventsSettings));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, chatEventsSettings, chatSettings, generalSettings);
+  int get hashCode => Object.hash(runtimeType, chatEventsSettings);
 
   @override
   String toString() {
-    return 'SettingsDTO(chatEventsSettings: $chatEventsSettings, chatSettings: $chatSettings, generalSettings: $generalSettings)';
+    return 'SettingsDTO(chatEventsSettings: $chatEventsSettings)';
   }
 }
 
@@ -59,14 +52,9 @@ abstract mixin class $SettingsDTOCopyWith<$Res> {
           SettingsDTO value, $Res Function(SettingsDTO) _then) =
       _$SettingsDTOCopyWithImpl;
   @useResult
-  $Res call(
-      {ChatEventsSettingsDTO chatEventsSettings,
-      ChatSettingsDTO chatSettings,
-      GeneralSettingsDTO generalSettings});
+  $Res call({ChatEventsSettingsDTO chatEventsSettings});
 
   $ChatEventsSettingsDTOCopyWith<$Res> get chatEventsSettings;
-  $ChatSettingsDTOCopyWith<$Res> get chatSettings;
-  $GeneralSettingsDTOCopyWith<$Res> get generalSettings;
 }
 
 /// @nodoc
@@ -82,22 +70,12 @@ class _$SettingsDTOCopyWithImpl<$Res> implements $SettingsDTOCopyWith<$Res> {
   @override
   $Res call({
     Object? chatEventsSettings = null,
-    Object? chatSettings = null,
-    Object? generalSettings = null,
   }) {
     return _then(_self.copyWith(
       chatEventsSettings: null == chatEventsSettings
           ? _self.chatEventsSettings
           : chatEventsSettings // ignore: cast_nullable_to_non_nullable
               as ChatEventsSettingsDTO,
-      chatSettings: null == chatSettings
-          ? _self.chatSettings
-          : chatSettings // ignore: cast_nullable_to_non_nullable
-              as ChatSettingsDTO,
-      generalSettings: null == generalSettings
-          ? _self.generalSettings
-          : generalSettings // ignore: cast_nullable_to_non_nullable
-              as GeneralSettingsDTO,
     ));
   }
 
@@ -109,26 +87,6 @@ class _$SettingsDTOCopyWithImpl<$Res> implements $SettingsDTOCopyWith<$Res> {
     return $ChatEventsSettingsDTOCopyWith<$Res>(_self.chatEventsSettings,
         (value) {
       return _then(_self.copyWith(chatEventsSettings: value));
-    });
-  }
-
-  /// Create a copy of SettingsDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $ChatSettingsDTOCopyWith<$Res> get chatSettings {
-    return $ChatSettingsDTOCopyWith<$Res>(_self.chatSettings, (value) {
-      return _then(_self.copyWith(chatSettings: value));
-    });
-  }
-
-  /// Create a copy of SettingsDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $GeneralSettingsDTOCopyWith<$Res> get generalSettings {
-    return $GeneralSettingsDTOCopyWith<$Res>(_self.generalSettings, (value) {
-      return _then(_self.copyWith(generalSettings: value));
     });
   }
 }
@@ -226,16 +184,13 @@ extension SettingsDTOPatterns on SettingsDTO {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(ChatEventsSettingsDTO chatEventsSettings,
-            ChatSettingsDTO chatSettings, GeneralSettingsDTO generalSettings)?
-        $default, {
+    TResult Function(ChatEventsSettingsDTO chatEventsSettings)? $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _SettingsDTO() when $default != null:
-        return $default(_that.chatEventsSettings, _that.chatSettings,
-            _that.generalSettings);
+        return $default(_that.chatEventsSettings);
       case _:
         return orElse();
     }
@@ -256,15 +211,12 @@ extension SettingsDTOPatterns on SettingsDTO {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(ChatEventsSettingsDTO chatEventsSettings,
-            ChatSettingsDTO chatSettings, GeneralSettingsDTO generalSettings)
-        $default,
+    TResult Function(ChatEventsSettingsDTO chatEventsSettings) $default,
   ) {
     final _that = this;
     switch (_that) {
       case _SettingsDTO():
-        return $default(_that.chatEventsSettings, _that.chatSettings,
-            _that.generalSettings);
+        return $default(_that.chatEventsSettings);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -284,15 +236,12 @@ extension SettingsDTOPatterns on SettingsDTO {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(ChatEventsSettingsDTO chatEventsSettings,
-            ChatSettingsDTO chatSettings, GeneralSettingsDTO generalSettings)?
-        $default,
+    TResult? Function(ChatEventsSettingsDTO chatEventsSettings)? $default,
   ) {
     final _that = this;
     switch (_that) {
       case _SettingsDTO() when $default != null:
-        return $default(_that.chatEventsSettings, _that.chatSettings,
-            _that.generalSettings);
+        return $default(_that.chatEventsSettings);
       case _:
         return null;
     }
@@ -302,21 +251,13 @@ extension SettingsDTOPatterns on SettingsDTO {
 /// @nodoc
 @JsonSerializable()
 class _SettingsDTO implements SettingsDTO {
-  const _SettingsDTO(
-      {required this.chatEventsSettings,
-      required this.chatSettings,
-      required this.generalSettings});
+  const _SettingsDTO({required this.chatEventsSettings});
   factory _SettingsDTO.fromJson(Map<String, dynamic> json) =>
       _$SettingsDTOFromJson(json);
 
 //CHAT SETTINGS
   @override
   final ChatEventsSettingsDTO chatEventsSettings;
-  @override
-  final ChatSettingsDTO chatSettings;
-//GENERAL SETTINGS
-  @override
-  final GeneralSettingsDTO generalSettings;
 
   /// Create a copy of SettingsDTO
   /// with the given fields replaced by the non-null parameter values.
@@ -339,21 +280,16 @@ class _SettingsDTO implements SettingsDTO {
         (other.runtimeType == runtimeType &&
             other is _SettingsDTO &&
             (identical(other.chatEventsSettings, chatEventsSettings) ||
-                other.chatEventsSettings == chatEventsSettings) &&
-            (identical(other.chatSettings, chatSettings) ||
-                other.chatSettings == chatSettings) &&
-            (identical(other.generalSettings, generalSettings) ||
-                other.generalSettings == generalSettings));
+                other.chatEventsSettings == chatEventsSettings));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, chatEventsSettings, chatSettings, generalSettings);
+  int get hashCode => Object.hash(runtimeType, chatEventsSettings);
 
   @override
   String toString() {
-    return 'SettingsDTO(chatEventsSettings: $chatEventsSettings, chatSettings: $chatSettings, generalSettings: $generalSettings)';
+    return 'SettingsDTO(chatEventsSettings: $chatEventsSettings)';
   }
 }
 
@@ -365,17 +301,10 @@ abstract mixin class _$SettingsDTOCopyWith<$Res>
       __$SettingsDTOCopyWithImpl;
   @override
   @useResult
-  $Res call(
-      {ChatEventsSettingsDTO chatEventsSettings,
-      ChatSettingsDTO chatSettings,
-      GeneralSettingsDTO generalSettings});
+  $Res call({ChatEventsSettingsDTO chatEventsSettings});
 
   @override
   $ChatEventsSettingsDTOCopyWith<$Res> get chatEventsSettings;
-  @override
-  $ChatSettingsDTOCopyWith<$Res> get chatSettings;
-  @override
-  $GeneralSettingsDTOCopyWith<$Res> get generalSettings;
 }
 
 /// @nodoc
@@ -391,22 +320,12 @@ class __$SettingsDTOCopyWithImpl<$Res> implements _$SettingsDTOCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   $Res call({
     Object? chatEventsSettings = null,
-    Object? chatSettings = null,
-    Object? generalSettings = null,
   }) {
     return _then(_SettingsDTO(
       chatEventsSettings: null == chatEventsSettings
           ? _self.chatEventsSettings
           : chatEventsSettings // ignore: cast_nullable_to_non_nullable
               as ChatEventsSettingsDTO,
-      chatSettings: null == chatSettings
-          ? _self.chatSettings
-          : chatSettings // ignore: cast_nullable_to_non_nullable
-              as ChatSettingsDTO,
-      generalSettings: null == generalSettings
-          ? _self.generalSettings
-          : generalSettings // ignore: cast_nullable_to_non_nullable
-              as GeneralSettingsDTO,
     ));
   }
 
@@ -418,26 +337,6 @@ class __$SettingsDTOCopyWithImpl<$Res> implements _$SettingsDTOCopyWith<$Res> {
     return $ChatEventsSettingsDTOCopyWith<$Res>(_self.chatEventsSettings,
         (value) {
       return _then(_self.copyWith(chatEventsSettings: value));
-    });
-  }
-
-  /// Create a copy of SettingsDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $ChatSettingsDTOCopyWith<$Res> get chatSettings {
-    return $ChatSettingsDTOCopyWith<$Res>(_self.chatSettings, (value) {
-      return _then(_self.copyWith(chatSettings: value));
-    });
-  }
-
-  /// Create a copy of SettingsDTO
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $GeneralSettingsDTOCopyWith<$Res> get generalSettings {
-    return $GeneralSettingsDTOCopyWith<$Res>(_self.generalSettings, (value) {
-      return _then(_self.copyWith(generalSettings: value));
     });
   }
 }

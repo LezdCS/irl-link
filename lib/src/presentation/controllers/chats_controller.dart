@@ -12,6 +12,7 @@ import 'package:irllink/src/domain/usecases/kick/ban_kick_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/unban_kick_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/add_hidden_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/get_chats_groups_usecase.dart';
+import 'package:irllink/src/domain/usecases/settings/get_general_settings.dart';
 import 'package:irllink/src/domain/usecases/settings/get_hidden_users_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/remove_hidden_user_usecase.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
@@ -28,6 +29,7 @@ class ChatsController extends GetxController with GetTickerProviderStateMixin {
     required this.getHiddenUsersUseCase,
     required this.settingsService,
     required this.getChatGroupsUseCase,
+    required this.getGeneralSettingsUseCase,
   });
 
   final TalkerService talkerService;
@@ -38,7 +40,7 @@ class ChatsController extends GetxController with GetTickerProviderStateMixin {
   final GetHiddenUsersUseCase getHiddenUsersUseCase;
   final SettingsService settingsService;
   final GetChatGroupsUsecase getChatGroupsUseCase;
-
+  final GetGeneralSettingsUseCase getGeneralSettingsUseCase;
   late Rx<TabController> chatTabsController;
   RxList<ChatView> chatsViews = <ChatView>[].obs;
   Rxn<ChatGroup> selectedChatGroup = Rxn<ChatGroup>();
@@ -212,6 +214,7 @@ class ChatsController extends GetxController with GetTickerProviderStateMixin {
           addHiddenUserUseCase: addHiddenUserUseCase,
           removeHiddenUserUseCase: removeHiddenUserUseCase,
           getHiddenUsersUseCase: getHiddenUsersUseCase,
+          getGeneralSettingsUseCase: getGeneralSettingsUseCase,
         );
         return controller;
       },

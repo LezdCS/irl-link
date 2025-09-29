@@ -4,13 +4,18 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
+import 'package:irllink/src/domain/usecases/settings/get_general_settings.dart';
 
 class SpeakerService extends GetxService {
   Timer? _keepAliveTimer;
   final AudioPlayer _audioPlayer = AudioPlayer();
   bool _isInitialized = false;
 
-  SpeakerService();
+  SpeakerService({
+    required this.getGeneralSettingsUseCase,
+  });
+
+  final GetGeneralSettingsUseCase getGeneralSettingsUseCase;
 
   Future<SpeakerService> init() async {
     await _audioPlayer.setReleaseMode(ReleaseMode.stop);
@@ -18,16 +23,21 @@ class SpeakerService extends GetxService {
     return this;
   }
 
-  void updateSettings(Settings settings) {
+  Future<void> updateSettings(Settings settings) async {
     if (!_isInitialized) {
       return;
     }
-
-    if (settings.generalSettings.keepSpeakerOn) {
-      _startKeepAlive();
-    } else {
-      _stopKeepAlive();
-    }
+    final generalSettingsResult = await getGeneralSettingsUseCase();
+    generalSettingsResult.fold(
+      (l) {},
+      (r) {
+        if (r.keepSpeakerOn) {
+          _startKeepAlive();
+        } else {
+          _stopKeepAlive();
+        }
+      },
+    );
   }
 
   void _startKeepAlive() {

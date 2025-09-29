@@ -22,6 +22,7 @@ _GeneralSettingsDTO _$GeneralSettingsDTOFromJson(Map<String, dynamic> json) =>
               .toList() ??
           const [0.5, 0.5],
       rainModeActivated: json['rainModeActivated'] as bool? ?? false,
+      hideDeletedMessages: json['hideDeletedMessages'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$GeneralSettingsDTOToJson(_GeneralSettingsDTO instance) =>
@@ -36,4 +37,5 @@ Map<String, dynamic> _$GeneralSettingsDTOToJson(_GeneralSettingsDTO instance) =>
       'appLanguage': instance.appLanguage,
       'splitViewWeights': instance.splitViewWeights,
       'rainModeActivated': instance.rainModeActivated,
+      'hideDeletedMessages': instance.hideDeletedMessages,
     };

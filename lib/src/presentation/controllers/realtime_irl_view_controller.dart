@@ -7,19 +7,30 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:irllink/main.dart';
 import 'package:irllink/src/core/services/realtime_irl.dart';
-import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/utils/determine_position.dart';
-import 'package:irllink/src/domain/entities/settings.dart';
+import 'package:irllink/src/domain/usecases/settings/get_general_settings.dart';
 
 class RealtimeIrlViewController extends GetxController
     with WidgetsBindingObserver {
   late RealtimeIrl realtimeIrl;
 
-  @override
-  void onInit() {
-    Settings settings = Get.find<SettingsService>().settings.value;
+  RealtimeIrlViewController({
+    required this.getGeneralSettingsUseCase,
+  });
 
-    realtimeIrl = RealtimeIrl(settings.generalSettings.rtIrlPushKey);
+  final GetGeneralSettingsUseCase getGeneralSettingsUseCase;
+
+  @override
+  void onInit() async {
+    final generalSettingsResult = await getGeneralSettingsUseCase();
+    generalSettingsResult.fold(
+      (l) {},
+      (r) {
+        realtimeIrl.key = r.rtIrlPushKey;
+      },
+    );
+
+    realtimeIrl = RealtimeIrl(realtimeIrl.key);
 
     FlutterForegroundTask.addTaskDataCallback(realtimeIrl.onReceiveTaskData);
     _initService();
@@ -127,7 +138,12 @@ class RealtimeIrlViewController extends GetxController
   }
 
   Future applySettings() async {
-    Settings settings = Get.find<SettingsService>().settings.value;
-    realtimeIrl.key = settings.generalSettings.rtIrlPushKey;
+    final generalSettingsResult = await getGeneralSettingsUseCase();
+    generalSettingsResult.fold(
+      (l) {},
+      (r) {
+        realtimeIrl.key = r.rtIrlPushKey;
+      },
+    );
   }
 }

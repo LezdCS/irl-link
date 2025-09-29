@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/presentation/controllers/home_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/tabs/twitch_tab_view_controller.dart';
@@ -176,11 +175,9 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                   ),
                   Obx(
                     () => Visibility(
-                      visible: Get.find<SettingsService>()
-                          .settings
-                          .value
-                          .generalSettings
-                          .displayViewerCount,
+                      visible: controller
+                              .generalSettings.value?.displayViewerCount ??
+                          false,
                       child: Row(
                         children: [
                           const Icon(Icons.person_outline, color: Colors.red),

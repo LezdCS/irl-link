@@ -54,16 +54,10 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
   @override
   Future<SettingsDTO?> getSettings() async {
     talker.logCustom(SettingsLog('Retrieving settings from local storage.'));
-    var settingsString = _storage.read('settings');
-    if (settingsString != null) {
+    var settingsJson = _storage.read('settings');
+    if (settingsJson != null) {
       talker.logCustom(SettingsLog('Settings found in local storage.'));
-      Map<String, dynamic> settingsJson = jsonDecode(settingsString);
       SettingsDTO settingsDTO = SettingsDTO.fromJson(settingsJson);
-
-      GeneralSettingsDTO? generalSettingsDTO = await getGeneralSettings();
-      if (generalSettingsDTO != null) {
-        settingsDTO = settingsDTO.copyWith(generalSettings: generalSettingsDTO);
-      }
       talker.logCustom(SettingsLog('Settings JSON: $settingsJson'));
       return settingsDTO;
     }
@@ -73,8 +67,6 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
 
   @override
   Future<void> setSettings(SettingsDTO settings) async {
-    GeneralSettingsDTO generalSettingsDTO = settings.generalSettings;
-    await setGeneralSettings(generalSettingsDTO);
     Map<String, dynamic> settingsJson = settings.toJson();
     settingsJson.remove('generalSettings');
     await _storage.write('settings', settingsJson);
@@ -448,6 +440,11 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
       appLanguage: appLanguage,
       splitViewWeights: splitViewWeights,
       rainModeActivated: generalSettingsMap['rain_mode_activated'] == 1,
+      rtIrlPushKey: generalSettingsMap['rtirl_push_key'],
+      allowChatEmotes: generalSettingsMap['allow_chat_emotes'] == 1,
+      textSize: generalSettingsMap['text_size'],
+      displayTimestamp: generalSettingsMap['display_timestamp'] == 1,
+      hideDeletedMessages: generalSettingsMap['hide_deleted_messages'] == 1,
     );
   }
 
@@ -473,6 +470,7 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
           'text_size': generalSettings.textSize,
           'display_timestamp': generalSettings.displayTimestamp ? 1 : 0,
           'rtirl_push_key': generalSettings.rtIrlPushKey,
+          'hide_deleted_messages': generalSettings.hideDeletedMessages ? 1 : 0,
         },
         where: 'id = ?',
         whereArgs: [existingSettings.first['id']],
@@ -490,6 +488,7 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
         'text_size': generalSettings.textSize,
         'display_timestamp': generalSettings.displayTimestamp ? 1 : 0,
         'rtirl_push_key': generalSettings.rtIrlPushKey,
+        'hide_deleted_messages': generalSettings.hideDeletedMessages ? 1 : 0,
       });
     }
   }

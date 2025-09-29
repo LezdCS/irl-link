@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
-import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/chat_settings.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
 import 'package:irllink/src/presentation/controllers/chats_controller.dart';
@@ -37,8 +35,6 @@ class ChatView extends GetView<ChatViewController> {
 
     return Obx(
       () {
-        Settings settings = Get.find<SettingsService>().settings.value;
-
         return Stack(
           children: [
             GestureDetector(
@@ -106,11 +102,17 @@ class ChatView extends GetView<ChatViewController> {
                                     selectedMessage: Get.find<ChatsController>()
                                         .selectedMessage
                                         .value,
-                                    displayTimestamp: settings
-                                        .generalSettings.displayTimestamp,
-                                    textSize: settings.generalSettings.textSize,
-                                    hideDeletedMessages: settings
-                                        .chatSettings.hideDeletedMessages,
+                                    displayTimestamp: controller.generalSettings
+                                            .value?.displayTimestamp ??
+                                        false,
+                                    textSize: controller
+                                            .generalSettings.value?.textSize ??
+                                        19,
+                                    hideDeletedMessages: controller
+                                            .generalSettings
+                                            .value
+                                            ?.hideDeletedMessages ??
+                                        false,
                                     cheerEmotes: controller.cheerEmotes,
                                     thirdPartEmotes: controller.thirdPartEmotes,
                                     showPlatformBadge: multiplePlatform,
@@ -120,11 +122,17 @@ class ChatView extends GetView<ChatViewController> {
                                         .selectedMessage
                                         .value,
                                     message: message,
-                                    displayTimestamp: settings
-                                        .generalSettings.displayTimestamp,
-                                    textSize: settings.generalSettings.textSize,
-                                    hideDeletedMessages: settings
-                                        .chatSettings.hideDeletedMessages,
+                                    displayTimestamp: controller.generalSettings
+                                            .value?.displayTimestamp ??
+                                        false,
+                                    textSize: controller
+                                            .generalSettings.value?.textSize ??
+                                        19,
+                                    hideDeletedMessages: controller
+                                            .generalSettings
+                                            .value
+                                            ?.hideDeletedMessages ??
+                                        false,
                                     cheerEmotes: controller.cheerEmotes,
                                     thirdPartEmotes: controller.thirdPartEmotes,
                                     showPlatformBadge: multiplePlatform,
