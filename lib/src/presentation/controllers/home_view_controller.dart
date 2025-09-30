@@ -7,6 +7,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/general_settings_service.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/services/twitch_event_sub_service.dart';
@@ -18,8 +19,6 @@ import 'package:irllink/src/domain/entities/settings/general_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/domain/usecases/kick/kick_refresh_token_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/post_kick_chat_nessage_usecase.dart';
-import 'package:irllink/src/domain/usecases/settings/get_general_settings.dart';
-import 'package:irllink/src/domain/usecases/settings/set_general_settings.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_recent_messages.dart';
 import 'package:irllink/src/domain/usecases/twitch/refresh_token_usecase.dart';
 import 'package:irllink/src/presentation/controllers/chat_view_controller.dart';
@@ -39,8 +38,7 @@ class HomeViewController extends GetxController
     required this.talkerService,
     required this.postKickChatMessageUseCase,
     required this.getRecentMessagesUseCase,
-    required this.getGeneralSettingsUseCase,
-    required this.setGeneralSettingsUseCase,
+    required this.generalSettingsService,
   });
 
   final RefreshTwitchTokenUseCase refreshAccessTokenUseCase;
@@ -49,8 +47,7 @@ class HomeViewController extends GetxController
   final TalkerService talkerService;
   final PostKickChatMessageUseCase postKickChatMessageUseCase;
   final GetRecentMessagesUseCase getRecentMessagesUseCase;
-  final GetGeneralSettingsUseCase getGeneralSettingsUseCase;
-  final SetGeneralSettingsUseCase setGeneralSettingsUseCase;
+  final GeneralSettingsService generalSettingsService;
   SplitViewController? splitViewController = SplitViewController(
     limits: [null, WeightLimit(min: 0.12, max: 0.92)],
   );
@@ -82,18 +79,12 @@ class HomeViewController extends GetxController
 
   Rxn<GeneralSettings> generalSettings = Rxn<GeneralSettings>();
 
+  StreamSubscription<GeneralSettings>? _settingsSubscription;
+
   @override
   void onInit() async {
     chatInputController = TextEditingController();
     emotesTabController = TabController(length: 0, vsync: this);
-
-    final generalSettingsResult = await getGeneralSettingsUseCase();
-    generalSettingsResult.fold(
-      (l) {},
-      (r) {
-        generalSettings.value = r;
-      },
-    );
 
     if (Get.arguments != null) {
       final twitchCreds = Get.arguments[0];
@@ -118,6 +109,8 @@ class HomeViewController extends GetxController
         ? remoteConfig.getString('minimum_version_android')
         : remoteConfig.getString('minimum_version_ios');
 
+    _listenToGeneralSettings();
+
     super.onInit();
   }
 
@@ -135,6 +128,18 @@ class HomeViewController extends GetxController
         },
       );
     });
+  }
+
+  void _listenToGeneralSettings() {
+    // Get initial settings
+    generalSettings.value = generalSettingsService.currentSettings;
+
+    // Listen to settings changes
+    _settingsSubscription = generalSettingsService.settingsStream.listen(
+      (settings) {
+        generalSettings.value = settings;
+      },
+    );
   }
 
   Future<void> _initializeTwitchServices() async {
@@ -198,6 +203,7 @@ class HomeViewController extends GetxController
   void onClose() {
     debounceSplitResize?.cancel();
     timerRefreshToken?.cancel();
+    _settingsSubscription?.cancel();
     super.onClose();
   }
 
@@ -210,15 +216,7 @@ class HomeViewController extends GetxController
       generalSettings.value = generalSettings.value?.copyWith(
         splitViewWeights: [weight[0]!, weight[1]!],
       );
-      setGeneralSettingsUseCase(params: generalSettings.value!);
-      getGeneralSettingsUseCase().then((value) {
-        value.fold(
-          (l) {},
-          (r) {
-            generalSettings.value = r;
-          },
-        );
-      });
+      generalSettingsService.updateGeneralSettings(generalSettings.value!);
     });
   }
 

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/bindings_interface.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:irllink/src/core/services/general_settings_service.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
@@ -19,7 +20,6 @@ import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/usecases/kick/login_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/logout_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/get_general_settings.dart';
-import 'package:irllink/src/domain/usecases/settings/set_general_settings.dart';
 import 'package:irllink/src/domain/usecases/tts/get_tts_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/tts/set_tts_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_users_usecase.dart';
@@ -84,8 +84,6 @@ class SettingsBindings extends Bindings {
 
     final getGeneralSettingsUseCase =
         GetGeneralSettingsUseCase(settingsRepository);
-    final setGeneralSettingsUseCase =
-        SetGeneralSettingsUseCase(settingsRepository);
 
     Get.lazyPut<SettingsViewController>(
       () => SettingsViewController(
@@ -101,7 +99,7 @@ class SettingsBindings extends Bindings {
         getTtsSettingsUsecase: getTtsSettingsUsecase,
         setTtsSettingsUsecase: setTtsSettingsUsecase,
         getGeneralSettingsUseCase: getGeneralSettingsUseCase,
-        setGeneralSettingsUseCase: setGeneralSettingsUseCase,
+        generalSettingsService: Get.find<GeneralSettingsService>(),
       ),
     );
   }

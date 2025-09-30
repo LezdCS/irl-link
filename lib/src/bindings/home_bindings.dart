@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/bindings_interface.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:irllink/src/core/services/general_settings_service.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/services/twitch_event_sub_service.dart';
@@ -25,8 +26,6 @@ import 'package:irllink/src/domain/usecases/dashboard/delete_dashboard_event_use
 import 'package:irllink/src/domain/usecases/dashboard/get_dashboard_events_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/kick_refresh_token_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/post_kick_chat_nessage_usecase.dart';
-import 'package:irllink/src/domain/usecases/settings/get_general_settings.dart';
-import 'package:irllink/src/domain/usecases/settings/set_general_settings.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_last_activities_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_local_credentials_usecase.dart';
 import 'package:irllink/src/domain/usecases/streamelements/get_me_usecase.dart';
@@ -149,11 +148,6 @@ class HomeBindings extends Bindings {
       talker: talker,
     );
 
-    final getGeneralSettingsUseCase =
-        GetGeneralSettingsUseCase(settingsRepository);
-    final setGeneralSettingsUseCase =
-        SetGeneralSettingsUseCase(settingsRepository);
-
     Get.lazyPut<HomeViewController>(
       () => HomeViewController(
         refreshAccessTokenUseCase: refreshTwitchAccessTokenUseCase,
@@ -162,8 +156,7 @@ class HomeBindings extends Bindings {
         talkerService: talkerService,
         postKickChatMessageUseCase: postKickChatMessageUseCase,
         getRecentMessagesUseCase: getRecentMessagesUseCase,
-        getGeneralSettingsUseCase: getGeneralSettingsUseCase,
-        setGeneralSettingsUseCase: setGeneralSettingsUseCase,
+        generalSettingsService: Get.find<GeneralSettingsService>(),
       ),
     );
 

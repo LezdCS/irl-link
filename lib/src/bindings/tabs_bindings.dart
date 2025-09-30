@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/general_settings_service.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/services/watch_service.dart';
@@ -133,7 +134,7 @@ class TabsBindings extends Bindings {
         getKickCategoriesUseCase: getKickCategoriesUseCase,
         patchKickChannelUseCase: patchKickChannelUseCase,
         getKickChannelsUseCase: getKickChannelsUseCase,
-        getGeneralSettingsUseCase: getGeneralSettingsUseCase,
+        generalSettingsService: Get.find<GeneralSettingsService>(),
       ),
       fenix: true,
     );
@@ -155,7 +156,7 @@ class TabsBindings extends Bindings {
         setChatSettingsUseCase: setChatSettingsUseCase,
         setStreamTitleUseCase: setStreamTitleUseCase,
         watchService: watchService,
-        getGeneralSettingsUseCase: getGeneralSettingsUseCase,
+        generalSettingsService: Get.find<GeneralSettingsService>(),
       ),
       fenix: true,
     );

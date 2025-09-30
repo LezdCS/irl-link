@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/general_settings_service.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/services/tts_service.dart';
@@ -214,7 +215,7 @@ class ChatsController extends GetxController with GetTickerProviderStateMixin {
           addHiddenUserUseCase: addHiddenUserUseCase,
           removeHiddenUserUseCase: removeHiddenUserUseCase,
           getHiddenUsersUseCase: getHiddenUsersUseCase,
-          getGeneralSettingsUseCase: getGeneralSettingsUseCase,
+          generalSettingsService: Get.find<GeneralSettingsService>(),
         );
         return controller;
       },

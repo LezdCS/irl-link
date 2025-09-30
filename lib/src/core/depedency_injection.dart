@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:irllink/src/core/services/app_info_service.dart';
 import 'package:irllink/src/core/services/deeplinks_service.dart';
+import 'package:irllink/src/core/services/general_settings_service.dart';
 import 'package:irllink/src/core/services/notification_service.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/speaker_service.dart';
@@ -22,6 +23,7 @@ import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/usecases/settings/add_browser_tab_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/get_general_settings.dart';
 import 'package:irllink/src/domain/usecases/settings/get_settings_usecase.dart';
+import 'package:irllink/src/domain/usecases/settings/set_general_settings.dart';
 import 'package:irllink/src/domain/usecases/settings/set_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/tts/get_tts_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart';
@@ -77,6 +79,8 @@ Future<void> initializeDependencies() async {
   );
   final getGeneralSettingsUseCase =
       GetGeneralSettingsUseCase(settingsRepository);
+  final setGeneralSettingsUseCase =
+      SetGeneralSettingsUseCase(settingsRepository);
   final getSettingsUseCase = GetSettingsUseCase(settingsRepository);
   final setSettingsUseCase = SetSettingsUseCase(settingsRepository);
   final generalSettingsResult = await getGeneralSettingsUseCase();
@@ -93,6 +97,15 @@ Future<void> initializeDependencies() async {
     () => SettingsService(
       getSettingsUseCase: getSettingsUseCase,
       setSettingsUseCase: setSettingsUseCase,
+    ).init(),
+    permanent: true,
+  );
+
+  // Initialize GeneralSettingsService
+  await Get.putAsync(
+    () => GeneralSettingsService(
+      getGeneralSettingsUseCase: getGeneralSettingsUseCase,
+      setGeneralSettingsUseCase: setGeneralSettingsUseCase,
     ).init(),
     permanent: true,
   );

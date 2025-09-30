@@ -5,6 +5,7 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/general_settings_service.dart';
 import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/services/youtube_chat.dart';
@@ -18,7 +19,6 @@ import 'package:irllink/src/domain/entities/settings/hidden_user.dart';
 import 'package:irllink/src/domain/usecases/kick/ban_kick_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/unban_kick_user_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/add_hidden_user_usecase.dart';
-import 'package:irllink/src/domain/usecases/settings/get_general_settings.dart';
 import 'package:irllink/src/domain/usecases/settings/get_hidden_users_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/remove_hidden_user_usecase.dart';
 import 'package:irllink/src/presentation/controllers/chats_controller.dart';
@@ -40,7 +40,7 @@ class ChatViewController extends GetxController
     required this.addHiddenUserUseCase,
     required this.removeHiddenUserUseCase,
     required this.getHiddenUsersUseCase,
-    required this.getGeneralSettingsUseCase,
+    required this.generalSettingsService,
   });
 
   final ChatGroup chatGroup;
@@ -54,7 +54,7 @@ class ChatViewController extends GetxController
   final AddHiddenUserUseCase addHiddenUserUseCase;
   final RemoveHiddenUserUseCase removeHiddenUserUseCase;
   final GetHiddenUsersUseCase getHiddenUsersUseCase;
-  final GetGeneralSettingsUseCase getGeneralSettingsUseCase;
+  final GeneralSettingsService generalSettingsService;
   //CHAT
   late ScrollController scrollController;
   RxBool isAutoScrolldown = true.obs;
@@ -70,6 +70,7 @@ class ChatViewController extends GetxController
   List<YoutubeChat> youtubeChats = [];
 
   Rxn<GeneralSettings> generalSettings = Rxn<GeneralSettings>();
+  StreamSubscription<GeneralSettings>? _settingsSubscription;
 
   @override
   void onInit() async {
@@ -81,16 +82,22 @@ class ChatViewController extends GetxController
       watchService.sendChatMessageToNative(value.last);
     });
 
-    final generalSettingsResult = await getGeneralSettingsUseCase();
-    generalSettingsResult.fold(
-      (l) {},
-      (r) {
-        generalSettings.value = r;
-      },
-    );
+    _listenToGeneralSettings();
 
     super.onInit();
     WidgetsBinding.instance.addObserver(this);
+  }
+
+  void _listenToGeneralSettings() {
+    // Get initial settings
+    generalSettings.value = generalSettingsService.currentSettings;
+
+    // Listen to settings changes
+    _settingsSubscription = generalSettingsService.settingsStream.listen(
+      (settings) {
+        generalSettings.value = settings;
+      },
+    );
   }
 
   @override
@@ -106,6 +113,7 @@ class ChatViewController extends GetxController
   @override
   void onClose() {
     Get.find<TtsService>().flutterTts.stop();
+    _settingsSubscription?.cancel();
     super.onClose();
   }
 

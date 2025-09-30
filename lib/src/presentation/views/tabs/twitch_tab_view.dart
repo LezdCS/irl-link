@@ -175,8 +175,8 @@ class TwitchTabView extends GetView<TwitchTabViewController> {
                   ),
                   Obx(
                     () => Visibility(
-                      visible: controller
-                              .generalSettings.value?.displayViewerCount ??
+                      visible: controller.generalSettingsService.currentSettings
+                              ?.displayViewerCount ??
                           false,
                       child: Row(
                         children: [

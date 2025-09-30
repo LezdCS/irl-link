@@ -111,8 +111,8 @@ class KickTabView extends GetView<KickTabViewController> {
                   ),
                   Obx(
                     () => Visibility(
-                      visible: controller
-                              .generalSettings.value?.displayViewerCount ??
+                      visible: controller.generalSettingsService.currentSettings
+                              ?.displayViewerCount ??
                           false,
                       child: Row(
                         children: [

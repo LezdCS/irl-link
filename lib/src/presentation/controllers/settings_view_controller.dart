@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:irllink/data/database/database_helper.dart';
 import 'package:irllink/src/core/params/kick_auth_params.dart';
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
+import 'package:irllink/src/core/services/general_settings_service.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/speaker_service.dart';
 import 'package:irllink/src/core/services/store_service.dart';
@@ -18,7 +19,6 @@ import 'package:irllink/src/domain/entities/settings/tts_settings.dart';
 import 'package:irllink/src/domain/usecases/kick/login_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/logout_usecase.dart';
 import 'package:irllink/src/domain/usecases/settings/get_general_settings.dart';
-import 'package:irllink/src/domain/usecases/settings/set_general_settings.dart';
 import 'package:irllink/src/domain/usecases/tts/get_tts_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/tts/set_tts_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_users_usecase.dart';
@@ -41,7 +41,7 @@ class SettingsViewController extends GetxController {
     required this.getTtsSettingsUsecase,
     required this.setTtsSettingsUsecase,
     required this.getGeneralSettingsUseCase,
-    required this.setGeneralSettingsUseCase,
+    required this.generalSettingsService,
   });
 
   final LogoutUseCase logoutUseCase;
@@ -52,7 +52,7 @@ class SettingsViewController extends GetxController {
   final GetTtsSettingsUsecase getTtsSettingsUsecase;
   final SetTtsSettingsUsecase setTtsSettingsUsecase;
   final GetGeneralSettingsUseCase getGeneralSettingsUseCase;
-  final SetGeneralSettingsUseCase setGeneralSettingsUseCase;
+  final GeneralSettingsService generalSettingsService;
   final SettingsService settingsService;
   final HomeViewController homeViewController;
   final TtsService ttsService;
@@ -78,14 +78,7 @@ class SettingsViewController extends GetxController {
 
   @override
   void onInit() async {
-    final generalSettingsResult = await getGeneralSettingsUseCase();
-    generalSettingsResult.fold(
-      (l) {},
-      (r) {
-        rtIrlInputController.text = r.rtIrlPushKey;
-        generalSettings.value = r;
-      },
-    );
+    getGeneralSettings();
 
     // Setup download progress listening
     _setupDownloadListener();
@@ -96,6 +89,16 @@ class SettingsViewController extends GetxController {
     await getTtsSettings();
 
     super.onInit();
+  }
+
+  Future<void> getGeneralSettings() async {
+    final generalSettingsResult = await getGeneralSettingsUseCase();
+    generalSettingsResult.fold(
+      (l) {},
+      (r) {
+        generalSettings.value = r;
+      },
+    );
   }
 
   @override
@@ -109,13 +112,8 @@ class SettingsViewController extends GetxController {
     if (settings == null) {
       return;
     }
-    final result = await setGeneralSettingsUseCase(params: settings);
-    result.fold(
-      (l) {},
-      (r) {
-        generalSettings.value = settings;
-      },
-    );
+    // Use the reactive service to update settings
+    await generalSettingsService.updateGeneralSettings(settings);
   }
 
   Future<void> getTtsSettings() async {

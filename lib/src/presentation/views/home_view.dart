@@ -485,8 +485,8 @@ class HomeView extends GetView<HomeViewController> {
                           .generalSettings.value
                           ?.copyWith(rainModeActivated: false);
 
-                      controller.setGeneralSettingsUseCase(
-                        params: controller.generalSettings.value!,
+                      controller.generalSettingsService.updateGeneralSettings(
+                        controller.generalSettings.value!,
                       );
                     }
                   } else {
@@ -495,8 +495,8 @@ class HomeView extends GetView<HomeViewController> {
                         controller.generalSettings.value?.copyWith(
                       rainModeActivated: true,
                     );
-                    controller.setGeneralSettingsUseCase(
-                      params: controller.generalSettings.value!,
+                    controller.generalSettingsService.updateGeneralSettings(
+                      controller.generalSettings.value!,
                     );
                   }
                 },
