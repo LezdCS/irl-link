@@ -9,18 +9,22 @@ import 'package:irllink/src/domain/entities/chat/chat_message.dart'
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/tts_settings.dart';
 import 'package:irllink/src/domain/usecases/tts/get_tts_settings_usecase.dart';
+import 'package:irllink/src/domain/usecases/tts/set_tts_settings_usecase.dart';
 
 class TtsService extends GetxService {
-  TtsService({required this.getTtsSettingsUsecase});
+  TtsService({
+    required this.getTtsSettingsUsecase,
+    required this.setTtsSettingsUsecase,
+  });
 
   late FlutterTts flutterTts;
   RxList ttsLanguages = [].obs;
   RxList ttsVoices = [].obs;
 
-  late TtsSettings ttsSettings;
+  Rxn<TtsSettings> ttsSettings = Rxn<TtsSettings>();
 
   final GetTtsSettingsUsecase getTtsSettingsUsecase;
-
+  final SetTtsSettingsUsecase setTtsSettingsUsecase;
   Future<TtsService> init() async {
     flutterTts = FlutterTts();
     if (Platform.isAndroid) {
@@ -38,9 +42,13 @@ class TtsService extends GetxService {
     result.fold(
       (l) {},
       (r) {
-        ttsSettings = r;
+        ttsSettings.value = r;
       },
     );
+  }
+
+  Future<void> setTtsSettings(TtsSettings settings) async {
+    await setTtsSettingsUsecase(params: settings);
   }
 
   Future<void> initTts() async {
@@ -57,28 +65,28 @@ class TtsService extends GetxService {
     }
 
     await flutterTts.awaitSpeakCompletion(true);
-    await flutterTts.setLanguage(ttsSettings.language);
-    await flutterTts.setSpeechRate(ttsSettings.rate);
-    await flutterTts.setVolume(ttsSettings.volume);
-    await flutterTts.setPitch(ttsSettings.pitch);
-    await flutterTts.setVoice(ttsSettings.voice);
+    await flutterTts.setLanguage(ttsSettings.value!.language);
+    await flutterTts.setSpeechRate(ttsSettings.value!.rate);
+    await flutterTts.setVolume(ttsSettings.value!.volume);
+    await flutterTts.setPitch(ttsSettings.value!.pitch);
+    await flutterTts.setVoice(ttsSettings.value!.voice);
 
     if (Platform.isAndroid) {
       await flutterTts.setQueueMode(1);
     }
 
-    if (!ttsSettings.ttsEnabled) {
+    if (!ttsSettings.value!.ttsEnabled) {
       // Prevent the queue to continue if we come back from settings and turn off TTS
       flutterTts.stop();
     }
   }
 
   Future<void> updateSettings(Settings settings) async {
-    await flutterTts.setLanguage(ttsSettings.language);
-    await flutterTts.setSpeechRate(ttsSettings.rate);
-    await flutterTts.setVolume(ttsSettings.volume);
-    await flutterTts.setPitch(ttsSettings.pitch);
-    await flutterTts.setVoice(ttsSettings.voice);
+    await flutterTts.setLanguage(ttsSettings.value!.language);
+    await flutterTts.setSpeechRate(ttsSettings.value!.rate);
+    await flutterTts.setVolume(ttsSettings.value!.volume);
+    await flutterTts.setPitch(ttsSettings.value!.pitch);
+    await flutterTts.setVoice(ttsSettings.value!.voice);
   }
 
   Future<void> getTtsVoices() async {
@@ -101,27 +109,27 @@ class TtsService extends GetxService {
 
   void readTts(ChatMessage message, [List<ChatEmote>? thirdPartEmotes]) {
     // If the user is in the ignore list, we don't read the message
-    if (ttsSettings.ttsUsersToIgnore.contains(message.displayName)) {
+    if (ttsSettings.value!.ttsUsersToIgnore.contains(message.displayName)) {
       return;
     }
 
     // If we allow only vip to be read, we don't read the message if the user is not a vip
-    if (ttsSettings.ttsOnlyVip && !message.isVip) {
+    if (ttsSettings.value!.ttsOnlyVip && !message.isVip) {
       return;
     }
 
     // If we allow only vip to be read, we don't read the message if the user is not a vip
-    if (ttsSettings.ttsOnlyMod && !message.isModerator) {
+    if (ttsSettings.value!.ttsOnlyMod && !message.isModerator) {
       return;
     }
 
     // If we allow only vip to be read, we don't read the message if the user is not a vip
-    if (ttsSettings.ttsOnlySubscriber && !message.isSubscriber) {
+    if (ttsSettings.value!.ttsOnlySubscriber && !message.isSubscriber) {
       return;
     }
 
     // If the prefix is in the ignore list, we don't read the message
-    for (String prefix in ttsSettings.prefixsToIgnore) {
+    for (String prefix in ttsSettings.value!.prefixsToIgnore) {
       if (message.message.startsWith(prefix)) {
         return;
       }
@@ -130,10 +138,10 @@ class TtsService extends GetxService {
     String finalMessage = message.message;
 
     // If the list of prefixs to use TTS only is not empty, we only read the message if it starts with one of the prefixs
-    if (ttsSettings.prefixsToUseTtsOnly.isNotEmpty) {
+    if (ttsSettings.value!.prefixsToUseTtsOnly.isNotEmpty) {
       bool foundPrefix = false;
 
-      for (String prefix in ttsSettings.prefixsToUseTtsOnly) {
+      for (String prefix in ttsSettings.value!.prefixsToUseTtsOnly) {
         if (message.message.startsWith(prefix)) {
           finalMessage = message.message.substring(prefix.length).trim();
           foundPrefix = true;
@@ -147,7 +155,7 @@ class TtsService extends GetxService {
     }
 
     // Remove emotes from the final message if the setting is disabled
-    if (!ttsSettings.ttsReadEmotes) {
+    if (!ttsSettings.value!.ttsReadEmotes) {
       finalMessage = EmoteUtils.removeEmotes(message, thirdPartEmotes ?? []);
 
       // Skip speaking if the message becomes empty after emote removal
@@ -159,7 +167,7 @@ class TtsService extends GetxService {
     String text = "user_said_message".trParams(
       {'authorName': message.displayName, 'message': finalMessage},
     );
-    if (ttsSettings.ttsMuteViewerName) {
+    if (ttsSettings.value!.ttsMuteViewerName) {
       text = finalMessage;
     }
     flutterTts.speak(text);
