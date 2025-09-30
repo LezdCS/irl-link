@@ -227,7 +227,7 @@ class StreamelementsViewController extends GetxController
       ),
     );
     lastActivitiesResult.fold(
-      (l) => debugPrint(l.message),
+      (l) => {},
       (r) => activities.value = r,
     );
 
@@ -329,15 +329,11 @@ class StreamelementsViewController extends GetxController
     });
     socket?.on(
       'event:update',
-      (data) => {
-        // debugPrint(data.toString())
-      },
+      (data) => {},
     );
     socket?.on(
       'event:reset',
-      (data) => {
-        // debugPrint(data.toString())
-      },
+      (data) => {},
     );
 
     socket?.onAny(

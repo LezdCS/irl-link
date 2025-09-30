@@ -90,3 +90,13 @@ class RtmpLog extends TalkerLog {
   @override
   String get title => 'RTMP 📡';
 }
+
+class WatchLog extends TalkerLog {
+  WatchLog(String super.message);
+
+  @override
+  AnsiPen get pen => AnsiPen()..rgb(r: 0, g: 0, b: 0);
+
+  @override
+  String get title => 'Watch ⌚';
+}

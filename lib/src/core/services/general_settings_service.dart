@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/settings/general_settings.dart';
 import 'package:irllink/src/domain/usecases/settings/get_general_settings.dart';
@@ -38,7 +37,7 @@ class GeneralSettingsService extends GetxService {
   Future<void> _loadGeneralSettings() async {
     final result = await getGeneralSettingsUseCase();
     result.fold(
-      (l) => debugPrint('Failed to load general settings: $l'),
+      (l) => {},
       (r) {
         _generalSettings.value = r;
         _settingsStreamController.add(r);
@@ -50,7 +49,7 @@ class GeneralSettingsService extends GetxService {
   Future<void> updateGeneralSettings(GeneralSettings settings) async {
     final result = await setGeneralSettingsUseCase(params: settings);
     result.fold(
-      (l) => debugPrint('Failed to update general settings: $l'),
+      (l) => {},
       (r) {
         _generalSettings.value = settings;
         _settingsStreamController.add(settings);

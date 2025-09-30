@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/usecases/settings/get_general_settings.dart';
 
@@ -58,8 +57,7 @@ class SpeakerService extends GetxService {
     try {
       await _audioPlayer.play(AssetSource('../lib/assets/blank.mp3'));
     } catch (e) {
-      // Log error but don't throw - we don't want to crash the app if this fails
-      debugPrint('Failed to play keep-alive sound: $e');
+      // Catch error but don't throw - we don't want to crash the app if this fails
     }
   }
 

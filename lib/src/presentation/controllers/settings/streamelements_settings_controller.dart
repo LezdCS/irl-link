@@ -55,7 +55,7 @@ class StreamelementsSettingsController extends GetxController {
   Future<void> getStreamElementsSettings() async {
     final seSettings = await getStreamElementsSettingsUseCase();
     seSettings.fold(
-      (l) => debugPrint(l.message),
+      (l) => {},
       (r) {
         streamElementsSettings.value = r;
         seJwtInputController.text = r.jwt ?? "";
@@ -137,14 +137,14 @@ class StreamelementsSettingsController extends GetxController {
     isLoading.value = true;
     final seCredentials = await streamElementsGetLocalCredentialsUseCase();
     seCredentials.fold(
-      (l) => debugPrint(l.message),
+      (l) => {},
       (r) async {
         final result = await streamElementsDisconnectUseCase(
           params: r.accessToken,
         );
 
         result.fold(
-          (l) => debugPrint(l.message),
+          (l) => {},
           (r) {
             Get.snackbar(
               "StreamElements",

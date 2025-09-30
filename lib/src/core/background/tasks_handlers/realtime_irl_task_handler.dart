@@ -3,9 +3,7 @@ import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 class RealtimeIrlTaskHandler extends TaskHandler {
   // Called when the task is started.
   @override
-  Future<void> onStart(DateTime timestamp, TaskStarter starter) async {
-    // debugPrint('onStart');
-  }
+  Future<void> onStart(DateTime timestamp, TaskStarter starter) async {}
 
   // Called every [ForegroundTaskOptions.interval] milliseconds.
   @override
@@ -20,15 +18,11 @@ class RealtimeIrlTaskHandler extends TaskHandler {
 
   // Called when the task is destroyed.
   @override
-  Future<void> onDestroy(DateTime timestamp, bool isTimeout) async {
-    // debugPrint('onDestroy');
-  }
+  Future<void> onDestroy(DateTime timestamp, bool isTimeout) async {}
 
   // Called when data is sent using [FlutterForegroundTask.sendDataToTask].
   @override
-  void onReceiveData(Object data) {
-    // debugPrint('onReceiveData: $data');
-  }
+  void onReceiveData(Object data) {}
 
   // Called when the notification button is pressed.
   @override
@@ -37,7 +31,6 @@ class RealtimeIrlTaskHandler extends TaskHandler {
       "action": id,
     };
     FlutterForegroundTask.sendDataToMain(data);
-    // debugPrint('onNotificationButtonPressed: $id');
   }
 
   // Called when the notification itself is pressed.
@@ -47,7 +40,6 @@ class RealtimeIrlTaskHandler extends TaskHandler {
   @override
   void onNotificationPressed() {
     FlutterForegroundTask.launchApp('/');
-    // debugPrint('onNotificationPressed');
   }
 
   // Called when the notification itself is dismissed.
@@ -55,7 +47,5 @@ class RealtimeIrlTaskHandler extends TaskHandler {
   // AOS: only work Android 14+
   // iOS: only work iOS 10+
   @override
-  void onNotificationDismissed() {
-    // debugPrint('onNotificationDismissed');
-  }
+  void onNotificationDismissed() {}
 }

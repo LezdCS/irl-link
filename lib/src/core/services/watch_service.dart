@@ -1,14 +1,17 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/talker_service.dart';
+import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:irllink/src/domain/entities/stream_elements/se_activity.dart';
 import 'package:irllink/src/presentation/controllers/tabs/obs_tab_view_controller.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 class WatchService extends GetxService {
   static const String _channelName = 'com.irllink';
   final _channel = const MethodChannel(_channelName);
   late final ObsTabViewController _obsController;
+  Talker talker = Get.find<TalkerService>().talker;
 
   Future<WatchService> init() async {
     // Check if platform channel exists
@@ -16,7 +19,7 @@ class WatchService extends GetxService {
       final bool exists =
           await _channel.invokeMethod('isChannelAvailable') ?? false;
       if (!exists) {
-        debugPrint('Watch platform channel is not available');
+        talker.warning('Watch platform channel is not available');
         return this;
       }
 
@@ -24,14 +27,14 @@ class WatchService extends GetxService {
 
       _channel.setMethodCallHandler(_handleWatchMessage);
     } catch (e) {
-      debugPrint('Watch platform channel error: $e');
+      talker.error('Watch platform channel error: $e');
     }
 
     return this;
   }
 
   Future<void> _handleWatchMessage(MethodCall call) async {
-    debugPrint('Data from watch: ${call.arguments}');
+    talker.logCustom(WatchLog('Data from watch: ${call.arguments}'));
     final data = call.arguments['data'];
 
     switch (call.method) {
@@ -52,7 +55,7 @@ class WatchService extends GetxService {
         "data": message.toJsonForWatch(),
       });
     } catch (e) {
-      debugPrint('Failed to send chat message to watch: $e');
+      talker.error('Failed to send chat message to watch: $e');
     }
   }
 
@@ -65,7 +68,7 @@ class WatchService extends GetxService {
         "data": isConnected,
       });
     } catch (e) {
-      debugPrint('Failed to send update obs connected to watch: $e');
+      talker.error('Failed to send update obs connected to watch: $e');
     }
   }
 
@@ -76,7 +79,7 @@ class WatchService extends GetxService {
         "data": sceneName,
       });
     } catch (e) {
-      debugPrint('Failed to send update obs scene to watch: $e');
+      talker.error('Failed to send update obs scene to watch: $e');
     }
   }
 
@@ -87,7 +90,7 @@ class WatchService extends GetxService {
         "data": scenes,
       });
     } catch (e) {
-      debugPrint('Failed to send obs scenes to watch: $e');
+      talker.error('Failed to send obs scenes to watch: $e');
     }
   }
 
@@ -98,7 +101,7 @@ class WatchService extends GetxService {
         "data": data,
       });
     } catch (e) {
-      debugPrint('Failed to send obs sources to watch: $e');
+      talker.error('Failed to send obs sources to watch: $e');
     }
   }
 
@@ -109,7 +112,7 @@ class WatchService extends GetxService {
         "data": isConnected,
       });
     } catch (e) {
-      debugPrint('Failed to send se connected to watch: $e');
+      talker.error('Failed to send se connected to watch: $e');
     }
   }
 
@@ -120,7 +123,7 @@ class WatchService extends GetxService {
         "data": activity.toJsonForWatch(),
       });
     } catch (e) {
-      debugPrint('Failed to send se activity to watch: $e');
+      talker.error('Failed to send se activity to watch: $e');
     }
   }
 
@@ -131,7 +134,7 @@ class WatchService extends GetxService {
         "data": viewers,
       });
     } catch (e) {
-      debugPrint('Failed to send viewers to watch: $e');
+      talker.error('Failed to send viewers to watch: $e');
     }
   }
 
@@ -142,7 +145,7 @@ class WatchService extends GetxService {
         "data": isLive,
       });
     } catch (e) {
-      debugPrint('Failed to send live status to watch: $e');
+      talker.error('Failed to send live status to watch: $e');
     }
   }
 }

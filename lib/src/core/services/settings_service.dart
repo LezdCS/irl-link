@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/usecases/settings/get_settings_usecase.dart';
@@ -24,19 +23,15 @@ class SettingsService extends GetxService {
     final settingsResult = await getSettingsUseCase();
 
     settingsResult.fold(
-      (l) => debugPrint(l.message),
+      (l) => {},
       (r) => settings = r.obs,
     );
   }
 
   Future<void> saveSettings() async {
     settings.refresh();
-    final setResult = await setSettingsUseCase(
+    await setSettingsUseCase(
       params: settings.value,
-    );
-    setResult.fold(
-      (l) => debugPrint(l.message),
-      (r) => {},
     );
   }
 }
