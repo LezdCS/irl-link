@@ -19,7 +19,6 @@ import 'package:irllink/src/data/repositories/settings_repository_impl.dart';
 import 'package:irllink/src/data/repositories/twitch_repository_impl.dart';
 import 'package:irllink/src/domain/usecases/kick/login_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/logout_usecase.dart';
-import 'package:irllink/src/domain/usecases/settings/get_general_settings.dart';
 import 'package:irllink/src/domain/usecases/tts/get_tts_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/tts/set_tts_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_users_usecase.dart';
@@ -82,9 +81,6 @@ class SettingsBindings extends Bindings {
       settingsRepository: settingsRepository,
     );
 
-    final getGeneralSettingsUseCase =
-        GetGeneralSettingsUseCase(settingsRepository);
-
     Get.lazyPut<SettingsViewController>(
       () => SettingsViewController(
         getTwitchUsersUseCase: getTwitchUsersUseCase,
@@ -98,7 +94,6 @@ class SettingsBindings extends Bindings {
         loginKickUseCase: loginKickUseCase,
         getTtsSettingsUsecase: getTtsSettingsUsecase,
         setTtsSettingsUsecase: setTtsSettingsUsecase,
-        getGeneralSettingsUseCase: getGeneralSettingsUseCase,
         generalSettingsService: Get.find<GeneralSettingsService>(),
       ),
     );

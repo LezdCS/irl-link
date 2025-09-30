@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/general_settings_service.dart';
 import 'package:irllink/src/core/services/watch_service.dart';
-import 'package:irllink/src/domain/entities/settings/general_settings.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_stream_infos.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_stream_info_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/set_chat_settings_usecase.dart';
@@ -43,8 +42,6 @@ class TwitchTabViewController extends GetxController
   // Store the necessary Twitch data
   String? accessToken;
   String? broadcasterId;
-
-  StreamSubscription<GeneralSettings>? _settingsSubscription;
 
   void setup({
     required String token,
@@ -99,7 +96,6 @@ class TwitchTabViewController extends GetxController
     controllerLiveCircleAnimation.dispose();
     refreshDataAnimationController.dispose();
     refreshDataTimer?.cancel();
-    _settingsSubscription?.cancel();
     super.onClose();
   }
 

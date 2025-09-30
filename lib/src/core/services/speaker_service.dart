@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/usecases/settings/get_general_settings.dart';
 
 class SpeakerService extends GetxService {
@@ -23,7 +22,7 @@ class SpeakerService extends GetxService {
     return this;
   }
 
-  Future<void> updateSettings(Settings settings) async {
+  Future<void> updateSettings() async {
     if (!_isInitialized) {
       return;
     }

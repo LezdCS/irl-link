@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
@@ -18,7 +19,6 @@ import 'package:irllink/src/domain/entities/settings/general_settings.dart';
 import 'package:irllink/src/domain/entities/settings/tts_settings.dart';
 import 'package:irllink/src/domain/usecases/kick/login_usecase.dart';
 import 'package:irllink/src/domain/usecases/kick/logout_usecase.dart';
-import 'package:irllink/src/domain/usecases/settings/get_general_settings.dart';
 import 'package:irllink/src/domain/usecases/tts/get_tts_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/tts/set_tts_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_users_usecase.dart';
@@ -40,7 +40,6 @@ class SettingsViewController extends GetxController {
     required this.loginKickUseCase,
     required this.getTtsSettingsUsecase,
     required this.setTtsSettingsUsecase,
-    required this.getGeneralSettingsUseCase,
     required this.generalSettingsService,
   });
 
@@ -51,7 +50,6 @@ class SettingsViewController extends GetxController {
   final LoginKickUseCase loginKickUseCase;
   final GetTtsSettingsUsecase getTtsSettingsUsecase;
   final SetTtsSettingsUsecase setTtsSettingsUsecase;
-  final GetGeneralSettingsUseCase getGeneralSettingsUseCase;
   final GeneralSettingsService generalSettingsService;
   final SettingsService settingsService;
   final HomeViewController homeViewController;
@@ -76,12 +74,14 @@ class SettingsViewController extends GetxController {
 
   Rxn<GeneralSettings> generalSettings = Rxn<GeneralSettings>();
 
+  StreamSubscription<GeneralSettings>? _settingsSubscription;
+
   @override
   void onInit() async {
-    getGeneralSettings();
-
     // Setup download progress listening
     _setupDownloadListener();
+
+    _listenToGeneralSettings();
 
     // Load available backups
     loadAvailableBackups();
@@ -91,21 +91,24 @@ class SettingsViewController extends GetxController {
     super.onInit();
   }
 
-  Future<void> getGeneralSettings() async {
-    final generalSettingsResult = await getGeneralSettingsUseCase();
-    generalSettingsResult.fold(
-      (l) {},
-      (r) {
-        generalSettings.value = r;
-      },
-    );
-  }
-
   @override
   void onClose() {
     _port.close();
     IsolateNameServer.removePortNameMapping('downloader_send_port');
+    _settingsSubscription?.cancel();
     super.onClose();
+  }
+
+  void _listenToGeneralSettings() {
+    // Get initial settings
+    generalSettings.value = generalSettingsService.currentSettings;
+
+    // Listen to settings changes
+    _settingsSubscription = generalSettingsService.settingsStream.listen(
+      (settings) {
+        generalSettings.value = settings;
+      },
+    );
   }
 
   Future<void> setGeneralSettings(GeneralSettings? settings) async {
@@ -187,19 +190,13 @@ class SettingsViewController extends GetxController {
   }
 
   Future<void> updateKeepSpeakerOn({required bool value}) async {
-    final generalSettingsResult = await getGeneralSettingsUseCase();
-    generalSettingsResult.fold(
-      (l) {},
-      (r) {
-        final generalSettings = r.copyWith(
-          keepSpeakerOn: value,
-        );
-        setGeneralSettings(generalSettings);
-      },
+    final newSettings = generalSettings.value?.copyWith(
+      keepSpeakerOn: value,
     );
+    setGeneralSettings(newSettings);
 
     if (Get.isRegistered<SpeakerService>()) {
-      Get.find<SpeakerService>().updateSettings(settingsService.settings.value);
+      Get.find<SpeakerService>().updateSettings();
     }
   }
 
