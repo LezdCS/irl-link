@@ -6,7 +6,6 @@ import 'package:irllink/src/core/utils/emote_utils.dart';
 import 'package:irllink/src/domain/entities/chat/chat_emote.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart'
     show ChatMessage;
-import 'package:irllink/src/domain/entities/settings.dart';
 import 'package:irllink/src/domain/entities/settings/tts_settings.dart';
 import 'package:irllink/src/domain/usecases/tts/get_tts_settings_usecase.dart';
 import 'package:irllink/src/domain/usecases/tts/set_tts_settings_usecase.dart';
@@ -43,15 +42,20 @@ class TtsService extends GetxService {
       (l) {},
       (r) {
         ttsSettings.value = r;
+        updateSettings();
       },
     );
   }
 
   Future<void> setTtsSettings(TtsSettings settings) async {
     await setTtsSettingsUsecase(params: settings);
+    getTtsSettings();
   }
 
   Future<void> initTts() async {
+    if (ttsSettings.value == null) {
+      return;
+    }
     // Configure iOS audio so TTS continues when app is in background
     if (Platform.isIOS) {
       await flutterTts.setIosAudioCategory(
@@ -81,7 +85,10 @@ class TtsService extends GetxService {
     }
   }
 
-  Future<void> updateSettings(Settings settings) async {
+  Future<void> updateSettings() async {
+    if (ttsSettings.value == null) {
+      return;
+    }
     await flutterTts.setLanguage(ttsSettings.value!.language);
     await flutterTts.setSpeechRate(ttsSettings.value!.rate);
     await flutterTts.setVolume(ttsSettings.value!.volume);
