@@ -248,7 +248,7 @@ class ObsTabView extends GetView<ObsTabViewController> {
                     ),
                     InkWell(
                       onTap: () {
-                        controller.applySettings();
+                        controller.startObsConnection();
                       },
                       child: Container(
                         margin: const EdgeInsets.only(

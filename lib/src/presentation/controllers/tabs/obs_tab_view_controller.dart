@@ -47,7 +47,7 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
 
   @override
   Future<void> onReady() async {
-    await applySettings();
+    await startObsConnection();
 
     isConnected.listen((value) {
       // Send to watchOS
@@ -87,9 +87,20 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
 
     if (state == AppLifecycleState.resumed) {
       // The app is back to the foreground
-      applySettings(); // Reconnect to OBS session
+      startObsConnection(); // Reconnect to OBS session
     } else if (state == AppLifecycleState.paused) {
       // The app is sent to the background
+    }
+  }
+
+  Future startObsConnection() async {
+    await getObsSettings();
+
+    if (obsWebSocket != null) {
+      obsWebSocket!.close();
+    }
+    if (obsSettings.value?.isConnected ?? false) {
+      connectWs(obsSettings.value!.url, obsSettings.value!.password);
     }
   }
 
@@ -185,7 +196,7 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
     }
   }
 
-  void getObsSettings() async {
+  Future<void> getObsSettings() async {
     final result = await getObsCredentialsUsecase(params: null);
     result.fold(
       (failure) {},
@@ -307,14 +318,5 @@ class ObsTabViewController extends GetxController with WidgetsBindingObserver {
 
     String imageBase64 = response?.responseData?['imageData'].split(",").last;
     sceneScreenshot.value = const Base64Decoder().convert(imageBase64);
-  }
-
-  Future applySettings() async {
-    if (obsWebSocket != null) {
-      obsWebSocket!.close();
-    }
-    if (obsSettings.value?.isConnected ?? false) {
-      connectWs(obsSettings.value!.url, obsSettings.value!.password);
-    }
   }
 }
