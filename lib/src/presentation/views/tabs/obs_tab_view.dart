@@ -232,6 +232,30 @@ class ObsTabView extends GetView<ObsTabViewController> {
                         Text(
                           'Avaibalable disk space: ${controller.statsResponse.value?.availableDiskSpace.toStringAsFixed(2)}',
                         ),
+                        Text(
+                          'Active FPS: ${controller.statsResponse.value?.activeFps.toStringAsFixed(2)}',
+                        ),
+                        Text(
+                          'Average frame render time: ${controller.statsResponse.value?.averageFrameRenderTime.toStringAsFixed(2)}',
+                        ),
+                        Text(
+                          'Render skipped frames: ${controller.statsResponse.value?.renderSkippedFrames.toStringAsFixed(2)}',
+                        ),
+                        Text(
+                          'Render total frames: ${controller.statsResponse.value?.renderTotalFrames.toStringAsFixed(2)}',
+                        ),
+                        Text(
+                          'Output skipped frames: ${controller.statsResponse.value?.outputSkippedFrames.toStringAsFixed(2)}',
+                        ),
+                        Text(
+                          'Output total frames: ${controller.statsResponse.value?.outputTotalFrames.toStringAsFixed(2)}',
+                        ),
+                        Text(
+                          'WebSocket session incoming messages: ${controller.statsResponse.value?.webSocketSessionIncomingMessages.toStringAsFixed(2)}',
+                        ),
+                        Text(
+                          'WebSocket session outgoing messages: ${controller.statsResponse.value?.webSocketSessionOutgoingMessages.toStringAsFixed(2)}',
+                        ),
                       ],
                     ),
                   ],
