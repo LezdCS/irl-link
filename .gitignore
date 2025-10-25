@@ -48,6 +48,7 @@ app.*.map.json
 /android/app/google-services.json
 /ios/Runner/GoogleService-Info.plist
 firebase.json
+upload-keystore.jks
 
 # Patrol related
 /integration_test/test_bundle.dart
