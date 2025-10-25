@@ -83,6 +83,8 @@ class HomeViewController extends GetxController
 
   @override
   void onInit() async {
+    super.onInit();
+
     chatInputController = TextEditingController();
     emotesTabController = TabController(length: 0, vsync: this);
 
@@ -110,8 +112,6 @@ class HomeViewController extends GetxController
         : remoteConfig.getString('minimum_version_ios');
 
     _listenToGeneralSettings();
-
-    super.onInit();
   }
 
   Future<void> _initializeKickServices() async {
