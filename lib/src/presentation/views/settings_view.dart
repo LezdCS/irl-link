@@ -413,6 +413,32 @@ class SettingsView extends GetView<SettingsViewController> {
                     ),
                   ],
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Rain Mode",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                    Switch(
+                      onChanged: (value) {
+                        controller.setGeneralSettings(
+                          controller.generalSettings.value?.copyWith(
+                            rainModeActivated: value,
+                          ),
+                        );
+
+                        if (value) {
+                          Get.back();
+                        }
+                      },
+                      value: controller.generalSettings.value?.rainModeActivated ??
+                          false,
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

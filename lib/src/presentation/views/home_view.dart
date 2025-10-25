@@ -469,14 +469,12 @@ class HomeView extends GetView<HomeViewController> {
               ),
             ),
           ),
-          // Rain mode toggle button
-          Expanded(
-            child: Obx(
-              () => InkWell(
-                onTap: () async {
-                  if (controller.generalSettings.value?.rainModeActivated ??
-                      false) {
-                    // Currently in rain mode, show disable dialog
+          Obx(
+            () => Visibility(
+              visible: controller.generalSettings.value?.rainModeActivated ?? false,
+              child: Expanded(
+                child: InkWell(
+                  onTap: () async {
                     final result = await Get.dialog<bool>(
                       const RainModeDisableDialog(),
                     );
@@ -489,24 +487,12 @@ class HomeView extends GetView<HomeViewController> {
                         controller.generalSettings.value!,
                       );
                     }
-                  } else {
-                    // Currently not in rain mode, enable it directly
-                    controller.generalSettings.value =
-                        controller.generalSettings.value?.copyWith(
-                      rainModeActivated: true,
-                    );
-                    controller.generalSettingsService.updateGeneralSettings(
-                      controller.generalSettings.value!,
-                    );
-                  }
-                },
-                child: Icon(
-                  Icons.water_drop,
-                  color: controller.generalSettings.value?.rainModeActivated ??
-                          false
-                      ? Theme.of(context).colorScheme.primary
-                      : Theme.of(context).primaryIconTheme.color,
-                  size: 22,
+                  },
+                  child: Icon(
+                    Icons.water_drop,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 22,
+                  ),
                 ),
               ),
             ),
