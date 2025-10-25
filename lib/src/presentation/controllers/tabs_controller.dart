@@ -332,7 +332,7 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
     reorderTabs(browserTabs);
 
     if (obsTabViewController != null) {
-      obsTabViewController?.applySettings();
+      obsTabViewController?.startObsConnection();
     }
     if (realtimeIrlViewController != null) {
       realtimeIrlViewController?.applySettings();
