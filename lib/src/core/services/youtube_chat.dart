@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:firebase_remote_config/firebase_remote_config.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:get/get.dart';
+import 'package:irllink/src/core/services/remote_config_service.dart';
 import 'package:irllink/src/domain/entities/chat/chat_message.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:web_socket_channel/io.dart';
@@ -42,9 +42,8 @@ class YoutubeChat {
       _chatStreamController = StreamController<ChatMessage>.broadcast();
     }
 
-    final remoteConfig = FirebaseRemoteConfig.instance;
-    await remoteConfig.fetchAndActivate();
-    String url = remoteConfig.getString('youtube_websocket_url');
+    final remoteConfig = Get.find<RemoteConfigService>();
+    String url = await remoteConfig.fetchAndGetString('youtube_websocket_url');
 
     _webSocketChannel = IOWebSocketChannel.connect(
       url,

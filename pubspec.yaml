@@ -30,11 +30,11 @@ dependencies:
   dio: ^5.8.0+1
   expandable: ^5.0.1
 
-  firebase_analytics: ^12.0.2
-  firebase_core: ^4.1.1
-  firebase_remote_config: ^6.0.2
-  firebase_crashlytics: ^5.0.2
-  firebase_messaging: ^16.0.2
+  firebase_analytics: ^12.0.3
+  firebase_core: ^4.2.0
+  firebase_remote_config: ^6.1.0
+  firebase_crashlytics: ^5.0.3
+  firebase_messaging: ^16.0.3
   flutter_colorpicker: ^1.1.0
   flutter_foreground_task: ^9.1.0
   flutter_svg: ^2.2.0
@@ -47,7 +47,7 @@ dependencies:
   instant: ^0.5.1
   intl: ^0.20.2
   jwt_decoder: ^2.0.1
-  kick_chat: ^1.7.0
+  kick_chat: ^1.7.2
   mobile_scanner: ^7.0.1
   obs_websocket: ^5.2.3
   package_info_plus: ^9.0.0

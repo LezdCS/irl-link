@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:get/get_core/get_core.dart';
@@ -10,6 +9,7 @@ import 'package:get/get_instance/get_instance.dart';
 import 'package:irllink/src/core/failure.dart';
 import 'package:irllink/src/core/params/kick_auth_params.dart';
 import 'package:irllink/src/core/services/app_info_service.dart';
+import 'package:irllink/src/core/services/remote_config_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/entities/kick/kick_category_dto.dart';
@@ -59,19 +59,12 @@ class KickRemoteDataSourceImpl implements KickRemoteDataSource {
 
   @override
   Future<Map<String, dynamic>> getKickOauth(KickAuthParams params) async {
-    final remoteConfig = FirebaseRemoteConfig.instance;
-    await remoteConfig.setConfigSettings(
-      RemoteConfigSettings(
-        fetchTimeout: const Duration(minutes: 1),
-        minimumFetchInterval: const Duration(minutes: 5),
-      ),
-    );
-    await remoteConfig.fetchAndActivate();
-    String redirectUri = remoteConfig.getString('irllink_kick_auth_url');
-    String tokenUrl = remoteConfig.getString('irllink_kick_token_url');
+    final remoteConfig = Get.find<RemoteConfigService>();
+    String redirectUri = await remoteConfig.fetchAndGetString('irllink_kick_auth_url');
+    String tokenUrl = await remoteConfig.fetchAndGetString('irllink_kick_token_url');
     if (kDebugMode) {
-      redirectUri = remoteConfig.getString('irllink_kick_auth_url_dev');
-      tokenUrl = remoteConfig.getString('irllink_kick_token_url_dev');
+      redirectUri = await remoteConfig.fetchAndGetString('irllink_kick_auth_url_dev');
+      tokenUrl = await remoteConfig.fetchAndGetString('irllink_kick_token_url_dev');
     }
 
     final url = Uri.https(kKickAuthUrlBase, kKickAuthUrlPath, {
@@ -121,19 +114,12 @@ class KickRemoteDataSourceImpl implements KickRemoteDataSource {
 
   @override
   Future<Map<String, dynamic>> refreshAccessToken(String refreshToken) async {
-    final remoteConfig = FirebaseRemoteConfig.instance;
-    await remoteConfig.setConfigSettings(
-      RemoteConfigSettings(
-        fetchTimeout: const Duration(minutes: 1),
-        minimumFetchInterval: const Duration(minutes: 5),
-      ),
-    );
-    await remoteConfig.fetchAndActivate();
+    final remoteConfig = Get.find<RemoteConfigService>();
     String apiRefreshTokenUrl =
-        remoteConfig.getString('irllink_kick_refresh_token_url');
+        await remoteConfig.fetchAndGetString('irllink_kick_refresh_token_url');
     if (kDebugMode) {
       apiRefreshTokenUrl =
-          remoteConfig.getString('irllink_kick_refresh_token_url_dev');
+          await remoteConfig.fetchAndGetString('irllink_kick_refresh_token_url_dev');
     }
 
     final response = await dioClient.get(

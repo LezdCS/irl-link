@@ -9,6 +9,7 @@ import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:irllink/data/database/database_helper.dart';
+import 'package:irllink/firebase_options.dart';
 import 'package:irllink/routes/app_pages.dart';
 import 'package:irllink/src/bindings/login_bindings.dart';
 import 'package:irllink/src/core/background/tasks_handlers/realtime_irl_task_handler.dart';
@@ -25,6 +26,8 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  KickChat.configureLogging(Level.ALL);
 
   if (Platform.isAndroid) {
     debugPaintSizeEnabled = false;
@@ -36,8 +39,8 @@ Future<void> main() async {
   await WakelockPlus.enable();
   await KickChat.init();
   await Firebase.initializeApp(
-      // options: DefaultFirebaseOptions.currentPlatform,
-      );
+    options: DefaultFirebaseOptions.currentPlatform,
+    );
 
   // Initialize the database
   await DatabaseHelper.instance.database;

@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/general_settings_service.dart';
+import 'package:irllink/src/core/services/remote_config_service.dart';
 import 'package:irllink/src/core/services/tts_service.dart';
 import 'package:irllink/src/core/services/watch_service.dart';
 import 'package:irllink/src/core/services/youtube_chat.dart';
@@ -514,9 +514,9 @@ class ChatViewController extends GetxController
   }
 
   Future<void> createKickChat(Channel kc) async {
-    final remoteConfig = FirebaseRemoteConfig.instance;
-    await remoteConfig.fetchAndActivate();
-    String pushKey = remoteConfig.getString('kick_chat_push_key');
+    final remoteConfigService = Get.find<RemoteConfigService>();
+    String pushKey = await remoteConfigService.fetchAndGetString('kick_chat_push_key');
+    talker.info('Kick chat push key: $pushKey');
     KickChat kickChat = KickChat(
       kc.channel,
       pushKey,

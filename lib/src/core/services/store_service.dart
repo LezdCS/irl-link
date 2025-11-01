@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:irllink/src/core/services/remote_config_service.dart';
 import 'package:irllink/src/core/utils/init_dio.dart';
 import 'package:irllink/src/domain/entities/twitch/twitch_credentials.dart';
 import 'package:irllink/src/domain/usecases/twitch/get_twitch_local_usecase.dart';
@@ -148,17 +148,16 @@ class StoreService extends GetxService {
 
     String? purchaseToken =
         purchaseDetails.verificationData.serverVerificationData;
-    final remoteConfig = FirebaseRemoteConfig.instance;
-    await remoteConfig.fetchAndActivate();
+    final remoteConfig = Get.find<RemoteConfigService>();
 
-    String url = remoteConfig.getString('verify_android_purchase');
+    String url = await remoteConfig.fetchAndGetString('verify_android_purchase');
     if (kDebugMode) {
-      url = remoteConfig.getString('verify_android_purchase_dev');
+      url = await remoteConfig.fetchAndGetString('verify_android_purchase_dev');
     }
     if (Platform.isIOS) {
-      url = remoteConfig.getString('verify_ios_purchase');
+      url = await remoteConfig.fetchAndGetString('verify_ios_purchase');
       if (kDebugMode) {
-        url = remoteConfig.getString('verify_ios_purchase_dev');
+        url = await remoteConfig.fetchAndGetString('verify_ios_purchase_dev');
       }
     }
 

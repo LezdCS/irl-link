@@ -4,10 +4,10 @@ import 'dart:io' as io;
 import 'package:audioplayers/audioplayers.dart';
 import 'package:collection/collection.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:irllink/src/core/services/general_settings_service.dart';
+import 'package:irllink/src/core/services/remote_config_service.dart';
 import 'package:irllink/src/core/services/settings_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
 import 'package:irllink/src/core/services/twitch_event_sub_service.dart';
@@ -105,11 +105,10 @@ class HomeViewController extends GetxController
     splitViewController?.weights =
         generalSettings.value?.splitViewWeights ?? [0.5, 0.5];
 
-    final remoteConfig = FirebaseRemoteConfig.instance;
-    await remoteConfig.fetchAndActivate();
+    final remoteConfig = Get.find<RemoteConfigService>();
     minimumVersion.value = io.Platform.isAndroid
-        ? remoteConfig.getString('minimum_version_android')
-        : remoteConfig.getString('minimum_version_ios');
+        ? await remoteConfig.fetchAndGetString('minimum_version_android')
+        : await remoteConfig.fetchAndGetString('minimum_version_ios');
 
     _listenToGeneralSettings();
   }

@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:app_links/app_links.dart';
-import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:get/get.dart';
+import 'package:irllink/src/core/services/remote_config_service.dart';
 import 'package:irllink/src/domain/entities/settings/browser_tab_settings.dart';
 import 'package:irllink/src/domain/usecases/settings/add_browser_tab_usecase.dart';
 import 'package:irllink/src/presentation/controllers/tabs_controller.dart';
@@ -68,9 +68,8 @@ class DeeplinksService {
       return;
     }
 
-    final remoteConfig = FirebaseRemoteConfig.instance;
-    await remoteConfig.fetchAndActivate();
-    final baseUrl = remoteConfig.getString('irltools_obs_remote_base_url');
+    final remoteConfigService = Get.find<RemoteConfigService>();
+    final baseUrl = await remoteConfigService.fetchAndGetString('irltools_obs_remote_base_url');
 
     // Create a new browser tab
     final tab = BrowserTab(

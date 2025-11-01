@@ -3,13 +3,13 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:get/get_core/get_core.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:irllink/src/core/services/app_info_service.dart';
+import 'package:irllink/src/core/services/remote_config_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_poll_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_stream_infos_dto.dart';
@@ -87,11 +87,10 @@ class TwitchRemoteDataSourceImpl implements TwitchRemoteDataSource {
 
   @override
   Future<Map<String, dynamic>> getTwitchOauth(TwitchAuthParams params) async {
-    final remoteConfig = FirebaseRemoteConfig.instance;
-    await remoteConfig.fetchAndActivate();
-    String redirectUri = remoteConfig.getString('irllink_auth_url');
+    final remoteConfig = Get.find<RemoteConfigService>();
+    String redirectUri = await remoteConfig.fetchAndGetString('irllink_auth_url');
     if (kDebugMode) {
-      redirectUri = remoteConfig.getString('irllink_auth_url_dev');
+      redirectUri = await remoteConfig.fetchAndGetString('irllink_auth_url_dev');
     }
 
     final url = Uri.https(kTwitchAuthUrlBase, kTwitchAuthUrlPath, {
@@ -134,13 +133,12 @@ class TwitchRemoteDataSourceImpl implements TwitchRemoteDataSource {
 
   @override
   Future<Map<String, dynamic>> refreshAccessToken(String refreshToken) async {
-    final remoteConfig = FirebaseRemoteConfig.instance;
-    await remoteConfig.fetchAndActivate();
+    final remoteConfig = Get.find<RemoteConfigService>();
     String apiRefreshTokenUrl =
-        remoteConfig.getString('irllink_refresh_token_url');
+        await remoteConfig.fetchAndGetString('irllink_refresh_token_url');
     if (kDebugMode) {
       apiRefreshTokenUrl =
-          remoteConfig.getString('irllink_refresh_token_url_dev');
+          await remoteConfig.fetchAndGetString('irllink_refresh_token_url_dev');
     }
 
     String? fcmToken;

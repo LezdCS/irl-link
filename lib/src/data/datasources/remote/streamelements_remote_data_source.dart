@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
+import 'package:irllink/src/core/services/remote_config_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/data/entities/stream_elements/se_activity_dto.dart';
@@ -57,13 +58,12 @@ class StreamelementsRemoteDataSourceImpl
     String refreshToken,
     String previousScopes,
   ) async {
-    final remoteConfig = FirebaseRemoteConfig.instance;
-    await remoteConfig.fetchAndActivate();
+    final remoteConfig = Get.find<RemoteConfigService>();
     String apiRefreshTokenUrl =
-        remoteConfig.getString('irllink_refresh_se_token_url');
+        await remoteConfig.fetchAndGetString('irllink_refresh_se_token_url');
     if (kDebugMode) {
       apiRefreshTokenUrl =
-          remoteConfig.getString('irllink_refresh_se_token_url_dev');
+          await remoteConfig.fetchAndGetString('irllink_refresh_se_token_url_dev');
     }
 
     try {
