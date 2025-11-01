@@ -995,10 +995,10 @@ packages:
     dependency: "direct main"
     description:
       name: kick_chat
-      sha256: "5f704e01e1fa9e298bfe2e311c2959c04a363b16a711099a126520bb5ef2aa8e"
+      sha256: cc42b974af4819bf60557c638676651d51edc5f9b5a0c68c4185350695c0dab4
       url: "https://pub.dev"
     source: hosted
-    version: "1.6.0"
+    version: "1.7.0"
   leak_tracker:
     dependency: transitive
     description:

@@ -47,7 +47,7 @@ dependencies:
   instant: ^0.5.1
   intl: ^0.20.2
   jwt_decoder: ^2.0.1
-  kick_chat: ^1.6.0
+  kick_chat: ^1.7.0
   mobile_scanner: ^7.0.1
   obs_websocket: ^5.2.3
   package_info_plus: ^9.0.0
