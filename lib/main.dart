@@ -27,7 +27,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  KickChat.configureLogging(Level.ALL);
+  // KickChat.configureLogging(Level.ALL);
 
   if (Platform.isAndroid) {
     debugPaintSizeEnabled = false;
