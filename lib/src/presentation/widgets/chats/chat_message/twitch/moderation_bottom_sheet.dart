@@ -227,9 +227,13 @@ class ModerationBottomSheet extends GetView {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(timeoutValues.length, (index) {
+              final message = Get.find<ChatsController>().selectedMessage.value;
+              if (message == null) {
+                return const SizedBox();
+              }
               return InkWell(
                 onTap: () => controller.timeoutMessageInstruction(
-                  Get.find<ChatsController>().selectedMessage.value!,
+                  message,
                   timeoutValues[index].values.first,
                 ),
                 child: Container(
@@ -272,8 +276,12 @@ class ModerationBottomSheet extends GetView {
                     textInputAction: TextInputAction.send,
                     onSubmitted: (String value) {
                       if (int.tryParse(value) != null) {
+                        final message = Get.find<ChatsController>().selectedMessage.value;
+                        if (message == null) {
+                          return;
+                        }
                         controller.timeoutMessageInstruction(
-                          Get.find<ChatsController>().selectedMessage.value!,
+                          message,
                           int.parse(value),
                         );
                       }
@@ -293,8 +301,12 @@ class ModerationBottomSheet extends GetView {
                           controller.banDurationInputController.text,
                         ) !=
                         null) {
+                      final message = Get.find<ChatsController>().selectedMessage.value;
+                      if (message == null) {
+                        return;
+                      }
                       controller.timeoutMessageInstruction(
-                        Get.find<ChatsController>().selectedMessage.value!,
+                        message,
                         int.parse(controller.banDurationInputController.text),
                       );
                     }

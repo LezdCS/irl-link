@@ -24,7 +24,7 @@ class YoutubeChat {
 
   Stream<ChatMessage> _getChatStream() {
     _chatStreamController ??= StreamController<ChatMessage>.broadcast();
-    return _chatStreamController!.stream;
+    return _chatStreamController?.stream ?? const Stream.empty();
   }
 
   late String channelHandle;

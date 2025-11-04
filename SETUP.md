@@ -24,4 +24,10 @@
 
 ## Apple Setup
 
-*Coming soon...*
+   - Just login to Xcode
+
+## FireBase
+   - Install Firebase CLI (https://firebase.google.com/docs/cli?hl=fr&_gl=1*gv35js*_up*MQ..*_ga*NjMzMzc5MjgwLjE3NjIyNTY2MTg.*_ga_CW55HF8NVT*czE3NjIyNTY2MTckbzEkZzAkdDE3NjIyNTY2MTckajYwJGwwJGgw#setup_update_cli)[Firebase CLI]
+   - `firebase login`
+   - `dart pub global activate flutterfire_cli`
+   - `flutterfire configure`

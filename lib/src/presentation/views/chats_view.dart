@@ -91,8 +91,7 @@ class ChatsView extends GetView<ChatsController> {
                                   style: TextStyle(
                                     color: Theme.of(Get.context!)
                                         .textTheme
-                                        .bodyLarge!
-                                        .color,
+                                        .bodyLarge?.color,
                                   ),
                                 ),
                               ],
@@ -147,8 +146,8 @@ class ChatsView extends GetView<ChatsController> {
       }),
       textConfirm: "confirm".tr,
       textCancel: "cancel".tr,
-      confirmTextColor: Theme.of(context).textTheme.bodyLarge!.color,
-      cancelTextColor: Theme.of(context).textTheme.bodyLarge!.color,
+      confirmTextColor: Theme.of(context).textTheme.bodyLarge?.color,
+      cancelTextColor: Theme.of(context).textTheme.bodyLarge?.color,
       buttonColor: Theme.of(context).colorScheme.tertiary,
       onConfirm: () {
         _reconnectTabChats(tabIndex);

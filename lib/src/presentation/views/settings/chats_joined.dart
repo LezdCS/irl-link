@@ -19,7 +19,7 @@ class ChatsJoined extends GetView<ChatsSettingsController> {
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back,
-              color: Theme.of(context).textTheme.bodyLarge!.color,
+              color: Theme.of(context).textTheme.bodyLarge?.color,
             ),
             onPressed: () => Get.back(),
           ),
@@ -207,7 +207,7 @@ class ChatsJoined extends GetView<ChatsSettingsController> {
           textCancel: "cancel".tr,
           textConfirm: "add".tr,
           titleStyle: TextStyle(
-            color: Theme.of(context).textTheme.bodyLarge!.color,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
           ),
           backgroundColor: Theme.of(context).colorScheme.surface,
           buttonColor: const Color(0xFF9147ff),
@@ -345,9 +345,7 @@ class ChatsJoined extends GetView<ChatsSettingsController> {
                                     style: TextStyle(
                                       color: Theme.of(context)
                                           .textTheme
-                                          .bodyLarge!
-                                          .color
-                                          ?.withAlpha(enabled ? 255 : 50),
+                                          .bodyLarge?.color?.withAlpha(enabled ? 255 : 50),
                                     ),
                                   ),
                                 ],
@@ -387,8 +385,7 @@ class ChatsJoined extends GetView<ChatsSettingsController> {
                                       style: TextStyle(
                                         color: Theme.of(context)
                                             .textTheme
-                                            .bodyLarge!
-                                            .color
+                                            .bodyLarge?.color 
                                             ?.withAlpha(50),
                                       ),
                                     ),
@@ -409,7 +406,7 @@ class ChatsJoined extends GetView<ChatsSettingsController> {
                   controller: channelTextController,
                   textInputAction: TextInputAction.send,
                   style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyLarge!.color,
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {

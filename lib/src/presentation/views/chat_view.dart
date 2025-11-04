@@ -57,8 +57,8 @@ class ChatView extends GetView<ChatViewController> {
                   textConfirm: "confirm".tr,
                   textCancel: "cancel".tr,
                   confirmTextColor:
-                      Theme.of(context).textTheme.bodyLarge!.color,
-                  cancelTextColor: Theme.of(context).textTheme.bodyLarge!.color,
+                      Theme.of(context).textTheme.bodyLarge?.color,
+                  cancelTextColor: Theme.of(context).textTheme.bodyLarge?.color,
                   buttonColor: Theme.of(context).colorScheme.tertiary,
                   onConfirm: () {
                     controller.reconnectAllChats();

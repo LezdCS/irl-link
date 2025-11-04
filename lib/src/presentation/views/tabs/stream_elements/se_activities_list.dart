@@ -64,8 +64,11 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
               value:
                   controller.streamElementsSettings.value?.showFollowerActivity,
               onChanged: (bool? value) {
-                StreamElementsSettings streamElementsSettings =
-                    controller.streamElementsSettings.value!;
+                StreamElementsSettings? streamElementsSettings =
+                    controller.streamElementsSettings.value;
+                if (streamElementsSettings == null) {
+                  return;
+                }
                 streamElementsSettings = streamElementsSettings.copyWith(
                   showFollowerActivity: value,
                 );
@@ -87,8 +90,11 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                 value: controller
                     .streamElementsSettings.value?.showSubscriberActivity,
                 onChanged: (bool? value) {
-                  StreamElementsSettings streamElementsSettings =
-                      controller.streamElementsSettings.value!;
+                  StreamElementsSettings? streamElementsSettings =
+                      controller.streamElementsSettings.value;
+                  if (streamElementsSettings == null) {
+                    return;
+                  }
                   streamElementsSettings = streamElementsSettings.copyWith(
                     showSubscriberActivity: value,
                   );
@@ -111,8 +117,11 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                 value:
                     controller.streamElementsSettings.value?.showCheerActivity,
                 onChanged: (bool? value) {
-                  StreamElementsSettings streamElementsSettings =
-                      controller.streamElementsSettings.value!;
+                  StreamElementsSettings? streamElementsSettings =
+                      controller.streamElementsSettings.value;
+                  if (streamElementsSettings == null) {
+                    return;
+                  }
                   streamElementsSettings = streamElementsSettings.copyWith(
                     showCheerActivity: value,
                   );
@@ -135,8 +144,11 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                 value: controller
                     .streamElementsSettings.value?.showDonationActivity,
                 onChanged: (bool? value) {
-                  StreamElementsSettings streamElementsSettings =
-                      controller.streamElementsSettings.value!;
+                  StreamElementsSettings? streamElementsSettings =
+                      controller.streamElementsSettings.value;
+                  if (streamElementsSettings == null) {
+                    return;
+                  }
                   streamElementsSettings = streamElementsSettings.copyWith(
                     showDonationActivity: value,
                   );
@@ -159,8 +171,11 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                 value:
                     controller.streamElementsSettings.value?.showRaidActivity,
                 onChanged: (bool? value) {
-                  StreamElementsSettings streamElementsSettings =
-                      controller.streamElementsSettings.value!;
+                  StreamElementsSettings? streamElementsSettings =
+                      controller.streamElementsSettings.value;
+                  if (streamElementsSettings == null) {
+                    return;
+                  }
                   streamElementsSettings = streamElementsSettings.copyWith(
                     showRaidActivity: value,
                   );
@@ -183,8 +198,11 @@ class SeActivitiesList extends GetView<StreamelementsViewController> {
                 value:
                     controller.streamElementsSettings.value?.showHostActivity,
                 onChanged: (bool? value) {
-                  StreamElementsSettings streamElementsSettings =
-                      controller.streamElementsSettings.value!;
+                  StreamElementsSettings? streamElementsSettings =
+                      controller.streamElementsSettings.value;
+                  if (streamElementsSettings == null) {
+                    return;
+                  }
                   streamElementsSettings = streamElementsSettings.copyWith(
                     showHostActivity: value,
                   );

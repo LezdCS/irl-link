@@ -108,7 +108,7 @@ class StoreService extends GetxService {
           purchasePending.value = false;
           Get.snackbar(
             "Error",
-            purchaseDetails.error!.message,
+            purchaseDetails.error?.message ?? "",
             snackPosition: SnackPosition.TOP,
             icon: const Icon(Icons.error_outline, color: Colors.red),
             borderWidth: 1,

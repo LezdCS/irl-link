@@ -18,7 +18,7 @@ class ManageListHiddenUsers extends GetView<HiddenUsersSettingsController> {
             leading: IconButton(
               icon: Icon(
                 Icons.arrow_back,
-                color: Theme.of(context).textTheme.bodyLarge!.color,
+                color: Theme.of(context).textTheme.bodyLarge?.color,
               ),
               onPressed: () => Get.back(),
             ),
@@ -94,8 +94,7 @@ class ManageListHiddenUsers extends GetView<HiddenUsersSettingsController> {
                                       style: TextStyle(
                                         color: Theme.of(context)
                                             .textTheme
-                                            .bodyLarge!
-                                            .color,
+                                            .bodyLarge?.color,
                                         fontSize: 12,
                                       ),
                                     ),
@@ -104,8 +103,7 @@ class ManageListHiddenUsers extends GetView<HiddenUsersSettingsController> {
                                       style: TextStyle(
                                         color: Theme.of(context)
                                             .textTheme
-                                            .bodyLarge!
-                                            .color,
+                                            .bodyLarge?.color,  
                                         fontSize: 20,
                                       ),
                                     ),

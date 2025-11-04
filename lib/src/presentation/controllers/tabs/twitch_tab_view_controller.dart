@@ -116,32 +116,43 @@ class TwitchTabViewController extends GetxController
       (r) => twitchStreamInfos.value = r,
     );
     if (!focus.hasFocus) {
-      titleFormController.text = twitchStreamInfos.value.title!;
+      titleFormController.text = twitchStreamInfos.value.title ?? "";
     }
     refreshDataAnimationController.forward();
   }
 
   void toggleFollowerOnly() {
-    twitchStreamInfos.value = twitchStreamInfos.value
-        .copyWith(isFollowerMode: !twitchStreamInfos.value.isFollowerMode!);
+    bool toggleTo = twitchStreamInfos.value.isFollowerMode ?? false;
+    toggleTo = !toggleTo;
+    twitchStreamInfos.value = twitchStreamInfos.value.copyWith(
+      isFollowerMode: toggleTo,
+    );
     changeChatSettings();
   }
 
   void toggleSubOnly() {
-    twitchStreamInfos.value = twitchStreamInfos.value
-        .copyWith(isSubscriberMode: !twitchStreamInfos.value.isSubscriberMode!);
+    bool toggleTo = twitchStreamInfos.value.isSubscriberMode ?? false;
+    toggleTo = !toggleTo;
+    twitchStreamInfos.value = twitchStreamInfos.value.copyWith(
+      isSubscriberMode: toggleTo,
+    );
     changeChatSettings();
   }
 
   void toggleEmoteOnly() {
-    twitchStreamInfos.value = twitchStreamInfos.value
-        .copyWith(isEmoteMode: !twitchStreamInfos.value.isEmoteMode!);
+    bool toggleTo = twitchStreamInfos.value.isEmoteMode ?? false;
+    toggleTo = !toggleTo;
+    twitchStreamInfos.value = twitchStreamInfos.value.copyWith(
+      isEmoteMode: toggleTo,
+    );
     changeChatSettings();
   }
 
   void toggleSlowMode(int? time) {
+    bool toggleTo = twitchStreamInfos.value.isSlowMode ?? false;
+    toggleTo = !toggleTo;
     twitchStreamInfos.value = twitchStreamInfos.value.copyWith(
-      isSlowMode: !twitchStreamInfos.value.isSlowMode!,
+      isSlowMode: toggleTo,
       slowModeWaitTime: time,
     );
     changeChatSettings();

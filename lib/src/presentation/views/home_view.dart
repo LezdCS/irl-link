@@ -265,8 +265,7 @@ class HomeView extends GetView<HomeViewController> {
                               hintStyle: TextStyle(
                                 color: Theme.of(context)
                                     .textTheme
-                                    .bodyLarge!
-                                    .color,
+                                    .bodyLarge?.color,
                               ),
                               isDense: true,
                               enabledBorder: InputBorder.none,

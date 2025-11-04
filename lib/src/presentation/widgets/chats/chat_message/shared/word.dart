@@ -48,7 +48,7 @@ class Word extends StatelessWidget {
       style: TextStyle(
         color: isAction
             ? Color(int.parse(color.replaceAll('#', '0xff')))
-            : Theme.of(Get.context!).textTheme.bodyLarge!.color,
+            : Theme.of(Get.context!).textTheme.bodyLarge?.color,
         fontSize: textSize,
         fontStyle: isAction ? FontStyle.italic : FontStyle.normal,
       ),

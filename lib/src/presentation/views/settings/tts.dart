@@ -36,7 +36,7 @@ class Tts extends GetView<SettingsViewController> {
             leading: IconButton(
               icon: Icon(
                 Icons.arrow_back,
-                color: Theme.of(context).textTheme.bodyLarge!.color,
+                color: Theme.of(context).textTheme.bodyLarge?.color,
               ),
               onPressed: () => Get.back(),
             ),

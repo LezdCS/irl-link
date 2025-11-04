@@ -40,7 +40,7 @@ class RealtimeIrl extends GetView<SettingsViewController> {
                   obscureText: !controller.rtIrlKeyShow.value,
                   onChanged: (value) {
                     controller.setGeneralSettings(
-                      controller.generalSettings.value!.copyWith(
+                      controller.generalSettings.value?.copyWith(
                         rtIrlPushKey: value,
                       ),
                     );
