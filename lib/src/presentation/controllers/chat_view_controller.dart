@@ -515,7 +515,8 @@ class ChatViewController extends GetxController
 
   Future<void> createKickChat(Channel kc) async {
     final remoteConfigService = Get.find<RemoteConfigService>();
-    String pushKey = await remoteConfigService.fetchAndGetString('kick_chat_push_key');
+    String pushKey =
+        await remoteConfigService.fetchAndGetString('kick_chat_push_key');
     talker.info('Kick chat push key: $pushKey');
     KickChat kickChat = KickChat(
       kc.channel,

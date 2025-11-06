@@ -258,8 +258,7 @@ class TabsController extends GetxController with GetTickerProviderStateMixin {
       final seCredentials = await getLocalCredentialsUseCase();
       seCredentials.fold(
         (l) {
-          talkerService.talker
-              .warning('StreamElements credentials not found.');
+          talkerService.talker.warning('StreamElements credentials not found.');
         },
         (r) {
           talkerService.talker.info('StreamElements credentials found');

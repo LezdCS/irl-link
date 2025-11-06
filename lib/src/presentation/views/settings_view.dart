@@ -434,8 +434,9 @@ class SettingsView extends GetView<SettingsViewController> {
                           Get.back();
                         }
                       },
-                      value: controller.generalSettings.value?.rainModeActivated ??
-                          false,
+                      value:
+                          controller.generalSettings.value?.rainModeActivated ??
+                              false,
                     ),
                   ],
                 ),

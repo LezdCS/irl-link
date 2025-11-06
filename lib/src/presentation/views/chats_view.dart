@@ -91,7 +91,8 @@ class ChatsView extends GetView<ChatsController> {
                                   style: TextStyle(
                                     color: Theme.of(Get.context!)
                                         .textTheme
-                                        .bodyLarge?.color,
+                                        .bodyLarge
+                                        ?.color,
                                   ),
                                 ),
                               ],

@@ -62,8 +62,8 @@ class StreamelementsRemoteDataSourceImpl
     String apiRefreshTokenUrl =
         await remoteConfig.fetchAndGetString('irllink_refresh_se_token_url');
     if (kDebugMode) {
-      apiRefreshTokenUrl =
-          await remoteConfig.fetchAndGetString('irllink_refresh_se_token_url_dev');
+      apiRefreshTokenUrl = await remoteConfig
+          .fetchAndGetString('irllink_refresh_se_token_url_dev');
     }
 
     try {

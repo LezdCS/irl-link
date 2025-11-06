@@ -88,9 +88,11 @@ class TwitchRemoteDataSourceImpl implements TwitchRemoteDataSource {
   @override
   Future<Map<String, dynamic>> getTwitchOauth(TwitchAuthParams params) async {
     final remoteConfig = Get.find<RemoteConfigService>();
-    String redirectUri = await remoteConfig.fetchAndGetString('irllink_auth_url');
+    String redirectUri =
+        await remoteConfig.fetchAndGetString('irllink_auth_url');
     if (kDebugMode) {
-      redirectUri = await remoteConfig.fetchAndGetString('irllink_auth_url_dev');
+      redirectUri =
+          await remoteConfig.fetchAndGetString('irllink_auth_url_dev');
     }
 
     final url = Uri.https(kTwitchAuthUrlBase, kTwitchAuthUrlPath, {

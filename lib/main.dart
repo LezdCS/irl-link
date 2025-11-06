@@ -12,7 +12,6 @@ import 'package:irllink/data/database/database_helper.dart';
 import 'package:irllink/firebase_options.dart';
 import 'package:irllink/routes/app_pages.dart';
 import 'package:irllink/src/bindings/login_bindings.dart';
-import 'package:irllink/src/core/background/tasks_handlers/realtime_irl_task_handler.dart';
 import 'package:irllink/src/core/depedency_injection.dart';
 import 'package:irllink/src/core/resources/app_translations.dart';
 import 'package:irllink/src/core/resources/themes.dart';
@@ -26,7 +25,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // KickChat.configureLogging(Level.ALL);
 
   if (Platform.isAndroid) {
@@ -40,7 +39,7 @@ Future<void> main() async {
   await KickChat.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-    );
+  );
 
   // Initialize the database
   await DatabaseHelper.instance.database;
@@ -65,14 +64,6 @@ Future<void> main() async {
   await initializeDependencies();
 
   runApp(const Main());
-}
-
-// The callback function should always be a top-level function.
-@pragma('vm:entry-point')
-void startCallback() {
-  // The setTaskHandler function must be called to handle the task
-  //in the background.
-  FlutterForegroundTask.setTaskHandler(RealtimeIrlTaskHandler());
 }
 
 @pragma('vm:entry-point')

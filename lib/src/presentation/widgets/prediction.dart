@@ -83,7 +83,8 @@ Widget prediction(
                           style: TextStyle(
                             color: Theme.of(Get.context!)
                                 .textTheme
-                                .bodyLarge?.color,
+                                .bodyLarge
+                                ?.color,
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                           ),

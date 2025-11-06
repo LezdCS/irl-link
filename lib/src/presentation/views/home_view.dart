@@ -39,8 +39,8 @@ class HomeView extends GetView<HomeViewController> {
 
     return UpgradeAlert(
       upgrader: Upgrader(
-        minAppVersion: controller.minimumVersion.value?.isNotEmpty ?? false 
-            ? controller.minimumVersion.value 
+        minAppVersion: controller.minimumVersion.value?.isNotEmpty ?? false
+            ? controller.minimumVersion.value
             : null,
         debugDisplayAlways: kDebugMode,
       ),
@@ -265,7 +265,8 @@ class HomeView extends GetView<HomeViewController> {
                               hintStyle: TextStyle(
                                 color: Theme.of(context)
                                     .textTheme
-                                    .bodyLarge?.color,
+                                    .bodyLarge
+                                    ?.color,
                               ),
                               isDense: true,
                               enabledBorder: InputBorder.none,
@@ -472,7 +473,8 @@ class HomeView extends GetView<HomeViewController> {
           ),
           Obx(
             () => Visibility(
-              visible: controller.generalSettings.value?.rainModeActivated ?? false,
+              visible:
+                  controller.generalSettings.value?.rainModeActivated ?? false,
               child: Expanded(
                 child: InkWell(
                   onTap: () async {

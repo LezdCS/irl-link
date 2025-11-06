@@ -150,7 +150,8 @@ class StoreService extends GetxService {
         purchaseDetails.verificationData.serverVerificationData;
     final remoteConfig = Get.find<RemoteConfigService>();
 
-    String url = await remoteConfig.fetchAndGetString('verify_android_purchase');
+    String url =
+        await remoteConfig.fetchAndGetString('verify_android_purchase');
     if (kDebugMode) {
       url = await remoteConfig.fetchAndGetString('verify_android_purchase_dev');
     }

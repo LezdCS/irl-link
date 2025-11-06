@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:irllink/main.dart';
+import 'package:irllink/src/core/background/tasks_handlers/realtime_irl_task_handler.dart';
 import 'package:irllink/src/core/services/realtime_irl.dart';
 import 'package:irllink/src/core/utils/determine_position.dart';
 import 'package:irllink/src/domain/usecases/settings/get_general_settings.dart';
@@ -19,6 +19,14 @@ class RealtimeIrlViewController extends GetxController
   });
 
   final GetGeneralSettingsUseCase getGeneralSettingsUseCase;
+
+// The callback function should always be a top-level function.
+  @pragma('vm:entry-point')
+  void startCallback() {
+    // The setTaskHandler function must be called to handle the task
+    //in the background.
+    FlutterForegroundTask.setTaskHandler(RealtimeIrlTaskHandler());
+  }
 
   @override
   void onInit() async {

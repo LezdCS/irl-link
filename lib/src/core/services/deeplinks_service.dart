@@ -69,7 +69,8 @@ class DeeplinksService {
     }
 
     final remoteConfigService = Get.find<RemoteConfigService>();
-    final baseUrl = await remoteConfigService.fetchAndGetString('irltools_obs_remote_base_url');
+    final baseUrl = await remoteConfigService
+        .fetchAndGetString('irltools_obs_remote_base_url');
 
     // Create a new browser tab
     final tab = BrowserTab(

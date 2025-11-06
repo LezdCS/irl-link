@@ -276,7 +276,8 @@ class ModerationBottomSheet extends GetView {
                     textInputAction: TextInputAction.send,
                     onSubmitted: (String value) {
                       if (int.tryParse(value) != null) {
-                        final message = Get.find<ChatsController>().selectedMessage.value;
+                        final message =
+                            Get.find<ChatsController>().selectedMessage.value;
                         if (message == null) {
                           return;
                         }
@@ -301,7 +302,8 @@ class ModerationBottomSheet extends GetView {
                           controller.banDurationInputController.text,
                         ) !=
                         null) {
-                      final message = Get.find<ChatsController>().selectedMessage.value;
+                      final message =
+                          Get.find<ChatsController>().selectedMessage.value;
                       if (message == null) {
                         return;
                       }

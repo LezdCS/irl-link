@@ -60,11 +60,15 @@ class KickRemoteDataSourceImpl implements KickRemoteDataSource {
   @override
   Future<Map<String, dynamic>> getKickOauth(KickAuthParams params) async {
     final remoteConfig = Get.find<RemoteConfigService>();
-    String redirectUri = await remoteConfig.fetchAndGetString('irllink_kick_auth_url');
-    String tokenUrl = await remoteConfig.fetchAndGetString('irllink_kick_token_url');
+    String redirectUri =
+        await remoteConfig.fetchAndGetString('irllink_kick_auth_url');
+    String tokenUrl =
+        await remoteConfig.fetchAndGetString('irllink_kick_token_url');
     if (kDebugMode) {
-      redirectUri = await remoteConfig.fetchAndGetString('irllink_kick_auth_url_dev');
-      tokenUrl = await remoteConfig.fetchAndGetString('irllink_kick_token_url_dev');
+      redirectUri =
+          await remoteConfig.fetchAndGetString('irllink_kick_auth_url_dev');
+      tokenUrl =
+          await remoteConfig.fetchAndGetString('irllink_kick_token_url_dev');
     }
 
     final url = Uri.https(kKickAuthUrlBase, kKickAuthUrlPath, {
@@ -118,8 +122,8 @@ class KickRemoteDataSourceImpl implements KickRemoteDataSource {
     String apiRefreshTokenUrl =
         await remoteConfig.fetchAndGetString('irllink_kick_refresh_token_url');
     if (kDebugMode) {
-      apiRefreshTokenUrl =
-          await remoteConfig.fetchAndGetString('irllink_kick_refresh_token_url_dev');
+      apiRefreshTokenUrl = await remoteConfig
+          .fetchAndGetString('irllink_kick_refresh_token_url_dev');
     }
 
     final response = await dioClient.get(

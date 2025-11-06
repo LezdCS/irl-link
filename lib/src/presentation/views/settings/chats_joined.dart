@@ -345,7 +345,9 @@ class ChatsJoined extends GetView<ChatsSettingsController> {
                                     style: TextStyle(
                                       color: Theme.of(context)
                                           .textTheme
-                                          .bodyLarge?.color?.withAlpha(enabled ? 255 : 50),
+                                          .bodyLarge
+                                          ?.color
+                                          ?.withAlpha(enabled ? 255 : 50),
                                     ),
                                   ),
                                 ],
@@ -385,7 +387,8 @@ class ChatsJoined extends GetView<ChatsSettingsController> {
                                       style: TextStyle(
                                         color: Theme.of(context)
                                             .textTheme
-                                            .bodyLarge?.color 
+                                            .bodyLarge
+                                            ?.color
                                             ?.withAlpha(50),
                                       ),
                                     ),
