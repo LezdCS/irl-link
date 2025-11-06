@@ -26,8 +26,11 @@ class CheerEmote extends StatelessWidget {
         Text(
           '${cheerEmote.id} ',
           style: TextStyle(
-            color: Color(int.parse(
-                cheerEmote.color?.replaceAll('#', '0xff') ?? '0xff000000',),),
+            color: Color(
+              int.parse(
+                cheerEmote.color?.replaceAll('#', '0xff') ?? '0xff000000',
+              ),
+            ),
             fontSize: textSize,
           ),
         ),

@@ -84,7 +84,8 @@ class WatchService extends GetxService {
   }) async {
     if (!await _ensureChannelAvailable()) {
       talker.warning(
-          'Watch channel unavailable; skipping sendUpdateObsConnecteToNative',);
+        'Watch channel unavailable; skipping sendUpdateObsConnecteToNative',
+      );
       return;
     }
     try {
@@ -101,7 +102,8 @@ class WatchService extends GetxService {
   Future<void> sendSelectedObsSceneToNative(String sceneName) async {
     if (!await _ensureChannelAvailable()) {
       talker.warning(
-          'Watch channel unavailable; skipping sendSelectedObsSceneToNative',);
+        'Watch channel unavailable; skipping sendSelectedObsSceneToNative',
+      );
       return;
     }
     try {
@@ -135,7 +137,8 @@ class WatchService extends GetxService {
   Future<void> sendObsSourcesToNative(String data) async {
     if (!await _ensureChannelAvailable()) {
       talker.warning(
-          'Watch channel unavailable; skipping sendObsSourcesToNative',);
+        'Watch channel unavailable; skipping sendObsSourcesToNative',
+      );
       return;
     }
     try {
@@ -152,7 +155,8 @@ class WatchService extends GetxService {
   Future<void> sendSeConnectedToNative({required bool isConnected}) async {
     if (!await _ensureChannelAvailable()) {
       talker.warning(
-          'Watch channel unavailable; skipping sendSeConnectedToNative',);
+        'Watch channel unavailable; skipping sendSeConnectedToNative',
+      );
       return;
     }
     try {
@@ -169,7 +173,8 @@ class WatchService extends GetxService {
   Future<void> sendSeActivityToNative(SeActivity activity) async {
     if (!await _ensureChannelAvailable()) {
       talker.warning(
-          'Watch channel unavailable; skipping sendSeActivityToNative',);
+        'Watch channel unavailable; skipping sendSeActivityToNative',
+      );
       return;
     }
     try {
@@ -202,7 +207,8 @@ class WatchService extends GetxService {
   Future<void> sendLiveStatusToNative({required bool isLive}) async {
     if (!await _ensureChannelAvailable()) {
       talker.warning(
-          'Watch channel unavailable; skipping sendLiveStatusToNative',);
+        'Watch channel unavailable; skipping sendLiveStatusToNative',
+      );
       return;
     }
     try {

@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -15,8 +17,8 @@ import 'package:irllink/src/bindings/login_bindings.dart';
 import 'package:irllink/src/core/depedency_injection.dart';
 import 'package:irllink/src/core/resources/app_translations.dart';
 import 'package:irllink/src/core/resources/themes.dart';
-import 'package:irllink/src/core/services/notification_service.dart';
 import 'package:irllink/src/core/services/talker_service.dart';
+import 'package:irllink/src/core/utils/notification_utils.dart';
 import 'package:irllink/src/core/utils/talker_custom_logs.dart';
 import 'package:irllink/src/presentation/views/login_view.dart';
 import 'package:kick_chat/kick_chat.dart';
@@ -34,43 +36,131 @@ Future<void> main() async {
     debugRepaintTextRainbowEnabled = false;
   }
 
-  await GetStorage.init();
-  await WakelockPlus.enable();
-  await KickChat.init();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  try {
+    await GetStorage.init();
+  } catch (e) {
+    // Can't use Crashlytics yet, Firebase not initialized
+    debugPrint('Error initializing GetStorage: $e');
+    rethrow;
+  }
+
+  try {
+    await WakelockPlus.enable();
+  } catch (e) {
+    // Non-critical, continue
+    debugPrint('Error enabling Wakelock: $e');
+  }
+
+  try {
+    await KickChat.init();
+  } catch (e) {
+    // Non-critical, continue
+    debugPrint('Error initializing KickChat: $e');
+  }
+
+  bool firebaseInitialized = false;
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    firebaseInitialized = true;
+  } catch (e) {
+    debugPrint('Error initializing Firebase: $e');
+    rethrow;
+  }
+
+  // Set up error handling for release builds after Firebase is initialized
+  if (firebaseInitialized) {
+    FlutterError.onError = (errorDetails) {
+      FlutterError.presentError(errorDetails);
+      if (kReleaseMode) {
+        FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+      }
+    };
+
+    // Handle errors outside of Flutter framework
+    PlatformDispatcher.instance.onError = (error, stack) {
+      if (kReleaseMode) {
+        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      }
+      return true;
+    };
+  }
 
   // Initialize the database
-  await DatabaseHelper.instance.database;
+  try {
+    await DatabaseHelper.instance.database;
+  } catch (e, stack) {
+    if (kReleaseMode) {
+      FirebaseCrashlytics.instance.recordError(e, stack, fatal: true);
+    }
+    rethrow;
+  }
 
   FirebaseMessaging.onBackgroundMessage(_handleFirebaseMessagingBackground);
   FirebaseMessaging.instance.getToken().then((token) {
     debugPrint('fcmToken: $token');
   }).catchError((e) {
     debugPrint('Failed to get FCM token: $e');
+    if (kReleaseMode) {
+      FirebaseCrashlytics.instance.recordError(e, null);
+    }
   });
 
   AppTranslations.initLanguages();
   FlutterForegroundTask.initCommunicationPort();
 
   await FlutterDownloader.initialize(
-    debug:
-        true, // optional: set to false to disable printing logs to console (default: true)
+    debug: kDebugMode, // Only enable debug in debug mode
     ignoreSsl:
         true, // option: set to false to disable working with http links (default: false)
   );
 
-  await initializeDependencies();
+  try {
+    await initializeDependencies();
+  } catch (e, stack) {
+    if (kReleaseMode) {
+      FirebaseCrashlytics.instance.recordError(e, stack, fatal: true);
+    }
+    rethrow;
+  }
 
   runApp(const Main());
 }
 
 @pragma('vm:entry-point')
 Future<void> _handleFirebaseMessagingBackground(RemoteMessage message) async {
-  final notificationService = Get.find<NotificationService>();
-  await notificationService.setupFlutterNotifications();
-  await notificationService.showNotification(message);
+  // Background message handler runs in a separate isolate
+  // GetX dependencies are not available here, so we need to initialize everything manually
+  try {
+    // Initialize Firebase (safe to call multiple times, but in a separate isolate it's needed)
+    try {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    } catch (e) {
+      // Firebase might already be initialized, which is fine
+      // Only rethrow if it's a different error
+      if (!e.toString().contains('already been initialized')) {
+        rethrow;
+      }
+    }
+
+    // Use shared utility to initialize and show notification
+    final flutterLocalNotificationsPlugin =
+        await NotificationUtils.initializeNotifications();
+    await NotificationUtils.showNotificationFromMessage(
+      flutterLocalNotificationsPlugin,
+      message,
+    );
+  } catch (e, stack) {
+    // Record error to Crashlytics if available
+    try {
+      await FirebaseCrashlytics.instance.recordError(e, stack);
+    } catch (_) {
+      // If Crashlytics isn't available, just ignore
+    }
+  }
 }
 
 class Main extends StatelessWidget {
