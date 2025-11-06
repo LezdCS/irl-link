@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:get/get_core/get_core.dart';
@@ -11,6 +10,7 @@ import 'package:irllink/src/core/params/twitch_auth_params.dart';
 import 'package:irllink/src/core/services/app_info_service.dart';
 import 'package:irllink/src/core/services/remote_config_service.dart';
 import 'package:irllink/src/core/utils/constants.dart';
+import 'package:irllink/src/core/utils/notification_utils.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_poll_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_stream_infos_dto.dart';
 import 'package:irllink/src/data/entities/twitch/twitch_user_dto.dart';
@@ -145,7 +145,7 @@ class TwitchRemoteDataSourceImpl implements TwitchRemoteDataSource {
 
     String? fcmToken;
     try {
-      fcmToken = await FirebaseMessaging.instance.getToken();
+      fcmToken = await NotificationUtils.getFcmToken();
     } catch (e, stack) {
       talker.handle(e, stack);
     }

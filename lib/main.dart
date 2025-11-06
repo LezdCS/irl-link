@@ -98,12 +98,12 @@ Future<void> main() async {
   }
 
   FirebaseMessaging.onBackgroundMessage(_handleFirebaseMessagingBackground);
-  FirebaseMessaging.instance.getToken().then((token) {
+  NotificationUtils.getFcmToken().then((token) {
     debugPrint('fcmToken: $token');
-  }).catchError((e) {
+  }).catchError((e, stack) {
     debugPrint('Failed to get FCM token: $e');
     if (kReleaseMode) {
-      FirebaseCrashlytics.instance.recordError(e, null);
+      FirebaseCrashlytics.instance.recordError(e, stack);
     }
   });
 
