@@ -38,7 +38,7 @@ class Migration1 extends Migration {
   Future<void> up(Database db) async {
     // Create Twitch credentials table
     await db.execute('''
-      CREATE TABLE twitch_credentials (
+      CREATE TABLE IF NOT EXISTS twitch_credentials (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         access_token TEXT NOT NULL,
         id_token TEXT NOT NULL,
@@ -53,7 +53,7 @@ class Migration1 extends Migration {
 
     // Create RTMP settings table
     await db.execute('''
-      CREATE TABLE rtmp (
+      CREATE TABLE IF NOT EXISTS rtmp (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
         url TEXT NOT NULL,
@@ -64,7 +64,7 @@ class Migration1 extends Migration {
 
     // Create Kick users table
     await db.execute('''
-      CREATE TABLE kick_users (
+      CREATE TABLE IF NOT EXISTS kick_users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER NOT NULL UNIQUE,
         name TEXT NOT NULL,
@@ -76,7 +76,7 @@ class Migration1 extends Migration {
 
     // Create Kick credentials table
     await db.execute('''
-      CREATE TABLE kick_credentials (
+      CREATE TABLE IF NOT EXISTS kick_credentials (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         access_token TEXT NOT NULL,
         refresh_token TEXT NOT NULL,
@@ -90,7 +90,7 @@ class Migration1 extends Migration {
 
     // Create StreamElements credentials table
     await db.execute('''
-      CREATE TABLE streamelements_credentials (
+      CREATE TABLE IF NOT EXISTS streamelements_credentials (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         access_token TEXT NOT NULL,
         refresh_token TEXT NOT NULL,
@@ -171,19 +171,19 @@ class Migration2 extends Migration {
   @override
   Future<void> up(Database db) async {
     await db.execute(
-      'CREATE TABLE hidden_users (id TEXT PRIMARY KEY, username TEXT NOT NULL, platform TEXT NOT NULL)',
+      'CREATE TABLE IF NOT EXISTS hidden_users (id TEXT PRIMARY KEY, username TEXT NOT NULL, platform TEXT NOT NULL)',
     );
 
     await db.execute(
-      'CREATE TABLE chat_groups (id TEXT PRIMARY KEY)',
+      'CREATE TABLE IF NOT EXISTS chat_groups (id TEXT PRIMARY KEY)',
     );
 
     await db.execute(
-      'CREATE TABLE channels (id TEXT PRIMARY KEY, channel TEXT NOT NULL, platform TEXT NOT NULL, chat_group_id TEXT NOT NULL, FOREIGN KEY (chat_group_id) REFERENCES chat_groups(id))',
+      'CREATE TABLE IF NOT EXISTS channels (id TEXT PRIMARY KEY, channel TEXT NOT NULL, platform TEXT NOT NULL, chat_group_id TEXT NOT NULL, FOREIGN KEY (chat_group_id) REFERENCES chat_groups(id))',
     );
 
     // Create default chat group
-    await db.insert('chat_groups', {'id': '-1'});
+    await db.execute("INSERT OR IGNORE INTO chat_groups(id) VALUES('-1')");
 
     try {
       final storage = GetStorage();
@@ -242,11 +242,11 @@ class Migration3 extends Migration {
   @override
   Future<void> up(Database db) async {
     await db.execute(
-      'CREATE TABLE browser_tabs (id TEXT PRIMARY KEY, url TEXT NOT NULL, title TEXT NOT NULL, toggled INTEGER NOT NULL, is_ios_audio_source INTEGER NOT NULL)',
+      'CREATE TABLE IF NOT EXISTS browser_tabs (id TEXT PRIMARY KEY, url TEXT NOT NULL, title TEXT NOT NULL, toggled INTEGER NOT NULL, is_ios_audio_source INTEGER NOT NULL)',
     );
 
     await db.execute(
-      'CREATE TABLE dashboard_events (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, color INTEGER NOT NULL, dashboard_actions_type TEXT NOT NULL, event TEXT NOT NULL, custom_value TEXT NOT NULL)',
+      'CREATE TABLE IF NOT EXISTS dashboard_events (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, color INTEGER NOT NULL, dashboard_actions_type TEXT NOT NULL, event TEXT NOT NULL, custom_value TEXT NOT NULL)',
     );
 
     try {
@@ -339,7 +339,7 @@ class Migration4 extends Migration {
   Future<void> up(Database db) async {
     // Create TTS settings table
     await db.execute('''
-      CREATE TABLE tts_settings (
+      CREATE TABLE IF NOT EXISTS tts_settings (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         tts_enabled INTEGER NOT NULL DEFAULT 0,
         language TEXT NOT NULL DEFAULT 'en-US',
@@ -358,7 +358,7 @@ class Migration4 extends Migration {
 
     // Create TTS prefixes to ignore table
     await db.execute('''
-      CREATE TABLE tts_prefixes_to_ignore (
+      CREATE TABLE IF NOT EXISTS tts_prefixes_to_ignore (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         tts_settings_id INTEGER NOT NULL,
         prefix TEXT NOT NULL,
@@ -368,7 +368,7 @@ class Migration4 extends Migration {
 
     // Create TTS prefixes to use TTS only table
     await db.execute('''
-      CREATE TABLE tts_prefixes_to_use_tts_only (
+      CREATE TABLE IF NOT EXISTS tts_prefixes_to_use_tts_only (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         tts_settings_id INTEGER NOT NULL,
         prefix TEXT NOT NULL,
@@ -378,7 +378,7 @@ class Migration4 extends Migration {
 
     // Create TTS users to ignore table
     await db.execute('''
-      CREATE TABLE tts_users_to_ignore (
+      CREATE TABLE IF NOT EXISTS tts_users_to_ignore (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         tts_settings_id INTEGER NOT NULL,
         username TEXT NOT NULL,
@@ -388,7 +388,7 @@ class Migration4 extends Migration {
 
     // Create OBS settings table
     await db.execute('''
-      CREATE TABLE obs_settings (
+      CREATE TABLE IF NOT EXISTS obs_settings (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         url TEXT NOT NULL DEFAULT '',
         password TEXT NOT NULL DEFAULT '',
@@ -399,7 +399,7 @@ class Migration4 extends Migration {
 
     // Create StreamElements settings table
     await db.execute('''
-      CREATE TABLE streamelements_settings (
+      CREATE TABLE IF NOT EXISTS streamelements_settings (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         show_follower_activity INTEGER NOT NULL DEFAULT 1,
         show_subscriber_activity INTEGER NOT NULL DEFAULT 1,
@@ -416,7 +416,7 @@ class Migration4 extends Migration {
 
     // Create StreamElements muted overlays table
     await db.execute('''
-      CREATE TABLE streamelements_muted_overlays (
+      CREATE TABLE IF NOT EXISTS streamelements_muted_overlays (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         streamelements_settings_id INTEGER NOT NULL,
         overlay_name TEXT NOT NULL,
@@ -569,7 +569,7 @@ class Migration5 extends Migration {
   Future<void> up(Database db) async {
     // Create general_settings table
     await db.execute('''
-      CREATE TABLE general_settings (
+      CREATE TABLE IF NOT EXISTS general_settings (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         is_dark_mode INTEGER NOT NULL DEFAULT 1,
         keep_speaker_on INTEGER NOT NULL DEFAULT 1,

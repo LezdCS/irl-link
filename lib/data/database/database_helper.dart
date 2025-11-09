@@ -36,31 +36,46 @@ class DatabaseHelper {
   }
 
   Future<void> _onCreate(Database db, int version) async {
-    // Execute all migrations up to the current version
+    // Execute all migrations up to the current version (fail-safe per migration)
     for (var i = 1; i <= version; i++) {
       final migration = Migration.getMigration(i);
       if (migration != null) {
-        await migration.up(db);
+        try {
+          await migration.up(db);
+        } catch (e) {
+          // Log and continue; do not block app startup
+          debugPrint('Migration $i up() failed: $e');
+        }
       }
     }
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    // Execute all migrations between old and new version
+    // Execute all migrations between old and new version (fail-safe per migration)
     for (var i = oldVersion + 1; i <= newVersion; i++) {
       final migration = Migration.getMigration(i);
       if (migration != null) {
-        await migration.up(db);
+        try {
+          await migration.up(db);
+        } catch (e) {
+          // Log and continue; do not block app startup
+          debugPrint('Migration $i up() failed during upgrade: $e');
+        }
       }
     }
   }
 
   Future<void> _onDowngrade(Database db, int oldVersion, int newVersion) async {
-    // Execute all migrations in reverse order
+    // Execute all migrations in reverse order (fail-safe per migration)
     for (var i = oldVersion; i > newVersion; i--) {
       final migration = Migration.getMigration(i);
       if (migration != null) {
-        await migration.down(db);
+        try {
+          await migration.down(db);
+        } catch (e) {
+          // Log and continue
+          debugPrint('Migration $i down() failed during downgrade: $e');
+        }
       }
     }
   }
