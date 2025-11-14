@@ -65,7 +65,7 @@ dependencies:
   wakelock_plus: ^1.4.0
   web_socket_channel: ^3.0.2
   webview_flutter: ^4.13.0
-  webview_flutter_android: ^4.7.0
+  webview_flutter_android: ^4.10.5
   webview_flutter_wkwebview: ^3.22.0
   cached_network_image: ^3.4.1
   auto_mappr_annotation: ^2.3.0
