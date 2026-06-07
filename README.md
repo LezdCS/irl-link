@@ -1,3 +1,6 @@
+> [!WARNING]
+> Project Status: This project is no longer actively maintained. It will be progressively removed from app stores and distribution platforms over time. No further updates or support are planned.
+
 # IRL Link
 
 IRL Link is a mobile application to monitor your IRL Stream.
